@@ -1,0 +1,1403 @@
+% Compile:  python build.py 03
+% or by hand:
+%   Rscript -e "knitr::knit('unit03.Rnw')"
+%   xelatex -shell-escape unit03.tex        # run twice to settle the toc
+\documentclass[17pt]{extarticle}
+
+\input{la_preamble.tex}
+\usepackage{needspace}
+
+% Unit 3 specific
+\fancyhead[L]{\small\color{hdrBG}\textbf{Unit\ 3\ \ Rank, Inverse, Determinant}}
+
+\setcounter{theorem}{0}\setcounter{example}{0}
+\renewcommand\thedefinition{3.\arabic{theorem}}
+\renewcommand\thetheorem{3.\arabic{theorem}}
+\renewcommand\thelemma{3.\arabic{theorem}}
+\renewcommand\theproposition{3.\arabic{theorem}}
+\renewcommand\thecorollary{3.\arabic{theorem}}
+\renewcommand\theexample{3.\arabic{example}}
+\renewcommand\theexercise{3.\arabic{exercise}}
+\renewcommand\thefigure{3.\arabic{figure}}
+
+\title{\color{hdrBG}\bfseries\Huge Rank, Inverse, and Determinant}
+\author{}\date{}
+
+\begin{document}
+
+<<setup, include=FALSE>>=
+source("la_knitr_setup.R")
+knitr::opts_chunk$set(fig.path = "figs/unit03-")
+@
+
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+{\color{hdrBG}\bfseries\fontsize{26}{32}\selectfont
+ Unit 3.\ Rank, Inverse, and Determinant}
+\end{center}
+\vspace*{\fill}
+\end{titlepage}
+
+\setcounter{page}{1}
+
+%=============================================================================
+\section{Rank}\label{sec:3.1}
+%=============================================================================
+
+\subsection{Full-rank factorisation}\label{sec:3.1.1}
+
+\begin{definition}[Singular and nonsingular]\label{def:singular}
+A square $\bA\in\Real^{n\times n}$ is \emph{nonsingular} if $\rank(\bA)=n$ and
+\emph{singular} if $\rank(\bA)<n$.
+\origin{H \S4.4(c); A\&M \S4.1}
+\end{definition}
+
+\begin{theorem}[Full-rank factorisation]\label{thm:full-rank-factorization}
+If $\bA\in\Real^{m\times n}$ has rank $r$, then
+\[
+\bA=\bB\bC,
+\qquad
+\bB\in\Real^{m\times r},\quad \rank(\bB)=r,
+\qquad
+\bC\in\Real^{r\times n},\quad \rank(\bC)=r.
+\]
+For $r=0$, both factors have no columns or no rows, respectively, and their product is
+$\bO$.
+\origin{H Thm.~4.4.8; A\&M Ex.~4.11(a)}
+\end{theorem}
+
+\begin{proof}
+For $r>0$, choose basis columns $\bu_1,\ldots,\bu_r$ of $\col(\bA)$ and set
+$\bB=(\bu_1,\ldots,\bu_r)$.  For each column $\ba_j$ of $\bA$, unique coordinates
+$c_{1j},\ldots,c_{rj}$ satisfy
+\[
+\ba_j=\sum_{i=1}^r c_{ij}\bu_i.
+\]
+With $\bC=(c_{ij})$, these $n$ identities give $\bA=\bB\bC$.  The columns of $\bB$
+are independent, so $\rank(\bB)=r$.  Every row of $\bA=\bB\bC$ is a linear
+combination of the rows of $\bC$; equality of row and column rank gives
+\[
+r=\rank(\bA)\leqslant\rank(\bC)\leqslant r.
+\]
+Thus $\rank(\bC)=r$.  If $r=0$, $\bA=\bO$.
+\end{proof}
+
+\begin{corollary}[Rank-one expansion]\label{cor:rank-one-expansion}
+Every rank-$r$ matrix admits
+\[
+\bA=\sum_{k=1}^r\bu_k\bc_k',
+\]
+\tcbbreak
+where every nonzero summand has rank one.  No sum of fewer than $r$ rank-one matrices
+can equal $\bA$.
+\origin{Course formulation from H Ex.~4.10; A\&M Ex.~4.11(b); S \S3.8}
+\end{corollary}
+
+\begin{proof}
+Write the factorisation of Theorem~\ref{thm:full-rank-factorization} as
+\[
+\bA=(\bu_1,\ldots,\bu_r)
+\begin{pmatrix}\bc_1'\\ \vdots\\ \bc_r'\end{pmatrix}
+=\sum_{k=1}^r\bu_k\bc_k'.
+\]
+For nonzero $\bu,\bv$, every column of $\bu\bv'$ is a multiple of $\bu$, and at least
+one is nonzero; hence $\rank(\bu\bv')=1$.  If
+$\bA=\sum_{k=1}^s\bA_k$ and $\rank(\bA_k)=1$, choose nonzero
+$\bu_k\in\col(\bA_k)$.  Then
+\[
+\col(\bA_k)=\spn\{\bu_k\},
+\qquad
+\col(\bA)\subseteq\spn\{\bu_1,\ldots,\bu_s\},
+\]
+so $r\leqslant s$.
+\end{proof}
+
+\begin{example}[A $3$ by $4$ factorisation]\label{ex:rank-factorization}
+\[
+\bA=
+\begin{pmatrix}
+1&0&-1&0\\0&1&3&2\\1&1&2&2
+\end{pmatrix}
+=
+\underbrace{\begin{pmatrix}1&0\\0&1\\1&1\end{pmatrix}}_{\bB}
+\underbrace{\begin{pmatrix}1&0&-1&0\\0&1&3&2\end{pmatrix}}_{\bC}.
+\]
+The first two columns of $\bA$ are independent, and every column belongs to their span;
+hence $\rank(\bA)=2$.  Also
+\[
+\bA=
+\begin{pmatrix}1\\0\\1\end{pmatrix}
+\begin{pmatrix}1&0&-1&0\end{pmatrix}
++
+\begin{pmatrix}0\\1\\1\end{pmatrix}
+\begin{pmatrix}0&1&3&2\end{pmatrix}.
+\]
+\origin{Course formulation from H Thm.~4.4.8}
+\end{example}
+
+\subsection{Products and sums}\label{sec:3.1.2}
+
+\begin{theorem}[Rank of a product]\label{thm:rank-product}
+For $\bA\in\Real^{m\times n}$ and $\bB\in\Real^{n\times p}$,
+\[
+\rank(\bA\bB)\leqslant\min\{\rank(\bA),\rank(\bB)\}.
+\]
+Moreover,
+\[
+\begin{array}{ll}
+\rank(\bA\bB)=\rank(\bB),&\text{if $\bA$ has full column rank},\\
+\rank(\bA\bB)=\rank(\bA),&\text{if $\bB$ has full row rank}.
+\end{array}
+\]
+\origin{H Cor.~4.4.5 and Lemma~8.3.2; A\&M Ex.~4.15 and 4.25(c)--(d)}
+\end{theorem}
+
+\begin{proof}
+Since $\col(\bA\bB)\subseteq\col(\bA)$,
+$\rank(\bA\bB)\leqslant\rank(\bA)$.  Applying this result to
+$(\bA\bB)'=\bB'\bA'$ gives $\rank(\bA\bB)\leqslant\rank(\bB)$.
+
+If $\bA$ has full column rank, then $\nul(\bA)=\{\bzero\}$ and
+\[
+\bA\bB\bx=\bzero
+\iff \bB\bx\in\nul(\bA)
+\iff \bB\bx=\bzero.
+\]
+Thus $\nul(\bA\bB)=\nul(\bB)$; rank--nullity gives equal ranks.  If $\bB$ has full
+row rank, then $\col(\bB)=\Real^n$, so
+\[
+\col(\bA\bB)=\{\bA\by:\by\in\col(\bB)\}
+=\{\bA\by:\by\in\Real^n\}=\col(\bA).
+\]
+\end{proof}
+
+\begin{theorem}[Sylvester's rank inequality]\label{thm:sylvester-rank}
+For $\bA\in\Real^{m\times n}$ and $\bB\in\Real^{n\times p}$,
+\[
+\rank(\bA\bB)\geqslant\rank(\bA)+\rank(\bB)-n.
+\]
+More precisely,
+\[
+\rank(\bA\bB)
+=\rank(\bB)-\dim\bigl(\col(\bB)\cap\nul(\bA)\bigr).
+\]
+\origin{H Cor.~17.5.2 and Eq.~17.5.17; A\&M Ex.~5.47(b)}
+\end{theorem}
+
+\begin{proof}
+Define $S:\col(\bB)\to\Real^m$ by $S(\by)=\bA\by$.  Then
+\[
+\im(S)=\{\bA\bB\bx:\bx\in\Real^p\}=\col(\bA\bB),
+\qquad
+\ker(S)=\col(\bB)\cap\nul(\bA).
+\]
+Rank--nullity for $S$ gives the equality.  Since
+\[
+\dim\bigl(\col(\bB)\cap\nul(\bA)\bigr)
+\leqslant\dim\nul(\bA)=n-\rank(\bA),
+\]
+the inequality follows.
+\end{proof}
+
+\begin{theorem}[Ranks of a sum and a difference]\label{thm:rank-sum}
+For $\bA,\bB\in\Real^{m\times n}$,
+\[
+\rank(\bA+\bB)\leqslant\rank(\bA)+\rank(\bB),
+\qquad
+|\rank(\bA)-\rank(\bB)|\leqslant\rank(\bA-\bB).
+\]
+\origin{H Cor.~4.5.9; A\&M Ex.~4.14}
+\end{theorem}
+
+\begin{proof}
+Every column of $\bA+\bB$ lies in $\col(\bA)+\col(\bB)$; hence the dimension formula
+gives
+\[
+\rank(\bA+\bB)
+\leqslant\dim(\col(\bA)+\col(\bB))
+\leqslant\rank(\bA)+\rank(\bB).
+\]
+Apply this inequality to $\bA=(\bA-\bB)+\bB$ and
+$\bB=-(\bA-\bB)+\bA$:
+\[
+\rank(\bA)-\rank(\bB)\leqslant\rank(\bA-\bB),
+\quad
+\rank(\bB)-\rank(\bA)\leqslant\rank(\bA-\bB).
+\]
+\end{proof}
+
+\begin{example}[Sharp and strict rank bounds]\label{ex:rank-bounds}
+For
+\[
+\bA=\begin{pmatrix}1&0\\0&0\end{pmatrix},
+\qquad
+\bB=\begin{pmatrix}0&0\\0&1\end{pmatrix},
+\]
+\[
+\rank(\bA)=\rank(\bB)=1,
+\quad \rank(\bA\bB)=0,
+\quad \rank(\bA+\bB)=2.
+\]
+Thus the product upper bound can be strict, while Sylvester's lower bound and the sum
+upper bound are attained.
+\origin{Course formulation from A\&M Ex.~4.14--4.15}
+\end{example}
+
+\subsection{The Gram matrix}\label{sec:3.1.3}
+
+\begin{theorem}[Gram rank theorem]\label{thm:gram-rank}
+For every $\bA\in\Real^{m\times n}$,
+\[
+\nul(\bA'\bA)=\nul(\bA),
+\qquad
+\rank(\bA'\bA)=\rank(\bA),
+\qquad
+\col(\bA'\bA)=\col(\bA').
+\]
+The transposed statements give
+$\rank(\bA\bA')=\rank(\bA)$ and $\col(\bA\bA')=\col(\bA)$.
+\origin{H Cor.~7.4.5; A\&M Ex.~4.13}
+\end{theorem}
+
+\begin{proof}
+For $\bx\in\Real^n$,
+\[
+\bA\bx=\bzero\implies\bA'\bA\bx=\bzero.
+\]
+Conversely,
+\[
+\bA'\bA\bx=\bzero
+\implies
+0=\bx'\bA'\bA\bx=(\bA\bx)'(\bA\bx)=\|\bA\bx\|^2
+\implies \bA\bx=\bzero.
+\]
+Equal nullities and rank--nullity give equal ranks.  Since
+$\col(\bA'\bA)\subseteq\col(\bA')$ and the two spaces have equal dimension, they are
+equal.  Replace $\bA$ by $\bA'$ for the remaining identities.
+\end{proof}
+
+\begin{corollary}[Full column rank and the Gram matrix]\label{cor:gram-nonsingular}
+For $\bA\in\Real^{m\times n}$,
+\[
+\bA\text{ has full column rank}
+\iff \bA'\bA\text{ is nonsingular}.
+\]
+Similarly, $\bA$ has full row rank if and only if $\bA\bA'$ is nonsingular.
+\origin{H Cor.~7.4.5--7.4.6; A\&M Ex.~4.13(d)}
+\end{corollary}
+
+\begin{proof}
+The square matrix $\bA'\bA$ has order $n$.  By Theorem~\ref{thm:gram-rank},
+\[
+\rank(\bA'\bA)=n\iff\rank(\bA)=n.
+\]
+Apply the same argument to $\bA'$ for the row statement.
+\end{proof}
+
+\begin{example}[A rank-deficient Gram matrix]\label{ex:gram-rank}
+Let
+\[
+\bX=\begin{pmatrix}1&0&1\\0&1&1\\1&1&2\end{pmatrix},
+\qquad
+\bX'\bX=\begin{pmatrix}2&1&3\\1&2&3\\3&3&6\end{pmatrix}.
+\]
+The third column of $\bX$ is the sum of the first two, and
+\[
+\bX\begin{pmatrix}1\\1\\-1\end{pmatrix}=\bzero,
+\qquad
+\bX'\bX\begin{pmatrix}1\\1\\-1\end{pmatrix}=\bzero.
+\]
+The first two columns of $\bX$ are independent, so both matrices have rank $2$.
+\origin{Course formulation from H Cor.~7.4.5}
+\end{example}
+
+% \periodmark{End of period 1 of 3.}
+
+%=============================================================================
+\section{The inverse}\label{sec:3.2}
+%=============================================================================
+
+\subsection{Existence, uniqueness, and algebra}\label{sec:3.2.1}
+
+\begin{definition}[One-sided and two-sided inverses]\label{def:inverse}
+For $\bA\in\Real^{m\times n}$, a matrix $\bR\in\Real^{n\times m}$ is a
+\emph{right inverse} if $\bA\bR=\bI_m$, and a matrix
+$\bL\in\Real^{n\times m}$ is a \emph{left inverse} if $\bL\bA=\bI_n$.
+If one matrix $\bB$ is both, then $\bA$ is \emph{invertible} and
+$\bB=\bA^{-1}$.
+\origin{H \S8.1; A\&M \S4.2}
+\end{definition}
+
+\begin{theorem}[Existence of one-sided inverses]\label{thm:one-sided-existence}
+For $\bA\in\Real^{m\times n}$:
+\[
+\begin{aligned}
+\bA\text{ has a right inverse}&\iff\rank(\bA)=m,\\
+\bA\text{ has a left inverse}&\iff\rank(\bA)=n.
+\end{aligned}
+\]
+Consequently, a right inverse requires $m\leqslant n$, and a left inverse requires
+$n\leqslant m$.
+\origin{H Lemma~8.1.1}
+\end{theorem}
+
+\begin{proof}
+If $\bA\bR=\bI_m$, then
+\[
+m=\rank(\bI_m)=\rank(\bA\bR)\leqslant\rank(\bA)\leqslant m.
+\]
+Conversely, if $\rank(\bA)=m$, each $\eu_j\in\Real^m$ has the form
+$\eu_j=\bA\br_j$.  Then $\bR=(\br_1,\ldots,\br_m)$ satisfies $\bA\bR=\bI_m$.
+The left-inverse assertion follows by applying the right-inverse assertion to $\bA'$ and
+transposing.
+\end{proof}
+
+\begin{theorem}[Square inverse theorem]\label{thm:square-inverse}
+For $\bA\in\Real^{n\times n}$, the following are equivalent:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $\bA$ is nonsingular;
+\item $\bA$ has a right inverse;
+\item $\bA$ has a left inverse;
+\item $\bA$ is invertible.
+\end{enumerate}
+Every one-sided inverse is the unique two-sided inverse.
+\origin{H Lemma~8.1.3 and Thm.~8.1.4; A\&M Ex.~4.20--4.21}
+\end{theorem}
+
+\begin{proof}
+Theorem~\ref{thm:one-sided-existence} gives (i)$\iff$(ii)$\iff$(iii).  Suppose
+$\bA\bR=\bI_n$.  Then $\bA$ also has a left inverse $\bL$, and
+\[
+\bL=\bL(\bA\bR)=(\bL\bA)\bR=\bR.
+\]
+Thus $\bR\bA=\bI_n$, proving (ii)$\implies$(iv); the left-sided case is symmetric.
+If $\bB$ and $\bC$ are inverses, then
+\[
+\bB=\bB(\bA\bC)=(\bB\bA)\bC=\bC.
+\]
+\end{proof}
+
+\begin{theorem}[Inverse identities]\label{thm:inverse-identities}
+For invertible square matrices $\bA,\bB$ of the same order and $c\neq0$,
+\[
+\begin{gathered}
+(c\bA)^{-1}=c^{-1}\bA^{-1},
+\qquad
+(\bA')^{-1}=(\bA^{-1})',
+\qquad
+(\bA^{-1})^{-1}=\bA,\\
+(\bA\bB)^{-1}=\bB^{-1}\bA^{-1}.
+\end{gathered}
+\]
+\origin{H Eqs.~8.2.1--8.2.8; S Prop.~3.6; A\&M Ex.~4.22}
+\end{theorem}
+
+\begin{proof}
+Each proposed inverse is verified on both sides:
+\[
+(c\bA)(c^{-1}\bA^{-1})=\bI=(c^{-1}\bA^{-1})(c\bA),
+\]
+\[
+\bA'(\bA^{-1})'=(\bA^{-1}\bA)'=\bI,
+\qquad
+(\bA^{-1})'\bA'=(\bA\bA^{-1})'=\bI,
+\]
+\[
+(\bA\bB)(\bB^{-1}\bA^{-1})=\bI
+=(\bB^{-1}\bA^{-1})(\bA\bB).
+\]
+The defining equalities for $\bA^{-1}$ prove the third identity.
+\end{proof}
+
+\begin{example}[Exact inverses of orders $2$ and $3$]\label{ex:small-inverses}
+\[
+\begin{pmatrix}2&1\\1&1\end{pmatrix}
+\begin{pmatrix}1&-1\\-1&2\end{pmatrix}
+=\begin{pmatrix}1&-1\\-1&2\end{pmatrix}
+\begin{pmatrix}2&1\\1&1\end{pmatrix}=\bI_2.
+\]
+\[
+\bA=\begin{pmatrix}2&-1&0\\1&2&1\\3&0&1\end{pmatrix},
+\qquad
+\bM=\begin{pmatrix}2&1&-1\\2&2&-2\\-6&-3&5\end{pmatrix},
+\qquad
+\bA\bM=\bM\bA=2\bI_3.
+\]
+\[
+\begin{pmatrix}2&1\\1&1\end{pmatrix}^{-1}
+=\begin{pmatrix}1&-1\\-1&2\end{pmatrix},
+\qquad
+\bA^{-1}=\tfrac12\bM.
+\]
+\origin{Course formulation from H Eq.~8.1.2}
+\end{example}
+
+\subsection{Orthogonal matrices}\label{sec:3.2.2}
+
+\begin{definition}[Orthogonal matrix]\label{def:orthogonal}
+A real square matrix $\bQ$ is \emph{orthogonal} if
+\[
+\bQ'\bQ=\bI.
+\]
+\origin{H \S8.4(a); A\&M Ex.~4.27}
+\end{definition}
+
+\begin{theorem}[Orthogonal inverse and orthonormal rows]\label{thm:orthogonal-inverse}
+For a square matrix $\bQ$, the following are equivalent:
+\[
+\bQ'\bQ=\bI,
+\qquad
+\bQ\bQ'=\bI,
+\qquad
+\bQ^{-1}=\bQ'.
+\]
+Thus the columns of $\bQ$ are orthonormal if and only if its rows are orthonormal.
+\origin{H \S8.4(a); A\&M Ex.~4.27(a)--(c)}
+\end{theorem}
+
+\begin{proof}
+The equality $\bQ'\bQ=\bI$ makes $\bQ'$ a left inverse.  The square inverse theorem
+gives $\bQ^{-1}=\bQ'$ and hence $\bQ\bQ'=\bI$.  The reverse implication is symmetric.
+The $(i,j)$ entries of $\bQ'\bQ$ and $\bQ\bQ'$ are, respectively, inner products of
+columns and of rows.
+\end{proof}
+
+\begin{theorem}[Orthogonal invariance]\label{thm:orthogonal-invariance}
+If $\bQ$ is orthogonal, then for $\bx,\by\in\Real^n$,
+\[
+(\bQ\bx)'(\bQ\by)=\bx'\by,
+\qquad
+\|\bQ\bx\|=\|\bx\|.
+\]
+The transpose and every finite product of orthogonal matrices are orthogonal.
+\origin{H Lemma~8.4.1 and \S8.4(a); A\&M Ex.~4.27(c)--(d)}
+\end{theorem}
+
+\begin{proof}
+\[
+(\bQ\bx)'(\bQ\by)=\bx'\bQ'\bQ\by=\bx'\by.
+\]
+Set $\by=\bx$ and take nonnegative square roots for the norm identity.  Also
+\[
+\bQ\bQ'=\bI,
+\qquad
+(\bQ_1\bQ_2)'(\bQ_1\bQ_2)
+=\bQ_2'\bQ_1'\bQ_1\bQ_2=\bI;
+\]
+induction gives the finite-product statement.
+\end{proof}
+
+\begin{example}[A rational orthogonal matrix]\label{ex:rational-rotation}
+\[
+\bQ=\frac15\begin{pmatrix}3&-4\\4&3\end{pmatrix},
+\qquad
+\bQ'\bQ=\bI_2,
+\qquad
+\bQ\begin{pmatrix}5\\0\end{pmatrix}
+=\begin{pmatrix}3\\4\end{pmatrix}.
+\]
+\[
+\left\|\begin{pmatrix}5\\0\end{pmatrix}\right\|
+=\left\|\begin{pmatrix}3\\4\end{pmatrix}\right\|=5.
+\]
+\origin{Course formulation from H \S8.4(a)}
+\end{example}
+
+\subsection{Equivalent nonsingularity criteria}\label{sec:3.2.3}
+
+\begin{theorem}[Nonsingularity criteria]\label{thm:nonsingularity-criteria}
+For $\bA\in\Real^{n\times n}$, the following are equivalent:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $\rank(\bA)=n$;
+\item $\nul(\bA)=\{\bzero\}$;
+\item the columns of $\bA$ are linearly independent;
+\item the columns of $\bA$ form a basis of $\Real^n$;
+\item $\col(\bA)=\Real^n$;
+\item $\bA\bx=\bbb$ has exactly one solution for every $\bbb\in\Real^n$;
+\item $\bA$ is invertible.
+\end{enumerate}
+The same independence and basis criteria hold for the rows.
+\origin{H \S4.4(c) and Thm.~8.1.4; A\&M Ex.~4.21}
+\end{theorem}
+
+\begin{proof}
+Rank--nullity gives (i)$\iff$(ii).  The definition of linear independence gives
+(ii)$\iff$(iii).  A list of $n$ vectors in $\Real^n$ is independent if and only if it
+is a basis, so (iii)$\iff$(iv); the definition of a basis gives (iv)$\iff$(v).
+
+Condition (v) gives existence in (vi), while (ii) gives uniqueness because
+\[
+\bA\bx_1=\bA\bx_2
+\iff \bx_1-\bx_2\in\nul(\bA).
+\]
+Condition (vi) implies (v), and (i)$\iff$(v) by dimension.  Finally,
+(i)$\iff$(vii) is the square inverse theorem.  Apply (iii) to $\bA'$ and use
+$\rank(\bA')=\rank(\bA)$ for the row criteria.
+\end{proof}
+
+\begin{corollary}[Cancellation by full-rank factors]\label{cor:matrix-cancellation}
+For conformable matrices:
+\[
+\begin{aligned}
+\bC\bA=\bC\bB, \bC\text{ full column rank}
+&\implies \bA=\bB,\\
+\bA\bD=\bB\bD, \bD\text{ full row rank}
+&\implies \bA=\bB.
+\end{aligned}
+\]
+\origin{H Lemma~8.3.1}
+\end{corollary}
+
+\begin{proof}
+A full-column-rank $\bC$ has a left inverse $\bL$, and a full-row-rank $\bD$ has a
+right inverse $\bR$.  Hence
+\[
+\bC\bA=\bC\bB\implies\bA=\bL\bC\bA=\bL\bC\bB=\bB,
+\]
+\[
+\bA\bD=\bB\bD\implies\bA=\bA\bD\bR=\bB\bD\bR=\bB.
+\]
+\end{proof}
+
+% \periodmark{End of period 2 of 3.}
+
+%=============================================================================
+\newpage
+\section{The determinant}\label{sec:3.3}
+%=============================================================================
+
+\subsection{Definition and elementary properties}\label{sec:3.3.1}
+
+\begin{definition}[Permutation, sign, and determinant]\label{def:determinant}
+A \emph{permutation} of $\{1,\ldots,n\}$ is a bijection from this set to itself; let
+$S_n$ be the set of all such maps.  For $\sigma\in S_n$, set
+\[
+N(\sigma)=\#\{(i,j):i<j,\ \sigma(i)>\sigma(j)\},
+\qquad
+\sgn(\sigma)=(-1)^{N(\sigma)}.
+\]
+For $\bA=(a_{ij})\in\Real^{n\times n}$, define
+\[
+\det(\bA)=\sum_{\sigma\in S_n}\sgn(\sigma)
+\prod_{i=1}^n a_{i,\sigma(i)}.
+\]
+Also set $\det(\bI_0)=1$ for the empty matrix.
+\origin{H \S13.1(a)--(b); A\&M \S4.3; S \S3.1}
+\end{definition}
+
+\begin{example}[Determinants of orders $2$ and $3$]\label{ex:det-small}
+\[
+\det\begin{pmatrix}a&b\\c&d\end{pmatrix}=ad-bc,
+\]
+\[
+\det\begin{pmatrix}a&b&c\\d&e&f\\g&h&i\end{pmatrix}
+=aei+bfg+cdh-ceg-bdi-afh.
+\]
+For the matrix $\bA$ in Example~\ref{ex:small-inverses},
+\[
+\det(\bA)=2(2)(1)+(-1)(1)(3)-(-1)(1)(1)=2.
+\]
+\origin{H Eqs.~13.1.4--13.1.5; A\&M Ex.~4.29; S \S3.1}
+\end{example}
+
+\begin{theorem}[Multilinearity and alternation]\label{thm:det-multilinear}
+As a function of the columns, $\det(\bA)$ is linear in each column while the others are
+fixed.  Interchanging two columns multiplies the determinant by $-1$; a matrix with two
+equal columns has determinant $0$.  The same statements hold for rows.
+\origin{H \S13.1(b), Lemma~13.2.1, and Thm.~13.2.6; S Prop.~3.2; A\&M Ex.~4.30, 4.32--4.33, and 4.39}
+\end{theorem}
+
+\begin{proof}
+In every term of Definition~\ref{def:determinant}, exactly one factor comes from each
+column, proving linearity.  Swapping two entries in the list
+$\sigma(1),\ldots,\sigma(n)$ toggles their mutual inversion; for every entry between
+their positions, the two associated inversion indicators change by $0$ or $2$.
+Therefore the inversion parity changes.  If columns $r,s$ are interchanged, pairing
+$\sigma$ with $(r\ s)\circ\sigma$ shows that the determinant changes sign.  If the two
+columns are equal, the interchange leaves the matrix fixed, so
+$\det(\bA)=-\det(\bA)$ and
+$\det(\bA)=0$.
+
+For the transpose, the term indexed by $\sigma$ becomes the term indexed by
+$\sigma^{-1}$.  An inversion $i<j$, $\sigma(i)>\sigma(j)$ maps to the inversion
+$\sigma(j)<\sigma(i)$,
+$\sigma^{-1}(\sigma(j))>\sigma^{-1}(\sigma(i))$.  This is a bijection, so
+$\sgn(\sigma^{-1})=\sgn(\sigma)$ and $\det(\bA')=\det(\bA)$.  Apply the column
+statements to $\bA'$ to obtain the row statements.
+\end{proof}
+
+\begin{corollary}[Elementary operations]\label{cor:det-operations}
+For a square matrix:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item scaling one row or column by $c$ scales the determinant by $c$;
+\item adding a multiple of one row or column to another leaves the determinant fixed;
+\item interchanging two rows or columns changes its sign;
+\item $\det(c\bA)=c^n\det(\bA)$ and $\det(\bA')=\det(\bA)$.
+\end{enumerate}
+\origin{H Lemmas~13.2.1--13.2.2 and Thm.~13.2.10; A\&M Ex.~4.30, 4.32, 4.34--4.35}
+\end{corollary}
+
+\begin{proof}
+Parts (i), (iii), and the transpose identity are in
+Theorem~\ref{thm:det-multilinear}.  For columns $\ba_i,\ba_j$ with $i\neq j$,
+multilinearity and alternation give
+\[
+\det(\ldots,\ba_i+c\ba_j,\ldots,\ba_j,\ldots)
+=\det(\bA)+c\det(\ldots,\ba_j,\ldots,\ba_j,\ldots)
+=\det(\bA).
+\]
+Apply (i) to all $n$ rows for $\det(c\bA)=c^n\det(\bA)$.
+\end{proof}
+
+\begin{theorem}[Triangular determinant]\label{thm:triangular-det}
+If $\bT=(t_{ij})\in\Real^{n\times n}$ is upper or lower triangular, then
+\[
+\det(\bT)=\prod_{i=1}^n t_{ii}.
+\]
+\origin{H Lemma~13.1.1; S Prop.~3.1; A\&M Ex.~4.38}
+\end{theorem}
+
+\begin{proof}
+For upper triangular $\bT$, a nonzero term in the permutation sum requires
+$\sigma(i)\geqslant i$ for every $i$.  Since
+$\sum_i\sigma(i)=\sum_i i$, every inequality is equality.  Only
+$\sigma(i)=i$ remains, with sign $1$, giving $\prod_i t_{ii}$.  Transpose for the lower
+triangular case.
+\end{proof}
+
+\subsection{Cofactors, products, and the inverse}\label{sec:3.3.2}
+
+\begin{definition}[Minor, cofactor, and adjugate]\label{def:cofactor}
+For $\bA\in\Real^{n\times n}$, let $\bA_{ij}$ be obtained by deleting row $i$ and column
+$j$.  Define
+\[
+M_{ij}=\det(\bA_{ij}),
+\qquad
+C_{ij}=(-1)^{i+j}M_{ij},
+\qquad
+\adj(\bA)=(C_{ij})'.
+\]
+$M_{ij}$ and $C_{ij}$ are the \emph{minor} and \emph{cofactor} of $a_{ij}$;
+$\adj(\bA)$ is the \emph{adjugate}.
+\origin{H \S13.5; S \S3.2.1; A\&M \S4.3}
+\end{definition}
+
+\begin{theorem}[Laplace expansion and adjugate identity]\label{thm:laplace-adjugate}
+For each row $i$ and column $j$,
+\[
+\det(\bA)=\sum_{k=1}^n a_{ik}C_{ik}
+=\sum_{k=1}^n a_{kj}C_{kj}.
+\]
+Moreover,
+\[
+\bA\adj(\bA)=\adj(\bA)\bA=\det(\bA)\bI_n.
+\]
+\origin{H Thms.~13.5.1--13.5.3; S Prop.~3.3; A\&M Ex.~4.36--4.37 and 4.46(a)}
+\end{theorem}
+
+\begin{proof}
+Fix row $i$.  Group the permutation sum by $k=\sigma(i)$.  Deleting the chosen row and
+column leaves the permutation sum for $\det(\bA_{ik})$.  Moving row $i$ and column $k$
+to the first positions uses $(i-1)+(k-1)$ interchanges and contributes
+$(-1)^{i+k}$.  Hence
+$\det(\bA)=\sum_k a_{ik}C_{ik}$.  Apply this row formula to $\bA'$ for the column
+formula.
+
+The $(i,j)$ entry of $\bA\adj(\bA)$ is $\sum_k a_{ik}C_{jk}$.  For $i=j$ this is the
+row expansion.  For $i\neq j$ it is the row-$j$ expansion of a matrix whose row $j$ has
+been replaced by row $i$; that matrix has two equal rows, so the sum is $0$.  Thus
+$\bA\adj(\bA)=\det(\bA)\bI_n$.  The column argument gives the reversed product.
+\end{proof}
+
+\begin{corollary}[Adjugate inverse and Cramer's rule]\label{cor:adjugate-cramer}
+If $\det(\bA)\neq0$, then
+\[
+\bA^{-1}=\frac{\adj(\bA)}{\det(\bA)}.
+\]
+\tcbbreak
+For $\bA\bx=\bbb$, let $\bA_j(\bbb)$ replace column $j$ of $\bA$ by $\bbb$.  Then
+\[
+x_j=\frac{\det(\bA_j(\bbb))}{\det(\bA)},
+\qquad j=1,\ldots,n.
+\]
+\origin{H Cor.~13.5.4 and Ex.~13.11; S Prop.~3.10; A\&M Ex.~4.46(b)}
+\end{corollary}
+
+\begin{proof}
+Divide the adjugate identity by $\det(\bA)$.  Then
+\[
+x_j=\frac{1}{\det(\bA)}\sum_{i=1}^n C_{ij}b_i.
+\]
+The numerator is the Laplace expansion of $\det(\bA_j(\bbb))$ along column $j$.
+\end{proof}
+
+\begin{theorem}[Multiplicativity]\label{thm:det-product}
+For $\bA,\bB\in\Real^{n\times n}$,
+\[
+\det(\bA\bB)=\det(\bA)\det(\bB).
+\]
+\origin{H Thm.~13.3.4; S Thm.~3.1; A\&M Ex.~4.42}
+\end{theorem}
+
+\begin{proof}
+Write $\bA=(\ba_1,\ldots,\ba_n)$ and let $b_{ij}$ be the entries of $\bB$.  Column $j$
+of $\bA\bB$ is $\sum_i b_{ij}\ba_i$.  Multilinearity gives
+\[
+\det(\bA\bB)
+=\sum_{i_1,\ldots,i_n}
+b_{i_1 1}\cdots b_{i_n n}\det(\ba_{i_1},\ldots,\ba_{i_n}).
+\]
+Repeated indices contribute $0$.  For $(i_1,\ldots,i_n)=(\sigma(1),\ldots,\sigma(n))$,
+alternation gives
+\[
+\det(\ba_{\sigma(1)},\ldots,\ba_{\sigma(n)})
+=\sgn(\sigma)\det(\bA).
+\]
+Factoring $\det(\bA)$ leaves the permutation formula for $\det(\bB)$ after the
+substitution $\tau=\sigma^{-1}$, since $\sgn(\tau)=\sgn(\sigma)$.
+\end{proof}
+
+\begin{theorem}[Determinant criterion]\label{thm:det-criterion}
+For $\bA\in\Real^{n\times n}$,
+\[
+\det(\bA)\neq0
+\iff \bA\text{ is nonsingular}
+\iff \bA\text{ is invertible}.
+\]
+If these hold, $\det(\bA^{-1})=1/\det(\bA)$.
+\origin{H Thm.~13.3.7; S Prop.~3.5; A\&M Ex.~4.43--4.44}
+\end{theorem}
+
+\begin{proof}
+If $\det(\bA)\neq0$, Corollary~\ref{cor:adjugate-cramer} constructs the inverse.  If
+$\bA$ is invertible, multiplicativity gives
+\[
+1=\det(\bI_n)=\det(\bA\bA^{-1})
+=\det(\bA)\det(\bA^{-1}),
+\]
+which proves both the nonzero criterion and the reciprocal identity.  The square inverse
+theorem identifies invertibility with nonsingularity.
+\end{proof}
+
+\subsection{Minors and determinant structure}\label{sec:3.3.3}
+
+\begin{theorem}[Rank from minors]\label{thm:rank-minors}
+If $\bA\neq\bO$, then $\rank(\bA)$ is the largest $k$ for which $\bA$ has a $k$ by $k$
+submatrix with nonzero determinant.  The null matrix has rank $0$ and all its positive-order
+minors vanish.
+\origin{H Thm.~4.4.10}
+\end{theorem}
+
+\begin{proof}
+Let $\bM$ retain rows $i_1,\ldots,i_k$ and columns $j_1,\ldots,j_k$ of $\bA$.  Define
+$\bE\in\Real^{k\times m}$ and $\bF\in\Real^{n\times k}$ by
+\[
+(\bE)_{a i}=
+\begin{cases}1,&i=i_a,\\0,&i\ne i_a,\end{cases}
+\qquad
+(\bF)_{j b}=
+\begin{cases}1,&j=j_b,\\0,&j\ne j_b.\end{cases}
+\]
+Then $\bM=\bE\bA\bF$, so
+\[
+\det(\bM)\neq0
+\implies k=\rank(\bM)\leqslant\rank(\bA).
+\]
+Let $r=\rank(\bA)>0$.  Choose $r$ basis columns and put them in
+$\bB\in\Real^{m\times r}$.  Let $\bE$ select $r$ independent rows of $\bA$.  In the
+factorisation $\bA=\bB\bC$,
+\[
+\bz'\bE\bB=\bzero'
+\implies \bz'\bE\bA=\bz'\bE\bB\bC=\bzero'
+\implies \bz=\bzero.
+\]
+Thus their $r$ by $r$ intersection $\bM=\bE\bB$ has rank $r$, so
+$\det(\bM)\neq0$ by Theorem~\ref{thm:det-criterion}.
+\end{proof}
+
+\begin{corollary}[Determinants under transpose, Gram formation, and rotation]
+\label{cor:structured-det}
+For square $\bA$ and orthogonal $\bQ$,
+\[
+\det(\bA')=\det(\bA),
+\qquad
+\det(\bA'\bA)=\det(\bA)^2,
+\qquad
+\det(\bQ)\in\{-1,1\}.
+\]
+\origin{H Lemma~13.2.1 and Cor.~13.3.5--13.3.6; S \S3.3}
+\end{corollary}
+
+\begin{proof}
+The transpose identity was proved in Theorem~\ref{thm:det-multilinear}.  Multiplicativity
+then gives $\det(\bA'\bA)=\det(\bA)^2$.  For orthogonal $\bQ$,
+\[
+1=\det(\bI)=\det(\bQ'\bQ)=\det(\bQ)^2.
+\]
+\end{proof}
+
+\begin{theorem}[Vandermonde determinant]\label{thm:vandermonde}
+For
+\[
+\bV(x_1,\ldots,x_n)=
+\begin{pmatrix}
+1&x_1&\cdots&x_1^{n-1}\\
+\vdots&\vdots&&\vdots\\
+1&x_n&\cdots&x_n^{n-1}
+\end{pmatrix},
+\]
+\[
+\det\bV(x_1,\ldots,x_n)=\prod_{1\leqslant i<j\leqslant n}(x_j-x_i).
+\]
+Hence $\bV$ is nonsingular if and only if $x_1,\ldots,x_n$ are distinct.
+\origin{H \S13.6; A\&M Ex.~4.41; S Ex.~3.16--3.17}
+\end{theorem}
+
+\begin{proof}
+Induct on $n$; the result is $1$ for $n=1$.  Let $\bT$ have diagonal entries $1$,
+superdiagonal entries $-x_n$, and all other entries $0$.  Then $\det(\bT)=1$ and
+\[
+\bV\bT=
+\begin{pmatrix}
+1&x_1-x_n&x_1(x_1-x_n)&\cdots&x_1^{n-2}(x_1-x_n)\\
+\vdots&\vdots&\vdots&&\vdots\\
+1&x_{n-1}-x_n&x_{n-1}(x_{n-1}-x_n)&\cdots&x_{n-1}^{n-2}(x_{n-1}-x_n)\\
+1&0&0&\cdots&0
+\end{pmatrix}.
+\]
+Let $\bD=\diag(x_1-x_n,\ldots,x_{n-1}-x_n)$ and
+$\bW=\bV(x_1,\ldots,x_{n-1})$.  Expansion along the last row and multiplicativity give
+\[
+\det(\bV)=\det(\bV\bT)
+=(-1)^{n+1}\det(\bD\bW)
+=\prod_{i=1}^{n-1}(x_n-x_i)\det(\bW).
+\]
+Apply the induction hypothesis to $\det(\bW)$.  The determinant criterion gives the
+final equivalence.
+\end{proof}
+
+\begin{corollary}[Unique polynomial interpolation]\label{cor:interpolation}
+If $x_1,\ldots,x_n$ are distinct, then for every $y_1,\ldots,y_n$ there is a unique
+polynomial $p$ of degree at most $n-1$ such that $p(x_i)=y_i$ for every $i$.
+\origin{Course formulation from H \S13.6; S Ex.~3.17}
+\end{corollary}
+
+\begin{proof}
+For $p(t)=\sum_{j=0}^{n-1}c_jt^j$, the interpolation equations are
+\[
+\bV(x_1,\ldots,x_n)\bc=\by.
+\]
+Theorem~\ref{thm:vandermonde} makes the coefficient matrix nonsingular; the
+nonsingularity criteria give one and only one $\bc$.
+\end{proof}
+
+%=============================================================================
+\section{Computation: Numerical Checks in R}\label{sec:3.4}
+%=============================================================================
+
+\subsection{Full-rank and Gram factorisations (§\ref{sec:3.1.1}, §\ref{sec:3.1.3})}
+\label{sec:3.4.1}
+
+\[
+\bA=
+\begin{pmatrix}1&0&-1&0\\0&1&3&2\\1&1&2&2\end{pmatrix}
+=
+\underbrace{\begin{pmatrix}1&0\\0&1\\1&1\end{pmatrix}}_{\bB}
+\underbrace{\begin{pmatrix}1&0&-1&0\\0&1&3&2\end{pmatrix}}_{\bC}.
+\]
+The top two rows of $\bB$ and the left two columns of $\bC$ equal $\bI_2$, so both
+factors have rank $2$.  For $\bh=(1,-3,1,0)'$,
+\[
+\bA\bh=\bzero,\qquad
+\bA'\bA\bh=\bzero,\qquad
+\bA=\sum_{k=1}^2\mathbf b_k\bc_k',
+\]
+where $\mathbf b_k$ is column $k$ of $\bB$ and $\bc_k'$ is row $k$ of $\bC$.
+
+<<rank-factorization-gram>>=
+A <- rbind(c(1, 0, -1, 0),
+           c(0, 1,  3, 2),
+           c(1, 1,  2, 2))
+B <- A[, 1:2, drop = FALSE]
+C <- rbind(c(1, 0, -1, 0),
+           c(0, 1,  3, 2))
+h <- c(1, -3, 1, 0)
+rank_one_sum <- B[, 1] %o% C[1, ] + B[, 2] %o% C[2, ]
+c(A_minus_BC = max(abs(A - B %*% C)),
+  A_minus_rank_one_sum = max(abs(A - rank_one_sum)),
+  Ah = max(abs(A %*% h)),
+  AtAh = max(abs(crossprod(A) %*% h)))
+@
+
+\subsection{A 3 by 3 determinant and adjugate (§\ref{sec:3.3.2})}
+\label{sec:3.4.2}
+
+<<manual-determinant>>=
+A <- rbind(c(2, -1, 0), c(1, 2, 1), c(3, 0, 1))
+a <- A[1, 1]; b <- A[1, 2]; cc <- A[1, 3]
+d <- A[2, 1]; e <- A[2, 2]; f <- A[2, 3]
+g <- A[3, 1]; h <- A[3, 2]; i <- A[3, 3]
+det_manual <- a*e*i + b*f*g + cc*d*h - cc*e*g - b*d*i - a*f*h
+c(manual = det_manual, package = det(A), difference = det_manual - det(A))
+@
+
+<<manual-adjugate>>=
+adj_manual <- matrix(c(
+  e*i - f*h, cc*h - b*i, b*f - cc*e,
+  f*g - d*i, a*i - cc*g, cc*d - a*f,
+  d*h - e*g, b*g - a*h, a*e - b*d), 3, 3, byrow = TRUE)
+c(reconstruction = max(abs(A %*% adj_manual - det_manual * diag(3))),
+  inverse = max(abs(adj_manual / det_manual - solve(A))))
+@
+
+\subsection{Multiplicativity and logarithmic determinants (§\ref{sec:3.3.2})}
+\label{sec:3.4.3}
+
+<<det-product>>=
+set.seed(304)
+A <- matrix(rnorm(16), 4, 4)
+B <- matrix(rnorm(16), 4, 4)
+c(det_product = det(A %*% B),
+  product_det = det(A) * det(B),
+  difference = det(A %*% B) - det(A) * det(B))
+@
+
+<<log-determinant>>=
+D <- diag(rep(0.01, 200))
+ld <- determinant(D, logarithm = TRUE)
+c(det = det(D), sign = unname(ld$sign),
+  log_abs_det = unname(ld$modulus), exact_log_abs_det = 200 * log(0.01))
+@
+
+\subsection{Solving against forming an inverse (§\ref{sec:3.2.1})}
+\label{sec:3.4.4}
+
+<<solve-not-invert>>=
+set.seed(305)
+n <- 180
+A <- crossprod(matrix(rnorm(n * n), n, n)) + diag(n)
+b <- rnorm(n)
+t_direct <- system.time(for (k in 1:10) x_direct <- solve(A, b))["elapsed"]
+t_inverse <- system.time(for (k in 1:10) x_inverse <- solve(A) %*% b)["elapsed"]
+c(residual_direct = sqrt(sum((A %*% x_direct - b)^2)),
+  residual_inverse = sqrt(sum((A %*% x_inverse - b)^2)),
+  solution_difference = sqrt(sum((x_direct - x_inverse)^2)),
+  seconds_direct = unname(t_direct), seconds_inverse = unname(t_inverse))
+@
+
+%=============================================================================
+\section{Pitfalls}\label{sec:3.5}
+%=============================================================================
+
+\subsection{Using a determinant as a numerical rank test}\label{sec:3.5.1}
+
+The invertible matrix $0.1\bI_{100}$ has determinant $10^{-100}$.  Rescaling a matrix
+changes its determinant by the hundredth power without changing its rank.  A small
+determinant does not imply deficient rank.
+
+\subsection{Treating a computed zero determinant as an algebraic zero}\label{sec:3.5.2}
+
+For $\bD=0.01\bI_{200}$,
+\[
+\det(\bD)=10^{-400}>0,
+\]
+but this number is below the range of ordinary double precision.  The logarithmic form
+$\log|\det(\bD)|=200\log(0.01)$ remains representable.
+
+\subsection{Reading a positive Gram diagonal as full rank}\label{sec:3.5.3}
+
+\[
+\bX=\begin{pmatrix}1&1\\0&0\end{pmatrix},
+\qquad
+\bX'\bX=\begin{pmatrix}1&1\\1&1\end{pmatrix}.
+\]
+Every diagonal entry of $\bX'\bX$ is positive, but
+\[
+\bX\begin{pmatrix}1\\-1\end{pmatrix}=\bzero,
+\qquad
+\rank(\bX)=\rank(\bX'\bX)=1.
+\]
+
+\subsection{Computing \texorpdfstring{$\bA^{-1}\bbb$}{A inverse b} as two operations}
+\label{sec:3.5.4}
+
+The identity $\bx=\bA^{-1}\bbb$ characterises the solution.  It does not prescribe an
+algorithm.  A linear-system routine computes the solution without forming every column
+of $\bA^{-1}$.
+
+%=============================================================================
+\newpage
+\section{Exercises}\label{sec:3.6}
+%=============================================================================
+
+\begin{exercise}[Rank factorisation and rank-one expansion]\label{ex:rank-compression}
+Let
+\[
+\bA=\begin{pmatrix}
+1&0&2&1\\0&1&-1&2\\1&1&1&3
+\end{pmatrix}.
+\]
+Find a full-rank factorisation $\bA=\bB\bC$, express $\bA$ as a sum of rank-one
+matrices, and prove that one rank-one summand cannot suffice.
+\origin{H Thm.~4.4.8 and Ex.~4.10; A\&M Ex.~4.11}
+\end{exercise}
+
+\begin{solution}
+The first two columns are independent, and columns $3,4$ equal
+$2\ba_1-\ba_2$ and $\ba_1+2\ba_2$.  Hence
+\[
+\bB=\begin{pmatrix}1&0\\0&1\\1&1\end{pmatrix},
+\qquad
+\bC=\begin{pmatrix}1&0&2&1\\0&1&-1&2\end{pmatrix},
+\qquad \bA=\bB\bC.
+\]
+Both factors contain $\bI_2$ as a submatrix, so both have rank $2$.  Thus
+\[
+\bA=
+\begin{pmatrix}1\\0\\1\end{pmatrix}(1,0,2,1)
++\begin{pmatrix}0\\1\\1\end{pmatrix}(0,1,-1,2).
+\]
+A single rank-one summand would have rank at most $1$, whereas $\rank(\bA)=2$.
+\end{solution}
+
+\begin{exercise}[Rank-one perturbation]\label{ex:rank-one-perturbation}
+For $\bA\in\Real^{m\times n}$, $\bu\in\Real^m$, and $\bv\in\Real^n$, prove
+\[
+|\rank(\bA+\bu\bv')-\rank(\bA)|\leqslant1.
+\]
+Give examples attaining $-1$, $0$, and $1$.
+\origin{Course formulation from S \S3.8; H Cor.~4.5.9}
+\end{exercise}
+
+\begin{solution}
+Since $\rank(\bu\bv')\leqslant1$, Theorem~\ref{thm:rank-sum} gives
+\[
+\rank(\bA+\bu\bv')\leqslant\rank(\bA)+1.
+\]
+Writing $\bA=(\bA+\bu\bv')-\bu\bv'$ gives the reverse bound
+$\rank(\bA)\leqslant\rank(\bA+\bu\bv')+1$.  In order $2$, take
+\[
+\begin{array}{c|c|c}
+\bA&\bu\bv'&\text{rank change}\\ \hline
+\bI_2&-\eu_1\eu_1'&-1\\
+\bI_2&\eu_1\eu_2'&0\\
+\diag(1,0)&\eu_2\eu_2'&1.
+\end{array}
+\]
+\end{solution}
+
+\begin{exercise}[A stacked Gram matrix]\label{ex:stacked-gram}
+For $\bA\in\Real^{m\times n}$ and $\bB\in\Real^{p\times n}$, prove
+\[
+\nul(\bA'\bA+\bB'\bB)=\nul(\bA)\cap\nul(\bB)
+=\nul\begin{pmatrix}\bA\\\bB\end{pmatrix},
+\]
+and hence
+\[
+\rank(\bA'\bA+\bB'\bB)
+=\rank\begin{pmatrix}\bA\\\bB\end{pmatrix}.
+\]
+\origin{Course formulation from H Cor.~7.4.5}
+\end{exercise}
+
+\begin{solution}
+For $\bx\in\Real^n$,
+\[
+\bx'(\bA'\bA+\bB'\bB)\bx
+=\|\bA\bx\|^2+\|\bB\bx\|^2.
+\]
+If $(\bA'\bA+\bB'\bB)\bx=\bzero$, the displayed sum is zero, so
+$\bA\bx=\bzero$ and $\bB\bx=\bzero$.  Conversely,
+\[
+\bA\bx=\bzero, \bB\bx=\bzero
+\implies (\bA'\bA+\bB'\bB)\bx=\bzero.
+\]
+This is
+also equivalent to
+\[
+\begin{pmatrix}\bA\\\bB\end{pmatrix}\bx=\bzero.
+\]
+The three
+matrices have $n$ columns, so rank--nullity gives the rank identity.
+\end{solution}
+
+\begin{exercise}[Exact rank loss in a product]\label{ex:product-rank-loss}
+For $\bA\in\Real^{m\times n}$ and $\bB\in\Real^{n\times p}$, prove
+\[
+\rank(\bA\bB)=\rank(\bB)
+\iff \col(\bB)\cap\nul(\bA)=\{\bzero\}.
+\]
+Deduce that full column rank of $\bA$ is sufficient but not necessary for equality.
+\origin{H Eq.~17.5.17}
+\end{exercise}
+
+\begin{solution}
+The exact formula in Theorem~\ref{thm:sylvester-rank} gives
+\[
+\rank(\bA\bB)=\rank(\bB)
+-\dim(\col(\bB)\cap\nul(\bA)),
+\]
+which proves the equivalence.  Full column rank gives $\nul(\bA)=\{\bzero\}$.  It is not
+necessary: with
+\[
+\bA=\diag(1,0),
+\qquad
+\bB=\begin{pmatrix}1\\0\end{pmatrix},
+\]
+$\bA$ is not full column rank, but $\bA\bB=\bB$ and both ranks are $1$.
+\end{solution}
+
+\begin{exercise}[Families of right inverses]\label{ex:right-inverse-family}
+For $m,q\geqslant1$, let
+$\bA=(\bI_m\ \bC)\in\Real^{m\times(m+q)}$.  Determine all right inverses of the
+form
+\[
+\bR=\begin{pmatrix}\bU\\\bV\end{pmatrix},
+\qquad \bU\in\Real^{m\times m},\quad\bV\in\Real^{q\times m}.
+\]
+When $q>0$, prove that $\bA$ has infinitely many right inverses.
+\origin{Course formulation from H Lemma~8.1.1}
+\end{exercise}
+
+\begin{solution}
+Block multiplication gives
+\[
+\bA\bR=\bU+\bC\bV.
+\]
+Thus $\bA\bR=\bI_m$ exactly when
+\[
+\bU=\bI_m-\bC\bV,
+\qquad
+\bR=\begin{pmatrix}\bI_m-\bC\bV\\\bV\end{pmatrix},
+\quad \bV\in\Real^{q\times m}.
+\]
+If $q>0$, distinct choices $\bV=t\bE_{11}$, $t\in\Real$, give distinct right inverses.
+\end{solution}
+
+\begin{exercise}[Orthogonal recoding of data]\label{ex:orthogonal-data}
+Let $\bX\in\Real^{n\times p}$ and let $\bQ\in\Real^{n\times n}$ be orthogonal.  Prove
+\[
+(\bQ\bX)'(\bQ\bX)=\bX'\bX,
+\qquad
+\rank(\bQ\bX)=\rank(\bX),
+\qquad
+\|\bQ\bx_i-\bQ\bx_j\|=\|\bx_i-\bx_j\|
+\]
+for any columns $\bx_i,\bx_j$ of $\bX$.
+\origin{Course formulation from H \S8.4(a) and Lemma~8.3.2; A\&M Ex.~4.13 and 4.27}
+\end{exercise}
+
+\begin{solution}
+\[
+(\bQ\bX)'(\bQ\bX)=\bX'\bQ'\bQ\bX=\bX'\bX.
+\]
+Since $\bQ$ is nonsingular, the product-rank equality gives
+$\rank(\bQ\bX)=\rank(\bX)$.  Finally,
+\[
+\|\bQ\bx_i-\bQ\bx_j\|
+=\|\bQ(\bx_i-\bx_j)\|=\|\bx_i-\bx_j\|.
+\]
+\end{solution}
+
+\begin{exercise}[Commutation and inversion]\label{ex:commuting-inverse}
+If $\bA\bB=\bB\bA$ and $\bB$ is invertible, prove
+\[
+\bA\bB^{-1}=\bB^{-1}\bA.
+\]
+If both matrices are invertible, prove that $\bA^{-1}$ and $\bB^{-1}$ commute.
+\origin{H Eq.~8.2.8; A\&M Ex.~4.22(e)}
+\end{exercise}
+
+\begin{solution}
+Premultiply $\bA\bB=\bB\bA$ by $\bB^{-1}$ and postmultiply by $\bB^{-1}$:
+\[
+\bB^{-1}\bA=\bA\bB^{-1}.
+\]
+If $\bA$ is also invertible, then
+\[
+\bA^{-1}\bB^{-1}=(\bB\bA)^{-1}
+=(\bA\bB)^{-1}=\bB^{-1}\bA^{-1}.
+\]
+\end{solution}
+
+\begin{exercise}[Matrix determinant lemma]\label{ex:determinant-lemma}
+For $\bA\in\Real^{n\times n}$ and $\bu,\bv\in\Real^n$, prove
+\[
+\det(\bA+\bu\bv')=\det(\bA)+\bv'\adj(\bA)\bu.
+\]
+If $\bA$ is invertible, deduce
+\[
+\det(\bA+\bu\bv')
+=\det(\bA)(1+\bv'\bA^{-1}\bu).
+\]
+\origin{S Prop.~3.21; H Thm.~18.1.1}
+\end{exercise}
+
+\begin{solution}
+Column $j$ of $\bA+\bu\bv'$ is $\ba_j+v_j\bu$.  Multilinearity produces the term
+$\det(\bA)$, the $n$ terms with one replaced column, and terms with at least two columns
+proportional to $\bu$.  The latter vanish.  Expanding a one-replacement determinant
+along its replaced column gives
+\[
+\det(\bA+\bu\bv')
+=\det(\bA)+\sum_{j=1}^n v_j\sum_{i=1}^n u_iC_{ij}
+=\det(\bA)+\bv'\adj(\bA)\bu.
+\]
+For invertible $\bA$, substitute $\adj(\bA)=\det(\bA)\bA^{-1}$.
+\end{solution}
+
+\begin{exercise}[Integer inverses]\label{ex:integer-inverse}
+Let $\bA$ be a square integer matrix.  Prove that $\bA^{-1}$ exists and has integer entries if
+and only if $\det(\bA)=\pm1$.
+\origin{Course formulation from H Ex.~13.3; S Prop.~3.5}
+\end{exercise}
+
+\begin{solution}
+If $\bA^{-1}$ is integral, then both determinants are integers and
+\[
+\det(\bA)\det(\bA^{-1})=1,
+\]
+so $\det(\bA)=\pm1$.  Conversely, every cofactor of an integer matrix is an integer.
+If $\det(\bA)=\pm1$, the adjugate formula gives
+$\bA^{-1}=\pm\adj(\bA)$, an integer matrix.
+\end{solution}
+
+\begin{exercise}[Rank of the adjugate]\label{ex:adjugate-rank}
+For $\bA\in\Real^{n\times n}$, prove
+\[
+\rank(\adj(\bA))=
+\begin{cases}
+n,&\rank(\bA)=n,\\
+1,&\rank(\bA)=n-1,\\
+0,&\rank(\bA)\leqslant n-2.
+\end{cases}
+\]
+\origin{Course formulation from H Ex.~13.10; A\&M Ex.~4.46}
+\end{exercise}
+
+\begin{solution}
+If $\rank(\bA)=n$, then
+$\adj(\bA)=\det(\bA)\bA^{-1}$ has rank $n$.  If $\rank(\bA)\leqslant n-2$, every
+$(n-1)$-order minor vanishes by Theorem~\ref{thm:rank-minors}; hence every cofactor is
+zero.
+
+If $\rank(\bA)=n-1$, some $(n-1)$-order minor is nonzero, so
+$\adj(\bA)\neq\bO$.  Since $\det(\bA)=0$, the adjugate identity gives
+$\bA\adj(\bA)=\bO$.  Every column of $\adj(\bA)$ lies in the one-dimensional space
+$\nul(\bA)$; therefore its rank is at most $1$ and, being nonzero, equals $1$.
+\end{solution}
+
+\begin{exercise}[Tridiagonal recurrence]\label{ex:tridiagonal-det}
+Let
+\[
+\bT_n=
+\begin{pmatrix}
+2&-1&0&\cdots&0\\
+-1&2&-1&\ddots&\vdots\\
+0&\ddots&\ddots&\ddots&0\\
+\vdots&\ddots&-1&2&-1\\
+0&\cdots&0&-1&2
+\end{pmatrix}.
+\]
+Prove $\det(\bT_n)=n+1$.
+\origin{A\&M Ex.~4.40}
+\end{exercise}
+
+\begin{solution}[qedhere]
+Let $d_n=\det(\bT_n)$ and set $d_0=1$.  Expansion along the first row, followed by
+expansion of the second minor along its first column, gives
+\[
+d_n=2d_{n-1}-d_{n-2},
+\qquad d_0=1,\quad d_1=2.
+\]
+\[
+d_n-d_{n-1}=d_{n-1}-d_{n-2}=\cdots=d_1-d_0=1
+\quad\Longrightarrow\quad
+d_n=d_0+n=n+1.\tag*{\textcolor{solFR}{$\blacksquare$}}
+\]
+\end{solution}
+
+\begin{exercise}[Interpolation as a linear system]\label{ex:vandermonde-interpolation}
+Let $x_1,\ldots,x_n$ be distinct.  Prove that the evaluation map
+\[
+E:\calP_{n-1}\to\Real^n,
+\qquad
+E(p)=(p(x_1),\ldots,p(x_n))',
+\]
+is linear, one-to-one, and onto.  If two polynomials of degree at most $n-1$ agree at
+all $x_i$, prove that they are equal.
+\origin{Course formulation from H \S13.6; A\&M Ex.~4.41; S Ex.~3.17}
+\end{exercise}
+
+\begin{solution}
+For $p(t)=\sum_{j=0}^{n-1}c_jt^j$ and
+$\bc=(c_0,\ldots,c_{n-1})'$,
+\[
+E(p)=\bV(x_1,\ldots,x_n)\bc.
+\]
+The determinant of $\bV$ is
+\[
+\prod_{i<j}(x_j-x_i)\neq0,
+\]
+and $E$ is linear by componentwise evaluation.
+\Needspace{4\baselineskip}
+\noindent For each $\by\in\Real^n$, the system
+$\bV\bc=\by$ has exactly one solution, so $E$ is one-to-one and onto.  If
+$p(x_i)=q(x_i)$ for all $i$, then $E(p-q)=\bzero$; one-to-one-ness gives $p-q=0$.
+\end{solution}
+
+\begin{exercise}[Cauchy--Binet]\label{ex:cauchy-binet}
+Let $\bA\in\Real^{m\times n}$ and $\bB\in\Real^{n\times m}$ with $m\leqslant n$.
+For $J\subseteq\{1,\ldots,n\}$ with $|J|=m$, let $\bA_{:,J}$ retain the columns in
+$J$ and let $\bB_{J,:}$ retain the rows in $J$, both in increasing order.  Prove
+\[
+\det(\bA\bB)=\sum_{|J|=m}\det(\bA_{:,J})\det(\bB_{J,:}).
+\]
+\origin{H Thm.~13.8.2; S Prop.~3.4}
+\end{exercise}
+
+\begin{solution}
+Write the columns of $\bA$ as $\ba_1,\ldots,\ba_n$.  Column $k$ of $\bA\bB$ is
+$\sum_{j=1}^n b_{jk}\ba_j$.  Multilinearity gives
+\[
+\det(\bA\bB)=
+\sum_{j_1,\ldots,j_m}
+b_{j_1 1}\cdots b_{j_m m}
+\det(\ba_{j_1},\ldots,\ba_{j_m}).
+\]
+Terms with repeated indices vanish.  Fix
+$J=\{i_1<\cdots<i_m\}$.  The terms using exactly these indices are indexed by
+$\sigma\in S_m$ and sum to
+\begin{align*}
+&\det(\ba_{i_1},\ldots,\ba_{i_m})
+\sum_{\sigma\in S_m}\sgn(\sigma)
+\prod_{k=1}^m b_{i_{\sigma(k)},k}\\
+&\hspace{35mm}=\det(\bA_{:,J})\det(\bB_{J,:}).
+\end{align*}
+Sum over all $J$.
+\end{solution}
+
+\begin{exercise}[Determinant under recoding]\label{ex:generalized-variance}
+For square $\bS,\bA$ of the same order, prove
+\[
+\det(\bS\bA\bS')=\det(\bS)^2\det(\bA).
+\]
+Deduce that orthogonal recoding leaves this determinant fixed, while rescaling every
+coordinate by $c$ multiplies it by $c^{2n}$.
+\origin{Course formulation from H Lemma~13.2.1 and Thm.~13.3.4}
+\end{exercise}
+
+\begin{solution}
+Multiplicativity and transpose invariance give
+\[
+\det(\bS\bA\bS')
+=\det(\bS)\det(\bA)\det(\bS')
+=\det(\bS)^2\det(\bA).
+\]
+For orthogonal $\bS$, $\det(\bS)^2=1$.  For $\bS=c\bI_n$,
+$\det(\bS)^2=(c^n)^2=c^{2n}$.
+\end{solution}
+
+\end{document}

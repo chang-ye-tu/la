@@ -1,0 +1,1999 @@
+% Compile:  python build.py 02
+% or by hand:
+%   Rscript -e "knitr::knit('unit02.Rnw')"
+%   xelatex -shell-escape unit02.tex        # run twice to settle the toc
+\documentclass[17pt]{extarticle}
+
+\input{la_preamble.tex}
+
+% Unit 2 specific
+\fancyhead[L]{\small\color{hdrBG}\textbf{Unit\ 2\ \ Vector Spaces}}
+
+\setcounter{theorem}{0}\setcounter{example}{0}
+\renewcommand\thedefinition{2.\arabic{theorem}}
+\renewcommand\thetheorem{2.\arabic{theorem}}
+\renewcommand\thelemma{2.\arabic{theorem}}
+\renewcommand\theproposition{2.\arabic{theorem}}
+\renewcommand\thecorollary{2.\arabic{theorem}}
+\renewcommand\theexample{2.\arabic{example}}
+\renewcommand\theexercise{2.\arabic{exercise}}
+\renewcommand\thefigure{2.\arabic{figure}}
+
+\title{\color{hdrBG}\bfseries\Huge Vector Spaces, Basis, Dimension}
+\author{}\date{}
+
+\begin{document}
+
+<<setup, include=FALSE>>=
+source("la_knitr_setup.R")
+knitr::opts_chunk$set(fig.path = "figs/unit02-")
+@
+
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+{\color{hdrBG}\bfseries\fontsize{26}{32}\selectfont
+ Unit 2.\ Vector Spaces, Basis, Dimension}
+\end{center}
+\vspace*{\fill}
+\end{titlepage}
+
+\setcounter{page}{1}
+
+%=============================================================================
+\section{Vector spaces and subspaces}\label{sec:2.1}
+%=============================================================================
+
+\subsection{Definition and examples}\label{sec:2.1.1}
+
+\begin{definition}[Real vector space]\label{def:vector-space}
+A \emph{real vector space} is a nonempty set $\calV$ with operations
+\[
++:\calV\times\calV\to\calV,
+\qquad
+\cdot:\Real\times\calV\to\calV,
+\]
+satisfying, for $\bu,\bv,\bw\in\calV$ and $\alpha,\beta\in\Real$:
+\par\smallskip
+\noindent
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X
+                                 >{\raggedright\arraybackslash}X@{}}
+\textup{(i)} $\bu+\bv=\bv+\bu$;
+&
+\textup{(v)} $\alpha(\bu+\bv)=\alpha\bu+\alpha\bv$;
+\\
+\textup{(ii)} $(\bu+\bv)+\bw=\bu+(\bv+\bw)$;
+&
+\textup{(vi)} $(\alpha+\beta)\bv=\alpha\bv+\beta\bv$;
+\\
+\textup{(iii)} there is $\bzero\in\calV$ with
+ $\bv+\bzero=\bv$ for every $\bv$;
+&
+\textup{(vii)} $(\alpha\beta)\bv=\alpha(\beta\bv)$;
+\\
+\textup{(iv)} every $\bv$ has $-\bv\in\calV$ with
+ $\bv+(-\bv)=\bzero$;
+&
+\textup{(viii)} $1\bv=\bv$.
+\end{tabularx}
+\par\smallskip
+Members of $\calV$ are \emph{vectors}; elements of $\Real$ are \emph{scalars}.
+\origin{S \S1.1.1}
+\end{definition}
+
+\begin{theorem}[Consequences of the vector-space axioms]\label{thm:vs-identities}
+In a real vector space:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item the zero vector and the additive inverse of each vector are unique;
+\item $0\bv=\bzero$ and $\alpha\bzero=\bzero$;
+\item $(-1)\bv=-\bv$ and $(-\alpha)\bv=-(\alpha\bv)=\alpha(-\bv)$;
+\item $\bu+\bw=\bv+\bw$ implies $\bu=\bv$.
+\item $\alpha\bv=\bzero$ if and only if $\alpha=0$ or $\bv=\bzero$.
+\end{enumerate}
+\origin{A\&M Exs.~3.2--3.3}
+\end{theorem}
+
+\begin{proof}
+\[
+\bzero_1=\bzero_1+\bzero_2=\bzero_2,
+\]
+and, if $\bw_1+\bv=\bw_2+\bv=\bzero$,
+\[
+\bw_1=\bw_1+\bzero=\bw_1+(\bv+\bw_2)
+=(\bw_1+\bv)+\bw_2=\bzero+\bw_2=\bw_2.
+\]
+\[
+0\bv=(0+0)\bv=0\bv+0\bv\implies0\bv=\bzero,
+\]
+\[
+\alpha\bzero=\alpha(\bzero+\bzero)
+=\alpha\bzero+\alpha\bzero\implies\alpha\bzero=\bzero.
+\]
+Each implication adds the appropriate additive inverse.  Moreover,
+\[
+\begin{split}
+(-1)\bv+\bv&=(-1+1)\bv=\bzero,\\
+(-\alpha)\bv+\alpha\bv&=(-\alpha+\alpha)\bv=\bzero,\\
+\alpha(-\bv)&=\alpha((-1)\bv)=(-\alpha)\bv.
+\end{split}
+\]
+Uniqueness of additive inverses gives (iii), and
+\[
+\bu+\bw=\bv+\bw
+\implies(\bu+\bw)-\bw=(\bv+\bw)-\bw
+\implies\bu=\bv.
+\]
+If $\alpha\bv=\bzero$ and $\alpha\ne0$, then
+\[
+\bv=\alpha^{-1}(\alpha\bv)=\alpha^{-1}\bzero=\bzero.
+\]
+Conversely,
+\[
+\alpha=0\implies\alpha\bv=0\bv=\bzero,
+\qquad
+\bv=\bzero\implies\alpha\bv=\alpha\bzero=\bzero.
+\]
+\end{proof}
+
+\begin{example}[Coordinate spaces]\label{ex:coordinate-spaces}
+With componentwise operations, $\Real^n$ and $\Real^{m\times n}$ are vector spaces;
+their zero vectors are $\bzero$ and $\bO$.  Each axiom is the corresponding scalar
+identity applied componentwise.
+\origin{A\&M Ex.~3.4; H \S4.1b}
+\end{example}
+
+\begin{example}[Polynomials and functions]\label{ex:function-spaces}
+For a nonnegative integer $d$, let
+\[
+\calP_d=\{a_0+a_1t+\cdots+a_dt^d:a_0,\ldots,a_d\in\Real\}.
+\]
+Equality in $\calP_d$ means coefficientwise equality; addition and scalar multiplication
+are coefficientwise.  More generally, if $D$ is any nonempty set, the real-valued functions on $D$
+form a vector space under
+\[
+(f+g)(x)=f(x)+g(x),\qquad (\alpha f)(x)=\alpha f(x).
+\]
+Equality and every axiom are checked at each $x\in D$.  The space $\calP_d$ is
+closed under these operations because adding or scaling two polynomials of degree at most
+$d$ cannot introduce a higher power of $t$.
+\origin{Course formulation from S \S1.1.1}
+\end{example}
+
+\subsection{Subspaces}\label{sec:2.1.2}
+
+\begin{definition}[Subspace]\label{def:subspace}
+Let $\calV$ be a vector space.  A nonempty subset $\calS\subseteq\calV$ is a
+\emph{subspace} of $\calV$ if
+\[
+\bu,\bv\in\calS\implies\bu+\bv\in\calS,
+\qquad
+\alpha\in\Real,\ \bu\in\calS\implies\alpha\bu\in\calS.
+\]
+It uses the addition and scalar multiplication already defined on $\calV$.
+\origin{H \S4.2; A\&M Ex.~3.8}
+\end{definition}
+
+\begin{theorem}[Subspace test]\label{thm:subspace-test}
+A nonempty subset $\calS$ of a real vector space $\calV$ is a subspace if and only if
+\[
+\alpha\bu+\beta\bv\in\calS
+\quad\text{for all }\bu,\bv\in\calS\text{ and }\alpha,\beta\in\Real.
+\]
+\origin{H \S4.1b; A\&M Ex.~3.8}
+\end{theorem}
+
+\begin{proof}
+For $\bu,\bv\in\calS$,
+\[
+\calS\text{ subspace}
+\implies\alpha\bu,\beta\bv\in\calS
+\implies\alpha\bu+\beta\bv\in\calS.
+\]
+Conversely, the asserted closure with $(\alpha,\beta)=(1,1)$ and $(a,0)$ gives
+\[
+\bu+\bv\in\calS,
+\qquad
+a\bu+0\bv=a\bu\in\calS.
+\]
+\end{proof}
+
+\begin{example}[Homogeneous and affine constraints]\label{ex:polynomial-constraint}
+In $\calP_2$, let
+\[
+\calS=\{p:p(1)=0\},\qquad \calA=\{p:p(1)=1\}.
+\]
+The zero polynomial belongs to $\calS$, and if $p,q\in\calS$, then
+\[
+(\alpha p+\beta q)(1)=\alpha p(1)+\beta q(1)=0.
+\]
+Thus $\calS$ is a subspace, whereas $0\notin\calA$.
+\origin{A\&M Exs.~3.9--3.10}
+\end{example}
+
+\begin{example}[Symmetric matrices]\label{ex:symmetric-subspace}
+The symmetric matrices form a subspace of $\Real^{n\times n}$.  The null matrix is both
+symmetric and skew-symmetric, and for symmetric $\bA,\bB$,
+\[
+(\alpha\bA+\beta\bB)'=\alpha\bA'+\beta\bB'
+=\alpha\bA+\beta\bB.
+\]
+For skew-symmetric $\bA,\bB$, the same calculation gives
+$(\alpha\bA+\beta\bB)'=-(\alpha\bA+\beta\bB)$, so the skew-symmetric matrices form
+another subspace.
+\origin{H \S4.3b; A\&M Ex.~3.11}
+\end{example}
+
+\begin{theorem}[Intersections and unions]\label{thm:intersection-union}
+The intersection of any nonempty collection of subspaces of $\calV$ is a subspace.  For
+two subspaces $\calS$ and $\calT$, the union $\calS\cup\calT$ is a subspace if and only
+if $\calS\subseteq\calT$ or $\calT\subseteq\calS$.
+\origin{S \S1.1.1; A\&M Ex.~3.12(a); H Ex.~4.3}
+\end{theorem}
+
+\begin{proof}
+For a nonempty family $\{\calS_i:i\in I\}$,
+\[
+\bzero\in\bigcap_i\calS_i,\qquad
+\bu,\bv\in\bigcap_i\calS_i
+\implies(\forall i)\ \alpha\bu+\beta\bv\in\calS_i
+\implies\alpha\bu+\beta\bv\in\bigcap_i\calS_i.
+\]
+If one of $\calS,\calT$ contains the other, their union is the larger subspace.  For the
+converse, take $\bs\in\calS\setminus\calT$ and
+$\bt\in\calT\setminus\calS$.  Closure of the union would give
+$\bs+\bt\in\calS\cup\calT$, whereas
+\[
+\bs+\bt\in\calS\implies\bt=(\bs+\bt)-\bs\in\calS,
+\quad
+\bs+\bt\in\calT\implies\bs=(\bs+\bt)-\bt\in\calT.
+\]
+\end{proof}
+
+\subsection{Span and linear independence}\label{sec:2.1.3}
+
+\begin{definition}[Span]\label{def:span}
+For a finite list $\bv_1,\ldots,\bv_k$ in $\calV$, its \emph{span} is
+\[
+\spn\{\bv_1,\ldots,\bv_k\}
+=\left\{\sum_{j=1}^k\alpha_j\bv_j:\alpha_1,\ldots,\alpha_k\in\Real\right\}.
+\]
+The empty sum is $\bzero$, so $\spn\varnothing=\{\bzero\}$.
+\origin{H \S4.3a}
+\end{definition}
+
+\begin{theorem}[The span is the smallest containing subspace]\label{thm:span-smallest}
+The set $\spn\{\bv_1,\ldots,\bv_k\}$ is a subspace of $\calV$.  If a subspace
+$\calS$ contains every $\bv_j$, then it contains their span.
+\origin{H Ex.~4.5; A\&M Ex.~3.18}
+\end{theorem}
+
+\begin{proof}
+Taking every coefficient zero gives $\bzero$ in the span.  If
+$\bu=\sum_j a_j\bv_j$ and $\bw=\sum_j b_j\bv_j$, then
+\[
+\alpha\bu+\beta\bw=\sum_{j=1}^k(\alpha a_j+\beta b_j)\bv_j,
+\]
+so the span is a subspace.  If $\bv_j\in\calS$ for every $j$, repeated closure gives
+\[
+(\alpha_1,\ldots,\alpha_k)\in\Real^k
+\implies\sum_{j=1}^k\alpha_j\bv_j\in\calS.
+\]
+\end{proof}
+
+\begin{definition}[Linear independence]\label{def:independence}
+A finite list $\bv_1,\ldots,\bv_k$ is \emph{linearly independent} if
+\[
+\alpha_1\bv_1+\cdots+\alpha_k\bv_k=\bzero
+\quad\Longrightarrow\quad
+\alpha_1=\cdots=\alpha_k=0.
+\]
+It is \emph{linearly dependent} otherwise.  The empty list is independent.
+\origin{H \S3.1}
+\end{definition}
+
+\begin{theorem}[Dependence and span]\label{thm:dependence-span}
+A nonempty finite list is linearly dependent if and only if one of its members belongs to
+the span of the others.
+\origin{H Lemma~3.2.1}
+\end{theorem}
+
+\begin{proof}
+For coefficients not all zero, choose $j$ with $\alpha_j\neq0$:
+\[
+\sum_i\alpha_i\bv_i=\bzero
+\implies
+\bv_j=-\sum_{i\neq j}\frac{\alpha_i}{\alpha_j}\bv_i.
+\]
+Conversely,
+\[
+\bv_j=\sum_{i\ne j}c_i\bv_i
+\implies
+\bv_j-\sum_{i\ne j}c_i\bv_i=\bzero,
+\]
+a nontrivial zero combination.
+\end{proof}
+
+\begin{corollary}[Appending one vector]\label{cor:append-vector}
+For any finite list $\bv_1,\ldots,\bv_k$,
+\[
+\spn\{\bv_1,\ldots,\bv_k,\bw\}
+=\spn\{\bv_1,\ldots,\bv_k\}
+\]
+if and only if $\bw$ belongs to the span on the right.  If the original list is
+independent, then the appended list is independent if and only if $\bw$ does not belong
+to that span.
+\origin{H Cor.~3.2.3 and Lemma~4.3.1}
+\end{corollary}
+
+\begin{proof}
+Put $\calS=\spn\{\bv_1,\ldots,\bv_k\}$.  Since
+$\calS\subseteq\spn\{\bv_1,\ldots,\bv_k,\bw\}$,
+\[
+\bw\in\calS
+\iff
+\spn\{\bv_1,\ldots,\bv_k,\bw\}\subseteq\calS
+\iff
+\spn\{\bv_1,\ldots,\bv_k,\bw\}=\calS.
+\]
+If the original list is independent, then
+\[
+\sum_{j=1}^k a_j\bv_j+c\bw=\bzero,\qquad
+(a_1,\ldots,a_k,c)\ne\bzero
+\iff
+c\ne0,\quad \bw=-\sum_{j=1}^k(a_j/c)\bv_j.
+\]
+\end{proof}
+
+\begin{example}[A redundant list]\label{ex:redundant-list}
+In $\Real^3$, let
+\[
+\bv_1=\begin{pmatrix}1\\0\\1\end{pmatrix},\qquad
+\bv_2=\begin{pmatrix}0\\1\\1\end{pmatrix},\qquad
+\bv_3=\begin{pmatrix}1\\1\\2\end{pmatrix}.
+\]
+The first two vectors are independent: the first two components of
+$a\bv_1+b\bv_2=\bzero$ give $a=b=0$.  Since $\bv_3=\bv_1+\bv_2$, the three-vector list
+is dependent and has the same span as $\bv_1,\bv_2$.  That span is the plane
+\[
+\left\{\begin{pmatrix}x\\y\\z\end{pmatrix}:z=x+y\right\}.
+\]
+\origin{Course formulation from H Lemmas~3.2.1 and 4.3.1}
+\end{example}
+
+% \periodmark{End of period 1 of 3.}
+
+%=============================================================================
+\section{Basis and dimension}\label{sec:2.2}
+%=============================================================================
+
+\subsection{Basis}\label{sec:2.2.1}
+
+\begin{definition}[Basis and finite-dimensional space]\label{def:basis}
+A finite list in $\calV$ is a \emph{basis} of $\calV$ if it is linearly independent and
+spans $\calV$.  The space $\calV$ is \emph{finite-dimensional} if some finite list spans
+it.  The empty list is a basis of the zero space $\{\bzero\}$.
+\origin{H \S\S4.3a and 4.3e}
+\end{definition}
+
+\begin{theorem}[Extracting and extending a basis]\label{thm:basis-extract-extend}
+Let $\calV$ be finite-dimensional.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item Every finite spanning list contains a sublist that is a basis of $\calV$.
+\item Every finite independent list can be extended to a basis of $\calV$.
+\end{enumerate}
+\origin{H Thms.~4.3.11--4.3.12}
+\end{theorem}
+
+\begin{proof}
+For (i), repeat
+\[
+\text{dependent spanning list}
+\longmapsto
+\text{list with one redundant member deleted}.
+\]
+Dependence and span identify such a member; deletion preserves the span.  Finite
+termination gives an independent spanning sublist.
+
+For (ii), let $(\bw_1,\ldots,\bw_s)$ span $\calV$.  Starting from the given independent
+list, append $\bw_j$ exactly when it is outside the current span.  At every stage,
+\[
+\text{retained list independent},\qquad
+\bw_j\in\text{span of the retained list}\quad(1\leqslant j\leqslant s\text{ already inspected}).
+\]
+After $s$ steps the retained list is independent and spans the original spanning list,
+hence spans $\calV$.
+\end{proof}
+
+\begin{lemma}[Steinitz exchange]\label{lem:steinitz}
+Suppose $\bu_1,\ldots,\bu_r$ is independent and
+$\bw_1,\ldots,\bw_s$ spans the same vector space.  Then $r\leqslant s$.  Moreover, $r$
+members of the spanning list can be replaced by $\bu_1,\ldots,\bu_r$ while the resulting
+list still spans the space.
+\origin{H Thm.~4.3.2; A\&M Ex.~3.28}
+\end{lemma}
+
+\begin{proof}
+The case $r=0$ is immediate.  At step $k\geqslant1$, suppose
+\[
+(\bu_1,\ldots,\bu_{k-1},\bw_{i_k},\ldots,\bw_{i_s})
+\]
+spans the space.  Write $\bu_k$ as a combination of this list.  At least one coefficient
+of an unreplaced $\bw_{i_j}$ is nonzero; otherwise
+$\bu_k\in\spn\{\bu_1,\ldots,\bu_{k-1}\}$.  Solving for that $\bw_{i_j}$ gives
+\[
+\spn\{\bu_1,\ldots,\bu_{k-1},\bw_{i_k},\ldots,\bw_{i_s}\}
+=
+\spn\{\bu_1,\ldots,\bu_k,\bw_{i_k},\ldots,\widehat{\bw_{i_j}},\ldots,\bw_{i_s}\}.
+\]
+Each step consumes one distinct $\bw$, so $r\leqslant s$; after step $r$ the list has the
+asserted form.
+\end{proof}
+
+\begin{theorem}[All bases have the same size]\label{thm:basis-size}
+Any two finite bases of a vector space contain the same number of vectors.
+\origin{H Thm.~4.3.6; A\&M Ex.~3.29}
+\end{theorem}
+
+\begin{proof}
+For bases of sizes $r$ and $s$, Steinitz exchange in the two directions gives
+\[
+r\leqslant s,\qquad s\leqslant r,\qquad r=s.
+\]
+\end{proof}
+
+\begin{definition}[Dimension]\label{def:dimension}
+The \emph{dimension} of a finite-dimensional vector space $\calV$, written
+$\dim\calV$, is the common number of vectors in any basis of $\calV$.  In particular,
+$\dim\{\bzero\}=0$.
+\origin{H \S4.3e}
+\end{definition}
+
+\begin{theorem}[Dimension of a subspace]\label{thm:subspace-dimension}
+If $\calS$ is a subspace of a finite-dimensional space $\calV$, then $\calS$ has a
+finite basis and
+\[
+\dim\calS\leqslant\dim\calV.
+\]
+Equality holds if and only if $\calS=\calV$.
+\origin{H Thms.~4.3.8 and 4.3.10}
+\end{theorem}
+
+\begin{proof}
+Starting with the empty list, append a vector of $\calS$ outside the current span.
+Appending preserves independence, while Steinitz exchange bounds every resulting list by
+$\dim\calV$.  The process stops after at most $\dim\calV$ steps with a basis of
+$\calS$; hence $\dim\calS\leqslant\dim\calV$.
+
+The implication $\calS=\calV\Rightarrow\dim\calS=\dim\calV$ is immediate.  Conversely,
+extend a basis $\calB_{\calS}$ of $\calS$ to a basis of $\calV$.  If
+$\dim\calS=\dim\calV$, then
+\[
+\#\calB_{\calS}=\dim\calS=\dim\calV,
+\]
+so no vector is appended and $\spn(\calB_{\calS})=\calV$.  Thus $\calS=\calV$.
+\end{proof}
+
+\begin{corollary}[$n$ vectors in an $n$-dimensional space]\label{cor:n-vectors}
+In an $n$-dimensional vector space, a list of $n$ vectors is linearly independent if and
+only if it spans the space.  Either condition makes it a basis.
+\origin{H Thms.~4.3.2, 4.3.7, and 4.3.9}
+\end{corollary}
+
+\begin{proof}
+For a list $\calL$ of length $n$,
+\[
+\calL\text{ independent}
+\implies
+\calL\subseteq\calB,\quad\#\calB=n
+\implies
+\calL=\calB,
+\]
+and
+\[
+\calL\text{ spanning}
+\implies
+\calB\subseteq\calL,\quad\#\calB=n
+\implies
+\calL=\calB.\qedhere
+\]
+\end{proof}
+
+\begin{example}[Three standard dimensions]\label{ex:standard-dimensions}
+The standard vectors $\eu_1,\ldots,\eu_n$ form a basis of $\Real^n$, so
+$\dim\Real^n=n$.  In $\Real^{m\times n}$, let $\bE_{ij}$ have a $1$ in position $(i,j)$
+and zeros elsewhere.  The $mn$ matrices $\bE_{ij}$ form a basis, so
+$\dim\Real^{m\times n}=mn$.  Finally, $1,t,\ldots,t^d$ form a basis of $\calP_d$, so
+$\dim\calP_d=d+1$.  Spanning follows by the definitions of the three spaces, and
+independence follows by comparing coordinates, entries, or polynomial coefficients.
+\origin{H \S4.3b and Eq.~(4.3.2); S \S1.1.1}
+\end{example}
+
+\subsection{Coordinates and change of basis}\label{sec:2.2.2}
+
+\begin{theorem}[Unique representation in a basis]\label{thm:basis-representation}
+If $\calB=(\bv_1,\ldots,\bv_n)$ is a basis of $\calV$, then every $\bx\in\calV$ has
+exactly one representation
+\[
+\bx=\alpha_1\bv_1+\cdots+\alpha_n\bv_n.
+\]
+\origin{H Lemma~4.3.5}
+\end{theorem}
+
+\begin{proof}
+Spanning gives existence.  Independence gives
+\[
+\sum_{j=1}^n\alpha_j\bv_j=\sum_{j=1}^n\beta_j\bv_j
+\iff
+\sum_{j=1}^n(\alpha_j-\beta_j)\bv_j=\bzero
+\iff
+(\forall j)\ \alpha_j=\beta_j.
+\]
+\end{proof}
+
+\begin{definition}[Coordinates]\label{def:coordinates-basis}
+For an ordered basis $\calB=(\bv_1,\ldots,\bv_n)$, the \emph{coordinate vector} of
+$\bx=\sum_j\alpha_j\bv_j$ in $\calB$ is
+\[
+[\bx]_{\calB}=\begin{pmatrix}\alpha_1\\ \vdots\\ \alpha_n\end{pmatrix}\in\Real^n.
+\]
+The order of the basis vectors determines the order of the coordinates.
+\origin{H \S22.3; S \S1.2.2}
+\end{definition}
+
+\begin{definition}[Transition matrix]\label{def:transition}
+Let $\calB=(\bv_1,\ldots,\bv_n)$ and
+$\calC=(\bw_1,\ldots,\bw_n)$ be ordered bases of the same space.  The
+\emph{transition matrix from $\calB$-coordinates to $\calC$-coordinates} is
+\[
+\bP_{\calC\leftarrow\calB}
+=\bigl([\bv_1]_{\calC},\ldots,[\bv_n]_{\calC}\bigr).
+\]
+Its $j$th column records the $\calC$-coordinates of the $j$th vector of $\calB$.
+\origin{H \S22.4b(3)}
+\end{definition}
+
+\begin{theorem}[Changing coordinates]\label{thm:transition}
+For every $\bx\in\calV$,
+\[
+[\bx]_{\calC}=\bP_{\calC\leftarrow\calB}[\bx]_{\calB}.
+\]
+The transition matrices in the two directions satisfy
+\[
+\bP_{\calB\leftarrow\calC}\bP_{\calC\leftarrow\calB}=\bI_n,
+\qquad
+\bP_{\calC\leftarrow\calB}\bP_{\calB\leftarrow\calC}=\bI_n.
+\]
+\origin{H \S22.4b(3)}
+\end{theorem}
+
+\begin{proof}
+Write $[\bx]_{\calB}=(\alpha_1,\ldots,\alpha_n)'$.  Then
+\[
+[\bx]_{\calC}
+=\left[\sum_{j=1}^n\alpha_j\bv_j\right]_{\calC}
+=\sum_j\alpha_j[\bv_j]_{\calC}
+=\bP_{\calC\leftarrow\calB}[\bx]_{\calB}.
+\]
+For every $\by=[\bx]_{\calB}\in\Real^n$,
+\[
+\bP_{\calB\leftarrow\calC}\bP_{\calC\leftarrow\calB}\by=\by.
+\]
+Taking $\by=\eu_j$ for $j=1,\ldots,n$ gives
+\[
+\bP_{\calB\leftarrow\calC}\bP_{\calC\leftarrow\calB}=\bI_n.
+\]
+Interchanging $\calB$ and $\calC$ gives the second identity.
+\end{proof}
+
+\begin{example}[Two coordinate systems]\label{ex:two-bases}
+Let $\calE=(\eu_1,\eu_2)$ be the standard basis of $\Real^2$ and
+\[
+\calB=\left(
+\begin{pmatrix}1\\1\end{pmatrix},
+\begin{pmatrix}1\\-1\end{pmatrix}
+\right).
+\]
+For $\bx=(5,1)'$, the identity
+\[
+\bx=3\begin{pmatrix}1\\1\end{pmatrix}
++2\begin{pmatrix}1\\-1\end{pmatrix}
+\]
+gives $[\bx]_{\calB}=(3,2)'$, whereas $[\bx]_{\calE}=(5,1)'$.  The transition
+matrices are
+\[
+\bP_{\calE\leftarrow\calB}
+=\begin{pmatrix}1&1\\1&-1\end{pmatrix},
+\qquad
+\bP_{\calB\leftarrow\calE}
+=\frac12\begin{pmatrix}1&1\\1&-1\end{pmatrix}.
+\]
+Their products in both orders equal $\bI_2$, and
+$\bP_{\calE\leftarrow\calB}(3,2)'=(5,1)'$.
+\origin{Course formulation from H \S22.4b(3)}
+\end{example}
+
+\subsection{Sums, direct sums, and the dimension formula}\label{sec:2.2.3}
+
+\begin{definition}[Sum and direct sum]\label{def:sum-direct}
+For subspaces $\calS,\calT\subseteq\calV$, define
+\[
+\calS+\calT=\{\bs+\bt:\bs\in\calS,\ \bt\in\calT\}.
+\]
+The sum is \emph{direct}, written $\calS\dsum\calT$, if each member of
+$\calS+\calT$ has a unique expression $\bs+\bt$ with $\bs\in\calS$ and
+$\bt\in\calT$.
+\origin{S \S1.1.1; A\&M Ex.~3.12(c)}
+\end{definition}
+
+\begin{theorem}[The sum is a subspace]\label{thm:sum-subspace}
+The set $\calS+\calT$ is the smallest subspace of $\calV$ containing both $\calS$ and
+$\calT$.
+\origin{S \S1.1.1; A\&M Ex.~3.12(c)}
+\end{theorem}
+
+\begin{proof}
+\[
+\bzero=\bzero+\bzero\in\calS+\calT.
+\]
+For $\bs_i\in\calS$ and $\bt_i\in\calT$,
+\[
+\alpha(\bs_1+\bt_1)+\beta(\bs_2+\bt_2)
+=(\alpha\bs_1+\beta\bs_2)+(\alpha\bt_1+\beta\bt_2),
+\]
+where the terms on the right belong to $\calS$ and $\calT$.  Moreover,
+\[
+\calS\subseteq\calS+\calT,\qquad\calT\subseteq\calS+\calT.
+\]
+If $\calU$ is a subspace containing $\calS\cup\calT$, then
+\[
+\bs\in\calS,\ \bt\in\calT\implies\bs+\bt\in\calU
+\implies\calS+\calT\subseteq\calU.
+\]
+\end{proof}
+
+\begin{theorem}[Characterisations of a direct sum]\label{thm:direct-sum}
+For subspaces $\calS$ and $\calT$, the following are equivalent:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item the sum $\calS+\calT$ is direct;
+\item $\calS\cap\calT=\{\bzero\}$;
+\item $\bs+\bt=\bzero$, with $\bs\in\calS$ and $\bt\in\calT$, implies
+$\bs=\bt=\bzero$.
+\end{enumerate}
+\origin{A\&M Ex.~3.13}
+\end{theorem}
+
+\begin{proof}
+\[
+\begin{array}{rcll}
+\text{(i)}
+&\implies&
+\bv=\bv+\bzero=\bzero+\bv,\quad\bv\in\calS\cap\calT
+&\implies\bv=\bzero,\\[2mm]
+\text{(ii)}
+&\implies&
+\bs+\bt=\bzero\implies\bs=-\bt\in\calS\cap\calT
+&\implies\bs=\bt=\bzero,\\[2mm]
+\text{(iii)}
+&\implies&
+\bs_1+\bt_1=\bs_2+\bt_2
+\implies(\bs_1-\bs_2)+(\bt_1-\bt_2)=\bzero
+&\implies\bs_1=\bs_2,\ \bt_1=\bt_2.
+\end{array}
+\]
+\end{proof}
+
+\begin{theorem}[Dimension formula]\label{thm:dimension-sum}
+If $\calS$ and $\calT$ are finite-dimensional subspaces, then
+\[
+\dim(\calS+\calT)+\dim(\calS\cap\calT)=\dim\calS+\dim\calT.
+\]
+\origin{H Thm.~17.4.1; S Prop.~1.2}
+\end{theorem}
+
+\begin{proof}
+Let $\bu_1,\ldots,\bu_q$ be a basis of $\calS\cap\calT$.  Extend it separately to
+bases
+\[
+(\bu_1,\ldots,\bu_q,\bs_1,\ldots,\bs_r)
+\quad\text{of }\calS,
+\]
+and
+\[
+(\bu_1,\ldots,\bu_q,\bt_1,\ldots,\bt_\ell)
+\quad\text{of }\calT.
+\]
+The list
+\[
+\calB=(\bu_1,\ldots,\bu_q,\bs_1,\ldots,\bs_r,\bt_1,\ldots,\bt_\ell)
+\]
+spans $\calS+\calT$.  For a zero combination,
+\[
+\sum_i a_i\bu_i+\sum_j b_j\bs_j+\sum_k c_k\bt_k=\bzero.
+\]
+Then
+\[
+\sum_kc_k\bt_k=-\sum_i a_i\bu_i-\sum_jb_j\bs_j
+\in\calS\cap\calT=\spn\{\bu_1,\ldots,\bu_q\}.
+\]
+Independence of the basis of $\calT$ gives $c_k=0$ for all $k$; independence of the
+basis of $\calS$ gives $a_i=b_j=0$ for all $i,j$.  Thus $\calB$ is a basis, and
+\[
+\dim(\calS+\calT)=q+r+\ell,\qquad
+\dim\calS=q+r,\qquad \dim\calT=q+\ell,\qquad
+\dim(\calS\cap\calT)=q.
+\]
+\end{proof}
+
+\begin{corollary}[Dimension of a direct sum]\label{cor:direct-dimension}
+If $\calS$ and $\calT$ are finite-dimensional and $\calS+\calT$ is direct, then
+\[
+\dim(\calS\dsum\calT)=\dim\calS+\dim\calT.
+\]
+\origin{H Cor.~17.1.6; S Prop.~1.2}
+\end{corollary}
+
+\begin{proof}
+\[
+\calS\cap\calT=\{\bzero\}
+\implies
+\dim(\calS\dsum\calT)
+=\dim\calS+\dim\calT-\dim\{\bzero\}
+=\dim\calS+\dim\calT.
+\]
+\end{proof}
+
+\begin{example}[Two planes in $\Real^3$]\label{ex:subspace-sum}
+Let $\calS=\spn\{\eu_1,\eu_2\}$ and
+$\calT=\spn\{\eu_2,\eu_3\}$.  Then
+\[
+\calS\cap\calT=\spn\{\eu_2\},\qquad
+\calS+\calT=\Real^3.
+\]
+The dimension formula reads $3+1=2+2$.  The sum is not direct.  In contrast,
+$\spn\{\eu_1,\eu_2\}+\spn\{\eu_3\}$ is a direct sum equal to $\Real^3$.
+\origin{Course formulation from H Thm.~17.4.1}
+\end{example}
+
+% \periodmark{End of period 2 of 3.}
+
+%=============================================================================
+\section{The subspaces of a matrix}\label{sec:2.3}
+%=============================================================================
+
+\subsection{Column space, row space, null space}\label{sec:2.3.1}
+
+\begin{definition}[Linear map, image, kernel]\label{def:linear-map}
+Let $\calV$ and $\calW$ be real vector spaces.  A map $T:\calV\to\calW$ is
+\emph{linear} if
+\[
+T(\alpha\bu+\beta\bv)=\alpha T(\bu)+\beta T(\bv)
+\]
+for every $\bu,\bv\in\calV$ and $\alpha,\beta\in\Real$.  Its \emph{image} and
+\emph{kernel} are
+\[
+\im(T)=\{T(\bv):\bv\in\calV\},
+\qquad
+\ker(T)=\{\bv\in\calV:T(\bv)=\bzero\}.
+\]
+The map is \emph{one-to-one} if $T(\bu)=T(\bv)$ implies $\bu=\bv$, and
+\emph{onto} if $\im(T)=\calW$.
+\origin{H \S22.1}
+\end{definition}
+
+\begin{theorem}[Image and kernel are subspaces]\label{thm:image-kernel}
+For a linear map $T:\calV\to\calW$, the image is a subspace of $\calW$ and the kernel
+is a subspace of $\calV$.
+\origin{H \S22.1}
+\end{theorem}
+
+\begin{proof}
+\[
+T(\bzero)=T(0\bu)=0T(\bu)=\bzero.
+\]
+For $\bw_i=T(\bv_i)\in\im(T)$,
+\[
+\alpha\bw_1+\beta\bw_2
+=T(\alpha\bv_1+\beta\bv_2),
+\]
+so $\alpha\bw_1+\beta\bw_2\in\im(T)$.  For $\bv_i\in\ker(T)$,
+\[
+T(\alpha\bv_1+\beta\bv_2)
+=\alpha\bzero+\beta\bzero=\bzero,
+\]
+so $\alpha\bv_1+\beta\bv_2\in\ker(T)$.
+\end{proof}
+
+\newpage
+\begin{definition}[Three matrix subspaces]\label{def:matrix-subspaces}
+Let $\bA\in\Real^{m\times n}$ have columns $\ba_1,\ldots,\ba_n$ and rows
+$\tilde\ba_1',\ldots,\tilde\ba_m'$.  Its \emph{column space}, \emph{row space}, and
+\emph{null space} are
+\[
+\begin{split}
+\col(\bA)&=\spn\{\ba_1,\ldots,\ba_n\}\subseteq\Real^m,\\
+\row(\bA)&=\spn\{\tilde\ba_1,\ldots,\tilde\ba_m\}
+           =\col(\bA')\subseteq\Real^n,\\
+\nul(\bA)&=\{\bx\in\Real^n:\bA\bx=\bzero\}\subseteq\Real^n.
+\end{split}
+\]
+\origin{H \S\S4.1a, 4.1c, and 11.1}
+\end{definition}
+
+\begin{proposition}[The matrix map]\label{prop:matrix-map}
+For $\bA\in\Real^{m\times n}$, the map $T_{\bA}:\Real^n\to\Real^m$ defined by
+$T_{\bA}(\bx)=\bA\bx$ is linear, with
+\[
+\im(T_{\bA})=\col(\bA),\qquad \ker(T_{\bA})=\nul(\bA).
+\]
+Consequently, all three sets in Definition~\ref{def:matrix-subspaces} are subspaces of
+their stated ambient spaces.
+\origin{H Thm.~22.5.1; S \S2.2.1}
+\end{proposition}
+
+\begin{proof}
+\[
+T_{\bA}(\alpha\bx+\beta\by)
+=\bA(\alpha\bx+\beta\by)
+=\alpha\bA\bx+\beta\bA\by.
+\]
+For $\bx=(x_1,\ldots,x_n)'$,
+\[
+T_{\bA}(\bx)=\bA\bx=\sum_{j=1}^n x_j\ba_j
+\implies
+\im(T_{\bA})=\col(\bA).
+\]
+\[
+\ker(T_{\bA})
+=\{\bx:\bA\bx=\bzero\}
+=\nul(\bA).
+\]
+The image--kernel result applied to $\bA$ and $\bA'$ gives the subspace assertions.
+\end{proof}
+
+\begin{theorem}[Subspace containment and factorisation]
+\label{thm:column-containment-factorization}
+Let $\bA\in\Real^{m\times n}$, $\bB\in\Real^{m\times p}$, and
+$\bC\in\Real^{q\times n}$.  Then
+\[
+\col(\bB)\subseteq\col(\bA)
+\iff
+\bB=\bA\bF\quad\text{for some }\bF\in\Real^{n\times p},
+\]
+\tcbbreak
+and
+\[
+\row(\bC)\subseteq\row(\bA)
+\iff
+\bC=\bL\bA\quad\text{for some }\bL\in\Real^{q\times m}.
+\]
+\origin{H Lemma~4.2.2}
+\end{theorem}
+
+\begin{proof}
+Write $\bB=(\mathbf b_1,\ldots,\mathbf b_p)$.  Then
+\[
+\begin{split}
+\col(\bB)\subseteq\col(\bA)
+&\iff (\forall j)(\exists\mathbf f_j\in\Real^n)\
+        \mathbf b_j=\bA\mathbf f_j\\
+&\iff \bB=\bA(\mathbf f_1,\ldots,\mathbf f_p).
+\end{split}
+\]
+If $\bB=\bA\bF$, then
+$\bB\bu=\bA(\bF\bu)\in\col(\bA)$, proving the reverse implication.  The row statement
+is the column statement applied to $\bC'$ and $\bA'$:
+\[
+\row(\bC)\subseteq\row(\bA)
+\iff \bC'=\bA'\bL'
+\iff \bC=\bL\bA.
+\]
+\end{proof}
+
+\begin{corollary}[Consistency]\label{cor:consistency}
+The system $\bA\bx=\bbb$ is consistent if and only if
+$\bbb\in\col(\bA)$.
+\origin{H Thm.~7.2.1}
+\end{corollary}
+
+\begin{proof}
+\[
+\bA\bx=\bbb\text{ is consistent}
+\iff(\exists\bx\in\Real^n)\ \bbb=T_{\bA}(\bx)
+\iff\bbb\in\im(T_{\bA})
+\iff\bbb\in\col(\bA).
+\]
+\end{proof}
+
+\begin{theorem}[All solutions of a linear system]\label{thm:solution-translate}
+If $\bx_0$ is one solution of $\bA\bx=\bbb$, then the set of all solutions is
+\[
+\bx_0+\nul(\bA)=\{\bx_0+\bz:\bz\in\nul(\bA)\}.
+\]
+The solution is unique if and only if $\nul(\bA)=\{\bzero\}$.  If the null space contains
+a nonzero vector, every consistent system has infinitely many solutions.
+\origin{H Thm.~11.2.3}
+\end{theorem}
+
+\begin{proof}
+\[
+\bA\bx=\bbb
+\iff
+\bA(\bx-\bx_0)=\bzero
+\iff
+\bx-\bx_0\in\nul(\bA)
+\iff
+\bx\in\bx_0+\nul(\bA).
+\]
+Hence uniqueness is equivalent to $\nul(\bA)=\{\bzero\}$.  If
+$\bzero\ne\bz\in\nul(\bA)$, then
+\[
+\bA(\bx_0+t\bz)=\bbb,\qquad
+\bx_0+t_1\bz=\bx_0+t_2\bz
+\iff(t_1-t_2)\bz=\bzero
+\iff t_1=t_2.
+\]
+\end{proof}
+
+\begin{example}[Three subspaces of one matrix]\label{ex:matrix-subspaces}
+Consider
+\[
+\bA=
+\begin{pmatrix}
+1&0&1& 2\\
+0&1&1&-1\\
+1&1&2& 1
+\end{pmatrix}.
+\]
+Its third column is the sum of its first two and its fourth is twice the first minus the
+second.  The first two columns are independent, so
+\[
+\col(\bA)=\spn\left\{
+\begin{pmatrix}1\\0\\1\end{pmatrix},
+\begin{pmatrix}0\\1\\1\end{pmatrix}\right\}
+=\left\{\begin{pmatrix}x\\y\\z\end{pmatrix}:z=x+y\right\}.
+\]
+The third row is the sum of the first two, which are independent, so
+\[
+\row(\bA)=\spn\left\{
+\begin{pmatrix}1\\0\\1\\2\end{pmatrix},
+\begin{pmatrix}0\\1\\1\\-1\end{pmatrix}\right\}.
+\]
+The equations $\bA\bx=\bzero$ reduce to
+\[
+x_1+x_3+2x_4=0,\qquad x_2+x_3-x_4=0.
+\]
+With $x_3=s$ and $x_4=t$, they give
+\[
+\nul(\bA)=\spn\left\{
+\begin{pmatrix}-1\\-1\\1\\0\end{pmatrix},
+\begin{pmatrix}-2\\ 1\\0\\1\end{pmatrix}\right\}.
+\]
+The right-hand side $(1,2,3)'$ is reachable because its third component is the sum of its
+first two, and all solutions are
+\[
+\begin{pmatrix}1\\2\\0\\0\end{pmatrix}
++s\begin{pmatrix}-1\\-1\\1\\0\end{pmatrix}
++t\begin{pmatrix}-2\\1\\0\\1\end{pmatrix},\qquad s,t\in\Real.
+\]
+The right-hand side $(1,2,4)'$ is not in the column space, so its system has no solution.
+\origin{Course formulation from H \S\S4.1 and 11.1}
+\end{example}
+
+\subsection{Rank and nullity}\label{sec:2.3.2}
+
+\begin{definition}[Rank and nullity]\label{def:rank-nullity}
+For $\bA\in\Real^{m\times n}$, define
+\[
+\rank(\bA)=\dim\col(\bA),\qquad
+\operatorname{nullity}(\bA)=\dim\nul(\bA).
+\]
+Its \emph{row rank} is $\dim\row(\bA)$.  The matrix has \emph{full column rank} if
+$\rank(\bA)=n$ and \emph{full row rank} if $\rank(\bA)=m$.
+\origin{H \S\S4.4a and 11.1}
+\end{definition}
+
+\begin{theorem}[Rank--nullity]\label{thm:rank-nullity}
+If $T:\calV\to\calW$ is linear and $\calV$ is finite-dimensional, then
+\[
+\dim\ker(T)+\dim\im(T)=\dim\calV.
+\]
+In particular, if $\bA\in\Real^{m\times n}$, then
+\[
+\rank(\bA)+\operatorname{nullity}(\bA)=n.
+\]
+\origin{H Thm.~22.1.1}
+\end{theorem}
+
+\begin{proof}
+Let $\bv_1,\ldots,\bv_k$ be a basis of $\ker(T)$ and extend it to a basis
+\[
+\bv_1,\ldots,\bv_k,\bv_{k+1},\ldots,\bv_n
+\]
+of $\calV$.  For $\bx=\sum_{j=1}^n a_j\bv_j$,
+\[
+T(\bx)=\sum_{j=1}^n a_jT(\bv_j)
+=\sum_{j=k+1}^n a_jT(\bv_j),
+\]
+so $T(\bv_{k+1}),\ldots,T(\bv_n)$ spans $\im(T)$.  Moreover,
+\[
+\sum_{j=k+1}^n a_jT(\bv_j)=\bzero
+\implies
+\sum_{j=k+1}^n a_j\bv_j\in\ker(T)
+=\spn\{\bv_1,\ldots,\bv_k\}
+\implies
+a_{k+1}=\cdots=a_n=0.
+\]
+Thus these $n-k$ images form a basis of $\im(T)$, and
+\[
+\dim\ker(T)+\dim\im(T)=k+(n-k)=n.
+\]
+For $T=T_{\bA}$, image and kernel are $\col(\bA)$ and $\nul(\bA)$.
+\end{proof}
+
+\newpage
+\begin{theorem}[Row rank equals column rank]\label{thm:row-column-rank}
+For every matrix $\bA$, $\dim\row(\bA)=\dim\col(\bA)=\rank(\bA)$.
+\origin{H Thms.~4.4.1--4.4.2; S Prop.~2.7}
+\end{theorem}
+
+\begin{proof}
+Let $r=\dim\col(\bA)$.  For $r=0$, $\bA=\bO$ and both dimensions are zero.  For
+$r>0$, put $r$ basis columns of $\bA$ in $\bB\in\Real^{m\times r}$.  Their coordinate
+vectors give $\bC\in\Real^{r\times n}$ such that $\bA=\bB\bC$.  Hence
+\[
+\row(\bA)\subseteq\row(\bC),\qquad
+\dim\row(\bA)\leqslant r=\dim\col(\bA).
+\]
+Applying the inequality to $\bA'$ gives
+\[
+\dim\col(\bA)=\dim\row(\bA')
+\leqslant\dim\col(\bA')=\dim\row(\bA).
+\]
+\end{proof}
+
+\begin{corollary}[Basic rank facts]\label{cor:rank-facts}
+For $\bA\in\Real^{m\times n}$:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $\rank(\bA')=\rank(\bA)\leqslant\min\{m,n\}$;
+\item $\bA$ has full column rank if and only if
+$\nul(\bA)=\{\bzero\}$, equivalently, $T_{\bA}$ is one-to-one;
+\item $\bA$ has full row rank if and only if $\col(\bA)=\Real^m$, equivalently, every
+right-hand side in $\Real^m$ is reachable.
+\end{enumerate}
+\origin{H Lemma~4.4.3, \S4.4c, and Lemma~22.1.3}
+\end{corollary}
+
+\begin{proof}
+\[
+\rank(\bA')=\dim\row(\bA)=\rank(\bA),
+\qquad
+\rank(\bA)\leqslant\min\{m,n\}.
+\]
+Rank--nullity and the matrix-map identities give
+\[
+\begin{split}
+\rank(\bA)=n
+&\iff\dim\nul(\bA)=0
+\iff\nul(\bA)=\{\bzero\}\\
+&\iff
+\bigl(\bA\bx=\bA\by\implies\bx-\by=\bzero\bigr)
+\iff T_{\bA}\text{ is one-to-one}.
+\end{split}
+\]
+Finally,
+\[
+\rank(\bA)=m
+\iff
+\dim\col(\bA)=\dim\Real^m
+\iff
+\col(\bA)=\Real^m
+\iff
+(\forall\bbb\in\Real^m)(\exists\bx)\ \bA\bx=\bbb.
+\]
+\end{proof}
+
+\begin{example}[Rank and nullity of the running matrix]\label{ex:rank-nullity-matrix}
+The three bases in Example~\ref{ex:matrix-subspaces} have respectively two, two, and two
+members.  Thus the matrix has column rank $2$, row rank $2$, and nullity $2$.
+Rank--nullity reads $2+2=4$, the number of columns.
+\origin{Course formulation from H Thm.~22.1.1}
+\end{example}
+
+\subsection{The model space}\label{sec:2.3.3}
+
+\begin{definition}[Model space and identifiability]\label{def:model-space}
+For a model matrix $\bX\in\Real^{n\times p}$, the \emph{model space} is
+\[
+\calM(\bX)=\col(\bX)=\{\bX\bb:\bb\in\Real^p\}.
+\]
+It is the set of linear-predictor vectors that the model can represent.  The coefficient
+parameterisation is \emph{identifiable} if
+$\bX\bb=\bX\bgamma$ implies $\bb=\bgamma$.
+\origin{Course formulation from H \S11.1 and Lemma~22.1.3}
+\end{definition}
+
+\begin{corollary}[Equivalent model matrices]\label{cor:model-space-factorization}
+For $\bX\in\Real^{n\times p}$ and $\bZ\in\Real^{n\times q}$,
+\[
+\calM(\bZ)\subseteq\calM(\bX)
+\iff
+\bZ=\bX\bF\quad\text{for some }\bF\in\Real^{p\times q}.
+\]
+Consequently,
+\[
+\calM(\bZ)=\calM(\bX)
+\iff
+\bZ=\bX\bF\ \text{and}\ \bX=\bZ\bG
+\quad\text{for some }\bF,\bG.
+\]
+\origin{Course formulation from H Lemma~4.2.2}
+\end{corollary}
+
+\begin{proof}
+\[
+\calM(\bZ)\subseteq\calM(\bX)
+\iff
+\col(\bZ)\subseteq\col(\bX)
+\iff
+(\exists\bF)\ \bZ=\bX\bF.
+\]
+Equality is mutual inclusion.
+\end{proof}
+
+\begin{theorem}[Coefficient equivalence]\label{thm:identifiability}
+For any $\bb,\bgamma\in\Real^p$,
+\[
+\bX\bb=\bX\bgamma
+\quad\Longleftrightarrow\quad
+\bb-\bgamma\in\nul(\bX).
+\]
+Consequently, the coefficient parameterisation is identifiable if and only if $\bX$ has
+full column rank.  If $\bfeta=\bX\bb_0$, then
+\[
+\{\bb\in\Real^p:\bX\bb=\bfeta\}=\bb_0+\nul(\bX).
+\]
+\origin{Course formulation from H Thm.~11.2.3 and Lemma~22.1.3}
+\end{theorem}
+
+\begin{proof}
+\[
+\bX\bb=\bX\bgamma
+\iff
+\bX(\bb-\bgamma)=\bzero
+\iff
+\bb-\bgamma\in\nul(\bX).
+\]
+Therefore
+\[
+\bX\bb=\bX\bgamma\implies\bb=\bgamma
+\iff
+\nul(\bX)=\{\bzero\}
+\iff
+\rank(\bX)=p.
+\]
+For $\bfeta=\bX\bb_0$,
+\[
+\{\bb:\bX\bb=\bfeta\}=\bb_0+\nul(\bX).
+\]
+\end{proof}
+
+\begin{example}[Factor codings and the dummy-variable trap]\label{ex:dummy-trap}
+Suppose a factor has $c$ levels, every level occurs, and $\bd_j\in\Real^n$ is the
+indicator vector of level $j$.  Each observation belongs to exactly one level, so
+\[
+\bd_1+\cdots+\bd_c=\bone.
+\]
+The indicator vectors are independent: if $\sum_j a_j\bd_j=\bzero$, inspect an
+observation in level $j$ to obtain $a_j=0$.  Thus
+$(\bd_1,\ldots,\bd_c)$ is a basis of the factor's model space.
+
+Including an intercept and all $c$ indicators gives
+\[
+\bX_F=(\bone,\bd_1,\ldots,\bd_c),
+\qquad
+\bX_F\begin{pmatrix}1\\-1\\\vdots\\-1\end{pmatrix}=\bzero.
+\]
+This $c+1$ column list is redundant and has rank $c$.  Two nonredundant choices are the
+\emph{cell-means coding}
+\[
+\bX_C=(\bd_1,\ldots,\bd_c)
+\]
+and the \emph{treatment coding}, with level $1$ as baseline,
+\[
+\bX_T=(\bone,\bd_2,\ldots,\bd_c).
+\]
+The treatment list is independent: an equation
+$a_0\bone+\sum_{j=2}^c a_j\bd_j=\bzero$ gives $a_0=0$ on level $1$ and then
+$a_j=0$ on level $j$.  It spans the same model space because
+$\bone=\sum_j\bd_j$ and $\bd_1=\bone-\sum_{j=2}^c\bd_j$.  The two column lists are
+therefore bases of one model space.
+
+For three levels, cell means $(\mu_1,\mu_2,\mu_3)'$ correspond to treatment coefficients
+\[
+\begin{pmatrix}\alpha_0\\\alpha_2\\\alpha_3\end{pmatrix}
+=\begin{pmatrix}\mu_1\\\mu_2-\mu_1\\\mu_3-\mu_1\end{pmatrix}.
+\]
+Both codings produce value $\mu_j$ at every observation in level $j$.  The redundant
+coding is the dummy-variable trap; either coding removes it without changing the model
+space.
+\origin{Course formulation from H Lemma~4.2.2 and Thm.~11.2.3}
+\end{example}
+
+%=============================================================================
+\section{Computation: Numerical Checks in R}\label{sec:2.4}
+%=============================================================================
+
+\subsection{Column, row, and null-space identities}\label{sec:2.4.1}
+
+\[
+\bA=\begin{pmatrix}1&0&1&2\\0&1&1&-1\\1&1&2&1\end{pmatrix},\qquad
+\bB=\begin{pmatrix}1&0\\0&1\\1&1\end{pmatrix},\qquad
+\bK=\begin{pmatrix}1&0&1&2\\0&1&1&-1\end{pmatrix},
+\]
+\[
+\bN=\begin{pmatrix}-1&-2\\-1&1\\1&0\\0&1\end{pmatrix},\qquad
+\bA=\bB\bK,\qquad
+\tilde\ba_3'=\tilde\ba_1'+\tilde\ba_2',\qquad
+\bA\bN=\bO.
+\]
+
+<<subspace-identities>>=
+A <- rbind(c(1, 0, 1,  2),
+           c(0, 1, 1, -1),
+           c(1, 1, 2,  1))
+B <- A[, 1:2, drop = FALSE]
+K <- rbind(c(1, 0, 1,  2),
+           c(0, 1, 1, -1))
+Nhand <- cbind(c(-1, -1, 1, 0),
+               c(-2,  1, 0, 1))
+c(A_minus_BK = max(abs(A - B %*% K)),
+  row3_minus_row1_row2 = max(abs(A[3, ] - A[1, ] - A[2, ])),
+  AN = max(abs(A %*% Nhand)))
+@
+
+\subsection{Coordinate identities}\label{sec:2.4.2}
+
+\[
+P_{\mathcal E\leftarrow\mathcal B}
+=\begin{pmatrix}1&1\\1&-1\end{pmatrix},\qquad
+P_{\mathcal B\leftarrow\mathcal E}
+=\frac12\begin{pmatrix}1&1\\1&-1\end{pmatrix},
+\]
+\[
+P_{\mathcal E\leftarrow\mathcal B}\begin{pmatrix}3\\2\end{pmatrix}
+=\begin{pmatrix}5\\1\end{pmatrix},\qquad
+P_{\mathcal B\leftarrow\mathcal E}\begin{pmatrix}5\\1\end{pmatrix}
+=\begin{pmatrix}3\\2\end{pmatrix},
+\]
+\[
+P_{\mathcal B\leftarrow\mathcal E}P_{\mathcal E\leftarrow\mathcal B}
+=P_{\mathcal E\leftarrow\mathcal B}P_{\mathcal B\leftarrow\mathcal E}
+=\bI_2.
+\]
+
+<<coordinate-transitions>>=
+P_E_from_B <- matrix(c(1, 1, 1, -1), 2, 2)
+P_B_from_E <- 0.5 * P_E_from_B
+v_E <- c(5, 1)
+v_B <- c(3, 2)
+c(E_coordinates = max(abs(P_E_from_B %*% v_B - v_E)),
+  B_coordinates = max(abs(P_B_from_E %*% v_E - v_B)),
+  B_round_trip = max(abs(P_B_from_E %*% P_E_from_B - diag(2))),
+  E_round_trip = max(abs(P_E_from_B %*% P_B_from_E - diag(2))))
+@
+
+\subsection{Rank--nullity from hand bases}\label{sec:2.4.3}
+
+\[
+\bB\begin{pmatrix}c_1\\c_2\end{pmatrix}=\bzero
+\implies c_1=c_2=0,\qquad
+\bN\begin{pmatrix}d_1\\d_2\end{pmatrix}=\bzero
+\implies d_1=d_2=0.
+\]
+\[
+\col(\bB)\subseteq\col(\bA),\qquad
+\bA=\bB\bK\implies\col(\bA)\subseteq\col(\bB),\qquad
+\rank(\bA)=2.
+\]
+\[
+\bA\bN=\bO,\qquad
+\dim\nul(\bA)=4-2=2,\qquad
+\col(\bN)=\nul(\bA).
+\]
+
+<<rank-nullity-hand-bases>>=
+c(B_identity_block = max(abs(B[1:2, ] - diag(2))),
+  N_identity_block = max(abs(Nhand[3:4, ] - diag(2))),
+  null_residual = max(abs(A %*% Nhand)),
+  number_of_columns = ncol(A),
+  rank = ncol(B),
+  nullity = ncol(Nhand),
+  rank_plus_nullity = ncol(B) + ncol(Nhand))
+@
+
+\subsection{Indicator codings}\label{sec:2.4.4}
+
+For $\bD=(\bd_1,\bd_2,\bd_3)$ and
+$\bX_T=(\bone,\bd_2,\bd_3)$,
+\[
+\bone=\bd_1+\bd_2+\bd_3,\qquad
+\bd_1=\bone-\bd_2-\bd_3,\qquad
+\col(\bD)=\col(\bX_T).
+\]
+If $\bmu=(3,6,11)'$ and $\balpha=(3,3,8)'$, then
+\[
+\bD\bmu=\bX_T\balpha,\qquad
+\balpha=(\mu_1,\mu_2-\mu_1,\mu_3-\mu_1)'.
+\]
+
+<<indicator-codings>>=
+D <- rbind(c(1, 0, 0), c(1, 0, 0),
+           c(0, 1, 0), c(0, 1, 0),
+           c(0, 0, 1), c(0, 0, 1))
+one6 <- rep(1, 6)
+X_all <- cbind(one6, D)
+X_treatment <- cbind(one6, D[, 2], D[, 3])
+mu <- c(3, 6, 11)
+alpha <- c(mu[1], mu[2] - mu[1], mu[3] - mu[1])
+c(indicator_sum = max(abs(D %*% rep(1, 3) - one6)),
+  redundant_coding = max(abs(X_all %*% c(1, -1, -1, -1))),
+  same_predictor = max(abs(D %*% mu - X_treatment %*% alpha)))
+@
+
+%=============================================================================
+\section{Pitfalls}\label{sec:2.5}
+%=============================================================================
+
+\subsection{Calling every solution set a subspace}\label{sec:2.5.1}
+
+\[
+\calS_{\bbb}=\{\bx:\bA\bx=\bbb\}
+=\bx_0+\nul(\bA),\qquad
+\bbb\neq\bzero\implies\bzero\notin\calS_{\bbb}.
+\]
+For $\calS=\{(x_1,x_2)':x_1+x_2=1\}$,
+\[
+(1,0)',(0,1)'\in\calS,\qquad (1,0)'+(0,1)'\notin\calS.
+\]
+
+\subsection{Counting generators as dimension}\label{sec:2.5.2}
+
+\[
+\dim\spn\{\bv_1,\ldots,\bv_k\}\leqslant k,\qquad
+\dim\spn\{\bv_1,\ldots,\bv_k\}=k
+\iff \bv_1,\ldots,\bv_k\text{ are independent}.
+\]
+If $\bv_3=\bv_1+\bv_2$, then
+\[
+\spn\{\bv_1,\bv_2,\bv_3\}=\spn\{\bv_1,\bv_2\}.
+\]
+
+\subsection{Reading "the" basis of a subspace as unique}\label{sec:2.5.3}
+
+If $(\bu,\bv)$ is a basis, then so is $(\bu+\bv,\bu-\bv)$ because
+\[
+\bu=\frac12\bigl[(\bu+\bv)+(\bu-\bv)\bigr],\qquad
+\bv=\frac12\bigl[(\bu+\bv)-(\bu-\bv)\bigr].
+\]
+Every basis of the same space has the same cardinality; its vectors, scales, signs, and
+order need not agree.
+
+%=============================================================================
+\section{Exercises}\label{sec:2.6}
+%=============================================================================
+
+\begin{exercise}\label{ex:pairwise-sums-independent}
+Let $\bx,\by,\bz$ be linearly independent vectors. Prove that
+\[
+\bx+\by,\qquad \bx+\bz,\qquad \by+\bz
+\]
+are linearly independent.
+\origin{H Ex.~3.2; A\&M Ex.~3.17(a)}
+\end{exercise}
+
+\begin{solution}
+If
+\[
+a(\bx+\by)+b(\bx+\bz)+c(\by+\bz)=\bzero,
+\]
+then
+\[
+(a+b)\bx+(a+c)\by+(b+c)\bz=\bzero.
+\]
+Independence gives
+\[
+a+b=0,\qquad a+c=0,\qquad b+c=0.
+\]
+Consequently,
+\[
+2a=(a+b)+(a+c)-(b+c)=0,
+\]
+and similarly $2b=2c=0$. Thus $a=b=c=0$.
+\end{solution}
+
+\begin{exercise}\label{ex:zero-sum-spans}
+If $\bx+\by+\bz=\bzero$, prove
+\[
+\spn\{\bx,\by\}=\spn\{\bx,\bz\}=\spn\{\by,\bz\}.
+\]
+\origin{H Ex.~4.4}
+\end{exercise}
+
+\begin{solution}
+The identities
+\[
+\bz=-\bx-\by,
+\qquad
+\by=-\bx-\bz
+\]
+give
+\[
+\spn\{\bx,\bz\}\subseteq\spn\{\bx,\by\},
+\qquad
+\spn\{\bx,\by\}\subseteq\spn\{\bx,\bz\}.
+\]
+Hence $\spn\{\bx,\by\}=\spn\{\bx,\bz\}$. Cyclic permutation of
+$\bx,\by,\bz$ gives the remaining equality.
+\end{solution}
+
+\begin{exercise}\label{ex:nonunique-spanning-coordinates}
+Let $(\bv_1,\ldots,\bv_k)$ span $\calV$ but be linearly dependent. Prove that every
+$\bx\in\calV$ has infinitely many distinct coefficient vectors
+$(a_1,\ldots,a_k)'$ satisfying
+\[
+\bx=\sum_{i=1}^k a_i\bv_i.
+\]
+\origin{H Ex.~4.7}
+\end{exercise}
+
+\begin{solution}
+Choose $\bc=(c_1,\ldots,c_k)'\neq\bzero$ such that
+\[
+\sum_{i=1}^k c_i\bv_i=\bzero.
+\]
+For $\bx\in\calV$, choose $\ba=(a_1,\ldots,a_k)'$ with
+$\bx=\sum_i a_i\bv_i$. Then, for every $t\in\Real$,
+\[
+\sum_{i=1}^k(a_i+t c_i)\bv_i
+=\bx+t\bzero
+=\bx.
+\]
+If $s\neq t$, then
+\[
+(\ba+s\bc)-(\ba+t\bc)=(s-t)\bc\neq\bzero.
+\]
+Thus the coefficient vectors $\ba+t\bc$, $t\in\Real$, are distinct.
+\end{solution}
+
+\begin{exercise}\label{ex:symmetric-skew-direct}
+For $n\geqslant1$, let
+\[
+\calS_n=\{\bA\in\Real^{n\times n}:\bA'=\bA\},
+\qquad
+\calK_n=\{\bA\in\Real^{n\times n}:\bA'=-\bA\}.
+\]
+Prove
+\[
+\Real^{n\times n}=\calS_n\dsum\calK_n,
+\]
+construct bases of $\calS_n$ and $\calK_n$ from the matrix units $\bE_{ij}$, and compute
+their dimensions.
+\origin{H \S4.3b; A\&M Ex.~2.23}
+\end{exercise}
+
+\begin{solution}
+For $\bA\in\Real^{n\times n}$,
+\[
+\bA=\frac{\bA+\bA'}2+\frac{\bA-\bA'}2,
+\qquad
+\frac{\bA+\bA'}2\in\calS_n,
+\qquad
+\frac{\bA-\bA'}2\in\calK_n.
+\]
+Moreover,
+\[
+\bA\in\calS_n\cap\calK_n
+\Longrightarrow
+\bA=\bA'=-\bA
+\Longrightarrow
+\bA=\bO.
+\]
+Hence the sum is direct. The lists
+\[
+\calB_{\calS}
+=\{\bE_{ii}:1\leqslant i\leqslant n\}
+ \cup
+ \{\bE_{ij}+\bE_{ji}:1\leqslant i<j\leqslant n\},
+\]
+\[
+\calB_{\calK}
+=\{\bE_{ij}-\bE_{ji}:1\leqslant i<j\leqslant n\}
+\]
+consist of symmetric and skew-symmetric matrices, respectively. If
+$\bA=(a_{ij})\in\calS_n$, then
+\[
+\bA=\sum_{i=1}^n a_{ii}\bE_{ii}
+   +\sum_{1\leqslant i<j\leqslant n}a_{ij}(\bE_{ij}+\bE_{ji}).
+\]
+If $\bA\in\calK_n$, then $a_{ii}=0$, $a_{ji}=-a_{ij}$, and
+\[
+\bA=\sum_{1\leqslant i<j\leqslant n}a_{ij}(\bE_{ij}-\bE_{ji}).
+\]
+In either display, comparison of entries forces every coefficient to be zero when the
+sum is $\bO$. Thus the lists are bases, and
+\[
+\dim\calS_n=n+\binom n2=\frac{n(n+1)}2,
+\qquad
+\dim\calK_n=\binom n2=\frac{n(n-1)}2.
+\]
+\end{solution}
+
+\begin{exercise}\label{ex:dimension-pressure}
+Let $\calS,\calT$ be subspaces of an $n$-dimensional vector space, with
+$\dim\calS=r$ and $\dim\calT=s$.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item Prove
+\[
+\max\{0,r+s-n\}\leqslant\dim(\calS\cap\calT)\leqslant\min\{r,s\}.
+\]
+\item Prove
+\[
+\calS+\calT=\calV
+\quad\Longleftrightarrow\quad
+\dim(\calS\cap\calT)=r+s-n.
+\]
+\item Prove that $r+s>n$ excludes a direct sum.
+\end{enumerate}
+\origin{H Thm.~17.4.1; S Prop.~1.2 and Cor.~1.1}
+\end{exercise}
+
+\begin{solution}
+The dimension formula and $\calS+\calT\subseteq\calV$ give
+\[
+\dim(\calS\cap\calT)
+=r+s-\dim(\calS+\calT)
+\geqslant r+s-n.
+\]
+Dimensions are nonnegative, while
+\[
+\calS\cap\calT\subseteq\calS,
+\qquad
+\calS\cap\calT\subseteq\calT
+\]
+imply
+\[
+\dim(\calS\cap\calT)\leqslant r,
+\qquad
+\dim(\calS\cap\calT)\leqslant s.
+\]
+This proves (i). For (ii),
+\begin{align*}
+\calS+\calT=\calV
+&\Longleftrightarrow \dim(\calS+\calT)=n\\
+&\Longleftrightarrow r+s-\dim(\calS\cap\calT)=n.
+\end{align*}
+If $r+s>n$, part (i) gives
+$\dim(\calS\cap\calT)\geqslant r+s-n>0$, whereas a direct sum requires
+$\calS\cap\calT=\{\bzero\}$.
+\end{solution}
+
+\begin{exercise}\label{ex:stacked-null}
+For $\bA\in\Real^{m\times n}$ and $\bB\in\Real^{p\times n}$, set
+\[
+\bC=\begin{pmatrix}\bA\\\bB\end{pmatrix}.
+\]
+\tcbbreak
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item Prove $\nul(\bC)=\nul(\bA)\cap\nul(\bB)$.
+\item Prove
+\[
+\max\{\rank(\bA),\rank(\bB)\}
+\leqslant\rank(\bC)
+\leqslant\min\{n,\rank(\bA)+\rank(\bB)\}.
+\]
+\item Prove
+\[
+\rank(\bC)=\rank(\bA)
+\quad\Longleftrightarrow\quad
+\nul(\bA)\subseteq\nul(\bB).
+\]
+\end{enumerate}
+\origin{Course formulation from H Lemmas~4.5.1 and~4.5.7, Cor.~4.5.2}
+\end{exercise}
+
+\begin{solution}
+For $\bx\in\Real^n$,
+\[
+\bC\bx=\bzero
+\Longleftrightarrow
+\bA\bx=\bzero\ \text{and}\ \bB\bx=\bzero
+\Longleftrightarrow
+\bx\in\nul(\bA)\cap\nul(\bB).
+\]
+Write $r_A=\rank(\bA)$, $r_B=\rank(\bB)$, and $r_C=\rank(\bC)$. Then
+\[
+\dim\nul(\bA)=n-r_A,
+\quad
+\dim\nul(\bB)=n-r_B,
+\quad
+\dim\nul(\bC)=n-r_C.
+\]
+The inclusions $\nul(\bC)\subseteq\nul(\bA),\nul(\bB)$ give
+$r_C\geqslant r_A,r_B$. The dimension formula gives
+\[
+n-r_C
+=\dim(\nul(\bA)\cap\nul(\bB))
+\geqslant
+\dim\nul(\bA)+\dim\nul(\bB)-n
+=(n-r_A)+(n-r_B)-n,
+\]
+so $r_C\leqslant r_A+r_B$; also $r_C\leqslant n$. Finally,
+\begin{align*}
+r_C=r_A
+&\Longleftrightarrow
+\dim\nul(\bC)=\dim\nul(\bA)\\
+&\Longleftrightarrow
+\nul(\bA)\cap\nul(\bB)=\nul(\bA)\\
+&\Longleftrightarrow
+\nul(\bA)\subseteq\nul(\bB),
+\end{align*}
+where the middle equivalence uses
+$\nul(\bC)=\nul(\bA)\cap\nul(\bB)\subseteq\nul(\bA)$.
+\end{solution}
+
+\begin{exercise}\label{ex:affine-solutions}
+Let $\bx_1,\ldots,\bx_k$ solve $\bA\bx=\bbb$. For scalars
+$c_1,\ldots,c_k$, prove
+\[
+\bA\left(\sum_{i=1}^k c_i\bx_i\right)
+=\left(\sum_{i=1}^k c_i\right)\bbb.
+\]
+Deduce:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item if $\sum_i c_i=1$, then $\sum_i c_i\bx_i$ is a solution;
+\item if $\bbb\neq\bzero$, the converse holds;
+\item if $\bbb=\bzero$, every linear combination of solutions is a solution.
+\end{enumerate}
+\origin{H Ex.~11.2}
+\end{exercise}
+
+\begin{solution}
+Linearity gives
+\[
+\bA\left(\sum_{i=1}^k c_i\bx_i\right)
+=\sum_{i=1}^k c_i\bA\bx_i
+=\sum_{i=1}^k c_i\bbb
+=\left(\sum_{i=1}^k c_i\right)\bbb.
+\]
+If $\sum_i c_i=1$, the right-hand side is $\bbb$. If $\bbb\neq\bzero$ and the
+combination is a solution, then
+\[
+\left(\sum_i c_i-1\right)\bbb=\bzero
+\Longrightarrow
+\sum_i c_i=1.
+\]
+For $\bbb=\bzero$, the displayed identity equals $\bzero$ for all $c_1,\ldots,c_k$.
+\end{solution}
+
+\begin{exercise}\label{ex:extend-linear-map}
+Let $\calU$ be a subspace of a finite-dimensional vector space $\calV$, and let
+$S:\calU\to\calW$ be linear. Construct a linear map $T:\calV\to\calW$ such that
+\[
+T(\bu)=S(\bu),\qquad \bu\in\calU.
+\]
+\origin{H Ex.~22.1}
+\end{exercise}
+
+\begin{solution}
+Choose a basis $(\bu_1,\ldots,\bu_r)$ of $\calU$ and extend it to a basis
+$(\bu_1,\ldots,\bu_n)$ of $\calV$. Define
+\[
+T\left(\sum_{i=1}^n a_i\bu_i\right)
+=\sum_{i=1}^r a_iS(\bu_i).
+\]
+Unique basis coordinates make $T$ well-defined. For $a,b\in\Real$ and
+$\bx=\sum_i x_i\bu_i$, $\by=\sum_i y_i\bu_i$,
+\begin{align*}
+T(a\bx+b\by)
+&=\sum_{i=1}^r(ax_i+by_i)S(\bu_i)\\
+&=aT(\bx)+bT(\by).
+\end{align*}
+For $\bu=\sum_{i=1}^r u_i\bu_i\in\calU$,
+\[
+T(\bu)=\sum_{i=1}^r u_iS(\bu_i)
+=S\left(\sum_{i=1}^r u_i\bu_i\right)
+=S(\bu).
+\]
+\end{solution}
+
+\begin{exercise}\label{ex:kernel-complement-images}
+Let $T:\calV\to\calW$ be linear and let $\calU\subseteq\calV$ satisfy
+$\calU\cap\ker(T)=\{\bzero\}$.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item If $\bu_1,\ldots,\bu_r$ are linearly independent in $\calU$, prove that
+$T(\bu_1),\ldots,T(\bu_r)$ are linearly independent.
+\item If $(\bu_1,\ldots,\bu_r)$ is a basis of $\calU$ and
+$\calV=\calU\dsum\ker(T)$, prove that
+$(T(\bu_1),\ldots,T(\bu_r))$ is a basis of $\im(T)$.
+\end{enumerate}
+\origin{H Ex.~22.3}
+\end{exercise}
+
+\begin{solution}
+If $\sum_i a_iT(\bu_i)=\bzero$, then
+\[
+\sum_i a_i\bu_i\in\calU\cap\ker(T)=\{\bzero\}.
+\]
+Independence of $\bu_1,\ldots,\bu_r$ gives $a_1=\cdots=a_r=0$, proving (i).
+
+For $\bx\in\calV=\calU\dsum\ker(T)$, write
+\[
+\bx=\bu+\bk,
+\qquad
+\bu=\sum_{i=1}^r a_i\bu_i,
+\qquad
+\bk\in\ker(T).
+\]
+Then
+\[
+T(\bx)=T(\bu)+T(\bk)=\sum_{i=1}^r a_iT(\bu_i).
+\]
+Thus the images span $\im(T)$; part (i) gives independence.
+\end{solution}
+
+\begin{exercise}\label{ex:dimension-obstruction}
+Let $T:\calV\to\calW$ be linear, with $\calV$ and $\calW$ finite-dimensional.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item If $\dim\calV>\dim\calW$, prove that $T$ is not one-to-one.
+\item If $\dim\calV<\dim\calW$, prove that $T$ is not onto.
+\item Deduce that for $\bA\in\Real^{m\times n}$, $n>m$ implies
+$\bA\bx=\bA\by$ for some $\bx\neq\by$, while $m>n$ implies
+$\bA\bx=\bbb$ is inconsistent for some $\bbb\in\Real^m$.
+\end{enumerate}
+\origin{H Thm.~22.1.1 and Cor.~22.1.2}
+\end{exercise}
+
+\begin{solution}
+Rank--nullity and $\im(T)\subseteq\calW$ give
+\[
+\dim\ker(T)
+=\dim\calV-\dim\im(T)
+\geqslant\dim\calV-\dim\calW.
+\]
+If $\dim\calV>\dim\calW$, then $\ker(T)\neq\{\bzero\}$, so $T$ is not one-to-one.
+If $\dim\calV<\dim\calW$, then
+\[
+\dim\im(T)\leqslant\dim\calV<\dim\calW,
+\]
+so $\im(T)\neq\calW$.
+
+For $T_{\bA}:\Real^n\to\Real^m$, if $n>m$, choose
+$\bh\in\nul(\bA)\setminus\{\bzero\}$ and set $\by=\bx+\bh$; then
+$\bA\by=\bA\bx$. If $m>n$, choose
+$\bbb\in\Real^m\setminus\col(\bA)$; then $\bA\bx=\bbb$ is inconsistent.
+\end{solution}
+
+\begin{exercise}\label{ex:transition-composition}
+Let $\calB,\calC,\calD$ be ordered bases of the same $n$-dimensional vector space.
+Prove
+\[
+\bP_{\calD\leftarrow\calB}
+=\bP_{\calD\leftarrow\calC}\bP_{\calC\leftarrow\calB}.
+\]
+Deduce
+\[
+\bP_{\calB\leftarrow\calC}\bP_{\calC\leftarrow\calB}=\bI_n.
+\]
+\origin{H Thm.~22.4.2 and \S22.4b(3)}
+\end{exercise}
+
+\begin{solution}[qedhere]
+For every $\bx$,
+\begin{align*}
+\bP_{\calD\leftarrow\calB}[\bx]_{\calB}
+&=[\bx]_{\calD}\\
+&=\bP_{\calD\leftarrow\calC}[\bx]_{\calC}\\
+&=\bP_{\calD\leftarrow\calC}\bP_{\calC\leftarrow\calB}[\bx]_{\calB}.
+\end{align*}
+For every $\bz\in\Real^n$, the vector
+$\bx=\sum_{j=1}^n z_j\bv_j$, where $\calB=(\bv_1,\ldots,\bv_n)$, satisfies
+$[\bx]_{\calB}=\bz$. Hence the two matrices agree on every $\bz$ and are equal.
+Setting $\calD=\calB$ gives
+\[
+\bP_{\calB\leftarrow\calC}\bP_{\calC\leftarrow\calB}
+=\bP_{\calB\leftarrow\calB}
+=\bI_n.\tag*{\textcolor{solFR}{$\blacksquare$}}
+\]
+\end{solution}
+
+\begin{exercise}\label{ex:evaluation-map}
+Fix distinct $r,s\in\Real$ and define $T:\calP_2\to\Real^2$ by
+\[
+T(p)=\begin{pmatrix}p(r)\\p(s)\end{pmatrix}.
+\]
+Prove that $T$ is linear and onto, find a basis of $\ker(T)$, and verify rank--nullity.
+\origin{Course formulation}
+\end{exercise}
+
+\begin{solution}
+For $a,b\in\Real$ and $p,q\in\calP_2$,
+\[
+T(ap+bq)
+=\begin{pmatrix}ap(r)+bq(r)\\ap(s)+bq(s)\end{pmatrix}
+=aT(p)+bT(q).
+\]
+For $(u,v)'\in\Real^2$, define
+\[
+p_{u,v}(t)
+=u\frac{t-s}{r-s}+v\frac{t-r}{s-r}.
+\]
+Then $p_{u,v}\in\calP_2$ and
+\[
+T(p_{u,v})=(u,v)',
+\]
+so $\im(T)=\Real^2$ and $\dim\im(T)=2$. Since $\dim\calP_2=3$,
+rank--nullity gives $\dim\ker(T)=1$. The nonzero polynomial
+\[
+q(t)=(t-r)(t-s)
+\]
+satisfies $T(q)=\bzero$; hence $(q)$ is a basis of $\ker(T)$. Therefore
+\[
+\dim\ker(T)+\dim\im(T)=1+2=3=\dim\calP_2.
+\]
+\end{solution}
+
+\begin{exercise}\label{ex:coefficient-equivalence}
+Let $\bx_1,\bx_2$ be linearly independent, set $\bx_3=\bx_1-\bx_2$, and write
+$\bX=(\bx_1,\bx_2,\bx_3)$.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item Find a basis of $\nul(\bX)$.
+\item For $\bb\in\Real^3$, find every $\bgamma$ such that
+$\bX\bgamma=\bX\bb$.
+\item With $\bZ=(\bx_1,\bx_2)$, find the unique $\btheta\in\Real^2$ such that
+$\bX\bb=\bZ\btheta$.
+\end{enumerate}
+\origin{Course formulation from H Lemma~4.2.2 and Thm.~11.2.3}
+\end{exercise}
+
+\begin{solution}
+For $\bh=(h_1,h_2,h_3)'$,
+\[
+\bX\bh
+=(h_1+h_3)\bx_1+(h_2-h_3)\bx_2.
+\]
+Independence of $\bx_1,\bx_2$ gives
+\[
+\bX\bh=\bzero
+\Longleftrightarrow
+h_1=-h_3,\quad h_2=h_3.
+\]
+Thus
+\[
+\nul(\bX)=\spn\{(-1,1,1)'\}.
+\]
+Consequently,
+\[
+\bX\bgamma=\bX\bb
+\Longleftrightarrow
+\bgamma=\bb+t(-1,1,1)',
+\qquad t\in\Real.
+\]
+Finally,
+\[
+\bX\bb
+=(\beta_1+\beta_3)\bx_1+(\beta_2-\beta_3)\bx_2
+=\bZ
+\begin{pmatrix}\beta_1+\beta_3\\\beta_2-\beta_3\end{pmatrix}.
+\]
+Independence of the columns of $\bZ$ makes the displayed coefficient vector unique.
+\end{solution}
+
+\begin{exercise}\label{ex:factor-codings}
+A factor has levels $1,\ldots,c$, every level occurs, and $\bd_j$ is the indicator
+column of level $j$. Set
+\[
+\bX_C=(\bd_1,\ldots,\bd_c),
+\qquad
+\bX_F=(\bone,\bd_1,\ldots,\bd_c).
+\]
+Fix a baseline level $r$ and let $\bX_{T,r}$ contain $\bone$ followed by all
+$\bd_j$ with $j\neq r$.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item Find bases of $\nul(\bX_F)$ and $\col(\bX_F)$.
+\item Prove that the columns of $\bX_C$ and $\bX_{T,r}$ are bases of the same model
+space.
+\item For cell means $\mu_1,\ldots,\mu_c$, derive the coefficients under baseline-$r$
+treatment coding and prove equality of the two predictors.
+\end{enumerate}
+\origin{Course formulation from H Lemma~4.2.2 and Thm.~11.2.3}
+\end{exercise}
+
+\begin{solution}
+Every observation belongs to exactly one level, so
+\[
+\bone=\sum_{j=1}^c\bd_j,
+\qquad
+\bX_F(1,-1,\ldots,-1)'=\bzero.
+\]
+The indicator columns are independent: from $\sum_j a_j\bd_j=\bzero$, evaluation at
+an observation in level $j$ gives $a_j=0$. Hence
+\[
+\rank(\bX_F)=c,
+\qquad
+\col(\bX_F)=\spn\{\bd_1,\ldots,\bd_c\}.
+\]
+Rank--nullity gives $\dim\nul(\bX_F)=(c+1)-c=1$; the displayed nonzero null vector
+therefore gives
+\[
+\nul(\bX_F)=\spn\{(1,-1,\ldots,-1)'\}.
+\]
+The relations
+\[
+\bone=\sum_{j=1}^c\bd_j,
+\qquad
+\bd_r=\bone-\sum_{j\neq r}\bd_j
+\]
+give $\col(\bX_C)=\col(\bX_{T,r})$. If
+\[
+a_0\bone+\sum_{j\neq r}a_j\bd_j=\bzero,
+\]
+evaluation at level $r$ gives $a_0=0$, and evaluation at level $j\neq r$ gives
+$a_0+a_j=0$. Thus the treatment columns are independent; both lists are bases.
+
+The cell-means coefficients are $(\mu_1,\ldots,\mu_c)'$. The treatment coefficients
+are
+\[
+\alpha_0=\mu_r,
+\qquad
+\alpha_j=\mu_j-\mu_r\quad(j\neq r).
+\]
+At level $r$ the treatment predictor is $\alpha_0=\mu_r$; at level $j\neq r$ it is
+$\alpha_0+\alpha_j=\mu_j$. Hence both predictors agree in every component.
+\end{solution}
+
+\begin{exercise}\label{ex:model-basis-change}
+Let $\bX\in\Real^{n\times p}$ have full column rank. Let
+$\calC=(\bc_1,\ldots,\bc_p)$ be an ordered basis of $\Real^p$, put
+$\bC=(\bc_1,\ldots,\bc_p)$, and define $\bZ=\bX\bC$.
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item Prove that $\bZ$ has full column rank and $\col(\bZ)=\col(\bX)$.
+\item For every $\bb\in\Real^p$, prove that there is exactly one $\bgamma$ such that
+$\bX\bb=\bZ\bgamma$, and identify $\bgamma$ as a coordinate vector.
+\end{enumerate}
+\origin{Course formulation from H Lemma~4.2.2 and \S22.4b(3)}
+\end{exercise}
+
+\begin{solution}
+Each column $\bX\bc_j$ of $\bZ$ belongs to $\col(\bX)$, so
+$\col(\bZ)\subseteq\col(\bX)$. For $\bb\in\Real^p$, the basis $\calC$ gives a unique
+$\bgamma$ such that
+\[
+\bb=\sum_{j=1}^p\gamma_j\bc_j=\bC\bgamma.
+\]
+Hence
+\[
+\bX\bb=\bX\bC\bgamma=\bZ\bgamma,
+\]
+which proves $\col(\bX)\subseteq\col(\bZ)$. If $\bZ\bgamma=\bzero$, then
+\[
+\bX\bC\bgamma=\bzero
+\Longrightarrow
+\bC\bgamma=\bzero
+\Longrightarrow
+\bgamma=\bzero,
+\]
+using full column rank of $\bX$ and independence of $\bc_1,\ldots,\bc_p$.
+Thus $\bZ$ has full column rank. Finally,
+\[
+\bX\bb=\bZ\bgamma
+\Longleftrightarrow
+\bX(\bb-\bC\bgamma)=\bzero
+\Longleftrightarrow
+\bb=\bC\bgamma
+\Longleftrightarrow
+\bgamma=[\bb]_{\calC}.
+\]
+\end{solution}
+
+\end{document}

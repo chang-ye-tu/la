@@ -1,0 +1,2237 @@
+% Compile:  python build.py 14
+% or by hand:
+%   Rscript -e "knitr::knit('unit14.Rnw')"
+%   xelatex -shell-escape unit14.tex        # run twice to settle the toc
+\documentclass[17pt]{extarticle}
+
+\input{la_preamble.tex}
+\usepackage{needspace}
+
+% Unit 14 specific
+\fancyhead[L]{\small\color{hdrBG}\textbf{Unit\ 14\ \ Second Differentials}}
+\newcommand{\bomega}{\boldsymbol{\omega}}
+
+\setcounter{theorem}{0}\setcounter{example}{0}
+\renewcommand\thedefinition{14.\arabic{theorem}}
+\renewcommand\thetheorem{14.\arabic{theorem}}
+\renewcommand\thelemma{14.\arabic{theorem}}
+\renewcommand\theproposition{14.\arabic{theorem}}
+\renewcommand\thecorollary{14.\arabic{theorem}}
+\renewcommand\theexample{14.\arabic{example}}
+\renewcommand\theexercise{14.\arabic{exercise}}
+\renewcommand\thefigure{14.\arabic{figure}}
+
+\title{\color{hdrBG}\bfseries\Huge Second Differentials and the Linear Model}
+\author{}\date{}
+
+\begin{document}
+
+<<setup, include=FALSE>>=
+source("la_knitr_setup.R")
+knitr::opts_chunk$set(fig.path = "figs/unit14-")
+@
+
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+{\color{hdrBG}\bfseries\fontsize{26}{32}\selectfont
+ Unit 14.\ Second Differentials and the Linear Model}
+\end{center}
+\vspace*{\fill}
+\end{titlepage}
+
+\setcounter{page}{1}
+
+%=============================================================================
+\section{Second-order theory}\label{sec:14.1}
+%=============================================================================
+
+\subsection{Second differentials and Hessians}\label{sec:14.1.1}
+
+\begin{lemma}[Continuous partial derivatives imply differentiability]
+\label{lem:14-continuous-partials}
+Let $\calU\subseteq\Real^p$ be open.  If
+$\bF=(F_1,\ldots,F_q)':\calU\to\Real^q$ has continuous first partial
+derivatives, then $\bF$ is differentiable in the sense of the first
+differential introduced previously, and
+\[
+\dd\bF_{\bx}[\bh]=\Dm\bF(\bx)\bh,
+\qquad
+(\Dm\bF)_{aj}(\bx)=\frac{\partial F_a}{\partial x_j}(\bx).
+\]
+\origin{Course formulation from H \S15.1c; MC Eqs.~(7)--(11)}
+\end{lemma}
+
+\begin{proof}
+Fix $\bx\in\calU$.  Choose $\rho>0$ such that
+$\norm{\bz-\bx}_2<\rho$ implies $\bz\in\calU$.  For
+$\norm{\bh}_2<\rho$, put
+\[
+\bx^{(j)}=\bx+\sum_{k=1}^j h_k\eu_k
+\qquad(j=0,\ldots,p).
+\]
+For $j=1,\ldots,p$ and $0\leqslant t\leqslant1$,
+\[
+\norm{\bx^{(j-1)}+t h_j\eu_j-\bx}_2
+\leqslant\norm{\bh}_2<\rho,
+\]
+so these points belong to $\calU$.  For $a=1,\ldots,q$ and
+$j=1,\ldots,p$, if $h_j\ne0$, the one-variable
+mean-value theorem gives $0<\theta_{aj}<1$; if $h_j=0$, put
+$\theta_{aj}=0$.  With
+\[
+\boldsymbol{\xi}_{aj}=\bx^{(j-1)}+\theta_{aj}h_j\eu_j,
+\]
+both cases satisfy
+\[
+F_a(\bx+\bh)-F_a(\bx)
+=\sum_{j=1}^p
+ \frac{\partial F_a}{\partial x_j}(\boldsymbol{\xi}_{aj})h_j.
+\]
+For $\epsilon>0$, continuity of the finitely many partial derivatives
+gives $0<\eta<\rho$ such that
+\[
+\norm{\bz-\bx}_2<\eta
+\implies
+\left|
+\frac{\partial F_a}{\partial x_j}(\bz)
+-\frac{\partial F_a}{\partial x_j}(\bx)
+\right|<\frac{\epsilon}{\sqrt{pq}}
+\quad(a=1,\ldots,q;\ j=1,\ldots,p).
+\]
+If $0<\norm{\bh}_2<\eta$, then
+\begin{align*}
+R_a(\bh)
+&:=F_a(\bx+\bh)-F_a(\bx)
+  -\sum_{j=1}^p\frac{\partial F_a}{\partial x_j}(\bx)h_j,\\
+|R_a(\bh)|
+&\leqslant\frac{\epsilon}{\sqrt{pq}}
+       \sum_{j=1}^p|h_j|
+ \leqslant\frac{\epsilon}{\sqrt q}\norm{\bh}_2,
+\end{align*}
+and hence
+\[
+\norm{\bR(\bh)}_2<\epsilon\norm{\bh}_2.
+\]
+The displayed linear term is therefore the first differential.
+\end{proof}
+
+\begin{definition}[Second differential and Hessian]\label{def:14-second}
+Let $\calU\subseteq\Real^p$ be open and let
+$f:\calU\to\Real$ have continuous second partial derivatives.  The
+column of first partial derivatives is
+\[
+\bp_f(\bx)
+=\left(
+\frac{\partial f}{\partial x_1}(\bx),\ldots,
+\frac{\partial f}{\partial x_p}(\bx)
+\right)'.
+\]
+The \emph{Hessian} is
+\[
+\Hm f(\bx)
+=\left(
+\frac{\partial}{\partial x_j}
+ \left\{\frac{\partial f}{\partial x_i}\right\}(\bx)
+\right)_{i,j=1}^p.
+\]
+Applying Lemma~\ref{lem:14-continuous-partials} to $\bp_f$ gives
+\[
+\dd(\bp_f)_{\bx}[\bk]=\Hm f(\bx)\bk.
+\]
+Thus $\bp_f$ is continuous by the earlier differentiability--continuity
+result.  Lemma~\ref{lem:14-continuous-partials} applied to $f$, followed
+by the earlier first-identification result, gives
+\[
+\dd f_{\bx}[\bh]=\bp_f(\bx)'\bh,
+\qquad
+\nabla f(\bx)=\bp_f(\bx).
+\]
+For increments $\bh,\bk\in\Real^p$, define the \emph{second
+differential} by
+\[
+\dd^2 f_{\bx}[\bh,\bk]
+:=\bh'\dd(\bp_f)_{\bx}[\bk]
+=\sum_{i=1}^p\sum_{j=1}^p
+ h_i k_j
+ \frac{\partial}{\partial x_j}
+ \left\{\frac{\partial f}{\partial x_i}\right\}(\bx).
+\]
+For a repeated increment, write
+\[
+\dd^2 f_{\bx}[\bh]
+=\dd^2 f_{\bx}[\bh,\bh]
+=\bh'\Hm f(\bx)\bh.
+\]
+Equivalently, with $\dd\bx=\bh$,
+$\dd^2f=(\dd\bx)'\Hm f(\bx)\dd\bx$.
+\origin{Course formulation from MC \S9; H \S15.9}
+\end{definition}
+
+\begin{theorem}[Symmetry and second identification]\label{thm:14-second-identification}
+Under Definition~\ref{def:14-second}, $\Hm f(\bx)$ is symmetric.  If
+$\bB(\bx)\in\Real^{p\times p}$ satisfies
+\[
+\dd^2 f_{\bx}[\bh]=\bh'\bB(\bx)\bh
+\qquad(\bh\in\Real^p),
+\]
+then
+\[
+\Hm f(\bx)=\frac{\bB(\bx)+\bB(\bx)'}2.
+\]
+Conversely, this matrix identity gives the displayed second differential.
+\origin{Adapted from MC Prop.~13; A\&M Ex.~13.47(c)}
+\end{theorem}
+
+\begin{proof}
+Fix $i,j$ and set
+$F(s,t)=f(\bx+s\eu_i+t\eu_j)$.  For sufficiently small $s,t\ne0$,
+the corresponding rectangle lies in $\calU$.  Applying the
+one-variable mean-value theorem in the two possible orders gives points
+$(\xi,\eta)$ and $(\widetilde\xi,\widetilde\eta)$ in that rectangle
+such that
+\[
+\frac{F(s,t)-F(s,0)-F(0,t)+F(0,0)}{st}
+=F_{st}(\xi,\eta)
+=F_{ts}(\widetilde\xi,\widetilde\eta).
+\]
+Continuity and $(s,t)\to(0,0)$ yield
+\[
+\frac{\partial^2f}{\partial x_i\partial x_j}(\bx)
+=
+\frac{\partial^2f}{\partial x_j\partial x_i}(\bx).
+\]
+Thus $\Hm f(\bx)=\Hm f(\bx)'$.
+
+Set
+\[
+\bC=\Hm f(\bx)-\frac{\bB(\bx)+\bB(\bx)'}2.
+\]
+Then $\bC=\bC'$ and $\bh'\bC\bh=0$ for every $\bh$.  Taking
+$\bh=\eu_i$ and $\bh=\eu_i+\eu_j$ gives
+\[
+c_{ii}=0,
+\qquad
+0=c_{ii}+2c_{ij}+c_{jj}=2c_{ij},
+\]
+so $\bC=\bO$.  Conversely, if
+$\Hm f=(\bB+\bB')/2$, then
+\[
+\bh'\Hm f\,\bh
+=\bh'\bB\bh+\frac12\bh'(\bB'-\bB)\bh
+=\bh'\bB\bh.
+\]
+\end{proof}
+
+\begin{theorem}[Trace identification of a matrix Hessian]
+\label{thm:14-trace-hessian}
+Let $\calU\subseteq\Real^{m\times n}$ be open, let
+$f:\calU\to\Real$ have continuous second partial derivatives, fix
+$\bX\in\calU$, and let $\bx=\vc\bX$.  If
+$\bA\in\Real^{n\times n}$ and $\bB\in\Real^{m\times m}$, then
+\[
+\bigl[\,\dd^2 f_{\bX}[\bDelta]
+=\tr\{\bA\bDelta'\bB\bDelta\}
+\text{ for every }\bDelta\in\Real^{m\times n}\,\bigr]
+\iff
+\Hm_{\bx} f(\bX)
+=\frac{\bA'\otimes\bB+\bA\otimes\bB'}2.
+\]
+In the square case $n=m$, put
+\[
+\calU_s=\{\vech\bX:\bX=\bX',\ \bX\in\calU\},
+\qquad
+f_s(\vech\bX)=f(\bX).
+\]
+Then $\calU_s$ is open.  If $\bx_s=\vech\bX$, then, for every
+$\bDelta=\bDelta'$,
+\[
+\dd\bx_s=\vech\bDelta,
+\qquad
+\dd^2(f_s)_{\bx_s}[\vech\bDelta]
+=(\dd\bx_s)'\bD_m'
+ \Hm_{\vc\bX}f(\bX)\bD_m\,\dd\bx_s.
+\]
+Consequently,
+\[
+\Hm f_s(\bx_s)
+=\bD_m'\Hm_{\vc\bX}f(\bX)\bD_m.
+\]
+\origin{Course formulation from MC Prop.~15; A\&M Ex.~13.47(c)}
+\end{theorem}
+
+\begin{proof}
+The vec--Kronecker identity gives
+\[
+\tr\{\bA\bDelta'\bB\bDelta\}
+=(\vc\bDelta)'(\bA'\otimes\bB)\vc\bDelta.
+\]
+Theorem~\ref{thm:14-second-identification} gives the first assertion.
+Fix a symmetric $\bX\in\calU$.  Choose $\rho>0$ such that
+$\norm{\bDelta}_F<\rho$ implies $\bX+\bDelta\in\calU$.  Then
+for symmetric $\bDelta$,
+\[
+\norm{\vech\bDelta}_2<\frac{\rho}{\sqrt2}
+\implies
+\norm{\bDelta}_F\leqslant\sqrt2\norm{\vech\bDelta}_2<\rho,
+\]
+so $\calU_s$ is open.
+
+For symmetric increments,
+\[
+\vc\bDelta=\bD_m\vech\bDelta
+=\bD_m\,\dd\bx_s,
+\]
+and the first-order chain rule gives
+\[
+\nabla f_s(\bx_s)
+=\bD_m'\nabla_{\vc\bX}f(\bX).
+\]
+Differentiating this identity gives the stated second differential and
+Hessian.
+\end{proof}
+
+\subsection{The second-order chain rule}\label{sec:14.1.2}
+
+\begin{theorem}[Second-order chain rule]\label{thm:14-second-chain}
+Let $\calU\subseteq\Real^p$ and $\calV\subseteq\Real^q$ be open.  Let
+$\bg:\calU\to\calV$ and $f:\calV\to\Real$ have continuous second
+partial derivatives.  Write
+\[
+\bJ(\bx)=\Dm\bg(\bx),
+\qquad
+f_a(\by)=\frac{\partial f}{\partial y_a}(\by).
+\]
+Then
+\[
+\Hm(f\circ\bg)(\bx)
+=\bJ(\bx)'\Hm f(\bg(\bx))\bJ(\bx)
++ \sum_{a=1}^q f_a(\bg(\bx))\,\Hm g_a(\bx).
+\]
+Equivalently,
+\[
+\dd^2(f\circ\bg)
+=(\dd\bg)'\Hm f(\bg)\,\dd\bg
++ \sum_{a=1}^q f_a(\bg)\,\dd^2g_a.
+\]
+\origin{Adapted from MC Prop.~14}
+\end{theorem}
+
+\begin{proof}
+Lemma~\ref{lem:14-continuous-partials} and the earlier first-order
+chain and product rules give, for $i,j=1,\ldots,p$,
+\begin{align*}
+\frac{\partial(f\circ\bg)}{\partial x_i}
+&=\sum_{a=1}^q f_a(\bg)
+  \frac{\partial g_a}{\partial x_i},\\
+\frac{\partial^2(f\circ\bg)}{\partial x_j\partial x_i}
+&=\sum_{a=1}^q\sum_{b=1}^q
+  \frac{\partial^2f}{\partial y_b\partial y_a}(\bg)
+  \frac{\partial g_b}{\partial x_j}
+  \frac{\partial g_a}{\partial x_i}
+ +\sum_{a=1}^q f_a(\bg)
+  \frac{\partial^2g_a}{\partial x_j\partial x_i}.
+\end{align*}
+These entries give the Hessian identity.  Multiplication on the left and
+right by $\dd\bx'$ and $\dd\bx$, respectively, gives the second
+differential identity.
+\end{proof}
+
+\begin{example}[Weighted least-squares Hessian]\label{ex:14-ls-hessian}
+Let $\by\in\Real^n$, $\bX\in\Real^{n\times p}$, and
+$\bW=\bW'\in\Real^{n\times n}$ with $\bW\psdge\bO$.  Define
+\[
+q(\bb)=(\by-\bX\bb)'\bW(\by-\bX\bb).
+\]
+For $\br=\by-\bX\bb$,
+\[
+\dd q=-2\br'\bW\bX\,\dd\bb,
+\qquad
+\dd^2q=2(\dd\bb)'\bX'\bW\bX\,\dd\bb,
+\]
+and therefore
+\[
+\nabla q(\bb)=-2\bX'\bW\br,
+\qquad
+\Hm q(\bb)=2\bX'\bW\bX.
+\]
+If $\bW\psdgt\bO$ and $\bX$ has full column rank, then
+$\Hm q(\bb)\psdgt\bO$.
+\origin{Adapted from A\&M Exs.~13.54--13.55; H Thm.~14.12.20}
+\end{example}
+
+\subsection{Convexity and stationary points}\label{sec:14.1.3}
+
+\begin{definition}[Convexity and stationarity]\label{def:14-convex}
+A set $\calC\subseteq\Real^p$ is \emph{convex} if
+\[
+(1-t)\bx+t\by\in\calC
+\qquad(\bx,\by\in\calC,\ 0\leqslant t\leqslant1).
+\]
+For a convex set $\calC$, a function $f:\calC\to\Real$ is
+\emph{convex} if
+\[
+f((1-t)\bx+t\by)
+\leqslant(1-t)f(\bx)+tf(\by);
+\]
+it is \emph{strictly convex} when the inequality is strict for
+$\bx\ne\by$ and $0<t<1$.  If $f$ is differentiable at an interior
+point $\bx_*$, it is
+\emph{stationary} when
+\[
+\dd f_{\bx_*}[\bh]=0\quad(\bh\in\Real^p),
+\qquad\text{equivalently}\qquad
+\nabla f(\bx_*)=\bzero.
+\]
+A point $\bx_*$ is a \emph{global minimiser} when
+$f(\bx_*)\leqslant f(\bx)$ for every $\bx\in\calC$.  It is a
+\emph{local minimiser} when, for some $\delta>0$,
+\[
+\bx\in\calC,\ \norm{\bx-\bx_*}_2<\delta
+\implies f(\bx_*)\leqslant f(\bx);
+\]
+the minimum is \emph{strict} when equality is excluded for
+$\bx\ne\bx_*$.  Global and local maximisers reverse the corresponding
+inequalities.  A
+\emph{saddle point} satisfies, for every $\delta>0$,
+\[
+f(\bx_-)<f(\bx_*)<f(\bx_+)
+\]
+for some $\bx_-,\bx_+\in\calC$ within distance $\delta$ of $\bx_*$.
+\origin{Course formulation from MC \S5; H \S19.1(c)}
+\end{definition}
+
+\begin{theorem}[Hessian criterion and stationary classification]
+\label{thm:14-convex-hessian}
+Let $\calC\subseteq\Real^p$ be open and convex and let
+$f:\calC\to\Real$ have continuous second partial derivatives.
+\begin{enumerate}[(a)]
+\item $f$ is convex if and only if
+      $\Hm f(\bx)\psdge\bO$ for every $\bx\in\calC$.
+\item If $\Hm f(\bx)\psdgt\bO$ for every $\bx\in\calC$, then $f$ is
+      strictly convex.
+\item If $f$ is convex and $\bx_*$ is stationary, then $\bx_*$ is a
+      global minimiser.  If $f$ is strictly convex, it is unique.
+\item At a stationary $\bx_*$, a positive-definite Hessian gives a strict
+      local minimum, a negative-definite Hessian gives a strict local
+      maximum, and an indefinite Hessian gives a saddle point.
+\end{enumerate}
+\origin{Course formulation from MC \S5; H \S19.1(c)}
+\end{theorem}
+
+\begin{proof}
+For $\bx,\by\in\calC$, set
+\[
+\phi(t)=f(\bx+t(\by-\bx)),
+\qquad
+\phi''(t)=(\by-\bx)'\Hm f(\bx+t(\by-\bx))(\by-\bx).
+\]
+If every Hessian is positive semidefinite, then $\phi''\geqslant0$ and the
+one-variable derivative $\phi'$ is nondecreasing; hence $\phi$ is convex.
+If every Hessian is positive definite and $\bx\ne\by$, then
+$\phi''>0$, so $\phi$ is strictly convex.
+
+Conversely, convexity of $f$ makes every such $\phi$ convex.  For
+$\bh\in\Real^p$ and sufficiently small $t$,
+\[
+f(\bx+t\bh)+f(\bx-t\bh)-2f(\bx)\geqslant0.
+\]
+Division by $t^2$ and $t\to0$ gives
+$\bh'\Hm f(\bx)\bh\geqslant0$.
+
+For $0<t\leqslant1$, convexity gives
+\[
+\frac{f(\bx+t(\by-\bx))-f(\bx)}{t}
+\leqslant f(\by)-f(\bx).
+\]
+Letting $t\downarrow0$ yields
+$f(\by)\geqslant f(\bx)+\nabla f(\bx)'(\by-\bx)$.
+At a stationary point this yields $f(\by)\geqslant f(\bx_*)$.  If a distinct
+$\by$ had equality under strict convexity, then
+\[
+f\!\left(\frac{\bx_*+\by}{2}\right)
+<\frac{f(\bx_*)+f(\by)}2=f(\bx_*),
+\]
+contradicting global minimality.
+
+If $\Hm f(\bx_*)\psdgt\bO$, put
+$\lambda=\lambda_{\min}\{\Hm f(\bx_*)\}>0$.  Continuity gives
+$\delta_1>0$ such that
+\[
+\left|
+\{\Hm f(\bx)-\Hm f(\bx_*)\}_{ij}
+\right|<\frac{\lambda}{2p}
+\quad(i,j=1,\ldots,p)
+\quad\text{when }\norm{\bx-\bx_*}_2<\delta_1.
+\]
+Hence
+\[
+\norm{\Hm f(\bx)-\Hm f(\bx_*)}_2
+\leqslant\norm{\Hm f(\bx)-\Hm f(\bx_*)}_F<\frac\lambda2.
+\]
+Since $\calC$ is open, choose $\rho>0$ with
+$\{\bx:\norm{\bx-\bx_*}_2<\rho\}\subseteq\calC$, and put
+$\delta=\min(\delta_1,\rho)$.  Hence
+\[
+\bh'\Hm f(\bx_*+t\bh)\bh
+\geqslant\frac\lambda2\norm{\bh}_2^2
+\quad(0\leqslant t\leqslant1,\ 0<\norm{\bh}_2<\delta).
+\]
+Twice applying the one-variable fundamental theorem of calculus gives
+\[
+f(\bx_*+\bh)-f(\bx_*)
+=\int_0^1(1-t)\,
+ \bh'\Hm f(\bx_*+t\bh)\bh\,\dd t
+\geqslant\frac\lambda4\norm{\bh}_2^2.
+\]
+The negative-definite case applies this argument to $-f$.  If the Hessian
+is indefinite, choose $\bu,\bv$ with
+\[
+\bu'\Hm f(\bx_*)\bu>0,
+\qquad
+\bv'\Hm f(\bx_*)\bv<0.
+\]
+The same integral formula has opposite signs along sufficiently short
+nonzero multiples of $\bu$ and $\bv$.
+\end{proof}
+
+\begin{example}[The log-determinant barrier]\label{ex:14-logdet-convex}
+On the cone of symmetric positive-definite $m\times m$ matrices, let
+\[
+\phi(\bOmega)=-\log|\bOmega|,
+\qquad
+\bomega=\vech\bOmega.
+\]
+The inverse and log-determinant differential rules give
+\[
+\dd\phi=-\tr(\bOmega^{-1}\dd\bOmega),
+\]
+\[
+\dd^2\phi
+=\tr\{\bOmega^{-1}(\dd\bOmega)
+       \bOmega^{-1}(\dd\bOmega)\}
+=(\dd\bomega)'\bD_m'
+ (\bOmega^{-1}\otimes\bOmega^{-1})\bD_m\,\dd\bomega.
+\]
+For $\bO\ne\bDelta=\bDelta'$,
+\[
+\tr\{\bOmega^{-1}\bDelta\bOmega^{-1}\bDelta\}
+=\tr\{(\bOmega^{-1/2}\bDelta\bOmega^{-1/2})^2\}>0.
+\]
+If $\lambda=\lambda_{\min}(\bOmega)$, then
+\[
+\norm{\vech\bDelta}_2<\frac{\lambda}{\sqrt2}
+\implies
+\norm{\bDelta}_2\leqslant\norm{\bDelta}_F
+\leqslant\sqrt2\norm{\vech\bDelta}_2<\lambda,
+\]
+and hence
+\[
+\bx'(\bOmega+\bDelta)\bx
+\geqslant\{\lambda-\norm{\bDelta}_2\}\norm{\bx}_2^2>0
+\qquad(\bx\ne\bzero).
+\]
+Thus the positive-definite cone is open in $\bomega=\vech\bOmega$
+coordinates.  For $0<t<1$ and
+$\bOmega_1,\bOmega_2\psdgt\bO$,
+\[
+\bx'\{(1-t)\bOmega_1+t\bOmega_2\}\bx
+=(1-t)\bx'\bOmega_1\bx+t\bx'\bOmega_2\bx>0
+\quad(\bx\ne\bzero).
+\]
+Thus the positive-definite cone is convex, and
+Theorem~\ref{thm:14-convex-hessian} makes $\phi$ strictly convex.
+\origin{Adapted from A\&M Ex.~13.52; H Eq.~(15.9.3); MC \S11}
+\end{example}
+
+% \periodmark{End of period 1 of 3.}
+
+%=============================================================================
+\section{Linear estimation under moment assumptions}\label{sec:14.2}
+%=============================================================================
+
+\subsection{The moment model and ordinary least squares}
+\label{sec:14.2.1}
+
+\begin{definition}[Linear moment model and BLUE]\label{def:14-moment-model}
+Let $\bX\in\Real^{n\times p}$ be fixed with $\rank\bX=p$ and let
+$\bb\in\Real^p$.  Let $\be\in\Real^n$ be a random vector with finite
+second moments satisfying
+\[
+\expc[\be]=\bzero,
+\qquad
+\cov(\be)=\bOmega\psdgt\bO.
+\]
+The \emph{linear moment model} is
+\[
+\by=\bX\bb+\be.
+\]
+For $\bC\in\Real^{p\times n}$, an estimator $\bC\by$ is
+\emph{linear}; it is \emph{unbiased} when
+\[
+\expc[\bC\by]=\bb
+\qquad(\bb\in\Real^p).
+\]
+A linear unbiased estimator $\widetilde{\bb}$ is \emph{best linear
+unbiased}, abbreviated BLUE, when
+\[
+\cov(\bC\by)
+-\cov(\widetilde{\bb})\psdge\bO
+\]
+for every linear unbiased estimator $\bC\by$ of $\bb$.
+\origin{Course formulation from A\&M Ex.~13.58; CLM \S\S1, 3}
+\end{definition}
+
+\begin{theorem}[Ordinary least squares and Gauss--Markov]
+\label{thm:14-gauss-markov}
+In Definition~\ref{def:14-moment-model}, suppose
+$\bOmega=\sigma^2\bI_n$, where $\sigma^2>0$.  Set
+\[
+\bG_0=(\bX'\bX)^{-1}\bX',
+\qquad
+\widehat{\bb}_{\rm OLS}=\widehat{\bb}=\bG_0\by.
+\]
+The ordinary least-squares (OLS) estimator $\widehat{\bb}$ is the unique
+minimiser of
+\[
+q_0(\bb)=\norm{\by-\bX\bb}_2^2,
+\]
+and the unique BLUE of $\bb$.  Moreover,
+\[
+\expc[\widehat{\bb}]=\bb,
+\qquad
+\cov(\widehat{\bb})
+=\sigma^2(\bX'\bX)^{-1}.
+\]
+If $\bC\by$ is linear and unbiased and
+$\bD=\bC-\bG_0$, then
+\[
+\cov(\bC\by)
+-\cov(\widehat{\bb})
+=\sigma^2\bD\bD'.
+\]
+\origin{Course formulation from A\&M Ex.~13.57; H Thm.~19.2.2; CLM \S3}
+\end{theorem}
+
+\begin{proof}
+Since
+\[
+\bX'(\by-\bX\widehat{\bb})=\bzero,
+\]
+\[
+q_0(\bb)
+=q_0(\widehat{\bb})
+ +(\bb-\widehat{\bb})'\bX'\bX(\bb-\widehat{\bb}).
+\]
+For $\ba\ne\bzero$,
+\[
+\ba'\bX'\bX\ba=\norm{\bX\ba}_2^2>0,
+\]
+so the minimiser is unique.
+
+The earlier affine expectation and covariance identities give
+\[
+\expc[\bC\by]=\bC\bX\bb,
+\qquad
+\cov(\bC\by)=\sigma^2\bC\bC'.
+\]
+Thus
+\[
+\bC\by\text{ is unbiased for every }\bb
+\ifff \bC\bX=\bI_p.
+\]
+Since $\bG_0\bX=\bI_p$, $\widehat{\bb}$ is unbiased.  Moreover,
+\[
+\cov(\widehat{\bb})
+=\sigma^2\bG_0\bG_0'
+=\sigma^2(\bX'\bX)^{-1}.
+\]
+For any unbiased $\bC\by$,
+\[
+\bD\bX=\bO,
+\qquad
+\bG_0\bD'=(\bX'\bX)^{-1}\bX'\bD'=\bO.
+\]
+Consequently,
+\begin{align*}
+\cov(\bC\by)
+-\cov(\widehat{\bb})
+&=\sigma^2\{(\bG_0+\bD)(\bG_0+\bD)'-\bG_0\bG_0'\}\\
+&=\sigma^2\bD\bD'\psdge\bO.
+\end{align*}
+If $\bC\by$ were also BLUE, comparison with $\widehat{\bb}$ would give
+$-\sigma^2\bD\bD'\psdge\bO$.  Hence
+\[
+0=\tr(\bD\bD')=\sum_{i,j}d_{ij}^2,
+\qquad
+\bD=\bO,
+\]
+so the BLUE is unique.
+\end{proof}
+
+\subsection{Generalized least squares and Aitken's theorem}
+\label{sec:14.2.2}
+
+\begin{theorem}[Generalized least squares and Aitken]
+\label{thm:14-aitken}
+Under Definition~\ref{def:14-moment-model}, put
+\[
+\bQ=\bX'\bOmega^{-1}\bX,
+\qquad
+\bV=\bQ^{-1},
+\qquad
+\bG=\bV\bX'\bOmega^{-1}.
+\]
+Then $\bQ\psdgt\bO$, and
+\[
+\widehat{\bb}_{\rm G}=\bG\by
+\]
+is the generalized least-squares (GLS) estimator.  It is both the unique
+minimiser of
+\[
+q_{\bOmega}(\bb)
+=(\by-\bX\bb)'\bOmega^{-1}(\by-\bX\bb)
+\]
+and the unique BLUE of $\bb$, with
+\[
+\expc[\widehat{\bb}_{\rm G}]=\bb,
+\qquad
+\cov(\widehat{\bb}_{\rm G})=\bV.
+\]
+For every linear unbiased $\bC\by$, with $\bD=\bC-\bG$,
+\[
+\cov(\bC\by)-\bV
+=\bD\bOmega\bD'\psdge\bO.
+\]
+\origin{Course formulation from A\&M Exs.~13.55, 13.58; H Thms.~14.12.19--14.12.20 and 19.2.2; CLM Ex.~B5}
+\end{theorem}
+
+\begin{proof}
+For $\ba\ne\bzero$,
+\[
+\ba'\bQ\ba=(\bX\ba)'\bOmega^{-1}(\bX\ba)>0,
+\]
+so $\bQ\psdgt\bO$.  The identities
+\[
+\bG\bX=\bI_p,
+\qquad
+\bX'\bOmega^{-1}(\by-\bX\widehat{\bb}_{\rm G})=\bzero
+\]
+give, for every $\bb$,
+\begin{align*}
+q_{\bOmega}(\bb)
+&=q_{\bOmega}(\widehat{\bb}_{\rm G})
+ +(\bb-\widehat{\bb}_{\rm G})'
+   \bQ(\bb-\widehat{\bb}_{\rm G}).
+\end{align*}
+Thus $\widehat{\bb}_{\rm G}$ is the unique minimiser.
+
+The affine moment identities yield
+\[
+\expc[\widehat{\bb}_{\rm G}]=\bG\bX\bb=\bb,
+\qquad
+\cov(\widehat{\bb}_{\rm G})
+=\bG\bOmega\bG'=\bV.
+\]
+If $\bC\by$ is unbiased, then $\bD\bX=\bO$ and
+\[
+\bG\bOmega\bD'
+=\bV\bX'\bD'
+=\bV(\bD\bX)'=\bO.
+\]
+Hence
+\[
+\cov(\bC\by)
+=\bV+\bD\bOmega\bD'.
+\]
+If $\bC\by$ were also BLUE, comparison with
+$\widehat{\bb}_{\rm G}$ would give
+$-\bD\bOmega\bD'\psdge\bO$; hence $\bD\bOmega\bD'=\bO$.  For the
+positive-definite square root
+$\bOmega^{1/2}$,
+\[
+\bD\bOmega\bD'
+=(\bD\bOmega^{1/2})(\bD\bOmega^{1/2})'=\bO
+\implies \bD\bOmega^{1/2}=\bO
+\implies \bD=\bO.
+\]
+Thus the BLUE is unique.
+\end{proof}
+
+\subsection{Exact linear restrictions}\label{sec:14.2.3}
+
+\begin{theorem}[Restricted generalized least squares]
+\label{thm:14-restricted-gls}
+In Theorem~\ref{thm:14-aitken}, let
+$1\leqslant q\leqslant p$, let $\bR\in\Real^{q\times p}$ have rank $q$, and let
+$\bc\in\Real^q$.  Suppose
+\[
+\bR\bb=\bc.
+\]
+Define
+\[
+\bS=\bR\bV\bR',
+\qquad
+\bg=\bR\widehat{\bb}_{\rm G}-\bc.
+\]
+Then $\bS\psdgt\bO$, and the unique constrained minimiser is
+\[
+\widehat{\bb}_{\rm R}
+=\widehat{\bb}_{\rm G}-\bV\bR'\bS^{-1}\bg.
+\]
+It satisfies
+\begin{align*}
+q_{\bOmega}(\widehat{\bb}_{\rm R})
+-q_{\bOmega}(\widehat{\bb}_{\rm G})
+&=\bg'\bS^{-1}\bg,\\
+\expc[\widehat{\bb}_{\rm R}]&=\bb,\\
+\cov(\widehat{\bb}_{\rm R})
+&=\bV-\bV\bR'\bS^{-1}\bR\bV.
+\end{align*}
+Thus restriction reduces covariance by
+$\bV\bR'\bS^{-1}\bR\bV\psdge\bO$.
+\origin{Course formulation from A\&M Ex.~13.56; H Thm.~19.2.1 and \S19.7; CLM \S10}
+\end{theorem}
+
+\begin{proof}
+For $\ba\ne\bzero$,
+\[
+\ba'\bS\ba=(\bR'\ba)'\bV(\bR'\ba)>0,
+\]
+because $\bR'$ has null space $\{\bzero\}$.  Therefore $\bS$ is
+positive definite.  Direct substitution gives
+\[
+\bR\widehat{\bb}_{\rm R}
+=\bR\widehat{\bb}_{\rm G}-\bS\bS^{-1}\bg=\bc.
+\]
+If $\bR\widetilde{\bb}=\bc$, put
+$\bd=\widetilde{\bb}-\widehat{\bb}_{\rm R}$.  Then
+$\bR\bd=\bzero$ and
+\[
+(\widehat{\bb}_{\rm R}-\widehat{\bb}_{\rm G})'\bQ\bd
+=-\bg'\bS^{-1}\bR\bd=0.
+\]
+The quadratic decomposition in Theorem~\ref{thm:14-aitken} now gives
+\[
+q_{\bOmega}(\widetilde{\bb})
+=q_{\bOmega}(\widehat{\bb}_{\rm R})+\bd'\bQ\bd,
+\]
+so the constrained minimiser is unique.  Taking
+$\bb=\widehat{\bb}_{\rm R}$ in the decomposition from
+Theorem~\ref{thm:14-aitken} gives
+\begin{align*}
+q_{\bOmega}(\widehat{\bb}_{\rm R})
+-q_{\bOmega}(\widehat{\bb}_{\rm G})
+&=\bg'\bS^{-1}\bR\bV\bQ\bV\bR'\bS^{-1}\bg\\
+&=\bg'\bS^{-1}\bg.
+\end{align*}
+
+Under $\bR\bb=\bc$, $\expc[\bg]=\bzero$ and
+\[
+\widehat{\bb}_{\rm R}-\bb
+=\{\bI_p-\bV\bR'\bS^{-1}\bR\}
+ (\widehat{\bb}_{\rm G}-\bb).
+\]
+Using $\cov(\widehat{\bb}_{\rm G})=\bV$ and
+$\bS=\bR\bV\bR'$ gives
+\[
+\cov(\widehat{\bb}_{\rm R})
+=\bV-\bV\bR'\bS^{-1}\bR\bV.
+\]
+Finally,
+\[
+\bV\bR'\bS^{-1}\bR\bV
+=(\bV\bR'\bS^{-1/2})(\bV\bR'\bS^{-1/2})'\psdge\bO.
+\]
+\end{proof}
+
+% \periodmark{End of period 2 of 3.}
+
+%=============================================================================
+\section{Gaussian criteria and sensitivity}\label{sec:14.3}
+%=============================================================================
+
+\subsection{A Gaussian criterion with unknown mean and covariance}
+\label{sec:14.3.1}
+
+\begin{definition}[Gaussian criterion]
+\label{def:14-gaussian-criterion}
+For observed vectors $\by_1,\ldots,\by_n\in\Real^m$, define, for
+$\bmu\in\Real^m$ and $\bOmega=\bOmega'\psdgt\bO$,
+\[
+\ell(\bmu,\bOmega)
+=-\frac{nm}{2}\log(2\pi)-\frac n2\log|\bOmega|
+ -\frac12\sum_{i=1}^n
+ (\by_i-\bmu)'\bOmega^{-1}(\by_i-\bmu).
+\]
+A \emph{Gaussian-criterion estimate} is a maximiser of $\ell$.  Put
+\[
+\bar\by=\frac1n\sum_{i=1}^n\by_i,
+\qquad
+\bS=\sum_{i=1}^n(\by_i-\bar\by)(\by_i-\bar\by)'.
+\]
+\origin{Adapted from A\&M Ex.~13.61; MC \S13}
+\end{definition}
+
+\begin{theorem}[Global Gaussian-criterion maximiser]
+\label{thm:14-gaussian-maximizer}
+The criterion in
+Definition~\ref{def:14-gaussian-criterion} has a global maximiser if and
+only if $\bS\psdgt\bO$.  In that case the maximiser is unique and equals
+\[
+\widehat{\bmu}=\bar\by,
+\qquad
+\widehat{\bOmega}=\frac1n\bS.
+\]
+If $\bS$ is singular, the criterion is unbounded above.  For symmetric
+increments $\dd\bOmega=\dd\bOmega'$, put
+\[
+\bZ(\bmu)=\sum_{i=1}^n(\by_i-\bmu)(\by_i-\bmu)'.
+\]
+Then
+\begin{align*}
+\dd\ell
+&=n(\dd\bmu)'\bOmega^{-1}(\bar\by-\bmu)\\
+&\quad+\frac12\tr\!\left[
+ \bOmega^{-1}\{\bZ(\bmu)-n\bOmega\}
+ \bOmega^{-1}\dd\bOmega\right].
+\end{align*}
+\origin{Course formulation from A\&M Exs.~13.61--13.64; MC \S13}
+\end{theorem}
+
+\begin{proof}
+For every $\bx\in\Real^m$,
+\[
+\bx'\bS\bx
+=\sum_{i=1}^n\{(\by_i-\bar\by)'\bx\}^2\geqslant0,
+\]
+so $\bS=\bS'\psdge\bO$.
+
+The inverse and log-determinant differential rules give
+\[
+\dd\bOmega^{-1}
+=-\bOmega^{-1}(\dd\bOmega)\bOmega^{-1},
+\qquad
+\dd\log|\bOmega|=\tr(\bOmega^{-1}\dd\bOmega).
+\]
+Also,
+\[
+\dd\bZ
+=-n(\dd\bmu)(\bar\by-\bmu)'
+ -n(\bar\by-\bmu)(\dd\bmu)'.
+\]
+Substitution in
+$\ell={\rm constant}-(n/2)\log|\bOmega|
+-(1/2)\tr(\bOmega^{-1}\bZ)$ gives the stated differential.
+
+The identity
+\[
+\bZ(\bmu)
+=\bS+n(\bmu-\bar\by)(\bmu-\bar\by)'
+\]
+implies, for each fixed $\bOmega\psdgt\bO$,
+\[
+\ell(\bar\by,\bOmega)-\ell(\bmu,\bOmega)
+=\frac n2(\bmu-\bar\by)'\bOmega^{-1}(\bmu-\bar\by)\geqslant0,
+\]
+with equality only at $\bmu=\bar\by$.
+
+Assume $\bS\psdgt\bO$.  Set $\widehat{\bOmega}=\bS/n$ and
+\[
+\bC=\widehat{\bOmega}^{-1/2}\bOmega
+    \widehat{\bOmega}^{-1/2}\psdgt\bO.
+\]
+If $c_1,\ldots,c_m>0$ are its eigenvalues, then
+\begin{align*}
+\ell(\bar\by,\widehat{\bOmega})-\ell(\bar\by,\bOmega)
+&=\frac n2\{\log|\bC|+\tr(\bC^{-1})-m\}\\
+&=\frac n2\sum_{j=1}^m
+   \{\log c_j+c_j^{-1}-1\}.
+\end{align*}
+For $g(t)=\log t+t^{-1}-1$ on $t>0$,
+\[
+g'(t)=\frac{t-1}{t^2},
+\qquad
+g'(t)\begin{cases}<0,&0<t<1,\\>0,&t>1,
+\end{cases}
+\]
+so $g(t)\geqslant g(1)=0$, with equality only at $t=1$.  Thus equality in
+the criterion comparison requires
+$\bC=\bI_m$, or $\bOmega=\widehat{\bOmega}$.
+Consequently,
+\[
+\ell(\bmu,\bOmega)
+\leqslant\ell(\bar\by,\bOmega)
+\leqslant\ell(\bar\by,\widehat{\bOmega}),
+\]
+with equality throughout exactly at
+$(\bmu,\bOmega)=(\bar\by,\widehat{\bOmega})$.
+
+If $\bS$ is singular, let $r=\rank\bS<m$ and use the spectral theorem to
+write
+\[
+\bS=\bU\diag(s_1,\ldots,s_r,0,\ldots,0)\bU',
+\qquad s_j>0.
+\]
+For $t>0$, put
+\[
+\bOmega_t
+=\bU\diag(s_1/n,\ldots,s_r/n,t,\ldots,t)\bU'\psdgt\bO.
+\]
+Then $\tr(\bOmega_t^{-1}\bS)=nr$ and
+\[
+\ell(\bar\by,\bOmega_t)
+=C-\frac{n(m-r)}2\log t\longrightarrow+\infty
+\qquad(t\downarrow0),
+\]
+where $C$ is independent of $t$.
+\end{proof}
+
+\subsection{Expected negative Hessian in vech coordinates}
+\label{sec:14.3.2}
+
+\begin{definition}[Information of the Gaussian criterion]
+\label{def:14-information}
+For the criterion in Definition~\ref{def:14-gaussian-criterion}, let
+$\by_1,\ldots,\by_n$ be random vectors satisfying
+\[
+\expc[\by_i]=\bmu,
+\qquad
+\cov(\by_i)=\bOmega\psdgt\bO
+\qquad(i=1,\ldots,n).
+\]
+No cross-observation moment condition is imposed.  For
+\[
+\bomega=\vech\bOmega,
+\qquad
+\btheta=(\bmu',\bomega')',
+\]
+define the \emph{information matrix of the criterion} by
+\[
+\calI(\btheta)
+=-\expc\{\Hm_{\btheta}\ell(\bmu,\bOmega)\},
+\]
+whenever the displayed entrywise expectations exist.
+\origin{Course formulation from A\&M Ex.~13.65}
+\end{definition}
+
+\begin{theorem}[Block information formula]
+\label{thm:14-information}
+Under Definition~\ref{def:14-information},
+\[
+\calI(\btheta)
+=n\begin{pmatrix}
+\bOmega^{-1}&\bO\\
+\bO&\displaystyle
+\frac12\bD_m'(\bOmega^{-1}\otimes\bOmega^{-1})\bD_m
+\end{pmatrix}.
+\]
+This identity uses only the stated first and second moments.
+\origin{Course formulation from A\&M Ex.~13.65(a); MC Eq.~(48)}
+\end{theorem}
+
+\begin{proof}
+For one observation, set
+\[
+\bz=\by_i-\bmu,
+\qquad
+\bK=\bOmega^{-1},
+\qquad
+\ba=\dd\bmu,
+\qquad
+\bH=\dd\bOmega=\bH'.
+\]
+Its contribution to the criterion is
+\[
+\ell_i(\bmu,\bOmega)
+=-\frac m2\log(2\pi)-\frac12\log|\bOmega|
+ -\frac12\bz'\bK\bz.
+\]
+Its first differential is
+\[
+\dd\ell_i
+=\ba'\bK\bz
+ +\frac12\tr\{(\bK\bz\bz'\bK-\bK)\bH\}.
+\]
+Using $\dd\bK=-\bK\bH\bK$ and $\dd\bz=-\ba$ gives
+\begin{align*}
+\dd^2\ell_i
+&=-\ba'\bK\ba-2\ba'\bK\bH\bK\bz
+ +\frac12\tr(\bK\bH\bK\bH)\\
+&\quad-\tr(\bK\bz\bz'\bK\bH\bK\bH).
+\end{align*}
+Since $\expc[\bz]=\bzero$ and
+$\expc[\bz\bz']=\bOmega=\bK^{-1}$,
+\[
+-\expc[\dd^2\ell_i]
+=\ba'\bK\ba+\frac12\tr(\bK\bH\bK\bH).
+\]
+Now
+\[
+\vc\bH=\bD_m\,\dd\bomega,
+\qquad
+\tr(\bK\bH\bK\bH)
+=(\dd\bomega)'\bD_m'(\bK\otimes\bK)\bD_m\,\dd\bomega.
+\]
+Summing the $n$ contributions and applying
+Theorem~\ref{thm:14-second-identification} gives the block matrix.
+\end{proof}
+
+\subsection{OLS sensitivity and exact deletion}
+\label{sec:14.3.3}
+
+\begin{theorem}[Differential of ordinary least squares]
+\label{thm:14-ols-sensitivity}
+Let $\bX\in\Real^{n\times p}$ have full column rank, let
+$\by\in\Real^n$, and put
+\[
+\bQ=\bX'\bX,
+\qquad
+\bG=\bQ^{-1}\bX',
+\qquad
+\widehat{\bb}=\bG\by,
+\qquad
+\widehat{\be}=\by-\bX\widehat{\bb}.
+\]
+For simultaneous increments $\dd\bX$ and $\dd\by$,
+\[
+\dd\widehat{\bb}
+=\bG\,\dd\by
+ +\bQ^{-1}(\dd\bX)'\widehat{\be}
+ -\bG(\dd\bX)\widehat{\bb}.
+\]
+Consequently,
+\[
+\Dm_{\vc\bX}\widehat{\bb}
+=\bQ^{-1}\otimes\widehat{\be}'
+ -\widehat{\bb}'\otimes\bG,
+\qquad
+\Dm_{\by}\widehat{\bb}=\bG.
+\]
+\origin{Adapted from A\&M Ex.~13.41}
+\end{theorem}
+
+\begin{proof}
+Differentiating
+$\widehat{\bb}=\bQ^{-1}\bX'\by$ gives
+\begin{align*}
+\dd\widehat{\bb}
+&=-\bQ^{-1}\{(\dd\bX)'\bX+\bX'\dd\bX\}
+  \widehat{\bb}
+ +\bQ^{-1}\{(\dd\bX)'\by+\bX'\dd\by\}\\
+&=\bG\,\dd\by+\bQ^{-1}(\dd\bX)'\widehat{\be}
+  -\bG(\dd\bX)\widehat{\bb}.
+\end{align*}
+The vec identities
+\[
+(\dd\bX)'\widehat{\be}
+=(\bI_p\otimes\widehat{\be}')\vc(\dd\bX),
+\qquad
+\bG(\dd\bX)\widehat{\bb}
+=(\widehat{\bb}'\otimes\bG)\vc(\dd\bX)
+\]
+give the Jacobians.
+\end{proof}
+
+\begin{theorem}[Exact row deletion]
+\label{thm:14-ols-deletion}
+With the notation of Theorem~\ref{thm:14-ols-sensitivity}, let
+$\tilde\bx_i'$ be row $i$ of $\bX$, let
+\[
+h_i=\tilde\bx_i'\bQ^{-1}\tilde\bx_i,
+\qquad
+\widehat e_i=y_i-\tilde\bx_i'\widehat{\bb},
+\]
+let $\bX_{-i}$ and $\by_{-i}$ delete observation $i$, and suppose
+$\rank\bX_{-i}=p$.  Define
+\[
+\widehat{\bb}_{-i}
+=(\bX_{-i}'\bX_{-i})^{-1}\bX_{-i}'\by_{-i}.
+\]
+Then
+\[
+0\leqslant h_i<1,
+\qquad
+\widehat{\bb}_{-i}
+=\widehat{\bb}
+ -\frac{\bQ^{-1}\tilde\bx_i\widehat e_i}{1-h_i},
+\qquad
+y_i-\tilde\bx_i'\widehat{\bb}_{-i}
+=\frac{\widehat e_i}{1-h_i}.
+\]
+\origin{Course formulation from H Cor.~18.2.10; CLM Ex.~B1}
+\end{theorem}
+
+\begin{proof}
+Write $\bQ_{-i}=\bQ-\tilde\bx_i\tilde\bx_i'$.  This matrix is positive
+definite by the deletion assumption.  If
+$\bv=\bQ^{-1}\tilde\bx_i$, then
+\[
+h_i=\bv'\bQ\bv
+=\bv'\bQ_{-i}\bv+h_i^2.
+\]
+Thus $h_i=0$ when $\tilde\bx_i=\bzero$; otherwise
+$h_i(1-h_i)>0$.  The rank-one inverse formula yields
+\[
+\bQ_{-i}^{-1}
+=\bQ^{-1}
+ +\frac{\bQ^{-1}\tilde\bx_i\tilde\bx_i'\bQ^{-1}}{1-h_i}.
+\]
+Since
+$\bX_{-i}'\by_{-i}=\bX'\by-\tilde\bx_i y_i$,
+substitution gives
+\[
+\widehat{\bb}_{-i}-\widehat{\bb}
+=-\frac{\bQ^{-1}\tilde\bx_i
+ (y_i-\tilde\bx_i'\widehat{\bb})}{1-h_i}.
+\]
+Premultiplication by $\tilde\bx_i'$ gives the held-out residual identity.
+\end{proof}
+
+%=============================================================================
+\section{Computation: Numerical Checks in R}\label{sec:14.4}
+%=============================================================================
+
+\subsection{Two Hessian checks (§\ref{sec:14.1.2})}
+\label{sec:14.4.1}
+
+<<hessian-check>>=
+B <- ISLR2::Boston
+Xh <- cbind(1, scale(as.matrix(B[, c("lstat", "rm")])))
+yh <- B$medv
+qfun <- function(b) sum((yh - drop(Xh %*% b))^2)
+b_at <- c(20, -0.4, 3)
+H_manual <- 2 * crossprod(Xh)
+H_package <- optimHess(
+  b_at, qfun,
+  control = list(ndeps = rep(0.1, length(b_at)))
+)
+
+Omega_h <- matrix(c(2, .3, .2,
+                    .3, 1.5, .1,
+                    .2, .1, 1.2), 3, 3, byrow = TRUE)
+Delta_h <- matrix(c(1, .2, -.1,
+                    .2, -.4, .3,
+                    -.1, .3, .5), 3, 3, byrow = TRUE)
+barrier <- function(A) -as.numeric(determinant(A, logarithm = TRUE)$modulus)
+step_h <- 1e-4
+second_fd <- (barrier(Omega_h + step_h * Delta_h) -
+              2 * barrier(Omega_h) +
+              barrier(Omega_h - step_h * Delta_h)) / step_h^2
+K_h <- solve(Omega_h)
+second_exact <- sum(diag(K_h %*% Delta_h %*% K_h %*% Delta_h))
+tol_pd <- 1e-10
+eig_barrier <- eigen(Omega_h, symmetric = TRUE, only.values = TRUE)$values
+c(min_eigenvalue_barrier_point = min(eig_barrier),
+  positive_definite_tolerance = tol_pd,
+  least_squares_max_abs = max(abs(H_manual - H_package)),
+  logdet_exact = second_exact,
+  logdet_finite_difference = second_fd,
+  logdet_abs_difference = abs(second_exact - second_fd))
+@
+
+\subsection{OLS normal equations against \texttt{lm} QR
+(§\ref{sec:14.2.1})}\label{sec:14.4.2}
+
+<<ols-package>>=
+X <- model.matrix(~ lstat + rm + age, data = B)
+y <- B$medv
+fit <- lm(medv ~ lstat + rm + age, data = B)
+b_normal <- drop(solve(crossprod(X), crossprod(X, y)))
+tol_rank <- 1e-10
+b_qr <- drop(qr.coef(qr(X, tol = tol_rank), y))
+e_normal <- y - drop(X %*% b_normal)
+c(qr_rank_at_tolerance = qr(X, tol = tol_rank)$rank,
+  max_normal_minus_lm = max(abs(b_normal - coef(fit))),
+  max_qr_minus_lm = max(abs(b_qr - coef(fit))),
+  normal_equation_residual = max(abs(crossprod(X, e_normal))))
+@
+
+\subsection{GLS against a whitened QR fit (§\ref{sec:14.2.2})}
+\label{sec:14.4.3}
+
+<<gls-whitening>>=
+rows_g <- seq_len(80)
+Xg <- model.matrix(~ lstat + rm, data = B[rows_g, ])
+yg <- B$medv[rows_g]
+n_g <- nrow(Xg)
+rho_g <- 0.6
+Omega_g <- rho_g^abs(outer(seq_len(n_g), seq_len(n_g), "-"))
+OiX <- solve(Omega_g, Xg)
+Oiy <- solve(Omega_g, yg)
+Q_g <- crossprod(Xg, OiX)
+V_g <- solve(Q_g)
+b_gls <- drop(V_g %*% crossprod(Xg, Oiy))
+
+R_g <- chol(Omega_g)
+X_white <- forwardsolve(t(R_g), Xg)
+y_white <- drop(forwardsolve(t(R_g), yg))
+b_white <- drop(lm.fit(X_white, y_white)$coefficients)
+e_gls <- yg - drop(Xg %*% b_gls)
+eig_Omega <- eigen(Omega_g, symmetric = TRUE, only.values = TRUE)$values
+c(min_eigenvalue_Omega = min(eig_Omega),
+  positive_definite_tolerance = tol_rank,
+  whitened_qr_rank_at_tolerance = qr(X_white, tol = tol_rank)$rank,
+  max_gls_minus_whitened = max(abs(b_gls - b_white)),
+  weighted_normal_residual =
+    max(abs(crossprod(Xg, solve(Omega_g, e_gls)))))
+@
+
+\subsection{Restricted GLS against a block solve (§\ref{sec:14.2.3})}
+\label{sec:14.4.4}
+
+<<restricted-kkt>>=
+R_con <- matrix(c(0, 1, 1), nrow = 1)
+c_con <- 0
+S_con <- drop(R_con %*% V_g %*% t(R_con))
+g_con <- drop(R_con %*% b_gls - c_con)
+b_restricted <- drop(b_gls -
+  V_g %*% t(R_con) %*% (g_con / S_con))
+
+s_g <- drop(crossprod(Xg, Oiy))
+KKT <- rbind(cbind(Q_g, t(R_con)),
+             cbind(R_con, matrix(0, 1, 1)))
+b_block <- drop(solve(KKT, c(s_g, c_con))[seq_len(ncol(Xg))])
+q_gls <- function(b) {
+  e <- yg - drop(Xg %*% b)
+  drop(crossprod(e, solve(Omega_g, e)))
+}
+increase_formula <- g_con^2 / S_con
+reduction <- V_g %*% t(R_con) %*% (1 / S_con) %*% R_con %*% V_g
+c(max_formula_minus_block = max(abs(b_restricted - b_block)),
+  constraint_residual = max(abs(R_con %*% b_restricted - c_con)),
+  objective_identity_residual =
+    abs(q_gls(b_restricted) - q_gls(b_gls) - increase_formula),
+  min_eigen_covariance_reduction =
+    min(eigen((reduction + t(reduction)) / 2,
+              symmetric = TRUE, only.values = TRUE)$values),
+  eigenvalue_tolerance = tol_rank)
+@
+
+\subsection{Mean, covariance, and information
+(§\ref{sec:14.3.1}--§\ref{sec:14.3.2})}\label{sec:14.4.5}
+
+<<gaussian-criterion-hessian>>=
+Y <- unclass(scale(as.matrix(B[, c("medv", "crim", "lstat")])))
+n_y <- nrow(Y)
+m_y <- ncol(Y)
+mu_manual <- drop(crossprod(rep(1 / n_y, n_y), Y))
+Z_y <- sweep(Y, 2, mu_manual)
+Omega_manual <- crossprod(Z_y) / n_y
+Omega_package <- cov(Y) * (n_y - 1) / n_y
+
+lower_y <- lower.tri(matrix(0, m_y, m_y), diag = TRUE)
+vech_to_sym <- function(w) {
+  A <- matrix(0, m_y, m_y)
+  A[lower_y] <- w
+  A + t(A) - diag(diag(A))
+}
+D_y <- matrix(0, m_y^2, sum(lower_y))
+for (j in seq_len(ncol(D_y))) {
+  E <- matrix(0, m_y, m_y)
+  E[which(lower_y)[j]] <- 1
+  E <- E + t(E) - diag(diag(E))
+  D_y[, j] <- as.vector(E)
+}
+nll <- function(theta) {
+  mu <- theta[seq_len(m_y)]
+  Omega <- vech_to_sym(theta[-seq_len(m_y)])
+  Z <- sweep(Y, 2, mu)
+  K <- solve(Omega)
+  n_y / 2 * as.numeric(determinant(Omega, logarithm = TRUE)$modulus) +
+    0.5 * sum((Z %*% K) * Z)
+}
+theta_hat <- c(mu_manual, Omega_manual[lower_y])
+H_package_criterion <- optimHess(
+  theta_hat, nll,
+  control = list(ndeps = rep(3e-5, length(theta_hat)))
+)
+K_y <- solve(Omega_manual)
+I_manual <- matrix(0, length(theta_hat), length(theta_hat))
+I_manual[seq_len(m_y), seq_len(m_y)] <- n_y * K_y
+omega_idx <- m_y + seq_len(ncol(D_y))
+I_manual[omega_idx, omega_idx] <-
+  n_y / 2 * t(D_y) %*% kronecker(K_y, K_y) %*% D_y
+score_Omega <- 0.5 *
+  (K_y %*% crossprod(Z_y) %*% K_y - n_y * K_y)
+eig_Omega_criterion <- eigen(Omega_manual, symmetric = TRUE,
+                             only.values = TRUE)$values
+c(min_eigenvalue_covariance = min(eig_Omega_criterion),
+  positive_definite_tolerance = tol_rank,
+  max_mean_minus_colMeans = max(abs(mu_manual - colMeans(Y))),
+  max_covariance_minus_cov = max(abs(Omega_manual - Omega_package)),
+  covariance_score_residual = max(abs(score_Omega)),
+  information_minus_optimHess = max(abs(I_manual - H_package_criterion)),
+  information_relative_residual =
+    max(abs(I_manual - H_package_criterion)) / max(abs(I_manual)))
+@
+
+\subsection{Differential and exact row deletion (§\ref{sec:14.3.3})}
+\label{sec:14.4.6}
+
+<<ols-sensitivity-deletion>>=
+Xs <- cbind(1, scale(as.matrix(B[, c("lstat", "rm", "age")])))
+ys <- B$medv
+Q_s <- crossprod(Xs)
+G_s <- solve(Q_s, t(Xs))
+b_s <- drop(G_s %*% ys)
+e_s <- ys - drop(Xs %*% b_s)
+DX <- matrix(sin(seq_along(Xs)) / 10, nrow(Xs), ncol(Xs))
+dy <- cos(seq_along(ys)) / 10
+db_formula <- drop(G_s %*% dy +
+  solve(Q_s, crossprod(DX, e_s)) - G_s %*% DX %*% b_s)
+step_s <- 1e-6
+b_perturbed <- drop(lm.fit(Xs + step_s * DX,
+                           ys + step_s * dy)$coefficients)
+db_finite <- (b_perturbed - b_s) / step_s
+
+leverages <- rowSums((Xs %*% solve(Q_s)) * Xs)
+i_del <- which.max(leverages)
+x_i <- Xs[i_del, ]
+h_i <- leverages[i_del]
+b_delete_formula <- drop(b_s -
+  solve(Q_s, x_i) * e_s[i_del] / (1 - h_i))
+b_delete_package <- drop(lm.fit(Xs[-i_del, ], ys[-i_del])$coefficients)
+heldout_package <- ys[i_del] - drop(x_i %*% b_delete_package)
+c(finite_difference_residual = max(abs(db_finite - db_formula)),
+  deletion_coefficient_residual =
+    max(abs(b_delete_formula - b_delete_package)),
+  heldout_residual_identity =
+    abs(heldout_package - e_s[i_del] / (1 - h_i)),
+  deletion_denominator = 1 - h_i)
+@
+
+%=============================================================================
+\section{Pitfalls}\label{sec:14.5}
+%=============================================================================
+
+\subsection{Reading a nonsymmetric coefficient as a Hessian}
+\label{sec:14.5.1}
+
+\[
+\dd^2f=(\dd\bx)'\bB\,\dd\bx,
+\qquad
+\Hm f=\frac{\bB+\bB'}2.
+\]
+The second equality is Theorem~\ref{thm:14-second-identification};
+$\bB$ itself is a Hessian only when it is symmetric.
+
+\subsection{Dropping the curvature term in a composition}
+\label{sec:14.5.2}
+
+For $f(u)=u$ and $g(x)=x^2$,
+\[
+g'(x)^2f''(g(x))=0,
+\qquad
+(f\circ g)''(x)=2.
+\]
+The missing term in Theorem~\ref{thm:14-second-chain} is
+$f'(g(x))g''(x)$.
+
+\subsection{Classifying from a zero Hessian}
+\label{sec:14.5.3}
+
+For $f(x)=x^3$,
+\[
+f'(0)=f''(0)=0,
+\qquad
+f(-t)<f(0)<f(t)\quad(t>0).
+\]
+A semidefinite Hessian at one stationary point is inconclusive.
+
+\subsection{Replacing a global comparison by a local test}
+\label{sec:14.5.4}
+
+Negative definiteness of $\Hm\ell$ at a stationary point proves only a
+strict local maximum.  The eigenvalue comparison in
+Theorem~\ref{thm:14-gaussian-maximizer} proves the global claim.
+
+\subsection{Differentiating duplicate covariance entries independently}
+\label{sec:14.5.5}
+
+For $\bOmega=\bOmega'$, Theorem~\ref{thm:14-trace-hessian} gives
+\[
+\vc(\dd\bOmega)=\bD_m\,\dd(\vech\bOmega),
+\qquad
+\Hm_{\vech\bOmega}f
+=\bD_m'\Hm_{\vc\bOmega}f\,\bD_m.
+\]
+
+\subsection{Using an identity-scaled formula under general moments}
+\label{sec:14.5.6}
+
+With $\bG_0$ from Theorem~\ref{thm:14-gauss-markov}, if
+$\cov(\be)=\bOmega$, then
+\[
+\cov(\widehat{\bb}_{\rm OLS})
+=\bG_0\bOmega\bG_0',
+\]
+not $\sigma^2(\bX'\bX)^{-1}$ unless the stated covariance justifies it.
+
+\subsection{Deleting a row when rank is lost}
+\label{sec:14.5.7}
+
+\[
+\bQ_{-i}:=\bX_{-i}'\bX_{-i}
+=\bQ-\tilde\bx_i\tilde\bx_i',
+\qquad
+\bv:=\bQ^{-1}\tilde\bx_i.
+\]
+With the notation of Theorem~\ref{thm:14-ols-deletion}, $h_i=1$
+implies
+\[
+\bv\ne\bzero,
+\qquad
+\bv'\bQ_{-i}\bv
+=\norm{\bX_{-i}\bv}_2^2
+=h_i(1-h_i)=0,
+\qquad
+\bQ_{-i}\bv=\bX_{-i}'\bX_{-i}\bv=\bzero.
+\]
+Thus $\rank\bX_{-i}<p$ and the leave-one-out coefficient vector is not
+uniquely defined by least squares.
+
+\subsection{Turning a criterion into unstated distribution theory}
+\label{sec:14.5.8}
+
+Definition~\ref{def:14-gaussian-criterion} specifies an objective function.
+Theorem~\ref{thm:14-information} uses only
+$\expc[\by_i]=\bmu$ and
+$\cov(\by_i)=\bOmega$; it supplies no sampling distribution.
+
+%=============================================================================
+\newpage
+\section{Exercises}\label{sec:14.6}
+%=============================================================================
+
+\Needspace{.46\textheight}
+\begin{exercise}[Affine pullback of a Hessian]
+\label{exer:14-affine-pullback}
+Let $f:\calC\to\Real$ have continuous second partial derivatives on an
+open convex set $\calC\subseteq\Real^q$.  Let
+$\bA\in\Real^{q\times p}$, $\bc\in\Real^q$, and
+\[
+g(\bx)=f(\bA\bx+\bc)
+\]
+on
+$\calU=\{\bx:\bA\bx+\bc\in\calC\}$.  Prove that $\calU$ is open
+and convex, and prove
+\[
+\nabla g(\bx)=\bA'\nabla f(\bA\bx+\bc),
+\qquad
+\Hm g(\bx)=\bA'\Hm f(\bA\bx+\bc)\bA.
+\]
+Deduce that $f$ convex implies $g$ convex.  If every Hessian of $f$ is
+positive definite and $\rank\bA=p$, prove that $g$ is strictly convex.
+Construct a strictly convex $f$ and a rank-deficient $\bA$ for which
+$g$ is not strictly convex.
+\origin{Course formulation from MC Prop.~14}
+\end{exercise}
+\begin{solution}
+For $\bx,\bz\in\calU$ and $0\leqslant t\leqslant1$,
+\[
+\bA\{(1-t)\bx+t\bz\}+\bc
+=(1-t)(\bA\bx+\bc)+t(\bA\bz+\bc)\in\calC,
+\]
+so $\calU$ is convex.  Fix $\bx\in\calU$.  Since $\calC$ is open,
+some $\rho>0$ satisfies
+\[
+\norm{\by-(\bA\bx+\bc)}_2<\rho\implies\by\in\calC.
+\]
+If $\norm{\bh}_2<\rho/(1+\norm{\bA}_2)$, then
+\[
+\norm{\bA\bh}_2
+\leqslant\norm{\bA}_2\norm{\bh}_2<\rho,
+\]
+so $\bx+\bh\in\calU$.  Hence $\calU$ is open.
+
+For $\by=\bA\bx+\bc$,
+\[
+\dd\by=\bA\,\dd\bx,
+\qquad
+\dd^2y_j=0\quad(j=1,\ldots,q).
+\]
+The earlier first-order chain rule and
+Theorem~\ref{thm:14-second-chain} give the two identities.  If
+$f$ is convex, then $\Hm f(\by)\psdge\bO$ for every $\by\in\calC$, so
+\[
+\bh'\Hm g(\bx)\bh
+=(\bA\bh)'\Hm f(\bA\bx+\bc)(\bA\bh)\geqslant0.
+\]
+If every $\Hm f(\by)\psdgt\bO$ and $\rank\bA=p$, then
+\[
+\bh\ne\bzero\implies\bA\bh\ne\bzero
+\implies\bh'\Hm g\bh>0.
+\]
+Apply Theorem~\ref{thm:14-convex-hessian}.
+For $q=1$, $p=2$, take
+\[
+\calC=\Real,
+\qquad
+f(y)=y^2,
+\qquad
+\bA=\begin{pmatrix}1&0\end{pmatrix},
+\qquad
+\bc=0.
+\]
+Then $f''(y)=2>0$, whereas
+\[
+g(x_1,x_2)=x_1^2,
+\qquad
+g(x_1,x_2+t)=g(x_1,x_2)\quad(t\in\Real),
+\]
+so $g$ is not strictly convex.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Exact nonlinear least-squares Hessian]
+\label{exer:14-nonlinear-ls}
+Let $\calU\subseteq\Real^p$ be open, and let
+$\br:\calU\to\Real^n$ have continuous second
+partial derivatives, let
+$\bW=\bW'\in\Real^{n\times n}$ with $\bW\psdge\bO$, and define
+\[
+f(\bx)=\frac12\br(\bx)'\bW\br(\bx),
+\qquad
+\bJ(\bx)=\Dm\br(\bx).
+\]
+Prove
+\begin{align*}
+\nabla f(\bx)&=\bJ(\bx)'\bW\br(\bx),\\
+\Hm f(\bx)&=\bJ(\bx)'\bW\bJ(\bx)
+ +\sum_{i=1}^n\{\bW\br(\bx)\}_i\Hm r_i(\bx).
+\end{align*}
+Prove that every $\bx_*$ satisfying $\br(\bx_*)=\bzero$ is a global
+minimiser.  If also $\bW\psdgt\bO$ and
+$\rank\bJ(\bx_*)=p$, prove that the minimum is locally strict.
+\origin{Adapted from A\&M Ex.~13.53; MC \S10}
+\end{exercise}
+\begin{solution}
+For $q(\bu)=\frac12\bu'\bW\bu$,
+\[
+\nabla q(\bu)=\bW\bu,
+\qquad
+\Hm q(\bu)=\bW.
+\]
+The earlier first-order chain rule and
+Theorem~\ref{thm:14-second-chain} give the displayed formulas.  If
+$\br(\bx_*)=\bzero$, then
+\[
+f(\bx)=\frac12\br(\bx)'\bW\br(\bx)\geqslant0=f(\bx_*),
+\]
+so $\bx_*$ is a global minimiser.  Under the additional hypotheses,
+\[
+\nabla f(\bx_*)=\bzero,
+\qquad
+\Hm f(\bx_*)=\bJ(\bx_*)'\bW\bJ(\bx_*)\psdgt\bO,
+\]
+because $\bJ(\bx_*)\bh\ne\bzero$ for $\bh\ne\bzero$.  Thus the
+global minimum is locally strict by
+Theorem~\ref{thm:14-convex-hessian}(d).
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[When a semidefinite quadratic is bounded below]
+\label{exer:14-semidefinite-quadratic}
+Let $\bV=\bV'\in\Real^{p\times p}$ with $\bV\psdge\bO$, let
+$\bbb\in\Real^p$, and define
+\[
+q(\ba)=\ba'\bV\ba-2\bbb'\ba.
+\]
+Prove that $q$ is bounded below if and only if
+$\bbb\in\col\bV$.  In that case,
+\[
+\argmin_{\ba}q(\ba)=\{\ba:\bV\ba=\bbb\},
+\qquad
+\min_{\ba}q(\ba)=-\bbb'\ba_*
+\]
+for any $\ba_*$ satisfying $\bV\ba_*=\bbb$.
+\origin{Adapted from H Ex.~19.1 and Thm.~19.1.1}
+\end{exercise}
+\begin{solution}
+If $\bbb=\bV\ba_*$, then
+\[
+q(\ba)-q(\ba_*)
+=(\ba-\ba_*)'\bV(\ba-\ba_*)\geqslant0.
+\]
+Equality holds exactly when
+$\bV(\ba-\ba_*)=\bzero$, equivalently $\bV\ba=\bbb$, and
+\[
+q(\ba_*)=\ba_*'\bbb-2\bbb'\ba_*=-\bbb'\ba_*.
+\]
+If $\bbb\notin\col\bV=(\nul\bV)^\perp$, choose
+$\bz\in\nul\bV$ with $\bbb'\bz\ne0$ and replace $\bz$ by $-\bz$ if
+necessary so that $\bbb'\bz>0$.  For $t>0$,
+\[
+q(t\bz)=-2t\bbb'\bz\longrightarrow-\infty.
+\]
+\end{solution}
+
+\Needspace{.36\textheight}
+\begin{exercise}[Trace minus log-determinant]
+\label{exer:14-trace-logdet}
+Let $\bA=\bA'\psdgt\bO$ be $m\times m$ and, for
+$\bOmega=\bOmega'\psdgt\bO$, define
+\[
+\phi(\bOmega)=\tr(\bA\bOmega)-\log|\bOmega|.
+\]
+Prove that $\phi$ is strictly convex and has the unique global minimiser
+\[
+\bOmega_*=\bA^{-1},
+\qquad
+\phi(\bOmega_*)=m+\log|\bA|.
+\]
+\origin{Course formulation from A\&M Ex.~13.52; H Eq.~(15.9.3)}
+\end{exercise}
+\begin{solution}[qedhere]
+Example~\ref{ex:14-logdet-convex} proves that the positive-definite
+cone is open and convex.
+The linear term has zero second differential.  The earlier inverse- and
+log-determinant differential rules, with $\bOmega\psdgt\bO$, give
+\[
+\dd\phi=\tr\{(\bA-\bOmega^{-1})\dd\bOmega\},
+\qquad
+\dd^2\phi
+=\tr\{\bOmega^{-1}(\dd\bOmega)
+       \bOmega^{-1}(\dd\bOmega)\}>0
+\]
+for every nonzero symmetric increment.  Thus $\phi$ is strictly convex.
+At $\bOmega_*=\bA^{-1}$, $\dd\phi=0$ for every symmetric increment, so
+Theorem~\ref{thm:14-convex-hessian} gives the unique global minimum.  Its
+value is
+\[
+\tr(\bI_m)-\log|\bA^{-1}|=m+\log|\bA|.
+\tag*{\textcolor{solFR}{$\blacksquare$}}
+\]
+\end{solution}
+
+\Needspace{.42\textheight}
+\begin{exercise}[An affine log-determinant barrier]
+\label{exer:14-affine-logdet}
+Let $\bA=\bA'$ and $\bB_1,\ldots,\bB_p$ be symmetric $m\times m$
+matrices.  On
+\[
+\calU=\left\{\bx\in\Real^p:
+\bF(\bx)=\bA+\sum_{j=1}^p x_j\bB_j\psdgt\bO\right\},
+\]
+assume $\calU\ne\varnothing$, and put
+$f(\bx)=-\log|\bF(\bx)|$.  Prove
+\begin{align*}
+\frac{\partial f}{\partial x_i}
+&=-\tr\{\bF(\bx)^{-1}\bB_i\},\\
+\frac{\partial^2 f}{\partial x_i\partial x_j}
+&=\tr\{\bF(\bx)^{-1}\bB_i
+          \bF(\bx)^{-1}\bB_j\}.
+\end{align*}
+Prove that the Hessian is positive semidefinite, and is positive definite
+if and only if $\bB_1,\ldots,\bB_p$ are linearly independent.
+\origin{Course formulation from H Eq.~(15.9.3); A\&M Ex.~13.52}
+\end{exercise}
+\begin{solution}
+The positive-definite cone is open by
+Example~\ref{ex:14-logdet-convex}; the affine-preimage argument in
+Exercise~\ref{exer:14-affine-pullback} makes $\calU$ open.
+The earlier inverse- and log-determinant differential rules apply because
+$\bF(\bx)\psdgt\bO$.  Moreover,
+\[
+\frac{\partial\bF}{\partial x_i}=\bB_i,
+\qquad
+\frac{\partial\bF^{-1}}{\partial x_j}
+=-\bF^{-1}\bB_j\bF^{-1},
+\]
+\begin{align*}
+\frac{\partial f}{\partial x_i}
+&=-\tr(\bF^{-1}\bB_i),\\
+\frac{\partial^2f}{\partial x_i\partial x_j}
+&=-\tr\!\left\{
+ \frac{\partial\bF^{-1}}{\partial x_j}\bB_i\right\}
+=\tr(\bF^{-1}\bB_j\bF^{-1}\bB_i)\\
+&=\tr(\bF^{-1}\bB_i\bF^{-1}\bB_j).
+\end{align*}
+For $\bh\in\Real^p$, set
+$\bH=\sum_i h_i\bB_i$.  Then
+\[
+\bh'\Hm f(\bx)\bh
+=\tr(\bF^{-1}\bH\bF^{-1}\bH)
+=\tr\{(\bF^{-1/2}\bH\bF^{-1/2})^2\}\geqslant0.
+\]
+Equality holds exactly when $\bH=\bO$.  Thus the Hessian is positive
+definite exactly when
+\[
+\sum_i h_i\bB_i=\bO\implies\bh=\bzero,
+\]
+which is linear independence of the $\bB_i$.
+\end{solution}
+
+\Needspace{.46\textheight}
+\begin{exercise}[Equality-constrained sensitivity]
+\label{exer:14-constraint-sensitivity}
+Let $\bQ=\bQ'\psdgt\bO$, let $1\leqslant q\leqslant p$, and let
+$\bR\in\Real^{q\times p}$ have rank $q$.  Let $\bs\in\Real^p$.
+For each $\bc\in\Real^q$,
+minimise
+\[
+f(\bb)=\frac12\bb'\bQ\bb-\bs'\bb
+\qquad\text{subject to}\qquad \bR\bb=\bc.
+\]
+Set $\bS=\bR\bQ^{-1}\bR'$.  Find $\bb(\bc)$ and $\blam(\bc)$ satisfying
+\[
+\bR\bb(\bc)=\bc,
+\qquad
+\bQ\bb(\bc)-\bs+\bR'\blam(\bc)=\bzero.
+\]
+Prove that $\bb(\bc)$ is the minimiser, find the minimum value $v(\bc)$,
+and show
+\[
+\nabla_{\bc}v(\bc)=-\blam(\bc),
+\qquad
+\Hm_{\bc}v(\bc)=\bS^{-1}\psdgt\bO.
+\]
+\origin{Course formulation from A\&M Ex.~13.56; H Thm.~19.2.1}
+\end{exercise}
+\begin{solution}
+Put $\bb_0=\bQ^{-1}\bs$.  For $\ba\ne\bzero$,
+\[
+\ba'\bS\ba=(\bR'\ba)'\bQ^{-1}(\bR'\ba)>0,
+\]
+so $\bS\psdgt\bO$.  The equations
+\[
+\bQ\bb-\bs+\bR'\blam=\bzero,
+\qquad
+\bR\bb=\bc
+\]
+have the unique solution
+\begin{align*}
+\blam(\bc)&=\bS^{-1}(\bR\bb_0-\bc),\\
+\bb(\bc)&=\bb_0-\bQ^{-1}\bR'\bS^{-1}
+ (\bR\bb_0-\bc).
+\end{align*}
+For every feasible $\bb=\bb(\bc)+\bd$, $\bR\bd=\bzero$ and
+\[
+f(\bb)-f(\bb(\bc))
+=\bd'\{\bQ\bb(\bc)-\bs\}+\frac12\bd'\bQ\bd
+=-\blam'\bR\bd+\frac12\bd'\bQ\bd
+=\frac12\bd'\bQ\bd,
+\]
+so this solution is the unique minimiser.  Completing the square gives
+\[
+v(\bc)
+=-\frac12\bs'\bQ^{-1}\bs
+ +\frac12(\bR\bb_0-\bc)'\bS^{-1}(\bR\bb_0-\bc).
+\]
+Differentiation gives
+\[
+\nabla_{\bc}v=\bS^{-1}(\bc-\bR\bb_0)=-\blam(\bc),
+\qquad
+\Hm_{\bc}v=\bS^{-1}.
+\]
+\end{solution}
+
+\Needspace{.40\textheight}
+\begin{exercise}[When OLS and GLS fitted values agree]
+\label{exer:14-ols-gls-equality}
+Let $\bX\in\Real^{n\times p}$ have full column rank and let
+$\bOmega=\bOmega'\in\Real^{n\times n}$ with $\bOmega\psdgt\bO$.
+Define
+\[
+\bP_0=\bX(\bX'\bX)^{-1}\bX',
+\qquad
+\bP_{\bOmega}
+=\bX(\bX'\bOmega^{-1}\bX)^{-1}\bX'\bOmega^{-1}.
+\]
+Prove
+\[
+\bP_0=\bP_{\bOmega}
+\ifff
+\bOmega^{-1}\bX=\bX\bA
+\quad\text{for some }\bA\in\Real^{p\times p}.
+\]
+\origin{Adapted from H Thm.~14.12.18}
+\end{exercise}
+\begin{solution}
+If $\bP_0=\bP_{\bOmega}$,
+Theorem~\ref{thm:14-aitken} gives
+\[
+\bX'\bOmega^{-1}(\bI-\bP_0)=\bO.
+\]
+After transposition,
+\[
+(\bI-\bP_0)\bOmega^{-1}\bX=\bO,
+\]
+so every column of $\bOmega^{-1}\bX$ belongs to $\col\bX$; hence
+$\bOmega^{-1}\bX=\bX\bA$ for some $\bA$.
+
+Conversely, this identity and symmetry give
+\[
+\bX'\bOmega^{-1}(\bI-\bP_0)
+=\bA'\bX'(\bI-\bP_0)=\bO.
+\]
+Thus $\bP_0\by\in\col\bX$ satisfies the weighted normal equation for
+every $\by$.  Uniqueness in Theorem~\ref{thm:14-aitken} gives
+$\bP_0\by=\bP_{\bOmega}\by$ for every $\by$, hence equality of the
+matrices.
+\end{solution}
+
+\Needspace{.43\textheight}
+\begin{exercise}[A BLUE linear function under rank deficiency]
+\label{exer:14-estimable-functional}
+Let
+\[
+\by=\bX\bb+\be,
+\qquad
+\expc[\be]=\bzero,
+\qquad
+\cov(\be)=\sigma^2\bI_n,
+\]
+\tcbbreak
+where $\bX\in\Real^{n\times p}$ may be rank deficient,
+$\bb\in\Real^p$, and $\sigma^2>0$.  Let $\ba\in\col\bX'$ and set
+\[
+\bg_0=\bX(\bX'\bX)^+\ba.
+\]
+Prove that $\bg_0'\by$ is the unique minimum-variance linear unbiased
+estimator of $\ba'\bb$.
+\origin{Course formulation from A\&M Ex.~13.59; H Thm.~20.3.6}
+\end{exercise}
+\begin{solution}
+The earlier Moore--Penrose range identities give
+\[
+\col(\bX'\bX)=\col\bX',
+\qquad
+\bX'\bg_0=\bX'\bX(\bX'\bX)^+\ba=\ba.
+\]
+Thus $\expc[\bg_0'\by]=\ba'\bb$.  Any $\bg'\by$ is unbiased for
+$\ba'\bb$ exactly when $\bX'\bg=\ba$.  For
+$\bd=\bg-\bg_0$, this condition gives $\bX'\bd=\bzero$, and hence
+\[
+\bg_0'\bd
+=\ba'(\bX'\bX)^+\bX'\bd=0.
+\]
+Therefore
+\[
+\var(\bg'\by)-\var(\bg_0'\by)
+=\sigma^2(\norm{\bg}_2^2-\norm{\bg_0}_2^2)
+=\sigma^2\norm{\bd}_2^2\geqslant0,
+\]
+with equality only at $\bg=\bg_0$.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Sensitivity of GLS to its covariance matrix]
+\label{exer:14-gls-covariance-sensitivity}
+Fix $\bX\in\Real^{n\times p}$ of full column rank and
+$\by\in\Real^n$.  Let
+$\bOmega=\bOmega'\in\Real^{n\times n}$ vary within the
+positive-definite cone.  With
+\[
+\bV=(\bX'\bOmega^{-1}\bX)^{-1},
+\qquad
+\widehat{\bb}_{\rm G}=\bV\bX'\bOmega^{-1}\by,
+\qquad
+\widehat{\be}_{\rm G}=\by-\bX\widehat{\bb}_{\rm G},
+\]
+prove, for symmetric increments $\dd\bOmega=\dd\bOmega'$,
+\[
+\dd\widehat{\bb}_{\rm G}
+=-\bV\bX'\bOmega^{-1}(\dd\bOmega)
+  \bOmega^{-1}\widehat{\be}_{\rm G}.
+\]
+Deduce that a scalar rescaling $\dd\bOmega=c\bOmega$ has zero
+first-order effect on $\widehat{\bb}_{\rm G}$.
+\origin{Adapted from A\&M Ex.~13.43}
+\end{exercise}
+\begin{solution}
+Theorem~\ref{thm:14-aitken} gives the weighted normal equation
+\[
+\bX'\bOmega^{-1}\widehat{\be}_{\rm G}=\bzero.
+\]
+Since $\bOmega\psdgt\bO$, the earlier inverse-differential rule gives
+\[
+\dd(\bOmega^{-1})
+=-\bOmega^{-1}(\dd\bOmega)\bOmega^{-1}.
+\]
+Since $\bX$ and $\by$ are fixed,
+\begin{align*}
+\bzero
+&=\bX'\dd(\bOmega^{-1})\widehat{\be}_{\rm G}
+  -\bX'\bOmega^{-1}\bX\,\dd\widehat{\bb}_{\rm G},\\
+\dd\widehat{\bb}_{\rm G}
+&=-\bV\bX'\bOmega^{-1}(\dd\bOmega)
+  \bOmega^{-1}\widehat{\be}_{\rm G}.
+\end{align*}
+For $\dd\bOmega=c\bOmega$, the last expression is
+\[
+-c\bV\bX'\bOmega^{-1}\widehat{\be}_{\rm G}=\bzero.
+\]
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[GLS under a nonsingular change of observations]
+\label{exer:14-gls-transformation}
+Under Theorem~\ref{thm:14-aitken}, let
+$\bL\in\Real^{n\times n}$ be nonsingular and define
+\[
+\by_*=\bL\by,
+\qquad
+\bX_*=\bL\bX,
+\qquad
+\bOmega_*=\bL\bOmega\bL'.
+\]
+Prove that GLS computed from $(\by_*,\bX_*,\bOmega_*)$ has the same
+coefficient vector and covariance matrix as GLS computed from
+$(\by,\bX,\bOmega)$.
+\origin{Course formulation from H Thms.~14.12.19--14.12.20; CLM Ex.~B5}
+\end{exercise}
+\begin{solution}
+Since
+\[
+\bOmega_*^{-1}=\bL^{-T}\bOmega^{-1}\bL^{-1},
+\]
+we have
+\begin{align*}
+\bX_*'\bOmega_*^{-1}\bX_*
+&=\bX'\bOmega^{-1}\bX,\\
+\bX_*'\bOmega_*^{-1}\by_*
+&=\bX'\bOmega^{-1}\by.
+\end{align*}
+Both the GLS coefficient formula and
+$(\bX'\bOmega^{-1}\bX)^{-1}$ are therefore unchanged.
+\end{solution}
+
+\Needspace{.40\textheight}
+\begin{exercise}[Aitken's theorem for linear functions]
+\label{exer:14-aitken-linear-function}
+Under Theorem~\ref{thm:14-aitken}, let
+$\bA\in\Real^{s\times p}$ be fixed.  Prove that
+\[
+\bA\widehat{\bb}_{\rm G}
+\]
+is the unique BLUE of $\bA\bb$, using the definition of BLUE with
+$\bA\bb$ in place of $\bb$, and has covariance
+$\bA\bV\bA'$.  If $\bC\in\Real^{s\times n}$ and $\bC\by$ is any
+linear unbiased
+estimator of $\bA\bb$, prove
+\[
+\cov(\bC\by)-\bA\bV\bA'
+=(\bC-\bA\bG)\bOmega(\bC-\bA\bG)'\psdge\bO.
+\]
+\origin{Adapted from A\&M Ex.~13.58; H Thm.~19.2.2}
+\end{exercise}
+\begin{solution}
+Unbiasedness is equivalent to $\bC\bX=\bA$.  Since
+$\bG\bX=\bI_p$, the candidate $\bA\bG\by$ is unbiased and has covariance
+\[
+\bA\bG\bOmega\bG'\bA'=\bA\bV\bA'.
+\]
+Put $\bD=\bC-\bA\bG$.  Then $\bD\bX=\bO$ and
+\[
+\bA\bG\bOmega\bD'
+=\bA\bV\bX'\bD'=\bO.
+\]
+Expanding $(\bA\bG+\bD)\bOmega(\bA\bG+\bD)'$ proves the identity.
+Positive definiteness of $\bOmega$ gives
+$\bD\bOmega\bD'=\bO\ifff\bD=\bO$.
+If $\bC\by$ were also BLUE, comparison with $\bA\bG\by$ would give
+\[
+-\bD\bOmega\bD'
+=\cov(\bA\bG\by)-\cov(\bC\by)
+\psdge\bO.
+\]
+Together with $\bD\bOmega\bD'\psdge\bO$, this implies $\bD=\bO$;
+hence the BLUE is unique.
+\end{solution}
+
+\Needspace{.42\textheight}
+\begin{exercise}[Expectation of the scaled scatter matrix]
+\label{exer:14-covariance-bias}
+Let $\by_1,\ldots,\by_n\in\Real^m$ satisfy
+\[
+\expc[\by_i]=\bmu,
+\qquad
+\cov(\by_i)=\bOmega,
+\qquad
+\expc[(\by_i-\bmu)(\by_j-\bmu)']=\bO\quad(i\ne j).
+\]
+For
+\[
+\bar\by=\frac1n\sum_i\by_i,
+\qquad
+\widehat{\bOmega}=\frac1n\sum_i
+(\by_i-\bar\by)(\by_i-\bar\by)',
+\]
+prove
+\[
+\expc[\widehat{\bOmega}]=\frac{n-1}{n}\bOmega.
+\]
+Deduce
+\[
+\expc[\widehat{\bOmega}]-\bOmega=-\frac1n\bOmega.
+\]
+Use only the displayed moments.
+\origin{Course formulation from A\&M Ex.~13.61}
+\end{exercise}
+\begin{solution}
+Put $\bz_i=\by_i-\bmu$ and
+$\bar\bz=n^{-1}\sum_i\bz_i$.  The stated moments give
+\[
+\expc[\bar\bz\bar\bz']
+=\frac1{n^2}\sum_{i,j}\expc[\bz_i\bz_j']
+=\frac1n\bOmega.
+\]
+The scatter identity yields
+\[
+\sum_i(\bz_i-\bar\bz)(\bz_i-\bar\bz)'
+=\sum_i\bz_i\bz_i'-n\bar\bz\bar\bz'.
+\]
+Taking expectations and dividing by $n$ gives
+\[
+\expc[\widehat{\bOmega}]
+=\frac1n\{n\bOmega-\bOmega\}
+=\frac{n-1}{n}\bOmega.
+\]
+Subtracting $\bOmega$ gives
+$\expc[\widehat{\bOmega}]-\bOmega=-\bOmega/n$.
+\end{solution}
+
+\Needspace{.45\textheight}
+\begin{exercise}[Inverse information in symmetric coordinates]
+\label{exer:14-information-inverse}
+Let $\bD_m^+$ be the Moore--Penrose inverse of the duplication matrix.
+Let $\bOmega=\bOmega'\in\Real^{m\times m}$ with
+$\bOmega\psdgt\bO$.
+Prove
+\[
+\left\{\bD_m'(\bOmega^{-1}\otimes\bOmega^{-1})\bD_m\right\}^{-1}
+=\bD_m^+(\bOmega\otimes\bOmega)(\bD_m^+)'.
+\]
+Deduce from Theorem~\ref{thm:14-information} that
+\[
+n\calI(\btheta)^{-1}
+=\begin{pmatrix}
+\bOmega&\bO\\
+\bO&2\bD_m^+(\bOmega\otimes\bOmega)(\bD_m^+)'
+\end{pmatrix}.
+\]
+\origin{Adapted from A\&M Ex.~13.65(b)}
+\end{exercise}
+\begin{solution}
+Put
+\[
+\bM=\bD_m\bD_m^+,
+\qquad
+\bK=\bOmega^{-1},
+\qquad
+\bA=\bD_m'(\bK\otimes\bK)\bD_m,
+\qquad
+\bB=\bD_m^+(\bOmega\otimes\bOmega)(\bD_m^+)'.
+\]
+The earlier duplication-matrix identities make $\bM$ the projector onto
+vectorised symmetric matrices.  If $\bH=\bH'$, then
+\[
+(\bOmega\otimes\bOmega)\vc\bH=\vc(\bOmega\bH\bOmega),
+\qquad
+(\bK\otimes\bK)\vc\bH=\vc(\bK\bH\bK),
+\]
+and both matrices on the right are symmetric.  Hence the inserted
+projectors below act as identities:
+\begin{align*}
+\bA\bB
+&=\bD_m'(\bK\otimes\bK)\bM
+  (\bOmega\otimes\bOmega)(\bD_m^+)'\\
+&=\bD_m'(\bD_m^+)'=\bI,\\
+\bB\bA
+&=\bD_m^+(\bOmega\otimes\bOmega)\bM
+  (\bK\otimes\bK)\bD_m\\
+&=\bD_m^+\bD_m=\bI.
+\end{align*}
+Thus $\bB=\bA^{-1}$.  Inverting the two diagonal blocks of
+Theorem~\ref{thm:14-information} gives the stated formula.
+\end{solution}
+
+\Needspace{.40\textheight}
+\begin{exercise}[Coefficient influence and leave-one-out residuals]
+\label{exer:14-loo-influence}
+Under Theorem~\ref{thm:14-ols-deletion}, suppose every row deletion
+leaves full column rank.  Prove
+\[
+(\widehat{\bb}_{-i}-\widehat{\bb})'\bQ
+ (\widehat{\bb}_{-i}-\widehat{\bb})
+=\frac{\widehat e_i^2h_i}{(1-h_i)^2}.
+\]
+If $\widehat e_{(i)}=y_i-\tilde\bx_i'\widehat{\bb}_{-i}$, prove the
+exact identity
+\[
+\sum_{i=1}^n\widehat e_{(i)}^2
+=\sum_{i=1}^n\left(\frac{\widehat e_i}{1-h_i}\right)^2.
+\]
+\origin{Course formulation from H Cor.~18.2.10; CLM Ex.~B1}
+\end{exercise}
+\begin{solution}
+Theorem~\ref{thm:14-ols-deletion} gives
+\[
+\widehat{\bb}_{-i}-\widehat{\bb}
+=-\frac{\bQ^{-1}\tilde\bx_i\widehat e_i}{1-h_i}.
+\]
+Therefore
+\begin{align*}
+(\widehat{\bb}_{-i}-\widehat{\bb})'\bQ
+ (\widehat{\bb}_{-i}-\widehat{\bb})
+&=\frac{\widehat e_i^2}{(1-h_i)^2}
+  \tilde\bx_i'\bQ^{-1}\tilde\bx_i\\
+&=\frac{\widehat e_i^2h_i}{(1-h_i)^2}.
+\end{align*}
+The held-out residual identity in that theorem gives
+$\widehat e_{(i)}=\widehat e_i/(1-h_i)$; squaring and summing proves the
+second formula.
+\end{solution}
+
+\Needspace{.43\textheight}
+\begin{exercise}[Geometry of restricted covariance]
+\label{exer:14-restricted-covariance}
+Let $\bV=\bV'\in\Real^{p\times p}$ with $\bV\psdgt\bO$, let
+$1\leqslant q\leqslant p$, let
+$\bR\in\Real^{q\times p}$ have rank $q$, and put
+\[
+\bS=\bR\bV\bR',
+\qquad
+\bC_{\rm R}=\bV-\bV\bR'\bS^{-1}\bR\bV.
+\]
+Prove
+\[
+\bC_{\rm R}\psdge\bO,
+\qquad
+\rank\bC_{\rm R}=p-q,
+\qquad
+\nul\bC_{\rm R}=\col\bR',
+\qquad
+\bR\bC_{\rm R}=\bO.
+\]
+\origin{Course formulation from H \S19.7; CLM \S10}
+\end{exercise}
+\begin{solution}
+Let
+\[
+\bA=\bR\bV^{1/2},
+\qquad
+\bP=\bA'(\bA\bA')^{-1}\bA.
+\]
+Then $\rank\bA=q$, $\bP=\bP'=\bP^2$, and $\rank\bP=q$.  Moreover,
+\[
+\bC_{\rm R}=\bV^{1/2}(\bI_p-\bP)\bV^{1/2}\psdge\bO.
+\]
+Nonsingularity of $\bV^{1/2}$ gives
+\[
+\rank\bC_{\rm R}=\rank(\bI_p-\bP)=p-q.
+\]
+Direct multiplication gives
+\[
+\bC_{\rm R}\bR'
+=\bV\bR'-\bV\bR'\bS^{-1}\bS=\bO.
+\]
+Thus $\col\bR'\subseteq\nul\bC_{\rm R}$.  Both spaces have dimension
+$q$, so they are equal.  Since $\bC_{\rm R}$ is symmetric,
+$\bR\bC_{\rm R}=(\bC_{\rm R}\bR')'=\bO$.
+\end{solution}
+
+\end{document}

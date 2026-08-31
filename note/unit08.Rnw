@@ -1,0 +1,1573 @@
+% Compile:  python build.py 08
+% or by hand:
+%   Rscript -e "knitr::knit('unit08.Rnw')"
+%   xelatex -shell-escape unit08.tex        # run twice to settle the toc
+\documentclass[17pt]{extarticle}
+
+\input{la_preamble.tex}
+\usepackage{needspace}
+
+% Unit 8 specific
+\fancyhead[L]{\small\color{hdrBG}\textbf{Unit\ 8\ \ Spectral Theorem}}
+
+\setcounter{theorem}{0}\setcounter{example}{0}
+\renewcommand\thedefinition{8.\arabic{theorem}}
+\renewcommand\thetheorem{8.\arabic{theorem}}
+\renewcommand\thelemma{8.\arabic{theorem}}
+\renewcommand\theproposition{8.\arabic{theorem}}
+\renewcommand\thecorollary{8.\arabic{theorem}}
+\renewcommand\theexample{8.\arabic{example}}
+\renewcommand\theexercise{8.\arabic{exercise}}
+\renewcommand\thefigure{8.\arabic{figure}}
+
+\title{\color{hdrBG}\bfseries\Huge The Spectral Theorem}
+\author{}\date{}
+
+\begin{document}
+
+<<setup, include=FALSE>>=
+source("la_knitr_setup.R")
+knitr::opts_chunk$set(fig.path = "figs/unit08-")
+@
+
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+{\color{hdrBG}\bfseries\fontsize{26}{32}\selectfont
+ Unit 8.\ The Spectral Theorem}
+\end{center}
+\vspace*{\fill}
+\end{titlepage}
+
+\setcounter{page}{1}
+
+%=============================================================================
+\section{Orthogonal diagonalisation}\label{sec:8.1}
+%=============================================================================
+
+\subsection{The real spectral theorem}\label{sec:8.1.1}
+
+\begin{definition}[Orthogonal diagonalisation]\label{def:orthogonal-diagonalisation}
+A matrix $\bA\in\Real^{n\times n}$ is \emph{orthogonally diagonalisable} if
+there are an orthogonal $\bQ\in\Real^{n\times n}$ and a real diagonal
+$\bLam$ such that
+\[
+\bQ'\bA\bQ=\bLam,
+\qquad
+\bA=\bQ\bLam\bQ'.
+\]
+If $\bQ=(\bq_1,\ldots,\bq_n)$ and
+$\bLam=\diag(\lambda_1,\ldots,\lambda_n)$, then
+\[
+\bA\bq_i=\lambda_i\bq_i,
+\qquad
+\bq_i'\bq_j=\begin{cases}1,&i=j,\\0,&i\ne j.\end{cases}
+\]
+\origin{H \S21.5a and Thm.~21.5.1; A\&M Ex.~7.46}
+\end{definition}
+
+\begin{theorem}[Real eigenpair]\label{thm:symmetric-real-eigenpair}
+Every real symmetric matrix of positive order has a real eigenvalue and a real unit
+eigenvector.
+\origin{H Thms.~21.5.5--21.5.6; A\&M Exs.~7.40 and 7.43}
+\end{theorem}
+
+\begin{proof}
+Let $\bA=\bA'\in\Real^{n\times n}$, $n\geqslant1$.  The complex eigenvalue
+theory gives $\bA\bz=\lambda\bz$ for some
+$\lambda\in\mathbb C$ and $\bzero\ne\bz\in\mathbb C^n$.  Since
+$\bA^*=\bA$,
+\[
+\overline{\bz^*\bA\bz}
+=\bz^*\bA^*\bz
+=\bz^*\bA\bz,
+\qquad
+\bz^*\bz>0.
+\]
+Thus $\bz^*\bA\bz=\lambda\bz^*\bz$ is real and $\lambda\in\Real$.
+Write $\bz=\bu+\mathrm{i}\bv$ with $\bu,\bv\in\Real^n$.  Then
+\[
+\bA\bu+\mathrm{i}\bA\bv
+=\lambda\bu+\mathrm{i}\lambda\bv
+\quad\Longrightarrow\quad
+\bA\bu=\lambda\bu,
+\qquad
+\bA\bv=\lambda\bv.
+\]
+At least one of $\bu,\bv$ is nonzero; normalising that vector gives the
+assertion.
+\end{proof}
+
+\begin{theorem}[Real spectral theorem]\label{thm:real-spectral}
+For $\bA\in\Real^{n\times n}$,
+\[
+\bA=\bA'
+\quad\Longleftrightarrow\quad
+\bA=\bQ\bLam\bQ'
+\]
+for some orthogonal $\bQ$ and real diagonal $\bLam$.
+\origin{H Thm.~21.5.7; A\&M Ex.~7.46; S Cor.~5.3}
+\end{theorem}
+
+\begin{proof}
+Suppose first that $\bA=\bA'$.  Induct on $n$.  The assertion holds for
+$n=1$.  For $n\geqslant2$, Theorem~\ref{thm:symmetric-real-eigenpair} gives
+\[
+\bA\bu=\lambda\bu,
+\qquad
+\bu'\bu=1.
+\]
+Complete $\bu$ to an orthonormal basis and write
+$\bQ_0=(\bu,\bV)$.  Symmetry gives
+\[
+\bQ_0'\bA\bQ_0
+=\begin{pmatrix}
+\bu'\bA\bu&\bu'\bA\bV\\
+\bV'\bA\bu&\bV'\bA\bV
+\end{pmatrix}
+=\begin{pmatrix}
+\lambda&\bzero'\\
+\bzero&\bC
+\end{pmatrix},
+\qquad
+\bC'=\bC.
+\]
+By induction, $\bC=\bR\bD\bR'$ for an orthogonal $\bR$.  Hence
+\[
+\bQ=\bQ_0\diag(1,\bR),
+\qquad
+\bQ'\bA\bQ=\diag(\lambda,\bD).
+\]
+
+Conversely, if $\bA=\bQ\bLam\bQ'$ with $\bQ'\bQ=\bI$ and
+$\bLam'=\bLam$, then
+\[
+\bA'=\bQ\bLam'\bQ'=\bA.
+\]
+\end{proof}
+
+\begin{corollary}[Orthogonal eigenspace decomposition]\label{cor:eigenspace-decomposition}
+Let $\theta_1,\ldots,\theta_s$ be the distinct eigenvalues of a real
+symmetric $\bA$.  Then
+\[
+\Real^n
+=\calE_{\theta_1}(\bA)\mathbin{\perp\!\oplus}\cdots
+\mathbin{\perp\!\oplus}\calE_{\theta_s}(\bA).
+\]
+For every $j$, the geometric and algebraic multiplicities of $\theta_j$
+are equal.
+\origin{H Cor.~21.5.8; A\&M Exs.~7.47--7.48}
+\end{corollary}
+
+\begin{proof}
+Choose the columns of $\bQ$ in Theorem~\ref{thm:real-spectral} in blocks
+$\bQ=(\bQ_1,\ldots,\bQ_s)$ corresponding to the distinct diagonal values.
+Then
+\[
+\bA\bQ_j=\theta_j\bQ_j,
+\qquad
+\bQ_i'\bQ_j=\begin{cases}\bI,&i=j,\\\bO,&i\ne j.\end{cases}
+\]
+The columns of $\bQ$ form a basis, so their block column spaces give the
+orthogonal direct sum.  Moreover,
+\[
+\chi_{\bA}(t)
+=\det(t\bI-\bQ'\bA\bQ)
+=\prod_{j=1}^s(t-\theta_j)^{\dim\calE_{\theta_j}(\bA)}.
+\]
+The exponent is both multiplicities.
+\end{proof}
+
+\begin{example}\label{ex:spectral-factor-exact}
+For
+\[
+\bA=\begin{pmatrix}2&1&0\\1&2&0\\0&0&5\end{pmatrix},
+\quad
+\bQ=\begin{pmatrix}
+0&2^{-1/2}&2^{-1/2}\\
+0&2^{-1/2}&-2^{-1/2}\\
+1&0&0
+\end{pmatrix},
+\quad
+\bLam=\diag(5,3,1),
+\]
+direct multiplication gives
+\[
+\bQ'\bQ=\bI_3,
+\qquad
+\bA\bQ=\bQ\bLam,
+\qquad
+\bA=\bQ\bLam\bQ'.
+\]
+\origin{Adapted from A\&M Exs.~7.44--7.46}
+\end{example}
+
+\subsection{Spectral projectors}\label{sec:8.1.2}
+
+\begin{definition}[Spectral projector]\label{def:spectral-projector}
+Let $\bA=\bA'$ have distinct eigenvalues
+$\theta_1,\ldots,\theta_s$, and let the columns of $\bQ_j$ be an
+orthonormal basis of $\calE_{\theta_j}(\bA)$.  The \emph{spectral projector}
+\tcbbreak
+for $\theta_j$ is
+\[
+\bP_j=\bQ_j\bQ_j'.
+\]
+\origin{H eqs.~(21.5.4)--(21.5.5)}
+\end{definition}
+
+\begin{theorem}[Spectral projector algebra]\label{thm:spectral-projectors}
+With Definition~\ref{def:spectral-projector},
+\[
+\bP_j'=\bP_j,
+\qquad
+\bP_i\bP_j=\begin{cases}\bP_j,&i=j,\\\bO,&i\ne j,\end{cases}
+\qquad
+\sum_{j=1}^s\bP_j=\bI,
+\]
+\[
+\im\bP_j=\calE_{\theta_j}(\bA),
+\qquad
+\bA\bP_j=\theta_j\bP_j,
+\qquad
+\bA=\sum_{j=1}^s\theta_j\bP_j.
+\]
+Moreover,
+\[
+\bP_j=\ell_j(\bA),
+\qquad
+\ell_j(t)=
+\prod_{\substack{1\leqslant i\leqslant s\\i\ne j}}
+\frac{t-\theta_i}{\theta_j-\theta_i},
+\]
+where an empty product is $1$.  Thus $\bP_j$ is independent of the chosen
+orthonormal basis of its eigenspace.
+\origin{H Ex.~21.18 and eq.~(21.5.5); S \S5.5}
+\end{theorem}
+
+\begin{proof}
+The block orthogonality in Corollary~\ref{cor:eigenspace-decomposition} gives
+\[
+\bP_i\bP_j
+=\bQ_i(\bQ_i'\bQ_j)\bQ_j',
+\qquad
+\sum_j\bP_j
+=\bQ\bQ'=\bI.
+\]
+Also
+\[
+\bP_j\bQ_i=\delta_{ij}\bQ_i,
+\qquad
+\bA\bP_j=\bA\bQ_j\bQ_j'=\theta_j\bP_j.
+\]
+These identities give the range assertion and
+\[
+\bA=\bA\sum_j\bP_j=\sum_j\theta_j\bP_j.
+\]
+Since $\ell_j(\theta_i)=\delta_{ij}$,
+\[
+\ell_j(\bA)\bQ_i
+=\ell_j(\theta_i)\bQ_i
+=\bP_j\bQ_i.
+\]
+The columns of $\bQ$ form a basis, so $\ell_j(\bA)=\bP_j$.
+\end{proof}
+
+\begin{corollary}[Rank, trace, and determinant]\label{cor:symmetric-spectral-invariants}
+If $m_j=\dim\calE_{\theta_j}(\bA)$, then
+\[
+\rank\bA=\sum_{\theta_j\ne0}m_j,
+\qquad
+\tr\bA=\sum_{j=1}^s m_j\theta_j,
+\qquad
+\det\bA=\prod_{j=1}^s\theta_j^{m_j}.
+\]
+\origin{H Thm.~21.6.1; A\&M Ex.~7.49}
+\end{corollary}
+
+\begin{proof}
+Orthogonal similarity preserves rank, trace, and determinant.  Apply this to
+\[
+\bQ'\bA\bQ
+=\diag(\theta_1\bI_{m_1},\ldots,\theta_s\bI_{m_s}).
+\]
+\end{proof}
+
+\subsection{Finite spectral calculus}\label{sec:8.1.3}
+
+\begin{definition}[Function of a symmetric matrix]\label{def:finite-spectral-calculus}
+Let $\bA=\bA'$ have distinct eigenvalues
+$\theta_1,\ldots,\theta_s$ and spectral projectors
+$\bP_1,\ldots,\bP_s$.  For a function
+$f:\{\theta_1,\ldots,\theta_s\}\to\Real$, define
+\[
+f(\bA)=\sum_{j=1}^s f(\theta_j)\bP_j.
+\]
+\origin{S \S5.5; H eqs.~(21.5.3)--(21.5.5)}
+\end{definition}
+
+\begin{theorem}[Rules of finite spectral calculus]\label{thm:finite-spectral-calculus}
+Let $f,g$ be real functions on the spectrum of $\bA=\bA'$.  Write its
+distinct eigenvalues as $\theta_1,\ldots,\theta_s$, set
+$m_j=\dim\calE_{\theta_j}(\bA)$, and let $a,b\in\Real$.
+\[
+(af+bg)(\bA)=a f(\bA)+b g(\bA),
+\qquad
+(fg)(\bA)=f(\bA)g(\bA),
+\]
+\[
+f(\bA)'=f(\bA),
+\qquad
+\bA f(\bA)=f(\bA)\bA.
+\]
+If $p(t)=\sum_{k=0}^d p_kt^k$ is a polynomial, this definition agrees with
+$p(\bA)=\sum_{k=0}^d p_k\bA^k$.  The eigenvalues of $f(\bA)$ are
+$f(\theta_j)$ with multiplicities $m_j$.  Consequently,
+\[
+\rank f(\bA)=\sum_{f(\theta_j)\ne0}m_j,
+\quad
+\tr f(\bA)=\sum_jm_jf(\theta_j),
+\quad
+\det f(\bA)=\prod_jf(\theta_j)^{m_j}.
+\]
+If every $f(\theta_j)\ne0$, then
+\[
+f(\bA)^{-1}=h(\bA),
+\qquad
+h(\theta_j)=\frac{1}{f(\theta_j)}.
+\]
+\origin{Adapted from S Prop.~5.7; H Thm.~21.6.1}
+\end{theorem}
+
+\begin{proof}
+Theorem~\ref{thm:spectral-projectors} gives
+\[
+\bP_i\bP_j=\delta_{ij}\bP_j,
+\qquad
+\bA\bP_j=\theta_j\bP_j.
+\]
+Hence
+\[
+f(\bA)g(\bA)
+=\sum_{i,j}f(\theta_i)g(\theta_j)\bP_i\bP_j
+=\sum_jf(\theta_j)g(\theta_j)\bP_j.
+\]
+Linearity, symmetry, and commutation follow from the same identities.  For
+$k\geqslant0$,
+\[
+\bA^k
+=\left(\sum_j\theta_j\bP_j\right)^k
+=\sum_j\theta_j^k\bP_j,
+\]
+so polynomial evaluation agrees.  In the orthonormal eigenbasis,
+\[
+\bQ'f(\bA)\bQ
+=\diag\bigl(f(\theta_1)\bI_{m_1},\ldots,
+f(\theta_s)\bI_{m_s}\bigr).
+\]
+This gives the eigenvalue, rank, trace, and determinant formulas.  If all
+values are nonzero, then
+\[
+f(\bA)h(\bA)
+=(fh)(\bA)=\sum_j\bP_j=\bI.
+\]
+\end{proof}
+
+\begin{example}\label{ex:spectral-filter}
+For $\bA$ in Example~\ref{ex:spectral-factor-exact}, the projector onto
+$\calE_3(\bA)$ is
+\[
+\bP_3
+=-\frac14(\bA-5\bI)(\bA-\bI)
+=\frac12\begin{pmatrix}1&1&0\\1&1&0\\0&0&0\end{pmatrix}.
+\]
+Indeed, $p(t)=-(t-5)(t-1)/4$ satisfies
+$p(5)=0$, $p(3)=1$, and $p(1)=0$.
+\origin{Adapted from S \S5.5 and H Ex.~21.18}
+\end{example}
+
+% \periodmark{End of period 1 of 3.}
+
+\newpage
+
+%=============================================================================
+\section{Variational characterisations}\label{sec:8.2}
+%=============================================================================
+
+\subsection{Rayleigh quotients}\label{sec:8.2.1}
+
+\begin{definition}[Rayleigh quotient]\label{def:rayleigh}
+For $\bA=\bA'\in\Real^{n\times n}$ and
+$\bzero\ne\bx\in\Real^n$, the \emph{Rayleigh quotient} is
+\[
+R_{\bA}(\bx)=\frac{\bx'\bA\bx}{\bx'\bx}.
+\]
+Write the eigenvalues of $\bA$, counted with multiplicity, as
+\[
+\lambda_1(\bA)\geqslant\lambda_2(\bA)\geqslant\cdots\geqslant\lambda_n(\bA).
+\]
+The argument $\bA$ is omitted when fixed.
+\origin{H Thm.~21.5.6; A\&M Exs.~7.53 and 12.39}
+\end{definition}
+
+\begin{theorem}[Rayleigh expansion and equality cases]\label{thm:rayleigh-bounds}
+Let $\bq_1,\ldots,\bq_n$ be an orthonormal eigenbasis ordered with
+$\lambda_1\geqslant\cdots\geqslant\lambda_n$.  If
+$\bx=\sum_i c_i\bq_i\ne\bzero$, then
+\[
+R_{\bA}(\bx)
+=\sum_{i=1}^n\lambda_iw_i,
+\qquad
+w_i=\frac{c_i^2}{\sum_jc_j^2},
+\qquad
+w_i\geqslant0,
+\quad
+\sum_iw_i=1.
+\]
+Therefore
+\[
+\lambda_n\leqslant R_{\bA}(\bx)\leqslant\lambda_1,
+\]
+with
+\[
+R_{\bA}(\bx)=\lambda_1
+\iff \bx\in\calE_{\lambda_1}(\bA),
+\qquad
+R_{\bA}(\bx)=\lambda_n
+\iff \bx\in\calE_{\lambda_n}(\bA).
+\]
+\origin{H Thm.~21.5.6; A\&M Ex.~12.39; S eqs.~(6.1)--(6.2)}
+\end{theorem}
+
+\begin{proof}
+Orthogonality and $\bA\bq_i=\lambda_i\bq_i$ give
+\[
+\bx'\bx=\sum_ic_i^2,
+\qquad
+\bx'\bA\bx=\sum_i\lambda_ic_i^2.
+\]
+Thus $R_{\bA}(\bx)$ is the displayed weighted mean.  Moreover,
+\[
+\lambda_1-R_{\bA}(\bx)
+=\sum_i(\lambda_1-\lambda_i)w_i.
+\]
+This is zero exactly when $w_i=0$ for every $i$ with
+$\lambda_i<\lambda_1$, which is equivalent to
+$\bx\in\calE_{\lambda_1}(\bA)$.  The lower equality follows from
+\[
+R_{\bA}(\bx)-\lambda_n
+=\sum_i(\lambda_i-\lambda_n)w_i.
+\]
+\end{proof}
+
+\begin{corollary}[Extreme eigenvalues]\label{cor:rayleigh-extrema}
+\[
+\lambda_1(\bA)=\max_{\norm{\bx}=1}\bx'\bA\bx,
+\qquad
+\lambda_n(\bA)=\min_{\norm{\bx}=1}\bx'\bA\bx.
+\]
+The maximisers and minimisers are the unit vectors in the corresponding
+eigenspaces.
+\origin{H Thm.~21.5.6; A\&M Ex.~12.39(c)}
+\end{corollary}
+
+\begin{proof}
+Apply Theorem~\ref{thm:rayleigh-bounds}; a unit eigenvector attains each
+bound.
+\end{proof}
+
+\subsection{Courant--Fischer}\label{sec:8.2.2}
+
+\begin{theorem}[Courant--Fischer]\label{thm:courant-fischer}
+For $1\leqslant k\leqslant n$,
+\[
+\lambda_k
+=\max_{\substack{\calU\subseteq\Real^n\\\dim\calU=k}}
+\ \min_{\bzero\ne\bx\in\calU}R_{\bA}(\bx)
+=\min_{\substack{\calV\subseteq\Real^n\\\dim\calV=n-k+1}}
+\ \max_{\bzero\ne\bx\in\calV}R_{\bA}(\bx).
+\]
+Equivalently,
+\[
+\lambda_k
+=\min_{\dim\calL=k-1}
+\ \max_{\substack{\bzero\ne\bx\\\bx\perp\calL}}R_{\bA}(\bx)
+=\max_{\dim\calL=n-k}
+\ \min_{\substack{\bzero\ne\bx\\\bx\perp\calL}}R_{\bA}(\bx).
+\]
+\origin{S Thm.~6.2; A\&M Exs.~12.42--12.44; H Ex.~21.17}
+\end{theorem}
+
+\begin{proof}
+Let
+\[
+\calF_k=\spn(\bq_1,\ldots,\bq_k),
+\qquad
+\calT_k=\spn(\bq_k,\ldots,\bq_n).
+\]
+If $\dim\calU=k$, then
+\[
+\dim\calU+\dim\calT_k=n+1
+\quad\Longrightarrow\quad
+\calU\cap\calT_k\ne\{\bzero\}.
+\]
+For $\bzero\ne\bx\in\calU\cap\calT_k$,
+$R_{\bA}(\bx)\leqslant\lambda_k$.  Hence
+\[
+\min_{\bzero\ne\bx\in\calU}R_{\bA}(\bx)\leqslant\lambda_k.
+\]
+For $\calU=\calF_k$, the minimum equals $\lambda_k$, proving the first
+formula.
+
+If $\dim\calV=n-k+1$, then
+$\calV\cap\calF_k\ne\{\bzero\}$.  A nonzero vector in this intersection
+has Rayleigh quotient at least $\lambda_k$, so
+\[
+\max_{\bzero\ne\bx\in\calV}R_{\bA}(\bx)\geqslant\lambda_k.
+\]
+For $\calV=\calT_k$, the maximum equals $\lambda_k$.  This proves the
+second formula.  Taking orthogonal complements gives the last two formulas.
+\end{proof}
+
+\Needspace{.36\textheight}
+\begin{example}\label{ex:constrained-rayleigh}
+For $\bA$ in Example~\ref{ex:spectral-factor-exact}, impose
+$\bx'\eu_3=0$.  Writing $\bx=(x_1,x_2,0)'\ne\bzero$ gives
+\[
+R_{\bA}(\bx)
+=\frac{2x_1^2+2x_1x_2+2x_2^2}{x_1^2+x_2^2},
+\qquad
+1\leqslant R_{\bA}(\bx)\leqslant3.
+\]
+The bounds are attained at $(1,-1,0)'$ and $(1,1,0)'$, respectively.
+\origin{Adapted from A\&M Ex.~12.42}
+\end{example}
+
+\subsection{The induced norm and perturbations}\label{sec:8.2.3}
+
+\begin{definition}[Induced Euclidean matrix norm]\label{def:induced-two-norm}
+For $\bC\in\Real^{m\times n}$,
+\[
+\norm{\bC}_2
+=\sup_{\bzero\ne\bx\in\Real^n}
+\frac{\norm{\bC\bx}}{\norm{\bx}}
+=\sup_{\norm{\bx}=1}\norm{\bC\bx}.
+\]
+For $\norm{\bx}=1$, Cauchy--Schwarz gives
+\[
+0\leqslant\norm{\bC\bx}^2
+=\sum_{i=1}^m(\tilde\bc_i'\bx)^2
+\leqslant\sum_{i=1}^m\norm{\tilde\bc_i}^2,
+\]
+so real completeness makes the supremum finite.
+\origin{S \S6.2, comment following Prop.~6.2}
+\end{definition}
+
+\begin{theorem}[Norm of a symmetric matrix]\label{thm:symmetric-induced-norm}
+If $\bA=\bA'$, then
+\[
+\norm{\bA}_2
+=\max_{1\leqslant i\leqslant n}|\lambda_i(\bA)|
+=\max\{|\lambda_1(\bA)|,|\lambda_n(\bA)|\}.
+\]
+The supremum in Definition~\ref{def:induced-two-norm} is attained by a unit
+eigenvector whose eigenvalue has largest modulus.
+\origin{S \S6.2, comment following Prop.~6.2; H \S21.5f}
+\end{theorem}
+
+\begin{proof}
+For $\bx=\sum_ic_i\bq_i$,
+\[
+\norm{\bA\bx}^2
+=\sum_i\lambda_i^2c_i^2
+\leqslant\left(\max_i|\lambda_i|\right)^2\sum_ic_i^2
+=\left(\max_i|\lambda_i|\right)^2\norm{\bx}^2.
+\]
+Equality holds when $\bx$ is a corresponding unit eigenvector.
+\end{proof}
+
+\begin{theorem}[Weyl perturbation bound]\label{thm:weyl-perturbation}
+Let $\bA=\bA'$ and $\bE=\bE'$ be of order $n$.  For
+$1\leqslant k\leqslant n$,
+\[
+\lambda_k(\bA)+\lambda_n(\bE)
+\leqslant\lambda_k(\bA+\bE)
+\leqslant\lambda_k(\bA)+\lambda_1(\bE).
+\]
+Consequently,
+\[
+\left|\lambda_k(\bA+\bE)-\lambda_k(\bA)\right|
+\leqslant\norm{\bE}_2.
+\]
+\origin{S Thm.~6.3 and Prop.~6.2; A\&M Exs.~12.40 and 12.44}
+\end{theorem}
+
+\begin{proof}
+For every $\bzero\ne\bx$,
+\[
+R_{\bA+\bE}(\bx)
+=R_{\bA}(\bx)+R_{\bE}(\bx),
+\qquad
+\lambda_n(\bE)\leqslant R_{\bE}(\bx)\leqslant\lambda_1(\bE).
+\]
+The max--min formula gives
+\[
+\begin{aligned}
+\lambda_k(\bA+\bE)
+&=\max_{\dim\calU=k}\min_{\bzero\ne\bx\in\calU}
+R_{\bA+\bE}(\bx)\\
+&\geqslant\max_{\dim\calU=k}\left\{
+\min_{\bzero\ne\bx\in\calU}R_{\bA}(\bx)+\lambda_n(\bE)
+\right\}\\
+&=\lambda_k(\bA)+\lambda_n(\bE).
+\end{aligned}
+\]
+The min--max formula similarly gives the upper bound.  Therefore
+\[
+-\norm{\bE}_2
+\leqslant\lambda_n(\bE)
+\leqslant\lambda_k(\bA+\bE)-\lambda_k(\bA)
+\leqslant\lambda_1(\bE)
+\leqslant\norm{\bE}_2.
+\]
+\end{proof}
+
+% \periodmark{End of period 2 of 3.}
+
+%=============================================================================
+\section{Invariant subspaces, compression, and principal components}\label{sec:8.3}
+%=============================================================================
+
+\subsection{Invariant subspaces and commuting matrices}\label{sec:8.3.1}
+
+\begin{definition}[Invariant subspace]\label{def:invariant-subspace}
+A subspace $\calU\subseteq\Real^n$ is \emph{invariant under} $\bA$ if
+\[
+\bA\calU=\{\bA\bu:\bu\in\calU\}\subseteq\calU.
+\]
+\origin{S \S5.5.2, p.~91}
+\end{definition}
+
+\begin{theorem}[Invariant orthogonal complement]\label{thm:invariant-complement}
+Let $\bA=\bA'$ and let $\bG$ and $\bH$ have orthonormal columns spanning
+$\calU$ and $\calU^\perp$, respectively.  Then
+\[
+\calU\text{ is invariant under }\bA
+\quad\Longleftrightarrow\quad
+\calU^\perp\text{ is invariant under }\bA.
+\]
+Under either condition,
+\[
+(\bG,\bH)'\bA(\bG,\bH)
+=\diag(\bG'\bA\bG,\bH'\bA\bH).
+\]
+\origin{S \S5.5.2, p.~91; H eqs.~(21.13.3)--(21.13.4)}
+\end{theorem}
+
+\begin{proof}
+For $\bu\in\calU$ and $\bv\in\calU^\perp$,
+\[
+\bv'\bA\bu=(\bA\bv)'\bu.
+\]
+If $\bA\calU\subseteq\calU$, the left side is zero for every $\bu$, so
+$\bA\bv\in\calU^\perp$.  The reverse implication follows by exchanging
+$\calU$ and $\calU^\perp$.  In matrix form,
+\[
+\bH'\bA\bG=\bO,
+\qquad
+\bG'\bA\bH=(\bH'\bA\bG)'=\bO,
+\]
+which gives the block diagonal identity.
+\end{proof}
+
+\begin{theorem}[Simultaneous orthogonal diagonalisation]\label{thm:simultaneous-diagonalisation}
+For symmetric $\bA,\bB\in\Real^{n\times n}$, the following are equivalent:
+\[
+\bA\bB=\bB\bA;
+\]
+\[
+\bQ'\bA\bQ\text{ and }\bQ'\bB\bQ
+\text{ are diagonal for some orthogonal }\bQ.
+\]
+\origin{H Cor.~21.13.2; A\&M Ex.~7.51}
+\end{theorem}
+
+\begin{proof}
+If both transformed matrices are diagonal, then
+\[
+\bA\bB
+=\bQ(\bQ'\bA\bQ)(\bQ'\bB\bQ)\bQ'
+=\bQ(\bQ'\bB\bQ)(\bQ'\bA\bQ)\bQ'
+=\bB\bA.
+\]
+
+Conversely, suppose $\bA\bB=\bB\bA$.  For
+$\bx\in\calE_\theta(\bA)$,
+\[
+\bA(\bB\bx)=\bB\bA\bx=\theta\bB\bx,
+\]
+so every eigenspace of $\bA$ is invariant under $\bB$.  Choose an
+orthonormal basis matrix $\bQ_j$ for each eigenspace.  Then
+\[
+\bB\bQ_j=\bQ_j\bC_j,
+\qquad
+\bC_j=\bQ_j'\bB\bQ_j=\bC_j'.
+\]
+The spectral theorem gives an orthogonal $\bR_j$ with
+$\bR_j'\bC_j\bR_j$ diagonal.  Hence
+\[
+\bQ=(\bQ_1\bR_1,\ldots,\bQ_s\bR_s)
+\]
+is orthogonal and diagonalises both matrices.
+\end{proof}
+
+\subsection{Compressions and interlacing}\label{sec:8.3.2}
+
+\begin{definition}[Orthogonal compression]\label{def:compression}
+Let $\bA=\bA'\in\Real^{n\times n}$ and
+$\bG\in\Real^{n\times r}$ satisfy $\bG'\bG=\bI_r$.  The matrix
+\[
+\bC=\bG'\bA\bG
+\]
+is the \emph{compression of $\bA$ to $\col\bG$} in the orthonormal basis
+formed by the columns of $\bG$.  It is symmetric and
+\[
+R_{\bC}(\by)=R_{\bA}(\bG\by),
+\qquad \bzero\ne\by\in\Real^r.
+\]
+\origin{S \S6.4, p.~120; A\&M Ex.~12.46}
+\end{definition}
+
+\Needspace{.48\textheight}
+\begin{theorem}[Poincar\'e separation]\label{thm:poincare-separation}
+Let
+\[
+\lambda_1\geqslant\cdots\geqslant\lambda_n
+\quad\text{and}\quad
+\mu_1\geqslant\cdots\geqslant\mu_r
+\]
+be the eigenvalues of $\bA$ and $\bG'\bA\bG$, respectively, where
+$\bG'\bG=\bI_r$.  Then
+\[
+\lambda_k\geqslant\mu_k\geqslant\lambda_{n-r+k},
+\qquad 1\leqslant k\leqslant r.
+\]
+\origin{A\&M Ex.~12.46; S Thm.~6.5}
+\end{theorem}
+
+\begin{proof}
+The map $\by\mapsto\bG\by$ preserves inner products and gives a bijection
+between subspaces of $\Real^r$ and subspaces of $\col\bG$ of the same
+dimension.  Courant--Fischer therefore gives
+\[
+\begin{aligned}
+\mu_k
+&=\max_{\substack{\calU\subseteq\col\bG\\\dim\calU=k}}
+\min_{\bzero\ne\bx\in\calU}R_{\bA}(\bx)\\
+&\leqslant\max_{\substack{\calU\subseteq\Real^n\\\dim\calU=k}}
+\min_{\bzero\ne\bx\in\calU}R_{\bA}(\bx)
+=\lambda_k,
+\end{aligned}
+\]
+and
+\[
+\begin{aligned}
+\mu_k
+&=\min_{\substack{\calV\subseteq\col\bG\\\dim\calV=r-k+1}}
+\max_{\bzero\ne\bx\in\calV}R_{\bA}(\bx)\\
+&\geqslant\min_{\substack{\calV\subseteq\Real^n\\\dim\calV=r-k+1}}
+\max_{\bzero\ne\bx\in\calV}R_{\bA}(\bx)
+=\lambda_{n-r+k}.
+\end{aligned}
+\]
+\end{proof}
+
+\begin{corollary}[Cauchy interlacing]\label{cor:cauchy-interlacing}
+Let $n\geqslant2$, and let $\bC$ be an $(n-1)\times(n-1)$ principal submatrix
+of a real symmetric $\bA\in\Real^{n\times n}$.  If
+\[
+\lambda_1\geqslant\cdots\geqslant\lambda_n,
+\qquad
+\mu_1\geqslant\cdots\geqslant\mu_{n-1}
+\]
+are the respective eigenvalues, then
+\[
+\lambda_k\geqslant\mu_k\geqslant\lambda_{k+1},
+\qquad 1\leqslant k\leqslant n-1.
+\]
+\origin{S Thm.~6.5; A\&M Ex.~12.48}
+\end{corollary}
+
+\begin{proof}
+If $i_1,\ldots,i_{n-1}$ are the retained indices, set
+$\bG=(\eu_{i_1},\ldots,\eu_{i_{n-1}})$.  Then
+\[
+\bG'\bG=\bI_{n-1},
+\qquad
+\bC=\bG'\bA\bG.
+\]
+Apply Theorem~\ref{thm:poincare-separation} with $r=n-1$.
+\end{proof}
+
+\subsection{Principal components and Ky Fan's principle}\label{sec:8.3.3}
+
+\begin{definition}[Sample principal components]\label{def:principal-components}
+Let $\bX\in\Real^{m\times p}$ contain $m\geqslant2$ observations by rows, and
+set
+\[
+\bZ=\left(\bI_m-\frac1m\boldsymbol{1}\boldsymbol{1}'\right)\bX,
+\qquad
+\bS=\frac{1}{m-1}\bZ'\bZ.
+\]
+For $\ba\in\Real^p$ with $\norm{\ba}=1$, $\bZ\ba$ is a
+\emph{principal-component score candidate}; its sample variance is
+\[
+\frac{1}{m-1}\norm{\bZ\ba}^2=\ba'\bS\ba.
+\]
+Successive \emph{principal-component loading vectors} maximise this variance
+subject to being unit and orthogonal to the preceding loading vectors.
+\origin{Adapted from A\&M Exs.~12.39 and 12.49}
+\end{definition}
+
+\newpage
+
+\begin{theorem}[Ky Fan trace principle]\label{thm:pca-ky-fan}
+Let $\bS=\bS'\in\Real^{p\times p}$ and
+\[
+\bS=\bQ\diag(\lambda_1,\ldots,\lambda_p)\bQ',
+\qquad
+\lambda_1\geqslant\cdots\geqslant\lambda_p.
+\]
+For $1\leqslant r\leqslant p$,
+\[
+\max_{\substack{\bG\in\Real^{p\times r}\\\bG'\bG=\bI_r}}
+\tr(\bG'\bS\bG)
+=\sum_{i=1}^r\lambda_i.
+\]
+If $r<p$ and $\lambda_r>\lambda_{r+1}$, equality in this maximisation
+holds exactly when
+\[
+\col\bG=\spn(\bq_1,\ldots,\bq_r).
+\]
+\origin{A\&M Ex.~12.49; S Thm.~6.2}
+\end{theorem}
+
+\begin{proof}
+Let $\bC=\bQ'\bG=(c_{ij})$ and
+\[
+w_i=\sum_{j=1}^r c_{ij}^2.
+\]
+Since $\bC'\bC=\bI_r$,
+\[
+0\leqslant w_i=\norm{\bG'\bq_i}^2,
+\qquad
+1-w_i=\norm{(\bI-\bG\bG')\bq_i}^2\geqslant0,
+\]
+and
+\[
+\sum_{i=1}^p w_i=r,
+\qquad
+\tr(\bG'\bS\bG)=\sum_{i=1}^p\lambda_iw_i.
+\]
+For $\alpha=\lambda_r$,
+\[
+\begin{aligned}
+\sum_{i=1}^p\lambda_iw_i
+&=\alpha r
++\sum_{i<r}(\lambda_i-\alpha)w_i
++\sum_{i>r}(\lambda_i-\alpha)w_i\\
+&\leqslant\alpha r+\sum_{i<r}(\lambda_i-\alpha)
+=\sum_{i=1}^r\lambda_i.
+\end{aligned}
+\]
+The bound is attained by $\bG=(\bq_1,\ldots,\bq_r)$.  If
+$\lambda_r>\lambda_{r+1}$, equality forces $w_i=0$ for $i>r$.  Then
+$\sum_{i=1}^rw_i=r$ and $w_i\leqslant1$ force $w_i=1$ for $i\leqslant r$, which is
+equivalent to the stated column space.
+\end{proof}
+
+\begin{corollary}[Principal-component solution]\label{cor:pca-solution}
+Let $\bZ$ and $\bS=\bZ'\bZ/(m-1)$ be as in
+Definition~\ref{def:principal-components}, and write
+\[
+\bS=\bQ\diag(\lambda_1,\ldots,\lambda_p)\bQ',
+\qquad
+\lambda_1\geqslant\cdots\geqslant\lambda_p.
+\]
+Then $\lambda_p\geqslant0$.  The successive principal-component loadings may be
+chosen as $\bq_1,\ldots,\bq_p$, with component variances
+$\lambda_1,\ldots,\lambda_p$.  For $1\leqslant r\leqslant p$,
+\[
+\min_{\bG'\bG=\bI_r}
+\norm{\bZ-\bZ\bG\bG'}_F^2
+=(m-1)\sum_{i=r+1}^p\lambda_i.
+\]
+The sum is $0$ when $r=p$.
+If $r<p$ and $\lambda_r>\lambda_{r+1}$, the minimising column space is
+uniquely
+$\spn(\bq_1,\ldots,\bq_r)$.
+\origin{Adapted from A\&M Exs.~12.39 and 12.49}
+\end{corollary}
+
+\begin{proof}
+For every $\ba$,
+\[
+\ba'\bS\ba=\frac{\norm{\bZ\ba}^2}{m-1}\geqslant0.
+\]
+Theorem~\ref{thm:rayleigh-bounds} gives $\lambda_p\geqslant0$.  For
+$1\leqslant k\leqslant p$, if
+$\ba\perp\spn(\bq_1,\ldots,\bq_{k-1})$ and $\norm{\ba}=1$, then
+\[
+\ba=\sum_{i=k}^p c_i\bq_i,
+\qquad
+\ba'\bS\ba=\sum_{i=k}^p\lambda_ic_i^2\leqslant\lambda_k,
+\qquad
+\sum_{i=k}^pc_i^2=1.
+\]
+The choice $\ba=\bq_k$ attains the bound, proving the successive loading
+assertions.
+
+For $\bP=\bG\bG'$, $\bP'=\bP^2=\bP$, so cyclicity of trace gives
+\[
+\begin{aligned}
+\norm{\bZ-\bZ\bP}_F^2
+&=\tr\{(\bI-\bP)\bZ'\bZ(\bI-\bP)\}\\
+&=\tr(\bZ'\bZ)-\tr(\bG'\bZ'\bZ\bG)\\
+&=(m-1)\{\tr\bS-\tr(\bG'\bS\bG)\}.
+\end{aligned}
+\]
+Theorem~\ref{thm:pca-ky-fan} and $\tr\bS=\sum_i\lambda_i$ give the minimum.
+Its equality case gives uniqueness under the gap.
+\end{proof}
+
+\begin{example}\label{ex:rank-one-pca}
+For
+\[
+\bZ=\begin{pmatrix}1&1\\-1&-1\\0&0\end{pmatrix},
+\qquad
+\bS=\frac12\bZ'\bZ
+=\begin{pmatrix}1&1\\1&1\end{pmatrix},
+\]
+the loadings
+\[
+\bq_1=2^{-1/2}(1,1)',
+\qquad
+\bq_2=2^{-1/2}(1,-1)'
+\]
+have variances $2$ and $0$.  Also
+\[
+\bZ\bq_1\bq_1'=\bZ,
+\qquad
+\norm{\bZ-\bZ\bq_1\bq_1'}_F^2=0.
+\]
+\origin{Adapted from A\&M Ex.~12.49}
+\end{example}
+
+%=============================================================================
+\section{Computation: Numerical Checks in R}\label{sec:8.4}
+%=============================================================================
+
+\subsection{Spectral factor and projectors (§\ref{sec:8.1})}\label{sec:8.4.1}
+
+<<spectral-factor>>=
+A <- matrix(c(4, 1, 0, 1,
+              1, 3, 1, 0,
+              0, 1, 2, 1,
+              1, 0, 1, 3), 4, 4, byrow = TRUE)
+ea <- eigen(A, symmetric = TRUE)
+Q <- ea$vectors
+Lam <- diag(ea$values)
+c(orthogonality = max(abs(crossprod(Q) - diag(4))),
+  reconstruction = max(abs(A - Q %*% Lam %*% t(Q))))
+@
+
+<<spectral-projector>>=
+M <- matrix(c(1, 1, 0, 0,
+              1, 0, 1, 0,
+              0, 1, 1, 1,
+              0, 0, 1, 1), 4, 4, byrow = TRUE)
+Q0 <- qr.Q(qr(M))
+Arep <- Q0 %*% diag(c(4, 4, 1, -2)) %*% t(Q0)
+P_basis <- Q0[, 1:2] %*% t(Q0[, 1:2])
+P_poly <- (Arep - diag(4)) %*% (Arep + 2 * diag(4)) / 18
+c(projector_routes = max(abs(P_basis - P_poly)),
+  idempotence = max(abs(P_poly %*% P_poly - P_poly)),
+  symmetry = max(abs(P_poly - t(P_poly))))
+@
+
+\subsection{Rayleigh bounds and the induced norm (§\ref{sec:8.2.1})}\label{sec:8.4.2}
+
+<<rayleigh-norm>>=
+set.seed(802)
+X <- matrix(rnorm(4000), 4, 1000)
+X <- sweep(X, 2, sqrt(colSums(X^2)), "/")
+rq <- colSums(X * (A %*% X))
+manual_norm <- max(abs(ea$values))
+package_norm <- norm(A, type = "2")
+c(sample_min_minus_lambda_min = min(rq) - min(ea$values),
+  lambda_max_minus_sample_max = max(ea$values) - max(rq),
+  norm_difference = manual_norm - package_norm)
+@
+
+\subsection{Weyl's perturbation bound (§\ref{sec:8.2.3})}\label{sec:8.4.3}
+
+<<weyl-bound>>=
+E <- matrix(c(0.10, -0.04, 0, 0,
+              -0.04, -0.08, 0.03, 0,
+              0, 0.03, 0.05, -0.02,
+              0, 0, -0.02, -0.01), 4, 4, byrow = TRUE)
+lam_A <- eigen(A, symmetric = TRUE, only.values = TRUE)$values
+lam_AE <- eigen(A + E, symmetric = TRUE, only.values = TRUE)$values
+bound <- max(abs(eigen(E, symmetric = TRUE, only.values = TRUE)$values))
+c(max_eigenvalue_movement = max(abs(lam_AE - lam_A)),
+  induced_norm_bound = bound,
+  bound_slack = bound - max(abs(lam_AE - lam_A)))
+@
+
+\subsection{Simultaneous diagonalisation (§\ref{sec:8.3.1})}\label{sec:8.4.4}
+
+<<simultaneous-diagonalisation>>=
+Q1 <- qr.Q(qr(matrix(c(1, 2, 0, 1,
+                       0, 1, 2, 1,
+                       1, 0, 1, 2,
+                       2, 1, 1, 0), 4, 4, byrow = TRUE)))
+As <- Q1 %*% diag(c(3, 3, 1, 1)) %*% t(Q1)
+Bs <- Q1 %*% diag(c(4, -1, 2, 5)) %*% t(Q1)
+va <- eigen(As, symmetric = TRUE)$vectors
+groups <- split(seq_len(4), round(diag(crossprod(va, As %*% va)), 8))
+Qsim <- matrix(0, 4, 4)
+for (idx in groups) {
+  Vg <- va[, idx, drop = FALSE]
+  Rg <- eigen(crossprod(Vg, Bs %*% Vg), symmetric = TRUE)$vectors
+  Qsim[, idx] <- Vg %*% Rg
+}
+offdiag_max <- function(M) max(abs(M - diag(diag(M))))
+c(commutator = max(abs(As %*% Bs - Bs %*% As)),
+  A_off_diagonal = offdiag_max(crossprod(Qsim, As %*% Qsim)),
+  B_off_diagonal = offdiag_max(crossprod(Qsim, Bs %*% Qsim)))
+@
+
+\subsection{Compression and interlacing (§\ref{sec:8.3.2})}\label{sec:8.4.5}
+
+<<interlacing>>=
+G <- qr.Q(qr(matrix(c(1, 0, 1,
+                      0, 1, 1,
+                      1, 1, 0,
+                      1, -1, 1), 4, 3, byrow = TRUE)))
+mu <- eigen(crossprod(G, A %*% G), symmetric = TRUE,
+            only.values = TRUE)$values
+lambda <- ea$values
+interlace <- cbind(upper = lambda[1:3], compression = mu,
+                   lower = lambda[2:4])
+interlace
+c(upper_slack_min = min(interlace[, "upper"] - interlace[, "compression"]),
+  lower_slack_min = min(interlace[, "compression"] - interlace[, "lower"]))
+@
+
+\subsection{Principal components from a sample covariance (§\ref{sec:8.3.3})}\label{sec:8.4.6}
+
+<<boston-pca>>=
+data("Boston", package = "ISLR2")
+Z <- scale(as.matrix(Boston), center = TRUE, scale = FALSE)
+S <- crossprod(Z) / (nrow(Z) - 1)
+es <- eigen(S, symmetric = TRUE)
+rotated_cov <- crossprod(Z %*% es$vectors) / (nrow(Z) - 1)
+ratio <- es$values / sum(es$values)
+reconstruction <-
+  norm(Z - Z %*% es$vectors[, 1, drop = FALSE] %*%
+         t(es$vectors[, 1, drop = FALSE]), type = "F")^2
+spectral_tail <- (nrow(Z) - 1) * sum(es$values[-1])
+c(rotated_off_diagonal = offdiag_max(rotated_cov),
+  variance_ratio_sum_minus_one = sum(ratio) - 1,
+  one_component_reconstruction = reconstruction,
+  spectral_tail_formula = spectral_tail,
+  reconstruction_minus_tail = reconstruction - spectral_tail)
+@
+
+%=============================================================================
+\section{Pitfalls}\label{sec:8.5}
+%=============================================================================
+
+\subsection{Comparing eigenvectors coordinatewise}\label{sec:8.5.1}
+
+\[
+\bq\quad\text{and}\quad-\bq
+\]
+represent the same one-dimensional eigenspace.  For simple eigenvalues,
+compare $|\bq'\widetilde{\bq}|$ or
+$\bq\bq'$ with $\widetilde{\bq}\widetilde{\bq}'$.  For a repeated
+eigenvalue, compare its full spectral projector.
+
+\subsection{Replacing the transpose by an unrelated inverse}\label{sec:8.5.2}
+
+\[
+\bA=\bS\bLam\bS^{-1}
+\quad\not\Longrightarrow\quad
+\bA=\bS\bLam\bS'.
+\]
+The second identity requires $\bS'\bS=\bI$.  A real matrix admits such a
+diagonalisation exactly when it is symmetric.
+
+\subsection{Treating sampled Rayleigh quotients as extrema}\label{sec:8.5.3}
+
+\[
+\max_{1\leqslant j\leqslant N}R_{\bA}(\bx_j)
+\leqslant\lambda_1(\bA),
+\qquad
+\min_{1\leqslant j\leqslant N}R_{\bA}(\bx_j)
+\geqslant\lambda_n(\bA).
+\]
+Finite random searches generally do not contain an extreme eigenvector.
+
+\subsection{Confusing covariance and correlation components}\label{sec:8.5.4}
+
+If every $s_{ii}>0$ and
+$\bD=\diag(s_{11}^{1/2},\ldots,s_{pp}^{1/2})$, then
+\[
+\bS
+\quad\text{and}\quad
+\bD^{-1}\bS\bD^{-1}
+\]
+usually have different eigenvectors.  The first retains measurement units;
+the second standardises every coordinate to diagonal entry $1$.
+
+\newpage
+
+%=============================================================================
+\section{Exercises}\label{sec:8.6}
+%=============================================================================
+
+\begin{exercise}\label{ex:projector-reflection}
+Let $\bP$ be a spectral projector of a real symmetric matrix.  Prove that
+\[
+\bH=\bI-2\bP
+\]
+is symmetric and orthogonal, acts as $-\bI$ on $\im\bP$, and acts as
+$\bI$ on $(\im\bP)^\perp$.
+\origin{H Ex.~10.3 and Ex.~21.18}
+\end{exercise}
+
+\begin{solution}
+Since $\bP'=\bP^2=\bP$,
+\[
+\bH'=\bH,
+\qquad
+\bH'\bH=(\bI-2\bP)^2=\bI-4\bP+4\bP^2=\bI.
+\]
+If $\bx=\bP\bu\in\im\bP$, then
+\[
+\bH\bx=\bx-2\bP^2\bu=-\bx.
+\]
+If $\bx\perp\im\bP$, the orthogonal-projector identity gives
+$\bP\bx=\bzero$, so $\bH\bx=\bx$.
+\end{solution}
+
+\begin{exercise}\label{ex:spectral-subset-filter}
+Let $\bA=\bA'$ have distinct eigenvalues
+$\theta_1,\ldots,\theta_s$, and let
+$\varnothing\ne J\subseteq\{1,\ldots,s\}$.  Construct a polynomial $p$ of degree at most
+$s-1$ such that
+\[
+p(\bA)
+\]
+is the orthogonal projector onto
+$\displaystyle\mathbin{\perp\!\oplus}_{j\in J}\calE_{\theta_j}(\bA)$.
+\origin{S \S5.5; H Ex.~21.18}
+\end{exercise}
+
+\begin{solution}
+With the Lagrange polynomials from
+Theorem~\ref{thm:spectral-projectors}, set
+\[
+p(t)=\sum_{j\in J}\ell_j(t).
+\]
+Then $\deg p\leqslant s-1$ and
+\[
+p(\theta_i)=\begin{cases}1,&i\in J,\\0,&i\notin J.\end{cases}
+\]
+Hence
+\[
+p(\bA)=\sum_{i=1}^sp(\theta_i)\bP_i
+=\sum_{i\in J}\bP_i,
+\]
+which is the stated orthogonal projector.
+\end{solution}
+
+\begin{exercise}\label{ex:symmetric-power-limit}
+Let $\bA=\bA'$.  Prove that $\bA^k$ converges entrywise as
+$k\to\infty$ if and only if every eigenvalue lies in $(-1,1]$.  When it
+converges, identify the limit.
+\origin{Adapted from H Ex.~21.19}
+\end{exercise}
+
+\begin{solution}
+Finite spectral calculus gives
+\[
+\bA^k=\sum_j\theta_j^k\bP_j.
+\]
+If every $\theta_j\in(-1,1]$, then
+\[
+\theta_j^k\longrightarrow
+\begin{cases}1,&\theta_j=1,\\0,&-1<\theta_j<1,\end{cases}
+\]
+so $\bA^k$ converges to the spectral projector for the eigenvalue $1$, or
+to $\bO$ if $1$ is absent.
+
+Conversely, if $\bA^k$ converges, then for a unit eigenvector $\bq_j$,
+\[
+\bq_j'\bA^k\bq_j=\theta_j^k
+\]
+converges.  A real geometric sequence converges exactly when its ratio lies
+in $(-1,1]$.
+\end{solution}
+
+\begin{exercise}\label{ex:polynomial-induced-norm}
+Let $\bA=\bA'$ and let $p$ be a real polynomial.  Prove
+\[
+\norm{p(\bA)}_2=\max_i|p(\lambda_i(\bA))|.
+\]
+Deduce that
+\[
+\norm{\bA^k}_2=\norm{\bA}_2^k,
+\qquad k\geqslant1.
+\]
+\origin{S Prop.~5.7 and \S6.2, comment following Prop.~6.2}
+\end{exercise}
+
+\begin{solution}[qedhere]
+The eigenvalues of the symmetric matrix $p(\bA)$ are
+$p(\lambda_i(\bA))$.  Theorem~\ref{thm:symmetric-induced-norm} gives the
+first identity.  With $p(t)=t^k$,
+\[
+\norm{\bA^k}_2
+=\max_i|\lambda_i|^k
+=\left(\max_i|\lambda_i|\right)^k
+=\norm{\bA}_2^k.
+\tag*{\textcolor{solFR}{$\blacksquare$}}
+\]
+\end{solution}
+
+\begin{exercise}\label{ex:eigen-residual-bound}
+Let $\bA=\bA'$, let $\norm{\bx}=1$, and set
+\[
+\mu=\bx'\bA\bx,
+\qquad
+\br=\bA\bx-\mu\bx.
+\]
+Prove
+\[
+\bx'\br=0,
+\qquad
+\min_i|\lambda_i(\bA)-\mu|\leqslant\norm{\br}.
+\]
+\origin{Adapted from S Thm.~6.2}
+\end{exercise}
+
+\begin{solution}
+\[
+\bx'\br=\bx'\bA\bx-\mu\bx'\bx=0.
+\]
+Write $\bx=\sum_ic_i\bq_i$.  Since $\sum_ic_i^2=1$,
+\[
+\norm{\br}^2
+=\sum_i c_i^2(\lambda_i-\mu)^2
+\geqslant\left(\min_i|\lambda_i-\mu|\right)^2\sum_ic_i^2.
+\]
+Both sides are nonnegative, so the bound follows.
+\end{solution}
+
+\begin{exercise}\label{ex:rank-one-eigenvalue-shift}
+Let $\bA=\bA'$ and $\bu\in\Real^n$.  Prove
+\[
+0\leqslant\lambda_k(\bA+\bu\bu')-\lambda_k(\bA)
+\leqslant\norm{\bu}^2,
+\qquad 1\leqslant k\leqslant n.
+\]
+\origin{Adapted from S Ex.~6.4 and Prop.~6.2; A\&M Ex.~12.40}
+\end{exercise}
+
+\begin{solution}
+For every unit $\bx$,
+\[
+0\leqslant\bx'\bu\bu'\bx=(\bu'\bx)^2
+\leqslant\norm{\bu}^2.
+\]
+Hence the smallest and largest eigenvalues of $\bu\bu'$ are $0$ and
+$\norm{\bu}^2$ when $n\geqslant2$; for $n=1$ both equal
+$\norm{\bu}^2$.  Weyl's bounds give, in either case,
+\[
+0\leqslant\lambda_k(\bA+\bu\bu')-\lambda_k(\bA)
+\leqslant\norm{\bu\bu'}_2=\norm{\bu}^2.
+\]
+\end{solution}
+
+\begin{exercise}\label{ex:simultaneous-family}
+Let $\bA_1,\ldots,\bA_m$ be real symmetric matrices that commute in pairs.
+Prove that one orthogonal matrix simultaneously diagonalises all of them.
+\origin{Adapted from H Thm.~21.13.1 and Ex.~21.29}
+\end{exercise}
+
+\begin{solution}
+Induct on $m$.  The assertion for $m=1$ is the spectral theorem.  Suppose it
+holds for $m-1$.  Each eigenspace $\calE$ of $\bA_m$ is invariant under
+every $\bA_i$, $i<m$, because
+\[
+\bA_m\bA_i\bx=\bA_i\bA_m\bx=\theta\bA_i\bx
+\qquad(\bx\in\calE).
+\]
+The restrictions of $\bA_1,\ldots,\bA_{m-1}$ to $\calE$ are symmetric and
+commute in pairs.  By induction they have a common orthonormal eigenbasis of
+$\calE$.  Combining these bases over the mutually orthogonal eigenspaces of
+$\bA_m$ gives the required basis of $\Real^n$.
+\end{solution}
+
+\begin{exercise}\label{ex:invariant-compression-spectrum}
+Let $\bA=\bA'$, $\bG'\bG=\bI_r$, and suppose $\col\bG$ is invariant under
+$\bA$.  Prove that every eigenvalue of $\bG'\bA\bG$ is an eigenvalue of
+$\bA$, with no larger multiplicity.
+\origin{S \S6.4; H eqs.~(21.13.3)--(21.13.4)}
+\end{exercise}
+
+\begin{solution}
+Complete $\bG$ to an orthogonal matrix $(\bG,\bH)$.  By
+Theorem~\ref{thm:invariant-complement},
+\[
+(\bG,\bH)'\bA(\bG,\bH)
+=\diag(\bG'\bA\bG,\bH'\bA\bH).
+\]
+Therefore
+\[
+\chi_{\bA}(t)
+=\chi_{\bG'\bA\bG}(t)\chi_{\bH'\bA\bH}(t).
+\]
+Every root of the first factor is a root of the product, and its exponent in
+the first factor cannot exceed its exponent in the product.
+\end{solution}
+
+\begin{exercise}\label{ex:graph-laplacian-spectrum}
+Let $w_{ij}=w_{ji}\geqslant0$ and $w_{ii}=0$ for $1\leqslant i,j\leqslant n$.  Define
+\[
+\bL=(\ell_{ij}),
+\qquad
+\ell_{ii}=\sum_{j=1}^n w_{ij},
+\qquad
+\ell_{ij}=-w_{ij}\quad(i\ne j).
+\]
+Prove
+\[
+\bx'\bL\bx=\sum_{1\leqslant i<j\leqslant n}w_{ij}(x_i-x_j)^2.
+\]
+Deduce that every eigenvalue of $\bL$ is nonnegative and that
+$\boldsymbol{1}$ is an eigenvector with eigenvalue $0$.
+\origin{Course formulation}
+\end{exercise}
+
+\begin{solution}
+Symmetry and $w_{ii}=0$ give
+\[
+\begin{aligned}
+\bx'\bL\bx
+&=\sum_i\left(\sum_jw_{ij}\right)x_i^2
+-2\sum_{i<j}w_{ij}x_ix_j\\
+&=\sum_{i<j}w_{ij}(x_i^2-2x_ix_j+x_j^2).
+\end{aligned}
+\]
+For a unit eigenvector $\bq$ with eigenvalue $\lambda$,
+\[
+\lambda=\bq'\bL\bq\geqslant0.
+\]
+Finally,
+\[
+(\bL\boldsymbol{1})_i
+=\sum_jw_{ij}-\sum_{j\ne i}w_{ij}=0.
+\]
+\end{solution}
+
+\begin{exercise}\label{ex:diagonal-majorization-one-side}
+Let $d_1\geqslant\cdots\geqslant d_n$ be the diagonal entries of a symmetric
+$\bA$, rearranged in decreasing order, and let
+$\lambda_1\geqslant\cdots\geqslant\lambda_n$ be its eigenvalues.  Prove
+\[
+\sum_{i=1}^k d_i\leqslant\sum_{i=1}^k\lambda_i
+\quad(1\leqslant k<n),
+\qquad
+\sum_{i=1}^n d_i=\sum_{i=1}^n\lambda_i.
+\]
+\origin{S Thm.~6.7; A\&M Ex.~12.49}
+\end{exercise}
+
+\begin{solution}
+Let $i_1,\ldots,i_k$ index the $k$ largest diagonal entries and set
+$\bG=(\eu_{i_1},\ldots,\eu_{i_k})$.  Then $\bG'\bG=\bI_k$, and Ky Fan's
+principle gives
+\[
+\sum_{j=1}^k d_j
+=\tr(\bG'\bA\bG)
+\leqslant\sum_{j=1}^k\lambda_j.
+\]
+For $k=n$ both sums equal $\tr\bA$.
+\end{solution}
+
+\begin{exercise}\label{ex:covariance-rotation}
+Let $\bZ\in\Real^{m\times p}$ have zero column means and let
+$\bQ\in\Real^{p\times p}$ be orthogonal.  Prove that the sample covariance
+of $\bZ\bQ$ is $\bQ'\bS\bQ$, where
+$\bS=\bZ'\bZ/(m-1)$.  Deduce that total sample variance and the ordered
+principal-component variances are unchanged by the coordinate rotation.
+\origin{Adapted from H Thm.~21.6.1 and A\&M Ex.~12.49}
+\end{exercise}
+
+\begin{solution}
+Since $\boldsymbol{1}'\bZ=\bzero'$, also
+$\boldsymbol{1}'\bZ\bQ=\bzero'$.  Its sample covariance is
+\[
+\frac1{m-1}(\bZ\bQ)'(\bZ\bQ)=\bQ'\bS\bQ.
+\]
+Similarity preserves the eigenvalues, so the ordered component variances
+are unchanged.  Also
+\[
+\tr(\bQ'\bS\bQ)=\tr(\bS\bQ\bQ')=\tr\bS.
+\]
+\end{solution}
+
+\begin{exercise}\label{ex:centered-data-rank}
+For the centred matrix
+\[
+\bZ=\left(\bI_m-\frac1m\boldsymbol{1}\boldsymbol{1}'\right)\bX,
+\]
+prove
+\[
+\rank\bZ\leqslant\min\{p,m-1\},
+\qquad
+\rank(\bZ'\bZ)=\rank\bZ.
+\]
+Deduce that at most $\min\{p,m-1\}$ sample principal-component variances
+are nonzero.
+\origin{A\&M Exs.~7.49--7.50; H \S21.5f}
+\end{exercise}
+
+\begin{solution}
+The identity $\boldsymbol{1}'\bZ=\bzero'$ makes every column of $\bZ$ lie
+in the $(m-1)$-dimensional space $\boldsymbol{1}^\perp$.  Hence
+\[
+\rank\bZ\leqslant m-1,
+\qquad
+\rank\bZ\leqslant p.
+\]
+Moreover,
+\[
+\bZ'\bZ\bx=\bzero
+\iff
+0=\bx'\bZ'\bZ\bx=\norm{\bZ\bx}^2
+\iff
+\bZ\bx=\bzero.
+\]
+Thus the two kernels have the same dimension, and rank--nullity gives
+$\rank(\bZ'\bZ)=\rank\bZ$.  The rank formula in
+Corollary~\ref{cor:symmetric-spectral-invariants} gives the last assertion.
+\end{solution}
+
+\begin{exercise}\label{ex:pca-uniqueness-gap}
+Let $\bS=\bS'$ have
+$\lambda_1\geqslant\cdots\geqslant\lambda_p$, and let
+$\bG'\bG=\bI_r$, $r<p$.  Assume $\lambda_r>\lambda_{r+1}$.  Prove that
+\[
+\tr(\bG'\bS\bG)=\sum_{i=1}^r\lambda_i
+\]
+if and only if
+$\col\bG=\spn(\bq_1,\ldots,\bq_r)$ for an ordered orthonormal eigenbasis.
+\origin{Adapted from A\&M Ex.~12.49}
+\end{exercise}
+
+\begin{solution}
+Use the notation $\bC=\bQ'\bG$ and
+$w_i=\sum_jc_{ij}^2$ from Theorem~\ref{thm:pca-ky-fan}.  Its proof gives
+\[
+0\leqslant w_i\leqslant1,
+\qquad
+\sum_iw_i=r,
+\qquad
+\sum_i\lambda_iw_i\leqslant\sum_{i=1}^r\lambda_i.
+\]
+Because $\lambda_r>\lambda_{r+1}$, equality forces
+\[
+w_i=1\ (i\leqslant r),
+\qquad
+w_i=0\ (i>r).
+\]
+These identities hold exactly when every column of $\bG$ lies in
+$\spn(\bq_1,\ldots,\bq_r)$; both spaces have dimension $r$, so they are
+equal.  The converse follows by substituting any orthonormal basis of that
+space.
+\end{solution}
+
+\begin{exercise}\label{ex:prescribed-symmetric-action}
+Let $1\leqslant r\leqslant n$, let $\bu_1,\ldots,\bu_r$ be orthonormal vectors in $\Real^n$, and let
+$\alpha_1,\ldots,\alpha_r,c\in\Real$.  Construct a symmetric matrix $\bA$
+such that
+\[
+\bA\bu_i=\alpha_i\bu_i\quad(1\leqslant i\leqslant r),
+\qquad
+\bA\bv=c\bv
+\quad\text{for every }\bv\perp\spn(\bu_1,\ldots,\bu_r).
+\]
+Prove uniqueness.
+\origin{Adapted from H eq.~(21.5.5)}
+\end{exercise}
+
+\begin{solution}
+Let $\bP_i=\bu_i\bu_i'$ and
+\[
+\bP_0=\bI-\sum_{i=1}^r\bP_i.
+\]
+Then
+\[
+\bA=\sum_{i=1}^r\alpha_i\bP_i+c\bP_0
+\]
+is symmetric and has the required action.  If $\widetilde{\bA}$ has the
+same action, then $\bA$ and $\widetilde{\bA}$ agree on the orthogonal basis
+formed by $\bu_1,\ldots,\bu_r$ and any orthonormal basis of their orthogonal
+complement.  Hence $\bA=\widetilde{\bA}$.
+\end{solution}
+
+\begin{exercise}\label{ex:rayleigh-sees-symmetric-part}
+For an arbitrary real square $\bA$, set
+\[
+\bH=\frac12(\bA+\bA'),
+\qquad
+\bK=\frac12(\bA-\bA').
+\]
+Prove
+\[
+\bx'\bA\bx=\bx'\bH\bx
+\quad\text{for every }\bx.
+\]
+Give two real $2\times2$ matrices with the same scalar expression
+$\bx'\bA\bx$ but different eigenvalues.
+\origin{Adapted from S \S5.6}
+\end{exercise}
+
+\begin{solution}
+Since $\bK'=-\bK$, the scalar $s=\bx'\bK\bx$ satisfies
+\[
+s=s'=\bx'\bK'\bx=-\bx'\bK\bx=-s,
+\]
+so $s=0$ and $\bx'\bA\bx=\bx'\bH\bx$.
+
+Take
+\[
+\bA_1=\bO_2,
+\qquad
+\bA_2=\begin{pmatrix}0&-1\\1&0\end{pmatrix}.
+\]
+Both scalar expressions vanish for every real $\bx$, whereas
+\[
+\chi_{\bA_1}(t)=t^2,
+\qquad
+\chi_{\bA_2}(t)=t^2+1.
+\]
+Thus their complex eigenvalues are $0,0$ and $\mathrm{i},-\mathrm{i}$.
+\end{solution}
+
+\end{document}

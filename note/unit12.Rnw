@@ -1,0 +1,1634 @@
+% Compile:  python build.py 12
+% or by hand:
+%   Rscript -e "knitr::knit('unit12.Rnw')"
+%   xelatex -shell-escape unit12.tex        # run twice to settle the toc
+\documentclass[17pt]{extarticle}
+
+\input{la_preamble.tex}
+\usepackage{needspace}
+
+% Unit 12 specific
+\fancyhead[L]{\small\color{hdrBG}\textbf{Unit\ 12\ \ Kronecker and vec}}
+
+\setcounter{theorem}{0}\setcounter{example}{0}
+\renewcommand\thedefinition{12.\arabic{theorem}}
+\renewcommand\thetheorem{12.\arabic{theorem}}
+\renewcommand\thelemma{12.\arabic{theorem}}
+\renewcommand\theproposition{12.\arabic{theorem}}
+\renewcommand\thecorollary{12.\arabic{theorem}}
+\renewcommand\theexample{12.\arabic{example}}
+\renewcommand\theexercise{12.\arabic{exercise}}
+\renewcommand\thefigure{12.\arabic{figure}}
+
+\title{\color{hdrBG}\bfseries\Huge Kronecker Product, vec, and Patterned Matrices}
+\author{}\date{}
+
+\begin{document}
+
+<<setup, include=FALSE>>=
+source("la_knitr_setup.R")
+knitr::opts_chunk$set(fig.path = "figs/unit12-")
+@
+
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+{\color{hdrBG}\bfseries\fontsize{26}{32}\selectfont
+ Unit 12.\ Kronecker Product, vec, and Patterned Matrices}
+\end{center}
+\vspace*{\fill}
+\end{titlepage}
+
+\setcounter{page}{1}
+
+%=============================================================================
+\section{The Kronecker Product}\label{sec:12.1}
+%=============================================================================
+
+\subsection{Definition and algebra}\label{sec:12.1.1}
+
+\Needspace{.38\textheight}
+\begin{definition}[Kronecker product]\label{def:12-kron}
+Let $\mathbb F\in\{\mathbb R,\mathbb C\}$.  For
+$\bA=(a_{ij})\in\mathbb F^{m\times n}$ and
+$\bB=(b_{rs})\in\mathbb F^{p\times q}$, the \emph{Kronecker product} is
+\[
+ \bA\otimes\bB
+ :=\begin{pmatrix}
+ a_{11}\bB&\cdots&a_{1n}\bB\\
+ \vdots&&\vdots\\
+ a_{m1}\bB&\cdots&a_{mn}\bB
+ \end{pmatrix}\in\mathbb F^{mp\times nq}.
+\]
+Equivalently,
+\[
+ (\bA\otimes\bB)_{p(i-1)+r,\,q(j-1)+s}=a_{ij}b_{rs}.
+\]
+\origin{A\&M §10.1; H §16.1; S §4.3.1; MC §2.3}
+\end{definition}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Kronecker algebra]\label{thm:12-kron-algebra}
+Let $\mathbb F\in\{\mathbb R,\mathbb C\}$.  For
+$\alpha,\beta\in\mathbb F$ and conformable matrices over $\mathbb F$,
+\begin{align}
+ (\alpha\bA+\beta\bC)\otimes\bB
+   &=\alpha(\bA\otimes\bB)+\beta(\bC\otimes\bB),\label{eq:12-left-linear}\\
+ \bA\otimes(\alpha\bB+\beta\bD)
+   &=\alpha(\bA\otimes\bB)+\beta(\bA\otimes\bD),\label{eq:12-right-linear}\\
+ (\bA\otimes\bB)\otimes\bC
+   &=\bA\otimes(\bB\otimes\bC),\label{eq:12-assoc}\\
+ (\bA\otimes\bB)(\bC\otimes\bD)
+   &=(\bA\bC)\otimes(\bB\bD),\label{eq:12-mixed}\\
+ (\bA\otimes\bB)'&=\bA'\otimes\bB'.\label{eq:12-kron-transpose}
+\end{align}
+If $\mathbb F=\mathbb C$, then
+\begin{equation}
+ (\bA\otimes\bB)^*=\bA^*\otimes\bB^*.
+ \label{eq:12-kron-adjoint}
+\end{equation}
+\origin{Course formulation from A\&M Exs.~10.3--10.4, 10.7; H Lemmas~16.1.1--16.1.2 and Eq.~(16.1.15); S \S4.3.1; MC Props.~3--4}
+\end{theorem}
+
+\begin{proof}
+Equations~\eqref{eq:12-left-linear}, \eqref{eq:12-right-linear}, and
+\eqref{eq:12-kron-transpose} hold blockwise.  For
+$\bA\in\mathbb F^{m\times n}$, $\bB\in\mathbb F^{p\times q}$, and
+$\bC\in\mathbb F^{u\times v}$, both sides of~\eqref{eq:12-assoc} have
+$u\times v$ block
+\[
+ a_{ij}b_{rs}\bC
+ \quad\text{in block position}\quad
+ (p(i-1)+r,\,q(j-1)+s).
+\]
+If $\bC\in\mathbb F^{n\times u}$ and $\bD\in\mathbb F^{q\times v}$, the
+$(i,k)$ block of the left side of~\eqref{eq:12-mixed} is
+\[
+ \sum_{j=1}^{n}(a_{ij}\bB)(c_{jk}\bD)
+ =\left(\sum_{j=1}^{n}a_{ij}c_{jk}\right)\bB\bD
+ =(\bA\bC)_{ik}\bB\bD.
+\]
+For $\mathbb F=\mathbb C$, entrywise conjugation gives
+\[
+ \overline{\bA\otimes\bB}=\overline{\bA}\otimes\overline{\bB}.
+\]
+Consequently,
+\[
+ (\bA\otimes\bB)^*
+ =\overline{\bA\otimes\bB}'
+ =(\overline{\bA}\otimes\overline{\bB})'
+ =\bA^*\otimes\bB^*.
+\]
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{corollary}[Inverses, powers, and orthogonality]\label{cor:12-kron-inverse}
+If $\bA\in\Real^{m\times m}$ and $\bB\in\Real^{n\times n}$ are
+nonsingular, then
+\[
+ (\bA\otimes\bB)^{-1}=\bA^{-1}\otimes\bB^{-1}.
+\]
+For $k\geqslant0$,
+\[
+ (\bA\otimes\bB)^k=\bA^k\otimes\bB^k.
+\]
+If $\bA$ and $\bB$ are orthogonal, then $\bA\otimes\bB$ is orthogonal.
+\origin{A\&M Exs.~10.7--10.8; H Eqs.~(16.1.22)--(16.1.23) and Ex.~16.4; MC Prop.~4}
+\end{corollary}
+
+\begin{proof}
+The mixed-product rule gives
+\begin{align*}
+ (\bA\otimes\bB)(\bA^{-1}\otimes\bB^{-1})
+   &=\bI_m\otimes\bI_n=\bI_{mn},\\
+ (\bA\otimes\bB)'(\bA\otimes\bB)
+   &=(\bA'\bA)\otimes(\bB'\bB)=\bI_{mn}.
+\end{align*}
+The power identity follows by induction; $k=0$ uses
+$\bI_m\otimes\bI_n=\bI_{mn}$.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{example}[Two block orderings]\label{ex:12-kron-order}
+For $\bA=\begin{pmatrix}1&2\\3&4\end{pmatrix}$ and
+$\bB=\begin{pmatrix}0&1\\1&0\end{pmatrix}$,
+\[
+ \bA\otimes\bB=
+ \begin{pmatrix}
+ 0&1&0&2\\1&0&2&0\\0&3&0&4\\3&0&4&0
+ \end{pmatrix},\qquad
+ \bB\otimes\bA=
+ \begin{pmatrix}
+ 0&0&1&2\\0&0&3&4\\1&2&0&0\\3&4&0&0
+ \end{pmatrix}.
+\]
+Thus $\bA\otimes\bB\neq\bB\otimes\bA$.
+\origin{A\&M Exs.~10.1--10.2; H §16.1}
+\end{example}
+
+\subsection{Singular values, spectrum, and order}\label{sec:12.1.2}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Singular values and rank]\label{thm:12-kron-svd}
+Let the nonzero singular values of $\bA$ and $\bB$ be
+$\alpha_1,\ldots,\alpha_r$ and $\beta_1,\ldots,\beta_s$.  The nonzero
+singular values of $\bA\otimes\bB$ are
+\[
+ \{\alpha_i\beta_j:1\leqslant i\leqslant r,
+                       1\leqslant j\leqslant s\}.
+\]
+Consequently,
+\begin{align}
+ \rank(\bA\otimes\bB)&=\rank(\bA)\rank(\bB),\label{eq:12-kron-rank}\\
+ \norm{\bA\otimes\bB}_{F}&=\norm{\bA}_{F}\norm{\bB}_{F},\label{eq:12-kron-frob}\\
+ \norm{\bA\otimes\bB}_{2}&=\norm{\bA}_{2}\norm{\bB}_{2}.\label{eq:12-kron-two}
+\end{align}
+\origin{Course formulation from A\&M Ex.~10.12(c); H Eq.~(16.1.26) and Ex.~16.9}
+\end{theorem}
+
+\begin{proof}
+Take singular value decompositions
+\[
+ \bA=\bU\bSig\bV',\qquad \bB=\bP\bGam\bQ'.
+\]
+Then
+\[
+ \bA\otimes\bB
+ =(\bU\otimes\bP)(\bSig\otimes\bGam)(\bV\otimes\bQ)'.
+\]
+The outer factors are orthogonal.  The nonzero diagonal entries of
+$\bSig\otimes\bGam$ are $\alpha_i\beta_j$; row and column permutations put
+them in decreasing order.  Hence~\eqref{eq:12-kron-rank}.  Moreover,
+\begin{align*}
+ \norm{\bA\otimes\bB}_{F}^{2}
+ &=\sum_{i,j}\alpha_i^2\beta_j^2
+   =\left(\sum_i\alpha_i^2\right)
+    \left(\sum_j\beta_j^2\right),\\
+ \norm{\bA\otimes\bB}_{2}
+ &=\max_{i,j}\alpha_i\beta_j
+   =(\max_i\alpha_i)(\max_j\beta_j).
+\end{align*}
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Spectrum, trace, and determinant]\label{thm:12-kron-spectrum}
+Let $\bA\in\Real^{m\times m}$ have eigenvalues
+$\lambda_1,\ldots,\lambda_m$ and let $\bB\in\Real^{n\times n}$ have
+eigenvalues $\mu_1,\ldots,\mu_n$, counted with algebraic multiplicity over
+$\mathbb C$.  Then $\bA\otimes\bB$ has eigenvalues
+\[
+ \lambda_i\mu_j,\qquad 1\leqslant i\leqslant m,\quad
+ 1\leqslant j\leqslant n.
+\]
+Also,
+\begin{align}
+ \tr(\bA\otimes\bB)&=(\tr\bA)(\tr\bB),\label{eq:12-kron-trace}\\
+ \det(\bA\otimes\bB)&=(\det\bA)^n(\det\bB)^m.\label{eq:12-kron-det}
+\end{align}
+\origin{A\&M Exs.~10.7, 10.10, 10.12(b); H Eqs.~(16.1.25) and (16.3.18); S Ex.~4.2}
+\end{theorem}
+
+\begin{proof}
+Regard $\bA$ and $\bB$ as complex matrices.  Complex Schur factorisations
+give unitary $\bQ,\bR$ and upper triangular
+$\bT,\bS$ such that
+\[
+ \bQ^*\bA\bQ=\bT,\qquad \bR^*\bB\bR=\bS.
+\]
+Thus
+\begin{align*}
+ (\bQ\otimes\bR)^*(\bA\otimes\bB)(\bQ\otimes\bR)
+ &=(\bQ^*\otimes\bR^*)(\bA\otimes\bB)(\bQ\otimes\bR)\\
+ &=(\bQ^*\bA\bQ)\otimes(\bR^*\bB\bR)
+  =\bT\otimes\bS.
+\end{align*}
+The right side is upper triangular with diagonal entries
+$\lambda_i\mu_j$.  Equation~\eqref{eq:12-kron-det} is their product.
+Directly from the diagonal blocks,
+\[
+ \tr(\bA\otimes\bB)
+ =\sum_{i=1}^{m}\tr(a_{ii}\bB)
+ =(\tr\bA)(\tr\bB).
+\]
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Definiteness of a Kronecker product]\label{thm:12-kron-definite}
+Let $\bA$ and $\bB$ be real symmetric matrices.
+\begin{enumerate}[(i)]
+\item If $\bA\psdge\bO$ and $\bB\psdge\bO$, then
+$\bA\otimes\bB\psdge\bO$.
+\item If $\bA\psdgt\bO$ and $\bB\psdgt\bO$, then
+$\bA\otimes\bB\psdgt\bO$.
+\item The same conclusions hold when both factors are respectively negative
+semidefinite or negative definite.
+\item Opposite definite signs give a negative definite product.
+\end{enumerate}
+\origin{A\&M Ex.~10.12(a); H Ex.~16.7}
+\end{theorem}
+
+\begin{proof}
+Choose orthonormal eigenbases $\bA\bq_i=\lambda_i\bq_i$ and
+$\bB\bu_j=\mu_j\bu_j$.  Then
+\[
+ (\bA\otimes\bB)(\bq_i\otimes\bu_j)
+ =\lambda_i\mu_j(\bq_i\otimes\bu_j).
+\]
+The $mn$ vectors $\bq_i\otimes\bu_j$ are orthonormal because
+\[
+ (\bq_i\otimes\bu_j)'(\bq_k\otimes\bu_l)
+ =(\bq_i'\bq_k)(\bu_j'\bu_l).
+\]
+The asserted signs are the signs of $\lambda_i\mu_j$.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{corollary}[Kronecker monotonicity]\label{cor:12-kron-monotone}
+If
+\[
+ \bA\psdge\bB\psdge\bO,\qquad
+ \bC\psdge\bD\psdge\bO,
+\]
+then
+\[
+ \bA\otimes\bC\psdge\bB\otimes\bD.
+\]
+\origin{H Ex.~16.8}
+\end{corollary}
+
+\begin{proof}
+\[
+ \bA\otimes\bC-\bB\otimes\bD
+ =(\bA-\bB)\otimes\bC+\bB\otimes(\bC-\bD)\psdge\bO.
+\]
+\end{proof}
+
+\subsection{Kronecker sums}\label{sec:12.1.3}
+
+\Needspace{.38\textheight}
+\begin{definition}[Kronecker sum]\label{def:12-kron-sum}
+For $\bA\in\Real^{m\times m}$ and $\bB\in\Real^{n\times n}$, define
+\[
+ \bA\boxplus\bB:=\bA\otimes\bI_n+\bI_m\otimes\bB
+ \in\Real^{mn\times mn}.
+\]
+The symbol $\boxplus$ is reserved here for this matrix operation; it is not a
+direct sum of vector spaces.
+\origin{Course formulation from S Ex.~4.3}
+\end{definition}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Spectrum of a Kronecker sum]\label{thm:12-kron-sum-spectrum}
+If $\lambda_1,\ldots,\lambda_m$ and $\mu_1,\ldots,\mu_n$ are the
+eigenvalues of $\bA$ and $\bB$, then the eigenvalues of
+$\bA\boxplus\bB$ are
+\[
+ \lambda_i+\mu_j,\qquad 1\leqslant i\leqslant m,\quad
+ 1\leqslant j\leqslant n.
+\]
+If $\bA$ and $\bB$ are real symmetric with orthonormal eigenvectors
+$\bq_i$ and $\bu_j$, then $\bq_i\otimes\bu_j$ is an orthonormal eigenbasis
+of $\bA\boxplus\bB$.
+\origin{Course formulation from S Ex.~4.3}
+\end{theorem}
+
+\begin{proof}
+With the Schur notation from Theorem~\ref{thm:12-kron-spectrum},
+\[
+ (\bQ\otimes\bR)^*(\bA\boxplus\bB)(\bQ\otimes\bR)
+ =\bT\otimes\bI_n+\bI_m\otimes\bS.
+\]
+The right side is upper triangular with diagonal
+$\lambda_i+\mu_j$.  In the symmetric case,
+\begin{align*}
+ (\bA\boxplus\bB)(\bq_i\otimes\bu_j)
+ &=\bA\bq_i\otimes\bu_j+\bq_i\otimes\bB\bu_j\\
+ &=(\lambda_i+\mu_j)(\bq_i\otimes\bu_j).
+\end{align*}
+Orthonormality was verified in Theorem~\ref{thm:12-kron-definite}.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{corollary}[Definiteness of a Kronecker sum]\label{cor:12-kron-sum-pd}
+If $\bA\psdge\bO$ and $\bB\psdge\bO$, then
+$\bA\boxplus\bB\psdge\bO$.  If, in addition, at least one factor is
+positive definite, then $\bA\boxplus\bB\psdgt\bO$.
+\origin{Course formulation from S Ex.~4.3}
+\end{corollary}
+
+\begin{proof}
+Every eigenvalue $\lambda_i+\mu_j$ is nonnegative.  If all $\lambda_i$ or
+all $\mu_j$ are positive, then every sum is positive.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{example}[A rectangular-grid penalty]\label{ex:12-grid-penalty}
+For $k\geqslant2$, let $\bE_k\in\Real^{(k-1)\times k}$ have row $i$
+equal to $\eu_i'-\eu_{i+1}'$, and put $\bL_k=\bE_k'\bE_k$.  Then
+\[
+ \bx'\bL_k\bx=\sum_{i=1}^{k-1}(x_i-x_{i+1})^2,\qquad
+ \nul(\bL_k)=\spn\{\bone_k\}.
+\]
+Hence $\bL_m\boxplus\bL_n\psdge\bO$ and
+\[
+ \nul(\bL_m\boxplus\bL_n)
+ =\spn\{\bone_m\otimes\bone_n\}.
+\]
+Indeed, a zero eigenvalue of the sum requires a zero eigenvalue from each
+factor.
+\origin{Course formulation from S Ex.~4.3}
+\end{example}
+
+% \periodmark{End of period 1 of 3.}
+\Needspace{.30\textheight}
+
+%=============================================================================
+\section{The vec Operator and Matrix Equations}\label{sec:12.2}
+%=============================================================================
+
+\subsection{Column stacking and Roth's identity}\label{sec:12.2.1}
+
+\Needspace{.38\textheight}
+\begin{definition}[The vec operator]\label{def:12-vec}
+For $\bX=(\bx_1,\ldots,\bx_n)\in\Real^{m\times n}$, define
+\[
+ \avec\bX:=
+ \begin{pmatrix}\bx_1\\\vdots\\\bx_n\end{pmatrix}
+ \in\Real^{mn}.
+\]
+Thus $x_{ij}$ occupies position $(j-1)m+i$.  Column stacking is a linear
+bijection from $\Real^{m\times n}$ to $\Real^{mn}$.
+\origin{A\&M §10.2; H §16.2, Eq.~(16.2.1); MC §2.4}
+\end{definition}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Coordinate and inner-product identities]\label{thm:12-vec-basic}
+For matrices of the indicated orders,
+\begin{align}
+ \avec(\alpha\bX+\beta\bY)
+   &=\alpha\avec\bX+\beta\avec\bY,\label{eq:12-vec-linear}\\
+ \avec(\ba\bbb')&=\bbb\otimes\ba,\label{eq:12-vec-outer}\\
+ (\avec\bX)'\avec\bY&=\tr(\bX'\bY),\label{eq:12-vec-inner}\\
+ \norm{\avec\bX}_2&=\norm{\bX}_F.\label{eq:12-vec-isometry}
+\end{align}
+\origin{A\&M Exs.~10.16, 10.18(a), 10.20(a); H Eqs.~(16.2.3)--(16.2.6), (16.2.14); MC Ex.~3 and Prop.~5}
+\end{theorem}
+
+\begin{proof}
+Equation~\eqref{eq:12-vec-linear} holds columnwise.  The $j$th column of
+$\ba\bbb'$ is $b_j\ba$, so
+\[
+ \avec(\ba\bbb')=
+ \begin{pmatrix}b_1\ba\\ \vdots\\ b_n\ba\end{pmatrix}
+ =\bbb\otimes\ba.
+\]
+Finally,
+\[
+ (\avec\bX)'\avec\bY
+ =\sum_{i=1}^{m}\sum_{j=1}^{n}x_{ij}y_{ij}
+ =\tr(\bX'\bY).
+\]
+Set $\bY=\bX$ and take the nonnegative square root to obtain
+\eqref{eq:12-vec-isometry}.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Roth's identity]\label{thm:12-roth}
+If $\bA\in\Real^{r\times m}$, $\bX\in\Real^{m\times n}$, and
+$\bB\in\Real^{n\times s}$, then
+\begin{equation}
+ \avec(\bA\bX\bB)=(\bB'\otimes\bA)\avec\bX.
+ \label{eq:12-roth}
+\end{equation}
+In particular,
+\[
+ \avec(\bA\bX)=(\bI_n\otimes\bA)\avec\bX,\qquad
+ \avec(\bX\bB)=(\bB'\otimes\bI_m)\avec\bX.
+\]
+\origin{A\&M Ex.~10.18(b); H Thm.~16.2.1; MC Prop.~6}
+\end{theorem}
+
+\begin{proof}
+Write $\bX=\sum_{j=1}^{n}\bx_j\eu_j'$.  By
+\eqref{eq:12-vec-outer} and the mixed-product rule,
+\begin{align*}
+ \avec(\bA\bX\bB)
+ &=\sum_{j=1}^{n}\avec\{(\bA\bx_j)(\bB'\eu_j)'\}\\
+ &=\sum_{j=1}^{n}(\bB'\eu_j)\otimes(\bA\bx_j)\\
+ &=(\bB'\otimes\bA)\sum_{j=1}^{n}(\eu_j\otimes\bx_j)
+  =(\bB'\otimes\bA)\avec\bX.
+\end{align*}
+The two special cases set $\bB=\bI_n$ or $\bA=\bI_m$.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{corollary}[Trace of a four-factor product]\label{cor:12-trace-four}
+For $\bA\in\Real^{r\times m}$, $\bX\in\Real^{m\times n}$,
+$\bB\in\Real^{n\times s}$, and $\bY\in\Real^{r\times s}$,
+\[
+ \tr(\bY'\bA\bX\bB)
+ =(\avec\bY)'(\bB'\otimes\bA)\avec\bX.
+\]
+\origin{A\&M Ex.~10.20(b); H Thm.~16.2.2}
+\end{corollary}
+
+\begin{proof}
+\[
+ \tr(\bY'\bA\bX\bB)
+ =(\avec\bY)'\avec(\bA\bX\bB)
+ =(\avec\bY)'(\bB'\otimes\bA)\avec\bX.
+\]
+\end{proof}
+
+\subsection{Linear matrix operators and Sylvester equations}\label{sec:12.2.2}
+
+\Needspace{.38\textheight}
+\begin{definition}[A linear matrix operator]\label{def:12-matrix-operator}
+Fix $\bA_l\in\Real^{r\times m}$ and
+$\bB_l\in\Real^{n\times s}$ for $1\leqslant l\leqslant k$.  Define
+\[
+ \calL(\bX):=\sum_{l=1}^{k}\bA_l\bX\bB_l,\qquad
+ \bM_{\calL}:=\sum_{l=1}^{k}(\bB_l'\otimes\bA_l)
+ \in\Real^{rs\times mn}.
+\]
+For real matrices of the same order, define the \emph{Frobenius inner
+product} by
+\[
+ \langle\bX,\bY\rangle_F:=\tr(\bX'\bY).
+\]
+A linear map $\calG:\Real^{r\times s}\to\Real^{m\times n}$ is a
+\emph{Frobenius adjoint} of $\calL$ if
+\[
+ \langle\calL(\bX),\bY\rangle_F
+ =\langle\bX,\calG(\bY)\rangle_F
+ \quad
+ (\bX\in\Real^{m\times n},\ \bY\in\Real^{r\times s}).
+\]
+When exactly one such map exists, denote it by $\calL^*$.
+\origin{Course formulation from A\&M Ex.~10.20(a); H Eqs.~(16.2.14), (16.5.7)--(16.5.8)}
+\end{definition}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Coordinate reduction of a matrix equation]\label{thm:12-operator-reduction}
+For $\bX\in\Real^{m\times n}$ and $\bC\in\Real^{r\times s}$,
+\begin{align}
+ \avec\calL(\bX)&=\bM_{\calL}\avec\bX,\label{eq:12-op-vec}\\
+ \calL(\bX)=\bC
+ &\ifff \bM_{\calL}\avec\bX=\avec\bC.\label{eq:12-op-system}
+\end{align}
+The equation is consistent exactly when
+$\avec\bC\in\col(\bM_{\calL})$.  Its unique minimum-Frobenius-norm
+least-squares solution satisfies
+\begin{equation}
+ \avec\widehat{\bX}=\bM_{\calL}^{+}\avec\bC.
+ \label{eq:12-op-mp}
+\end{equation}
+If $rs=mn$, every $\bC$ has a unique solution exactly when
+$\bM_{\calL}$ is nonsingular.
+\origin{A\&M Exs.~10.45--10.49; H §16.5, Eqs.~(16.5.7)--(16.5.9)}
+\end{theorem}
+
+\begin{proof}
+Roth's identity gives
+\[
+ \avec\calL(\bX)
+ =\sum_{l=1}^{k}(\bB_l'\otimes\bA_l)\avec\bX
+ =\bM_{\calL}\avec\bX.
+\]
+The consistency and uniqueness claims are the corresponding facts for a
+linear system.  The Moore--Penrose formula minimizes
+$\norm{\bM_{\calL}\bx-\avec\bC}_2$ and then $\norm{\bx}_2$; the vec
+isometry converts these norms to Frobenius norms.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Sylvester equation]\label{thm:12-sylvester}
+Let $\bA\in\Real^{m\times m}$ and $\bB\in\Real^{n\times n}$.  The
+equation
+\begin{equation}
+ \bA\bX+\bX\bB=\bC
+ \label{eq:12-sylvester}
+\end{equation}
+has coefficient matrix
+\begin{equation}
+ \bS_{\bA,\bB}:=\bI_n\otimes\bA+\bB'\otimes\bI_m.
+ \label{eq:12-sylvester-coef}
+\end{equation}
+Its eigenvalues are
+\[
+ \lambda_i(\bA)+\lambda_j(\bB),\qquad
+ 1\leqslant i\leqslant m,\quad 1\leqslant j\leqslant n.
+\]
+Thus~\eqref{eq:12-sylvester} has a unique solution for every $\bC$ if and
+only if
+\begin{equation}
+ \lambda_i(\bA)+\lambda_j(\bB)\neq0
+ \quad\text{for every }i,j.
+ \label{eq:12-sylvester-unique}
+\end{equation}
+\origin{Course formulation from H Eq.~(16.5.8); S Ex.~3.23}
+\end{theorem}
+
+\begin{proof}
+Roth's identity gives
+\[
+ \avec(\bA\bX+\bX\bB)
+ =(\bI_n\otimes\bA+\bB'\otimes\bI_m)\avec\bX.
+\]
+The coefficient is $\bB'\boxplus\bA$; transposition preserves the
+eigenvalues of $\bB$.  Theorem~\ref{thm:12-kron-sum-spectrum} gives its
+spectrum.  A square linear system has a unique solution for every right side
+if and only if zero is not an eigenvalue of its coefficient matrix.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{corollary}[Symmetric Sylvester equation]\label{cor:12-symmetric-sylvester}
+Suppose
+\[
+ \bA=\bQ\diag(\lambda_1,\ldots,\lambda_m)\bQ',\qquad
+ \bB=\bR\diag(\mu_1,\ldots,\mu_n)\bR'
+\]
+are symmetric and satisfy~\eqref{eq:12-sylvester-unique}.  Put
+$\bY=\bQ'\bC\bR$ and
+\[
+ z_{ij}:=\frac{y_{ij}}{\lambda_i+\mu_j}.
+\]
+Then the unique solution is $\bX=\bQ\bZ\bR'$.
+\origin{Course formulation from S Ex.~3.23}
+\end{corollary}
+
+\begin{proof}
+Premultiplication by $\bQ'$ and postmultiplication by $\bR$ transform
+\eqref{eq:12-sylvester} into
+\[
+ \diag(\lambda_i)\bZ+\bZ\diag(\mu_j)=\bY,\qquad
+ (\lambda_i+\mu_j)z_{ij}=y_{ij}.
+\]
+\end{proof}
+
+\subsection{Deterministic weighted matrix least squares}\label{sec:12.2.3}
+
+\Needspace{.38\textheight}
+\begin{definition}[Separable weighted residual norm]\label{def:12-weighted-matrix-ls}
+Let $\bA\in\Real^{n\times p}$ have full column rank,
+$\bY\in\Real^{n\times q}$, $\bW\psdgt\bO$ of order $n$, and
+$\bR\psdgt\bO$ of order $q$.  For $\bB\in\Real^{p\times q}$ define
+\begin{align}
+ \Phi(\bB)
+ &:=\tr\{\bR(\bY-\bA\bB)'\bW(\bY-\bA\bB)\}\label{eq:12-wls-objective}\\
+ &=\norm{\bW^{1/2}(\bY-\bA\bB)\bR^{1/2}}_F^2.\nonumber
+\end{align}
+\origin{Course formulation from CLM Def.~2.1}
+\end{definition}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Two-sided weighting]\label{thm:12-weighted-matrix-ls}
+The unique minimizer of~\eqref{eq:12-wls-objective} is
+\begin{equation}
+ \widehat{\bB}=(\bA'\bW\bA)^{-1}\bA'\bW\bY.
+ \label{eq:12-weighted-matrix-solution}
+\end{equation}
+It does not depend on the positive definite column weight $\bR$.
+\origin{Course formulation from H Thm.~16.2.1; CLM Thm.~2.2}
+\end{theorem}
+
+\begin{proof}
+Set
+\[
+ \widetilde{\bA}=\bW^{1/2}\bA,\qquad
+ \bZ=\bW^{1/2}\bY\bR^{1/2},\qquad
+ \bG=\bB\bR^{1/2}.
+\]
+Since $\bR^{1/2}$ is nonsingular, $\bB\mapsto\bG$ is a bijection, and
+\[
+ \Phi(\bB)=\norm{\bZ-\widetilde{\bA}\bG}_F^2
+ =\sum_{j=1}^{q}\norm{\bz_j-\widetilde{\bA}\bg_j}_2^2.
+\]
+The full-column-rank least-squares formula applied to each column gives
+\begin{align*}
+ \widehat{\bG}
+ &=(\widetilde{\bA}'\widetilde{\bA})^{-1}
+   \widetilde{\bA}'\bZ\\
+ &=(\bA'\bW\bA)^{-1}\bA'\bW\bY\bR^{1/2}.
+\end{align*}
+Right multiplication by $\bR^{-1/2}$ gives
+\eqref{eq:12-weighted-matrix-solution}.  Positive definiteness of
+$\widetilde{\bA}'\widetilde{\bA}$ gives uniqueness.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{corollary}[Vector form of two-sided weighting]\label{cor:12-weighted-vec}
+With $\bbb=\avec\bB$ and $\by=\avec\bY$,
+\begin{align}
+ \Phi(\bB)
+ &=\norm{(\bR^{1/2}\otimes\bW^{1/2})
+   \{\by-(\bI_q\otimes\bA)\bbb\}}_2^2,
+   \label{eq:12-wls-vec}\\
+ \{\bR\otimes(\bA'\bW\bA)\}\widehat{\bbb}
+ &=(\bR\otimes\bA'\bW)\by.
+ \label{eq:12-wls-normal}
+\end{align}
+\origin{Course formulation from H Eqs.~(16.1.19), (16.2.10); CLM Thm.~2.1}
+\end{corollary}
+
+\begin{proof}
+Roth's identity and the vec isometry give~\eqref{eq:12-wls-vec}.  Its
+design matrix is
+\[
+ (\bR^{1/2}\otimes\bW^{1/2})(\bI_q\otimes\bA)
+ =\bR^{1/2}\otimes(\bW^{1/2}\bA).
+\]
+The ordinary normal equations and the mixed-product rule give
+\eqref{eq:12-wls-normal}.
+\end{proof}
+
+% \periodmark{End of period 2 of 3.}
+\Needspace{.30\textheight}
+
+%=============================================================================
+\section{Commutation and Symmetric Coordinates}\label{sec:12.3}
+%=============================================================================
+
+\subsection{The commutation matrix}\label{sec:12.3.1}
+
+\Needspace{.38\textheight}
+\begin{definition}[Commutation matrix]\label{def:12-commutation}
+For positive integers $m,n$, the \emph{commutation matrix}
+$\bK_{mn}\in\Real^{mn\times mn}$ is the unique permutation matrix such
+that
+\begin{equation}
+ \bK_{mn}\avec\bX=\avec\bX'
+ \quad\text{for every }\bX\in\Real^{m\times n}.
+ \label{eq:12-K-def}
+\end{equation}
+The order of the indices records the order of $\bX$.
+\origin{A\&M §11.1; H §16.3a, Eq.~(16.3.1); MC §2.5}
+\end{definition}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Commutation identities]\label{thm:12-commutation}
+The commutation matrix satisfies
+\begin{align}
+ \bK_{mn}'=\bK_{mn}^{-1}=\bK_{nm},\label{eq:12-K-inverse}\\
+ \tr\bK_{nn}=n.\label{eq:12-K-trace}
+\end{align}
+If $\bA\in\Real^{m\times n}$ and $\bB\in\Real^{p\times q}$, then
+\begin{align}
+ \bK_{pm}(\bA\otimes\bB)
+   &=(\bB\otimes\bA)\bK_{qn},\label{eq:12-K-commute}\\
+ \bB\otimes\bA
+   &=\bK_{pm}(\bA\otimes\bB)\bK_{nq}.
+   \label{eq:12-K-similarity}
+\end{align}
+\origin{A\&M Exs.~11.1, 11.3--11.4, 11.13; H Eqs.~(16.3.6), (16.3.8) and Thm.~16.3.2; MC Props.~7--8}
+\end{theorem}
+
+\begin{proof}
+For every $\bX\in\Real^{m\times n}$,
+\[
+ \bK_{nm}\bK_{mn}\avec\bX
+ =\bK_{nm}\avec\bX'=\avec\bX.
+\]
+Thus $\bK_{nm}=\bK_{mn}^{-1}$.  A permutation matrix is orthogonal, so
+$\bK_{mn}'=\bK_{mn}^{-1}$.  Exactly the $n$ diagonal coordinates of an
+$n\times n$ matrix retain their positions under transposition, giving
+$\tr\bK_{nn}=n$.
+
+For arbitrary $\bX\in\Real^{q\times n}$, Roth's identity gives
+\begin{align*}
+ \bK_{pm}(\bA\otimes\bB)\avec\bX
+ &=\avec\{(\bB\bX\bA')'\}\\
+ &=\avec(\bA\bX'\bB')\\
+ &=(\bB\otimes\bA)\avec\bX'
+  =(\bB\otimes\bA)\bK_{qn}\avec\bX.
+\end{align*}
+The bijectivity of vec gives~\eqref{eq:12-K-commute}; right multiplication
+by $\bK_{nq}=\bK_{qn}^{-1}$ gives~\eqref{eq:12-K-similarity}.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{example}[The matrix $\bK_{23}$]\label{ex:12-K23}
+\[
+ \bK_{23}=
+ \begin{pmatrix}
+ 1&0&0&0&0&0\\
+ 0&0&1&0&0&0\\
+ 0&0&0&0&1&0\\
+ 0&1&0&0&0&0\\
+ 0&0&0&1&0&0\\
+ 0&0&0&0&0&1
+ \end{pmatrix},\qquad
+ \bK_{23}
+ \begin{pmatrix}x_{11}\\x_{21}\\x_{12}\\x_{22}\\x_{13}\\x_{23}\end{pmatrix}
+ =
+ \begin{pmatrix}x_{11}\\x_{12}\\x_{13}\\x_{21}\\x_{22}\\x_{23}\end{pmatrix}.
+\]
+Thus $\bK_{23}'=\bK_{32}$; $\bK_{23}$ need not be symmetric.
+\origin{A\&M Ex.~11.9; H §16.3a}
+\end{example}
+
+\subsection{Symmetric and skew-symmetric coordinates}\label{sec:12.3.2}
+
+\Needspace{.38\textheight}
+\begin{definition}[Symmetrizer and skew-symmetrizer]\label{def:12-symmetrizers}
+For $n\geqslant1$, define
+\[
+ \bN_n:=\frac12(\bI_{n^2}+\bK_{nn}),\qquad
+ \bM_n:=\frac12(\bI_{n^2}-\bK_{nn}).
+\]
+\origin{A\&M §§11.1--11.2; H §16.4c, Eq.~(16.4.19); MC Ex.~5}
+\end{definition}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Two orthogonal coordinate projections]\label{thm:12-symmetrizers}
+For $\bX\in\Real^{n\times n}$,
+\begin{align}
+ \bN_n\avec\bX&=\avec\frac{\bX+\bX'}2,\label{eq:12-N-action}\\
+ \bM_n\avec\bX&=\avec\frac{\bX-\bX'}2.\label{eq:12-M-action}
+\end{align}
+Moreover,
+\begin{gather}
+ \bN_n'=\bN_n^2=\bN_n,\qquad
+ \bM_n'=\bM_n^2=\bM_n,\qquad
+ \bN_n\bM_n=\bO,\qquad \bN_n+\bM_n=\bI_{n^2},
+ \label{eq:12-NM-algebra}\\
+ \rank\bN_n=\frac{n(n+1)}2,\qquad
+ \rank\bM_n=\frac{n(n-1)}2.
+ \label{eq:12-NM-ranks}
+\end{gather}
+Thus $\col(\bN_n)$ and $\col(\bM_n)$ are respectively the vec images of
+the symmetric and skew-symmetric $n\times n$ matrices.
+\origin{A\&M Exs.~11.13--11.14, 11.16--11.17; H Eqs.~(16.4.19)--(16.4.21); MC Ex.~5}
+\end{theorem}
+
+\begin{proof}
+Equations~\eqref{eq:12-N-action}--\eqref{eq:12-M-action} use
+$\bK_{nn}\avec\bX=\avec\bX'$.  Since
+$\bK_{nn}'=\bK_{nn}$ and $\bK_{nn}^2=\bI_{n^2}$,
+\begin{align*}
+ \bN_n^2&=\tfrac14(\bI+2\bK_{nn}+\bK_{nn}^2)=\bN_n,\\
+ \bM_n^2&=\tfrac14(\bI-2\bK_{nn}+\bK_{nn}^2)=\bM_n,\\
+ \bN_n\bM_n&=\tfrac14(\bI-\bK_{nn}^2)=\bO.
+\end{align*}
+For a symmetric idempotent, rank equals trace.  Hence
+\begin{align*}
+ \rank\bN_n&=\tr\bN_n=\tfrac12(n^2+n),\\
+ \rank\bM_n&=\tr\bM_n=\tfrac12(n^2-n).
+\end{align*}
+The action formulas identify the two ranges.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{corollary}[Commutation spectrum]\label{cor:12-K-spectrum}
+The eigenvalues of $\bK_{nn}$ are $1$ and $-1$, with multiplicities
+$n(n+1)/2$ and $n(n-1)/2$.  Therefore
+\[
+ \det\bK_{nn}=(-1)^{n(n-1)/2}.
+\]
+\origin{A\&M Ex.~11.13}
+\end{corollary}
+
+\begin{proof}
+From $\bK_{nn}=\bN_n-\bM_n$, its restrictions to
+$\col(\bN_n)$ and $\col(\bM_n)$ are $\bI$ and $-\bI$.  Their dimensions
+are given by~\eqref{eq:12-NM-ranks}.
+\end{proof}
+
+\subsection{vech, elimination, duplication, and congruence}\label{sec:12.3.3}
+
+\Needspace{.38\textheight}
+\begin{definition}[vech, elimination, and duplication]\label{def:12-vech-duplication}
+For $\bX=(x_{ij})\in\Real^{n\times n}$, $\vech(\bX)$ stacks the entries
+$x_{ij}$ with $i\geqslant j$, column by column:
+\[
+ \vech(\bX)
+ =(x_{11},x_{21},\ldots,x_{n1},x_{22},\ldots,x_{n2},\ldots,x_{nn})'.
+\]
+Put $d_n=n(n+1)/2$.  The \emph{elimination matrix}
+$\bL_n\in\Real^{d_n\times n^2}$ and the \emph{duplication matrix}
+$\bD_n\in\Real^{n^2\times d_n}$ are defined by
+\begin{align}
+ \bL_n\avec\bX&=\vech(\bX)
+ &&(\bX\in\Real^{n\times n}),\label{eq:12-L-def}\\
+ \bD_n\vech(\bS)&=\avec\bS
+ &&(\bS=\bS').\label{eq:12-D-def}
+\end{align}
+\origin{A\&M §11.3; H §§16.4a--16.4b and Ex.~16.25; MC §2.6}
+\end{definition}
+
+\Needspace{.38\textheight}
+\begin{example}[Elimination is not averaging]\label{ex:12-LD2}
+For $n=2$,
+\[
+ \bL_2=
+ \begin{pmatrix}1&0&0&0\\0&1&0&0\\0&0&0&1\end{pmatrix},\qquad
+ \bD_2=
+ \begin{pmatrix}1&0&0\\0&1&0\\0&1&0\\0&0&1\end{pmatrix},
+\]
+whereas
+\[
+ \bD_2^+=
+ \begin{pmatrix}1&0&0&0\\0&\tfrac12&\tfrac12&0\\0&0&0&1\end{pmatrix}.
+\]
+Thus $\bL_2\avec\bX=(x_{11},x_{21},x_{22})'$, while
+$\bD_2^+\avec\bX=(x_{11},(x_{12}+x_{21})/2,x_{22})'$.
+\origin{A\&M Exs.~11.27, 11.29; H Eqs.~(16.4.8a) and (16.4.13)}
+\end{example}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Duplication and the symmetric projector]\label{thm:12-duplication}
+The matrix $\bD_n$ has full column rank and
+\begin{align}
+ \bL_n\bD_n&=\bI_{d_n},\label{eq:12-LD}\\
+ \bD_n^+&=(\bD_n'\bD_n)^{-1}\bD_n',\label{eq:12-Dplus}\\
+ \bD_n^+\bD_n&=\bI_{d_n},\label{eq:12-DplusD}\\
+ \bD_n\bD_n^+&=\bN_n,\label{eq:12-DDplus}\\
+ \bD_n^+&=\bL_n\bN_n.\label{eq:12-Dplus-LN}
+\end{align}
+The columns of $\bD_n$ are mutually orthogonal.  In
+$\bD_n'\bD_n$, the coordinate for $s_{ii}$ has diagonal weight $1$ and
+the coordinate for $s_{ij}$, $i>j$, has diagonal weight $2$.
+\origin{A\&M Exs.~11.26--11.30; H Eqs.~(16.4.4), (16.4.13), (16.4.22); MC Prop.~9}
+\end{theorem}
+
+\begin{proof}
+Every column of $\bD_n$ contains either one $1$ for a diagonal entry or
+two $1$s for a mirrored off-diagonal pair; distinct columns have disjoint
+supports.  Hence $\bD_n$ has full column rank and the stated form of
+$\bD_n'\bD_n$ holds.  Equations~\eqref{eq:12-Dplus} and
+\eqref{eq:12-DplusD} are the full-column-rank Moore--Penrose formula.
+Equation~\eqref{eq:12-LD} holds because $\bL_n$ deletes the duplicated
+upper-triangular coordinate.
+
+The column space of $\bD_n$ is the vec image of the symmetric matrices,
+which is $\col(\bN_n)$.  Both $\bD_n\bD_n^+$ and $\bN_n$ are orthogonal
+projectors onto this space, proving~\eqref{eq:12-DDplus}.  For arbitrary
+$\bX$,
+\begin{align*}
+ \bD_n^+\avec\bX
+ &=\vech\frac{\bX+\bX'}2
+  =\bL_n\bN_n\avec\bX,
+\end{align*}
+which proves~\eqref{eq:12-Dplus-LN} by the bijectivity of vec.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{definition}[Congruence coordinate matrix]\label{def:12-congruence-operator}
+For $\bA\in\Real^{r\times n}$ define
+\[
+ \bC_{\bA}:=\bD_r^+(\bA\otimes\bA)\bD_n
+ \in\Real^{d_r\times d_n},
+ \qquad d_k=\frac{k(k+1)}2.
+\]
+\origin{H Eq.~(16.4.25); A\&M Ex.~11.31; MC Prop.~10}
+\end{definition}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Congruence in symmetric coordinates]\label{thm:12-congruence-operator}
+For every symmetric $\bX\in\Real^{n\times n}$,
+\begin{equation}
+ \vech(\bA\bX\bA')=\bC_{\bA}\vech(\bX).
+ \label{eq:12-congruence-coordinate}
+\end{equation}
+If $\bA\in\Real^{r\times n}$ and $\bB\in\Real^{n\times p}$, then
+\begin{equation}
+ \bC_{\bA}\bC_{\bB}=\bC_{\bA\bB}.
+ \label{eq:12-congruence-composition}
+\end{equation}
+\tcbbreak
+For square $\bA$ of order $n$ and $t=\rank\bA$,
+\begin{align}
+ \rank\bC_{\bA}&=\frac{t(t+1)}2,\label{eq:12-congruence-rank}\\
+ \bC_{\bA}^{-1}&=\bC_{\bA^{-1}}\quad(\bA\text{ nonsingular}),
+ \label{eq:12-congruence-inverse}\\
+ \det\bC_{\bA}&=(\det\bA)^{n+1}.
+ \label{eq:12-congruence-det}
+\end{align}
+\origin{A\&M Exs.~11.31--11.33; H Thms.~16.4.1--16.4.2}
+\end{theorem}
+
+\begin{proof}
+Roth's identity and the symmetry of $\bA\bX\bA'$ give
+\begin{align*}
+ \bC_{\bA}\vech\bX
+ &=\bD_r^+(\bA\otimes\bA)\avec\bX
+  =\bD_r^+\avec(\bA\bX\bA')
+  =\vech(\bA\bX\bA').
+\end{align*}
+Applying this identity twice to arbitrary symmetric $\bX$ proves
+\eqref{eq:12-congruence-composition}; the map $\bX\mapsto\vech\bX$ is
+bijective on symmetric matrices.  Taking $\bB=\bA^{-1}$ proves
+\eqref{eq:12-congruence-inverse}.
+
+Let $\bA=\bU\bSig\bV'$ be an SVD with $t$ positive singular values.
+The matrices $\bC_{\bU}$ and $\bC_{\bV'}$ are nonsingular by
+\eqref{eq:12-congruence-inverse}, while
+$\bX\mapsto\bSig\bX\bSig'$ has as its range the symmetric matrices
+supported on a $t\times t$ principal block.  Its range has dimension
+$t(t+1)/2$, proving~\eqref{eq:12-congruence-rank}.
+
+If $\bA$ is singular, both sides of~\eqref{eq:12-congruence-det} are zero.
+For the determinant calculation, extend
+$\bC_{\bA}=\bD_n^+(\bA\otimes\bA)\bD_n$ complex-linearly; the preceding
+composition identity is algebraic and is unchanged.  If $\bA$ is
+nonsingular, complex Schur triangularisation gives
+$\bA=\bS\bT\bS^{-1}$.  By~\eqref{eq:12-congruence-composition},
+\[
+ \bC_{\bA}=\bC_{\bS}\bC_{\bT}\bC_{\bS}^{-1}.
+\]
+For $i\geqslant j$, let
+\[
+ \bF_{ij}:=
+ \begin{cases}
+ \eu_i\eu_i',&i=j,\\
+ \eu_i\eu_j'+\eu_j\eu_i',&i>j.
+ \end{cases}
+\]
+In the basis ordered as $\vech$, the map
+$\bX\mapsto\bT\bX\bT'$ is upper triangular: the coefficient of
+$\bF_{ij}$ in $\bT\bF_{ij}\bT'$ is $t_{ii}t_{jj}$.  Hence
+\[
+ \det\bC_{\bA}=\det\bC_{\bT}
+ =\prod_{i\geqslant j}t_{ii}t_{jj}
+ =\prod_{i=1}^{n}t_{ii}^{n+1}
+ =(\det\bA)^{n+1}.
+\]
+\end{proof}
+
+\begin{remark}
+The matrices $\bB'\otimes\bA$ and $\bC_{\bA}$ are coordinate matrices of
+the linear maps $\bX\mapsto\bA\bX\bB$ and
+$\bX\mapsto\bA\bX\bA'$.  Thus unrestricted coordinates use
+$\bB'\otimes\bA$, whereas symmetric congruence coordinates use
+$\bC_{\bA}$.
+\end{remark}
+
+%=============================================================================
+\section{Computation: Numerical Checks in R}\label{sec:12.4}
+%=============================================================================
+
+\subsection{Mixed products and inverses (§\ref{sec:12.1.1})}\label{sec:12.4.1}
+
+<<mixed-product>>=
+A <- matrix(c(1, 3, 2, 4), 2, 2)
+B <- matrix(c(2, -1, 0, 1), 2, 2)
+C <- matrix(c(1, 0, 2, 1), 2, 2)
+D <- matrix(c(3, 1, -1, 2), 2, 2)
+mixed_left <- (A %x% B) %*% (C %x% D)
+mixed_right <- (A %*% C) %x% (B %*% D)
+inverse_manual <- solve(A) %x% solve(B)
+inverse_package <- solve(A %x% B)
+c(mixed_residual = max(abs(mixed_left - mixed_right)),
+  inverse_residual = max(abs(inverse_manual - inverse_package)))
+@
+
+\subsection{Spectrum, determinant, and rank (§\ref{sec:12.1.2})}\label{sec:12.4.2}
+
+<<kron-spectrum>>=
+A <- matrix(c(4, 1, 1, 2), 2, 2)
+B <- matrix(c(3, 0, 1, 0, 2, 0, 1, 0, 1), 3, 3)
+ev_A <- eigen(A, symmetric = TRUE)$values
+ev_B <- eigen(B, symmetric = TRUE)$values
+ev_product <- sort(as.vector(outer(ev_A, ev_B, "*")))
+ev_package <- sort(eigen(A %x% B, symmetric = TRUE)$values)
+rank_tol <- 1e-10
+rank_qr <- function(M, tol = rank_tol) qr(M, tol = tol)$rank
+c(eigenvalue_residual = max(abs(ev_product - ev_package)),
+  determinant_residual = det(A %x% B) - det(A)^3 * det(B)^2,
+  rank_at_1e_10 = rank_qr(A %x% B),
+  rank_product_at_1e_10 = rank_qr(A) * rank_qr(B))
+@
+
+\subsection{A Sylvester solve (§\ref{sec:12.2.2})}\label{sec:12.4.3}
+
+<<sylvester>>=
+A <- matrix(c(3, 1, 1, 2), 2, 2)
+B <- matrix(c(2, -1, -1, 4), 2, 2)
+C <- matrix(c(1, 2, -1, 3), 2, 2)
+coef <- diag(2) %x% A + t(B) %x% diag(2)
+X_vec <- matrix(solve(coef, c(C)), 2, 2)
+ea <- eigen(A, symmetric = TRUE)
+eb <- eigen(B, symmetric = TRUE)
+Y <- t(ea$vectors) %*% C %*% eb$vectors
+Z <- Y / outer(ea$values, eb$values, "+")
+X_spectral <- ea$vectors %*% Z %*% t(eb$vectors)
+c(equation_residual = max(abs(A %*% X_vec + X_vec %*% B - C)),
+  route_difference = max(abs(X_vec - X_spectral)))
+@
+
+\subsection{Two-sided weighted least squares (§\ref{sec:12.2.3})}\label{sec:12.4.4}
+
+<<weighted-matrix-ls>>=
+A <- cbind(1, c(-2, -1, 1, 2))
+Y <- matrix(c(1, 2, 0, 3, 2, -1, 1, 4), 4, 2)
+W <- diag(c(1, 2, 3, 4))
+R <- matrix(c(2, 1, 1, 3), 2, 2)
+B_formula <- solve(t(A) %*% W %*% A, t(A) %*% W %*% Y)
+normal_matrix <- R %x% (t(A) %*% W %*% A)
+normal_rhs <- (R %x% (t(A) %*% W)) %*% c(Y)
+B_vec <- matrix(solve(normal_matrix, normal_rhs), ncol(A), ncol(Y))
+normal_residual <- t(A) %*% W %*% (Y - A %*% B_formula) %*% R
+c(route_difference = max(abs(B_formula - B_vec)),
+  normal_equation_residual = max(abs(normal_residual)))
+@
+
+\subsection{Pattern matrices (§\ref{sec:12.3})}\label{sec:12.4.5}
+
+<<patterned-matrices>>=
+commutation <- function(m, n) {
+  K <- matrix(0, m * n, m * n)
+  for (i in seq_len(m)) for (j in seq_len(n))
+    K[(i - 1) * n + j, (j - 1) * m + i] <- 1
+  K
+}
+elimination <- function(n) {
+  keep <- as.vector(row(matrix(0, n, n)) >= col(matrix(0, n, n)))
+  diag(n * n)[keep, , drop = FALSE]
+}
+duplication <- function(n) {
+  d <- n * (n + 1) / 2
+  D <- matrix(0, n * n, d); h <- 0
+  for (j in seq_len(n)) for (i in j:n) {
+    h <- h + 1
+    D[(j - 1) * n + i, h] <- 1
+    D[(i - 1) * n + j, h] <- 1
+  }
+  D
+}
+n <- 3; K <- commutation(n, n); I <- diag(n * n)
+N <- (I + K) / 2; M <- (I - K) / 2
+L <- elimination(n); D <- duplication(n)
+Dplus <- solve(t(D) %*% D, t(D))
+X <- matrix(1:9, n, n)
+c(transpose_residual = max(abs(K %*% c(X) - c(t(X)))),
+  projector_residual = max(abs(N %*% N - N)),
+  orthogonality_residual = max(abs(N %*% M)),
+  duplication_residual = max(abs(D %*% Dplus - N)),
+  averaging_residual = max(abs(Dplus - L %*% N)))
+@
+
+\subsection{Congruence in vech coordinates (§\ref{sec:12.3.3})}\label{sec:12.4.6}
+
+<<congruence-operator>>=
+n <- 3; D <- duplication(n); Dplus <- solve(t(D) %*% D, t(D))
+A <- matrix(c(2, 0, 1, 1, 1, 0, 0, 1, 1), n, n)
+X <- matrix(c(3, 1, 0, 1, 2, -1, 0, -1, 4), n, n)
+C_A <- Dplus %*% (A %x% A) %*% D
+vech <- function(S) elimination(n) %*% c(S)
+c(coordinate_residual = max(abs(C_A %*% vech(X) - vech(A %*% X %*% t(A)))),
+  determinant_residual = det(C_A) - det(A)^(n + 1))
+@
+
+%=============================================================================
+\newpage
+\section{Pitfalls}\label{sec:12.5}
+%=============================================================================
+
+\subsection{Reversing Kronecker factors}\label{sec:12.5.1}
+
+\[
+ \bA\otimes\bB\neq\bB\otimes\bA,\qquad
+ \bB\otimes\bA=\bK_{pm}(\bA\otimes\bB)\bK_{nq}.
+\]
+The equality on the right requires $\bA$ of order $m\times n$ and $\bB$
+of order $p\times q$; the two permutation matrices have different index
+orders.
+
+\subsection{Applying the mixed-product rule without conformability}\label{sec:12.5.2}
+
+\[
+ (\bA_{m\times n}\otimes\bB_{p\times q})
+ (\bC_{u\times v}\otimes\bD_{r\times s})
+\]
+is defined in the mixed-product form only when $n=u$ and $q=r$.  These are
+exactly the conditions that define $\bA\bC$ and $\bB\bD$.
+
+\subsection{Stacking rows instead of columns}\label{sec:12.5.3}
+
+\[
+ \avec\begin{pmatrix}a&b\\c&d\end{pmatrix}
+ =(a,c,b,d)',\qquad
+ \avec\!\left\{\begin{pmatrix}a&b\\c&d\end{pmatrix}'\right\}
+ =(a,b,c,d)'.
+\]
+Row stacking silently inserts a commutation matrix into every Roth identity.
+
+\subsection{Changing the sign in a Sylvester coefficient}\label{sec:12.5.4}
+
+\begin{align*}
+ \bA\bX+\bX\bB=\bC
+ &\quad\longleftrightarrow\quad
+ \{\bI\otimes\bA+\bB'\otimes\bI\}\avec\bX=\avec\bC,\\
+ \bA\bX-\bX\bB=\bC
+ &\quad\longleftrightarrow\quad
+ \{\bI\otimes\bA-\bB'\otimes\bI\}\avec\bX=\avec\bC.
+\end{align*}
+The corresponding exclusion conditions are $\lambda_i(\bA)+\lambda_j(\bB)
+\neq0$ and $\lambda_i(\bA)-\lambda_j(\bB)\neq0$.
+
+\subsection{Replacing averaging by elimination}\label{sec:12.5.5}
+
+\[
+ \bL_n\avec\bX=\vech\bX,\qquad
+ \bD_n^+\avec\bX=\vech\frac{\bX+\bX'}2.
+\]
+Thus $\bL_n=\bD_n^+$ on vecs of symmetric matrices, but not on all of
+$\Real^{n^2}$.
+
+\subsection{Expanding a structured system prematurely}\label{sec:12.5.6}
+
+\[
+ \bA\bX+\bX\bB=\bC
+ \quad\leadsto\quad
+ (\bI_n\otimes\bA+\bB'\otimes\bI_m)\avec\bX=\avec\bC,
+\]
+whose coefficient has $m^2n^2$ entries.  The identity specifies the operator;
+it does not require storing that coefficient when a matrix-equation solver is
+available.
+
+%=============================================================================
+\newpage
+\section{Exercises}\label{sec:12.6}
+%=============================================================================
+
+\Needspace{.38\textheight}
+\begin{exercise}[Kronecker products of vectors]\label{exer:12-simple-tensors}
+For conformable vectors $\ba,\bbb,\bc,\bd$, prove
+\[
+ (\ba\otimes\bbb)(\bc\otimes\bd)'
+ =(\ba\bc')\otimes(\bbb\bd'),
+ \qquad
+ (\ba\otimes\bbb)'(\bc\otimes\bd)
+ =(\ba'\bc)(\bbb'\bd).
+\]
+Deduce $\norm{\ba\otimes\bbb}_2=\norm{\ba}_2\norm{\bbb}_2$.
+\origin{A\&M Ex.~10.6; H Eqs.~(16.1.2)--(16.1.4) and Ex.~16.9}
+\end{exercise}
+\begin{solution}
+Since $(\bc\otimes\bd)'=\bc'\otimes\bd'$, the mixed-product rule gives
+\[
+ (\ba\otimes\bbb)(\bc'\otimes\bd')
+ =(\ba\bc')\otimes(\bbb\bd').
+\]
+Apply the same rule to the scalar product.  With $\bc=\ba$ and $\bd=\bbb$,
+\[
+ \norm{\ba\otimes\bbb}_2^2
+ =(\ba'\ba)(\bbb'\bbb)
+ =\norm{\ba}_2^2\norm{\bbb}_2^2.
+\]
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Identifying Kronecker factors]\label{exer:12-factor-identification}
+Suppose $\bA\otimes\bB=\bC\otimes\bD\neq\bO$, where $\bA,\bC$ have
+the same order and $\bB,\bD$ have the same order.  Prove that some
+$\alpha\neq0$ satisfies
+\[
+ \bC=\alpha\bA,\qquad \bD=\alpha^{-1}\bB.
+\]
+\origin{Course formulation from S Cor.~4.1}
+\end{exercise}
+\begin{solution}
+Choose $a_{ij}\bB\neq\bO$; then $a_{ij}\neq0$ and $\bB\neq\bO$.
+Equality of the $(i,j)$ blocks gives
+\[
+ a_{ij}\bB=c_{ij}\bD\neq\bO,
+\]
+so $c_{ij}\neq0$ and $\bD=(a_{ij}/c_{ij})\bB$.  Substitution into every
+block gives
+\[
+ a_{kl}\bB=c_{kl}(a_{ij}/c_{ij})\bB.
+\]
+Because $\bB\neq\bO$, $c_{kl}=(c_{ij}/a_{ij})a_{kl}$.  Set
+$\alpha=c_{ij}/a_{ij}$.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Kronecker products of projectors]\label{exer:12-tensor-projectors}
+Let $\bP\in\Real^{m\times m}$ and $\bQ\in\Real^{n\times n}$ satisfy
+$\bP=\bP'=\bP^2$ and $\bQ=\bQ'=\bQ^2$.  Prove that
+$\bP\otimes\bQ$ is the orthogonal projector onto
+\[
+ \spn\{\bp_i\otimes\bq_j:
+       \bp_i\text{ runs through a basis of }\col\bP,
+       \ \bq_j\text{ runs through a basis of }\col\bQ\}.
+\]
+\origin{A\&M Ex.~10.7(c); H Exs.~16.4, 16.6}
+\end{exercise}
+\begin{solution}
+The transpose and mixed-product rules give
+\[
+ (\bP\otimes\bQ)'=\bP\otimes\bQ,\qquad
+ (\bP\otimes\bQ)^2=\bP\otimes\bQ.
+\]
+If $\bx=\sum_i a_i\bp_i$ and $\by=\sum_jb_j\bq_j$, then
+$\bx\otimes\by$ lies in the displayed span.  For every displayed basis
+product,
+\[
+ (\bP\otimes\bQ)(\bp_i\otimes\bq_j)=\bp_i\otimes\bq_j,
+\]
+so the displayed span is contained in $\col(\bP\otimes\bQ)$.  Conversely,
+every column of $\bP\otimes\bQ$ is a Kronecker product of a column of $\bP$
+and a column of $\bQ$, hence lies in the displayed span.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[A Kronecker order equivalence]\label{exer:12-tensor-order-equivalence}
+For symmetric positive semidefinite $\bA,\bB$ of the same order, prove
+\[
+ \bA\otimes\bA\psdge\bB\otimes\bB
+ \ifff \bA\psdge\bB.
+\]
+Give a $1\times1$ counterexample when positive semidefiniteness is omitted.
+\origin{A\&M Ex.~10.14}
+\end{exercise}
+\begin{solution}
+If $\bA\psdge\bB$, Corollary~\ref{cor:12-kron-monotone} applies.  Conversely,
+for every $\bx$,
+\begin{align*}
+ 0&\leqslant(\bx\otimes\bx)'
+ (\bA\otimes\bA-\bB\otimes\bB)(\bx\otimes\bx)\\
+ &=(\bx'\bA\bx)^2-(\bx'\bB\bx)^2\\
+ &=\{\bx'(\bA+\bB)\bx\}\{\bx'(\bA-\bB)\bx\}.
+\end{align*}
+If the first factor is positive, the second is nonnegative.  If it is zero,
+both $\bx'\bA\bx$ and $\bx'\bB\bx$ are zero, so the second factor is zero.
+Thus $\bx'(\bA-\bB)\bx\geqslant0$ for every $\bx$.
+For $\bA=(-2)$ and $\bB=(1)$,
+$\bA\otimes\bA=(4)\psdge(1)=\bB\otimes\bB$, but
+$\bA\not\psdge\bB$.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Grid energy]\label{exer:12-grid-energy}
+Let $m,n\geqslant2$ and use the matrices $\bE_k,\bL_k$ from
+Example~\ref{ex:12-grid-penalty}.  Index
+$z_{ij}$ by $1\leqslant i\leqslant m$, $1\leqslant j\leqslant n$, and
+stack the $j$ index within the $i$ index into $\bz\in\Real^{mn}$.  Prove
+\[
+ \bz'(\bL_m\boxplus\bL_n)\bz
+ =\sum_{i=1}^{m-1}\sum_{j=1}^{n}(z_{ij}-z_{i+1,j})^2
+ +\sum_{i=1}^{m}\sum_{j=1}^{n-1}(z_{ij}-z_{i,j+1})^2.
+\]
+Characterize equality.
+\origin{Course formulation from S Ex.~4.3}
+\end{exercise}
+\begin{solution}
+The two terms are
+\begin{align*}
+ \bz'(\bL_m\otimes\bI_n)\bz
+ &=\sum_{i=1}^{m-1}\sum_{j=1}^{n}(z_{ij}-z_{i+1,j})^2,\\
+ \bz'(\bI_m\otimes\bL_n)\bz
+ &=\sum_{i=1}^{m}\sum_{j=1}^{n-1}(z_{ij}-z_{i,j+1})^2.
+\end{align*}
+Equality to zero holds exactly when all horizontal and vertical differences
+vanish, equivalently $z_{ij}=c$ for all $i,j$, or
+$\bz=c(\bone_m\otimes\bone_n)$.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[A commutator equation]\label{exer:12-commutator}
+Let $\bA=\diag(\lambda_1,\ldots,\lambda_n)$ with distinct diagonal
+entries and $\bC\in\Real^{n\times n}$.  Characterize all solutions of
+\[
+ \bA\bX-\bX\bA=\bC.
+\]
+\origin{S Ex.~3.23; H §16.5}
+\end{exercise}
+\begin{solution}
+Entrywise,
+\[
+ (\lambda_i-\lambda_j)x_{ij}=c_{ij}.
+\]
+Thus a solution exists exactly when $c_{ii}=0$ for every $i$.  Under this
+condition,
+\[
+ x_{ij}=\frac{c_{ij}}{\lambda_i-\lambda_j}\quad(i\neq j),
+ \qquad x_{ii}\in\Real\quad\text{arbitrary}.
+\]
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[A norm bound for a Sylvester solution]\label{exer:12-sylvester-bound}
+Let $\bA\in\Real^{m\times m}$, $\bB\in\Real^{n\times n}$ satisfy
+$\bA\psdgt\bO$, $\bB\psdgt\bO$, let $\bC\in\Real^{m\times n}$, and let
+$\bX$ solve
+$\bA\bX+\bX\bB=\bC$.  Prove
+\[
+ \norm{\bX}_F
+ \leqslant
+ \frac{\norm{\bC}_F}{\lambda_{\min}(\bA)+\lambda_{\min}(\bB)}.
+\]
+\origin{Course formulation from S Ex.~3.23; H §16.5}
+\end{exercise}
+\begin{solution}
+Use Corollary~\ref{cor:12-symmetric-sylvester}.  Orthogonal invariance of the
+Frobenius norm gives
+\begin{align*}
+ \norm{\bX}_F^2
+ &=\sum_{i,j}\frac{y_{ij}^2}{(\lambda_i+\mu_j)^2}\\
+ &\leqslant
+ \frac{\sum_{i,j}y_{ij}^2}
+ {(\lambda_{\min}(\bA)+\lambda_{\min}(\bB))^2}
+ =\frac{\norm{\bC}_F^2}
+ {(\lambda_{\min}(\bA)+\lambda_{\min}(\bB))^2}.
+\end{align*}
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[A matrix recurrence]\label{exer:12-matrix-recurrence}
+Let $\bA\in\Real^{m\times m}$, $\bB\in\Real^{n\times n}$, and
+$\bX_0\in\Real^{m\times n}$.  If
+$\bX_{k+1}=\bA\bX_k\bB$ for $k\geqslant0$, prove
+\[
+ \avec\bX_k=(\bB'\otimes\bA)^k\avec\bX_0
+ =(\bB'^k\otimes\bA^k)\avec\bX_0
+\]
+and
+\[
+ \norm{\bX_k}_F
+ \leqslant\norm{\bA}_2^k\norm{\bB}_2^k\norm{\bX_0}_F.
+\]
+\origin{A\&M Ex.~10.18; H Eq.~(16.1.22)}
+\end{exercise}
+\begin{solution}
+Roth's identity gives
+$\avec\bX_{k+1}=(\bB'\otimes\bA)\avec\bX_k$.  Induction and the
+mixed-product rule give the two equalities.  The vec isometry and induced-norm
+inequality give
+\begin{align*}
+ \norm{\bX_k}_F
+ &\leqslant\norm{\bB'^k\otimes\bA^k}_2\norm{\bX_0}_F\\
+ &=\norm{\bB^k}_2\norm{\bA^k}_2\norm{\bX_0}_F
+ \leqslant\norm{\bB}_2^k\norm{\bA}_2^k\norm{\bX_0}_F.
+\end{align*}
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Frobenius adjoint of a matrix operator]\label{exer:12-operator-adjoint}
+Prove that the operator in Definition~\ref{def:12-matrix-operator} has a
+unique Frobenius adjoint and that
+\[
+ \calL^*(\bY)=\sum_{l=1}^{k}\bA_l'\bY\bB_l',
+ \qquad \bM_{\calL^*}=\bM_{\calL}'.
+\]
+\origin{Course formulation from A\&M Ex.~10.20; H Thm.~16.2.2}
+\end{exercise}
+\begin{solution}
+Cyclicity of trace gives
+\begin{align*}
+ \tr\{\bY'\bA_l\bX\bB_l\}
+ &=\tr\{\bB_l\bY'\bA_l\bX\}
+ =\tr\{(\bA_l'\bY\bB_l')'\bX\}.
+\end{align*}
+Thus the displayed map is a Frobenius adjoint.  If $\calG$ is another one,
+then, for every $\bX$ and $\bY$,
+\[
+ \left\langle\bX,
+ \calG(\bY)-\sum_{l=1}^k\bA_l'\bY\bB_l'\right\rangle_F=0.
+\]
+For fixed $\bY$, put
+\[
+ \bDelta=\calG(\bY)-\sum_l\bA_l'\bY\bB_l'.
+\]
+Setting $\bX=\bDelta$ gives
+\[
+ 0=\langle\bDelta,\bDelta\rangle_F=\norm{\bDelta}_F^2
+ \quad\Longrightarrow\quad \bDelta=\bO.
+\]
+Thus $\calG=\calL^*$.  The coefficient of the $l$th term is
+\[
+ \bB_l\otimes\bA_l'=(\bB_l'\otimes\bA_l)',
+\]
+and summation gives $\bM_{\calL^*}=\bM_{\calL}'$.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Minimum-norm matrix least squares]\label{exer:12-AXB-mp}
+Let $\bA\in\Real^{r\times m}$, $\bB\in\Real^{n\times s}$, and
+$\bC\in\Real^{r\times s}$.
+Prove
+\[
+ (\bA\otimes\bB)^+=\bA^+\otimes\bB^+.
+\]
+Then prove that the unique minimum-Frobenius-norm matrix among the minimizers
+of $\norm{\bA\bX\bB-\bC}_F$ is
+\[
+ \widehat{\bX}=\bA^+\bC\bB^+.
+\]
+\origin{A\&M Exs.~10.25(c), 10.49; H Eqs.~(16.1.24), (16.5.3)}
+\end{exercise}
+\begin{solution}
+Apply the construction in the proof of Theorem~\ref{thm:12-kron-svd} to
+SVDs of $\bA$ and $\bB$; reciprocating the positive diagonal entries gives
+\[
+ (\bA\otimes\bB)^+=\bA^+\otimes\bB^+.
+\]
+The coefficient of $\bA\bX\bB$ is $\bB'\otimes\bA$.  Hence
+if $\bB=\bU\bD\bV'$ is an SVD, then
+$\bB'=\bV\bD\bU'$ and $(\bB')^+=\bU\bD^+\bV'=(\bB^+)'$.  Therefore
+\begin{align*}
+ \avec\widehat{\bX}
+ &=(\bB'\otimes\bA)^+\avec\bC\\
+ &=((\bB^+)'\otimes\bA^+)\avec\bC
+  =\avec(\bA^+\bC\bB^+).
+\end{align*}
+The Moore--Penrose least-squares theorem and the vec isometry give both
+minimum properties.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[A transposed matrix equation]\label{exer:12-transpose-equation}
+For $\bX,\bC\in\Real^{n\times n}$, characterize all solutions of
+$\bX+\bX'=\bC$.  If the equation is
+consistent, identify its minimum-Frobenius-norm solution and prove
+\[
+ (\bI_{n^2}+\bK_{nn})^+=\tfrac12\bN_n.
+\]
+\origin{A\&M Exs.~11.14, 11.17; H Eqs.~(16.5.4)--(16.5.6)}
+\end{exercise}
+\begin{solution}
+The left side is symmetric, so consistency requires $\bC=\bC'$.  Under
+this condition,
+\[
+ \bX+\bX'=\bC
+ \ifff \bX=\tfrac12\bC+\bS,\qquad \bS'=-\bS.
+\]
+Theorem~\ref{thm:12-symmetrizers} and the vec isometry make the symmetric
+and skew-symmetric parts orthogonal in the Frobenius inner product; hence
+the norm is minimized at $\bS=\bO$.  Since
+$\bI+\bK=2\bN$ and $\bN'=\bN^2=\bN$, the four Penrose equations give
+$(2\bN)^+=\bN/2$.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Nearest patterned parts]\label{exer:12-nearest-patterned}
+For $\bX\in\Real^{n\times n}$, set
+\begin{align*}
+ \bS_0&=\frac{\bX+\bX'}2,
+ &\bT_0&=\frac{\bX-\bX'}2.
+\end{align*}
+Prove
+\begin{align*}
+ \norm{\bX-\bS}_F^2
+ &=\norm{\bT_0}_F^2+\norm{\bS-\bS_0}_F^2
+ &&(\bS=\bS'),\\
+ \norm{\bX-\bT}_F^2
+ &=\norm{\bS_0}_F^2+\norm{\bT-\bT_0}_F^2
+ &&(\bT'=-\bT).
+\end{align*}
+Deduce that $\bS_0$ and $\bT_0$ are the respective unique minimizers.
+\origin{A\&M Exs.~11.14, 11.17; H Eq.~(16.4.19)}
+\end{exercise}
+\begin{solution}
+$\bS_0$ and $\bS-\bS_0$ are symmetric; $\bT_0$ is skew-symmetric.
+Theorem~\ref{thm:12-symmetrizers} and the vec isometry give
+\[
+ \langle\bT_0,\bS-\bS_0\rangle_F=0,
+ \qquad
+ \bX-\bS=\bT_0-(\bS-\bS_0),
+\]
+which gives the first identity.  Similarly, $\bT-\bT_0$ is
+skew-symmetric and
+\[
+ \langle\bS_0,\bT-\bT_0\rangle_F=0,
+ \qquad
+ \bX-\bT=\bS_0-(\bT-\bT_0),
+\]
+which gives the second.  Each remainder norm vanishes at exactly one
+feasible matrix.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Weights in symmetric coordinates]\label{exer:12-symmetric-weights}
+For symmetric $\bS=(s_{ij})$, put $\bh=\vech\bS$.  Prove
+\[
+ \norm{\bS}_F^2=\bh'\bD_n'\bD_n\bh
+ =\sum_{i=1}^{n}s_{ii}^2+2\sum_{i>j}s_{ij}^2.
+\]
+For arbitrary $\bX$, prove that $\bD_n^+\avec\bX$ retains diagonal entries
+and replaces each lower-triangular entry by $(x_{ij}+x_{ji})/2$.
+\origin{A\&M Ex.~11.30; H §16.4b and Ex.~16.27}
+\end{exercise}
+\begin{solution}
+Since $\avec\bS=\bD_n\bh$,
+\[
+ \norm{\bS}_F^2=(\bD_n\bh)'\bD_n\bh
+ =\bh'\bD_n'\bD_n\bh.
+\]
+The diagonal weights of $\bD_n'\bD_n$ are $1$ for diagonal coordinates and
+$2$ for off-diagonal coordinates.  Also,
+\[
+ \bD_n^+\avec\bX
+ =\bL_n\bN_n\avec\bX
+ =\vech\frac{\bX+\bX'}2,
+\]
+which gives the entry formula.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Orthogonal congruence in vech coordinates]\label{exer:12-vech-metric}
+Let $\bQ\in\Real^{n\times n}$ be orthogonal,
+$\bG_n=\bD_n'\bD_n$, and
+$\bC_{\bQ}=\bD_n^+(\bQ\otimes\bQ)\bD_n$.  Prove
+\[
+ \bC_{\bQ}'\bG_n\bC_{\bQ}=\bG_n.
+\]
+Thus $\bC_{\bQ}$ preserves the $\bG_n$-weighted inner product even when it
+does not preserve the ordinary Euclidean inner product on vech coordinates.
+\origin{Course formulation from A\&M Ex.~11.31; H Eq.~(16.4.25)}
+\end{exercise}
+\begin{solution}
+For arbitrary $\bh=\vech\bS$ with $\bS=\bS'$, duplication and orthogonal
+invariance give
+\begin{align*}
+ \bh'\bC_{\bQ}'\bG_n\bC_{\bQ}\bh
+ &=\norm{\bD_n\bC_{\bQ}\bh}_2^2
+  =\norm{\bQ\bS\bQ'}_F^2
+  =\norm{\bS}_F^2
+  =\bh'\bG_n\bh.
+\end{align*}
+Both coefficient matrices are symmetric.  Equality of their quadratic forms
+for every $\bh$ gives the matrix identity.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[A symmetric matrix basis equation]\label{exer:12-symmetric-basis-equation}
+Let $\bA_1,\ldots,\bA_k,\bC$ be symmetric $n\times n$ matrices and put
+\[
+ \bG=(\vech\bA_1,\ldots,\vech\bA_k),\qquad
+ \bH=(\avec\bA_1,\ldots,\avec\bA_k).
+\]
+Prove
+\[
+ \sum_{i=1}^{k}\theta_i\bA_i=\bC
+ \ifff \bG\btheta=\vech\bC,
+ \qquad \bH=\bD_n\bG,
+ \qquad \rank\bH=\rank\bG.
+\]
+Derive the normal equations for minimizing
+$\norm{\sum_i\theta_i\bA_i-\bC}_F^2$ in vech coordinates.
+\origin{H Ex.~16.30}
+\end{exercise}
+\begin{solution}
+Linearity and injectivity of vech on symmetric matrices give the first
+equivalence.  Columnwise duplication gives $\bH=\bD_n\bG$.  Since
+$\bD_n$ has full column rank,
+\[
+ \nul(\bD_n\bG)=\nul\bG,\qquad \rank\bH=\rank\bG.
+\]
+Since $\avec\bA_i=\bD_n\vech\bA_i$ and
+$\avec\bC=\bD_n\vech\bC$, the objective is
+\[
+ (\bG\btheta-\vech\bC)'\bD_n'\bD_n
+ (\bG\btheta-\vech\bC).
+\]
+Its normal equations are
+\[
+ \bG'\bD_n'\bD_n\bG\widehat{\btheta}
+ =\bG'\bD_n'\bD_n\vech\bC.
+\]
+\end{solution}
+
+\end{document}

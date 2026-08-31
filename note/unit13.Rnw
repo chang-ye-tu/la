@@ -1,0 +1,1283 @@
+% Compile:  python build.py 13
+% or by hand:
+%   Rscript -e "knitr::knit('unit13.Rnw')"
+%   xelatex -shell-escape unit13.tex        # run twice to settle the toc
+\documentclass[17pt]{extarticle}
+
+\input{la_preamble.tex}
+\usepackage{needspace}
+
+% Unit 13 specific
+\fancyhead[L]{\small\color{hdrBG}\textbf{Unit\ 13\ \ Matrix Calculus I}}
+
+\setcounter{theorem}{0}\setcounter{example}{0}
+\renewcommand\thedefinition{13.\arabic{theorem}}
+\renewcommand\thetheorem{13.\arabic{theorem}}
+\renewcommand\thelemma{13.\arabic{theorem}}
+\renewcommand\theproposition{13.\arabic{theorem}}
+\renewcommand\thecorollary{13.\arabic{theorem}}
+\renewcommand\theexample{13.\arabic{example}}
+\renewcommand\theexercise{13.\arabic{exercise}}
+\renewcommand\thefigure{13.\arabic{figure}}
+
+\title{\color{hdrBG}\bfseries\Huge Matrix Differential Calculus I}
+\author{}\date{}
+
+\begin{document}
+
+<<setup, include=FALSE>>=
+source("la_knitr_setup.R")
+knitr::opts_chunk$set(fig.path = "figs/unit13-")
+@
+
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+{\color{hdrBG}\bfseries\fontsize{26}{32}\selectfont
+ Unit 13.\ Matrix Differential Calculus I}
+\end{center}
+\vspace*{\fill}
+\end{titlepage}
+
+\setcounter{page}{1}
+
+%=============================================================================
+\section{First Differentials as Linear Maps}\label{sec:13.1}
+%=============================================================================
+
+\Needspace{.80\textheight}
+\subsection{Differentiability and uniqueness}\label{sec:13.1.1}
+
+\begin{definition}[First differential]\label{def:13-differential}
+A set $\calU\subseteq\Real^{m\times n}$ is \emph{open} if, for every
+$\bX\in\calU$, some $\rho>0$ satisfies
+\[
+ \norm{\bDelta}_F<\rho\ie \bX+\bDelta\in\calU.
+\]
+Let $\bF:\calU\to\Real^{p\times q}$.  The function $\bF$ is
+\emph{differentiable at $\bX$} if a linear map
+$\calL_{\bX}:\Real^{m\times n}\to\Real^{p\times q}$ and a remainder
+$\bR_{\bX}$ satisfy
+\begin{align}
+ \bF(\bX+\bDelta)
+ &=\bF(\bX)+\calL_{\bX}(\bDelta)+\bR_{\bX}(\bDelta),
+ \label{eq:13-diff-definition}\\
+ &\forall\epsilon>0\ \exists\eta>0:\quad
+ 0<\norm{\bDelta}_F<\eta
+ \ie
+ \norm{\bR_{\bX}(\bDelta)}_F
+ <\epsilon\norm{\bDelta}_F.
+ \label{eq:13-little-o}
+\end{align}
+The \emph{first differential} is
+\[
+ \dd\bF_{\bX}[\bDelta]:=\calL_{\bX}(\bDelta).
+\]
+For scalar output, replace the output Frobenius norm by absolute value.
+The notation $\bDelta\to\bO$ means $\norm{\bDelta}_F\to0$, and
+$\bR_{\bX}(\bDelta)=o(\norm{\bDelta}_F)$ abbreviates
+\eqref{eq:13-little-o}.  The relation
+$\bR_{\bX}(\bDelta)=O(\norm{\bDelta}_F^k)$ means
+\[
+ \exists C,\eta>0:\quad
+ \norm{\bDelta}_F<\eta
+ \ie
+ \norm{\bR_{\bX}(\bDelta)}_F
+ \leqslant C\norm{\bDelta}_F^k.
+\]
+For the identity map $\operatorname{id}(\bX)=\bX$,
+\[
+ \dd\operatorname{id}_{\bX}[\bDelta]=\bDelta;
+\]
+thereafter $\dd\bX$ denotes the chosen increment $\bDelta$.
+\origin{Adapted from H §§15.1a, 15.1c, especially Eq.~(15.1.1); A\&M pp.~298--299; MC Eqs.~(10)--(11)}
+\end{definition}
+
+\Needspace{.38\textheight}
+\begin{lemma}[Uniqueness and continuity]\label{lem:13-unique-continuous}
+The linear map in Definition~\ref{def:13-differential} is unique.  If
+$\bF$ is differentiable at $\bX$, then
+\[
+ \bF(\bX+\bDelta)\longrightarrow\bF(\bX)
+ \qquad(\bDelta\to\bO).
+\]
+\origin{Course formulation from H Eq.~(15.1.1); MC Eqs.~(10)--(11)}
+\end{lemma}
+
+\begin{proof}
+Suppose $\calL_1,\calL_2$ have remainders $\bR_1,\bR_2$.  For fixed
+$\bE\neq\bO$ and $t\neq0$,
+\[
+ (\calL_1-\calL_2)(\bE)
+ =\frac{\bR_2(t\bE)-\bR_1(t\bE)}{t}\longrightarrow\bO.
+\]
+Hence $\calL_1(\bE)=\calL_2(\bE)$; equality at $\bE=\bO$ follows from
+linearity.
+
+For the coordinate basis $\{\bE_{ij}\}$, define $\bM_{\calL}$ by
+\[
+ \bM_{\calL}\avec\bE_{ij}=\avec\{\calL(\bE_{ij})\}.
+\]
+Linearity and the vec isometry give
+\[
+ \avec\{\calL(\bDelta)\}=\bM_{\calL}\avec\bDelta,
+ \qquad
+ \norm{\calL(\bDelta)}_F
+ \leqslant\norm{\bM_{\calL}}_2\norm{\bDelta}_F.
+\]
+Thus both $\calL(\bDelta)$ and $\bR_{\bX}(\bDelta)$ tend to zero in
+\eqref{eq:13-diff-definition}.
+\end{proof}
+
+\newpage
+\subsection{Jacobians, gradients, and identification}\label{sec:13.1.2}
+
+\begin{definition}[Jacobian and matrix gradient]\label{def:13-jacobian-gradient}
+If $\bF:\calU\to\Real^{p\times q}$ is differentiable at $\bX$, its
+\emph{Jacobian} is the coordinate matrix of its differential:
+\begin{equation}
+ \avec\{\dd\bF_{\bX}[\bDelta]\}
+ =\Dm\bF(\bX)\avec\bDelta,
+ \qquad
+ \Dm\bF(\bX)
+ :=\frac{\partial\avec\bF}{\partial(\avec\bX)'}.
+ \label{eq:13-jacobian-definition}
+\end{equation}
+For differentiable $f:\calU\to\Real$, its \emph{matrix gradient}
+$\nabla_{\bX}f\in\Real^{m\times n}$ is defined by
+\begin{equation}
+ \dd f_{\bX}[\bDelta]
+ =\tr\{(\nabla_{\bX}f)'\bDelta\}.
+ \label{eq:13-gradient-definition}
+\end{equation}
+\origin{Adapted from A\&M Eqs.~(13.1)--(13.2); H §§15.1c, 15.1e--f; MC Eqs.~(7)--(9)}
+\end{definition}
+
+\begin{derivation}[Coordinate consequences]
+If $\ba'$ is the coordinate row of the linear functional $\dd f_{\bX}$,
+the vec bijection supplies the unique $\bG$ with $\avec\bG=\ba$; then
+$\ba'\avec\bDelta=\tr(\bG'\bDelta)$.  Thus
+\eqref{eq:13-gradient-definition} always defines a matrix gradient.
+If $\bE_{ij}$ has a $1$ in position $(i,j)$ and zeros elsewhere, then
+the Jacobian columns and gradient entries are
+\begin{align}
+ \Dm\bF(\bX)\avec\bE_{ij}
+ &=\left.\frac{\dd}{\dd t}\avec\bF(\bX+t\bE_{ij})\right|_{t=0},
+ \label{eq:13-partial-column}\\
+ (\nabla_{\bX}f)_{ij}
+ &=\left.\frac{\dd}{\dd t}f(\bX+t\bE_{ij})\right|_{t=0}.
+ \label{eq:13-partial-gradient}
+\end{align}
+To verify~\eqref{eq:13-partial-column}, substitute
+$\bDelta=t\bE_{ij}$ in~\eqref{eq:13-diff-definition}, divide by $t$,
+and let $t\to0$.  Equation~\eqref{eq:13-partial-gradient} is its scalar
+coordinate form.
+\end{derivation}
+
+\Needspace{.38\textheight}
+\begin{theorem}[First identification]\label{thm:13-identification}
+\begin{align}
+ \bigl[\,\avec\{\dd\bF_{\bX}[\bDelta]\}
+ =\bJ\avec\bDelta\text{ for every }\bDelta\,\bigr]
+ &\ifff \Dm\bF(\bX)=\bJ,
+ \label{eq:13-identify-jacobian}\\
+ \bigl[\,\dd f_{\bX}[\bDelta]
+ =\tr(\bG'\bDelta)\text{ for every }\bDelta\,\bigr]
+ &\ifff \nabla_{\bX}f=\bG.
+ \label{eq:13-identify-gradient}
+\end{align}
+\tcbbreak
+Consequently,
+\begin{equation}
+ \Dm f(\bX)=\{\avec(\nabla_{\bX}f)\}'.
+ \label{eq:13-gradient-row}
+\end{equation}
+\origin{Adapted from A\&M Eq.~(13.3) and Ex.~13.7; MC Prop.~11; H §15.6}
+\end{theorem}
+
+\begin{proof}
+The coordinate matrix of a linear map is unique, proving
+\eqref{eq:13-identify-jacobian}.  By the vec inner-product identity,
+\[
+ \tr(\bG'\bDelta)=(\avec\bG)'\avec\bDelta.
+\]
+Equality for every $\bDelta$, followed by $\bDelta=\bE_{ij}$, proves
+\eqref{eq:13-identify-gradient}.  Equation~\eqref{eq:13-gradient-row}
+follows from the two identifications.
+\end{proof}
+
+\Needspace{.80\textheight}
+\subsection{Algebra and composition}\label{sec:13.1.3}
+
+\begin{theorem}[Algebra of first differentials]\label{thm:13-differential-rules}
+Let $\bF,\bG$ be differentiable at $\bX$ and let $\alpha,\beta$ be
+constants.  With all products conformable,
+\begin{align}
+ \dd(\alpha\bF+\beta\bG)
+ &=\alpha\,\dd\bF+\beta\,\dd\bG,
+ \label{eq:13-d-sum}\\
+ \dd(\bF')&=(\dd\bF)',
+ &\dd(\avec\bF)&=\avec(\dd\bF),
+ \label{eq:13-d-linear-maps}\\
+ \dd\tr\bF&=\tr(\dd\bF),
+ \label{eq:13-d-trace}\\
+ \dd(\bF\bG)&=(\dd\bF)\bG+\bF(\dd\bG),
+ \label{eq:13-d-product}\\
+ \dd(\bF\otimes\bG)
+ &=(\dd\bF)\otimes\bG+\bF\otimes(\dd\bG).
+ \label{eq:13-d-kron}
+\end{align}
+In~\eqref{eq:13-d-trace}, $\bF$ is square.
+All quantities on the right are evaluated at $\bX$ and in the same
+increment $\bDelta$.
+\origin{Adapted from A\&M Exs.~13.1--13.3; H Lemmas~15.4.1--15.4.3 and Eqs.~(15.4.9)--(15.4.10); MC Eqs.~(12), (15)--(17)}
+\end{theorem}
+
+\begin{proof}
+Put $h=\norm{\bDelta}_F$ and write
+\[
+ \bF(\bX+\bDelta)=\bF+\bL_F+\bR_F,
+ \qquad
+ \bG(\bX+\bDelta)=\bG+\bL_G+\bR_G.
+\]
+The coordinate-matrix bound in Lemma~\ref{lem:13-unique-continuous} gives
+\[
+ \norm{\bL_F}_F+\norm{\bL_G}_F=O(h),
+ \qquad
+ \norm{\bR_F}_F+\norm{\bR_G}_F=o(h).
+\]
+For the linear operations,
+\begin{align*}
+ \bR_{\alpha\bF+\beta\bG}&=\alpha\bR_F+\beta\bR_G=o(h),\\
+ \norm{\bR_F'}_F&=\norm{\bR_F}_F,&
+ \norm{\avec\bR_F}_2&=\norm{\bR_F}_F,\\
+ \abs{\tr\bR_F}&\leqslant\sqrt p\,\norm{\bR_F}_F
+ \quad(\bF\in\Real^{p\times p}).
+\end{align*}
+These bounds prove~\eqref{eq:13-d-sum}--\eqref{eq:13-d-trace}.
+For matrix multiplication, subtraction of its asserted linear part leaves
+\[
+ \bR_F\bG+\bF\bR_G+\bL_F\bL_G
+ +\bL_F\bR_G+\bR_F\bL_G+\bR_F\bR_G.
+\]
+The bounds
+\[
+ \norm{\bA\bB}_F\leqslant\norm{\bA}_2\norm{\bB}_F,
+ \qquad
+ \norm{\bA\otimes\bB}_F=\norm{\bA}_F\norm{\bB}_F
+\]
+make this sum $o(h)$.  The identical six-term expansion with every product
+replaced by $\otimes$ is $o(h)$ by the second bound.  This proves
+\eqref{eq:13-d-product}--\eqref{eq:13-d-kron}.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Chain rule]\label{thm:13-chain-rule}
+Let $\bF:\calU\to\calV$ be differentiable at $\bX$ and
+$\bG:\calV\to\Real^{r\times s}$ be differentiable at
+$\bY=\bF(\bX)$, where $\calU,\calV$ are open matrix sets.  Then
+\begin{align}
+ \dd(\bG\circ\bF)_{\bX}[\bDelta]
+ &=\dd\bG_{\bY}\!\left[\dd\bF_{\bX}[\bDelta]\right],
+ \label{eq:13-chain-differential}\\
+ \Dm(\bG\circ\bF)(\bX)
+ &=\Dm\bG(\bY)\Dm\bF(\bX).
+ \label{eq:13-chain-jacobian}
+\end{align}
+\origin{Adapted from H Thm.~15.7.1 and Eqs.~(15.7.7)--(15.7.10); A\&M pp.~299--300; MC Prop.~12}
+\end{theorem}
+
+\begin{proof}
+Put
+\[
+ \bK=\bF(\bX+\bDelta)-\bF(\bX)
+ =\calL_F(\bDelta)+\bR_F(\bDelta).
+\]
+Lemma~\ref{lem:13-unique-continuous} gives
+$\bK\to\bO$ and $\norm{\bK}_F=O(\norm{\bDelta}_F)$.  Hence
+\begin{align*}
+ \bG(\bY+\bK)-\bG(\bY)
+ &=\calL_G\calL_F(\bDelta)
+   +\calL_G\bR_F(\bDelta)+\bR_G(\bK),\\
+ \frac{\norm{\calL_G\bR_F(\bDelta)}_F}{\norm{\bDelta}_F}
+ &\longrightarrow0,\\
+ \frac{\norm{\bR_G(\bK)}_F}{\norm{\bDelta}_F}
+ &=\frac{\norm{\bR_G(\bK)}_F}{\norm{\bK}_F}
+   \frac{\norm{\bK}_F}{\norm{\bDelta}_F}\longrightarrow0.
+\end{align*}
+If $\bK=\bO$, take the first factor in the last line as $0$.
+Thus the linear part is $\calL_G\calL_F$.  Coordinate matrices multiply,
+giving~\eqref{eq:13-chain-jacobian}.
+\end{proof}
+
+% \periodmark{End of period 1 of 3.}
+\newpage
+
+%=============================================================================
+\section{Reusable Matrix Differentials}\label{sec:13.2}
+%=============================================================================
+
+\Needspace{.80\textheight}
+\subsection{Trace forms and powers}\label{sec:13.2.1}
+
+\begin{theorem}[Trace-gradient formulas]\label{thm:13-trace-gradients}
+Let $\bX\in\Real^{m\times n}$ be unrestricted.  All constants are
+conformable; in the quadratic trace formula, $\bA$ and $\bB$ have orders
+$m$ and $n$.
+\begin{align}
+ f(\bX)=\tr(\bA'\bX)
+ &:\quad \dd f=\tr(\bA'\dd\bX),
+ &\nabla_{\bX}f&=\bA,
+ \label{eq:13-grad-linear}\\
+ f(\bX)=\ba'\bX\bbb
+ &:\quad \dd f=\ba'(\dd\bX)\bbb,
+ &\nabla_{\bX}f&=\ba\bbb',
+ \label{eq:13-grad-bilinear}\\
+ f(\bX)=\tr(\bX'\bA\bX\bB)
+ &:\quad \nabla_{\bX}f=\bA\bX\bB+\bA'\bX\bB',
+ \label{eq:13-grad-trace-quadratic}\\
+ f(\bX)=\norm{\bA\bX\bB-\bC}_F^2
+ &:\quad \nabla_{\bX}f
+ =2\bA'(\bA\bX\bB-\bC)\bB'.
+ \label{eq:13-grad-residual}
+\end{align}
+\origin{Adapted from H §15.6 and Exs.~15.8, 15.11; A\&M Exs.~13.6--13.7, 13.10; MC Ex.~19}
+\end{theorem}
+
+\begin{proof}
+The differential rules and trace cyclicity give
+\begin{align*}
+ \dd\tr(\bA'\bX)&=\tr(\bA'\dd\bX),\\
+ \dd(\ba'\bX\bbb)&=\ba'(\dd\bX)\bbb
+ =\tr\{(\ba\bbb')'\dd\bX\},\\
+ \dd\tr(\bX'\bA\bX\bB)
+ &=\tr\{(\dd\bX)'\bA\bX\bB
+       +\bX'\bA(\dd\bX)\bB\}\\
+ &=\tr\{(\bA\bX\bB+\bA'\bX\bB')'\dd\bX\}.
+\end{align*}
+For $\bR=\bA\bX\bB-\bC$,
+\[
+ \dd\norm{\bR}_F^2
+ =\dd\tr(\bR'\bR)
+ =2\tr\{\bR'\bA(\dd\bX)\bB\}
+ =2\tr\{(\bA'\bR\bB')'\dd\bX\}.
+\]
+Theorem~\ref{thm:13-identification} identifies all four gradients.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Matrix and trace powers]\label{thm:13-powers}
+For square $\bX$ and integer $k\geqslant1$,
+\begin{align}
+ \dd(\bX^k)
+ &=\sum_{j=0}^{k-1}\bX^j(\dd\bX)\bX^{k-1-j},
+ \label{eq:13-d-power}\\
+ \Dm(\bX^k)
+ &=\sum_{j=0}^{k-1}(\bX^{k-1-j})'\otimes\bX^j,
+ \label{eq:13-jacobian-power}\\
+ \dd\tr(\bX^k)
+ &=k\tr\{\bX^{k-1}\dd\bX\},
+ &\nabla_{\bX}\tr(\bX^k)&=k(\bX^{k-1})'.
+ \label{eq:13-grad-trace-power}
+\end{align}
+\origin{Adapted from A\&M Exs.~13.8, 13.18; H Exs.~15.10, 16.31; S Ex.~10.24; MC Ex.~21}
+\end{theorem}
+
+\begin{proof}
+The product rule proves~\eqref{eq:13-d-power} by induction.  Roth's
+identity applied termwise gives~\eqref{eq:13-jacobian-power}.  Cyclicity
+gives
+\[
+ \sum_{j=0}^{k-1}\tr\{\bX^j(\dd\bX)\bX^{k-1-j}\}
+ =\sum_{j=0}^{k-1}\tr\{\bX^{k-1}\dd\bX\}.
+\]
+The gradient follows by identification.
+\end{proof}
+
+\newpage
+\subsection{Inverse, determinant, and log-determinant}\label{sec:13.2.2}
+
+\begin{theorem}[Inverse and linear-solve sensitivity]\label{thm:13-inverse}
+For nonsingular $\bX\in\Real^{n\times n}$,
+\begin{align}
+ \dd(\bX^{-1})
+ &=-\bX^{-1}(\dd\bX)\bX^{-1},
+ \label{eq:13-d-inverse}\\
+ \Dm(\bX^{-1})
+ &=-\bX^{-T}\otimes\bX^{-1}.
+ \label{eq:13-jacobian-inverse}
+\end{align}
+If $\bA(\bZ)$ is nonsingular and $\bA(\bZ),\bB(\bZ)$ are differentiable,
+then $\bY=\bA^{-1}\bB$ satisfies
+\begin{equation}
+ \dd\bY=\bA^{-1}\{\dd\bB-(\dd\bA)\bY\}.
+ \label{eq:13-solve-sensitivity}
+\end{equation}
+\origin{Adapted from H Eqs.~(15.8.14)--(15.8.18), (16.6.13), (16.6.15); A\&M Exs.~13.21, 13.25; MC Eq.~(32) and Ex.~22}
+\end{theorem}
+
+\begin{proof}
+Put $\bE=\bX^{-1}\bDelta$.  If $\norm{\bE}_2<1$, then
+\begin{equation*}
+ \norm{(\bI+\bE)\bz}_2
+ \geqslant(1-\norm{\bE}_2)\norm{\bz}_2.
+\end{equation*}
+Thus $\nul(\bI+\bE)=\{\bzero\}$, so $\bI+\bE$ is nonsingular.  For
+arbitrary $\by$, take $\bz=(\bI+\bE)^{-1}\by$ to obtain
+\[
+ \norm{(\bI+\bE)^{-1}}_2
+ \leqslant\frac1{1-\norm{\bE}_2}.
+\]
+Moreover,
+\[
+ (\bI+\bE)^{-1}=\bI-\bE+\bE^2(\bI+\bE)^{-1}.
+\]
+Therefore
+\begin{align*}
+ (\bX+\bDelta)^{-1}
+ &=\bX^{-1}-\bX^{-1}\bDelta\bX^{-1}\\
+ &\quad+(\bX^{-1}\bDelta)^2
+       (\bI+\bX^{-1}\bDelta)^{-1}\bX^{-1},
+\end{align*}
+and the last term is $O(\norm{\bDelta}_F^2)$.  This proves
+\eqref{eq:13-d-inverse}; Roth's identity gives
+\eqref{eq:13-jacobian-inverse}.  Finally,
+\[
+ \dd(\bA^{-1}\bB)
+ =-\bA^{-1}(\dd\bA)\bA^{-1}\bB+\bA^{-1}\dd\bB,
+\]
+which is~\eqref{eq:13-solve-sensitivity}.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Determinant and log-determinant]\label{thm:13-determinant}
+For every square $\bX$,
+\begin{align}
+ \dd\det\bX
+ &=\tr\{\adj(\bX)\dd\bX\},
+ &\nabla_{\bX}\det\bX&=\adj(\bX)'.
+ \label{eq:13-d-det-adj}
+\end{align}
+If $\bX$ is nonsingular, then
+\begin{align}
+ \dd\det\bX
+ &=(\det\bX)\tr(\bX^{-1}\dd\bX),
+ &\nabla_{\bX}\det\bX&=(\det\bX)\bX^{-T},
+ \label{eq:13-d-det-inverse}\\
+ \dd\log\abs{\det\bX}
+ &=\tr(\bX^{-1}\dd\bX),
+ &\nabla_{\bX}\log\abs{\det\bX}&=\bX^{-T}.
+ \label{eq:13-d-logdet}
+\end{align}
+For positive definite $\bX$, $\log\abs{\det\bX}=\log\det\bX$.
+\origin{Adapted from H Eqs.~(15.8.1)--(15.8.8); A\&M Exs.~13.32, 13.36; MC Eqs.~(30)--(31)}
+\end{theorem}
+
+\begin{proof}
+Write $\bX=(\bx_1,\ldots,\bx_n)$ and
+$\bDelta=(\boldsymbol{\delta}_1,\ldots,\boldsymbol{\delta}_n)$.
+Multilinearity gives
+\[
+ \det(\bX+\bDelta)
+ =\det\bX+
+ \sum_{j=1}^{n}\det(\bx_1,\ldots,\boldsymbol{\delta}_j,\ldots,\bx_n)
+ +O(\norm{\bDelta}_F^2).
+\]
+Laplace expansion identifies the linear sum as
+$\sum_{ij}c_{ij}\delta_{ij}=\tr\{\adj(\bX)\bDelta\}$, where
+$c_{ij}$ is the $(i,j)$ cofactor.  This proves
+\eqref{eq:13-d-det-adj}.  If $\bX$ is nonsingular,
+$\adj(\bX)=(\det\bX)\bX^{-1}$, giving
+\eqref{eq:13-d-det-inverse}.  The one-variable chain rule and
+$(\dd/\dd s)\log\abs{s}=s^{-1}$ for $s\neq0$ give
+\eqref{eq:13-d-logdet}.
+\end{proof}
+
+% \periodmark{End of period 2 of 3.}
+\newpage
+
+%=============================================================================
+\section{Jacobians and Structural Sensitivity}\label{sec:13.3}
+%=============================================================================
+
+\Needspace{.80\textheight}
+\subsection{Coordinate Jacobians}\label{sec:13.3.1}
+
+\begin{theorem}[Three coordinate Jacobians]\label{thm:13-coordinate-jacobians}
+Let $\bX\in\Real^{m\times n}$.
+\begin{align}
+ \bF(\bX)=\bA\bX\bB+\bC
+ &:\quad \Dm\bF(\bX)=\bB'\otimes\bA,
+ \label{eq:13-jacobian-AXB}\\
+ \bT(\bX)=\bX'
+ &:\quad \Dm\bT(\bX)=\bK_{mn},
+ \label{eq:13-jacobian-transpose}\\
+ \bG(\bX)=\bX'\bX
+ &:\quad \Dm\bG(\bX)
+ =(\bX'\otimes\bI_n)\bK_{mn}+\bI_n\otimes\bX'.
+ \label{eq:13-jacobian-gram}
+\end{align}
+In~\eqref{eq:13-jacobian-AXB}, $\bA\in\Real^{r\times m}$ and
+$\bB\in\Real^{n\times s}$, and $\bC\in\Real^{r\times s}$.
+\origin{Adapted from A\&M Exs.~13.17, 13.19; H Eqs.~(15.4.3), (15.4.7), (15.4.10), (15.5.3), (16.6.6), (16.6.8); MC §§4.4--4.5}
+\end{theorem}
+
+\begin{proof}
+The differentials are
+\[
+ \dd\bF=\bA(\dd\bX)\bB,
+ \qquad
+ \dd\bT=(\dd\bX)',
+ \qquad
+ \dd\bG=(\dd\bX)'\bX+\bX'\dd\bX.
+\]
+Roth's identity and
+$\avec(\dd\bX)'=\bK_{mn}\avec\dd\bX$ give the three coordinate
+matrices.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Jacobian determinants of two transformations]
+\label{thm:13-jacobian-determinants}
+Let $\bA\in\Real^{m\times m}$ and $\bB\in\Real^{n\times n}$ be
+nonsingular, and let $\bX\in\Real^{m\times n}$.
+\begin{align}
+ \bY=\bA\bX\bB
+ &:\quad
+ \det\!\left\{\frac{\partial\avec\bY}
+ {\partial(\avec\bX)'}\right\}
+ =(\det\bA)^n(\det\bB)^m,
+ \label{eq:13-jdet-AXB}\\
+ \bY=\bX^{-1},\quad \bX\in\Real^{n\times n}\text{ nonsingular}
+ &:\quad
+ \det\!\left\{\frac{\partial\avec\bY}
+ {\partial(\avec\bX)'}\right\}
+ =(-1)^n(\det\bX)^{-2n}.
+ \label{eq:13-jdet-inverse}
+\end{align}
+For nonsingular $\bX=\bX'$ and vech input and output coordinates,
+\begin{equation}
+ \det\!\left\{\frac{\partial\vech(\bX^{-1})}
+ {\partial(\vech\bX)'}\right\}
+ =(-1)^{n(n+1)/2}(\det\bX)^{-(n+1)}.
+ \label{eq:13-jdet-symmetric-inverse}
+\end{equation}
+\origin{Adapted from A\&M Exs.~13.37--13.38; H Eqs.~(16.6.9), (16.6.16), (16.6.20); MC §7}
+\end{theorem}
+
+\begin{proof}
+Equation~\eqref{eq:13-jacobian-AXB} and the Kronecker determinant give
+\eqref{eq:13-jdet-AXB}.  From~\eqref{eq:13-jacobian-inverse},
+\begin{align*}
+ \det(-\bX^{-T}\otimes\bX^{-1})
+ &=(-1)^{n^2}
+   \det(\bX^{-T})^n\det(\bX^{-1})^n\\
+ &=(-1)^n(\det\bX)^{-2n}.
+\end{align*}
+For symmetric $\bX$,
+\[
+ \dd\vech(\bX^{-1})
+ =-\bC_{\bX^{-1}}\dd\vech\bX.
+\]
+The dimension is $n(n+1)/2$, and
+$\det\bC_{\bX^{-1}}=(\det\bX)^{-(n+1)}$ by the earlier
+symmetric-congruence coordinate determinant.
+\end{proof}
+
+\Needspace{.80\textheight}
+\subsection{Projection and eigenpair sensitivity}\label{sec:13.3.2}
+
+\begin{theorem}[Differential of a full-rank projector]
+\label{thm:13-projector-differential}
+Let $\bX\in\Real^{n\times p}$ have full column rank and put
+\[
+ \bR=(\bX'\bX)^{-1}\bX',
+ \qquad
+ \bP=\bX\bR,
+ \qquad
+ \bM=\bI_n-\bP.
+\]
+Then
+\begin{equation}
+ \dd\bP=\bM(\dd\bX)\bR
+          +\bR'(\dd\bX)'\bM.
+ \label{eq:13-d-projector}
+\end{equation}
+\origin{Adapted from H Thm.~15.11.1, Eq.~(15.11.1) with $\bW=\bI$; A\&M Ex.~13.24}
+\end{theorem}
+
+\begin{proof}
+Let $\bS=(\bX'\bX)^{-1}$.  The product and inverse rules give
+\begin{align*}
+ \dd\bP
+ &=(\dd\bX)\bS\bX'+\bX\bS(\dd\bX)'\\
+ &\quad-\bX\bS\{(\dd\bX)'\bX+\bX'(\dd\bX)\}\bS\bX'\\
+ &=(\bI-\bP)(\dd\bX)\bS\bX'
+   +\bX\bS(\dd\bX)'(\bI-\bP),
+\end{align*}
+which is~\eqref{eq:13-d-projector} because
+$\bR=\bS\bX'$ and $\bR'=\bX\bS$.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{theorem}[Derivative along a differentiable symmetric eigenpair]
+\label{thm:13-eigenpair-differential}
+Assume that $\bA(t)=\bA(t)'$ and a normalized eigenpair branch
+$(\lambda_i(t),\bq_i(t))$ are differentiable at $t=0$ and satisfy
+\[
+ \bA(t)\bq_i(t)=\lambda_i(t)\bq_i(t),
+ \qquad \bq_i(t)'\bq_i(t)=1.
+\]
+Write a dot for $\dd/\dd t$ at $0$.  Then
+\begin{align}
+ \dot\lambda_i&=\bq_i'\dot{\bA}\bq_i,
+ \label{eq:13-eigenvalue-derivative}\\
+ \bq_i'\dot{\bq}_i&=0.
+ \label{eq:13-eigenvector-normalization}
+\end{align}
+If $\lambda_i$ is simple and
+$\bA\bq_j=\lambda_j\bq_j$ for an orthonormal eigenbasis, then
+\begin{equation}
+ \dot{\bq}_i
+ =\sum_{j\neq i}
+ \frac{\bq_j'\dot{\bA}\bq_i}{\lambda_i-\lambda_j}\,\bq_j.
+ \label{eq:13-eigenvector-derivative}
+\end{equation}
+\origin{Adapted from H Eqs.~(21.15.1)--(21.15.3), under the simplicity hypothesis of Lemma~21.15.1}
+\end{theorem}
+
+\begin{proof}
+Differentiate the eigen-equation and the normalization:
+\begin{align*}
+ (\bA-\lambda_i\bI)\dot{\bq}_i
+ &=-(\dot{\bA}-\dot\lambda_i\bI)\bq_i,\\
+ 2\bq_i'\dot{\bq}_i&=0.
+\end{align*}
+Premultiplication of the first equation by $\bq_i'$ gives
+\eqref{eq:13-eigenvalue-derivative}.  For $j\neq i$,
+\[
+ (\lambda_j-\lambda_i)\bq_j'\dot{\bq}_i
+ =-\bq_j'\dot{\bA}\bq_i.
+\]
+Expand $\dot{\bq}_i$ in the orthonormal eigenbasis and use
+\eqref{eq:13-eigenvector-normalization}.
+\end{proof}
+
+\Needspace{.38\textheight}
+\begin{definition}[Stationary point]\label{def:13-stationary}
+Let $f:\calU\to\Real$ be differentiable on an open matrix set.  An
+interior point $\bX\in\calU$ is \emph{stationary} if
+\begin{equation}
+ \dd f_{\bX}[\bDelta]=0
+ \quad\text{for every }\bDelta.
+ \label{eq:13-stationary-differential}
+\end{equation}
+\tcbbreak
+By Theorem~\ref{thm:13-identification},
+\begin{equation}
+ \bX\text{ is stationary}
+ \ifff \nabla_{\bX}f=\bO
+ \ifff \Dm f(\bX)=\bzero'.
+ \label{eq:13-stationary-gradient}
+\end{equation}
+\origin{Adapted from A\&M p.~300; MC §5, opening paragraph}
+\end{definition}
+
+%=============================================================================
+\Needspace{.35\textheight}
+\section{Computation: Numerical Checks in R}\label{sec:13.4}
+%=============================================================================
+
+\subsection{A quadratic matrix map (§\ref{sec:13.1.1})}\label{sec:13.4.1}
+
+For $\bF(\bX)=\bX'\bX$,
+\[
+ \bF(\bX+h\bE)-\bF(\bX)-h\{\bE'\bX+\bX'\bE\}=h^2\bE'\bE.
+\]
+
+<<first-order-remainder>>=
+set.seed(1301)
+X <- matrix(rnorm(15), 5, 3)
+E <- matrix(rnorm(15), 5, 3)
+dF <- t(E) %*% X + t(X) %*% E
+h <- 10^-(1:8)
+err <- sapply(h, function(step) {
+  R <- t(X + step * E) %*% (X + step * E) - t(X) %*% X - step * dF
+  sqrt(sum(R^2))
+})
+cbind(h = h, error_over_h = err / h, error_over_h2 = err / h^2)
+@
+
+The printed $\texttt{error\_over\_h}$ tends to zero;
+$\texttt{error\_over\_h2}$ is constant up to rounding.
+
+\subsection{Jacobian of a two-sided linear map (§\ref{sec:13.3.1})}\label{sec:13.4.2}
+
+<<axb-jacobian>>=
+set.seed(1302)
+m <- 2; n <- 3; r <- 4; s <- 2
+A <- matrix(rnorm(r * m), r, m)
+B <- matrix(rnorm(n * s), n, s)
+X <- matrix(rnorm(m * n), m, n)
+map <- function(z) c(A %*% matrix(z, m, n) %*% B)
+step <- 1e-6
+numeric_J <- sapply(seq_len(m * n), function(j) {
+  ej <- numeric(m * n); ej[j] <- 1
+  (map(c(X) + step * ej) - map(c(X) - step * ej)) / (2 * step)
+})
+analytic_J <- t(B) %x% A
+c(maximum_entry_error = max(abs(numeric_J - analytic_J)),
+  tolerance = 5e-9)
+@
+
+\subsection{Inverse and log-determinant (§\ref{sec:13.2.2})}\label{sec:13.4.3}
+
+<<inverse-logdet>>=
+set.seed(1303)
+Z <- matrix(rnorm(16), 4, 4)
+X <- crossprod(Z) + diag(4)
+E <- matrix(rnorm(16), 4, 4)
+Xinv <- solve(X)
+d_inverse <- -Xinv %*% E %*% Xinv
+d_logdet <- sum(diag(Xinv %*% E))
+logabsdet <- function(M) as.numeric(determinant(M, logarithm = TRUE)$modulus)
+h <- 10^-(1:7)
+inverse_error <- sapply(h, function(step)
+  sqrt(sum((solve(X + step * E) - Xinv - step * d_inverse)^2)))
+logdet_error <- sapply(h, function(step)
+  abs(logabsdet(X + step * E) - logabsdet(X) - step * d_logdet))
+cbind(h = h,
+      inverse_error_over_h2 = inverse_error / h^2,
+      logdet_error_over_h2 = logdet_error / h^2)
+@
+
+The two scaled errors remain bounded until floating-point cancellation
+dominates.
+
+\subsection{Projection sensitivity (§\ref{sec:13.3.2})}\label{sec:13.4.4}
+
+<<projection-differential>>=
+set.seed(1304)
+X <- matrix(rnorm(21), 7, 3)
+E <- matrix(rnorm(21), 7, 3)
+projector <- function(Z) Z %*% solve(t(Z) %*% Z, t(Z))
+P <- projector(X); M <- diag(7) - P
+R <- solve(t(X) %*% X, t(X))
+dP <- M %*% E %*% R + t(R) %*% t(E) %*% M
+h <- 10^-(1:7)
+err <- sapply(h, function(step)
+  sqrt(sum((projector(X + step * E) - P - step * dP)^2)))
+c(tangent_block = max(abs(P %*% dP %*% P)),
+  symmetry_error = max(abs(dP - t(dP))),
+  max_scaled_remainder = max(err[1:5] / h[1:5]^2),
+  structural_zero_tolerance = 2e-10)
+@
+
+\subsection{Simple and repeated eigenvalues (§\ref{sec:13.3.2})}\label{sec:13.4.5}
+
+<<eigenvalue-differential>>=
+set.seed(1305)
+Q <- qr.Q(qr(matrix(rnorm(16), 4, 4)))
+A <- Q %*% diag(c(1, 2.5, 5, 8)) %*% t(Q)
+E0 <- matrix(rnorm(16), 4, 4); E <- (E0 + t(E0)) / 2
+q <- Q[, 4]
+analytic <- drop(t(q) %*% E %*% q)
+lambda_max <- function(M) max(eigen(M, symmetric = TRUE, only.values = TRUE)$values)
+h <- 10^-(1:7)
+simple_error <- sapply(h, function(step)
+  abs((lambda_max(A + step * E) - 8) / step - analytic))
+A_rep <- diag(c(3, 3, 1)); E_rep <- diag(c(1, -1, 0))
+side_steps <- c(-1e-6, 1e-6)
+side_quotients <- sapply(side_steps, function(step)
+  (lambda_max(A_rep + step * E_rep) - 3) / step)
+list(simple_branch = cbind(h = h, derivative_error = simple_error),
+     repeated_branch = cbind(h = side_steps, quotient = side_quotients))
+@
+
+The simple-branch errors tend to zero.  At the repeated eigenvalue, the two
+one-sided quotients are $-1$ and $1$.
+
+%=============================================================================
+\newpage
+\section{Pitfalls}\label{sec:13.5}
+%=============================================================================
+
+\subsection{Using a matrix-shaped partial array as a Jacobian}\label{sec:13.5.1}
+
+For $\bX\in\Real^{n\times n}$ and $f(\bX)=\tr\bX$,
+\[
+ \nabla_{\bX}f=\bI_n,
+ \qquad
+ \Dm f(\bX)=(\avec\bI_n)'.
+\]
+The first object has order $n\times n$; the Jacobian has order
+$1\times n^2$.
+
+\subsection{Commuting an increment through a matrix}\label{sec:13.5.2}
+
+\[
+ \dd(\bX^2)=(\dd\bX)\bX+\bX(\dd\bX),
+\]
+which equals $2\bX\dd\bX$ only when
+$\bX\dd\bX=(\dd\bX)\bX$.
+
+\subsection{Using inverse formulas at a singular matrix}\label{sec:13.5.3}
+
+The identity
+\[
+ \dd\det\bX=\tr\{\adj(\bX)\dd\bX\}
+\]
+holds at singular matrices.  The formulas containing $\bX^{-1}$ and
+$\log\abs{\det\bX}$ require $\det\bX\neq0$.
+
+\subsection{Treating symmetric coordinates as independent vec coordinates}
+\label{sec:13.5.4}
+
+If $\bX=\bX'$, then
+\[
+ \dd\avec\bX=\bD_n\dd\vech\bX.
+\]
+Consequently an unrestricted Jacobian $\bJ$ becomes $\bJ\bD_n$ on the
+input side; a symmetric output requires $\bD_r^+$ on the output side.
+
+\subsection{Applying a simple-eigenvalue formula at a repeated eigenvalue}
+\label{sec:13.5.5}
+
+Equation~\eqref{eq:13-eigenvector-derivative} contains
+$(\lambda_i-\lambda_j)^{-1}$.  If $\lambda_i=\lambda_j$, the eigenvector is not unique,
+and an ordered eigenvalue may have different one-sided derivatives.
+
+%=============================================================================
+\newpage
+\section{Exercises}\label{sec:13.6}
+%=============================================================================
+
+\Needspace{.38\textheight}
+\begin{exercise}[Partials without a differential]
+\label{exer:13-partials-not-differential}
+Define
+\[
+ f(x,y)=
+ \begin{cases}
+ \displaystyle\frac{xy}{\sqrt{x^2+y^2}},&(x,y)\neq(0,0),\\[1mm]
+ 0,&(x,y)=(0,0).
+ \end{cases}
+\]
+Prove that both partial derivatives at $(0,0)$ exist, but $f$ is not
+differentiable there.
+\origin{Course formulation from H §15.1c and A\&M pp.~298--299}
+\end{exercise}
+\begin{solution}
+On the coordinate axes, $f(t,0)=f(0,t)=0$, so both partial derivatives are
+$0$.  A differential would therefore have linear part $L(h,k)=0$.  For
+$t\neq0$,
+\[
+ \frac{\abs{f(t,t)-L(t,t)}}{\norm{(t,t)'}_2}
+ =\frac{|t|/\sqrt2}{\sqrt2|t|}=\frac12\not\longrightarrow0.
+\]
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Normalizing a vector]\label{exer:13-normalize}
+For $\bx\in\Real^n\setminus\{\bzero\}$, put
+$\bu=\bx/\norm{\bx}_2$.  Prove
+\[
+ \dd\norm{\bx}_2=\bu'\dd\bx,
+ \qquad
+ \dd\bu=\frac1{\norm{\bx}_2}(\bI-\bu\bu')\dd\bx.
+\]
+Identify $\Dm\bu(\bx)$ and its null space.
+\origin{Course formulation from A\&M Ex.~13.5 and H Thm.~15.7.1}
+\end{exercise}
+\begin{solution}
+For $r=(\bx'\bx)^{1/2}>0$, the scalar square-root derivative and
+Theorem~\ref{thm:13-chain-rule} give
+\[
+ \dd r=\frac1{2r}\dd(\bx'\bx)
+ =\frac{\bx'\dd\bx}{r}=\bu'\dd\bx.
+\]
+Hence
+\[
+ \dd\bu=r^{-1}\dd\bx-r^{-2}\bx\,\dd r
+ =r^{-1}(\bI-\bu\bu')\dd\bx.
+\]
+Thus $\Dm\bu=r^{-1}(\bI-\bu\bu')$ and
+$\nul(\Dm\bu)=\spn\{\bx\}$.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Generalized Rayleigh quotient]
+\label{exer:13-generalized-rayleigh}
+Let $\bA,\bB\in\Real^{n\times n}$, with
+$\bA=\bA'$ and $\bB=\bB'\psdgt\bO$.  For
+$\bx\in\Real^n\setminus\{\bzero\}$, put
+\[
+ r(\bx)=\frac{\bx'\bA\bx}{\bx'\bB\bx}.
+\]
+Prove
+\[
+ \nabla_{\bx}r
+ =\frac{2}{\bx'\bB\bx}\{\bA\bx-r(\bx)\bB\bx\}.
+\]
+\origin{Adapted from H Eqs.~(15.2.6), (15.3.7); A\&M Ex.~13.4(b)}
+\end{exercise}
+\begin{solution}
+Let $a=\bx'\bA\bx$ and $b=\bx'\bB\bx>0$.  Then
+\begin{align*}
+ \dd r&=b^{-1}\dd a-ab^{-2}\dd b\\
+ &=\frac{2}{b}\{\bA\bx-(a/b)\bB\bx\}'\dd\bx.
+\end{align*}
+Identification gives the result.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Jacobian of a Kronecker product]
+\label{exer:13-kron-jacobian}
+Let $\bX\in\Real^{p\times q}$, $\bY\in\Real^{r\times s}$,
+\[
+ \bz=\binom{\avec\bX}{\avec\bY},
+ \qquad
+ \bP=\bI_q\otimes\bK_{sp}\otimes\bI_r,
+ \qquad
+ \bH(\bz)=\bX\otimes\bY.
+\]
+Prove
+\begin{align*}
+ \avec(\bX\otimes\bY)
+ &=\bP(\avec\bX\otimes\avec\bY),\\
+ \Dm\bH(\bz)
+ &=\bP\bigl(\bI_{pq}\otimes\avec\bY,\,
+             (\avec\bX)\otimes\bI_{rs}\bigr).
+\end{align*}
+\origin{Adapted from H Ex.~16.32(d)}
+\end{exercise}
+\begin{solution}
+Since
+\[
+ \avec\bX=\sum_{i,j}x_{ij}(\eu_j\otimes\eu_i),
+ \qquad
+ \avec\bY=\sum_{a,b}y_{ab}(\eu_b\otimes\eu_a),
+\]
+the commutation action in the middle two factors gives
+\begin{align*}
+ \bP(\avec\bX\otimes\avec\bY)
+ &=\sum_{i,j,a,b}x_{ij}y_{ab}
+   (\eu_j\otimes\eu_b\otimes\eu_i\otimes\eu_a)\\
+ &=\avec(\bX\otimes\bY).
+\end{align*}
+Therefore
+\begin{align*}
+ \dd\avec\bH
+ &=\bP\{(\dd\avec\bX)\otimes\avec\bY
+          +\avec\bX\otimes(\dd\avec\bY)\}\\
+ &=\bP\bigl(\bI_{pq}\otimes\avec\bY,\,
+             (\avec\bX)\otimes\bI_{rs}\bigr)\dd\bz.
+\end{align*}
+Theorem~\ref{thm:13-identification} yields the Jacobian.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Negative matrix powers]\label{exer:13-negative-powers}
+For nonsingular $\bX\in\Real^{n\times n}$ and integer $k\geqslant1$,
+prove
+\begin{align*}
+ \dd(\bX^{-k})
+ &=-\sum_{j=1}^{k}\bX^{-j}(\dd\bX)\bX^{-(k+1-j)},\\
+ \Dm(\bX^{-k})
+ &=-\sum_{j=1}^{k}
+   (\bX^{-(k+1-j)})'\otimes\bX^{-j}.
+\end{align*}
+\origin{Course formulation from A\&M Exs.~13.18, 13.21; H Eqs.~(15.4.8), (15.8.15)}
+\end{exercise}
+\begin{solution}
+Apply~\eqref{eq:13-d-power} to $(\bX^{-1})^k$ and substitute
+$\dd\bX^{-1}=-\bX^{-1}(\dd\bX)\bX^{-1}$.  Roth's identity applied to
+each summand gives the Jacobian.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Relative sensitivity of a linear solve]
+\label{exer:13-solve-condition}
+Let $\bA\bx=\bbb$, where $\bA\in\Real^{n\times n}$ is nonsingular and
+$\bbb\in\Real^n\setminus\{\bzero\}$.
+For simultaneous first-order changes, prove
+\[
+ \frac{\norm{\dd\bx}_2}{\norm{\bx}_2}
+ \leqslant\cond_2(\bA)
+ \left(
+  \frac{\norm{\dd\bA}_2}{\norm{\bA}_2}
+  +\frac{\norm{\dd\bbb}_2}{\norm{\bbb}_2}
+ \right),
+ \qquad
+ \cond_2(\bA)=\norm{\bA}_2\norm{\bA^{-1}}_2.
+\]
+\origin{Course formulation from H Eq.~(15.8.17)}
+\end{exercise}
+\begin{solution}
+Equation~\eqref{eq:13-solve-sensitivity} gives
+\[
+ \norm{\dd\bx}_2
+ \leqslant\norm{\bA^{-1}}_2
+ \{\norm{\dd\bbb}_2+\norm{\dd\bA}_2\norm{\bx}_2\}.
+\]
+Since $\norm{\bbb}_2\leqslant\norm{\bA}_2\norm{\bx}_2$, division by
+$\norm{\bx}_2$ proves the bound.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[An inverse bilinear form]
+\label{exer:13-inverse-bilinear}
+For nonsingular $\bX\in\Real^{n\times n}$ and constant
+$\ba,\bbb\in\Real^n$, find the gradient
+of $f(\bX)=\ba'\bX^{-1}\bbb$.
+\origin{Adapted from A\&M Exs.~13.22, 13.26; H Eqs.~(15.8.15), (15.8.18)}
+\end{exercise}
+\begin{solution}
+\begin{align*}
+ \dd f
+ &=-\ba'\bX^{-1}(\dd\bX)\bX^{-1}\bbb\\
+ &=-\tr\{\bX^{-1}\bbb\ba'\bX^{-1}\dd\bX\}.
+\end{align*}
+Hence
+\[
+ \nabla_{\bX}f=-\bX^{-T}\ba\bbb'\bX^{-T}.
+\]
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[A Gram log-determinant]
+\label{exer:13-gram-logdet}
+Let $\bA\in\Real^{m\times m}$ satisfy $\bA=\bA'\psdgt\bO$, and let
+$\bX\in\Real^{m\times n}$ have full column rank.  For
+\[
+ f(\bX)=\log\det(\bX'\bA\bX),
+\]
+prove
+\[
+ \nabla_{\bX}f=2\bA\bX(\bX'\bA\bX)^{-1}.
+\]
+\origin{Adapted from A\&M Ex.~13.36(b); H Ex.~15.16; MC Ex.~20}
+\end{exercise}
+\begin{solution}
+Put $\bS=\bX'\bA\bX\psdgt\bO$.  Then
+\begin{align*}
+ \dd f
+ &=\tr\{\bS^{-1}((\dd\bX)'\bA\bX
+                   +\bX'\bA\dd\bX)\}\\
+ &=2\tr\{(\bA\bX\bS^{-1})'\dd\bX\}.
+\end{align*}
+Theorem~\ref{thm:13-identification} gives the result.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Stationary set of the determinant]
+\label{exer:13-det-stationary-set}
+For $f(\bX)=\det\bX$ on $\Real^{n\times n}$, prove
+\[
+ \bX\text{ is stationary}
+ \ifff \rank\bX\leqslant n-2.
+\]
+\origin{Adapted from A\&M Ex.~13.33; H Eqs.~(15.8.1)--(15.8.3)}
+\end{exercise}
+\begin{solution}
+By~\eqref{eq:13-d-det-adj} and~\eqref{eq:13-stationary-gradient},
+\[
+ \bX\text{ is stationary}\ifff\adj\bX=\bO.
+\]
+The earlier adjugate-rank classification gives
+$\adj\bX=\bO\ifff\rank\bX\leqslant n-2$.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Kernel of the Gram differential]
+\label{exer:13-gram-kernel}
+Let $\bX\in\Real^{m\times n}$ have full column rank and
+$\bG=\bX'\bX$.  Characterize all $\bDelta$ satisfying
+\[
+ \dd\bG_{\bX}[\bDelta]=\bO.
+\]
+For each $\bS=\bS'\in\Real^{n\times n}$, construct an increment
+$\bDelta_{\bS}$ satisfying
+$\dd\bG_{\bX}[\bDelta_{\bS}]=\bS$.
+Deduce that the Jacobian of $\bX\mapsto\vech(\bX'\bX)$ has rank
+$n(n+1)/2$.
+\origin{Course formulation from A\&M Ex.~13.19(c); H Eqs.~(15.4.3), (15.4.10), (15.5.3)}
+\end{exercise}
+\begin{solution}
+The equation is
+\[
+ \bX'\bDelta+\bDelta'\bX=\bO.
+\]
+Put $\bK=\bX'\bDelta$ and
+$\bZ=\bDelta-\bX\bG^{-1}\bK$.  Then
+\[
+ \bK'=-\bK,
+ \qquad \bX'\bZ=\bO,
+ \qquad \bDelta=\bX\bG^{-1}\bK+\bZ.
+\]
+Conversely, every such skew-symmetric $\bK$ and $\bZ$ satisfy the equation.
+For $\bS=\bS'$, take
+\[
+ \bDelta_{\bS}=\tfrac12\bX\bG^{-1}\bS;
+ \qquad
+ \bX'\bDelta_{\bS}=\bDelta_{\bS}'\bX=\tfrac12\bS.
+\]
+The kernel dimension is
+\[
+ \frac{n(n-1)}2+(m-n)n=mn-\frac{n(n+1)}2.
+\]
+Rank--nullity gives rank $n(n+1)/2$, the dimension of the symmetric output.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Inverse Jacobian as its own chain check]
+\label{exer:13-inverse-chain-check}
+For nonsingular $\bX\in\Real^{n\times n}$, let
+$\calI(\bX)=\bX^{-1}$.  Verify directly that
+\[
+ \Dm\calI(\bX^{-1})\Dm\calI(\bX)=\bI_{n^2}.
+\]
+For nonsingular $\bX=\bX'$, verify the analogous identity in vech
+coordinates.
+\origin{Adapted from A\&M Ex.~13.38; H Eqs.~(16.6.15), (16.6.19)}
+\end{exercise}
+\begin{solution}
+The unrestricted product is
+\begin{align*}
+ &\{-\bX'\otimes\bX\}
+  \{-\bX^{-T}\otimes\bX^{-1}\}\\
+ &\qquad=(\bX'\bX^{-T})\otimes(\bX\bX^{-1})=\bI_{n^2}.
+\end{align*}
+For symmetric nonsingular $\bX$ and $\bX^{-1}$, the earlier congruence-
+coordinate rule gives $\bC_{\bA}\bC_{\bB}=\bC_{\bA\bB}$.
+The two Jacobians are
+$-\bC_{\bX}$ and $-\bC_{\bX^{-1}}$; their product is
+$\bC_{\bX}\bC_{\bX^{-1}}=\bC_{\bI}=\bI_{n(n+1)/2}$.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Tangent blocks of a projector]
+\label{exer:13-projector-tangent}
+Let $\bP(t)=\bP(t)'=\bP(t)^2$ be differentiable at $0$, and put
+$\bP=\bP(0)$ and $\dot{\bP}=\bP'(0)$.  Prove
+\begin{align*}
+ \dot{\bP}'&=\dot{\bP},&
+ \bP\dot{\bP}\bP&=\bO,\\
+ (\bI-\bP)\dot{\bP}(\bI-\bP)&=\bO,&
+ \tr\dot{\bP}&=0.
+\end{align*}
+\origin{Adapted from H Ex.~15.6 and Thm.~15.11.1; A\&M Ex.~13.24}
+\end{exercise}
+\begin{solution}
+Differentiate $\bP'=\bP$ and $\bP^2=\bP$:
+\[
+ \dot{\bP}'=\dot{\bP},
+ \qquad
+ \dot{\bP}\bP+\bP\dot{\bP}=\dot{\bP}.
+\]
+Premultiplication and postmultiplication by $\bP$ gives
+$2\bP\dot{\bP}\bP=\bP\dot{\bP}\bP$.  Replacing $\bP$ by
+$\bI-\bP$ gives the second zero block.  Taking traces in the differentiated
+idempotence identity gives $2\tr(\bP\dot{\bP})=\tr\dot{\bP}$, while the
+first zero block and cyclicity give $\tr(\bP\dot{\bP})=0$.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Null directions of the projector map]
+\label{exer:13-projector-null-directions}
+For the projector $\bP_{\bX}=\bX(\bX'\bX)^{-1}\bX'$ with full-column-rank
+$\bX\in\Real^{n\times p}$, prove
+\[
+ \dd\bP_{\bX}[\bDelta]=\bO
+ \ifff \bDelta=\bX\bC
+ \quad\text{for some }\bC\in\Real^{p\times p}.
+\]
+\origin{Course formulation from H Thm.~15.11.1; A\&M Ex.~13.24}
+\end{exercise}
+\begin{solution}
+If $\bDelta=\bX\bC$, then $\bM\bDelta=\bO$, so
+\eqref{eq:13-d-projector} vanishes.  Conversely, multiply that equation on
+the left by $\bM$ and on the right by $\bX$:
+\[
+ \bM\{\dd\bP_{\bX}[\bDelta]\}\bX
+ =\bM\bDelta\bR\bX=\bM\bDelta.
+\]
+Thus zero differential implies $\bDelta=\bP\bDelta
+=\bX(\bR\bDelta)$.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Spectral consistency of eigenvalue derivatives]
+\label{exer:13-eigenvalue-consistency}
+Let $\bA(t)=\bA(t)'$ have differentiable eigenpair branches
+$(\lambda_i(t),\bq_i(t))$, $i=1,\ldots,n$, at $t=0$, such that
+\[
+ \bA(t)\bq_i(t)=\lambda_i(t)\bq_i(t),
+ \qquad
+ \bq_i(t)'\bq_i(t)=1,
+\]
+and $\lambda_1(0),\ldots,\lambda_n(0)$ are distinct.  Prove
+\[
+ \sum_{i=1}^{n}\dot\lambda_i=\tr\dot{\bA}.
+\]
+If $\bA$ is nonsingular, also prove
+\[
+ \left.\frac{\dd}{\dd t}\det\bA(t)\right|_{t=0}
+ =\sum_{i=1}^{n}\left(\prod_{j\neq i}\lambda_j\right)
+   \bq_i'\dot{\bA}\bq_i.
+\]
+\origin{Course formulation from H Eq.~(21.15.2); A\&M Ex.~13.32}
+\end{exercise}
+\begin{solution}
+For the orthogonal $\bQ=(\bq_1,\ldots,\bq_n)$,
+\[
+ \sum_i\dot\lambda_i
+ =\sum_i\bq_i'\dot{\bA}\bq_i
+ =\tr(\bQ'\dot{\bA}\bQ)=\tr\dot{\bA}.
+\]
+If $\bA$ is nonsingular,
+\begin{align*}
+ \frac{\dd}{\dd t}\det\bA(t)\bigg|_{0}
+ &=(\det\bA)\tr(\bA^{-1}\dot{\bA})\\
+ &=\left(\prod_j\lambda_j\right)
+   \sum_i\lambda_i^{-1}\bq_i'\dot{\bA}\bq_i,
+\end{align*}
+which is the displayed sum.
+\end{solution}
+
+\Needspace{.38\textheight}
+\begin{exercise}[Splitting a repeated eigenvalue]
+\label{exer:13-repeated-eigenvalue}
+Let
+\[
+ \bA=\diag(\lambda,\lambda,\mu),
+ \qquad
+ \bE=\begin{pmatrix}a&b&0\\b&c&0\\0&0&0\end{pmatrix},
+ \qquad \lambda\neq\mu.
+\]
+Find the two eigenvalues of $\bA+t\bE$ that equal $\lambda$ at $t=0$.
+Show that their first-order rates are the two eigenvalues of
+$\begin{psmallmatrix}a&b\\b&c\end{psmallmatrix}$, and explain why a single
+formula $\dot\lambda=\bq'\bE\bq$ cannot define a unique gradient for an
+individually selected member of the repeated pair.
+\origin{Course formulation from H §21.15, especially the simplicity hypothesis of Lemma~21.15.1}
+\end{exercise}
+\begin{solution}
+The leading block equals
+\[
+ \lambda\bI_2+t\begin{pmatrix}a&b\\b&c\end{pmatrix}.
+\]
+Hence its eigenvalues are
+\[
+ \lambda+t\theta_{\pm},
+ \qquad
+ \theta_{\pm}=\frac{a+c\pm\sqrt{(a-c)^2+4b^2}}2.
+\]
+At $t=0$, every unit vector $\bq=(q_1,q_2,0)'$ is an eigenvector for
+$\lambda$, while $\bq'\bE\bq$ ranges over the Rayleigh quotients of the
+$2\times2$ block.  It is not a uniquely determined linear functional of
+$\bE$.
+\end{solution}
+
+\end{document}

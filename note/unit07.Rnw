@@ -1,0 +1,1988 @@
+% Compile:  python build.py 07
+% or by hand:
+%   Rscript -e "knitr::knit('unit07.Rnw')"
+%   xelatex -shell-escape unit07.tex        # run twice to settle the toc
+\documentclass[17pt]{extarticle}
+
+\input{la_preamble.tex}
+\usepackage{needspace}
+
+% Unit 7 specific
+\fancyhead[L]{\small\color{hdrBG}\textbf{Unit\ 7\ \ Eigenvalues}}
+
+\setcounter{theorem}{0}\setcounter{example}{0}
+\renewcommand\thedefinition{7.\arabic{theorem}}
+\renewcommand\thetheorem{7.\arabic{theorem}}
+\renewcommand\thelemma{7.\arabic{theorem}}
+\renewcommand\theproposition{7.\arabic{theorem}}
+\renewcommand\thecorollary{7.\arabic{theorem}}
+\renewcommand\theexample{7.\arabic{example}}
+\renewcommand\theexercise{7.\arabic{exercise}}
+\renewcommand\thefigure{7.\arabic{figure}}
+
+\title{\color{hdrBG}\bfseries\Huge Eigenvalues and Eigenvectors}
+\author{}\date{}
+
+\begin{document}
+
+<<setup, include=FALSE>>=
+source("la_knitr_setup.R")
+knitr::opts_chunk$set(fig.path = "figs/unit07-")
+@
+
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+{\color{hdrBG}\bfseries\fontsize{26}{32}\selectfont
+ Unit 7.\ Eigenvalues and Eigenvectors}
+\end{center}
+\vspace*{\fill}
+\end{titlepage}
+
+\setcounter{page}{1}
+
+%=============================================================================
+\section{Complex roots and the eigenvalue problem}\label{sec:7.1}
+%=============================================================================
+
+\subsection{Complex scalars and finite-dimensional algebra}\label{sec:7.1.1}
+
+\begin{definition}[Complex number, conjugate, and modulus]\label{def:complex-number}
+\[
+\mathbb C=\{a+\mathrm{i}b:a,b\in\mathbb R\},
+\qquad \mathrm{i}^{\,2}=-1.
+\]
+For $z=a+\mathrm{i}b$ and $w=c+\mathrm{i}d$,
+\[
+z+w=(a+c)+\mathrm{i}(b+d),\qquad
+zw=(ac-bd)+\mathrm{i}(ad+bc).
+\]
+The \emph{conjugate}, \emph{real part}, \emph{imaginary part}, and
+\emph{modulus} of $z$ are
+\[
+\bar z=a-\mathrm{i}b,\qquad
+\Re z=a,\qquad
+\Im z=b,\qquad
+|z|=(a^2+b^2)^{1/2}.
+\]
+A real number is identified with $a+\mathrm{i}0$.
+\origin{A\&M \S1.2 and Exs.~1.17--1.19}
+\end{definition}
+
+\begin{theorem}[Complex scalar identities]\label{thm:complex-scalar}
+For $z,w\in\mathbb C$,
+\[
+\overline{z+w}=\bar z+\bar w,\qquad
+\overline{zw}=\bar z\,\bar w,\qquad
+\overline{\bar z}=z,
+\]
+\[
+z\bar z=|z|^2,\qquad |zw|=|z||w|,\qquad
+|\bar z|=|z|.
+\]
+Moreover,
+\[
+z\ne0
+\quad\Longrightarrow\quad
+z^{-1}=\frac{\bar z}{|z|^2}.
+\]
+With the preceding addition and multiplication, $\mathbb C$ is a field.
+\origin{A\&M Exs.~1.17--1.19}
+\end{theorem}
+
+\begin{proof}
+Writing $z=a+\mathrm{i}b$ and $w=c+\mathrm{i}d$ gives
+\[
+\overline{zw}
+=(ac-bd)-\mathrm{i}(ad+bc)
+=(a-\mathrm{i}b)(c-\mathrm{i}d)
+=\bar z\,\bar w,
+\]
+\[
+z\bar z=(a+\mathrm{i}b)(a-\mathrm{i}b)=a^2+b^2=|z|^2,
+\]
+and the remaining conjugation identities follow entrywise.  Hence
+\[
+|zw|^2=zw\overline{zw}
+=z\bar z\,w\bar w
+=|z|^2|w|^2.
+\]
+Both sides are nonnegative, so $|zw|=|z||w|$.  If $z\ne0$, then
+$|z|^2=a^2+b^2>0$ and
+\[
+z\frac{\bar z}{|z|^2}=1.
+\]
+Associativity, commutativity, distributivity, and the identities $0,1$ follow
+by expanding real and imaginary parts and applying the real field laws.
+\end{proof}
+
+\begin{definition}[Complex vectors and matrices]\label{def:complex-matrices}
+For positive integers $m,n$,
+\[
+\mathbb C^n=\{(z_1,\ldots,z_n)':z_j\in\mathbb C\},
+\qquad
+\mathbb C^{m\times n}=\{\bA=(a_{ij}):a_{ij}\in\mathbb C\}.
+\]
+\tcbbreak
+Addition, scalar multiplication, matrix multiplication, span, linear
+independence, basis, dimension, kernel, image, rank, trace, transpose, and
+block partitioning are defined by the same coordinate formulas as over
+$\mathbb R$.  Write $\mathbb F\in\{\mathbb R,\mathbb C\}$ when a statement
+holds over either field.  Then
+\[
+\det\bA
+=\sum_{\sigma}
+\sgn(\sigma)\prod_{i=1}^n a_{i,\sigma(i)},
+\qquad \bA\in\mathbb F^{n\times n},
+\]
+where the sum is over the permutations of $\{1,\ldots,n\}$.
+\origin{S \S\S1.1--1.3 and \S3.1; A\&M \S1.2}
+\end{definition}
+
+\Needspace{.90\textheight}
+\begin{theorem}[Field transfer for finite-dimensional algebra]\label{thm:field-transfer}
+Let $\mathbb F\in\{\mathbb R,\mathbb C\}$.  The basis-extension theorem,
+rank--nullity, row reduction, row rank equals column rank, and the square
+inverse criterion hold in $\mathbb F^n$.  Moreover,
+\[
+\dim\mathbb F^{m\times n}=mn,\qquad
+\rank(\bA')=\rank(\bA)
+\quad\bigl(\bA\in\mathbb F^{m\times n}\bigr).
+\]
+The determinant over $\mathbb F$ is multilinear and alternating and satisfies
+\[
+\det(\bA\bB)=\det\bA\,\det\bB,\qquad
+\det(\bA')=\det\bA,\qquad
+\bA\adj(\bA)=\adj(\bA)\bA=(\det\bA)\bI.
+\]
+Block-triangular determinant identities and Sylvester's identity also hold:
+\[
+\det\begin{pmatrix}\bA&\bB\\\bO&\bD\end{pmatrix}
+=\det\bA\,\det\bD,
+\qquad
+\det(\bI_m-\bX\bY)=\det(\bI_n-\bY\bX)
+\]
+for $\bX\in\mathbb F^{m\times n}$ and
+$\bY\in\mathbb F^{n\times m}$.
+\origin{S \S\S1.1--1.3 and \S\S3.1--3.3}
+\end{theorem}
+
+\begin{proof}
+Every nonzero pivot in $\mathbb F$ has an inverse.  The elimination algorithm
+therefore produces echelon form over either field.  Pivot columns give a
+basis of the image; nonzero rows give a basis of the row space; free variables
+give a basis of the kernel; appending vectors and eliminating their
+coordinates proves basis extension.  For
+$T:\mathbb F^d\to\mathbb F^e$, counting pivots gives
+\[
+\dim\ker T+\dim\im T=\dim\dom T.
+\]
+For every matrix $\bA$,
+\[
+\dim\row(\bA)
+=\#\{\hbox{pivots of }\bA\}
+=\dim\col(\bA).
+\]
+The $mn$ matrices having one entry equal to $1$ and all other entries zero
+form a basis of $\mathbb F^{m\times n}$.  Transposition exchanges row rank and
+column rank.
+The earlier proofs of the displayed determinant identities expand only finite
+sums and products, cancel a nonzero pivot, or multiply unit block factors.
+The complex scalar identities supply every field operation used in those
+proofs, so each equality is unchanged over $\mathbb C$.
+\end{proof}
+
+\subsection{Polynomials over the two fields}\label{sec:7.1.2}
+
+\begin{definition}[Polynomial, root, factor, and multiplicity]\label{def:polynomial}
+For $\mathbb F\in\{\mathbb R,\mathbb C\}$,
+\[
+\mathbb F[t]
+=\left\{\sum_{j=0}^d c_jt^j:d\geqslant0,\ c_j\in\mathbb F\right\}.
+\]
+For a nonzero polynomial $p(t)=\sum_{j=0}^d c_jt^j$ with $c_d\ne0$,
+$\deg p=d$.  A polynomial $q$ \emph{divides} $p$, written $q\mid p$, if
+$p=qr$ for some $r\in\mathbb F[t]$.  A scalar $\lambda\in\mathbb F$ is a
+\emph{root} of $p$ if $p(\lambda)=0$.  Its \emph{multiplicity} is
+\[
+m_p(\lambda)
+=\max\{r\geqslant1:(t-\lambda)^r\mid p\}.
+\]
+\tcbbreak
+A degree-$d$ polynomial \emph{splits over $\mathbb F$} if it has the form
+\[
+c\prod_{j=1}^d(t-\lambda_j),
+\qquad c,\lambda_1,\ldots,\lambda_d\in\mathbb F.
+\]
+\origin{H Appendix~21.A, p.~485}
+\end{definition}
+
+\begin{theorem}[Division, factors, and polynomial identity]\label{thm:polynomial-basics}
+Let $p,q\in\mathbb F[t]$ and $q\ne0$.
+
+\begin{enumerate}[(a)]
+\item There are unique $b,r\in\mathbb F[t]$ such that
+\[
+p=bq+r,\qquad r=0\ \hbox{or}\ \deg r<\deg q.
+\]
+\item $p(\lambda)=0$ if and only if $(t-\lambda)\mid p$.
+\item A nonzero polynomial of degree $d$ has at most $d$ distinct roots.
+\item If two polynomials agree at infinitely many scalars, they are equal.
+\end{enumerate}
+\origin{H Thms.~21.A.1--21.A.3 and 21.A.5}
+\end{theorem}
+
+\begin{proof}
+If $p=0$, take $b=r=0$.  Let $p\ne0$, $\deg p=m$, and $\deg q=d$, with
+leading coefficients $a_m,b_d$.
+For nonzero $f,g\in\mathbb F[t]$, their leading coefficients have nonzero
+product, so
+\[
+\deg(fg)=\deg f+\deg g.
+\]
+If $m<d$, take $b=0$, $r=p$.  If $m\geqslant d$, then
+\[
+p_1(t)=p(t)-a_mb_d^{-1}t^{m-d}q(t)
+\]
+has degree less than $m$.  Induction on $m$ gives existence.  If
+$p=bq+r=\tilde bq+\tilde r$, then
+\[
+(b-\tilde b)q=\tilde r-r.
+\]
+A nonzero left side has degree at least $d$, while a nonzero right side has
+degree less than $d$; hence both vanish.
+
+Division by $t-\lambda$ gives $p(t)=(t-\lambda)b(t)+r$ with constant $r$.
+Evaluation at $\lambda$ gives $r=p(\lambda)$, proving (b).  If
+$p=(t-\lambda_1)q_1$ and $\lambda_2\ne\lambda_1$ is another root, then
+\[
+0=p(\lambda_2)
+=(\lambda_2-\lambda_1)q_1(\lambda_2)
+\quad\Longrightarrow\quad
+q_1(\lambda_2)=0.
+\]
+Repeating this argument gives
+\[
+\lambda_1,\ldots,\lambda_k\ \hbox{distinct roots}
+\quad\Longrightarrow\quad
+\prod_{j=1}^k(t-\lambda_j)\mid p,
+\]
+so $k\leqslant\deg p$.  The difference of two polynomials agreeing at infinitely
+many scalars has infinitely many roots; (c) forces that difference to be zero.
+\end{proof}
+
+\begin{theorem}[Factorisation over $\mathbb C$]\label{thm:fta-factorisation}
+If $p\in\mathbb C[t]$ has degree $d\geqslant1$ and leading coefficient $c_d$, then
+there are $\lambda_1,\ldots,\lambda_d\in\mathbb C$ such that
+\[
+p(t)=c_d\prod_{j=1}^d(t-\lambda_j).
+\]
+Each root occurs in this list according to its multiplicity.
+\origin{Adapted from H \S21.1, Eqs.~(21.1.10)--(21.1.11), and Thm.~21.A.3}
+\end{theorem}
+
+\begin{proof}
+The fundamental theorem of algebra supplies a root $\lambda_1$.  The factor
+theorem gives
+\[
+p(t)=(t-\lambda_1)p_1(t),\qquad \deg p_1=d-1.
+\]
+If $d-1>0$, apply the fundamental theorem of algebra to $p_1$ and repeat.
+After $d$ steps the remaining factor is the leading coefficient $c_d$.
+If $\lambda$ occurs $r$ times, then
+\[
+p(t)=(t-\lambda)^rh(t),\qquad
+h(\lambda)
+=c_d\prod_{\lambda_j\ne\lambda}(\lambda-\lambda_j)\ne0.
+\]
+The factor theorem excludes $(t-\lambda)\mid h$, so
+$m_p(\lambda)=r$.
+\end{proof}
+
+\subsection{Eigenvalues and the characteristic polynomial}\label{sec:7.1.3}
+
+\begin{definition}[Spectrum and multiplicities over a field]\label{def:eigendata}
+Let $\mathbb F\in\{\mathbb R,\mathbb C\}$ and
+$\bA\in\mathbb F^{n\times n}$.  A scalar $\lambda\in\mathbb F$ is an
+\emph{eigenvalue} of $\bA$ if
+\[
+\bA\bx=\lambda\bx
+\]
+for some \emph{eigenvector} $\bx\in\mathbb F^n\setminus\{\bzero\}$.  The
+\emph{eigenspace}, \emph{spectrum}, and \emph{characteristic polynomial} are
+\[
+\calE_\lambda(\bA)=\ker(\bA-\lambda\bI_n),\qquad
+\sigma_{\mathbb F}(\bA)=\{\lambda\in\mathbb F:
+\calE_\lambda(\bA)\ne\{\bzero\}\},
+\]
+\[
+\chi_{\bA}(t)=\det(t\bI_n-\bA).
+\]
+For $\lambda\in\sigma_{\mathbb F}(\bA)$, its \emph{algebraic multiplicity} is
+$a_{\bA}(\lambda)=m_{\chi_{\bA}}(\lambda)$ and its
+\emph{geometric multiplicity} is
+\[
+g_{\bA}(\lambda)=\dim\calE_\lambda(\bA)
+=n-\rank(\bA-\lambda\bI_n).
+\]
+For a real matrix, $\sigma_{\mathbb R}(\bA)$ and
+$\sigma_{\mathbb C}(\bA)$ distinguish eigenpairs in $\mathbb R^n$ from
+eigenpairs obtained when its entries are regarded as complex.
+\origin{H \S21.1, eqs.~(21.1.1)--(21.1.11); A\&M \S7.1}
+\end{definition}
+
+\Needspace{.42\textheight}
+\begin{theorem}[Characteristic criterion and coefficients]\label{thm:characteristic-coefficients}
+For $\bA\in\mathbb F^{n\times n}$ and $\lambda\in\mathbb F$,
+\[
+\lambda\in\sigma_{\mathbb F}(\bA)
+\quad\Longleftrightarrow\quad
+\chi_{\bA}(\lambda)=0.
+\]
+Moreover,
+\[
+\chi_{\bA}(t)
+=t^n-(\tr\bA)t^{n-1}+\cdots+(-1)^n\det\bA.
+\]
+\origin{H \S21.1, eqs.~(21.1.2)--(21.1.8); A\&M \S7.1}
+\end{theorem}
+
+\begin{proof}
+\[
+\bA\bx=\lambda\bx\ \hbox{for some }\bx\ne\bzero
+\iff
+\ker(\lambda\bI-\bA)\ne\{\bzero\}
+\iff
+\det(\lambda\bI-\bA)=0.
+\]
+In the Leibniz expansion of $\det(t\bI-\bA)$, the identity permutation gives
+\[
+\prod_{i=1}^n(t-a_{ii})
+=t^n-\left(\sum_{i=1}^na_{ii}\right)t^{n-1}+\cdots.
+\]
+A nonidentity permutation has at most $n-2$ fixed points, so every other term
+has degree at most $n-2$.  Thus the first two coefficients are $1$ and
+$-\tr\bA$.  At $t=0$,
+\[
+\chi_{\bA}(0)=\det(-\bA)=(-1)^n\det\bA.
+\]
+\end{proof}
+
+\begin{theorem}[Complex spectrum, trace, and determinant]\label{thm:spectrum-trace-det}
+Every $\bA\in\mathbb C^{n\times n}$ has complex eigenvalues
+$\lambda_1,\ldots,\lambda_n$, listed with algebraic multiplicity, and
+\[
+\chi_{\bA}(t)=\prod_{j=1}^n(t-\lambda_j),
+\qquad
+\tr\bA=\sum_{j=1}^n\lambda_j,
+\qquad
+\det\bA=\prod_{j=1}^n\lambda_j.
+\]
+Consequently,
+\[
+\bA\ \hbox{is singular}
+\quad\Longleftrightarrow\quad
+0\in\sigma_{\mathbb C}(\bA).
+\]
+\origin{H \S21.6, Thm.~21.6.1; A\&M Exs.~7.26--7.27}
+\end{theorem}
+
+\begin{proof}
+The factorisation theorem and the leading coefficient of $\chi_{\bA}$ give
+\[
+\chi_{\bA}(t)=\prod_{j=1}^n(t-\lambda_j)
+=t^n-\left(\sum_{j=1}^n\lambda_j\right)t^{n-1}
++\cdots+(-1)^n\prod_{j=1}^n\lambda_j.
+\]
+Coefficient comparison with Theorem~\ref{thm:characteristic-coefficients}
+gives the trace and determinant identities.  The last equivalence follows
+from $\det\bA=\prod_j\lambda_j$ and the determinant criterion.
+\end{proof}
+
+\begin{theorem}[Conjugate pairs for real matrices]\label{thm:conjugate-pairs}
+If $\bA\in\mathbb R^{n\times n}$ and
+$\lambda\in\sigma_{\mathbb C}(\bA)$, then
+$\bar\lambda\in\sigma_{\mathbb C}(\bA)$ and
+\[
+a_{\bA}(\bar\lambda)=a_{\bA}(\lambda).
+\]
+If $n$ is odd, $\sigma_{\mathbb R}(\bA)\ne\varnothing$.
+\origin{A\&M Ex.~7.17; S \S5.2}
+\end{theorem}
+
+\begin{proof}
+The coefficients of $\chi_{\bA}$ are real, so
+\[
+\chi_{\bA}(\bar z)=\overline{\chi_{\bA}(z)}.
+\]
+Thus $\chi_{\bA}(\lambda)=0$ implies
+$\chi_{\bA}(\bar\lambda)=0$.  If
+\[
+\chi_{\bA}(t)=(t-\lambda)^m q(t),\qquad q(\lambda)\ne0,
+\]
+then
+\[
+\chi_{\bA}(t)
+=\overline{\chi_{\bA}(\bar t)}
+=(t-\bar\lambda)^m\overline{q(\bar t)},
+\qquad
+\overline{q(\lambda)}\ne0.
+\]
+Hence $a_{\bA}(\bar\lambda)\geqslant m$; conjugating again gives the reverse
+inequality.  Nonreal roots occur in distinct pairs with equal multiplicity.
+If no root were real, $n$ would be even.
+\end{proof}
+
+\begin{example}[A real rotation over two fields]\label{ex:rotation-fields}
+For
+\[
+\bR=\begin{pmatrix}0&-1\\1&0\end{pmatrix},
+\qquad
+\chi_{\bR}(t)=t^2+1=(t-\mathrm{i})(t+\mathrm{i}),
+\]
+\[
+\sigma_{\mathbb R}(\bR)=\varnothing,\qquad
+\sigma_{\mathbb C}(\bR)=\{-\mathrm{i},\mathrm{i}\}.
+\]
+Complex eigenvectors are
+\[
+\bR\begin{pmatrix}1\\-\mathrm{i}\end{pmatrix}
+=\mathrm{i}\begin{pmatrix}1\\-\mathrm{i}\end{pmatrix},
+\qquad
+\bR\begin{pmatrix}1\\\mathrm{i}\end{pmatrix}
+=-\mathrm{i}\begin{pmatrix}1\\\mathrm{i}\end{pmatrix}.
+\]
+\origin{H \S21.1, pp.~509--510; A\&M Ex.~7.22}
+\end{example}
+
+% \periodmark{End of period 1 of 3.}
+
+\newpage
+
+%=============================================================================
+\section{Similarity and diagonalisation}\label{sec:7.2}
+%=============================================================================
+
+\subsection{Similarity and invariant eigenspaces}\label{sec:7.2.1}
+
+\begin{definition}[Similarity and invariant subspace]\label{def:similar-invariant}
+Matrices $\bA,\bB\in\mathbb F^{n\times n}$ are \emph{similar over
+$\mathbb F$} if
+\[
+\bB=\bS^{-1}\bA\bS
+\]
+for some nonsingular $\bS\in\mathbb F^{n\times n}$.  A subspace
+$\calU\subseteq\mathbb F^n$ is \emph{invariant under $\bA$} if
+\[
+\bA\calU=\{\bA\bu:\bu\in\calU\}\subseteq\calU.
+\]
+\origin{H \S\S21.1 and 21.3; A\&M Ex.~7.24}
+\end{definition}
+
+\begin{theorem}[Similarity invariants]\label{thm:similarity-invariants}
+If $\bB=\bS^{-1}\bA\bS$, then
+\[
+\chi_{\bB}=\chi_{\bA},\qquad
+\rank\bB=\rank\bA,\qquad
+\tr\bB=\tr\bA,\qquad
+\det\bB=\det\bA,
+\]
+and, for every $\lambda\in\mathbb F$,
+\[
+\calE_\lambda(\bB)=\bS^{-1}\calE_\lambda(\bA).
+\]
+Thus algebraic and geometric multiplicities are preserved.
+\origin{H Thm.~21.3.1; A\&M Ex.~7.24}
+\end{theorem}
+
+\begin{proof}
+\[
+t\bI-\bB
+=\bS^{-1}(t\bI-\bA)\bS
+\quad\Longrightarrow\quad
+\chi_{\bB}(t)=\det(\bS^{-1})\chi_{\bA}(t)\det\bS
+=\chi_{\bA}(t).
+\]
+The characteristic coefficients give equality of trace and determinant.
+Multiplication by an invertible matrix preserves the dimension of the image,
+so $\rank\bB=\rank\bA$.  Finally,
+\[
+\bB\by=\lambda\by
+\iff
+\bS^{-1}\bA\bS\by=\lambda\by
+\iff
+\bA(\bS\by)=\lambda(\bS\by)
+\iff
+\by\in\bS^{-1}\calE_\lambda(\bA).
+\]
+\end{proof}
+
+\begin{theorem}[Geometric multiplicity is bounded by algebraic multiplicity]
+\label{thm:geometric-algebraic}
+For every eigenvalue $\lambda$ of $\bA\in\mathbb F^{n\times n}$,
+\[
+1\leqslant g_{\bA}(\lambda)\leqslant a_{\bA}(\lambda).
+\]
+\origin{H Thm.~21.3.4}
+\end{theorem}
+
+\begin{proof}
+Set $g=g_{\bA}(\lambda)$.  If $g=n$, then
+$\bA\bx=\lambda\bx$ for every $\bx$, so
+$\bA=\lambda\bI$ and $\chi_{\bA}(t)=(t-\lambda)^n$.
+
+Let $g<n$.  Choose a basis $\bx_1,\ldots,\bx_g$ of
+$\calE_\lambda(\bA)$ and extend it to a basis of $\mathbb F^n$.  With these
+basis vectors as the columns of $\bS$,
+\[
+\bS^{-1}\bA\bS
+=\begin{pmatrix}
+\lambda\bI_g&\bC\\
+\bO&\bD
+\end{pmatrix}.
+\]
+Similarity and the block-triangular determinant identity give
+\[
+\chi_{\bA}(t)
+=\det\begin{pmatrix}
+(t-\lambda)\bI_g&-\bC\\
+\bO&t\bI_{n-g}-\bD
+\end{pmatrix}
+=(t-\lambda)^g\chi_{\bD}(t).
+\]
+Hence $a_{\bA}(\lambda)\geqslant g\geqslant1$.
+\end{proof}
+
+\begin{theorem}[Direct sum of distinct eigenspaces]\label{thm:distinct-eigenspaces}
+If $\lambda_1,\ldots,\lambda_r$ are distinct eigenvalues of $\bA$, then
+\[
+\calE_{\lambda_1}(\bA)+\cdots+\calE_{\lambda_r}(\bA)
+=
+\calE_{\lambda_1}(\bA)\dsum\cdots\dsum
+\calE_{\lambda_r}(\bA).
+\]
+In particular, eigenvectors belonging to distinct eigenvalues are linearly
+independent.
+\origin{H Thms.~21.4.1--21.4.2; A\&M Ex.~7.31}
+\end{theorem}
+
+\begin{proof}
+For $r=1$, the assertion is the definition of a one-term sum.  Suppose it
+holds for $r-1$ and
+\[
+\bx_1+\cdots+\bx_r=\bzero,\qquad
+\bx_j\in\calE_{\lambda_j}(\bA).
+\]
+Applying $\bA-\lambda_r\bI$ gives
+\[
+\sum_{j=1}^{r-1}(\lambda_j-\lambda_r)\bx_j=\bzero.
+\]
+By the induction hypothesis,
+\[
+(\lambda_j-\lambda_r)\bx_j=\bzero,\qquad j<r.
+\]
+The eigenvalues are distinct, so $\bx_1=\cdots=\bx_{r-1}=\bzero$, and the
+original equality gives $\bx_r=\bzero$.
+\end{proof}
+
+\subsection{Diagonalisation over the chosen field}\label{sec:7.2.2}
+
+\begin{definition}[Diagonalisation over a field]\label{def:diagonalizable}
+A matrix $\bA\in\mathbb F^{n\times n}$ is \emph{diagonalisable over
+$\mathbb F$} if
+\[
+\bS^{-1}\bA\bS=\diag(d_1,\ldots,d_n)
+\]
+for some nonsingular $\bS\in\mathbb F^{n\times n}$.
+A basis consisting of eigenvectors of one matrix is an \emph{eigenbasis} of
+that matrix.
+\origin{H \S21.5a, eq.~(21.5.1); A\&M Ex.~7.61}
+\end{definition}
+
+\begin{theorem}[Equivalent diagonalisation criteria]\label{thm:diagonalization-criteria}
+Let $\lambda_1,\ldots,\lambda_r$ be the distinct eigenvalues of
+$\bA\in\mathbb F^{n\times n}$.  Conditions (a)--(d) are equivalent.
+
+\begin{enumerate}[(a)]
+\item $\bA$ is diagonalisable over $\mathbb F$.
+\item $\mathbb F^n$ has a basis of eigenvectors of $\bA$.
+\item
+\[
+\mathbb F^n
+=\calE_{\lambda_1}(\bA)\dsum\cdots\dsum
+\calE_{\lambda_r}(\bA).
+\]
+\item $\chi_{\bA}$ splits into linear factors over $\mathbb F$ and
+\[
+g_{\bA}(\lambda_j)=a_{\bA}(\lambda_j),
+\qquad j=1,\ldots,r.
+\]
+\end{enumerate}
+\origin{H Thms.~21.4.3, 21.5.1--21.5.2 and Cor.~21.5.4}
+\end{theorem}
+
+\begin{proof}
+If $\bS=(\bx_1,\ldots,\bx_n)$ and
+$\bD=\diag(d_1,\ldots,d_n)$, then
+\[
+\bS^{-1}\bA\bS=\bD
+\iff
+\bA\bS=\bS\bD
+\iff
+\bA\bx_j=d_j\bx_j,\quad j=1,\ldots,n.
+\]
+Thus (a) and (b) are equivalent.  Grouping an eigenbasis by eigenvalue and
+using the direct-sum theorem proves the equivalence of (b) and (c).
+
+If (c) holds, then
+\[
+n=\sum_{j=1}^r g_{\bA}(\lambda_j).
+\]
+The union of bases of the eigenspaces is an eigenbasis, so $\bA$ is similar to
+a diagonal matrix and $\chi_{\bA}$ splits.  Since
+\[
+g_{\bA}(\lambda_j)\leqslant a_{\bA}(\lambda_j),
+\qquad
+\sum_{j=1}^r a_{\bA}(\lambda_j)=n,
+\]
+all inequalities are equalities.  Conversely, (d) and the direct-sum theorem
+give a direct sum of dimension
+\[
+\sum_{j=1}^r g_{\bA}(\lambda_j)
+=\sum_{j=1}^r a_{\bA}(\lambda_j)=n,
+\]
+which is $\mathbb F^n$.
+\end{proof}
+
+\begin{corollary}[Distinct eigenvalues suffice]\label{cor:distinct-diagonalizable}
+If $\bA\in\mathbb F^{n\times n}$ has $n$ distinct eigenvalues in
+$\mathbb F$, then it is diagonalisable over $\mathbb F$.
+\origin{H Cor.~21.5.3; A\&M Ex.~7.32}
+\end{corollary}
+
+\begin{proof}
+Choose one eigenvector for each eigenvalue.  The distinct-eigenspaces theorem
+makes the resulting $n$ vectors linearly independent, hence a basis.
+\end{proof}
+
+\begin{example}[A repeated root with one eigenvector]\label{ex:defective-matrix}
+\[
+\bJ=\begin{pmatrix}1&1\\0&1\end{pmatrix},
+\qquad
+\chi_{\bJ}(t)=(t-1)^2,
+\qquad
+\calE_1(\bJ)
+=\ker\begin{pmatrix}0&1\\0&0\end{pmatrix}
+=\spn\left\{\begin{pmatrix}1\\0\end{pmatrix}\right\}.
+\]
+Thus $a_{\bJ}(1)=2$, $g_{\bJ}(1)=1$, and $\bJ$ is not diagonalisable over
+either $\mathbb R$ or $\mathbb C$.
+\origin{H \S21.1, pp.~508--509; A\&M Ex.~7.33}
+\end{example}
+
+\subsection{Matrix polynomials and related products}\label{sec:7.2.3}
+
+\begin{definition}[Matrix polynomial]\label{def:matrix-polynomial}
+For $p(t)=\sum_{j=0}^d c_jt^j\in\mathbb F[t]$ and
+$\bA\in\mathbb F^{n\times n}$,
+\[
+p(\bA)=\sum_{j=0}^d c_j\bA^j,\qquad \bA^0=\bI_n.
+\]
+\origin{H Ex.~21.3; S \S3.5}
+\end{definition}
+
+\begin{theorem}[Polynomial action on eigenvectors]\label{thm:polynomial-eigenvector}
+For $p,q\in\mathbb F[t]$,
+\[
+(p+q)(\bA)=p(\bA)+q(\bA),\qquad
+(pq)(\bA)=p(\bA)q(\bA).
+\]
+If $\bA\bx=\lambda\bx$, then
+\[
+p(\bA)\bx=p(\lambda)\bx.
+\]
+If $\bA=\bS\bD\bS^{-1}$ with
+$\bD=\diag(\lambda_1,\ldots,\lambda_n)$, then
+\[
+p(\bA)
+=\bS\diag\bigl(p(\lambda_1),\ldots,p(\lambda_n)\bigr)\bS^{-1}.
+\]
+If $\bA$ is nonsingular, every eigenvalue is nonzero and
+\[
+\bA\bx=\lambda\bx
+\quad\Longrightarrow\quad
+\bA^{-1}\bx=\lambda^{-1}\bx.
+\]
+\origin{H Lemma~21.1.3 and Thm.~21.5.1}
+\end{theorem}
+
+\begin{proof}
+If $p(t)=\sum_jc_jt^j$ and $q(t)=\sum_kd_kt^k$, then
+\[
+p(\bA)q(\bA)
+=\sum_{j,k}c_jd_k\bA^{j+k}
+=(pq)(\bA).
+\]
+Also $\bA^j\bx=\lambda^j\bx$ by induction, so
+\[
+p(\bA)\bx=\sum_jc_j\bA^j\bx
+=\sum_jc_j\lambda^j\bx=p(\lambda)\bx.
+\]
+From $\bA^j=\bS\bD^j\bS^{-1}$,
+\[
+p(\bA)=\bS p(\bD)\bS^{-1}.
+\]
+If $\bA$ is nonsingular, $\lambda=0$ is impossible; multiplying
+$\bA\bx=\lambda\bx$ by $\bA^{-1}$ and $\lambda^{-1}$ gives the last identity.
+\end{proof}
+
+\begin{theorem}[Rectangular products]\label{thm:rectangular-products}
+Let $\bA\in\mathbb F^{m\times n}$ and
+$\bB\in\mathbb F^{n\times m}$.  Then
+\[
+t^n\chi_{\bA\bB}(t)=t^m\chi_{\bB\bA}(t).
+\]
+Consequently, $\bA\bB$ and $\bB\bA$ have the same nonzero eigenvalues with
+the same algebraic and geometric multiplicities.  For $\lambda\ne0$, the maps
+\[
+\bB:\calE_\lambda(\bA\bB)\longrightarrow
+\calE_\lambda(\bB\bA),
+\qquad
+\lambda^{-1}\bA:\calE_\lambda(\bB\bA)\longrightarrow
+\calE_\lambda(\bA\bB)
+\]
+are inverse linear maps.
+\origin{H Thm.~21.10.1; A\&M Ex.~7.25; S Ex.~3.14}
+\end{theorem}
+
+\begin{proof}
+For $t\ne0$, Sylvester's determinant identity gives
+\[
+\begin{aligned}
+t^n\chi_{\bA\bB}(t)
+&=t^{m+n}\det(\bI_m-t^{-1}\bA\bB)\\
+&=t^{m+n}\det(\bI_n-t^{-1}\bB\bA)
+=t^m\chi_{\bB\bA}(t).
+\end{aligned}
+\]
+The two polynomials agree at infinitely many $t$, hence agree identically.
+Their nonzero roots have the same multiplicities.
+
+If $\bA\bB\bx=\lambda\bx$, then
+\[
+\bB\bA(\bB\bx)=\bB(\bA\bB\bx)=\lambda\bB\bx,
+\qquad
+\lambda^{-1}\bA(\bB\bx)=\bx.
+\]
+Thus $\bB\bx\ne\bzero$.  The analogous calculation begins with
+$\bB\bA\by=\lambda\by$ and gives
+\[
+\bB(\lambda^{-1}\bA\by)=\by.
+\]
+The two displayed maps are inverse, so their eigenspaces have equal
+dimension.
+\end{proof}
+
+% \periodmark{End of period 2 of 3.}
+
+\newpage
+
+%=============================================================================
+\section{Unitary triangularisation and Cayley--Hamilton}\label{sec:7.3}
+%=============================================================================
+
+\subsection{Complex inner products and unitary matrices}\label{sec:7.3.1}
+
+\begin{definition}[Adjoint, complex inner product, and unitary matrix]
+\label{def:complex-inner-product}
+For $\bA=(a_{ij})\in\mathbb C^{m\times n}$, its \emph{conjugate transpose} or
+\emph{adjoint} is
+\[
+\bA^*=\overline{\bA}'=(\bar a_{ji})\in\mathbb C^{n\times m}.
+\]
+For $\bx,\by\in\mathbb C^n$,
+\[
+\langle\bx,\by\rangle=\bx^*\by
+=\sum_{j=1}^n\bar x_jy_j,
+\qquad
+\norm{\bx}=(\bx^*\bx)^{1/2}.
+\]
+A list $\bq_1,\ldots,\bq_k$ is \emph{orthonormal} if
+$\bq_i^*\bq_j$ equals $1$ for $i=j$ and $0$ otherwise.  A matrix
+$\bQ\in\mathbb C^{n\times n}$ is \emph{unitary} if
+\[
+\bQ^*\bQ=\bI_n.
+\]
+\origin{A\&M \S1.2, Exs.~1.18--1.19 and 7.34}
+\end{definition}
+
+\begin{theorem}[Adjoint and unitary identities]\label{thm:adjoint-unitary}
+For conformable complex matrices and complex vectors,
+\[
+(\bA+\bB)^*=\bA^*+\bB^*,\qquad
+(\bA\bB)^*=\bB^*\bA^*,\qquad
+(\bA^*)^*=\bA,
+\]
+\[
+\langle a\bx+b\by,\bz\rangle
+=\bar a\langle\bx,\bz\rangle+\bar b\langle\by,\bz\rangle,
+\quad
+\langle\bx,a\by+b\bz\rangle
+=a\langle\bx,\by\rangle+b\langle\bx,\bz\rangle,
+\]
+\[
+\langle\bx,\by\rangle=\overline{\langle\by,\bx\rangle},
+\qquad
+\bx^*\bx=\sum_{j=1}^n|x_j|^2\geqslant0,
+\qquad
+\bx^*\bx=0\iff\bx=\bzero.
+\]
+For square $\bQ$, the three conditions below are equivalent:
+\[
+\bQ^*\bQ=\bI,\qquad
+\bQ^{-1}=\bQ^*,\qquad
+\bQ\bQ^*=\bI.
+\]
+They imply
+\[
+\norm{\bQ\bx}=\norm{\bx}.
+\]
+\origin{A\&M Exs.~1.18--1.19 and 7.34; S \S5.1.1}
+\end{theorem}
+
+\begin{proof}
+For the product,
+\[
+[(\bA\bB)^*]_{ij}
+=\overline{\sum_k a_{jk}b_{ki}}
+=\sum_k\bar b_{ki}\bar a_{jk}
+=(\bB^*\bA^*)_{ij}.
+\]
+The other adjoint and inner-product identities follow from the scalar
+conjugation identities.  Positivity is the displayed sum of nonnegative real
+numbers.
+
+If $\bQ^*\bQ=\bI$, the square inverse criterion gives
+$\bQ^{-1}=\bQ^*$ and hence $\bQ\bQ^*=\bI$; the reverse implications are
+identical.  Finally,
+\[
+\norm{\bQ\bx}^2
+=(\bQ\bx)^*(\bQ\bx)
+=\bx^*\bQ^*\bQ\bx
+=\bx^*\bx.
+\]
+\end{proof}
+
+\begin{theorem}[Complex Gram--Schmidt and completion]\label{thm:complex-gs}
+Let $\bv_1,\ldots,\bv_k\in\mathbb C^n$ be linearly independent.  Define
+\[
+\bu_1=\bv_1,\qquad
+\bq_1=\frac{\bu_1}{\norm{\bu_1}},
+\]
+\[
+\bu_j
+=\bv_j-\sum_{i=1}^{j-1}(\bq_i^*\bv_j)\bq_i,
+\qquad
+\bq_j=\frac{\bu_j}{\norm{\bu_j}},
+\quad j=2,\ldots,k.
+\]
+Then every $\bu_j$ is nonzero, $\bq_1,\ldots,\bq_k$ are orthonormal, and
+\[
+\spn\{\bq_1,\ldots,\bq_j\}
+=\spn\{\bv_1,\ldots,\bv_j\}.
+\]
+Every complex orthonormal list extends to an orthonormal basis of
+$\mathbb C^n$.
+\origin{Adapted from A\&M Ex.~7.34; H Thms.~6.4.1 and 6.4.5}
+\end{theorem}
+
+\begin{proof}
+For $j=1$, $\bu_1=\bv_1\ne\bzero$, $\bq_1^*\bq_1=1$, and the two
+one-vector spans agree.  Suppose the claims hold through $j-1$.  If
+$\bu_j=\bzero$, then
+\[
+\bv_j=\sum_{i=1}^{j-1}(\bq_i^*\bv_j)\bq_i
+\in\spn\{\bv_1,\ldots,\bv_{j-1}\},
+\]
+contrary to independence.  For $\ell<j$,
+\[
+\bq_\ell^*\bu_j
+=\bq_\ell^*\bv_j
+-\sum_{i=1}^{j-1}(\bq_i^*\bv_j)\bq_\ell^*\bq_i
+=0.
+\]
+Also $\bq_j^*\bq_j=1$, and
+\[
+\bu_j\in\spn\{\bv_1,\ldots,\bv_j\},\qquad
+\bv_j=\bu_j+\sum_{i=1}^{j-1}(\bq_i^*\bv_j)\bq_i,
+\]
+which proves both span inclusions.
+
+Extend an orthonormal list to a basis by the field-transfer theorem and apply
+the displayed recursion.  For an original orthonormal vector $\bq_j$,
+\[
+\bq_j-\sum_{i<j}(\bq_i^*\bq_j)\bq_i=\bq_j,
+\qquad \norm{\bq_j}=1,
+\]
+so the original list is unchanged.
+\end{proof}
+
+\subsection{Triangular matrices and Schur's theorem}\label{sec:7.3.2}
+
+\begin{theorem}[Upper-triangular calculus]\label{thm:triangular-calculus}
+Let $\bT\in\mathbb F^{n\times n}$ be upper triangular with diagonal
+$\tau_1,\ldots,\tau_n$.
+
+\begin{enumerate}[(a)]
+\item
+\[
+\chi_{\bT}(t)=\prod_{j=1}^n(t-\tau_j).
+\]
+\item If $\bU$ is upper triangular, then $\bT\bU$ is upper triangular and
+\[
+(\bT\bU)_{ii}=\tau_i u_{ii}.
+\]
+\item For $p\in\mathbb F[t]$, $p(\bT)$ is upper triangular with diagonal
+$p(\tau_1),\ldots,p(\tau_n)$.
+\item If every $\tau_i\ne0$, then $\bT^{-1}$ is upper triangular with diagonal
+$\tau_1^{-1},\ldots,\tau_n^{-1}$.
+\item If $\bN$ is strictly upper triangular, then $\bN^n=\bO$.
+\end{enumerate}
+\origin{H Cor.~21.2.2; A\&M Exs.~7.55--7.56}
+\end{theorem}
+
+\begin{proof}
+Part (a) is the triangular determinant identity.  For $i>j$,
+\[
+(\bT\bU)_{ij}
+=\sum_{k=1}^n t_{ik}u_{kj}=0,
+\]
+because a nonzero summand would require $i\leqslant k\leqslant j$.  For $i=j$, only
+$k=i$ remains.  Induction gives the diagonal of every power, hence (c).
+
+If all $\tau_i\ne0$, triangular substitution solves
+$\bT\bx=\eu_j$ uniquely.  Its first $j-1$ entries vanish, so column $j$ of
+$\bT^{-1}$ has zeros below its diagonal; the $j$th pivot gives diagonal entry
+$\tau_j^{-1}$.
+
+For a strictly upper-triangular $\bN$, induction on $r$ gives
+\[
+(\bN^r)_{ij}=0\qquad\hbox{whenever }j-i<r.
+\]
+For $r=n$, every index pair satisfies $j-i<n$, so $\bN^n=\bO$.
+\end{proof}
+
+\begin{theorem}[Schur triangularisation]\label{thm:schur}
+For every $\bA\in\mathbb C^{n\times n}$ and every ordering
+$\lambda_1,\ldots,\lambda_n$ of its eigenvalues with algebraic multiplicity,
+there is a unitary $\bQ$ such that
+\[
+\bQ^*\bA\bQ=\bT,
+\]
+where $\bT$ is upper triangular with diagonal
+$\lambda_1,\ldots,\lambda_n$.  If $\bA$ is real and $\chi_{\bA}$ splits over
+$\mathbb R$, then $\bQ$ and $\bT$ may be chosen real, with
+$\bQ'\bQ=\bI$.
+\origin{S Thm.~5.1; H Thm.~21.5.11; A\&M Ex.~7.62}
+\end{theorem}
+
+\begin{proof}
+Induct on $n$.  For $n=1$, take $\bQ=(1)$ and $\bT=\bA$.  Choose
+$\bx\in\calE_{\lambda_1}(\bA)\setminus\{\bzero\}$, set
+$\bq_1=\bx/\norm{\bx}$, and complete $\bq_1$ to an orthonormal basis:
+\[
+\bQ_1=(\bq_1,\bV),\qquad \bQ_1^*\bQ_1=\bI.
+\]
+Set $\bB=\bV^*\bA\bV$.  Since
+$\bA\bq_1=\lambda_1\bq_1$ and $\bV^*\bq_1=\bzero$,
+\[
+\bQ_1^*\bA\bQ_1
+=
+\begin{pmatrix}
+\lambda_1&\bq_1^*\bA\bV\\
+\bzero&\bB
+\end{pmatrix}.
+\]
+Similarity and the block-triangular determinant identity give
+\[
+\chi_{\bA}(t)=(t-\lambda_1)\chi_{\bB}(t).
+\]
+Thus $\bB$ has the remaining ordered roots
+$\lambda_2,\ldots,\lambda_n$.  By induction, a unitary $\bW$ satisfies
+$\bW^*\bB\bW=\bT_2$, upper triangular in that order.  Set
+\[
+\bQ=\bQ_1\diag(1,\bW).
+\]
+Then $\bQ$ is unitary and
+\[
+\bQ^*\bA\bQ
+=
+\begin{pmatrix}
+\lambda_1&\bq_1^*\bA\bV\bW\\
+\bzero&\bT_2
+\end{pmatrix}.
+\]
+For real $\bA$ with real roots, choose a real eigenvector and use real
+orthonormal completion at every induction step.
+\end{proof}
+
+\begin{theorem}[Polynomial spectral mapping]\label{thm:polynomial-spectrum}
+Let $\lambda_1,\ldots,\lambda_n$ be the complex eigenvalues of
+$\bA\in\mathbb C^{n\times n}$, counted with algebraic multiplicity.  For every
+$p\in\mathbb C[t]$,
+\[
+\chi_{p(\bA)}(t)
+=\prod_{j=1}^n\bigl(t-p(\lambda_j)\bigr).
+\]
+Thus
+\[
+\sigma_{\mathbb C}\bigl(p(\bA)\bigr)
+=p\bigl(\sigma_{\mathbb C}(\bA)\bigr),
+\]
+with algebraic multiplicities combined when distinct $\lambda_j$ have the
+same image under $p$.
+\origin{H Lemma~21.1.3 and Thm.~21.5.11; S Prop.~5.7; A\&M Ex.~7.65}
+\end{theorem}
+
+\begin{proof}
+Choose a Schur factorisation $\bA=\bQ\bT\bQ^*$.  Matrix-polynomial algebra
+gives
+\[
+p(\bA)=\bQ\,p(\bT)\bQ^*.
+\]
+The triangular-calculus theorem makes $p(\bT)$ upper triangular with diagonal
+$p(\lambda_1),\ldots,p(\lambda_n)$.  Similarity and the triangular
+characteristic polynomial give the stated factorisation.
+\end{proof}
+
+\subsection{Cayley--Hamilton and power reduction}\label{sec:7.3.3}
+
+\begin{theorem}[Cayley--Hamilton]\label{thm:cayley-hamilton}
+For $\bA\in\mathbb F^{n\times n}$, if
+\[
+\chi_{\bA}(t)
+=t^n+c_{n-1}t^{n-1}+\cdots+c_1t+c_0,
+\]
+then
+\[
+\chi_{\bA}(\bA)
+=\bA^n+c_{n-1}\bA^{n-1}+\cdots+c_1\bA+c_0\bI
+=\bO.
+\]
+\origin{H Ex.~21.3; S Thm.~3.3}
+\end{theorem}
+
+\begin{proof}
+Every entry of $\adj(t\bI-\bA)$ is a polynomial of degree at most $n-1$.
+Write
+\[
+\adj(t\bI-\bA)
+=\bB_0t^{n-1}+\bB_1t^{n-2}+\cdots+\bB_{n-1}.
+\]
+The adjugate identity gives the polynomial identity
+\[
+(t\bI-\bA)
+\left(\bB_0t^{n-1}+\cdots+\bB_{n-1}\right)
+=\chi_{\bA}(t)\bI.
+\]
+Coefficient comparison gives
+\[
+\bB_0=\bI,
+\]
+\[
+\bB_j-\bA\bB_{j-1}=c_{n-j}\bI,
+\qquad j=1,\ldots,n-1,
+\]
+\[
+-\bA\bB_{n-1}=c_0\bI.
+\]
+The recursion yields
+\[
+\bB_j
+=\bA^j+c_{n-1}\bA^{j-1}+\cdots+c_{n-j}\bI.
+\]
+Substitution of $j=n-1$ into the constant-coefficient equality gives
+\[
+\bA^n+c_{n-1}\bA^{n-1}+\cdots+c_1\bA+c_0\bI=\bO.
+\]
+\end{proof}
+
+\begin{corollary}[Reduction of powers and inverses]\label{cor:power-reduction}
+For every $p\in\mathbb F[t]$ there is a unique remainder $r$ with
+\[
+r=0\ \hbox{or}\ \deg r<n,\qquad p(\bA)=r(\bA),
+\]
+where $r$ is the remainder on division of $p$ by $\chi_{\bA}$.  If $\bA$ is
+nonsingular, then $c_0=(-1)^n\det\bA\ne0$ and
+\[
+\bA^{-1}
+=-c_0^{-1}
+\left(\bA^{n-1}+c_{n-1}\bA^{n-2}+\cdots+c_2\bA+c_1\bI\right).
+\]
+\origin{H Ex.~21.4; S Ex.~3.22}
+\end{corollary}
+
+\begin{proof}
+The division algorithm gives $p=q\chi_{\bA}+r$, $\deg r<n$.  Matrix-polynomial
+algebra and Cayley--Hamilton give
+\[
+p(\bA)=q(\bA)\chi_{\bA}(\bA)+r(\bA)=r(\bA).
+\]
+For a nonsingular matrix, $c_0\ne0$.  Regrouping Cayley--Hamilton as
+\[
+\bA\left(
+\bA^{n-1}+c_{n-1}\bA^{n-2}+\cdots+c_2\bA+c_1\bI
+\right)=-c_0\bI
+\]
+and multiplying by $-c_0^{-1}$ gives the inverse formula.
+\end{proof}
+
+\newpage
+
+%=============================================================================
+\section{Computation: Numerical Checks in R}\label{sec:7.4}
+%=============================================================================
+
+\subsection{A real matrix with a complex spectrum}\label{sec:7.4.1}
+
+\[
+\bR=\begin{pmatrix}0&-1\\1&0\end{pmatrix},
+\qquad
+\bx=\begin{pmatrix}1\\-\mathrm{i}\end{pmatrix},
+\qquad
+\bR\bx=\mathrm{i}\bx.
+\]
+
+<<rotation-spectrum>>=
+Rmat <- matrix(c(0, 1, -1, 0), 2, 2)
+x <- c(1, -1i)
+lam_R <- eigen(Rmat)$values
+c(eigenpair_residual = sqrt(sum(Mod(Rmat %*% x - 1i * x)^2)),
+  trace_gap = Mod(sum(lam_R) - sum(diag(Rmat))),
+  determinant_gap = Mod(prod(lam_R) - det(Rmat)),
+  largest_imaginary_part = max(abs(Im(lam_R))))
+@
+
+\subsection{Rectangular products and their extra zeros}\label{sec:7.4.2}
+
+\[
+\bA=
+\begin{pmatrix}1&2\\0&1\\1&-1\end{pmatrix},
+\qquad
+\bB=
+\begin{pmatrix}2&1&0\\1&1&0\end{pmatrix}.
+\]
+
+<<rectangular-products>>=
+A <- matrix(c(1, 0, 1, 2, 1, -1), 3, 2)
+B <- matrix(c(2, 1, 1, 1, 0, 0), 2, 3)
+lam_AB <- eigen(A %*% B)$values
+lam_BA <- eigen(B %*% A)$values
+nz_AB <- lam_AB[Mod(lam_AB) > 1e-10]
+nz_BA <- lam_BA[Mod(lam_BA) > 1e-10]
+nz_AB <- nz_AB[order(Re(nz_AB), Im(nz_AB))]
+nz_BA <- nz_BA[order(Re(nz_BA), Im(nz_BA))]
+c(nonzero_spectrum_gap = max(Mod(nz_AB - nz_BA)),
+  smallest_modulus_AB = min(Mod(lam_AB)),
+  determinant_BA = det(B %*% A))
+@
+
+\subsection{A constructed unitary triangularisation}\label{sec:7.4.3}
+
+\[
+\bA=\bQ\bT\bQ^*,
+\qquad
+\bT=
+\begin{pmatrix}
+1+2\mathrm{i}&2-\mathrm{i}&1\\
+0&-2&3+\mathrm{i}\\
+0&0&3-\mathrm{i}
+\end{pmatrix}.
+\]
+
+<<unitary-triangularisation>>=
+Z <- matrix(c(1+1i, 2-1i, 0+2i,
+              2+0i, -1+1i, 1-2i,
+              0-1i, 1+0i, 2+1i), 3, 3)
+Q <- qr.Q(qr(Z, LAPACK = TRUE))
+Tmat <- matrix(0+0i, 3, 3)
+diag(Tmat) <- c(1+2i, -2+0i, 3-1i)
+Tmat[1, 2] <- 2-1i
+Tmat[1, 3] <- 1
+Tmat[2, 3] <- 3+1i
+Ac <- Q %*% Tmat %*% Conj(t(Q))
+That <- Conj(t(Q)) %*% Ac %*% Q
+ordc <- function(z) order(round(Re(z), 10), round(Im(z), 10))
+lam_Ac <- eigen(Ac)$values
+c(unitarity_residual = norm(Conj(t(Q)) %*% Q - diag(3), "F"),
+  reconstruction_residual = norm(Ac - Q %*% That %*% Conj(t(Q)), "F"),
+  lower_triangle_residual = sqrt(sum(Mod(That[lower.tri(That)])^2)),
+  spectrum_gap =
+    max(Mod(lam_Ac[ordc(lam_Ac)] - diag(Tmat)[ordc(diag(Tmat))])))
+@
+
+\subsection{Cayley--Hamilton on a recurrence matrix}\label{sec:7.4.4}
+
+\[
+\bC=
+\begin{pmatrix}0&1&0\\0&0&1\\4&-1&2\end{pmatrix},
+\qquad
+\chi_{\bC}(t)=t^3-2t^2+t-4.
+\]
+
+<<cayley-hamilton-companion>>=
+Cmat <- matrix(c(0, 0, 4, 1, 0, -1, 0, 1, 2), 3, 3)
+I3 <- diag(3)
+pC <- Cmat %*% Cmat %*% Cmat -
+      2 * Cmat %*% Cmat + Cmat - 4 * I3
+c(cayley_hamilton_residual = norm(pC, "F"),
+  inverse_formula_residual =
+    norm(solve(Cmat) - 0.25 * (Cmat %*% Cmat - 2 * Cmat + I3), "F"))
+@
+
+\subsection{Algebraic and geometric multiplicity}\label{sec:7.4.5}
+
+\[
+\bI_3,\qquad
+\bJ=\bI_3+\eu_1\eu_2'+\eu_2\eu_3'
+\]
+have the same characteristic polynomial $(t-1)^3$.
+
+<<multiplicity-rank>>=
+I3 <- diag(3)
+J3 <- I3
+J3[1, 2] <- 1
+J3[2, 3] <- 1
+rank_tol <- function(M, tol = 1e-10) qr(M, tol = tol)$rank
+c(tolerance = 1e-10,
+  rank_I3 = rank_tol(I3),
+  rank_J3 = rank_tol(J3),
+  geometric_multiplicity_I3 = 3 - rank_tol(I3 - diag(3)),
+  geometric_multiplicity_J3 = 3 - rank_tol(J3 - diag(3)),
+  trace_gap = sum(diag(I3)) - sum(diag(J3)),
+  determinant_gap = det(I3) - det(J3))
+@
+
+\newpage
+
+%=============================================================================
+\section{Pitfalls}\label{sec:7.5}
+%=============================================================================
+
+\subsection{Omitting the scalar field}\label{sec:7.5.1}
+
+\[
+\sigma_{\mathbb R}
+\begin{pmatrix}0&-1\\1&0\end{pmatrix}
+=\varnothing,
+\qquad
+\sigma_{\mathbb C}
+\begin{pmatrix}0&-1\\1&0\end{pmatrix}
+=\{-\mathrm{i},\mathrm{i}\}.
+\]
+A real matrix has a complex spectrum, but need not have a real eigenpair.
+Diagonalisation must specify its scalar field.
+
+\subsection{Replacing similarity by a list of invariants}\label{sec:7.5.2}
+
+\[
+\bI_2,\quad
+\begin{pmatrix}1&1\\0&1\end{pmatrix}
+:\qquad
+\rank=2,\quad \tr=2,\quad \det=1,\quad \chi(t)=(t-1)^2.
+\]
+Their eigenspace dimensions are $2$ and $1$, so they are not similar.
+
+\subsection{Comparing eigenvectors entry by entry}\label{sec:7.5.3}
+
+\[
+\bA\bx=\lambda\bx,\quad c\ne0
+\quad\Longrightarrow\quad
+\bA(c\bx)=\lambda(c\bx).
+\]
+For complex eigenvectors $\bx,\by$ with
+$\norm{\bx}=\norm{\by}=1$, the quantity
+$|\bx^*\by|$ is unchanged when either vector is multiplied by a scalar of
+modulus $1$.  Moreover,
+\[
+\begin{aligned}
+\norm{\by-(\bx^*\by)\bx}^2
+&=\by^*\by-(\bx^*\by)(\by^*\bx)
+-\overline{\bx^*\by}(\bx^*\by)+|\bx^*\by|^2\bx^*\bx\\
+&=1-|\bx^*\by|^2,
+\end{aligned}
+\]
+so $|\bx^*\by|=1$ exactly when they span the same line.
+
+\subsection{Confusing eigenvector identities with matrix identities}
+\label{sec:7.5.4}
+
+\[
+\bJ=\begin{pmatrix}1&1\\0&1\end{pmatrix},
+\qquad
+(\bJ-\bI)\begin{pmatrix}1\\0\end{pmatrix}=\bzero,
+\qquad
+\bJ-\bI\ne\bO.
+\]
+An identity on one eigenspace is not an identity on the whole space.
+Cayley--Hamilton is established by coefficient recursion, not by testing only
+the available eigenvectors.
+
+\newpage
+
+%=============================================================================
+\section{Exercises}\label{sec:7.6}
+%=============================================================================
+
+\begin{exercise}\label{ex:intertwining-invariant-block}
+Let $\bA\in\mathbb C^{n\times n}$,
+$\bB\in\mathbb C^{k\times k}$, and
+$\bX\in\mathbb C^{n\times k}$ satisfy
+\[
+\bA\bX=\bX\bB,\qquad \rank\bX=k.
+\]
+Prove that $\col(\bX)$ is invariant under $\bA$.  Construct a unitary
+$\bQ=(\bQ_1,\bQ_2)$ such that
+\[
+\bQ^*\bA\bQ
+=\begin{pmatrix}\bT_{11}&\bT_{12}\\\bO&\bT_{22}\end{pmatrix},
+\qquad
+\bT_{11}\ \hbox{is similar to }\bB.
+\]
+If $k=n$, the second block row and column are omitted.
+Deduce that every eigenvalue of $\bB$ is an eigenvalue of $\bA$, with at
+least the same algebraic multiplicity.
+\origin{H Exs.~21.2 and 21.9}
+\end{exercise}
+
+\begin{solution}
+For $\bu=\bX\bc$,
+\[
+\bA\bu=\bA\bX\bc=\bX\bB\bc\in\col(\bX).
+\]
+Write $\bX=(\bx_1,\ldots,\bx_k)$.  Apply complex Gram--Schmidt to these
+columns.  It gives
+\[
+\bX=\bQ_1\bR,\qquad
+\bQ_1^*\bQ_1=\bI_k,
+\]
+where
+\[
+\bR=\bQ_1^*\bX,\qquad
+r_{ij}=\bq_i^*\bx_j=0\quad(i>j),\qquad
+r_{jj}=\norm{\bu_j}>0.
+\]
+Thus $\bR$ is nonsingular and upper triangular.  Extend the columns of
+$\bQ_1$ to a unitary $\bQ=(\bQ_1,\bQ_2)$ when $k<n$; when $k=n$, set
+$\bQ=\bQ_1$ and omit the second block.  In either case,
+\[
+\bA\bQ_1
+=\bA\bX\bR^{-1}
+=\bX\bB\bR^{-1}
+=\bQ_1\bR\bB\bR^{-1}.
+\]
+Consequently,
+\[
+\bT_{11}=\bQ_1^*\bA\bQ_1=\bR\bB\bR^{-1}.
+\]
+For $k<n$, invariance gives $\bQ_2^*\bA\bQ_1=\bO$ and hence the stated
+block form, with
+\[
+\chi_{\bA}(t)
+=\chi_{\bT_{11}}(t)\chi_{\bT_{22}}(t)
+=\chi_{\bB}(t)\chi_{\bT_{22}}(t),
+\]
+so $\chi_{\bB}\mid\chi_{\bA}$.  For $k=n$,
+\[
+\bA=\bQ_1\bR\bB\bR^{-1}\bQ_1^*,
+\qquad \chi_{\bA}=\chi_{\bB}.
+\]
+Both cases give the multiplicity assertion.
+\end{solution}
+
+\begin{exercise}\label{ex:gram-products-complex}
+Let $\bX\in\mathbb C^{m\times n}$.
+
+\begin{enumerate}[(a)]
+\item Prove
+\[
+\ker(\bX^*\bX)=\ker\bX,\qquad
+\ker(\bX\bX^*)=\ker\bX^*.
+\]
+\item For $\lambda\ne0$, prove that
+\[
+\bX:\calE_\lambda(\bX^*\bX)\longrightarrow
+\calE_\lambda(\bX\bX^*)
+\]
+is an isomorphism with inverse $\lambda^{-1}\bX^*$.
+\item Deduce
+\[
+\rank(\bX^*\bX)=\rank\bX
+=\rank(\bX\bX^*).
+\]
+\end{enumerate}
+\origin{A\&M Ex.~7.25; S Ex.~3.14}
+\end{exercise}
+
+\begin{solution}
+For $\bv\in\mathbb C^n$,
+\[
+\bX^*\bX\bv=\bzero
+\Longrightarrow
+0=\bv^*\bX^*\bX\bv=\norm{\bX\bv}^2
+\Longrightarrow
+\bX\bv=\bzero.
+\]
+The reverse implication follows by multiplication by $\bX^*$.  Replacing
+$\bX$ by $\bX^*$ gives the second kernel equality.
+
+If $\bX^*\bX\bv=\lambda\bv$, then
+\[
+\bX\bX^*(\bX\bv)=\bX(\bX^*\bX\bv)=\lambda\bX\bv,
+\qquad
+\lambda^{-1}\bX^*(\bX\bv)=\bv.
+\]
+Thus $\bX\bv\ne\bzero$.  Starting from
+$\bX\bX^*\bu=\lambda\bu$ gives
+\[
+\bX(\lambda^{-1}\bX^*\bu)=\bu,
+\]
+so the maps are inverse.  Rank--nullity and part (a) give
+\[
+\rank(\bX^*\bX)=n-\dim\ker(\bX^*\bX)
+=n-\dim\ker\bX=\rank\bX.
+\]
+Apply the same equality to $\bX^*$ and use
+\[
+\rank\bX^*=\rank\overline{\bX}'=\rank\overline{\bX}=\rank\bX.
+\]
+Transposition preserves rank; conjugating a column relation conjugates its
+coefficients and preserves its dimension.
+\end{solution}
+
+\begin{exercise}\label{ex:rank-one-spectrum-update}
+Let $\bu,\bv\in\mathbb C^n$, $n\geqslant1$.  Prove
+\[
+\chi_{\bu\bv^*}(t)
+=t^{n-1}(t-\bv^*\bu).
+\]
+Deduce
+\[
+\det(\bI+\bu\bv^*)=1+\bv^*\bu.
+\]
+If $1+\bv^*\bu\ne0$, prove
+\[
+(\bI+\bu\bv^*)^{-1}
+=\bI-\frac{\bu\bv^*}{1+\bv^*\bu}.
+\]
+\origin{A\&M Ex.~7.36; S \S3.8, Lemma~2 and eq.~(3.14)}
+\end{exercise}
+
+\begin{solution}
+Regard $\bu$ as an $n\times1$ matrix and $\bv^*$ as a $1\times n$ matrix.
+The rectangular-product identity gives
+\[
+t\chi_{\bu\bv^*}(t)
+=t^n\chi_{\bv^*\bu}(t)
+=t^n(t-\bv^*\bu).
+\]
+Cancellation of the common polynomial factor $t$ gives the first identity.
+Polynomial spectral mapping with $p(t)=1+t$ gives
+\[
+\det(\bI+\bu\bv^*)
+=1^{n-1}(1+\bv^*\bu).
+\]
+Set $\alpha=(1+\bv^*\bu)^{-1}$.  Then
+\[
+\begin{aligned}
+(\bI+\bu\bv^*)(\bI-\alpha\bu\bv^*)
+&=\bI+
+\bigl[1-\alpha-\alpha(\bv^*\bu)\bigr]\bu\bv^*\\
+&=\bI.
+\end{aligned}
+\]
+The square inverse criterion gives the asserted inverse.
+\end{solution}
+
+\begin{exercise}\label{ex:invariants-not-similarity}
+For $n\geqslant2$, set
+\[
+\bA=\bI_n,\qquad
+\bB=\bI_n+\eu_1\eu_2'.
+\]
+Prove that $\bA$ and $\bB$ have the same rank, determinant, trace, and
+characteristic polynomial, but are not similar.
+\origin{H Exs.~21.7--21.8; A\&M Ex.~7.33}
+\end{exercise}
+
+\begin{solution}
+Both matrices are upper triangular with diagonal entries $1$, so
+\[
+\chi_{\bA}(t)=\chi_{\bB}(t)=(t-1)^n,\qquad
+\det\bA=\det\bB=1,\qquad
+\tr\bA=\tr\bB=n.
+\]
+Their nonzero determinants give rank $n$.  If
+$\bB=\bS^{-1}\bA\bS$, then
+\[
+\bB=\bS^{-1}\bI_n\bS=\bI_n,
+\]
+contrary to $\eu_1\eu_2'\ne\bO$.
+\end{solution}
+
+\begin{exercise}\label{ex:two-by-two-diagonalization}
+For $\lambda,\mu,a\in\mathbb F$, classify the diagonalisability over
+$\mathbb F$ of
+\[
+\bA=\begin{pmatrix}\lambda&a\\0&\mu\end{pmatrix}.
+\]
+When it is diagonalisable, give an eigenbasis.
+\origin{H Ex.~21.16; A\&M Exs.~7.32--7.33}
+\end{exercise}
+
+\begin{solution}
+If $\lambda\ne\mu$, then
+\[
+\bA\begin{pmatrix}1\\0\end{pmatrix}
+=\lambda\begin{pmatrix}1\\0\end{pmatrix},
+\qquad
+\bA\begin{pmatrix}a\\\mu-\lambda\end{pmatrix}
+=\mu\begin{pmatrix}a\\\mu-\lambda\end{pmatrix}.
+\]
+The determinant of the matrix formed from these vectors is
+$\mu-\lambda\ne0$, so they are an eigenbasis.
+
+If $\lambda=\mu$, then
+\[
+\calE_\lambda(\bA)
+=\left\{\begin{pmatrix}x_1\\x_2\end{pmatrix}:ax_2=0\right\}.
+\]
+For $a=0$, $\bA=\lambda\bI_2$ and every basis is an eigenbasis.  For
+$a\ne0$, the eigenspace has dimension $1<2$, so $\bA$ is not diagonalisable.
+\end{solution}
+
+\begin{exercise}\label{ex:dual-eigenvectors}
+Suppose $\bA\bx=\lambda\bx$ and
+\[
+\by^*\bA=\mu\by^*,
+\qquad
+\bx,\by\ne\bzero.
+\]
+
+\begin{enumerate}[(a)]
+\item Prove $\bA^*\by=\bar\mu\by$.
+\item Prove $\lambda\ne\mu\Longrightarrow\by^*\bx=0$.
+\item If $\bA=\bS\bD\bS^{-1}$, let $\bs_j$ be column $j$ of $\bS$ and
+$\br_j^*$ row $j$ of $\bS^{-1}$.  Prove
+\[
+\bA\bs_j=d_j\bs_j,\qquad
+\br_j^*\bA=d_j\br_j^*,\qquad
+\br_i^*\bs_j=
+\begin{cases}
+1,&i=j,\\
+0,&i\ne j.
+\end{cases}
+\]
+\end{enumerate}
+\origin{A\&M Ex.~7.37; H Ex.~21.14}
+\end{exercise}
+
+\begin{solution}
+Taking adjoints gives
+\[
+\bA^*\by=(\by^*\bA)^*=(\mu\by^*)^*=\bar\mu\by.
+\]
+Also
+\[
+\mu\by^*\bx
+=\by^*\bA\bx
+=\lambda\by^*\bx,
+\]
+so $(\lambda-\mu)\by^*\bx=0$.
+
+The identities $\bA\bS=\bS\bD$ and
+$\bS^{-1}\bA=\bD\bS^{-1}$ give the first two column and row equations.
+The $(i,j)$ entry of $\bS^{-1}\bS=\bI$ is $1$ for $i=j$ and $0$ otherwise,
+which gives the last identity.
+\end{solution}
+
+\begin{exercise}\label{ex:lagrange-eigenmatrices}
+Let $\bA$ be diagonalisable over $\mathbb C$ with distinct eigenvalues
+$\lambda_1,\ldots,\lambda_r$.  Define
+\[
+\ell_j(t)
+=\prod_{\substack{1\leqslant k\leqslant r\\k\ne j}}
+\frac{t-\lambda_k}{\lambda_j-\lambda_k},
+\qquad
+\bP_j=\ell_j(\bA),
+\]
+where an empty product equals $1$.  Prove
+\[
+\bP_j^2=\bP_j,\qquad
+\bP_j\bP_k=\bO\ (j\ne k),\qquad
+\sum_{j=1}^r\bP_j=\bI,
+\]
+\[
+\im\bP_j=\calE_{\lambda_j}(\bA),
+\qquad
+\bA=\sum_{j=1}^r\lambda_j\bP_j.
+\]
+\origin{Adapted from S Prop.~3.19}
+\end{exercise}
+
+\begin{solution}
+Let $\bA=\bS\bD\bS^{-1}$, with diagonal entries of $\bD$ drawn from
+$\lambda_1,\ldots,\lambda_r$.  Since
+\[
+\ell_j(\lambda_k)=\delta_{jk},
+\]
+$\ell_j(\bD)$ is diagonal with entries $0$ or $1$.  Therefore
+\[
+\ell_j(\bD)^2=\ell_j(\bD),\qquad
+\ell_j(\bD)\ell_k(\bD)=\bO\quad(j\ne k),
+\]
+\[
+\sum_j\ell_j(\bD)=\bI,\qquad
+\bD=\sum_j\lambda_j\ell_j(\bD).
+\]
+Conjugation by $\bS$ gives the four matrix identities.
+
+For $\bx\in\calE_{\lambda_k}(\bA)$,
+\[
+\bP_j\bx=\ell_j(\lambda_k)\bx=\delta_{jk}\bx.
+\]
+Hence $\calE_{\lambda_j}(\bA)\subseteq\im\bP_j$.  The diagonal representation
+also gives
+\[
+(\bA-\lambda_j\bI)\bP_j=\bO,
+\]
+so $\im\bP_j\subseteq\calE_{\lambda_j}(\bA)$.
+\end{solution}
+
+\begin{exercise}\label{ex:fibonacci-powers}
+Let
+\[
+\bA=\begin{pmatrix}1&1\\1&0\end{pmatrix},
+\qquad
+F_0=0,\quad F_1=1,\quad F_{k+1}=F_k+F_{k-1}\quad(k\geqslant1).
+\]
+Prove, for $k\geqslant1$,
+\[
+\bA^k=F_k\bA+F_{k-1}\bI.
+\]
+Deduce $\bA^{-1}=\bA-\bI$.
+\origin{Adapted from H Ex.~21.4; S Ex.~3.22}
+\end{exercise}
+
+\begin{solution}
+\[
+\chi_{\bA}(t)=t^2-t-1,
+\qquad
+\bA^2=\bA+\bI.
+\]
+The formula holds for $k=1$.  If it holds for $k$, then
+\[
+\begin{aligned}
+\bA^{k+1}
+&=F_k\bA^2+F_{k-1}\bA\\
+&=F_k(\bA+\bI)+F_{k-1}\bA\\
+&=F_{k+1}\bA+F_k\bI.
+\end{aligned}
+\]
+Finally,
+\[
+\bA(\bA-\bI)=\bA^2-\bA=\bI.
+\]
+\end{solution}
+
+\begin{exercise}\label{ex:diagonalizable-stability}
+Let $\bA\in\mathbb C^{n\times n}$ be diagonalisable.  Prove that every entry
+of $\bA^k$ tends to $0$ as $k\to\infty$ if and only if every eigenvalue
+$\lambda$ of $\bA$ satisfies $|\lambda|<1$.
+\origin{Adapted from H Ex.~21.19}
+\end{exercise}
+
+\begin{solution}
+Write
+\[
+\bA=\bS\diag(\lambda_1,\ldots,\lambda_n)\bS^{-1}.
+\]
+If $|\lambda_\ell|<1$ for every $\ell$, then
+\[
+(\bA^k)_{ij}
+=\sum_{\ell=1}^n s_{i\ell}\lambda_\ell^k
+(\bS^{-1})_{\ell j}\longrightarrow0.
+\]
+
+Conversely, suppose every entry of $\bA^k$ tends to $0$.  For an eigenpair
+$\bA\bx=\lambda\bx$,
+\[
+\bA^k\bx=\lambda^k\bx.
+\]
+Choose $i$ with $x_i\ne0$.  Then
+\[
+\lambda^kx_i
+=\sum_{j=1}^n(\bA^k)_{ij}x_j\longrightarrow0,
+\]
+so $\lambda^k\to0$, which is equivalent to $|\lambda|<1$.
+\end{solution}
+
+\begin{exercise}\label{ex:simultaneous-simple-spectrum}
+Let $\bA,\bB\in\mathbb C^{n\times n}$ satisfy
+$\bA\bB=\bB\bA$.  Suppose $\bA$ has $n$ distinct eigenvalues.  Prove that
+there is one nonsingular $\bS$ for which both
+\[
+\bS^{-1}\bA\bS
+\quad\hbox{and}\quad
+\bS^{-1}\bB\bS
+\]
+are diagonal.
+\origin{Adapted from A\&M Ex.~7.39; H Ex.~21.29}
+\end{exercise}
+
+\begin{solution}
+Let $\bA\bx_j=\lambda_j\bx_j$.  Commutation gives
+\[
+\bA(\bB\bx_j)
+=\bB\bA\bx_j
+=\lambda_j\bB\bx_j,
+\]
+so $\bB\bx_j\in\calE_{\lambda_j}(\bA)$.  The $n$ roots are distinct, so
+\[
+\dim\calE_{\lambda_j}(\bA)=g_{\bA}(\lambda_j)
+\leqslant a_{\bA}(\lambda_j)=1.
+\]
+Since $\bx_j\ne\bzero$ belongs to this eigenspace,
+\[
+\dim\calE_{\lambda_j}(\bA)=1,
+\qquad
+\bB\bx_j=\mu_j\bx_j
+\]
+for some $\mu_j\in\mathbb C$, including $\mu_j=0$.  The distinct-eigenspaces
+theorem makes
+\[
+\bS=(\bx_1,\ldots,\bx_n)
+\]
+nonsingular, and
+\[
+\bS^{-1}\bA\bS=\diag(\lambda_1,\ldots,\lambda_n),
+\qquad
+\bS^{-1}\bB\bS=\diag(\mu_1,\ldots,\mu_n).
+\]
+\end{solution}
+
+\begin{exercise}\label{ex:sylvester-equation}
+Let $\bA\in\mathbb C^{m\times m}$ and
+$\bB\in\mathbb C^{n\times n}$ satisfy
+\[
+\sigma_{\mathbb C}(\bA)\cap\sigma_{\mathbb C}(\bB)=\varnothing.
+\]
+Prove that, for every $\bC\in\mathbb C^{m\times n}$, the equation
+\[
+\bA\bX-\bX\bB=\bC
+\]
+has exactly one solution $\bX\in\mathbb C^{m\times n}$.
+\origin{S Ex.~3.23}
+\end{exercise}
+
+\begin{solution}
+Define
+\[
+\calL:\mathbb C^{m\times n}\longrightarrow\mathbb C^{m\times n},
+\qquad
+\calL(\bX)=\bA\bX-\bX\bB.
+\]
+Suppose $\calL(\bX)=\bO$.  Then
+\[
+\bA^k\bX=\bX\bB^k,\qquad k\geqslant0,
+\]
+by induction.  With $p=\chi_{\bA}$,
+\[
+p(\bA)\bX=\bX p(\bB).
+\]
+Cayley--Hamilton gives $p(\bA)=\bO$.  Polynomial spectral mapping gives
+\[
+\sigma_{\mathbb C}(p(\bB))
+=\{p(\mu):\mu\in\sigma_{\mathbb C}(\bB)\}.
+\]
+Every $p(\mu)\ne0$ because the spectra are disjoint, so $p(\bB)$ is
+nonsingular.  Hence
+\[
+\bO=\bX p(\bB)\quad\Longrightarrow\quad\bX=\bO.
+\]
+Thus $\calL$ is injective.  Its domain and codomain both have dimension $mn$,
+so rank--nullity makes it surjective.  Existence and uniqueness follow.
+\end{solution}
+
+\begin{exercise}\label{ex:companion-recurrence}
+Let
+\[
+\bC=\begin{pmatrix}0&1&0\\0&0&1\\4&-1&2\end{pmatrix},
+\qquad
+y_k=\bu^*\bC^k\bv
+\]
+\tcbbreak
+for fixed $\bu,\bv\in\mathbb C^3$.  Prove
+\[
+y_{k+3}=2y_{k+2}-y_{k+1}+4y_k,\qquad k\geqslant0.
+\]
+\origin{Adapted from A\&M Ex.~7.38}
+\end{exercise}
+
+\begin{solution}
+\[
+\begin{aligned}
+\chi_{\bC}(t)
+&=\det\begin{pmatrix}
+t&-1&0\\
+0&t&-1\\
+-4&1&t-2
+\end{pmatrix}\\
+&=t\{t(t-2)+1\}-4
+=t^3-2t^2+t-4.
+\end{aligned}
+\]
+Cayley--Hamilton and multiplication by $\bC^k$ give
+\[
+\bC^{k+3}-2\bC^{k+2}+\bC^{k+1}-4\bC^k=\bO.
+\]
+Premultiplication by $\bu^*$ and postmultiplication by $\bv$ give
+\[
+y_{k+3}-2y_{k+2}+y_{k+1}-4y_k=0.
+\]
+\end{solution}
+
+\begin{exercise}\label{ex:four-point-cyclic-filter}
+Let $a_0,a_1,a_2,a_3\in\mathbb C$ and
+\[
+\bP=
+\begin{pmatrix}
+0&0&0&1\\
+1&0&0&0\\
+0&1&0&0\\
+0&0&1&0
+\end{pmatrix},
+\qquad
+p(t)=a_0+a_1t+a_2t^2+a_3t^3,
+\qquad
+\bC=p(\bP).
+\]
+For $\omega\in\{1,\mathrm{i},-1,-\mathrm{i}\}$, set
+\[
+\boldsymbol{f}_\omega
+=\begin{pmatrix}1&\omega^{-1}&\omega^{-2}&\omega^{-3}\end{pmatrix}'.
+\]
+
+\begin{enumerate}[(a)]
+\item Prove that the four $\boldsymbol{f}_\omega$ form a common eigenbasis for every
+matrix $p(\bP)$ and that
+\[
+\bC\boldsymbol{f}_\omega=p(\omega)\boldsymbol{f}_\omega.
+\]
+\item Prove
+\[
+\det\bC=p(1)p(\mathrm{i})p(-1)p(-\mathrm{i}).
+\]
+\item If the four factors are nonzero, construct a polynomial $q$ of degree
+at most $3$ such that $\bC^{-1}=q(\bP)$.
+\end{enumerate}
+\origin{S Ex.~3.9}
+\end{exercise}
+
+\begin{solution}
+Since $\omega^4=1$,
+\[
+\bP\boldsymbol{f}_\omega
+=\begin{pmatrix}
+\omega^{-3}\\1\\\omega^{-1}\\\omega^{-2}
+\end{pmatrix}
+=\omega\boldsymbol{f}_\omega.
+\]
+The four eigenvalues of $\bP$ are distinct, so the four eigenvectors are
+linearly independent.  Polynomial action gives
+\[
+p(\bP)\boldsymbol{f}_\omega=p(\omega)\boldsymbol{f}_\omega.
+\]
+Thus $\bC$ is similar to the diagonal matrix with diagonal
+$p(1),p(\mathrm{i}),p(-1),p(-\mathrm{i})$, proving the determinant formula.
+
+If every $p(\omega)\ne0$, define
+\[
+q(t)
+=\sum_{\omega\in\{1,\mathrm{i},-1,-\mathrm{i}\}}
+\frac{1}{p(\omega)}
+\prod_{\substack{\zeta\in\{1,\mathrm{i},-1,-\mathrm{i}\}\\\zeta\ne\omega}}
+\frac{t-\zeta}{\omega-\zeta}.
+\]
+Then $\deg q\leqslant3$ and $q(\omega)p(\omega)=1$.  Hence
+\[
+q(\bP)\bC\boldsymbol{f}_\omega=\boldsymbol{f}_\omega
+\]
+on a basis, so $q(\bP)\bC=\bI$ and $q(\bP)=\bC^{-1}$.
+\end{solution}
+
+\begin{exercise}\label{ex:triangular-cayley-hamilton}
+Let $\bT$ be upper triangular with diagonal
+$\lambda_1,\ldots,\lambda_n$, and set
+\[
+\bB_j=\bT-\lambda_j\bI,\qquad
+\bP_k=\bB_1\cdots\bB_k.
+\]
+Prove by induction that the leading $k\times k$ block of $\bP_k$ is zero.
+Deduce
+\[
+\prod_{j=1}^n(\bT-\lambda_j\bI)=\bO.
+\]
+Use Schur triangularisation to obtain an alternative proof of
+Cayley--Hamilton for every complex square matrix.
+\origin{A\&M Exs.~7.56 and 7.69}
+\end{exercise}
+
+\begin{solution}
+For $k=1$, $(\bP_1)_{11}=(\bB_1)_{11}=0$.  Suppose the leading
+$(k-1)\times(k-1)$ block of $\bP_{k-1}$ is zero.  Since all $\bB_j$ are
+polynomials in $\bT$, they commute, and
+\[
+\bP_k=\bP_{k-1}\bB_k.
+\]
+For $i,j\leqslant k-1$, upper-triangular multiplication uses only indices
+$i\leqslant\ell\leqslant j$, so
+\[
+(\bP_k)_{ij}
+=\sum_{\ell=i}^j(\bP_{k-1})_{i\ell}(\bB_k)_{\ell j}=0.
+\]
+For $i<k$,
+\[
+(\bP_k)_{ik}
+=\sum_{\ell=i}^{k-1}
+(\bP_{k-1})_{i\ell}(\bB_k)_{\ell k}
++(\bP_{k-1})_{ik}(\bB_k)_{kk}
+=0,
+\]
+because the first terms lie in the zero leading block and
+$(\bB_k)_{kk}=0$.  Also $(\bP_k)_{ki}=0$ for $i<k$, and triangular
+multiplication gives
+\[
+(\bP_k)_{kk}
+=\prod_{r=1}^k(\lambda_k-\lambda_r)=0.
+\]
+The induction is complete.  At $k=n$,
+\[
+\bP_n=\prod_{j=1}^n(\bT-\lambda_j\bI)=\bO.
+\]
+
+For $\bA=\bQ\bT\bQ^*$ from Schur's theorem,
+\[
+\chi_{\bA}(t)=\chi_{\bT}(t)
+=\prod_{j=1}^n(t-\lambda_j).
+\]
+Matrix-polynomial algebra gives
+\[
+\chi_{\bA}(\bA)
+=\bQ\chi_{\bT}(\bT)\bQ^*
+=\bO.
+\]
+\end{solution}
+
+\end{document}

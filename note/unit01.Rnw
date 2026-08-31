@@ -1,0 +1,1766 @@
+% Compile:  python build.py 01
+% or by hand:
+%   Rscript -e "knitr::knit('unit01.Rnw')"
+%   xelatex -shell-escape unit01.tex        # run twice to settle the toc
+\documentclass[17pt]{extarticle}
+
+\input{la_preamble.tex}
+
+% Unit 1 specific
+\fancyhead[L]{\small\color{hdrBG}\textbf{Unit\ 1\ \ Vectors, Matrices, Data}}
+
+\setcounter{theorem}{0}\setcounter{example}{0}
+\renewcommand\thedefinition{1.\arabic{theorem}}
+\renewcommand\thetheorem{1.\arabic{theorem}}
+\renewcommand\thelemma{1.\arabic{theorem}}
+\renewcommand\theproposition{1.\arabic{theorem}}
+\renewcommand\thecorollary{1.\arabic{theorem}}
+\renewcommand\theexample{1.\arabic{example}}
+\renewcommand\theexercise{1.\arabic{exercise}}
+\renewcommand\thefigure{1.\arabic{figure}}
+
+\title{\color{hdrBG}\bfseries\Huge Vectors, Matrices, and the Data Matrix}
+\author{}\date{}
+
+\begin{document}
+
+<<setup, include=FALSE>>=
+source("la_knitr_setup.R")
+knitr::opts_chunk$set(fig.path = "figs/unit01-")
+@
+
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+{\color{hdrBG}\bfseries\fontsize{26}{32}\selectfont
+ Unit 1.\ Vectors, Matrices, and the Data Matrix}
+\end{center}
+\vspace*{\fill}
+\end{titlepage}
+
+\setcounter{page}{1}
+
+%==============================================================================
+\section{Vectors in \texorpdfstring{$\Real^n$}{R\^{}n}}\label{sec:1.1}
+%==============================================================================
+
+\subsection{Vectors, linear combinations, geometry}\label{sec:1.1.1}
+
+\begin{definition}[Real $n$-vector]\label{def:vector}
+Let $n$ be a positive integer. A \emph{real $n$-vector} is an ordered list of $n$ real
+numbers, written as a column,
+\[
+\bx = \begin{pmatrix} x_1 \\ x_2 \\ \vdots \\ x_n\end{pmatrix},
+\qquad x_i \in \Real .
+\]
+The number $x_i$ is the \emph{$i$th component} of $\bx$. The set of all real $n$-vectors is
+written $\Real^n$. Two vectors are equal when all their components are equal.
+\origin{A\&M p.~1}
+\end{definition}
+
+\begin{definition}[Addition and scalar multiplication]\label{def:vecops}
+For $\bx,\by\in\Real^n$ and $\alpha\in\Real$, define $\bx+\by$ and $\alpha\bx$ componentwise:
+\[
+(\bx+\by)_i = x_i + y_i, \qquad (\alpha\bx)_i = \alpha x_i , \qquad i=1,\ldots,n .
+\]
+Write $\bzero$ for the vector with every component $0$, and $-\bx$ for $(-1)\bx$.
+\origin{A\&M pp.~1--2}
+\end{definition}
+
+\begin{theorem}[Arithmetic of vectors]\label{thm:vecaxioms}
+For all $\bx,\by,\bz\in\Real^n$ and all $\alpha,\beta\in\Real$:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $\bx+\by=\by+\bx$;
+\item $(\bx+\by)+\bz=\bx+(\by+\bz)$;
+\item $\bx+\bzero=\bx$ and $\bx+(-\bx)=\bzero$;
+\item $\alpha(\bx+\by)=\alpha\bx+\alpha\by$ and $(\alpha+\beta)\bx=\alpha\bx+\beta\bx$;
+\item $(\alpha\beta)\bx=\alpha(\beta\bx)$ and $1\bx=\bx$.
+\end{enumerate}
+\origin{Course formulation from A\&M Ex.~1.3--1.5}
+\end{theorem}
+
+\begin{proof}
+For $i=1,\ldots,n$, the field axioms give
+\begin{align*}
+(\bx+\by)_i&=x_i+y_i=y_i+x_i=(\by+\bx)_i,\\
+((\bx+\by)+\bz)_i&=(x_i+y_i)+z_i=x_i+(y_i+z_i)
+  =(\bx+(\by+\bz))_i,\\
+(\bx+\bzero)_i&=x_i+0=x_i,
+& (\bx+(-\bx))_i&=x_i-x_i=0,\\
+(\alpha(\bx+\by))_i&=\alpha(x_i+y_i)=\alpha x_i+\alpha y_i
+  =(\alpha\bx+\alpha\by)_i,\\
+((\alpha+\beta)\bx)_i&=(\alpha+\beta)x_i=\alpha x_i+\beta x_i
+  =(\alpha\bx+\beta\bx)_i,\\
+((\alpha\beta)\bx)_i&=(\alpha\beta)x_i=\alpha(\beta x_i)
+  =(\alpha(\beta\bx))_i,
+& (1\bx)_i&=1x_i=x_i.
+\end{align*}
+Equality in every component gives each vector identity.
+\end{proof}
+
+\begin{definition}[Linear combination]\label{def:lincomb}
+Given $\bx_1,\ldots,\bx_k\in\Real^n$ and $\alpha_1,\ldots,\alpha_k\in\Real$, the vector
+$\sum_{j=1}^{k}\alpha_j\bx_j$ is a \emph{linear combination} of $\bx_1,\ldots,\bx_k$ with
+\emph{coefficients} $\alpha_1,\ldots,\alpha_k$.
+\origin{S \S1.1.1}
+\end{definition}
+
+\begin{definition}[Two standard vectors]\label{def:eu-one}
+For $j=1,\ldots,n$, the \emph{$j$th standard coordinate vector} $\eu_j\in\Real^n$ has $j$th
+component $1$ and all other components $0$. The vector $\bone\in\Real^n$ has every
+component equal to $1$.
+\origin{A\&M p.~2}
+\end{definition}
+
+\begin{theorem}[Coordinates]\label{thm:coords}
+Every $\bx\in\Real^n$ satisfies $\bx=\sum_{j=1}^{n}x_j\eu_j$, and the coefficients in such
+a representation are unique: if $\sum_j\alpha_j\eu_j=\sum_j\beta_j\eu_j$ then
+$\alpha_j=\beta_j$ for every $j$.
+\origin{A\&M Ex.~1.13(b); S \S1.1.1.1}
+\end{theorem}
+
+\begin{proof}
+For $i=1,\ldots,n$,
+\[
+\left(\sum_{j=1}^n x_j\eu_j\right)_i
+=\sum_{j=1}^n x_j(\eu_j)_i=x_i.
+\]
+If $\sum_j\alpha_j\eu_j=\sum_j\beta_j\eu_j$, comparison of component $i$ gives
+$\alpha_i=\beta_i$.
+\end{proof}
+
+\begin{example}[A linear combination]\label{ex:lincomb}
+With $\bx=\begin{pmatrix}3\\1\end{pmatrix}$ and $\by=\begin{pmatrix}1\\2\end{pmatrix}$
+in $\Real^2$,
+\[
+2\bx-\by=\begin{pmatrix}6\\2\end{pmatrix}-\begin{pmatrix}1\\2\end{pmatrix}
+=\begin{pmatrix}5\\0\end{pmatrix},
+\qquad
+\bx+\by=\begin{pmatrix}4\\3\end{pmatrix}.
+\]
+\origin{Course formulation}
+\end{example}
+
+\begin{figure}[H]\centering
+\begin{tikzpicture}[scale=0.8,>=Stealth]
+  \draw[gray!40,->] (-0.4,0)--(5.2,0);
+  \draw[gray!40,->] (0,-0.4)--(0,3.6);
+  \draw[gray!45,dashed] (3,1)--(4,3);
+  \draw[gray!45,dashed] (1,2)--(4,3);
+  \draw[->,very thick,blue!55!black] (0,0)--(3,1);
+  \draw[->,very thick,red!60!black] (0,0)--(1,2);
+  \draw[->,very thick,violet!70!black] (0,0)--(4,3);
+  \node[blue!55!black] at (2.2,0.25) {$\bx$};
+  \node[red!60!black] at (0.35,1.7) {$\by$};
+  \node[violet!70!black] at (2.15,2.35) {$\bx+\by$};
+\end{tikzpicture}
+\caption{The two vectors of Example~\ref{ex:lincomb} and their sum.}\label{fig:parallelogram}
+\end{figure}
+
+\subsection{Inner product, norm, and the Cauchy--Schwarz inequality}\label{sec:1.1.2}
+
+\begin{definition}[Inner product]\label{def:inner}
+For $\bx,\by\in\Real^n$ the \emph{inner product} is the number
+\[
+\bx'\by = \sum_{i=1}^{n} x_i y_i .
+\]
+\origin{A\&M Ex.~1.7; S \S1.3.5}
+\end{definition}
+
+\begin{theorem}[Properties of the inner product]\label{thm:inner}
+For all $\bx,\by,\bz\in\Real^n$ and $\alpha\in\Real$:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $\bx'\by=\by'\bx$;
+\item $(\alpha\bx+\bz)'\by=\alpha(\bx'\by)+\bz'\by$, and likewise in the second argument;
+\item $\bx'\bx=\sum_i x_i^2\geqslant0$, with $\bx'\bx=0$ if and only if $\bx=\bzero$.
+\end{enumerate}
+\origin{A\&M Ex.~1.7}
+\end{theorem}
+
+\begin{proof}
+\begin{align*}
+\bx'\by&=\sum_i x_i y_i=\sum_i y_i x_i=\by'\bx,\\
+(\alpha\bx+\bz)'\by
+ &=\sum_i(\alpha x_i+z_i)y_i
+ =\alpha\sum_i x_i y_i+\sum_i z_i y_i
+ =\alpha\bx'\by+\bz'\by.
+\end{align*}
+Symmetry gives linearity in the second argument. Finally,
+\[
+\bx'\bx=\sum_i x_i^2\geqslant0,
+\qquad
+\bx'\bx=0\iff x_i^2=0\ (i=1,\ldots,n)\iff\bx=\bzero.
+\]
+\end{proof}
+
+\begin{definition}[Norm]\label{def:norm}
+The \emph{norm} of $\bx\in\Real^n$ is $\norm{\bx}=(\bx'\bx)^{1/2}$. A vector with
+$\norm{\bx}=1$ is a \emph{unit vector}.
+\origin{A\&M Ex.~1.10; S \S1.3.5}
+\end{definition}
+
+\begin{theorem}[Basic properties of the norm]\label{thm:norm-basic}
+For $\bx\in\Real^n$ and $\alpha\in\Real$,
+\[
+\norm{\bx}\geqslant0,\qquad
+\norm{\bx}=0\iff\bx=\bzero,\qquad
+\norm{\alpha\bx}=\abs{\alpha}\norm{\bx}.
+\]
+\origin{A\&M Ex.~1.10(a)--(b)}
+\end{theorem}
+
+\begin{proof}
+The first two claims follow from Theorem~\ref{thm:inner}(iii). Moreover,
+\[
+\norm{\alpha\bx}^2=(\alpha\bx)'(\alpha\bx)
+=\alpha^2\bx'\bx=\abs{\alpha}^2\norm{\bx}^2.
+\]
+Both sides of $\norm{\alpha\bx}=\abs{\alpha}\norm{\bx}$ are nonnegative.
+\end{proof}
+
+\begin{theorem}[Cauchy--Schwarz]\label{thm:cs}
+For all $\bx,\by\in\Real^n$,
+\[
+\abs{\bx'\by}\leqslant\norm{\bx}\,\norm{\by},
+\]
+with equality if and only if one of $\bx,\by$ is a scalar multiple of the other.
+\origin{A\&M Ex.~1.9; S Prop.~1.5}
+\end{theorem}
+
+\begin{proof}
+For $\by=\bzero$, equality holds and $\by=0\bx$. Let $\by\neq\bzero$ and put
+$t=(\bx'\by)/(\by'\by)$. Then
+\[
+0\leqslant\norm{\bx-t\by}^2
+=\bx'\bx-2t\bx'\by+t^2\by'\by
+=\bx'\bx-\frac{(\bx'\by)^2}{\by'\by},
+\]
+so
+\[
+(\bx'\by)^2\leqslant(\bx'\bx)(\by'\by)
+=\norm{\bx}^2\norm{\by}^2.
+\]
+Taking nonnegative square roots gives the inequality. Equality is equivalent to
+$\norm{\bx-t\by}=0$, hence to $\bx=t\by$. Conversely, if $\bx=\alpha\by$, then
+\[
+\abs{\bx'\by}=\abs{\alpha}\,\by'\by
+=\abs{\alpha}\norm{\by}^2
+=\norm{\bx}\norm{\by}
+\]
+by Theorem~\ref{thm:norm-basic}.
+\end{proof}
+
+\begin{corollary}[Triangle inequality]\label{cor:triangle}
+$\norm{\bx+\by}\leqslant\norm{\bx}+\norm{\by}$ for all $\bx,\by\in\Real^n$.
+\origin{A\&M Ex.~1.10(c); S \S1.3.5}
+\end{corollary}
+
+\begin{proof}
+Using Theorem~\ref{thm:inner} and then Theorem~\ref{thm:cs},
+\[
+\norm{\bx+\by}^2=\bx'\bx+2\,\bx'\by+\by'\by
+\leqslant\norm{\bx}^2+2\norm{\bx}\norm{\by}+\norm{\by}^2
+=\bigl(\norm{\bx}+\norm{\by}\bigr)^2 .
+\]
+Both sides before squaring are nonnegative.
+\end{proof}
+
+\begin{definition}[Angle]\label{def:angle}
+For nonzero $\bx,\by\in\Real^n$, the \emph{angle} between them is the unique
+$\theta\in[0,\pi]$ with
+\[
+\cos\theta=\frac{\bx'\by}{\norm{\bx}\,\norm{\by}} .
+\]
+Theorem~\ref{thm:cs} puts the right-hand side in $[-1,1]$, and $\cos$ is a decreasing
+bijection from $[0,\pi]$ onto $[-1,1]$, so exactly one such $\theta$ exists.
+\origin{A\&M Ex.~1.15}
+\end{definition}
+
+\begin{definition}[Orthogonality]\label{def:orth}
+Vectors $\bx,\by\in\Real^n$ are \emph{orthogonal}, written $\bx\perp\by$, when
+$\bx'\by=0$. By Definition~\ref{def:angle} this is $\theta=\pi/2$ when both are nonzero,
+and $\bzero$ is orthogonal to everything.
+\origin{A\&M Ex.~1.12}
+\end{definition}
+
+\begin{theorem}[Pythagoras]\label{thm:pythagoras}
+If $\bx\perp\by$ then $\norm{\bx+\by}^2=\norm{\bx}^2+\norm{\by}^2$.
+\origin{A\&M Ex.~1.12(c)}
+\end{theorem}
+
+\begin{proof}
+$\norm{\bx+\by}^2=\bx'\bx+2\,\bx'\by+\by'\by$ by Theorem~\ref{thm:inner}, and the middle
+term is $0$.
+\end{proof}
+
+\begin{example}[Orthogonality in $\Real^3$]\label{ex:orth}
+Let $\bx=(1,2,-1)'$ and $\by=(3,-1,1)'$. Then $\bx'\by=3-2-1=0$, so $\bx\perp\by$. Here
+$\norm{\bx}^2=6$, $\norm{\by}^2=11$, and $\bx+\by=(4,1,0)'$ has
+$\norm{\bx+\by}^2=17=6+11$.
+\origin{Course formulation}
+\end{example}
+
+\subsection{The sample mean and variance as vector operations}\label{sec:1.1.3}
+
+\begin{definition}[Sample mean and deviation vector]\label{def:mean}
+For $\bx=(x_1,\ldots,x_n)'\in\Real^n$, the \emph{sample mean} is
+$\bar x=n^{-1}\sum_i x_i$ and the \emph{deviation
+vector} is $\bx-\bar x\bone$, whose $i$th component is $x_i-\bar x$.
+\origin{Course formulation from A\&M Ex.~2.37(b)}
+\end{definition}
+
+\begin{theorem}[The mean as an inner product]\label{thm:mean-inner}
+$\bar x=n^{-1}\bone'\bx$, and $\bone'\bone=n$.
+\origin{A\&M Ex.~1.16, 2.37(b)}
+\end{theorem}
+
+\begin{proof}
+\[
+\bone'\bx=\sum_i x_i=n\bar x,
+\qquad
+\bone'\bone=\sum_i1=n.
+\]
+\end{proof}
+
+\begin{theorem}[The deviation vector is orthogonal to $\bone$]\label{thm:dev-orth}
+$\bone'(\bx-\bar x\bone)=0$.
+\origin{Adapted from A\&M Ex.~2.37(b)}
+\end{theorem}
+
+\begin{proof}
+By Theorems~\ref{thm:inner} and~\ref{thm:mean-inner},
+\[
+\bone'(\bx-\bar x\bone)=\bone'\bx-\bar x\,\bone'\bone=n\bar x-n\bar x=0.
+\]
+\end{proof}
+
+\begin{definition}[Sample variance]\label{def:var}
+The \emph{sample variance} of $\bx$ is
+\[
+s_x^2=\frac{1}{n-1}\sum_{i=1}^{n}(x_i-\bar x)^2=\frac{1}{n-1}\norm{\bx-\bar x\bone}^2 ,
+\qquad n\geqslant2 ,
+\]
+the second expression by Definitions~\ref{def:norm} and~\ref{def:mean}. The \emph{sample
+standard deviation} is $s_x=\sqrt{s_x^2}$.
+\origin{Course formulation}
+\end{definition}
+
+\begin{theorem}[Decomposition of the sum of squares]\label{thm:ss-decomp}
+$\norm{\bx}^2=n\bar x^2+\norm{\bx-\bar x\bone}^2$, that is
+$\sum_i x_i^2=n\bar x^2+\sum_i(x_i-\bar x)^2$.
+\origin{Course formulation}
+\end{theorem}
+
+\begin{proof}
+By Theorems~\ref{thm:dev-orth}, \ref{thm:pythagoras}, and~\ref{thm:mean-inner},
+\begin{align*}
+(\bar x\bone)'(\bx-\bar x\bone)&=\bar x\,\bone'(\bx-\bar x\bone)=0,\\
+\norm{\bx}^2
+&=\norm{\bar x\bone+(\bx-\bar x\bone)}^2\\
+&=\norm{\bar x\bone}^2+\norm{\bx-\bar x\bone}^2\\
+&=n\bar x^2+\norm{\bx-\bar x\bone}^2.
+\end{align*}
+\end{proof}
+
+\begin{figure}[H]\centering
+\begin{tikzpicture}[scale=0.9,>=Stealth]
+  \draw[gray!45,->] (-0.3,0)--(5.0,0) node[right,black]{\small multiples of $\bone$};
+  \draw[->,very thick,blue!55!black] (0,0)--(3,2.1);
+  \draw[->,very thick,teal!65!black] (0,0)--(3,0);
+  \draw[->,very thick,orange!85!black] (3,0)--(3,2.1);
+  \draw[gray!70] (2.72,0)--(2.72,0.28)--(3,0.28);
+  \node[blue!55!black] at (1.35,1.45) {$\bx$};
+  \node[teal!65!black] at (1.5,-0.35) {$\bar x\bone$};
+  \node[orange!85!black,right] at (3.05,1.05) {$\bx-\bar x\bone$};
+\end{tikzpicture}
+\caption{Theorem~\ref{thm:ss-decomp} in the plane containing $\bone$ and
+$\bx$.}\label{fig:decomp}
+\end{figure}
+
+\begin{theorem}[The mean minimises the sum of squared deviations]\label{thm:mean-min}
+For every $a\in\Real$,
+\[
+\sum_{i=1}^{n}(x_i-a)^2=\sum_{i=1}^{n}(x_i-\bar x)^2+n(\bar x-a)^2 ,
+\]
+so the left-hand side is smallest exactly at $a=\bar x$.
+\origin{Course formulation}
+\end{theorem}
+
+\begin{proof}
+By Theorems~\ref{thm:dev-orth}, \ref{thm:pythagoras}, and~\ref{thm:mean-inner},
+\begin{align*}
+\sum_i(x_i-a)^2
+&=\norm{\bx-a\bone}^2\\
+&=\norm{(\bx-\bar x\bone)+(\bar x-a)\bone}^2\\
+&=\norm{\bx-\bar x\bone}^2+(\bar x-a)^2\norm{\bone}^2\\
+&=\sum_i(x_i-\bar x)^2+n(\bar x-a)^2.
+\end{align*}
+Since $n>0$, $n(\bar x-a)^2=0\iff a=\bar x$.
+\end{proof}
+
+\begin{definition}[Sample covariance and correlation]\label{def:cov}
+For $\bx,\by\in\Real^n$ with $n\geqslant2$, the \emph{sample covariance} and, when both
+sample variances are nonzero, the \emph{sample correlation} are
+\[
+s_{xy}=\frac{(\bx-\bar x\bone)'(\by-\bar y\bone)}{n-1},
+\qquad
+r_{xy}=\frac{s_{xy}}{s_xs_y}
+=\frac{(\bx-\bar x\bone)'(\by-\bar y\bone)}
+       {\norm{\bx-\bar x\bone}\,\norm{\by-\bar y\bone}} .
+\]
+\origin{Course formulation}
+\end{definition}
+
+\begin{theorem}[The correlation is a cosine]\label{thm:cor-cos}
+Whenever $r_{xy}$ is defined, $r_{xy}=\cos\theta$, where $\theta$ is the angle between
+the deviation vectors $\bx-\bar x\bone$ and $\by-\bar y\bone$. Consequently
+$\abs{r_{xy}}\leqslant1$, and
+$\abs{r_{xy}}=1$ if and only if
+\[
+\by-\bar y\bone=b\,(\bx-\bar x\bone) \quad\text{for some } b\neq0 ,
+\]
+that is, if and only if $y_i=a+bx_i$ for every $i$, with $a=\bar y-b\bar x$.
+\origin{Course formulation}
+\end{theorem}
+
+\begin{proof}
+Put $\bu=\bx-\bar x\bone$ and $\bv=\by-\bar y\bone$. Then
+\[
+r_{xy}=\frac{\bu'\bv}{\norm{\bu}\norm{\bv}}=\cos\theta,
+\qquad
+\abs{r_{xy}}\leqslant1.
+\]
+By Theorem~\ref{thm:cs}, equality holds iff $\bv=b\bu$ for some $b\neq0$. Componentwise,
+\[
+y_i-\bar y=b(x_i-\bar x)
+\iff y_i=(\bar y-b\bar x)+bx_i.
+\]
+\end{proof}
+
+% \periodmark{End of period 1 of 3.}
+
+%==============================================================================
+\section{Matrices}\label{sec:1.2}
+%==============================================================================
+
+\subsection{Matrices, multiplication, transpose}\label{sec:1.2.1}
+
+\begin{definition}[Matrix]\label{def:matrix}
+An \emph{$m\times n$ matrix} is a rectangular array
+$\bA=(a_{ij})$ of real numbers with $i=1,\ldots,m$ indexing rows and $j=1,\ldots,n$
+indexing columns. The set of all such is $\Real^{m\times n}$. A matrix is \emph{square}
+when $m=n$, and \emph{of order $n$} then. Sums and scalar multiples are componentwise:
+$(\bA+\bB)_{ij}=a_{ij}+b_{ij}$ and $(\alpha\bA)_{ij}=\alpha a_{ij}$. The matrix with every
+entry $0$ is $\bO$.
+\origin{H \S1.1, \S1.2a--1.2b, \S1.3a, \S1.3f}
+\end{definition}
+
+\begin{definition}[Product]\label{def:matprod}
+For $\bA\in\Real^{m\times n}$ and $\bB\in\Real^{n\times p}$ the product
+$\bA\bB\in\Real^{m\times p}$ has entries
+\begin{equation}\label{eq:matprod}
+(\bA\bB)_{ij}=\sum_{k=1}^{n}a_{ik}b_{kj},\qquad i=1,\ldots,m,\ \ j=1,\ldots,p .
+\end{equation}
+The product is defined only when the number of columns of $\bA$ equals the number of rows
+of $\bB$; the two matrices are then \emph{conformable}.
+\origin{H \S1.2c}
+\end{definition}
+
+\begin{definition}[Transpose]\label{def:transpose}
+The \emph{transpose} of $\bA\in\Real^{m\times n}$ is the matrix
+$\bA'\in\Real^{n\times m}$ with $(\bA')_{ij}=a_{ji}$.
+\origin{H \S1.2d}
+\end{definition}
+
+\begin{theorem}[Four readings of a product]\label{thm:four}
+Let $\bA\in\Real^{m\times n}$ have columns $\ba_j$ and rows $\tilde\ba_i'$, and let
+$\bB\in\Real^{n\times p}$ have columns $\bbb_j$ and rows $\tilde\bbb_k'$. Then
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $(\bA\bB)_{ij}=\tilde\ba_i'\bbb_j$;
+\item $\bA\bB=(\bA\bbb_1,\ldots,\bA\bbb_p)$, so the $j$th column of $\bA\bB$ is $\bA\bbb_j$;
+\item the $i$th row of $\bA\bB$ is $\tilde\ba_i'\bB$;
+\item $\ds\bA\bB=\sum_{k=1}^{n}\ba_k\tilde\bbb_k'$, a sum of $n$ matrices each of the form
+      (column)(row).
+\end{enumerate}
+\origin{Course formulation from A\&M Ex.~2.17, 5.2; H \S1.2c, \S2.2--2.3}
+\end{theorem}
+
+\begin{proof}
+For every $i,j$,
+\begin{align*}
+\tilde\ba_i'\bbb_j
+ &=\sum_k a_{ik}b_{kj}=(\bA\bB)_{ij},\\
+(\bA\bbb_j)_i
+ &=\sum_k a_{ik}(\bbb_j)_k=\sum_k a_{ik}b_{kj}=(\bA\bB)_{ij},\\
+(\tilde\ba_i'\bB)_j
+ &=\sum_k(\tilde\ba_i)_k b_{kj}=\sum_k a_{ik}b_{kj}=(\bA\bB)_{ij},\\
+\left(\sum_k\ba_k\tilde\bbb_k'\right)_{ij}
+ &=\sum_k(\ba_k)_i(\tilde\bbb_k)_j
+ =\sum_k a_{ik}b_{kj}=(\bA\bB)_{ij}.
+\end{align*}
+\end{proof}
+
+\begin{corollary}[Matrix times vector]\label{cor:Ax}
+For $\bA\in\Real^{m\times n}$ with columns $\ba_1,\ldots,\ba_n$ and $\bx\in\Real^n$,
+\[
+\bA\bx=\sum_{j=1}^{n}x_j\ba_j .
+\]
+\origin{H \S2.3}
+\end{corollary}
+
+\begin{proof}
+Theorem~\ref{thm:four}(iv), with $\bB=\bx$, gives
+$\bA\bx=\sum_k\ba_k x_k$.
+\end{proof}
+
+\begin{theorem}[Algebra of products]\label{thm:prodalg}
+Whenever the products are defined,
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $(\bA\bB)\bC=\bA(\bB\bC)$;
+\item $\bA(\bB+\bC)=\bA\bB+\bA\bC$ and $(\bA+\bB)\bC=\bA\bC+\bB\bC$;
+\item $\alpha(\bA\bB)=(\alpha\bA)\bB=\bA(\alpha\bB)$;
+\item $(\bA')'=\bA$, $(\bA+\bB)'=\bA'+\bB'$, and $(\bA\bB)'=\bB'\bA'$.
+\end{enumerate}
+\origin{Course formulation from A\&M Ex.~2.4(b),(d), 2.14, 2.15(a); H \S1.2c--1.2d, Ex.~1.2--1.3}
+\end{theorem}
+
+\begin{proof}
+(i) With $\bA\in\Real^{m\times n}$, $\bB\in\Real^{n\times p}$, and
+$\bC\in\Real^{p\times q}$, both
+sides are $m\times q$ and
+\[
+\bigl((\bA\bB)\bC\bigr)_{ij}=\sum_{l=1}^{p}\Bigl(\sum_{k=1}^{n}a_{ik}b_{kl}\Bigr)c_{lj}
+=\sum_{k=1}^{n}\sum_{l=1}^{p}a_{ik}b_{kl}c_{lj}
+=\sum_{k=1}^{n}a_{ik}\Bigl(\sum_{l=1}^{p}b_{kl}c_{lj}\Bigr)
+=\bigl(\bA(\bB\bC)\bigr)_{ij},
+\]
+the middle step being the interchange of two finite sums.
+
+(ii) For $\bB,\bC\in\Real^{n\times p}$,
+\[
+[\bA(\bB+\bC)]_{ij}
+=\sum_k a_{ik}(b_{kj}+c_{kj})
+=(\bA\bB)_{ij}+(\bA\bC)_{ij}.
+\]
+Similarly,
+\[
+[(\bA+\bB)\bC]_{ij}
+=\sum_k(a_{ik}+b_{ik})c_{kj}
+=(\bA\bC)_{ij}+(\bB\bC)_{ij}.
+\]
+
+(iii)
+\[
+[\alpha(\bA\bB)]_{ij}
+=\alpha\sum_k a_{ik}b_{kj}
+=\sum_k(\alpha a_{ik})b_{kj}
+=\sum_k a_{ik}(\alpha b_{kj}).
+\]
+
+(iv) For every $i,j$,
+\[
+((\bA')')_{ij}=a_{ij},
+\qquad
+((\bA+\bB)')_{ij}=a_{ji}+b_{ji}=(\bA'+\bB')_{ij}.
+\]
+For the product,
+\[
+\bigl((\bA\bB)'\bigr)_{ij}=(\bA\bB)_{ji}=\sum_k a_{jk}b_{ki}
+=\sum_k (\bB')_{ik}(\bA')_{kj}=(\bB'\bA')_{ij}. \qedhere
+\]
+\end{proof}
+
+\begin{definition}[Powers]\label{def:powers}
+For a square $\bA$, define
+\[
+\bA^1=\bA,
+\qquad
+\bA^{p+1}=\bA^p\bA\quad(p\geqslant1).
+\]
+Thus $\bA^2=\bA\bA$.
+\origin{A\&M p.~15}
+\end{definition}
+
+\begin{example}[Multiplication does not commute]\label{ex:noncomm}
+With
+$\bA=\begin{pmatrix}0&1\\0&0\end{pmatrix}$ and
+$\bB=\begin{pmatrix}0&0\\1&0\end{pmatrix}$,
+\[
+\bA\bB=\begin{pmatrix}1&0\\0&0\end{pmatrix},\qquad
+\bB\bA=\begin{pmatrix}0&0\\0&1\end{pmatrix} .
+\]
+Moreover $\bA\neq\bO$ and $\bA^2=\bO$.
+\origin{Course formulation from A\&M Ex.~2.8(b), 2.9(b)}
+\end{example}
+
+\begin{definition}[Identity matrix]\label{def:identity}
+$\bI_n\in\Real^{n\times n}$ has $(\bI_n)_{ij}=1$ when $i=j$ and $0$ otherwise. Its columns
+are $\eu_1,\ldots,\eu_n$. The subscript is dropped when the order is clear.
+\origin{H \S1.3d}
+\end{definition}
+
+\begin{theorem}\label{thm:identity}
+$\bA\bI_n=\bA$ and $\bI_m\bA=\bA$ for every $\bA\in\Real^{m\times n}$, and $\bI_n'=\bI_n$.
+\origin{Adapted from A\&M Ex.~2.18(b)}
+\end{theorem}
+
+\begin{proof}
+\[
+(\bA\bI_n)_{ij}=\sum_k a_{ik}\delta_{kj}=a_{ij},\qquad
+(\bI_m\bA)_{ij}=\sum_k\delta_{ik}a_{kj}=a_{ij},\qquad
+(\bI_n')_{ij}=\delta_{ji}=\delta_{ij}.\qedhere
+\]
+\end{proof}
+
+\subsection{The trace}\label{sec:1.2.2}
+
+\begin{definition}[Trace]\label{def:trace}
+For a square $\bA$ of order $n$, $\tr\bA=\sum_{i=1}^{n}a_{ii}$.
+\origin{A\&M Ex.~2.24; H \S5.1}
+\end{definition}
+
+\begin{theorem}[Elementary properties]\label{thm:trace-basic}
+For square $\bA,\bB$ of the same order and $\alpha,\beta\in\Real$,
+$\tr(\alpha\bA+\beta\bB)=\alpha\tr\bA+\beta\tr\bB$ and $\tr\bA'=\tr\bA$ and
+$\tr\bI_n=n$.
+\origin{Adapted from A\&M Ex.~2.24(a)--(c)}
+\end{theorem}
+
+\begin{proof}
+\begin{align*}
+\tr(\alpha\bA+\beta\bB)
+ &=\sum_i(\alpha a_{ii}+\beta b_{ii})
+ =\alpha\tr\bA+\beta\tr\bB,\\
+\tr\bA'&=\sum_i a_{ii}=\tr\bA,
+&\tr\bI_n&=\sum_i1=n.
+\end{align*}
+\end{proof}
+
+\begin{theorem}[The trace of a product]\label{thm:trAB}
+For $\bA\in\Real^{m\times n}$ and $\bB\in\Real^{n\times m}$, both $\bA\bB$ and $\bB\bA$
+are square, of orders $m$ and $n$ respectively, and
+\[
+\tr(\bA\bB)=\tr(\bB\bA) .
+\]
+\origin{A\&M Ex.~2.26(a); H \S5.2}
+\end{theorem}
+
+\begin{proof}
+By Definitions~\ref{def:trace} and~\ref{def:matprod},
+\[
+\tr(\bA\bB)=\sum_{i=1}^{m}(\bA\bB)_{ii}=\sum_{i=1}^{m}\sum_{k=1}^{n}a_{ik}b_{ki},
+\qquad
+\tr(\bB\bA)=\sum_{k=1}^{n}(\bB\bA)_{kk}=\sum_{k=1}^{n}\sum_{i=1}^{m}b_{ki}a_{ik} .
+\]
+The two double sums have the same terms, so they are equal.
+\end{proof}
+
+\begin{corollary}[Cyclic property]\label{cor:cyclic}
+$\tr(\bA\bB\bC)=\tr(\bB\bC\bA)=\tr(\bC\bA\bB)$ whenever the products are defined and
+square.
+\origin{A\&M Ex.~2.26(c); H \S5.2}
+\end{corollary}
+
+\begin{proof}
+Apply Theorem~\ref{thm:trAB} to the pair $\bA$ and $\bB\bC$, then to $\bB$ and $\bC\bA$,
+using associativity from Theorem~\ref{thm:prodalg}(i).
+\end{proof}
+
+\begin{theorem}[The trace as an inner product on matrices]\label{thm:trAtB}
+For $\bA,\bB\in\Real^{m\times n}$,
+\[
+\tr(\bA'\bB)=\sum_{i=1}^{m}\sum_{j=1}^{n}a_{ij}b_{ij} .
+\]
+In particular $\tr(\bA'\bA)=\sum_{i,j}a_{ij}^2\geqslant0$, with $\tr(\bA'\bA)=0$ if and
+only if $\bA=\bO$.
+\origin{A\&M Ex.~2.24(d), 2.25, 2.38}
+\end{theorem}
+
+\begin{proof}
+$\bA'\bB$ is square of order $n$, and
+$(\bA'\bB)_{jj}=\sum_{i}(\bA')_{ji}b_{ij}=\sum_i a_{ij}b_{ij}$. Summing over $j$ gives the
+stated double sum. Putting $\bB=\bA$ makes every term a square, so the sum is non-negative
+and vanishes only when every $a_{ij}=0$.
+\end{proof}
+
+\begin{corollary}\label{cor:xx-trace}
+For $\bx\in\Real^n$, $\bx'\bx=\tr(\bx\bx')$.
+\origin{A\&M Ex.~2.24(e)}
+\end{corollary}
+
+\begin{proof}
+By Theorem~\ref{thm:trAB},
+\[
+\tr(\bx\bx')=\tr(\bx'\bx)=\bx'\bx,
+\]
+because $\bx'\bx$ is a $1\times1$ matrix.
+\end{proof}
+
+\subsection{Special matrices}\label{sec:1.2.3}
+
+\begin{definition}[Diagonal and triangular]\label{def:diagtri}
+A square $\bA$ is \emph{diagonal} when $a_{ij}=0$ for all $i\neq j$; for
+$\bd\in\Real^n$, $\diag(\bd)$ is the diagonal matrix with $i$th diagonal entry $d_i$. It is
+also written $\diag(d_1,\ldots,d_n)$. A square $\bA$ is
+\emph{upper triangular} when $a_{ij}=0$ for $i>j$, and \emph{lower triangular} when
+$a_{ij}=0$ for $i<j$.
+\origin{H \S1.3c, \S1.3g}
+\end{definition}
+
+\begin{theorem}\label{thm:triangular}
+If $\bA$ and $\bB$ are upper triangular of order $n$, then $\bA\bB$ is upper triangular and
+$(\bA\bB)_{ii}=a_{ii}b_{ii}$. The same holds for lower triangular matrices. In particular
+$\diag(\bd)\diag(\bc)$ is diagonal with $i$th diagonal entry $d_ic_i$.
+\origin{Adapted from A\&M Ex.~2.20, 2.21(b); S Ex.~3.1 (triangular closure)}
+\end{theorem}
+
+\begin{proof}
+$(\bA\bB)_{ij}=\sum_k a_{ik}b_{kj}$. A term is nonzero only if $k\geqslant i$ (else
+$a_{ik}=0$) and $j\geqslant k$ (else $b_{kj}=0$), hence only if $j\geqslant k\geqslant i$.
+If $i>j$ no such $k$ exists and the entry is $0$. If $i=j$ the only such $k$ is $k=i$, and
+the term is $a_{ii}b_{ii}$. For lower triangular factors, a nonzero term requires
+$k\leqslant i$ and $j\leqslant k$, hence $j\leqslant k\leqslant i$; the same conclusions
+follow with the inequalities reversed. Diagonal matrices are both upper and lower
+triangular.
+\end{proof}
+
+\begin{definition}[Symmetric and skew-symmetric]\label{def:sym}
+A square $\bA$ is \emph{symmetric} when $\bA'=\bA$, and \emph{skew-symmetric} when
+$\bA'=-\bA$.
+\origin{H \S1.3b, \S14.6}
+\end{definition}
+
+\begin{theorem}[Symmetric plus skew-symmetric]\label{thm:symskew}
+Every square $\bA$ can be written as $\bA=\bS+\bK$ with $\bS$ symmetric and $\bK$
+skew-symmetric, in exactly one way, namely
+$\bS=\tfrac12(\bA+\bA')$ and $\bK=\tfrac12(\bA-\bA')$.
+\origin{Adapted from A\&M Ex.~2.23(b)}
+\end{theorem}
+
+\begin{proof}
+Those $\bS$ and $\bK$ sum to $\bA$, and $\bS'=\tfrac12(\bA'+\bA)=\bS$ while
+$\bK'=\tfrac12(\bA'-\bA)=-\bK$ by Theorem~\ref{thm:prodalg}(iv). For uniqueness, suppose
+$\bA=\bS+\bK$ with $\bS'=\bS$ and $\bK'=-\bK$. Transposing gives $\bA'=\bS-\bK$. Adding
+and subtracting the two equations gives $\bS=\tfrac12(\bA+\bA')$ and
+$\bK=\tfrac12(\bA-\bA')$.
+\end{proof}
+
+\begin{theorem}\label{thm:AtA-sym}
+For any $\bA\in\Real^{m\times n}$, both $\bA'\bA$ and $\bA\bA'$ are symmetric.
+\origin{Course formulation from A\&M Ex.~2.22(c)}
+\end{theorem}
+
+\begin{proof}
+\[
+(\bA'\bA)'=\bA'(\bA')'=\bA'\bA,
+\qquad
+(\bA\bA')'=\bA(\bA')'=\bA\bA'.
+\]
+\end{proof}
+
+\begin{definition}[Orthogonal matrix]\label{def:orthmat}
+A square $\bQ=(\bq_1,\ldots,\bq_n)$ is \emph{orthogonal} when $\bQ'\bQ=\bI_n$. Since
+$(\bQ'\bQ)_{ij}=\bq_i'\bq_j$, this is equivalent to
+\[
+\bq_i'\bq_j=\begin{cases}1,&i=j,\\0,&i\neq j.\end{cases}
+\]
+\origin{Adapted from A\&M Ex.~2.28(c)}
+\end{definition}
+
+\begin{theorem}[Orthogonal invariance]\label{thm:orth-preserve}
+If $\bQ$ is orthogonal, then $(\bQ\bx)'(\bQ\by)=\bx'\by$ and
+$\norm{\bQ\bx}=\norm{\bx}$ for all $\bx,\by\in\Real^n$. For nonzero $\bx,\by$, the
+angles between $\bQ\bx,\bQ\by$ and between $\bx,\by$ are equal.
+\origin{Course formulation from A\&M Ex.~8.4(a)}
+\end{theorem}
+
+\begin{proof}
+\[
+(\bQ\bx)'(\bQ\by)=\bx'\bQ'\bQ\by=\bx'\by,
+\qquad
+\norm{\bQ\bx}^2=(\bQ\bx)'(\bQ\bx)=\norm{\bx}^2.
+\]
+The norms are nonnegative. For nonzero $\bx,\by$,
+\[
+\frac{(\bQ\bx)'(\bQ\by)}{\norm{\bQ\bx}\norm{\bQ\by}}
+=\frac{\bx'\by}{\norm{\bx}\norm{\by}}.
+\]
+\end{proof}
+
+\begin{definition}[Permutation matrix]\label{def:perm}
+A \emph{permutation matrix} of order $n$ is a square matrix whose entries are $0$ and $1$
+with exactly one $1$ in each row and exactly one $1$ in each column.
+\origin{A\&M Ex.~2.29; H \S8.4c}
+\end{definition}
+
+\begin{theorem}\label{thm:perm}
+Every permutation matrix $\bP$ satisfies $\bP'\bP=\bP\bP'=\bI_n$, so it is orthogonal.
+\origin{A\&M Ex.~2.29(d)}
+\end{theorem}
+
+\begin{proof}
+Write column $j$ as $\bp_j=\eu_{\sigma(j)}$. The row condition makes $\sigma$ bijective;
+hence
+\[
+(\bP'\bP)_{ij}=\eu_{\sigma(i)}'\eu_{\sigma(j)}
+=\begin{cases}1,&i=j,\\0,&i\neq j.\end{cases}
+\]
+Writing row $i$ as $\eu_{\tau(i)}'$ gives the same calculation for $\bP\bP'$.
+\end{proof}
+
+\begin{definition}[Idempotent matrix]\label{def:idem}
+A square $\bA$ is \emph{idempotent} when $\bA\bA=\bA$.
+\origin{A\&M Ex.~2.37; S Ex.~3.5 (projector condition)}
+\end{definition}
+
+\begin{example}[The averaging matrix]\label{ex:avg}
+Let $\bJ=n^{-1}\bone\bone'\in\Real^{n\times n}$; $J_{ij}=1/n$. Then
+\[
+\bJ\bJ=n^{-2}\bone(\bone'\bone)\bone'=n^{-2}\cdot n\cdot\bone\bone'=n^{-1}\bone\bone'=\bJ ,
+\]
+and $\bJ'=\bJ$. For $\bx\in\Real^n$,
+\[
+\bJ\bx=n^{-1}\bone(\bone'\bx)=\bar x\bone.
+\]
+\origin{Adapted from A\&M Ex.~2.37(b)}
+\end{example}
+
+% \periodmark{End of period 2 of 3.}
+
+%==============================================================================
+\section{The Data Matrix}\label{sec:1.3}
+%==============================================================================
+
+\subsection{Partitioned matrices and block multiplication}\label{sec:1.3.1}
+
+\begin{definition}[Partition]\label{def:partition}
+Let $\bA\in\Real^{m\times n}$. Split the row indices $1,\ldots,m$ into consecutive groups
+of sizes $m_1,\ldots,m_r$ with $\sum_s m_s=m$, and the column indices into consecutive
+groups of sizes $n_1,\ldots,n_c$ with $\sum_t n_t=n$. Writing $\bA_{st}$ for the
+$m_s\times n_t$ submatrix cut out by group $s$ of rows and group $t$ of columns,
+\[
+\bA=\begin{pmatrix}
+\bA_{11}&\cdots&\bA_{1c}\\
+\vdots& &\vdots\\
+\bA_{r1}&\cdots&\bA_{rc}
+\end{pmatrix}
+\]
+is a \emph{partition} of $\bA$ into blocks.
+\origin{H \S2.1}
+\end{definition}
+
+\begin{theorem}[Block multiplication]\label{thm:block}
+Let $\bA\in\Real^{m\times n}$ be partitioned with column groups of sizes
+$n_1,\ldots,n_c$, and let $\bB\in\Real^{n\times p}$ be partitioned with \emph{row} groups
+of the same sizes $n_1,\ldots,n_c$ and column groups of sizes $p_1,\ldots,p_d$. Then every
+product $\bA_{st}\bB_{tu}$ below is defined and
+\[
+(\bA\bB)_{su}=\sum_{t=1}^{c}\bA_{st}\bB_{tu},\qquad s=1,\ldots,r,\ \ u=1,\ldots,d ,
+\]
+where $(\bA\bB)_{su}$ is the block of $\bA\bB$ cut out by row group $s$ and column group
+$u$.
+\origin{Adapted from A\&M Ex.~5.2; H \S2.2}
+\end{theorem}
+
+\begin{proof}
+For $i$ in row group $s$ and $j$ in column group $u$,
+\[
+(\bA\bB)_{ij}
+=\sum_{k=1}^{n}a_{ik}b_{kj}
+=\sum_{t=1}^{c}\ \sum_{k\in\text{group }t}a_{ik}b_{kj}
+=\left(\sum_{t=1}^{c}\bA_{st}\bB_{tu}\right)_{ij}.
+\]
+\end{proof}
+
+\begin{example}[Splitting off the constant column]\label{ex:blockX}
+Let $\bX=(\bone,\bX_1)\in\Real^{n\times(1+q)}$, where $\bX_1$ holds $q$ variables. Applying
+Theorem~\ref{thm:block} to $\bX'\bX$ with the same split on both sides,
+\[
+\bX'\bX=\begin{pmatrix}\bone'\\ \bX_1'\end{pmatrix}(\bone,\bX_1)
+=\begin{pmatrix}\bone'\bone & \bone'\bX_1\\ \bX_1'\bone & \bX_1'\bX_1\end{pmatrix}
+=\begin{pmatrix} n & \bone'\bX_1\\ \bX_1'\bone & \bX_1'\bX_1\end{pmatrix},
+\]
+using $\bone'\bone=n$ from Theorem~\ref{thm:mean-inner}. The off-diagonal block
+$\bone'\bX_1$ is the row of column sums of $\bX_1$.
+\origin{Course formulation}
+\end{example}
+
+\subsection{Gram matrix, covariance, correlation}\label{sec:1.3.2}
+
+\begin{definition}[Data matrix]\label{def:datamatrix}
+A \emph{data matrix} is a matrix $\bX\in\Real^{n\times k}$ whose rows $\tilde\bx_1',\ldots,
+\tilde\bx_n'$ hold $n$ observations and whose columns $\bx_1,\ldots,\bx_k$ hold $k$
+variables, so $x_{ij}$ is the value of variable $j$ on observation $i$.
+\origin{Course formulation}
+\end{definition}
+
+\begin{definition}[Gram matrix]\label{def:gram}
+The \emph{Gram matrix} of $\bX$ is $\bX'\bX\in\Real^{k\times k}$.
+\origin{Adapted from H Ex.~14.7}
+\end{definition}
+
+\begin{theorem}[Two readings of the Gram matrix]\label{thm:gram}
+$(\bX'\bX)_{jl}=\bx_j'\bx_l$, and
+\[
+\bX'\bX=\sum_{i=1}^{n}\tilde\bx_i\tilde\bx_i' .
+\]
+The matrix $\bX'\bX$ is symmetric.
+\origin{A\&M Ex.~2.17; H \S2.2, Ex.~14.7(a)}
+\end{theorem}
+
+\begin{proof}
+Theorem~\ref{thm:four}(i),(iv) gives
+\[
+(\bX'\bX)_{jl}=\bx_j'\bx_l,
+\qquad
+\bX'\bX=\sum_i\tilde\bx_i\tilde\bx_i'.
+\]
+Also $(\bX'\bX)'=\bX'\bX$ by Theorem~\ref{thm:AtA-sym}.
+\end{proof}
+
+\begin{definition}[Centering matrix]\label{def:centering}
+$\bC=\bI_n-n^{-1}\bone\bone'\in\Real^{n\times n}$.
+\origin{A\&M Ex.~2.37(b)}
+\end{definition}
+
+\begin{theorem}[Properties of $\bC$]\label{thm:centering}
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $\bC'=\bC$ and $\bC\bC=\bC$;
+\item $\bC\bone=\bzero$ and $\bone'\bC=\bzero'$;
+\item $\bC\bx=\bx-\bar x\bone$ for every $\bx\in\Real^n$;
+\item $\bC\bX=\bX-\bone\bar\bx'$ for every $\bX\in\Real^{n\times k}$, where
+      $\bar\bx=n^{-1}\bX'\bone$, so $\bC\bX$ has all column means zero.
+\end{enumerate}
+\origin{Adapted from A\&M Ex.~2.37(b)}
+\end{theorem}
+
+\begin{proof}
+(i) Put $\bJ=n^{-1}\bone\bone'$. Then
+\[
+\bC'=\bI'-\bJ'=\bI-\bJ=\bC,
+\qquad
+\bC\bC=(\bI-\bJ)(\bI-\bJ)=\bI-2\bJ+\bJ\bJ=\bI-2\bJ+\bJ=\bI-\bJ=\bC .
+\]
+
+(ii)
+\[
+\bC\bone=\bone-n^{-1}\bone(\bone'\bone)=\bzero,
+\qquad
+\bone'\bC=(\bC\bone)'=\bzero'.
+\]
+
+(iii)
+\[
+\bC\bx=\bx-n^{-1}\bone(\bone'\bx)=\bx-\bar x\bone.
+\]
+
+(iv)
+\[
+\bC\bX=(\bC\bx_1,\ldots,\bC\bx_k)
+=\bX-\bone\bar\bx',
+\qquad
+\bone'\bC\bX=\bzero'.
+\]
+\end{proof}
+
+\begin{definition}[Sample mean vector, covariance matrix, correlation matrix]\label{def:S}
+For a data matrix $\bX\in\Real^{n\times k}$ with $n\geqslant2$,
+\[
+\bar\bx=\frac{1}{n}\bX'\bone\in\Real^k ,
+\qquad
+\bS=\frac{1}{n-1}\bX'\bC\bX\in\Real^{k\times k} .
+\]
+Write $s_j=\sqrt{s_{jj}}$. When every $s_{jj}>0$, put
+$\bD_s=\diag(s_1,\ldots,s_k)$ and define
+$\bR=\bD_s^{-1}\bS\bD_s^{-1}$, where $\bD_s^{-1}$ is the diagonal matrix with $j$th
+diagonal entry $1/s_j$.
+\origin{Course formulation from A\&M Ex.~13.61 (mean vector only)}
+\end{definition}
+
+\begin{theorem}[$\bS$ is the matrix of sample covariances]\label{thm:S-entries}
+$\bS=(n-1)^{-1}(\bC\bX)'(\bC\bX)$, it is symmetric, and
+\[
+s_{jl}=\frac{1}{n-1}\sum_{i=1}^{n}(x_{ij}-\bar x_j)(x_{il}-\bar x_l) ,
+\]
+so $s_{jl}$ is the sample covariance of variables $j$ and $l$ and $s_{jj}=s_j^2$ is the
+sample variance of variable $j$.
+\origin{Course formulation}
+\end{theorem}
+
+\begin{proof}
+\[
+(\bC\bX)'(\bC\bX)
+=\bX'\bC'\bC\bX
+=\bX'\bC\bX
+=(n-1)\bS.
+\]
+Thus $\bS$ is symmetric. Its $(j,l)$ entry is
+\[
+s_{jl}
+=\frac{(\bx_j-\bar x_j\bone)'(\bx_l-\bar x_l\bone)}{n-1}
+=\frac{1}{n-1}\sum_i(x_{ij}-\bar x_j)(x_{il}-\bar x_l).
+\]
+Definitions~\ref{def:var} and~\ref{def:cov} give the stated identifications.
+\end{proof}
+
+\begin{theorem}[Variance of a linear combination]\label{thm:aSa}
+For every $\ba\in\Real^k$, the derived variable $\bX\ba\in\Real^n$ has sample variance
+$\ba'\bS\ba$. Consequently $\ba'\bS\ba\geqslant0$ for every $\ba$.
+\origin{Course formulation}
+\end{theorem}
+
+\begin{proof}
+The deviation vector of $\bX\ba$ is $\bC\bX\ba$. Hence its sample variance is
+\[
+\frac{1}{n-1}\norm{(\bC\bX)\ba}^2
+=\frac{1}{n-1}\ba'(\bC\bX)'(\bC\bX)\ba
+=\ba'\bS\ba .
+\]
+The first expression is nonnegative.
+\end{proof}
+
+\begin{theorem}[Total variance]\label{thm:trS}
+$\tr\bS=\sum_{j=1}^{k}s_j^2$, the sum of the sample variances of the $k$ variables.
+\origin{Course formulation}
+\end{theorem}
+
+\begin{proof}
+\[
+\tr\bS=\sum_j s_{jj}=\sum_j s_j^2.
+\]
+\end{proof}
+
+\begin{theorem}[The correlation matrix]\label{thm:R}
+When every $s_{jj}>0$, $r_{jl}=s_{jl}/(s_js_l)$ is the sample correlation of variables
+$j$ and $l$; $r_{jj}=1$; and $\abs{r_{jl}}\leqslant1$ for all $j,l$.
+\origin{Course formulation}
+\end{theorem}
+
+\begin{proof}
+\[
+r_{jl}=(\bD_s^{-1}\bS\bD_s^{-1})_{jl}
+=\frac{s_{jl}}{s_js_l},
+\qquad
+r_{jj}=\frac{s_{jj}}{s_j^2}=1.
+\]
+Theorem~\ref{thm:cor-cos}, applied to columns $j,l$ of $\bX$, gives
+$\abs{r_{jl}}\leqslant1$.
+\end{proof}
+
+\begin{example}[A data matrix of size $4\times2$]\label{ex:small-data}
+Let
+\[
+\bX=\begin{pmatrix}1&3\\2&4\\3&8\\6&9\end{pmatrix},
+\qquad n=4,\ k=2 .
+\]
+Then
+\[
+\bX'\bone=\begin{pmatrix}12\\24\end{pmatrix},
+\qquad
+\bar\bx=\begin{pmatrix}3\\6\end{pmatrix},
+\qquad
+\bC\bX=\begin{pmatrix}-2&-3\\-1&-2\\0&2\\3&3\end{pmatrix}.
+\]
+\[
+(\bC\bX)'(\bC\bX)=\begin{pmatrix}14&17\\17&26\end{pmatrix},
+\qquad
+\bS=\frac13\begin{pmatrix}14&17\\17&26\end{pmatrix}.
+\]
+\[
+s_1^2=\frac{14}{3},\quad s_{12}=\frac{17}{3},\quad s_2^2=\frac{26}{3},
+\quad r_{12}=\frac{17}{\sqrt{364}}\approx0.891,
+\quad\tr\bS=\frac{40}{3}.
+\]
+For $\ba=(1,-1)'$,
+\[
+\bX\ba=(-2,-2,-5,-3)',
+\qquad
+\ba'\bS\ba=\frac{14-2(17)+26}{3}=2
+=\frac{1}{3}\sum_{i=1}^4\bigl((\bX\ba)_i+3\bigr)^2.
+\]
+\origin{Course formulation}
+\end{example}
+
+%==============================================================================
+\section{Computation: Numerical Checks in R}\label{sec:1.4}
+%==============================================================================
+
+<<data-setup>>=
+set.seed(1)
+X4 <- matrix(c(1, 2, 3, 6, 3, 4, 8, 9), nrow = 4)   # small data example
+data(Boston, package = "ISLR2")
+XB <- as.matrix(Boston[, c("lstat", "rm", "age", "crim")])
+n <- nrow(XB); k <- ncol(XB)
+c(n = n, k = k)
+@
+
+\subsection{The four readings of a product (§\ref{sec:1.2.1})}\label{sec:1.4.1}
+
+<<four-readings>>=
+A <- matrix(rnorm(12), 4, 3); B <- matrix(rnorm(15), 3, 5)
+P     <- A %*% B
+P_col <- sapply(1:5, function(j) A %*% B[, j])              # (ii) by columns of B
+P_row <- t(sapply(1:4, function(i) A[i, ] %*% B))           # (iii) by rows of A
+P_out <- Reduce(`+`, lapply(1:3, function(l)                # (iv) outer products
+                 outer(A[, l], B[l, ])))
+c(columns = max(abs(P - P_col)), rows = max(abs(P - P_row)),
+  outer_products = max(abs(P - P_out)))
+@
+
+<<Ax-combination>>=
+xv <- rnorm(3)
+c(combination = max(abs(A %*% xv -                          # Ax = sum x_j a_j
+      Reduce(`+`, lapply(1:3, function(j) xv[j] * A[, j])))),
+  transpose_rule = max(abs(t(A %*% B) - t(B) %*% t(A))))    # (AB)' = B'A'
+@
+
+\subsection{The trace identities (§\ref{sec:1.2.2})}\label{sec:1.4.2}
+
+<<trace-product>>=
+M1 <- matrix(rnorm(12), 4, 3); M2 <- matrix(rnorm(12), 3, 4)
+c(tr_M1M2 = sum(diag(M1 %*% M2)),          # order 4
+  tr_M2M1 = sum(diag(M2 %*% M1)),          # order 3
+  difference = sum(diag(M1 %*% M2)) - sum(diag(M2 %*% M1)))
+@
+
+<<trace-inner-product>>=
+Aa <- matrix(rnorm(12), 4, 3); Bb <- matrix(rnorm(12), 4, 3)
+c(tr_AtB = sum(diag(t(Aa) %*% Bb)), entrywise = sum(Aa * Bb),
+  tr_AtA = sum(diag(t(Aa) %*% Aa)), sum_of_squares = sum(Aa^2))
+@
+
+<<cyclic-not-arbitrary>>=
+A3 <- matrix(rnorm(4), 2, 2); B3 <- matrix(rnorm(4), 2, 2)
+C3 <- matrix(rnorm(4), 2, 2)
+c(ABC = sum(diag(A3 %*% B3 %*% C3)), BCA = sum(diag(B3 %*% C3 %*% A3)),
+  CAB = sum(diag(C3 %*% A3 %*% B3)), ACB = sum(diag(A3 %*% C3 %*% B3)))
+@
+
+\subsection{Centering, mean and variance (§\ref{sec:1.1.3}, §\ref{sec:1.3.2})}\label{sec:1.4.3}
+
+<<centering-matrix>>=
+n4 <- nrow(X4); C4 <- diag(n4) - matrix(1/n4, n4, n4)
+c(idempotent  = max(abs(C4 %*% C4 - C4)),                  # CC = C
+  symmetric   = max(abs(C4 - t(C4))),                      # C' = C
+  C_times_one = max(abs(C4 %*% rep(1, n4))),               # C1 = 0
+  vs_scale    = max(abs(C4 %*% X4 - scale(X4, scale = FALSE))))
+@
+
+<<example-by-hand>>=
+S4 <- crossprod(C4 %*% X4) / (n4 - 1)                      # S = X'CX/(n-1)
+c(S11 = S4[1, 1], S12 = S4[1, 2], S22 = S4[2, 2],          # 14/3, 17/3, 26/3
+  vs_cov  = max(abs(S4 - cov(X4))),
+  r12     = S4[1, 2] / sqrt(S4[1, 1] * S4[2, 2]),          # 0.891
+  r12_cor = cor(X4)[1, 2],
+  trace_S = sum(diag(S4)))                                 # 40/3
+@
+
+<<quadratic-form>>=
+av <- c(1, -1)
+c(aSa = drop(t(av) %*% S4 %*% av), var_of_Xa = var(drop(X4 %*% av)))
+@
+
+<<pythagoras>>=
+yv <- Boston$medv; nb <- length(yv)
+c(sum_of_squares = sum(yv^2),
+  mean_part      = nb * mean(yv)^2,                        # n * xbar^2
+  deviation_part = sum((yv - mean(yv))^2),
+  difference     = sum(yv^2) - (nb * mean(yv)^2 + sum((yv - mean(yv))^2)))
+@
+
+<<correlation-cosine>>=
+dx <- Boston$lstat - mean(Boston$lstat)
+dy <- Boston$medv  - mean(Boston$medv)
+cosine <- sum(dx * dy) / (sqrt(sum(dx^2)) * sqrt(sum(dy^2)))
+c(cosine     = cosine, cor = cor(Boston$lstat, Boston$medv),
+  difference = cosine - cor(Boston$lstat, Boston$medv),
+  angle_in_degrees = acos(cosine) * 180 / pi)
+@
+
+<<S-and-R>>=
+CB <- diag(n) - matrix(1/n, n, n)
+S  <- crossprod(CB %*% XB) / (n - 1)
+Ds <- diag(1 / sqrt(diag(S)))
+R  <- Ds %*% S %*% Ds
+c(S_vs_cov = max(abs(S - cov(XB))), R_vs_cor = max(abs(R - cor(XB))),
+  trace_S  = sum(diag(S)), sum_of_variances = sum(apply(XB, 2, var)))
+@
+
+\subsection{Association order and intermediate matrices}\label{sec:1.4.4}
+
+<<association-order>>=
+uu <- matrix(rnorm(1000), 1000, 1); vv <- matrix(rnorm(1000), 1, 1000)
+ww <- matrix(rnorm(1000), 1000, 1)
+tl <- system.time(for (i in 1:20) (uu %*% vv) %*% ww)[["elapsed"]] # 1000 x 1000
+tr <- system.time(for (i in 1:20) uu %*% (vv %*% ww))[["elapsed"]] # scalar
+c(max_abs_diff = max(abs((uu %*% vv) %*% ww - uu %*% (vv %*% ww))),
+  seconds_left = tl, seconds_right = tr)
+@
+
+<<centering-cost>>=
+m <- 3000
+Y  <- matrix(rnorm(m * 50), m, 50)
+Cm <- diag(m) - matrix(1/m, m, m)
+ta <- system.time(for (i in 1:5) Cm %*% Y)[["elapsed"]]
+tb <- system.time(for (i in 1:5) Y - rep(1, m) %*% t(colMeans(Y)))[["elapsed"]]
+c(max_abs_diff       = max(abs(Cm %*% Y - (Y - rep(1, m) %*% t(colMeans(Y))))),
+  megabytes_for_C    = as.numeric(object.size(Cm)) / 2^20,
+  seconds_via_matrix = ta, seconds_via_means = tb)
+@
+
+<<crossprod>>=
+Z  <- matrix(rnorm(2000 * 300), 2000, 300)
+t1 <- system.time(for (i in 1:20) t(Z) %*% Z)[["elapsed"]]
+t2 <- system.time(for (i in 1:20) crossprod(Z))[["elapsed"]]
+c(max_abs_diff = max(abs(t(Z) %*% Z - crossprod(Z))),
+  seconds_transpose_then_multiply = t1, seconds_crossprod = t2)
+@
+
+\clearpage
+%==============================================================================
+\section{Pitfalls}\label{sec:1.5}
+%==============================================================================
+
+\subsection{Forming \texorpdfstring{$\bC$}{C} to centre a large matrix}\label{sec:1.5.1}
+
+Explicit centering stores $n^2$ numbers. The run in §\ref{sec:1.4.4} uses $68.7$ MiB at
+$n=3000$; $10^{10}$ double-precision entries at $n=10^5$ use $80$ GB. Compute
+$\bX-\bone\bar\bx'$.
+
+\subsection{Reading \texorpdfstring{$\bA\bB=\bO$}{AB = O} as
+\texorpdfstring{$\bA=\bO$ or $\bB=\bO$}{A = O or B = O}}\label{sec:1.5.2}
+
+\[
+\bA\bA=\bO=\bA\bO,
+\qquad \bA\neq\bO
+\]
+for the matrix $\bA$ in Example~\ref{ex:noncomm}; left cancellation fails.
+
+<<zero-divisors>>=
+A0 <- matrix(c(0, 0, 1, 0), 2, 2)         # nonzero, but A0 %*% A0 = 0
+list(A0 = A0, A0_squared = A0 %*% A0)
+@
+
+\[
+\bA=\bO\iff\tr(\bA'\bA)=\sum_{i,j}a_{ij}^2=0.
+\]
+
+<<trace-criterion>>=
+c(tr_A0tA0 = sum(diag(t(A0) %*% A0)),     # nonzero, so A0 is not O
+  tr_of_product = sum(diag(t(A0 %*% A0) %*% (A0 %*% A0))))
+@
+
+\subsection{Two divisors, one name}\label{sec:1.5.3}
+
+For $n\geqslant2$,
+\[
+s_{n-1}^2=\frac{1}{n-1}\sum_i(x_i-\bar x)^2,
+\qquad
+s_n^2=\frac{1}{n}\sum_i(x_i-\bar x)^2
+=\frac{n-1}{n}s_{n-1}^2.
+\]
+
+<<two-divisors>>=
+c(cov_default = cov(X4)[1, 1],                       # divisor n - 1
+  divisor_n   = cov(X4)[1, 1] * (n4 - 1) / n4,
+  ratio       = (n4 - 1) / n4)
+@
+
+The divisor must be checked for each routine. It cancels from every correlation coefficient.
+
+%==============================================================================
+\section{Exercises}\label{sec:1.6}
+%==============================================================================
+
+\begin{exercise}\label{ex:parallelogram}
+For $\bx,\by\in\Real^n$:
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item prove the parallelogram identity
+\[
+\norm{\bx+\by}^2+\norm{\bx-\by}^2
+=2\norm{\bx}^2+2\norm{\by}^2;
+\]
+\item deduce the polarization identity
+\[
+\bx'\by=\frac14\left(\norm{\bx+\by}^2-\norm{\bx-\by}^2\right).
+\]
+\end{enumerate}
+\origin{A\&M Ex.~3.38(a); H Ex.~14.1 (polarization); S \S1.3.4}
+\end{exercise}
+
+\begin{solution}
+\[
+\norm{\bx\pm\by}^2
+=\norm{\bx}^2\pm2\bx'\by+\norm{\by}^2.
+\]
+Adding the $+$ and $-$ identities proves (a); subtracting them gives
+$\norm{\bx+\by}^2-\norm{\bx-\by}^2=4\bx'\by$, proving (b).
+\end{solution}
+
+\begin{exercise}\label{ex:triangle-equality}
+Determine exactly when equality holds in
+\[
+\norm{\bx+\by}\leqslant\norm{\bx}+\norm{\by}.
+\]
+Include the cases $\bx=\bzero$ and $\by=\bzero$.
+\origin{Adapted from S Ex.~7.2}
+\end{exercise}
+
+\begin{solution}
+If $\bx=\bzero$ or $\by=\bzero$, equality holds. Otherwise,
+\begin{align*}
+\norm{\bx+\by}=\norm{\bx}+\norm{\by}
+&\iff \norm{\bx+\by}^2=(\norm{\bx}+\norm{\by})^2\\
+&\iff \bx'\by=\norm{\bx}\norm{\by}.
+\end{align*}
+By Theorem~\ref{thm:cs}, $\bx=\alpha\by$ for some $\alpha\neq0$. Then
+\[
+\bx'\by=\alpha\norm{\by}^2,
+\qquad
+\norm{\bx}\norm{\by}=\abs{\alpha}\norm{\by}^2,
+\]
+so equality holds iff $\alpha\geqslant0$. Including the zero cases,
+\[
+\norm{\bx+\by}=\norm{\bx}+\norm{\by}
+\iff
+\exists\alpha\geqslant0:\quad \bx=\alpha\by\ \text{or}\ \by=\alpha\bx.
+\]
+\end{solution}
+
+\begin{exercise}\label{ex:mean-bound}
+Show that $\abs{\sum_i x_i}\leqslant\sqrt{n}\,\norm{\bx}$ for every $\bx\in\Real^n$, state
+when equality holds, and deduce that $\abs{\bar x}\leqslant\norm{\bx}/\sqrt{n}$.
+\origin{Adapted from A\&M Ex.~12.4(a)}
+\end{exercise}
+
+\begin{solution}
+\[
+\abs{\sum_i x_i}=\abs{\bone'\bx}
+\leqslant\norm{\bone}\norm{\bx}
+=\sqrt n\norm{\bx}.
+\]
+Equality holds iff $\bx=c\bone$, that is, iff $x_1=\cdots=x_n$. Division by $n$ gives
+$\abs{\bar x}\leqslant\norm{\bx}/\sqrt n$.
+\end{solution}
+
+\begin{exercise}\label{ex:noncyclic}
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item Exhibit matrices $\bA,\bB,\bC$ of order $2$ such that
+$\tr(\bA\bB\bC)\neq\tr(\bA\bC\bB)$.
+\item If $\bA,\bB,\bC$ are symmetric of the same order, prove
+$\tr(\bA\bB\bC)=\tr(\bB\bA\bC)$.
+\end{enumerate}
+\origin{Adapted from A\&M Ex.~2.26(d); H Ex.~5.2}
+\end{exercise}
+
+\begin{solution}
+For (a), take
+\[
+\bA=\begin{pmatrix}1&0\\0&0\end{pmatrix},\quad
+\bB=\begin{pmatrix}0&1\\0&0\end{pmatrix},\quad
+\bC=\begin{pmatrix}0&0\\1&0\end{pmatrix}.
+\]
+Then
+\[
+\tr(\bA\bB\bC)=1,
+\qquad
+\tr(\bA\bC\bB)=0.
+\]
+For (b),
+\[
+\tr(\bA\bB\bC)
+=\tr((\bA\bB\bC)')
+=\tr(\bC\bB\bA)
+=\tr(\bB\bA\bC),
+\]
+where the last equality is cyclic rotation.
+\end{solution}
+
+\begin{exercise}\label{ex:noncomm-binomial}
+Let $\bA,\bB$ be square matrices of the same order.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item Expand $(\bA+\bB)^2$ and prove
+\[
+(\bA+\bB)^2=\bA^2+2\bA\bB+\bB^2
+\iff \bA\bB=\bB\bA.
+\]
+\item If $\bA$ and $\bB$ are symmetric, prove
+\[
+\bA\bB\text{ is symmetric}\iff\bA\bB=\bB\bA.
+\]
+\item Give symmetric matrices of order $2$ whose product is not symmetric.
+\end{enumerate}
+\origin{Adapted from A\&M Ex.~2.7(b),(e); H Ex.~1.5--1.6}
+\end{exercise}
+
+\begin{solution}
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item
+\[
+(\bA+\bB)^2=\bA^2+\bA\bB+\bB\bA+\bB^2.
+\]
+\[
+(\bA+\bB)^2=\bA^2+2\bA\bB+\bB^2
+\iff \bA\bB+\bB\bA=2\bA\bB
+\iff \bA\bB=\bB\bA.
+\]
+\item
+\[
+(\bA\bB)'=\bB'\bA'=\bB\bA;
+\]
+hence $\bA\bB=(\bA\bB)'$ iff $\bA\bB=\bB\bA$.
+\item For
+\[
+\bA=\begin{pmatrix}1&0\\0&0\end{pmatrix},
+\qquad
+\bB=\begin{pmatrix}0&1\\1&0\end{pmatrix},
+\]
+both factors are symmetric, whereas
+$\bA\bB=\begin{pmatrix}0&1\\0&0\end{pmatrix}$ is not.
+\end{enumerate}
+\end{solution}
+
+\begin{exercise}\label{ex:diagonal-scaling}
+Let $\bD=\diag(d_1,\ldots,d_n)$ and $\bA=(a_{ij})\in\Real^{n\times n}$.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item Prove $(\bD\bA)_{ij}=d_i a_{ij}$ and $(\bA\bD)_{ij}=a_{ij}d_j$.
+\item Prove
+\[
+\bD\bA=\bA\bD\iff(d_i-d_j)a_{ij}=0\quad(1\leqslant i,j\leqslant n).
+\]
+\item If $d_1,\ldots,d_n$ are pairwise distinct, prove
+$\bD\bA=\bA\bD$ iff $\bA$ is diagonal.
+\end{enumerate}
+\origin{Adapted from A\&M Ex.~2.11, 2.20}
+\end{exercise}
+
+\begin{solution}
+By Definition~\ref{def:matprod},
+\[
+(\bD\bA)_{ij}=\sum_k d_{ik}a_{kj}=d_i a_{ij},
+\qquad
+(\bA\bD)_{ij}=\sum_k a_{ik}d_{kj}=a_{ij}d_j,
+\]
+because only $k=i$ survives in the first sum and only $k=j$ in the second.
+Therefore
+\[
+\bD\bA=\bA\bD
+\iff d_i a_{ij}=a_{ij}d_j\ \forall i,j
+\iff(d_i-d_j)a_{ij}=0\ \forall i,j.
+\]
+If the $d_i$ are pairwise distinct, then
+\[
+i\neq j\implies d_i-d_j\neq0\implies a_{ij}=0.
+\]
+The converse follows because diagonal matrices commute by Theorem~\ref{thm:triangular}.
+\end{solution}
+
+\begin{exercise}\label{ex:strict-upper-power}
+For strictly upper triangular $\bA$ of order $n$, prove by induction
+\[
+(\bA^p)_{ij}=0\quad(p\geqslant1,\ j-i<p)
+\quad\Longrightarrow\quad
+\bA^n=\bO.
+\]
+\origin{Adapted from H Ex.~1.8}
+\end{exercise}
+
+\begin{solution}
+For $p=1$, $j-i<1$ means $j\leqslant i$, so the claim is the hypothesis. Suppose it holds
+for $p$. A nonzero term in
+\[
+(\bA^{p+1})_{ij}=\sum_{k=1}^n(\bA^p)_{ik}a_{kj}
+\]
+requires
+\[
+k-i\geqslant p,
+\qquad
+j-k\geqslant1,
+\qquad
+j-i\geqslant p+1.
+\]
+Hence $(\bA^{p+1})_{ij}=0$ when $j-i<p+1$. Since $j-i\leqslant n-1<n$ for every
+$i,j$, the case $p=n$ gives $\bA^n=\bO$.
+\end{solution}
+
+\begin{exercise}\label{ex:skew}
+Let $\bK$ be skew-symmetric of order $n$.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item Prove $\bx'\bK\bx=0$ for every $\bx\in\Real^n$.
+\item For arbitrary square $\bA$, prove
+\[
+\bx'\bA\bx=\bx'\left(\frac{\bA+\bA'}{2}\right)\bx.
+\]
+\end{enumerate}
+\origin{Adapted from A\&M Ex.~8.3(a); H Cor.~14.1.2, Lemma~14.6.3}
+\end{exercise}
+
+\begin{solution}
+Put $q=\bx'\bK\bx\in\Real$. Then
+\[
+q=q'=\bx'\bK'\bx=-\bx'\bK\bx=-q,
+\]
+so $q=0$. By Theorem~\ref{thm:symskew},
+\[
+\bA=\frac{\bA+\bA'}{2}+\frac{\bA-\bA'}{2},
+\]
+and the second summand is skew-symmetric. Part (a) gives the result.
+\end{solution}
+
+\begin{exercise}\label{ex:AtA-A2}
+Let $\bA$ be square and satisfy $\bA'\bA=\bA^2$. Prove that $\bA$ is symmetric.
+\origin{H Ex.~5.3}
+\end{exercise}
+
+\begin{solution}
+Put $\bD=\bA-\bA'$. Then
+\begin{align*}
+\tr(\bD'\bD)
+&=\tr(\bA'\bA)-\tr(\bA'\bA')-\tr(\bA^2)+\tr(\bA\bA')\\
+&=\tr(\bA^2)-\tr((\bA^2)')-\tr(\bA^2)+\tr(\bA'\bA)\\
+&=0.
+\end{align*}
+Theorem~\ref{thm:trAtB} gives $\bD=\bO$, hence $\bA=\bA'$.
+\end{solution}
+
+\begin{exercise}\label{ex:AtAB-zero}
+Let $\bA\in\Real^{m\times n}$ and $\bB,\bD\in\Real^{n\times p}$. Prove
+\[
+\bA\bB=\bO\iff\bA'\bA\bB=\bO,
+\]
+and deduce
+\[
+\bA\bB=\bA\bD\iff\bA'\bA\bB=\bA'\bA\bD.
+\]
+\origin{A\&M Ex.~2.13(b)--(c)}
+\end{exercise}
+
+\begin{solution}
+The forward implication follows by premultiplication by $\bA'$. Conversely,
+\[
+\bA'\bA\bB=\bO
+\implies
+(\bA\bB)'(\bA\bB)=\bB'\bA'\bA\bB=\bO
+\implies \tr\bigl((\bA\bB)'(\bA\bB)\bigr)=0
+\implies \bA\bB=\bO
+\]
+by Theorem~\ref{thm:trAtB}, applied to $\bA\bB$. Replacing $\bB$ by $\bB-\bD$ gives the
+second equivalence.
+\end{solution}
+
+\begin{exercise}\label{ex:reflection}
+Let $\bP\in\Real^{m\times r}$ satisfy $\bP'\bP=\bI_r$, and put
+$\bH=\bP\bP'$.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item Prove that $\bH$ is symmetric and idempotent.
+\item Prove that $\bQ=\bI_m-2\bH$ is orthogonal.
+\end{enumerate}
+\origin{H Ex.~10.2--10.3}
+\end{exercise}
+
+\begin{solution}
+\[
+\bH'=\bP\bP'=\bH,
+\qquad
+\bH^2=\bP(\bP'\bP)\bP'=\bP\bP'=\bH.
+\]
+Thus $\bQ'=\bQ$, and
+\[
+\bQ'\bQ=(\bI_m-2\bH)^2
+=\bI_m-4\bH+4\bH^2=\bI_m.
+\]
+\end{solution}
+
+\begin{exercise}\label{ex:two-idempotents}
+Let $\bP$ and $\bQ$ be idempotent matrices of the same order. Prove
+\[
+(\bP-\bQ)^2+(\bI-\bP-\bQ)^2=\bI.
+\]
+No commutativity assumption is permitted.
+\origin{S Ex.~3.5(b)}
+\end{exercise}
+
+\begin{solution}
+Using $\bP^2=\bP$ and $\bQ^2=\bQ$ without changing the factor order,
+\[
+(\bP-\bQ)^2=\bP-\bP\bQ-\bQ\bP+\bQ,
+\]
+\[
+(\bI-\bP-\bQ)^2
+=\bI-\bP-\bQ+\bP\bQ+\bQ\bP.
+\]
+Their sum is $\bI$.
+\end{solution}
+
+\begin{exercise}\label{ex:block-structure}
+Let
+\[
+\bZ=\begin{pmatrix}\bA&\bB\\\bC&\bD\end{pmatrix},
+\]
+where $\bA$ and $\bD$ are square. Prove:
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $\bZ$ is symmetric iff $\bA,\bD$ are symmetric and $\bC=\bB'$;
+\item $\bZ$ is diagonal iff $\bA,\bD$ are diagonal and $\bB=\bO$, $\bC=\bO$;
+\item $\bZ$ is upper triangular iff $\bA,\bD$ are upper triangular and $\bC=\bO$.
+\end{enumerate}
+\origin{Adapted from A\&M Ex.~5.3, 5.5}
+\end{exercise}
+
+\begin{solution}
+Definition~\ref{def:transpose} gives
+\[
+\bZ'=\begin{pmatrix}\bA'&\bC'\\\bB'&\bD'\end{pmatrix}.
+\]
+Hence
+\[
+\bZ'=\bZ
+\iff
+\bA'=\bA,\quad\bD'=\bD,
+\quad\bC=\bB'.
+\]
+For (b), every entry outside the two diagonal blocks must vanish, and each diagonal block
+must itself be diagonal. For (c), every entry below the main diagonal consists of the
+entries below the diagonals of $\bA,\bD$ together with all entries of $\bC$.
+\end{solution}
+
+\begin{exercise}\label{ex:block-involution}
+For $\bB\in\Real^{m\times n}$ and $\bD\in\Real^{n\times m}$, put
+\[
+\bZ=\begin{pmatrix}-\bI_m&\bB\\\bD&\bI_n\end{pmatrix}.
+\]
+Prove
+\[
+\bZ^2=\bI_{m+n}
+\iff \bB\bD=\bO\text{ and }\bD\bB=\bO.
+\]
+Give nonzero $\bB,\bD$ of order $2$ satisfying both zero-product conditions.
+\origin{Adapted from A\&M Ex.~5.8}
+\end{exercise}
+
+\begin{solution}
+Block multiplication gives
+\[
+\bZ^2
+=\begin{pmatrix}
+\bI_m+\bB\bD&-\bB+\bB\\
+-\bD+\bD&\bI_n+\bD\bB
+\end{pmatrix}
+=\begin{pmatrix}
+\bI_m+\bB\bD&\bO\\
+\bO&\bI_n+\bD\bB
+\end{pmatrix}.
+\]
+For $m=n=2$, take
+\[
+\bB=\bD=\begin{pmatrix}0&1\\0&0\end{pmatrix}\neq\bO;
+\qquad
+\bB\bD=\bD\bB=\bO.
+\]
+\end{solution}
+
+\begin{exercise}\label{ex:r-sign}
+Suppose
+\[
+\by-\bar y\bone=b(\bx-\bar x\bone),
+\qquad b\neq0,
+\]
+and both sample variances are nonzero. Prove $r_{xy}=b/\abs b$.
+\origin{Course formulation}
+\end{exercise}
+
+\begin{solution}
+Put $\bu=\bx-\bar x\bone$. Then
+\[
+r_{xy}
+=\frac{\bu'(b\bu)}{\norm{\bu}\norm{b\bu}}
+=\frac{b\norm{\bu}^2}{\abs b\norm{\bu}^2}
+=\frac{b}{\abs b}.
+\]
+Thus $r_{xy}=1$ for $b>0$ and $r_{xy}=-1$ for $b<0$.
+\end{solution}
+
+\begin{exercise}\label{ex:XCX}
+Let $\bX=(\bone,\bX_1)$ as in Example~\ref{ex:blockX}. Prove
+\[
+\bX'\bC\bX
+=\begin{pmatrix}
+0&\bzero'\\
+\bzero&\bX_1'\bC\bX_1
+\end{pmatrix}.
+\]
+\origin{Course formulation from A\&M Ex.~5.2}
+\end{exercise}
+
+\begin{solution}
+Theorem~\ref{thm:centering}(ii) gives
+\[
+\bC\bX=(\bC\bone,\bC\bX_1)=(\bzero,\bC\bX_1).
+\]
+Therefore
+\[
+\bX'\bC\bX
+=\begin{pmatrix}\bone'\\\bX_1'\end{pmatrix}
+ (\bzero,\bC\bX_1)
+=\begin{pmatrix}
+0&\bone'\bC\bX_1\\
+\bzero&\bX_1'\bC\bX_1
+\end{pmatrix},
+\]
+and $\bone'\bC=\bzero'$.
+\end{solution}
+
+\begin{exercise}\label{ex:degenerate}
+Let $\bX=(\bx_1,\ldots,\bx_k)\in\Real^{n\times k}$ and suppose
+\[
+\bx_k=c\bone+\sum_{j=1}^{k-1}b_j\bx_j.
+\]
+Exhibit $\ba\neq\bzero$ such that $\ba'\bS\ba=0$.
+\origin{Course formulation}
+\end{exercise}
+
+\begin{solution}
+Take
+\[
+\ba=(b_1,\ldots,b_{k-1},-1)'.
+\]
+Then $\ba\neq\bzero$ and
+\[
+\bX\ba=\sum_{j=1}^{k-1}b_j\bx_j-\bx_k=-c\bone,
+\qquad
+\ba'\bS\ba
+=\frac{1}{n-1}\norm{\bC\bX\ba}^2
+=\frac{c^2}{n-1}\norm{\bC\bone}^2=0
+\]
+by Theorems~\ref{thm:aSa} and~\ref{thm:centering}(ii).
+\end{solution}
+
+\begin{exercise}\label{ex:perm-action}
+Let $\bP$ be a permutation matrix of order $n$ whose $i$th row is
+$\eu_{\tau(i)}'$ and whose $j$th column is $\eu_{\sigma(j)}$. For
+$\bY\in\Real^{n\times p}$ and $\bZ\in\Real^{m\times n}$:
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item prove that row $i$ of $\bP\bY$ is row $\tau(i)$ of $\bY$;
+\item prove that column $j$ of $\bZ\bP$ is column $\sigma(j)$ of $\bZ$;
+\item prove $\tau=\sigma^{-1}$.
+\end{enumerate}
+\origin{Adapted from A\&M Ex.~2.29(a)--(b)}
+\end{exercise}
+
+\begin{solution}
+Theorem~\ref{thm:four}(iii),(ii) gives
+\[
+(\bP\bY)_{i\bullet}=\eu_{\tau(i)}'\bY=\bY_{\tau(i)\bullet},
+\qquad
+(\bZ\bP)_{\bullet j}=\bZ\eu_{\sigma(j)}=\bZ_{\bullet\sigma(j)}.
+\]
+Moreover,
+\[
+p_{ij}=1
+\iff j=\tau(i)
+\iff i=\sigma(j).
+\]
+Hence $\sigma(\tau(i))=i$ and $\tau(\sigma(j))=j$.
+\end{solution}
+
+\end{document}
