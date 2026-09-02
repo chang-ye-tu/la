@@ -6,14 +6,17 @@
 
 ## 參考書
 
-- **A&M:** Abadir, K., Magnus, J. R., 2005. *Matrix Algebra*. Cambridge University Press.
-- Magnus, J. R., Neudecker, H., 2019. Matrix Differential Calculus with Applications in Statistics and Econometrics. 3rd ed., John Wiley & Sons.
-- **H:** [Harville, D., 1997. *Matrix Algebra From a Statistician's Perspective*. Springer.](https://link.springer.com/book/10.1007/b98818)
+- Abadir, K., Magnus, J. R., 2005. *Matrix Algebra*. Cambridge University Press.
+- [Harville, D., 1997. *Matrix Algebra From a Statistician's Perspective*. Springer.](https://link.springer.com/book/10.1007/b98818)
 - [Harville, D., 2001. Matrix Algebra: Exercises and Solutions. Springer.](https://link.springer.com/book/10.1007/978-1-4613-0181-3)
-- **S:** Serre, D., 2010. *Matrices: Theory and Applications*. 2nd ed., Springer GTM 216.
 - 教師講義
   - [Notes on the Classical Theory of Linear Models](https://github.com/chang-ye-tu/mva/blob/master/note/clm.pdf)
   - [Introduction to Matrix Calculus: Expanded "A Gentle Introduction to Matrix Calculus" by Jan R. Magnus](https://github.com/chang-ye-tu/mva/blob/master/note/mc.pdf)
+
+<!--
+- Magnus, J. R., Neudecker, H., 2019. Matrix Differential Calculus with Applications in Statistics and Econometrics. 3rd ed., John Wiley & Sons.
+- Serre, D., 2010. *Matrices: Theory and Applications*. 2nd ed., Springer GTM 216.
+-->
 
 ## 評分標準
 
@@ -41,24 +44,6 @@
 | 12/09    | <a href="https://github.com/chang-ye-tu/la/blob/master/note/unit13.pdf">**Unit 13** 矩陣微分（一）</a><br>13.1 微分：偏導數排成矩陣為何不是導數、微分的定義與規則、第一辨識定理<br>13.2 Jacobian：矩陣函數的 Jacobian、標準微分公式、特徵值與特徵向量的微分<br>13.3 變數變換與駐點：Jacobian 行列式、駐點條件、最小平方與特徵值問題 |
 | 12/16    | <a href="https://github.com/chang-ye-tu/la/blob/master/note/unit14.pdf">**Unit 14** 二階微分與線性模型</a><br>14.1 二階理論：二階微分與第二辨識定理、二階連鎖律、凸性與駐點分類<br>14.2 線性模型：最小平方法與 Gauss–Markov 定理、GLS 與 Aitken 定理、受限最小平方與一般線性假設<br>14.3 概似與敏感度：常態概似的分數與訊息矩陣、迴歸敏感度、刪除觀測值與影響量 |
 | 12/23    | **期末考**（Unit 9–14）                                                                                                |
-
-## 講義編譯
-
-`note/unit01.Rnw` 至 `note/unit14.Rnw` 是講義的權威來源；同名 `.tex`、`figs/`、
-`Sweave.sty` 與 LaTeX 輔助檔均為可重建產物。README 直接連結的十四份 PDF 則刻意納入
-版本控制，讓學生不必安裝完整工具鏈即可閱讀草稿。
-
-```bash
-cd note
-python3 build.py --pkg-check
-python3 build.py --quiet
-```
-
-建置需要 `Rscript`、XeLaTeX、BibTeX、Pygments，以及程式所列 R packages；中文字型需有
-Noto Serif CJK TC。完整建置會要求十四份 `.Rnw` 全部存在、檢查每個子程序的退出碼，並
-持續執行 XeLaTeX 至交叉引用收斂。請勿在同一工作目錄同時執行兩個 build。
-
-撰寫或審查內容前，請先閱讀 [`note/CONVENTIONS.md`](note/CONVENTIONS.md)。
 
 ## 授課教師
 
