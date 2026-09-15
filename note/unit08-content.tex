@@ -1,0 +1,437 @@
+
+\subsection*{1. Eigenspaces}
+We first work with real vectors and real linear maps. In Section 4,
+we also calculate nonreal eigenvalues and eigenvectors of real matrices.
+Let \(T:V\to V\) be linear. An \emph{eigenvector} is a nonzero vector
+\(v\) for which \(Tv=\lambda v\); the scalar \(\lambda\) is its
+\emph{eigenvalue}. It is unique for that vector: if
+\(\lambda v=\mu v\) and \(v\ne0\), then \(\lambda=\mu\).
+The zero vector is not called an eigenvector. The \emph{eigenspace}
+\[
+ E_\lambda(T)=\ker(T-\lambda I)=\{v:Tv=\lambda v\}
+\]
+does include zero. Linearity gives
+\(T(av+bw)=\lambda(av+bw)\) for \(v,w\in E_\lambda\); therefore
+\(E_\lambda\) is a subspace, and every nonzero element of it is an
+eigenvector. A linear combination of eigenvectors may be zero.
+
+\begin{example}
+For \(D=\operatorname{diag}(2,2,-1)\),
+\[
+ E_2(D)=\{(x,y,0)^\top:x,y\in\R\},\qquad
+ E_{-1}(D)=\{(0,0,z)^\top:z\in\R\}.
+\]
+There are infinitely many eigenvectors, two eigenvalues, and a basis of
+three eigenvectors. These are three different counts.
+
+On the space of infinitely differentiable functions, differentiation
+satisfies \(\frac{d}{dt}e^{\lambda t}=\lambda e^{\lambda t}\).
+Thus \(e^{\lambda t}\) is an eigenvector of a linear map whose vectors are
+functions. Infinite differentiability ensures that the derivative maps
+this space into itself.
+\end{example}
+
+\begin{theorem}[Distinct eigenvalues give independent vectors]
+If \(Tv_j=\lambda_jv_j\), every \(v_j\ne0\), and
+\(\lambda_1,\ldots,\lambda_k\) are distinct, then \(v_1,\ldots,v_k\)
+are linearly independent.
+\end{theorem}
+\begin{proof}
+Induct on \(k\). A single nonzero vector is independent.
+From \(\sum_{j=1}^k c_jv_j=0\), applying \(T-\lambda_1I\) gives
+\[
+ \sum_{j=2}^k c_j(\lambda_j-\lambda_1)v_j=0.
+\]
+The induction hypothesis and the nonzero differences give \(c_j=0\)
+for \(j\geqslant2\); the original relation then gives \(c_1=0\).
+\end{proof}
+In particular, distinct real exponentials \(e^{\alpha_jt}\) are linearly
+independent. Also the sum of eigenspaces for distinct eigenvalues is
+direct: in \(\sum_j w_j=0\), with \(w_j\in E_{\lambda_j}\), discard any
+zero terms and apply the theorem to the remaining vectors.
+
+\subsection*{2. The characteristic polynomial}
+For \(A\in\R^{n\times n}\), define \(p_A(t)=\det(tI-A)\).
+The coefficient of \(t^n\) is \(1\): only the product of diagonal entries
+in the determinant expansion can supply \(n\) factors of \(t\).
+Thus \(p_A\) has degree exactly \(n\).
+
+\begin{theorem}[How eigenvalues are found]
+For a scalar \(\lambda\), the following are equivalent:
+\[
+ \lambda\text{ is an eigenvalue of }A
+ \quad\Longleftrightarrow\quad
+ \ker(A-\lambda I)\ne\{0\}
+ \quad\Longleftrightarrow\quad p_A(\lambda)=0.
+\]
+\end{theorem}
+\begin{proof}
+The first equivalence is the definition. A square matrix has a nonzero
+kernel precisely when it is not invertible, equivalently when its
+determinant is zero. Finally
+\(\det(A-\lambda I)=(-1)^n p_A(\lambda)\), so the choice of sign does
+not change the roots.
+\end{proof}
+
+An eigenvalue is found from one scalar equation, but its eigenvectors
+must still be found by solving the homogeneous system
+\((A-\lambda I)v=0\). For a triangular \(A\),
+\(p_A(t)=\prod_i(t-a_{ii})\); its diagonal entries are the eigenvalues,
+with repetitions.
+
+\begin{example}[A complete two-dimensional calculation]
+Let \(A=\begin{pmatrix}1&4\\2&3\end{pmatrix}\). Then
+\[
+ p_A(t)=(t-1)(t-3)-8=(t-5)(t+1).
+\]
+For \(\lambda=5\), the equations are \(-4x+4y=0\), \(2x-2y=0\);
+therefore \(E_5=\operatorname{span}\{(1,1)^\top\}\).
+For \(\lambda=-1\), they reduce to \(x+2y=0\);
+therefore \(E_{-1}=\operatorname{span}\{(2,-1)^\top\}\).
+The two basis vectors have dot product \(1\), not zero. Distinct
+eigenvalues give independence without necessarily giving orthogonality.
+\end{example}
+
+\subsection*{3. Change of basis and diagonalization}
+\begin{proposition}[Similarity]
+If \(B=P^{-1}AP\), then \(p_B=p_A\) and
+\(E_\lambda(B)=P^{-1}E_\lambda(A)\).
+\end{proposition}
+\begin{proof}
+Since \(tI-B=P^{-1}(tI-A)P\), multiplicativity gives equal determinants.
+Also \(Bz=\lambda z\) if and only if \(A(Pz)=\lambda(Pz)\).
+\end{proof}
+Consequently the characteristic polynomial of a linear map on a
+finite-dimensional space is independent of the chosen basis.
+
+\begin{theorem}[Eigenvector basis criterion]\label{thm:08:diagonal}
+A real square matrix \(A\) is \emph{diagonalizable over \(\R\)} if
+and only if it has a basis of real eigenvectors. In that case
+\[
+ P=(v_1\ \cdots\ v_n),\qquad
+ AP=P\operatorname{diag}(\lambda_1,\ldots,\lambda_n),\qquad
+ P^{-1}AP=\operatorname{diag}(\lambda_1,\ldots,\lambda_n).
+\]
+In particular, \(n\) distinct eigenvalues give diagonalizability.
+\end{theorem}
+\begin{proof}
+The \(j\)-th column of the middle equality is \(Av_j=\lambda_jv_j\).
+If the columns form a basis, \(P\) is invertible and the last equality
+follows. Conversely, a diagonalization provides those \(n\) independent
+eigenvector columns. For distinct eigenvalues, their independence was
+proved above.
+\end{proof}
+
+\begin{example}[Coordinates and powers]
+For the preceding \(A\), choose
+\[
+ P=\begin{pmatrix}1&2\\1&-1\end{pmatrix},\qquad
+ P^{-1}=\frac13\begin{pmatrix}1&2\\1&-1\end{pmatrix}.
+\]
+Then \(AP=P\operatorname{diag}(5,-1)\). For any integer \(k\geqslant0\),
+successive cancellation of \(P^{-1}P\) gives
+\[
+ A^k=\frac13
+ \begin{pmatrix}
+ 5^k+2(-1)^k&2\cdot5^k-2(-1)^k\\
+ 5^k-(-1)^k&2\cdot5^k+(-1)^k
+ \end{pmatrix}.
+\]
+For \(k=2\), this is \(\begin{pmatrix}9&16\\8&17\end{pmatrix}\), which
+direct multiplication confirms. A vector \(x\) has eigenbasis coordinates
+\(P^{-1}x\); the map multiplies those coordinates by \(5\) and \(-1\).
+\end{example}
+
+The \emph{algebraic multiplicity} of \(\lambda\) is its multiplicity as
+a root of \(p_A\). The \emph{geometric multiplicity} is
+\(\dim E_\lambda(A)\).
+
+\begin{proposition}[Multiplicity and missing eigenvectors]
+For each eigenvalue,
+\[
+ 1\leqslant \dim E_\lambda(A)
+ \leqslant\text{algebraic multiplicity of }\lambda .
+\]
+If the characteristic polynomial splits into linear factors over \(\R\), \(A\) is diagonalizable exactly when equality holds for every
+eigenvalue.
+\end{proposition}
+\begin{proof}
+Take a basis of \(E_\lambda\), of size \(r\), and extend it to a basis
+of the whole space. In this basis the matrix has block form
+\(\begin{pmatrix}\lambda I_r&B\\0&C\end{pmatrix}\).
+Its characteristic polynomial is
+\((t-\lambda)^r\det(tI-C)\), proving the bound.
+Eigenspaces for distinct eigenvalues have a direct sum. Thus their bases
+together form a basis of the whole space exactly when their dimensions
+sum to \(n\). When the polynomial splits, its algebraic multiplicities
+sum to \(n\); the individual upper bounds make the stated equality
+criterion equivalent to that dimension condition.
+\end{proof}
+
+\begin{example}[Repeated roots can leave too few eigenvectors]
+For
+\[
+ B=\begin{pmatrix}2&1&0\\0&1&-1\\0&2&4\end{pmatrix},
+ \qquad
+ p_B(t)=(t-2)\{(t-1)(t-4)+2\}=(t-2)^2(t-3).
+\]
+At \(\lambda=2\), the first row gives \(y=0\) and the second gives
+\(-y-z=0\), hence \(E_2=\operatorname{span}\{(1,0,0)^\top\}\).
+At \(\lambda=3\), the equations give \(y=x\), \(z=-2y\), hence
+\(E_3=\operatorname{span}\{(1,1,-2)^\top\}\).
+The eigenspaces together have dimension \(2<3\), so \(B\) is not
+diagonalizable. By comparison, \(\operatorname{diag}(2,2,3)\) has the
+same characteristic polynomial and a three-vector eigenbasis.
+\end{example}
+
+\begin{example}[Back substitution for a triangular matrix]
+Let
+\[
+ C=\begin{pmatrix}1&1&2\\0&5&-1\\0&0&7\end{pmatrix}.
+\]
+Its eigenvalues are \(1,5,7\). Back substitution gives, respectively,
+\[
+ v_1=(1,0,0)^\top,\quad
+ v_5=(1/4,1,0)^\top,\quad
+ v_7=(1/4,-1/2,1)^\top.
+\]
+For \(\lambda=7\), the second equation is \(-2y-z=0\);
+the first is \(-6x+y+2z=0\). Setting \(z=1\) gives the stated vector.
+Thus
+\[
+ P=\begin{pmatrix}1&1/4&1/4\\0&1&-1/2\\0&0&1\end{pmatrix},
+ \quad
+ P^{-1}=\begin{pmatrix}1&-1/4&-3/8\\0&1&1/2\\0&0&1\end{pmatrix}
+\]
+satisfy \(P^{-1}CP=\operatorname{diag}(1,5,7)\).
+Here every calculation uses triangular substitution; no general formula
+for a cubic root is needed.
+\end{example}
+
+
+\subsection*{4. Real matrices can have nonreal eigenvalues}
+A complex number has the form \(a+bi\), where \(a,b\in\R\) and
+\(i^2=-1\). Addition is componentwise, and multiplication gives
+\[
+ (a+bi)(c+di)=(ac-bd)+(ad+bc)i.
+\]
+Its conjugate is \(\overline{a+bi}=a-bi\), and its absolute value is
+\(|a+bi|=\sqrt{a^2+b^2}\). Conjugation preserves sums and products.
+For \(a+bi\ne0\), multiplication by its conjugate gives
+\[
+ \frac1{a+bi}=\frac{a-bi}{a^2+b^2}.
+\]
+These arithmetic rules suffice for the calculations below.
+
+For a monic real quadratic \(t^2-bt+c\), completing the square gives
+\[
+ t^2-bt+c=\left(t-\frac b2\right)^2-\frac{b^2-4c}{4}.
+\]
+If \(\Delta=b^2-4c\geqslant0\), its roots are
+\((b\pm\sqrt\Delta)/2\). If \(\Delta<0\), use
+\((i\sqrt{-\Delta})^2=\Delta\) to obtain
+\[
+ \lambda_\pm=\frac{b\pm i\sqrt{-\Delta}}2.
+\]
+They are nonreal conjugates. Thus a negative discriminant means
+no \emph{real} root, not absence of eigenvalues.
+
+For real \(A\), a complex column \(z=x+iy\) consists of two real
+columns \(x,y\). Define \(Az=Ax+iAy\). Writing \(\lambda=a+bi\),
+the equation \(Az=\lambda z\) is equivalent to the two real equations
+\[
+ Ax=ax-by,\qquad Ay=bx+ay.                         \tag{*}
+\]
+A nonzero complex column satisfying them is an eigenvector for \(\lambda\).
+The criterion \(p_A(\lambda)=0\) still finds these eigenvalues:
+elimination and the determinant criterion use only addition,
+multiplication and division by nonzero numbers, which the arithmetic
+above permits. The resulting eigenvector must satisfy every row of
+\((A-\lambda I)z=0\).
+
+\paragraph{Conjugate pairs.}
+If \(Az=\lambda z\), then the real entries of \(A\) give
+\[
+ A\bar z=\overline{Az}=\overline{\lambda z}
+       =\bar\lambda\,\bar z,\qquad \bar z\ne0.
+\]
+Equivalently, for the real coefficients \(c_j\) of \(p_A\),
+\[
+ p_A(\bar\lambda)=\sum_jc_j\bar\lambda^j
+                =\overline{\sum_jc_j\lambda^j}
+                =\overline{p_A(\lambda)}=0.
+\]
+Conjugating a factorization
+\(p_A(t)=(t-\lambda)^r q(t)\), \(q(\lambda)\ne0\), shows that
+\(\bar\lambda\) has the same multiplicity.
+When \(\lambda\) is real, (*) gives \(Ax=\lambda x\) and
+\(Ay=\lambda y\); at least one is a nonzero real eigenvector.
+When \(\lambda\) is nonreal, no nonzero \emph{real} eigenvector can
+have that eigenvalue: the imaginary part of \(Av=\lambda v\)
+would give \(0=bv\).
+
+A real eigenbasis must consist of real vectors. In particular, a real
+diagonalization requires \(n\) independent real eigenvectors.
+We say that a degree-\(n\) polynomial \emph{splits over \(\R\)} if it
+is a product of \(n\) real linear factors, with repetitions allowed.
+A real characteristic polynomial need not have this property.
+
+\begin{proposition}[Coefficients and eigenvalues]
+For a real \(n\times n\) matrix, the coefficient of \(t^{n-1}\) in
+\(p_A(t)\) is \(-\tr A\), and \(p_A(0)=(-1)^n\det A\).
+If a factorization \(p_A(t)=\prod_{j=1}^n(t-\lambda_j)\) is given,
+allowing real or nonreal \(\lambda_j\), then
+\[
+ \det A=\prod_{j=1}^n\lambda_j,\qquad
+ \tr A=\sum_{j=1}^n\lambda_j.
+\]
+Every real matrix of odd order has at least one real eigenvalue.
+\end{proposition}
+\begin{proof}
+In the permutation expansion of \(\det(tI-A)\), the identity permutation
+contributes \(\prod_i(t-a_{ii})\), whose \(t^{n-1}\) coefficient is
+\(-\sum_i a_{ii}\). Every other permutation moves at least two indices,
+so its term has degree at most \(n-2\). Evaluation at zero gives the
+constant coefficient. Comparing these two coefficients with the stated
+factorization proves the sum and product formulas.
+For odd \(n\), the monic polynomial \(p_A(t)\) is positive for sufficiently
+large positive \(t\) and negative for sufficiently large negative \(t\).
+The intermediate value theorem supplies a real root, hence an eigenvalue.
+\end{proof}
+
+\begin{example}[The eigenvalues of a rotation]
+For
+\[
+ R(\theta)=\begin{pmatrix}c&-s\\s&c\end{pmatrix},
+ \qquad c=\cos\theta,\quad s=\sin\theta,
+\]
+\[
+ p_R(t)=(t-c)^2+s^2,\qquad \lambda_\pm=c\pm is.
+\]
+If \(s\ne0\), these are nonreal and their eigenvectors necessarily
+have nonreal coordinates. Direct multiplication gives
+\[
+ R(\theta)\begin{pmatrix}1\\-i\end{pmatrix}
+ =\begin{pmatrix}c+is\\s-ic\end{pmatrix}
+ =(c+is)\begin{pmatrix}1\\-i\end{pmatrix}.
+\]
+Conjugating gives the eigenvector \((1,i)^\top\) for \(c-is\).
+There is no real eigenvector, and therefore no real eigenbasis.
+If \(s=0\), then \(R=\pm I\), and every nonzero real vector is an
+eigenvector with eigenvalue \(c=\pm1\).
+For a quarter turn, \(c=0,s=1\), the eigenvalues are \(i,-i\):
+they are purely imaginary, meaning their real parts vanish.
+\end{example}
+
+\begin{example}[Solving a nonreal eigenvalue equation]
+For the real matrix \(A=\begin{pmatrix}2&-1\\3&1\end{pmatrix}\),
+\[
+ p_A(t)=(t-2)(t-1)+3=t^2-3t+5,\qquad
+ \lambda_\pm=\frac{3\pm i\sqrt{11}}2.
+\]
+The homogeneous equations are
+\[
+ (2-\lambda)x-y=0,\qquad 3x+(1-\lambda)y=0.
+\]
+The first gives \(y=(2-\lambda)x\). Set \(x=1\), giving
+\(z_\lambda=(1,2-\lambda)^\top\). In the second equation,
+\[
+ 3+(1-\lambda)(2-\lambda)=\lambda^2-3\lambda+5=0,
+\]
+so both rows hold. If \(x=0\), the first row forces \(y=0\);
+hence all eigenvectors for this root are precisely the nonzero complex
+multiples of \(z_\lambda\).
+The two displayed eigenvectors are conjugates. There are no real
+eigenvalues and no real eigenbasis.
+\end{example}
+
+\paragraph{Reading: eigenvalues of real orthogonal matrices.}
+For \(A^\top A=I\), a nonreal eigenvalue still has a conjugate partner
+because \(A\) is real. To find its absolute value, use (*) and real norms:
+\[
+ \begin{aligned}
+ \norm x^2+\norm y^2
+ &=\norm{Ax}^2+\norm{Ay}^2\\
+ &=\norm{ax-by}^2+\norm{bx+ay}^2\\
+ &=(a^2+b^2)(\norm x^2+\norm y^2).
+ \end{aligned}
+\]
+The cross terms cancel. Since \(z=x+iy\ne0\), the final common factor
+is positive, and \(a^2+b^2=1\). Thus \(|\lambda|=1\).
+A real eigenvalue is consequently \(1\) or \(-1\), but the rotation
+shows why these need not be all the eigenvalues.
+
+\subsection*{5. Diagonal differential equations}
+If \(F'(t)=DF(t)\), \(D=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)\),
+then each coordinate solves \(f_j'=\lambda_j f_j\).
+The derivative of \(e^{-\lambda_jt}f_j(t)\) is zero, so
+\(f_j(t)=c_je^{\lambda_jt}\), including when \(\lambda_j=0\).
+The functions \(e^{\lambda_jt}e_j\) form a basis of the solution space:
+they span by the formula, and evaluation at \(t=0\) proves independence.
+If \(A=PDP^{-1}\), putting \(G=P^{-1}F\) gives \(G'=DG\), hence
+\[
+ F(t)=P\operatorname{diag}(e^{\lambda_1t},\ldots,e^{\lambda_nt})P^{-1}F(0).
+\]
+For \(A=\begin{pmatrix}1&4\\2&3\end{pmatrix}\) and \(F(0)=(1,0)^\top\),
+\(P^{-1}F(0)=(1/3,1/3)^\top\); consequently
+\[
+ F(t)=\frac13\{e^{5t}(1,1)^\top+e^{-t}(2,-1)^\top\}.
+\]
+Differentiation verifies \(F'=AF\), and at zero it gives \((1,0)^\top\).
+This is the same change of coordinates used for powers of \(A\).
+
+\subsection*{Reading: eigenvectors when cubic roots are implicit}
+For \(A=\begin{pmatrix}1&-1&2\\-2&1&3\\1&-1&1\end{pmatrix}\), set
+\(u=t-1\). Then \(p_A(t)=u^3-u-1\). Neither \(1\) nor \(-1\)
+is a root, so the rational-root test rules out rational roots.
+Its derivative is \(3u^2-1\). At both stationary points, in particular
+at the local maximum \(-1/\sqrt3\), the polynomial is negative:
+the latter value is \(2/(3\sqrt3)-1<0\).
+The function therefore has exactly one real root. That root is simple,
+because neither stationary point is a root.
+
+For that real root \(u\), solve the first two equations with \(z=1\):
+\[
+ ux+y=2,\qquad 2x+uy=3,
+ \quad
+ x=\frac{2u-3}{u^2-2},\qquad y=\frac{3u-4}{u^2-2}.
+\]
+The denominator cannot vanish at a root: \(u^2=2\) would give
+\(u^3-u-1=u-1\ne0\).
+The third equation is \(x-y-u=0\); substitution makes its numerator
+\(1+u-u^3=0\). Thus these formulas give a basis vector for the unique
+real eigenspace. Its dimension is one, so this real matrix has no real
+eigenbasis. One eigenspace contains infinitely many eigenvectors.
+
+\subsection*{Reading: triangularization with a real-root hypothesis}
+Suppose \(p_A\) splits over \(\R\). Then a real change of basis makes
+\(A\) upper triangular. To prove this, induct on the order \(n\).
+The assertion is immediate for \(n=1\). Choose a real root \(\lambda_1\)
+and a nonzero vector \(v_1\in\ker(A-\lambda_1I)\).
+Extend \(v_1\) to a real basis, with column matrix \(P\). Then
+\[
+ P^{-1}AP=\begin{pmatrix}\lambda_1&b\\0&B\end{pmatrix},
+ \qquad p_A(t)=(t-\lambda_1)p_B(t).
+\]
+Polynomial cancellation shows that \(p_B\) also splits into real factors.
+By induction there is a real invertible \(S\) with \(S^{-1}BS\)
+upper triangular. The change of basis \(P\operatorname{diag}(1,S)\)
+gives
+\[
+ \begin{pmatrix}\lambda_1&bS\\0&S^{-1}BS\end{pmatrix}.
+\]
+Its diagonal entries are the real roots of \(p_A\), with multiplicity.
+The change of basis is not asserted to be orthogonal.
+The root hypothesis is essential: the rotation above cannot be similar
+over \(\R\) to a triangular matrix, whose diagonal entries would be
+real eigenvalues.
+
+\clearpage
+\section*{Exercises and solutions}
+A star marks an advanced exercise. Matrices are real. The quadratic,
+conjugate-pair and skew-symmetric tasks include nonreal eigenvalues and
+use complex columns when needed; other vector-space and diagonalization
+tasks retain their stated real scope. Root multiplicities refer to factors
+of the characteristic polynomial. A complete list of \(n\) real eigenvalues
+is used only when a real factorization has been proved or explicitly assumed.
+\input{unit08-exercises}

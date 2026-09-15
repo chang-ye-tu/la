@@ -1,0 +1,17 @@
+\documentclass[a4paper]{article}
+\usepackage{pdfpages}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Unit 1: Two pages per sheet},pdfauthor={Chang-Ye Tu}}
+\begin{document}
+% Portrait A4: odd page above even page, each rotated clockwise.
+% The small gutter leaves room at the paper edges for the original footers.
+\includepdf[
+  pages=-,
+  nup=1x2,
+  angle=-90,
+  delta=0 6mm,
+  offset=0 0,
+  turn=false,
+  pagecommand={\thispagestyle{empty}}
+]{unit01.pdf}
+\end{document}

@@ -1,0 +1,230 @@
+\section*{Row rank and column rank}
+For an $m\times n$ real matrix $A$, its \emph{row space} is the span of its rows in $\R^n$, and its \emph{column space} is
+\[
+ \operatorname{col}A=\{Ax:x\in\R^n\}\subseteq\R^m.
+\]
+The dimensions of these spaces are initially called the row rank and column rank. Each equals the size of a largest independent sublist of the corresponding rows or columns, by basis extraction.
+
+\begin{theorem}[What elementary operations preserve]\label{thm:04:operations}
+Elementary row and column operations preserve both the row rank and the column rank.
+\end{theorem}
+\begin{proof}
+A row operation replaces each new row by a combination of old rows; the inverse operation expresses each old row in terms of new rows. Therefore their row spaces are equal.
+
+Write the row operation as $A\mapsto EA$, where $E$ is invertible. For any coefficient column $c$,
+\[
+ Ac=0\quad\Longleftrightarrow\quad EAc=0.
+\]
+Thus exactly the same coefficients give relations among the corresponding columns before and after the operation. This applies to any chosen column sublist by setting all other coefficients to zero. Consequently a chosen sublist is independent before the operation exactly when it is independent afterward. The column ranks are equal, although the column spaces need not be the same subsets of $\R^m$.
+
+Transposing turns column operations into row operations, interchanging the roles of rows and columns. Hence column operations also preserve both ranks.
+\end{proof}
+
+\begin{theorem}[Rank normal form]\label{thm:04:rank}
+Every $m\times n$ matrix can be transformed by elementary row and column operations into
+\[
+ J_r=\begin{pmatrix}I_r&0\\0&0\end{pmatrix},
+ \qquad 0\leqslant r\leqslant\min(m,n),
+\]
+with the block sizes determined by the original rectangular shape. Its row rank and column rank both equal $r$.
+\end{theorem}
+\begin{proof}
+If $A=0$, take $r=0$. Otherwise move a nonzero entry to position $(1,1)$ by row and column interchanges. Subtract multiples of row one to clear the rest of column one. Then subtract multiples of column one to clear the rest of row one. The matrix now has the form
+\[
+ \begin{pmatrix}a&0\\0&B\end{pmatrix},\qquad a\ne0.
+\]
+Operations on $B$ leave the first row and column undisturbed. Repeat on the smaller rectangular block while it is nonzero. This process terminates after at most $\min(m,n)$ steps and gives a diagonal string of nonzero entries followed by zeros. Scale the rows containing those entries to make them one. The resulting matrix is $J_r$, whose first $r$ rows and columns are independent and span their respective spaces. Theorem~\ref{thm:04:operations} transfers both ranks back to $A$.
+\end{proof}
+Their common value is the \emph{rank}, denoted $\operatorname{rank}A$. In particular,
+\[
+ \operatorname{rank}A=\operatorname{rank}A^\top,\qquad
+ 0\leqslant\operatorname{rank}A\leqslant\min(m,n).
+\]
+A matrix has \emph{full column rank} if its rank is $n$ and \emph{full row rank} if its rank is $m$.
+
+\begin{example}[Column reduction]
+For
+\[
+ A=\begin{pmatrix}1&2&-3\\2&1&0\\-2&-1&3\\-1&4&-2\end{pmatrix},
+\]
+perform $C_2\leftarrow C_2-2C_1$, $C_3\leftarrow C_3+3C_1$, and then $C_3\leftarrow C_3+2C_2$ using the current second column. The result is
+\[
+ \begin{pmatrix}1&0&0\\2&-3&0\\-2&3&3\\-1&6&7\end{pmatrix}.
+\]
+In a zero combination of its columns, rows one, two, and three successively force all coefficients to vanish. Thus there are three independent columns, and the rank is three. These operations preserve rank; their new columns should not be reported as columns selected from the original matrix.
+\end{example}
+
+\begin{proposition}[Rank and echelon form]\label{prop:04:pivots}
+The rank of a row-echelon matrix is its number of nonzero rows. Consequently elimination computes rank by counting pivots.
+\end{proposition}
+\begin{proof}
+Let the nonzero rows have successive pivot columns $j_1<\cdots<j_r$. In a zero combination of these rows, column $j_1$ forces the coefficient of row one to be zero; column $j_2$ then forces the coefficient of row two to be zero, and so on. Thus the nonzero rows are independent. They span the row space because every remaining row is zero. Row operations preserve rank.
+\end{proof}
+To extract a column basis of an original matrix, take its columns at the pivot indices of an echelon form. The selected echelon columns are independent, so the corresponding original columns are independent by Theorem~\ref{thm:04:operations}. Their number equals the rank, hence they span the original column space. The nonzero echelon rows themselves form a basis of the original row space.
+
+\begin{example}[Different ranks from similar-looking matrices]\label{eg:04:numerical-rank}
+Consider
+\[
+ A=\begin{pmatrix}1&5&6\\2&6&8\\7&1&8\end{pmatrix},\qquad
+ B=\begin{pmatrix}1&5&6&3\\2&1&4&1\\3&5&5&4\end{pmatrix}.
+\]
+For $A$, the third column is the sum of the first two. The first two are independent: their first two coordinates give $x+5y=0$, $2x+6y=0$, hence $x=y=0$. Thus $\operatorname{rank}A=2$.
+For $B$, subtract twice row one from row two and three times row one from row three:
+\[
+ B\longrightarrow
+ \begin{pmatrix}1&5&6&3\\0&-9&-8&-5\\0&-10&-13&-5\end{pmatrix}.
+\]
+Replacing row three by $9R_3-10R_2$ gives $(0,0,-37,5)$, so there are three pivots and $\operatorname{rank}B=3$. A $3\times4$ matrix cannot have rank four because its column space is contained in $\R^3$.
+\end{example}
+
+\begin{theorem}[Rank factorization]\label{thm:04:factorization}
+If $A$ has rank $r>0$, there exist $B\in\R^{m\times r}$ and $C\in\R^{n\times r}$, both of rank $r$, such that $A=BC^\top$. Consequently $A$ is a sum of $r$ rank-one matrices.
+\end{theorem}
+\begin{proof}
+Select a basis $b_1,\ldots,b_r$ from the columns of $A$ and let $B$ have these columns. Write each column $a_j$ uniquely as $\sum_{i=1}^r c_{ji}b_i$. Then $A=BC^\top$. The columns of $C^\top$ at the selected indices are the standard vectors of $\R^r$, because the selected columns of $A$ are the $b_i$ themselves. Thus $C^\top$ has rank $r$, and so does $C$.
+If $c_i$ is column $i$ of $C$, multiplication gives
+$A=\sum_{i=1}^r b_ic_i^\top$. Each outer product has rank one: its columns are multiples of the nonzero vector $b_i$, and at least one multiple is nonzero because $c_i\ne0$.
+\end{proof}
+For rank zero, $A=0$ and the corresponding sum is empty.
+
+\begin{example}[Constructing the factors]\label{eg:04:factorization}
+For the matrix $A$ in Example~\ref{eg:04:numerical-rank}, choose
+\[
+ B=\begin{pmatrix}1&5\\2&6\\7&1\end{pmatrix},\qquad
+ C=\begin{pmatrix}1&0\\0&1\\1&1\end{pmatrix}.
+\]
+The coordinate columns of $a_1,a_2,a_3$ are $(1,0)^\top,(0,1)^\top,(1,1)^\top$, so
+\[
+ A=BC^\top
+ =\begin{pmatrix}1\\2\\7\end{pmatrix}(1,0,1)
+  +\begin{pmatrix}5\\6\\1\end{pmatrix}(0,1,1).
+\]
+Both factors have two independent columns. Merely displaying a product with two inner columns would prove only an upper bound on rank; their independence establishes the full factorization claim.
+\end{example}
+
+\section*{Mappings and linear mappings}
+A \emph{mapping} $F:V\to W$ assigns exactly one element $F(v)\in W$ to each $v\in V$. Its \emph{image} is $F(V)=\{F(v):v\in V\}$. For a subset $S\subseteq V$, write $F(S)=\{F(s):s\in S\}$; for $T\subseteq W$, its \emph{preimage} is $F^{-1}(T)=\{v:F(v)\in T\}$. Preimage notation does not assert that an inverse mapping exists.
+
+\begin{example}[An image requires both inclusions]
+Let $F(x,y)=(2x,3y)$ and let $S=\{(x,y):x^2+y^2=1\}$. If $(u,v)=F(x,y)$ with $(x,y)\in S$, then $u^2/4+v^2/9=1$. Conversely, a point satisfying this ellipse equation is the image of $(u/2,v/3)$, which belongs to $S$. Therefore
+\[
+ F(S)=\{(u,v):u^2/4+v^2/9=1\}.
+\]
+Showing only that images satisfy the ellipse equation would establish containment, not equality.
+\end{example}
+
+A mapping $L:V\to W$ between real vector spaces is \emph{linear} if
+\[
+ L(u+v)=L(u)+L(v),\qquad L(cu)=cL(u)
+\]
+for all $u,v\in V$ and $c\in\R$. These rules give $L(0)=0$, $L(-v)=-L(v)$, and, by induction,
+\[
+ L\left(\sum_i c_iv_i\right)=\sum_i c_iL(v_i).
+\]
+The sum and scalar multiple of linear mappings are linear under pointwise operations, so the collection of linear mappings $V\to W$ is itself a vector space.
+
+\begin{example}[Linear and nonlinear rules]
+Matrix multiplication $L_A(x)=Ax$, the functional $x\mapsto a\cdot x$, the identity and zero mappings, and the coordinate projection $(x,y,z)\mapsto(x,y)$ are linear. For example, the matrix rule follows from $A(x+y)=Ax+Ay$ and $A(cx)=cAx$.
+Differentiation $D:C^1(\R)\to C(\R)$ is linear by the sum and scalar rules for derivatives. A translation $x\mapsto x+b$ is linear exactly when $b=0$: otherwise it does not send zero to zero. The function $(x,y)\mapsto xy$ sends zero to zero but is not linear, since it takes $(1,0)$ and $(0,1)$ to zero and their sum to one.
+\end{example}
+
+\begin{example}[Characterizing the identity by its action]
+The equation $I_nx=x$ holds for every $x\in\R^n$ by the coordinate formula. Conversely, if a matrix $B\in\R^{n\times n}$ satisfies $Bx=x$ for every $x$, then $Be_j=e_j$ for each $j$. These are the columns of $B$, so $B=I_n$. More generally, for $A\in\R^{m\times n}$, multiplying its columns by $I_m$ gives $I_mA=A$, while column $j$ of $AI_n$ is $Ae_j$, the original column $j$. Thus $I_mA=AI_n=A$ with the two identity sizes determined separately.
+\end{example}
+
+\begin{proposition}[Coordinate test for linearity]
+A mapping $F:V\to\R^m$, written $F(v)=(f_1(v),\ldots,f_m(v))^\top$, is linear if and only if every scalar-valued coordinate function $f_i$ is linear.
+\end{proposition}
+\begin{proof}
+Both linearity identities for $F$ hold exactly when they hold in each coordinate. Equality of vectors is equality of all their coordinates.
+\end{proof}
+
+\begin{example}[Using prescribed values]\label{eg:04:prescribed}
+Suppose $L:\R^2\to\R^2$ is linear and
+\[
+ L(1,1)=(1,4),\qquad L(2,-1)=(-2,3).
+\]
+Since $(3,-1)=\tfrac13(1,1)+\tfrac43(2,-1)$, linearity forces
+\[
+ L(3,-1)=\tfrac13(1,4)+\tfrac43(-2,3)=(-7/3,16/3).
+\]
+For arbitrary $(x,y)$, the basis coefficients are $(x+2y)/3$ and $(x-y)/3$. Hence the formula
+\[
+ L(x,y)=\frac{x+2y}{3}(1,4)+\frac{x-y}{3}(-2,3)
+\]
+defines a linear mapping having the prescribed values. Thus existence, as well as the forced value, is verified.
+\end{example}
+
+\begin{proposition}[Linear images and convexity]\label{prop:04:convex}
+A linear mapping sends a subspace to a subspace, and the preimage of a subspace is a subspace. It also sends a convex set to a convex set, and the preimage of a convex set is convex.
+\end{proposition}
+\begin{proof}
+For a subspace $U\subseteq V$, zero belongs to $L(U)$; and $aL(u)+bL(v)=L(au+bv)\in L(U)$. For a subspace $Z\subseteq W$, if $L(u),L(v)\in Z$, then $L(au+bv)\in Z$, proving closure of $L^{-1}(Z)$; it also contains zero.
+
+For a convex $S\subseteq V$, write any two points of $L(S)$ as $L(u),L(v)$ with $u,v\in S$. Their convex combination is $L((1-t)u+tv)\in L(S)$. For convex $T\subseteq W$, if $L(u),L(v)\in T$, then $L((1-t)u+tv)=(1-t)L(u)+tL(v)\in T$. Thus the convex combination belongs to $L^{-1}(T)$. Empty sets cause no exception to the convexity statements.
+\end{proof}
+A line $p+tu$ has image $L(p)+tL(u)$, which is a line if $L(u)\ne0$ and a point otherwise. A segment has the corresponding segment image, possibly a point. The same coefficient argument applies to a parallelogram, which may collapse to a segment or point.
+
+\section*{Kernel, image, and dimension}
+For a linear mapping $L:V\to W$, define
+\[
+ \ker L=\{v\in V:L(v)=0\},\qquad
+ \operatorname{im}L=L(V).
+\]
+They are subspaces, by the preceding proposition with the zero subspace and with $U=V$.
+
+\begin{proposition}[Zero kernel and independence]\label{prop:04:kernel}
+If $\ker L=\{0\}$, then $L$ sends every independent list to an independent list. Also, $L$ is injective if and only if $\ker L=\{0\}$.
+\end{proposition}
+\begin{proof}
+If $\sum_i c_iL(v_i)=0$, then $L(\sum_i c_iv_i)=0$. A zero kernel gives $\sum_i c_iv_i=0$, and independence gives all $c_i=0$.
+If $L$ is injective, $L(v)=0=L(0)$ forces $v=0$. Conversely, if the kernel is zero and $L(u)=L(v)$, then $u-v\in\ker L$, hence $u=v$.
+\end{proof}
+
+\begin{theorem}[Rank--nullity]\label{thm:04:rank-nullity}
+If $V$ is finite dimensional and $L:V\to W$ is linear, then
+\[
+ \dim V=\dim\ker L+\dim\operatorname{im}L.
+\]
+The codomain $W$ need not be finite dimensional.
+\end{theorem}
+\begin{proof}
+Images of a finite basis of $V$ span $\operatorname{im}L$, so the image is finite dimensional. Let $w_1,\ldots,w_r$ be its basis, and choose $v_i\in V$ with $L(v_i)=w_i$. Let $u_1,\ldots,u_s$ be a basis of $\ker L$, which exists because it is a subspace of $V$.
+
+We prove that $u_1,\ldots,u_s,v_1,\ldots,v_r$ is a basis of $V$. Given $v\in V$, write $L(v)=\sum_i a_iw_i$. Then
+\[
+ L\left(v-\sum_i a_iv_i\right)=0,
+\]
+so the difference is a combination of the $u_j$. This proves spanning.
+If $\sum_j b_ju_j+\sum_i a_iv_i=0$, apply $L$ to obtain $\sum_i a_iw_i=0$. Independence gives all $a_i=0$. The remaining relation among the $u_j$ gives all $b_j=0$. Thus the list is independent and has $s+r=\dim V$ elements. Empty kernel or image bases are allowed.
+\end{proof}
+
+\begin{example}[A scalar equation and its kernel]
+Let $L:\R^3\to\R$ be $L(x,y,z)=3x-2y+z$. Since $L(0,0,t)=t$, its image is $\R$. Its kernel has the explicit description
+\[
+ \ker L=\{(x,y,-3x+2y):x,y\in\R\}
+ =\operatorname{span}\{(1,0,-3),(0,1,2)\}.
+\]
+The two displayed vectors are independent by the first two coordinates. Therefore rank--nullity reads $3=2+1$.
+\end{example}
+
+\begin{example}[A derivative between polynomial spaces]\label{eg:04:derivative}
+Let $P_d$ be the space of real polynomials of degree at most $d$, including zero. For $d\geqslant1$, differentiation $D:P_d\to P_{d-1}$ is onto: the polynomial $\sum_{j=0}^{d-1}a_jt^j$ is the derivative of $\sum_{j=0}^{d-1}a_jt^{j+1}/(j+1)$. Its kernel consists exactly of constants. Hence
+\[
+ \dim P_d=d+1=1+d=\dim\ker D+\dim\operatorname{im}D.
+\]
+The image basis $1,t,\ldots,t^{d-1}$ has lifts $t,t^2/2,\ldots,t^d/d$. Together with the kernel basis $1$, these give the particular domain basis constructed in the theorem's proof.
+\end{example}
+
+\begin{proposition}[Dimension of a sum]\label{prop:04:sum-dimension}
+For finite-dimensional subspaces $U,W$ of a vector space,
+\[
+ \dim(U+W)=\dim U+\dim W-\dim(U\cap W).
+\]
+\end{proposition}
+\begin{proof}
+The product $U\times W$ has componentwise operations and basis
+\[ (u_1,0),\ldots,(u_r,0),(0,w_1),\ldots,(0,w_s) \]
+when the component lists are bases. Spanning and independence follow by comparing the two components, so its dimension is $r+s$.
+The mapping $T:U\times W\to U+W$, $T(u,w)=u-w$, is linear and onto: $u+w=T(u,-w)$. Its kernel is $\{(v,v):v\in U\cap W\}$. A basis $z_1,\ldots,z_k$ of the intersection gives the kernel basis $(z_1,z_1),\ldots,(z_k,z_k)$, again by componentwise comparison. Rank--nullity now gives $r+s=k+\dim(U+W)$.
+\end{proof}

@@ -1,0 +1,821 @@
+\section*{1. Row operations as matrix multiplication}
+For $1\leqslant r,s\leqslant m$, let $M_{rs}$ be the $m\times m$ matrix
+with a single $1$ in position $(r,s)$ and zeros elsewhere. Write $A_i$
+for row $i$ of an $m\times n$ matrix $A$. By the definition of matrix
+multiplication,
+\[
+ (M_{rs}A)_{ij}=\sum_{k=1}^m(M_{rs})_{ik}a_{kj}
+ =\begin{cases}a_{sj},&i=r,\\0,&i\ne r.\end{cases}
+\]
+Every row of $M_{rs}$ except row $r$ is zero; its row $r$ selects the
+$s$th row of $A$. Thus $M_{rs}A$ puts $A_s$ in position $r$ and puts
+zero in every other row. In particular, $M_{rr}A$ keeps row $r$ and
+replaces all the other rows by zero.
+
+\begin{example}[Selecting and interchanging rows]
+For
+\[
+ A=\begin{pmatrix}3&2&-1\\1&4&2\\-2&5&1\end{pmatrix},
+\]
+row selection gives
+\[
+ M_{12}A=\begin{pmatrix}1&4&2\\0&0&0\\0&0&0\end{pmatrix},\qquad
+ M_{21}A=\begin{pmatrix}0&0&0\\3&2&-1\\0&0&0\end{pmatrix}.
+\]
+Their sum swaps the first two rows but deletes the third:
+\[
+ (M_{12}+M_{21})A
+ =\begin{pmatrix}0&1&0\\1&0&0\\0&0&0\end{pmatrix}A
+ =\begin{pmatrix}1&4&2\\3&2&-1\\0&0&0\end{pmatrix}.
+\]
+Adding $M_{33}A$ restores the third row. Therefore
+\[
+ (M_{12}+M_{21}+M_{33})A
+ =\begin{pmatrix}0&1&0\\1&0&0\\0&0&1\end{pmatrix}A
+ =\begin{pmatrix}1&4&2\\3&2&-1\\-2&5&1\end{pmatrix}.
+\]
+The left factor is obtained by swapping rows $1,2$ of $I_3$.
+\end{example}
+
+\begin{proposition}[The three elementary matrices]
+Applying one elementary row operation to $I_m$ produces a matrix $E$
+such that $EA$ performs that same operation on every $m\times n$ matrix
+$A$. Specifically,
+\[
+\begin{array}{lll}
+ S_{rs}=M_{rs}+M_{sr}+\displaystyle\sum_{i\notin\{r,s\}}M_{ii}
+ &(r\ne s),&R_r\leftrightarrow R_s,\\[4pt]
+ D_r(c)=I_m+(c-1)M_{rr}&(c\ne0),&R_r\leftarrow cR_r,\\[2pt]
+ T_{rs}(c)=I_m+cM_{rs}&(r\ne s),&R_r\leftarrow R_r+cR_s.
+\end{array}
+\]
+\end{proposition}
+\begin{proof}
+For the first matrix, distribute the product:
+\[
+ S_{rs}A=M_{rs}A+M_{sr}A+
+ \sum_{i\notin\{r,s\}}M_{ii}A.
+\]
+The first two summands put $A_s$ in row $r$ and $A_r$ in row $s$;
+each remaining summand restores one of the unchanged rows.
+
+For scaling, $D_r(c)A=A+(c-1)M_{rr}A$. Its row $r$ is
+$A_r+(c-1)A_r=cA_r$, and every other row is $A_i$.
+For addition, $T_{rs}(c)A=A+cM_{rs}A$. Its row $r$ is
+$A_r+cA_s$, and every other row is $A_i$.
+\end{proof}
+The non-diagonal entry $c$ of $T_{rs}(c)$ is in position $(r,s)$:
+$r$ is the row being changed and $s$ supplies the row being added. For
+example,
+\[
+ T_{13}(4)=\begin{pmatrix}1&0&4&0\\0&1&0&0\\0&0&1&0\\0&0&0&1\end{pmatrix}
+\]
+adds four times row $3$ to row $1$ of a matrix with four rows.
+
+\begin{proposition}[Elementary inverses]
+\[
+ S_{rs}^{-1}=S_{rs},\qquad D_r(c)^{-1}=D_r(c^{-1}),\qquad
+ T_{rs}(c)^{-1}=T_{rs}(-c).
+\]
+\end{proposition}
+\begin{proof}
+Swapping the same two rows twice restores every row. Applying this to
+$I_m$ gives $S_{rs}S_{rs}=I_m$.
+Multiplying row $r$ by $c$ and then by $c^{-1}$ restores that row;
+the reverse order does too. Thus
+\[
+ D_r(c^{-1})D_r(c)=D_r(c)D_r(c^{-1})=I_m.
+\]
+The addition $R_r\leftarrow R_r+cR_s$ leaves row $s$ unchanged because
+$r\ne s$. It is undone by $R_r\leftarrow R_r-cR_s$:
+\[
+ (A_r+cA_s)-cA_s=A_r.
+\]
+Starting with the subtraction gives $(A_r-cA_s)+cA_s=A_r$.
+Applying both orders to $I_m$ proves
+$T_{rs}(-c)T_{rs}(c)=T_{rs}(c)T_{rs}(-c)=I_m$.
+\end{proof}
+
+The row-selection calculation also determines products of matrix units:
+\[
+ M_{rs}M_{uv}=\begin{cases}M_{rv},&s=u,\\0,&s\ne u.\end{cases}
+\]
+Indeed, row $s$ of $M_{uv}$ is zero unless $s=u$; in that case it has
+its $1$ in column $v$. In particular, $M_{rr}^2=M_{rr}$ and
+$M_{rs}^2=0$ for $r\ne s$. Hence
+\[
+ T_{rs}(c)T_{rs}(d)
+ =(I+cM_{rs})(I+dM_{rs})
+ =I+(c+d)M_{rs}=T_{rs}(c+d).
+\]
+If $e_r$ denotes a standard coordinate column, entrywise multiplication
+gives $M_{rs}=e_re_s^\top$. Thus the outer-product notation describes
+the same row selectors already computed above.
+
+\begin{example}[Operation order]
+For $A=\begin{pmatrix}1&2\\3&4\\5&6\end{pmatrix}$, the successive operations
+$R_1\leftrightarrow R_3$, $R_2\leftarrow7R_2$, and $R_3\leftarrow R_3+5R_2$
+give
+\[
+A\longmapsto\begin{pmatrix}5&6\\3&4\\1&2\end{pmatrix}
+\longmapsto\begin{pmatrix}5&6\\21&28\\1&2\end{pmatrix}
+\longmapsto\begin{pmatrix}5&6\\21&28\\106&142\end{pmatrix}.
+\]
+The final matrix is $T_{32}(5)D_2(7)S_{13}A$. The first operation is the
+factor closest to $A$. To undo the calculation, multiply on the left by
+$S_{13}D_2(1/7)T_{32}(-5)$.
+\end{example}
+
+Column operations are right multiplication. Here use $n\times n$
+matrix units, since $A$ has $n$ columns. The entry calculation is
+\[
+ (AM_{rs})_{ij}=\sum_{k=1}^n a_{ik}(M_{rs})_{kj}
+ =\begin{cases}a_{ir},&j=s,\\0,&j\ne s.\end{cases}
+\]
+Thus $AM_{rs}$ puts column $r$ of $A$ in column $s$ and zero elsewhere.
+Consequently $A(I_n+cM_{rs})$ adds $c$ times column $r$ to column $s$.
+The same entry $(r,s)$ changes row $r$ on the left and column $s$ on
+the right.
+If $F$ is invertible, the correspondence $x=Fz$, $z=F^{-1}x$ gives
+\[
+ AFz=b\quad\Longleftrightarrow\quad Ax=b.
+\]
+The coordinates of the unknown have changed; the original solution
+columns $x$ need not also solve $AFx=b$.
+
+\section*{2. Invertibility and the inverse algorithm}
+\begin{proposition}[Inverses of products]
+If $A_1,\ldots,A_k$ are invertible square matrices of the same size, then
+\[
+ (A_1\cdots A_k)^{-1}=A_k^{-1}\cdots A_1^{-1}.
+\]
+\end{proposition}
+\begin{proof}
+For two factors, associativity permits the adjacent cancellations
+\[
+ (AB)(B^{-1}A^{-1})=A(BB^{-1})A^{-1}=AA^{-1}=I,
+\]
+\[
+ (B^{-1}A^{-1})(AB)=B^{-1}(A^{-1}A)B=B^{-1}B=I.
+\]
+For $k$ factors, in
+$(A_1\cdots A_k)(A_k^{-1}\cdots A_1^{-1})$ first cancel
+$A_kA_k^{-1}$, then $A_{k-1}A_{k-1}^{-1}$, and continue to $A_1A_1^{-1}$.
+The reversed product cancels starting with $A_1^{-1}A_1$. Both products
+are $I$, as required.
+\end{proof}
+
+If successive row operations multiply by $E_1,\ldots,E_k$, then
+\[
+ A\longmapsto E_1A\longmapsto E_2E_1A\longmapsto\cdots
+ \longmapsto H=E_k\cdots E_1A=EA.
+\]
+Every $E_i$ is invertible, so
+$E^{-1}=E_1^{-1}\cdots E_k^{-1}$. Multiplying by $E$ and $E^{-1}$ gives
+\[
+ Ax=b\quad\Longleftrightarrow\quad Hx=Eb.
+\]
+For square $A$, if $A^{-1}$ exists, then $(EA)^{-1}=A^{-1}E^{-1}$.
+Conversely, if $H^{-1}$ exists, then $A=E^{-1}H$ is a product of
+invertible matrices and $A^{-1}=H^{-1}E$.
+Thus row equivalent square matrices are either both invertible or both
+noninvertible.
+
+\begin{proposition}[From an upper triangular matrix to the identity]\label{prop:02:triangular}
+Every upper triangular square matrix with nonzero diagonal entries is
+row equivalent to the identity.
+\end{proposition}
+\begin{proof}
+Write the matrix as
+\[
+ U=\begin{pmatrix}
+ u_{11}&u_{12}&\cdots&u_{1n}\\
+ 0&u_{22}&\cdots&u_{2n}\\
+ \vdots&\ddots&\ddots&\vdots\\
+ 0&\cdots&0&u_{nn}
+ \end{pmatrix},\qquad u_{ii}\ne0.
+\]
+Perform $R_i\leftarrow u_{ii}^{-1}R_i$ for every $i$. With
+$t_{ij}=u_{ij}/u_{ii}$ this gives
+\[
+ T=\begin{pmatrix}
+ 1&t_{12}&\cdots&t_{1,n-1}&t_{1n}\\
+ 0&1&\cdots&t_{2,n-1}&t_{2n}\\
+ \vdots&\ddots&\ddots&\vdots&\vdots\\
+ 0&\cdots&0&1&t_{n-1,n}\\
+ 0&\cdots&0&0&1
+ \end{pmatrix}.
+\]
+Its last row is $e_n^\top$. For $i=1,\ldots,n-1$, perform
+$R_i\leftarrow R_i-t_{in}R_n$. Only entry $(i,n)$ changes, becoming
+$t_{in}-t_{in}=0$. The result has the form
+\[
+ \begin{pmatrix}
+ 1&t_{12}&\cdots&t_{1,n-1}&0\\
+ 0&1&\cdots&t_{2,n-1}&0\\
+ \vdots&\ddots&\ddots&\vdots&\vdots\\
+ 0&\cdots&0&1&0\\
+ 0&\cdots&0&0&1
+ \end{pmatrix}.
+\]
+Now row $n-1$ is $e_{n-1}^\top$. Subtract $t_{i,n-1}$ times that row
+from row $i$, for $i<n-1$. This clears column $n-1$ above its diagonal
+without changing any other column.
+More generally, after columns $j+1,\ldots,n$ have been cleared,
+row $j$ is $e_j^\top$: its earlier entries are zero by triangularity
+and its later entries have just been cleared. Subtract the current
+entry $(i,j)$ times row $j$ from row $i$, for each $i<j$.
+Proceeding with $j=n,n-1,\ldots,2$ therefore gives $I_n$.
+For $n=1$, the initial scaling already gives $I_1$.
+\end{proof}
+For order three the entire procedure reads
+\[
+ \begin{pmatrix}a&b&c\\0&d&e\\0&0&f\end{pmatrix}
+ \longmapsto
+ \begin{pmatrix}1&b/a&c/a\\0&1&e/d\\0&0&1\end{pmatrix}
+ \longmapsto
+ \begin{pmatrix}1&b/a&0\\0&1&0\\0&0&1\end{pmatrix}
+ \longmapsto I_3,
+\]
+where $a,d,f\ne0$. After scaling, the operations are
+$R_1\leftarrow R_1-(c/a)R_3$, $R_2\leftarrow R_2-(e/d)R_3$,
+and $R_1\leftarrow R_1-(b/a)R_2$.
+
+\begin{theorem}[Square inverse criterion]\label{thm:02:inverse}
+For an $n\times n$ matrix $A$, the following statements are equivalent:
+\begin{enumerate}
+\item $A$ has a two-sided inverse.
+\item $A$ is row equivalent to $I_n$.
+\item $Ax=0$ has only the solution $x=0$.
+\item For every $b\in\R^n$, $Ax=b$ has exactly one solution.
+\end{enumerate}
+When these hold, $A$ is a product of elementary matrices and $x=A^{-1}b$.
+\end{theorem}
+\begin{proof}
+Reduce $A$ to an echelon matrix $H=EA$, using the elimination theorem from
+Unit 1. If $H$ has a zero row, every product $HC$ has that zero row, so $H$
+cannot have a right inverse. Thus (a) forces $n$ nonzero rows. Their strictly
+increasing pivot columns are $n$ distinct indices in $\{1,\ldots,n\}$,
+so they must be $1,\ldots,n$ in that order. Therefore $H$ is upper
+triangular with nonzero diagonal. Proposition~\ref{prop:02:triangular}
+reduces it to $I_n$, proving (b).
+
+If $FA=I_n$ is the accumulated row reduction, $F$ is a product of elementary
+matrices and hence invertible. Multiplication by $F^{-1}$ gives $A=F^{-1}$,
+so $F=A^{-1}$ and (b) implies (a). Moreover, $F^{-1}$ is a product of the
+elementary inverses in reverse order.
+
+From (a), $Ax=0$ implies $x=A^{-1}0=0$. Conversely, if an echelon form of
+$A$ has fewer than $n$ pivots, a free variable can be set to $1$, the other
+free variables to $0$, and back substitution produces a nonzero solution
+of $Ax=0$. Thus (c) forces $n$ pivots and implies (b).
+Finally, if (a) holds, $A(A^{-1}b)=(AA^{-1})b=b$, so $A^{-1}b$
+is a solution. If $Ax=b$, then
+\[
+ x=(A^{-1}A)x=A^{-1}(Ax)=A^{-1}b,
+\]
+which proves uniqueness and (d). Statement (d), applied to $b=0$,
+implies (c).
+\end{proof}
+
+To compute $A^{-1}$, reduce the \emph{left block} of $[A\mid I_n]$ to
+$I_n$. Each operation is applied across the entire augmented matrix:
+\[
+ [A\mid I_n]\longmapsto [EA\mid E]=[I_n\mid A^{-1}].
+\]
+If the left block has fewer than $n$ pivots, $A$ is not invertible. Pivots
+created in the right block cannot repair this failure.
+
+\begin{example}[A complete inverse calculation]\label{eg:02:inverse}
+Let $A=\begin{pmatrix}2&-3&1\\1&1&-1\\2&0&1\end{pmatrix}$.
+Start with $[A\mid I_3]$ and perform $R_1\leftrightarrow R_2$:
+\[
+\left[\begin{array}{rrr|rrr}2&-3&1&1&0&0\\1&1&-1&0&1&0\\2&0&1&0&0&1\end{array}\right]
+\longmapsto
+\left[\begin{array}{rrr|rrr}1&1&-1&0&1&0\\2&-3&1&1&0&0\\2&0&1&0&0&1\end{array}\right].
+\]
+Next perform $R_2\leftarrow R_2-2R_1$ and $R_3\leftarrow R_3-2R_1$:
+\[
+\left[\begin{array}{rrr|rrr}1&1&-1&0&1&0\\0&-5&3&1&-2&0\\0&-2&3&0&-2&1\end{array}\right].
+\]
+The operation $R_3\leftarrow R_3-\frac25R_2$ gives
+\[
+\left[\begin{array}{rrr|rrr}1&1&-1&0&1&0\\0&-5&3&1&-2&0\\0&0&9/5&-2/5&-6/5&1\end{array}\right].
+\]
+The last pivot is $9/5$. To clear the entries above it, use
+$R_2\leftarrow R_2-\frac53R_3$ and
+$R_1\leftarrow R_1+\frac59R_3$. This gives
+\[
+\left[\begin{array}{rrr|rrr}1&1&0&-2/9&1/3&5/9\\0&-5&0&5/3&0&-5/3\\0&0&9/5&-2/5&-6/5&1\end{array}\right].
+\]
+Now $R_1\leftarrow R_1+\frac15R_2$ clears the entry above the second pivot:
+\[
+\left[\begin{array}{rrr|rrr}1&0&0&1/9&1/3&2/9\\0&-5&0&5/3&0&-5/3\\0&0&9/5&-2/5&-6/5&1\end{array}\right].
+\]
+Finally perform $R_2\leftarrow-\frac15R_2$ and
+$R_3\leftarrow\frac59R_3$:
+\[
+\left[\begin{array}{rrr|rrr}1&0&0&1/9&1/3&2/9\\0&1&0&-1/3&0&1/3\\0&0&1&-2/9&-2/3&5/9\end{array}\right].
+\]
+Thus the right block is $A^{-1}$. Its three columns satisfy
+\[
+ A\frac19\begin{pmatrix}1\\-3\\-2\end{pmatrix}=e_1,\qquad
+ A\frac13\begin{pmatrix}1\\0\\-2\end{pmatrix}=e_2,\qquad
+ A\frac19\begin{pmatrix}2\\3\\5\end{pmatrix}=e_3.
+\]
+For an arbitrary right-hand side, multiplication by the inverse gives
+\[
+ x=A^{-1}b=\frac19\begin{pmatrix}
+ b_1+3b_2+2b_3\\-3b_1+3b_3\\-2b_1-6b_2+5b_3
+ \end{pmatrix}.
+\]
+\end{example}
+
+\subsection*{Further inverse results: reading}
+\begin{proposition}[A one-sided inverse for a square matrix is two-sided]
+If $A,B$ are $n\times n$ and either $BA=I_n$ or $AB=I_n$, then
+$B=A^{-1}$ and both identities hold.
+\end{proposition}
+\begin{proof}
+If $BA=I_n$, then $Ax=0$ gives $x=BAx=0$, so the theorem gives $A^{-1}$.
+Now $B=BAA^{-1}=A^{-1}$. If $AB=I_n$, apply the result just proved to
+$B^\top A^\top=I_n$, and transpose the resulting identity
+$A^\top B^\top=I_n$.
+\end{proof}
+
+The square hypothesis matters. For $A=(1\ 0)$ and
+$B=(1\ 0)^\top$, $AB=1$ but
+$BA=\begin{pmatrix}1&0\\0&0\end{pmatrix}\ne I_2$.
+
+\begin{example}[The inverse fails at an exceptional parameter]
+For $A=\begin{pmatrix}a&b\\c&d\end{pmatrix}$ put $\Delta=ad-bc$.
+If $\Delta\ne0$, direct multiplication in both orders gives
+\[
+A^{-1}=\frac1\Delta\begin{pmatrix}d&-b\\-c&a\end{pmatrix}.
+\]
+If $\Delta=0$ and the first row is nonzero, $(b,-a)^\top\ne0$ is killed
+by $A$. If the first row is zero and the second is nonzero, use
+$(d,-c)^\top$; if $A=0$, use $e_1$. Thus $A$ is invertible exactly when
+$\Delta\ne0$. This is a direct two-variable calculation; no general
+determinant theorem is needed.
+\end{example}
+
+\section*{3. Columns, relations, and generated sets}
+For columns $a_1,\ldots,a_n\in\R^m$, an expression
+$x_1a_1+\cdots+x_na_n$ is a \textbf{linear combination}, with
+\textbf{coefficients} $x_1,\ldots,x_n$. It is \textbf{nontrivial} if at
+least one coefficient is nonzero, even when the resulting vector is zero.
+Write $A=(a_1\ \cdots\ a_n)$. Expanding the matrix product gives
+\[
+ Ax=\begin{pmatrix}
+ a_{11}x_1+\cdots+a_{1n}x_n\\
+ \vdots\\
+ a_{m1}x_1+\cdots+a_{mn}x_n
+ \end{pmatrix}
+ =x_1\begin{pmatrix}a_{11}\\\vdots\\a_{m1}\end{pmatrix}
+ +\cdots+x_n\begin{pmatrix}a_{1n}\\\vdots\\a_{mn}\end{pmatrix}
+ =\sum_{j=1}^n x_ja_j.
+\]
+Thus $Ax=b$ asks whether $b$ is a linear combination of the columns.
+A \textbf{relation} among the columns is an equality
+$\sum_jx_ja_j=0$. The homogeneous system has three equivalent readings:
+\[
+\begin{array}{rcll}
+ Ax=0
+ &\Longleftrightarrow&\sum_{j=1}^n x_ja_j=0
+ &\text{a relation among columns},\\[3pt]
+ &\Longleftrightarrow&A_i\cdot x=0\quad(i=1,\ldots,m)
+ &\text{perpendicularity to every row}.
+\end{array}
+\]
+Here the row $A_i=(a_{i1},\ldots,a_{in})$ is viewed as a vector of
+$\R^n$ in the dot product. The last equivalence holds because
+$(Ax)_i=\sum_j a_{ij}x_j=A_i\cdot x$.
+
+The columns are \textbf{linearly dependent} if they have a nontrivial
+relation, and \textbf{linearly independent} otherwise. In symbols,
+independence means
+\[
+ x_1a_1+\cdots+x_na_n=0
+ \quad\Longrightarrow\quad x_1=\cdots=x_n=0.
+\]
+For square $A$, this is equivalent to invertibility by
+Theorem~\ref{thm:02:inverse}. The standard vectors are independent:
+\[
+ x_1e_1+\cdots+x_ne_n=(x_1,\ldots,x_n)^\top=0
+ \quad\Longrightarrow\quad x_i=0\text{ for every }i.
+\]
+
+The same calculation identifies every column of a product. If
+$B=(b_{jk})$ has $n$ rows and $C=AB$, then column $k$ is
+\[
+ c_k=A\begin{pmatrix}b_{1k}\\\vdots\\b_{nk}\end{pmatrix}
+ =b_{1k}a_1+\cdots+b_{nk}a_n.
+\]
+Indeed the $i$th coordinate on either side is
+$\sum_{j=1}^n a_{ij}b_{jk}=c_{ik}$.
+
+If $H=EA$ is a row reduction, its columns are $h_j=Ea_j$.
+For every choice of coefficients,
+\[
+ \sum_jx_jh_j=\sum_jx_jEa_j=E\left(\sum_jx_ja_j\right).
+\]
+Thus a relation among the original columns gives a relation with the
+same coefficients among the new columns. Conversely,
+\[
+ \sum_jx_jh_j=0\quad\Longrightarrow\quad
+ \sum_jx_ja_j=E^{-1}\left(\sum_jx_jh_j\right)=0.
+\]
+Row reduction preserves every column relation, coefficient by coefficient.
+It need not preserve the set of column combinations itself: that set is
+multiplied by $E$.
+
+\begin{example}[Worked reading: redundant generators]\label{eg:02:span}
+Let
+\[
+A=\begin{pmatrix}0&0&1&2&3\\2&4&-2&0&4\\2&4&-1&2&7\end{pmatrix}.
+\]
+Swap rows $1,2$, then perform $R_3\leftarrow R_3-R_1$ and
+$R_3\leftarrow R_3-R_2$, using the current rows:
+\[
+ A\longmapsto
+ \begin{pmatrix}2&4&-2&0&4\\0&0&1&2&3\\2&4&-1&2&7\end{pmatrix}
+ \longmapsto
+ \begin{pmatrix}2&4&-2&0&4\\0&0&1&2&3\\0&0&1&2&3\end{pmatrix}
+ \longmapsto
+ \begin{pmatrix}2&4&-2&0&4\\0&0&1&2&3\\0&0&0&0&0\end{pmatrix}.
+\]
+Halving row $1$ gives
+\[
+ H=\begin{pmatrix}1&2&-1&0&2\\0&0&1&2&3\\0&0&0&0&0\end{pmatrix}.
+\]
+Its columns satisfy $h_2=2h_1$, $h_4=2h_1+2h_3$, and
+$h_5=5h_1+3h_3$. Hence the original columns satisfy
+\[
+a_2=2a_1,\qquad a_4=2a_1+2a_3,\qquad a_5=5a_1+3a_3.
+\]
+All five columns therefore generate the same set as $a_1,a_3$.
+The equation $s a_1+t a_3=(u,v,w)^\top$ is
+\[
+ t=u,\qquad 2s-2t=v,\qquad 2s-t=w.
+\]
+The first two equations give $t=u$ and $s=v/2+u$; the third then requires
+$w=u+v$. Conversely, if $w=u+v$, those choices of $s,t$ satisfy all
+three equations. The generated set is exactly the plane $w=u+v$.
+To find all relations, the nonzero rows of $Hx=0$ give
+\[
+ x_1+2x_2-x_3+2x_5=0,\qquad x_3+2x_4+3x_5=0.
+\]
+Set the free variables $x_2=p$, $x_4=q$, $x_5=r$. Then
+$x_3=-2q-3r$ and $x_1=-2p-2q-5r$, so the full relation set is
+\[
+ x=(-2p-2q-5r,\ p,\ -2q-3r,\ q,\ r)^\top,
+ \qquad p,q,r\in\R.
+\]
+Thus redundant generators create nonunique coefficients, while $a_1,a_3$
+give unique coefficients in their generated plane.
+\end{example}
+
+\Needspace{18\baselineskip}
+\section*{4. Vector spaces and subspaces}
+A \textbf{real vector space} is a set $V$ with addition of its elements
+and multiplication by real scalars. Both operations take their values
+in $V$. They satisfy the following eight axioms, for all $u,v,w\in V$
+and $a,b\in\R$:
+\[
+\begin{array}{ll}
+\text{VS 1.}&(u+v)+w=u+(v+w),\\[2pt]
+\text{VS 2.}&\text{There is }0_V\in V\text{ with }0_V+u=u+0_V=u,\\[2pt]
+\text{VS 3.}&u+(-1)u=0_V,\\[2pt]
+\text{VS 4.}&u+v=v+u,\\[2pt]
+\text{VS 5.}&a(u+v)=au+av,\\[2pt]
+\text{VS 6.}&(a+b)u=au+bu,\\[2pt]
+\text{VS 7.}&(ab)u=a(bu),\\[2pt]
+\text{VS 8.}&1u=u.
+\end{array}
+\]
+Elements of $V$ are called \textbf{vectors}, even when they are matrices
+or functions. Write $-v=(-1)v$ and $u-v=u+(-v)$. We usually write $0$
+for $0_V$ when the ambient space is specified.
+Associativity and commutativity allow regrouping finite sums. For example,
+\[
+ ((u+v)+w)+z=(u+(v+w))+z=((v+w)+u)+z=(v+w)+(u+z).
+\]
+
+\begin{proposition}[Consequences of the axioms]
+The zero vector and each additive inverse are unique. Cancellation holds:
+$u+v=u+w$ implies $v=w$. Moreover, $0v=0_V$, $a0_V=0_V$, and
+$av=0_V$ implies $a=0$ or $v=0_V$.
+\end{proposition}
+\begin{proof}
+If $0'_V$ is another zero, then $0'_V=0'_V+0_V=0_V$.
+For cancellation, add $-u$ to both sides and regroup:
+\[
+ (-u)+(u+v)=((-u)+u)+v=v,\qquad
+ (-u)+(u+w)=w.
+\]
+Hence $v=w$. If $v+w=0_V=v+(-v)$, cancellation gives $w=-v$;
+this proves uniqueness of the additive inverse.
+The axiom for $(-1)v$ gives
+\[
+ 0_V=v+(-1)v=1v+(-1)v=(1-1)v=0v.
+\]
+Also
+\[
+ a0_V=a(0_V+0_V)=a0_V+a0_V.
+\]
+Subtracting $a0_V$ from both sides gives $0_V=a0_V$.
+Finally, if $a\ne0$ and $av=0_V$, then
+\[
+ v=1v=(a^{-1}a)v=a^{-1}(av)=a^{-1}0_V=0_V.
+\]
+\end{proof}
+
+\begin{example}[Matrices and functions]
+The set $\R^{m\times n}$ is a vector space. Matrix addition and scaling
+are defined entrywise, so the real-number laws verify the eight axioms.
+For example,
+\[
+ ((A+B)+C)_{ij}=(a_{ij}+b_{ij})+c_{ij}
+ =a_{ij}+(b_{ij}+c_{ij})=(A+(B+C))_{ij},
+\]
+\[
+ (a(A+B))_{ij}=a(a_{ij}+b_{ij})=aa_{ij}+ab_{ij}
+ =(aA+aB)_{ij}.
+\]
+These identities hold for every entry. Its zero vector is the zero
+matrix, and the negative of $A$ has entries $-a_{ij}$.
+
+If $T$ is any set, the real functions $f:T\to\R$ form a vector space
+under pointwise operations
+\[
+ (f+g)(t)=f(t)+g(t),\qquad (af)(t)=a f(t).
+\]
+For every $t\in T$,
+\[
+ \begin{aligned}
+ ((f+g)+h)(t)&=(f(t)+g(t))+h(t)\\
+ &=f(t)+(g(t)+h(t))=(f+(g+h))(t),\\
+ (a(f+g))(t)&=a(f(t)+g(t))=af(t)+ag(t)=(af+ag)(t).
+ \end{aligned}
+\]
+The other axioms follow pointwise from the corresponding real-number
+laws. The zero vector is the function identically zero. A function
+which vanishes at some points but not at all points is not this zero
+vector; for example, $f(t)=t$ on $\R$ has $f(0)=0$ but $f(1)=1$.
+\end{example}
+
+A subset $W$ of $V$ is a \textbf{subspace} if it is a vector space with
+the same operations.
+\begin{theorem}[Subspace test]
+A subset $W\subseteq V$ is a subspace if and only if
+\begin{enumerate}
+\item $0_V\in W$;
+\item $u+v\in W$ whenever $u,v\in W$;
+\item $cu\in W$ whenever $u\in W$ and $c\in\R$.
+\end{enumerate}
+Equivalently, $W$ is nonempty and $au+bv\in W$ for all $u,v\in W$
+and $a,b\in\R$.
+\end{theorem}
+\begin{proof}
+A subspace satisfies these conditions by its own vector-space axioms.
+Conversely, (b,c) ensure the operations remain in $W$, (a) supplies its
+zero, and (c) supplies $-u=(-1)u\in W$. All the identities VS 1--VS 8
+then hold in $W$ because they already hold in $V$.
+
+The three conditions imply $au+bv\in W$ by scaling twice and adding.
+Conversely, suppose the combined condition holds and choose $w\in W$.
+Then $0w+0w=0_V\in W$. For $u,v\in W$, taking $(a,b)=(1,1)$ gives
+$u+v\in W$, and taking $(a,b)=(c,0)$ gives $cu\in W$.
+\end{proof}
+
+\begin{example}[A coordinate restriction and perpendicularity]
+The set $W=\{x\in\R^n:x_n=0\}$ is a subspace: its zero vector belongs
+to $W$, and
+\[
+ (x+y)_n=x_n+y_n=0,\qquad (cx)_n=cx_n=0
+\]
+for $x,y\in W$. For $n\geqslant2$, deleting the last, zero coordinate
+identifies its addition and scaling with those of $\R^{n-1}$.
+
+For fixed $a\in\R^n$, let $U=\{x:x\cdot a=0\}$. The three checks are
+\[
+ 0\cdot a=0,\qquad
+ (x+y)\cdot a=x\cdot a+y\cdot a=0,\qquad
+ (cx)\cdot a=c(x\cdot a)=0.
+\]
+Thus the vectors perpendicular to $a$ form a subspace, including when
+$a=0$ and the subspace is all of $\R^n$.
+\end{example}
+
+\begin{example}[Tests that distinguish linear and nonlinear restrictions]
+The solution set of $Ax=0$ is a subspace, since
+$A(au+bv)=aAu+bAv=0$. For fixed $b\ne0$, a nonempty solution set of
+$Ax=b$ is not a subspace, since it does not contain $0$.
+Symmetric matrices form a subspace: zero is symmetric, and for symmetric
+$S,T$,
+\[
+ (S+T)^\top=S^\top+T^\top=S+T,\qquad (cS)^\top=cS^\top=cS.
+\] Invertible matrices do not: the zero matrix is
+excluded. The set $\{(x,y):xy=0\}$ contains both coordinate axes but
+fails addition: $(1,0)+(0,1)=(1,1)$ is outside it.
+
+Polynomials of degree at most $d$, including the zero polynomial, form a
+subspace of real functions. Polynomials of degree exactly $d$ do not.
+On a fixed open interval, continuous functions form a subspace: zero is
+continuous, and sums and scalar multiples of continuous functions are
+continuous. Differentiable functions likewise form a subspace, since
+\[
+ (f+g)'=f'+g',\qquad (cf)'=cf',\qquad 0'=0.
+\]
+Every differentiable function is continuous, so the differentiable
+functions also form a subspace of the continuous functions.
+\end{example}
+
+For subspaces $U,W\subseteq V$, their \textbf{intersection} consists of
+vectors belonging to both, and their \textbf{sum} consists of sums of
+one vector from each:
+\[
+ U\cap W=\{v:v\in U\text{ and }v\in W\},\qquad
+ U+W=\{u+w:u\in U,\ w\in W\}.
+\]
+The intersection is a subspace. It contains zero. If $x,y\in U\cap W$,
+then $x+y$ belongs to both $U,W$, as does $cx$ for every scalar $c$.
+The sum is also a subspace: $0=0+0$ belongs to it, and
+\[
+ \begin{aligned}
+ (u_1+w_1)+(u_2+w_2)&=(u_1+u_2)+(w_1+w_2)\in U+W,\\
+ c(u_1+w_1)&=cu_1+cw_1\in U+W.
+ \end{aligned}
+\]
+For example, the coordinate planes $z=0$ and $y=0$ in $\R^3$ intersect
+in $\{(t,0,0):t\in\R\}$, the $x$-axis. Their sum is all of $\R^3$,
+because $(x,y,z)=(x,y,0)+(0,0,z)$.
+
+The \textbf{union} $U\cup W$ consists of vectors lying in at least one
+of the two subspaces.
+It need not be a subspace. More precisely, $U\cup W$ is a subspace
+exactly when one of $U,W$ contains the other. To prove necessity, if neither
+contains the other, choose $u\in U\setminus W$ and $w\in W\setminus U$.
+The vector $u+w$ belongs to neither set: membership in $U$ would force
+$w=(u+w)-u\in U$, and membership in $W$ would force $u\in W$.
+Sufficiency follows because the union is then the larger subspace.
+
+\section*{5. Span and affine geometry}
+Vectors $v_1,\ldots,v_k$ \textbf{generate} a vector space $V$ if each
+$v\in V$ has an expression $v=x_1v_1+\cdots+x_kv_k$ with real
+coefficients. Their \textbf{span} is the set of all these combinations:
+\[
+ \operatorname{span}(v_1,\ldots,v_k)
+ =\{x_1v_1+\cdots+x_kv_k:x_1,\ldots,x_k\in\R\}.
+\]
+\begin{proposition}[The subspace generated by a list]
+The span of a finite list is a subspace. It is the smallest subspace
+containing every vector in that list.
+\end{proposition}
+\begin{proof}
+Zero belongs to the span because $0=0v_1+\cdots+0v_k$.
+Given two of its elements $u=\sum_i x_iv_i$ and $w=\sum_i y_iv_i$,
+\[
+ \begin{aligned}
+ u+w&=(x_1v_1+\cdots+x_kv_k)+(y_1v_1+\cdots+y_kv_k)\\
+ &=(x_1+y_1)v_1+\cdots+(x_k+y_k)v_k,\\
+ cu&=(cx_1)v_1+\cdots+(cx_k)v_k.
+ \end{aligned}
+\]
+Both expressions are combinations of the same list, proving closure.
+Every $v_i$ belongs to the span by giving it coefficient one and all
+other vectors coefficient zero. If a subspace $Z$ contains each $v_i$,
+then closure under scaling puts every $x_iv_i$ in $Z$, and repeated
+addition puts $\sum_i x_iv_i$ in $Z$. Thus the span is contained in
+any such $Z$.
+\end{proof}
+For an arbitrary set $S$, define $\operatorname{span}(S)$ using all
+\emph{finite} combinations of its elements. The sum of two finite
+combinations is a finite combination formed by joining their lists;
+scaling multiplies their coefficients. The preceding proof therefore
+also gives the subspace and minimality claims for $S$.
+The empty combination is zero, so $\operatorname{span}(\varnothing)=\{0\}$.
+
+For rectangular matrices, let $M_{rs}=e_r e_s^\top$, where $e_r\in\R^m$
+and $e_s\in\R^n$; thus $M_{rs}$ has its single nonzero entry, equal to $1$,
+in position $(r,s)$. The standard vectors generate $\R^n$, these $M_{rs}$ generate
+$\R^{m\times n}$, and $1,t,\ldots,t^d$ generate the polynomials of degree
+at most $d$. These statements follow from
+\[
+x=\sum_i x_ie_i,\qquad A=\sum_{r,s}a_{rs}M_{rs},\qquad
+p(t)=\sum_{j=0}^d c_jt^j.
+\]
+Two different lists can have the same span, as in Example~\ref{eg:02:span}.
+Equality of spans is proved by expressing each list in terms of the other,
+not by requiring the lists themselves to be equal.
+
+\begin{example}[Worked reading: a matrix-defined subspace]\label{eg:02:commuting}
+Fix $A=\begin{pmatrix}1&2\\3&4\end{pmatrix}$. The matrices commuting with
+$A$ form a subspace: if $AB=BA$ and $AC=CA$, then
+$A(sB+tC)=(sB+tC)A$. To find all of them, write
+$B=\begin{pmatrix}a&b\\c&d\end{pmatrix}$. The two products are
+\[
+ AB=\begin{pmatrix}a+2c&b+2d\\3a+4c&3b+4d\end{pmatrix},\qquad
+ BA=\begin{pmatrix}a+3b&2a+4b\\c+3d&2c+4d\end{pmatrix}.
+\]
+Equating their $(1,1),(1,2),(2,1)$ entries gives
+\[
+ 2c=3b,\qquad 2d=2a+3b,\qquad d=a+c.
+\]
+The $(2,2)$ entries repeat $3b=2c$.
+The third equation follows from the first two. Thus $c=3b/2$, $d=a+3b/2$,
+and the full subspace is
+\[
+B=aI+\frac b2\begin{pmatrix}0&2\\3&3\end{pmatrix}.
+\]
+Conversely, both displayed generating matrices commute with $A$, so every
+matrix in this span satisfies the original equation.
+\end{example}
+
+For a nonzero vector $u\in V$, the line through zero in direction $u$
+is the subspace $\{tu:t\in\R\}$. If neither of $u,v$ is a scalar
+multiple of the other, their span
+\[
+ \{su+tv:s,t\in\R\}
+\]
+is the plane through zero generated by $u,v$.
+For a subset $S\subseteq V$ and a vector $p$, its \textbf{translate} is
+$p+S=\{p+s:s\in S\}$. In particular,
+\[
+ p+tu\quad(t\in\R),\qquad
+ p+su+tv\quad(s,t\in\R)
+\]
+describe the parallel line and plane passing through $p$.
+
+For a subspace $W$, its translate $p+W$ is a subspace exactly when
+$p\in W$. If $p\in W$, then $p+w\in W$ for every $w\in W$; conversely,
+every $w\in W$ equals $p+(w-p)\in p+W$. Thus $p+W=W$.
+If $p+W$ is a subspace, it contains zero, so $p+w=0$ for some $w\in W$.
+Then $p=-w\in W$, proving the converse.
+If $Ap=b$, then
+\[
+ Ax=b\quad\Longleftrightarrow\quad A(x-p)=0
+ \quad\Longleftrightarrow\quad x=p+z\text{ with }Az=0.
+\]
+Thus the whole solution set is a translate of a subspace, with the
+homogeneous equation determining its directions.
+
+The \textbf{segment} from $v$ to $v+u$ is
+$\{v+tu:0\leqslant t\leqslant1\}$. The endpoints occur at $t=0,1$;
+$t=1/2$ gives the midpoint and $t=1/3$ gives the point one third of the
+way from $v$ to $v+u$.
+For endpoints $v,w$, substitute $u=w-v$:
+\[
+ v+t(w-v)=v+tw-tv=(1-t)v+tw.
+\]
+Consequently the segment has the two descriptions
+\[
+ [v,w]=\{(1-t)v+tw:0\leqslant t\leqslant1\}
+ =\{sv+tw:s,t\geqslant0,\ s+t=1\}.
+\]
+For the forward inclusion, put $s=1-t$; then $s\geqslant0$ and
+$s+t=1$. For the reverse inclusion, $s,t\geqslant0$ and $s+t=1$
+imply $0\leqslant t\leqslant1$ and $s=1-t$, giving the first form.
+These descriptions include $v=w$, when the segment is one point.
+
+More generally, coefficients whose sum is one give an \textbf{affine
+combination}; if they are also nonnegative, they give a \textbf{convex
+combination}. For $w_i\in W$ and $\sum_i c_i=1$,
+\[
+ \sum_i c_i(p+w_i)=\left(\sum_i c_i\right)p+\sum_i c_iw_i
+ =p+\sum_i c_iw_i\in p+W.
+\]
+Thus affine combinations of points in a translate $p+W$ remain in that
+translate.
+
+\begin{example}[A parallelogram through coefficient inequalities]
+With $v=(1,2)^\top$ and $w=(-1,1)^\top$, the parallelogram they span is
+\[
+\{sv+tw:0\leqslant s,t\leqslant1\}.
+\]
+Its vertices are $0,v,v+w=(0,3)^\top,w$. If $(x,y)^\top=sv+tw$, then
+$x=s-t$, $y=2s+t$, so $s=(x+y)/3$ and $t=(y-2x)/3$.
+An equivalent description is therefore
+\[
+0\leqslant x+y\leqslant3,\qquad 0\leqslant y-2x\leqslant3.
+\]
+\begin{center}
+\begin{tikzpicture}[scale=.72,>=Stealth]
+\draw[->](-1.8,0)--(1.9,0) node[right]{$x$};
+\draw[->](0,-.4)--(0,3.6) node[above]{$y$};
+\filldraw[fill=gray!12,thick](0,0)--(1,2)--(0,3)--(-1,1)--cycle;
+\node[below right]at(0,0){$0$};\node[right]at(1,2){$v$};
+\node[above right]at(0,3){$v+w$};\node[left]at(-1,1){$w$};
+\end{tikzpicture}
+\end{center}
+The segment between $v$ and $w$ has the extra equation $s+t=1$.
+The parallelogram allows the two coefficients to vary independently.
+Its translate by $p$ consists of $p+sv+tw$ with the same bounds.
+\end{example}
+
+Three vectors similarly generate a box
+$\{t_1v_1+t_2v_2+t_3v_3:0\leqslant t_i\leqslant1\}$; adding $p$ translates
+the box. Such a set may collapse into a plane, a segment, or a point when
+the generating vectors satisfy relations. The coefficient description
+remains valid in these degenerate cases.

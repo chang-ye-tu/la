@@ -1,0 +1,1428 @@
+\subsection*{Real symmetric spectra}
+
+\begin{problem}[Symmetric orthogonal matrices]\label{ex:09:symmetric-orthogonal}
+Prove that a real symmetric orthogonal matrix has eigenvalues only
+\(1\) and \(-1\). If it is also positive definite, prove it is \(I\).
+\end{problem}
+\begin{solution}
+The real spectral theorem gives an eigenbasis. Since \(A^\top A=I\)
+and \(A^\top=A\), we have \(A^2=I\). For an eigenvector \(v\ne0\),
+\(v=A^2v=\lambda^2v\), so \(\lambda^2=1\).
+If \(A\) is PD, every eigenvalue is positive, hence \(1\).
+The real spectral theorem then gives \(A=QI Q^\top=I\).
+\end{solution}
+
+\begin{problem}[Independence and orthogonality with parameters]\label{ex:09:parameters}
+Let \(A=\begin{pmatrix}a&1\\ab&b\end{pmatrix}\), where real \(a,b\ne0\).
+\begin{enumerate}
+\item Find the eigenvalues and normalized eigenvectors.
+\item Show that eigenvectors for the two roots are independent unless
+\(a+b=0\).
+\item Show that these directions are orthogonal exactly when \(ab=1\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+The polynomial is \(t^2-(a+b)t=t(t-a-b)\).
+Vectors \(v_0=(1,-a)^\top\) and \(v_{a+b}=(1,b)^\top\) satisfy
+the eigenvector equations. Their unit versions are
+\(v_0/\sqrt{1+a^2}\) and \(v_{a+b}/\sqrt{1+b^2}\), with either sign.
+Their column determinant is \(a+b\); if \(a+b\ne0\), they are independent.
+If \(a+b=0\), they coincide and the single eigenspace for zero is
+\(\operatorname{span}(1,-a)^\top\): \(A\ne0\) has rank one.
+Their dot product before normalization is \(1-ab\), proving (c).
+The condition \(ab=1\) is exactly the symmetry condition for \(A\),
+consistent with the symmetric eigenvector theorem.
+\end{solution}
+
+\begin{problem}[A repeated eigenvalue]\label{ex:09:multiplicity}
+Let \(\lambda\) have algebraic multiplicity \(k\geqslant2\) in a real
+symmetric matrix.
+\begin{enumerate}
+\item Prove its eigenspace has an orthonormal basis of \(k\) vectors.
+\item Prove there are infinitely many such orthonormal bases.
+\item Prove there cannot be more than \(k\) independent eigenvectors
+for \(\lambda\), and conclude the eigenspace has dimension \(k\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+The spectral theorem diagonalizes the matrix. The \(k\) columns belonging
+to \(\lambda\) form an orthonormal basis of that eigenspace.
+If the first two are \(q_1,q_2\), replace them by
+\(q_1\cos t+q_2\sin t\) and \(-q_1\sin t+q_2\cos t\).
+They remain orthonormal and in the same eigenspace, giving infinitely
+many bases as \(t\) varies.
+The earlier geometric-multiplicity bound gives dimension at most \(k\),
+while the \(k\) constructed vectors give dimension at least \(k\).
+\end{solution}
+
+\begin{problem}[An orthonormal matrix spanning a kernel]\label{ex:09:null-basis}
+Let \(A\in\R^{m\times n}\) have rank \(r\).
+\begin{enumerate}
+\item Use the eigenspaces of \(A^\top A\) to construct
+\(S\in\R^{n\times(n-r)}\) with \(AS=0\) and \(S^\top S=I_{n-r}\).
+\item If \(AT=0\), prove \(\operatorname{rank}T\leqslant n-r\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+The Gram kernel identity gives
+\(\ker(A^\top A)=\ker A\), of dimension \(n-r\).
+Choose orthonormal eigenvectors for its zero eigenvalue and place them
+in \(S\). They give both stated identities.
+Every column of \(T\) lies in \(\ker A\), so its column-space dimension
+is at most \(n-r\).
+When \(r=n\), \(S\) has no columns and the identities use the empty
+zero-dimensional identity.
+\end{solution}
+
+\begin{problem}[*Simultaneous orthogonal diagonalization]\label{ex:09:simultaneous}
+For real symmetric \(A,B\) of the same order, prove that one orthogonal
+matrix diagonalizes both if and only if \(AB=BA\).
+\end{problem}
+\begin{solution}
+If \(A=Q\Lambda Q^\top\), \(B=QM Q^\top\) with diagonal \(\Lambda,M\),
+their products commute because \(\Lambda M=M\Lambda\).
+Conversely, commutation implies \(B(E_\lambda(A))\subseteq E_\lambda(A)\).
+On each such eigenspace, the restriction of \(B\) is self-adjoint.
+The spectral theorem gives an orthonormal basis there of \(B\)-eigenvectors,
+which are also \(A\)-eigenvectors. Different \(A\)-eigenspaces are
+orthogonal, so the union of these bases is an orthonormal basis of the
+whole space. Its column matrix diagonalizes both.
+\end{solution}
+
+\begin{problem}[*Craig--Sakamoto identity]\label{ex:09:craig}
+For real symmetric \(A,B\) of the same order, prove
+\[
+ AB=0\quad\Longleftrightarrow\quad
+ \det(I-sA)\det(I-tB)=\det(I-sA-tB)
+ \quad\hbox{for every real }s,t.
+\]
+\end{problem}
+\begin{solution}
+If \(AB=0\), then \((I-sA)(I-tB)=I-sA-tB\); take determinants.
+
+For the converse, work for all \(s\) in a sufficiently small interval
+about zero, where \(C(s)=(I-sA)^{-1}\) exists.
+The assumed identity, divided by \(\det(I-sA)\), gives
+\(\det(I-tB)=\det(I-tC(s)B)\) for every \(t\).
+Consequently \(B\) and \(C(s)B\) have the same characteristic polynomial,
+and
+\[
+ h(s):=\tr\{C(s)BC(s)B\}=\tr B^2 .
+\]
+The trace-of-square conclusion follows directly from the coefficients
+of the determinant, without any hypothesis on its roots:
+the first coefficient gives \(\tr M\), and the second gives
+\(\{(\tr M)^2-\tr(M^2)\}/2\), by summing the two-by-two principal minors.
+For order one, the first coefficient already gives \(M\) itself.
+
+The entries of \(C(s)\) are differentiable rational functions near zero.
+Differentiating \((I-sA)C(s)=I\) gives
+\(C'(0)=A\), \(C''(0)=2A^2\).
+Twice applying the product rule to \(h\), and cyclically moving factors
+inside the trace, yields
+\[
+ 0=h''(0)=4\tr(A^2B^2)+2\tr(ABAB).
+\]
+Put \(M=AB\). Symmetry gives \(\tr(A^2B^2)=\tr(MM^\top)=\norm M_F^2\),
+where \(\norm M_F^2=\sum_{i,j}m_{ij}^2\).
+Also
+\[
+ \tr(M^2)+\norm M_F^2=\tfrac12\norm{M+M^\top}_F^2.
+\]
+Therefore
+\[
+ 0=\tr(M^2)+2\norm M_F^2
+   =\tfrac12\norm{M+M^\top}_F^2+\norm M_F^2.
+\]
+Both terms are nonnegative, so \(M=0\).
+The proof does not assume \(\tr(M^2)\geqslant0\) for a nonsymmetric
+matrix; that assertion would be false.
+\end{solution}
+
+\begin{problem}[The norm of a matrix acting on a vector]\label{ex:09:norm-bound}
+For real \(A\in\R^{m\times n}\), let \(\mu\) be the largest eigenvalue
+of \(A^\top A\). Prove \(\norm{Ax}\leqslant\sqrt\mu\,\norm x\) for
+every \(x\).
+\end{problem}
+\begin{solution}
+The Gram matrix is PSD, so \(\mu\geqslant0\).
+For \(x\ne0\), the Rayleigh bound gives
+\(\norm{Ax}^2=x^\top A^\top Ax\leqslant\mu x^\top x\).
+Taking nonnegative square roots proves the result.
+For \(x=0\), both sides vanish. Equality for \(x\ne0\) occurs precisely
+in the top eigenspace of \(A^\top A\).
+\end{solution}
+
+\subsection*{Positive forms: basic tests and constructions}
+
+\begin{problem}[Quadratic-form uniqueness]\label{ex:09:quadratic-uniqueness}
+\begin{enumerate}
+\item For real square \(A\), show
+\(x^\top Ax=x^\top(A+A^\top)x/2\).
+\item Prove \(x^\top Ax=0\) for all \(x\) exactly when \(A\) is skew-symmetric.
+\item Deduce that two symmetric matrices with the same quadratic form
+are equal.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Transposing a scalar gives \(x^\top Ax=x^\top A^\top x\), proving (a).
+If \(A^\top=-A\), that scalar equals its negative and is zero.
+Conversely, setting \(x=e_i\) gives \(a_{ii}=0\);
+setting \(x=e_i+e_j\) gives \(a_{ij}+a_{ji}=0\).
+Thus \(A^\top=-A\).
+If \(A,B\) are symmetric and have the same form, \(A-B\) is both
+symmetric and skew-symmetric, hence zero.
+\end{solution}
+
+\begin{problem}[Represent and classify three forms]\label{ex:09:forms}
+Write the following as symmetric matrix forms and classify their signs:
+\[
+ x^2+y^2-xy,\qquad
+ 4x^2+5y^2+z^2+2xy+2yz,\qquad
+ -x^2+2y^2+xy.
+\]
+\end{problem}
+\begin{solution}
+Their matrices are
+\[
+ A=\begin{pmatrix}1&-1/2\\-1/2&1\end{pmatrix},\quad
+ B=\begin{pmatrix}4&1&0\\1&5&1\\0&1&1\end{pmatrix},\quad
+ C=\begin{pmatrix}-1&1/2\\1/2&2\end{pmatrix}.
+\]
+The first form is \((x-y/2)^2+3y^2/4\), positive for nonzero \((x,y)\).
+The second is
+\[
+ 4(x+y/4)^2+(z+y)^2+\frac{15}{4}y^2,
+\]
+also positive for every nonzero vector.
+The third takes values \(-1\) at \((1,0)\) and \(2\) at \((0,1)\),
+so it is indefinite.
+\end{solution}
+
+\begin{problem}[Length preservation]\label{ex:09:isometry}
+For a fixed real square matrix \(Q\), prove that the following are equivalent:
+\(Q^\top Q=I\); \(\norm{Qx}=\norm x\) for every \(x\);
+\((Qx)^\top(Qy)=x^\top y\) for every \(x,y\).
+Does equality of lengths for just one vector imply orthogonality?
+\end{problem}
+\begin{solution}
+\(Q^\top Q=I\) gives the inner-product identity, which gives norm
+preservation on taking \(y=x\).
+Conversely, norm preservation makes
+\(x^\top(Q^\top Q-I)x=0\) for all \(x\).
+The matrix is symmetric, so the preceding quadratic-form uniqueness
+result gives \(Q^\top Q-I=0\).
+A single vector is insufficient: \(Q=\operatorname{diag}(1,2)\)
+preserves the length of \(e_1\) but is not orthogonal.
+The matrix must be fixed and the condition must hold for all vectors.
+\end{solution}
+
+\begin{problem}[Signs and diagonal matrices]\label{ex:09:signs}
+\begin{enumerate}
+\item Prove \(A\succ0\) iff \(-A\prec0\), and \(A\succeq0\) iff
+\(-A\preceq0\).
+\item Can a matrix be both positive and negative definite? Both positive
+and negative semidefinite?
+\item For diagonal \(D=\operatorname{diag}(d_i)\), characterize PD and PSD.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Multiplication by \(-1\) reverses the sign of every quadratic value,
+proving (a).
+A positive-dimensional matrix cannot have both strictly positive and
+strictly negative quadratic values on a fixed nonzero vector.
+Both weak signs hold exactly when its quadratic form vanishes, which
+for symmetric \(A\) means \(A=0\).
+For a diagonal matrix \(x^\top Dx=\sum_i d_ix_i^2\).
+If all \(d_i>0\) it is PD; if all \(d_i\geqslant0\) it is PSD.
+Testing \(x=e_i\) proves the necessity of those respective conditions.
+\end{solution}
+
+\begin{problem}[*Entrywise bounds]\label{ex:09:entries}
+Let \(A=(a_{ij})\succ0\).
+\begin{enumerate}
+\item Prove \(a_{ii}>0\).
+\item For \(i\ne j\), prove \(a_{ij}^2<a_{ii}a_{jj}\).
+\item Prove a largest absolute entry of \(A\) is a diagonal entry.
+\item State and prove the corresponding PSD conclusions.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Testing \(e_i\) gives (a).
+For \(x=te_i+e_j\), positivity gives
+\(a_{ii}t^2+2a_{ij}t+a_{jj}>0\) for every real \(t\).
+Its minimum at \(t=-a_{ij}/a_{ii}\) is
+\(a_{jj}-a_{ij}^2/a_{ii}>0\), proving (b).
+Therefore
+\(|a_{ij}|<\sqrt{a_{ii}a_{jj}}\leqslant\max_k a_{kk}\).
+For PSD matrices replace the strict signs by weak signs.
+If \(a_{ii}=0\), the expression \(2a_{ij}t+a_{jj}\) must be nonnegative
+for every \(t\), which forces \(a_{ij}=0\). If \(a_{ii}>0\), minimize
+as before to obtain \(a_{ij}^2\leqslant a_{ii}a_{jj}\).
+These prove the diagonal maximum statement also in the PSD case.
+\end{solution}
+
+\begin{problem}[Sums, trace, and determinant]\label{ex:09:psd-sums}
+Let \(A\succeq0\).
+\begin{enumerate}
+\item Prove \(\tr A\geqslant0\), with equality exactly when \(A=0\).
+\item Prove \(\det A\geqslant0\), with equality exactly when \(A\) is singular.
+\item If \(B\succeq0\), prove \(A+B\succeq0\); if \(B\succ0\),
+prove \(A+B\succ0\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+The eigenvalues \(\lambda_i\) are nonnegative. Their sum is nonnegative
+and vanishes exactly when every one is zero; spectral decomposition
+then gives \(A=0\).
+Their product is nonnegative and vanishes exactly when an eigenvalue is
+zero, equivalently when \(A\) is singular.
+Finally \(x^\top(A+B)x=x^\top Ax+x^\top Bx\).
+The terms are nonnegative, and the second is strictly positive for
+\(x\ne0\) if \(B\succ0\), proving (c).
+\end{solution}
+
+\begin{problem}[When a Gram matrix is zero]\label{ex:09:zero-gram}
+For real \(A\in\R^{m\times n}\), prove \(A^\top A,AA^\top\succeq0\) and
+\[
+ A=0\quad\Longleftrightarrow\quad A^\top A=0
+ \quad\Longleftrightarrow\quad\tr(A^\top A)=0.
+\]
+\end{problem}
+\begin{solution}
+Their quadratic forms are \(\norm{Ax}^2\) and \(\norm{A^\top y}^2\).
+Also
+\(\tr(A^\top A)=\sum_{i,j}a_{ij}^2\).
+This sum vanishes precisely when all entries vanish.
+The forward implications to a zero Gram matrix and zero trace are
+immediate, and the sum-of-squares formula proves the reverse implication.
+\end{solution}
+
+\begin{problem}[Positive determinant and trace are insufficient]\label{ex:09:det-trace}
+Prove that a PD matrix has positive determinant and positive trace.
+Show that these two scalar conditions together do not imply positive
+definiteness, even for a real symmetric matrix.
+\end{problem}
+\begin{solution}
+All eigenvalues of a PD matrix are positive, so their product and sum
+are positive. Conversely
+\(A=\operatorname{diag}(-1,-1,3)\) has determinant \(3>0\) and
+trace \(1>0\), but \(e_1^\top Ae_1=-1<0\); it is indefinite.
+\end{solution}
+
+\begin{problem}[Inverses and powers preserve positivity]\label{ex:09:inverse-powers}
+\begin{enumerate}
+\item Prove a PD matrix is invertible, and a PSD matrix is PD exactly
+when it is invertible.
+\item For symmetric invertible \(A\), prove \(A\succ0\) iff \(A^{-1}\succ0\).
+\item If \(A\) is PD or PSD, prove the same respective property for
+\(A^k\), \(k=1,2,\ldots\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+In the spectral representation, invertibility means that every eigenvalue
+is nonzero. A nonnegative eigenvalue list is strictly positive exactly
+when none is zero, proving (a).
+The eigenvalues of \(A^{-1}\) are \(1/\lambda_i\), which are positive
+exactly when all \(\lambda_i\) are positive; the inverse is symmetric.
+The powers have the same orthonormal eigenvectors and eigenvalues
+\(\lambda_i^k\), which retain positivity or nonnegativity.
+\end{solution}
+
+\begin{problem}[Complete a matrix square]\label{ex:09:complete-square}
+Let \(A,B\succ0\), \(C=(A^{-1}+B^{-1})^{-1}\), and \(D=A+B\).
+\begin{enumerate}
+\item Prove
+\[
+ D^{-1}=A^{-1}-A^{-1}CA^{-1}
+ =B^{-1}-B^{-1}CB^{-1}
+ =A^{-1}CB^{-1}=B^{-1}CA^{-1}.
+\]
+\item Find \(\mu\) and an \(x\)-independent quantity \(Q(a,b)\) such that
+\[
+ (x-a)^\top A^{-1}(x-a)+(x-b)^\top B^{-1}(x-b)
+ =(x-\mu)^\top C^{-1}(x-\mu)+Q(a,b).
+\]
+\item Prove \(Q(a,b)=(a-b)^\top D^{-1}(a-b)\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+All inverses exist: sums of PD matrices are PD, as are their inverses.
+Since \(A^{-1}DB^{-1}=B^{-1}+A^{-1}=C^{-1}\),
+inverting gives \(C=BD^{-1}A\).
+Interchanging \(A,B\) also gives \(C=AD^{-1}B\).
+Multiplying these identities gives
+\(A^{-1}CB^{-1}=B^{-1}CA^{-1}=D^{-1}\).
+Furthermore \(C(A^{-1}+B^{-1})=I\), so
+\[
+ A^{-1}-A^{-1}CA^{-1}
+ =A^{-1}(I-CA^{-1})=A^{-1}CB^{-1}=D^{-1};
+\]
+the other formula follows by interchange.
+
+Set \(h=A^{-1}a+B^{-1}b\) and \(\mu=Ch\).
+Expansion of both sides of (b) gives the same quadratic term
+\(x^\top C^{-1}x\) and linear term \(-2x^\top h\), provided
+\[
+ Q(a,b)=a^\top A^{-1}a+b^\top B^{-1}b-h^\top Ch.
+\]
+Using (a), the coefficients of the pure \(a\) and pure \(b\) terms
+are \(D^{-1}\), while the two cross terms are
+\(-a^\top D^{-1}b-b^\top D^{-1}a\).
+Thus \(Q(a,b)=(a-b)^\top D^{-1}(a-b)\), as claimed.
+\end{solution}
+
+\begin{problem}[*A shift and a gap in the spectrum]\label{ex:09:kato}
+\begin{enumerate}
+\item For symmetric \(A\), show that some real \(k\) makes \(kI+A\) PD.
+\item If symmetric \(A\) has no eigenvalue in \([a,b]\), where \(a\leqslant b\),
+prove \((A-aI)(A-bI)\succ0\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Choose \(k>-\lambda_{\min}(A)\); the shifted eigenvalues \(k+\lambda_i\)
+are all positive.
+For (b), the two factors commute and are simultaneously diagonal in an
+eigenbasis of \(A\). Their product has eigenvalues
+\((\lambda_i-a)(\lambda_i-b)\).
+Since \(\lambda_i<a\) or \(\lambda_i>b\), both factors have the same
+strict sign. Every product is positive, proving the claim, also when
+\(a=b\).
+\end{solution}
+
+\begin{problem}[A sum of two rank-one matrices]\label{ex:09:rank-two-plus}
+Let \(a,b\in\R^n\) be independent and \(A=aa^\top+bb^\top\).
+Prove \(A\succeq0\) with rank two. Find its two positive eigenvalues
+through a two-by-two equation, and express the corresponding eigenvectors
+as combinations of \(a,b\).
+\end{problem}
+\begin{solution}
+Let \(X=(a\ b)\). Then \(A=XX^\top\succeq0\), and the Gram rank identity
+gives \(\operatorname{rank}A=\operatorname{rank}X=2\).
+Its image is \(\operatorname{span}(a,b)\). A nonzero eigenvalue has
+eigenvector \(x=\lambda^{-1}Ax\) in that image, so write
+\(x=\theta_1a+\theta_2b\).
+Independence makes \(Ax=\lambda x\) equivalent to
+\[
+ \begin{pmatrix}\lambda-a^\top a&-a^\top b\\
+                 -a^\top b&\lambda-b^\top b\end{pmatrix}
+ \begin{pmatrix}\theta_1\\\theta_2\end{pmatrix}=0.
+\]
+The Gram matrix \(X^\top X\) is PD, so its two eigenvalues are positive;
+they are the roots of
+\[
+ \lambda^2-(\norm a^2+\norm b^2)\lambda
+ +\norm a^2\norm b^2-(a^\top b)^2=0.
+\]
+Every nonzero solution \(\theta\) produces a nonzero eigenvector \(X\theta\).
+All remaining \(n-2\) eigenvalues are zero.
+\end{solution}
+
+\begin{problem}[A difference of two rank-one matrices]\label{ex:09:rank-two-minus}
+Let \(a,b\in\R^n\) be independent and \(A=aa^\top-bb^\top\).
+Prove its rank is two and its two nonzero eigenvalues have opposite signs.
+Derive the equation
+\[
+ \begin{pmatrix}\lambda-a^\top a&a^\top b\\
+                 -a^\top b&\lambda+b^\top b\end{pmatrix}
+ \begin{pmatrix}\theta_1\\\theta_2\end{pmatrix}=0
+\]
+and show the corresponding eigenvectors are \(x=\theta_1a-\theta_2b\).
+\end{problem}
+\begin{solution}
+The image lies in \(\operatorname{span}(a,b)\).
+In the basis \(a,-b\) of this plane, the restriction has matrix
+\[
+ K=\begin{pmatrix}\norm a^2&-a^\top b\\
+                  a^\top b&-\norm b^2\end{pmatrix}.
+\]
+Its determinant is
+\((a^\top b)^2-\norm a^2\norm b^2<0\), by strict Schwarz for independent
+vectors. Thus its restriction is invertible, so the rank is two.
+Its characteristic polynomial has real coefficients and negative
+constant term; its discriminant is the squared trace minus four times
+that negative determinant, hence positive. The two real roots have
+negative product and therefore opposite signs.
+The displayed equation is \((\lambda I-K)\theta=0\), and
+\(x=\theta_1a-\theta_2b\) translates it back to the original space.
+Thus the form is indefinite.
+\end{solution}
+
+\begin{problem}[Factors of a PSD matrix]\label{ex:09:psd-factor}
+Let \(A\succeq0\) have order \(n\) and rank \(r\).
+\begin{enumerate}
+\item Construct \(T\in\R^{n\times r}\) and positive diagonal
+\(\Lambda\in\R^{r\times r}\) with \(A=TT^\top\), \(T^\top T=\Lambda\).
+\item For each \(r\leqslant m\leqslant n\), construct an \(n\times m\)
+matrix \(B\) with \(A=BB^\top\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Take the orthonormal eigenvectors \(q_1,\ldots,q_r\) for the positive
+eigenvalues and put
+\(T=(\sqrt{\lambda_1}q_1\ \cdots\ \sqrt{\lambda_r}q_r)\).
+Then \(TT^\top=\sum_{j=1}^r\lambda_jq_jq_j^\top=A\), and
+\(T^\top T=\operatorname{diag}(\lambda_1,\ldots,\lambda_r)\).
+If \(A\) is PD, \(r=n\) and \(T\) is square and invertible.
+For (b), append \(m-r\) zero columns to \(T\).
+For \(A=0\), use the empty matrix when \(r=m=0\), or a zero matrix
+of the requested positive width.
+\end{solution}
+
+\begin{problem}[Cholesky factorization in the definite case]\label{ex:09:cholesky}
+Prove that every real \(A\succ0\) can be written \(A=LL^\top\), where
+\(L\) is lower triangular with positive diagonal entries.
+\end{problem}
+\begin{solution}
+Induct on the order. For \(n=1\), take \(L=[\sqrt{a_{11}}]\).
+Partition
+\(A=\begin{pmatrix}a&b^\top\\b&D\end{pmatrix}\), where \(a>0\).
+For \(y\ne0\), test the nonzero vector
+\((-b^\top y/a,y^\top)^\top\); positivity gives
+\(y^\top(D-bb^\top/a)y>0\).
+Thus \(S=D-bb^\top/a\) is PD.
+By induction \(S=L_2L_2^\top\), with \(L_2\) lower triangular and
+positive diagonal. Set
+\[
+ L=\begin{pmatrix}\sqrt a&0\\b/\sqrt a&L_2\end{pmatrix}.
+\]
+Multiplication gives \(LL^\top=A\), and every diagonal entry is positive.
+This proves precisely the positive-definite case.
+\end{solution}
+
+\begin{problem}[*The unique PSD square root]\label{ex:09:square-root}
+\begin{enumerate}
+\item Construct a PSD \(B\) with \(B^2=A\) when \(A\succeq0\).
+\item Prove this PSD \(B\) is unique, although unrestricted square roots
+need not be unique.
+\item If \(A\succ0\), prove
+\((A^{-1})^{1/2}=(A^{1/2})^{-1}\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+An orthonormal eigenbasis gives
+\(B=Q\operatorname{diag}(\sqrt{\lambda_i})Q^\top\), proving existence
+and providing a calculation method.
+If another PSD \(C\) satisfies \(C^2=A\), then \(CA=AC\).
+Therefore each eigenspace \(E_\lambda(A)\) is invariant under \(C\).
+On this space \(C\) is self-adjoint and PSD, so it has an orthonormal
+eigenbasis with eigenvalues \(\mu\geqslant0\).
+The identity \(C^2=A\) gives \(\mu^2=\lambda\), hence
+\(\mu=\sqrt\lambda\).
+Thus \(C\) acts as \(\sqrt\lambda I\) on every \(E_\lambda(A)\), exactly
+as \(B\) does; the eigenspaces span the whole space, so \(C=B\).
+For example \(I\) has the unrestricted square roots \(I\) and \(-I\),
+showing the PSD restriction matters.
+When \(A\succ0\), both matrices in (c) have eigenvectors \(q_i\)
+and eigenvalues \(1/\sqrt{\lambda_i}\), proving their equality.
+\end{solution}
+
+\begin{problem}[Matrix quadratic forms]\label{ex:09:matrix-forms}
+Let \(A\succeq0\) be \(n\times n\) and \(B\in\R^{n\times m}\).
+\begin{enumerate}
+\item Prove \(B^\top AB\succeq0\) and
+\(\operatorname{rank}(B^\top AB)=\operatorname{rank}(AB)\).
+\item Prove \(B^\top AB=0\) iff \(AB=0\).
+\item If \(A\succ0\), prove
+\(\operatorname{rank}(B^\top AB)=\operatorname{rank}B\);
+deduce the conditions for \(B^\top AB\succ0\) and for \(B^\top AB=0\).
+\item Even if \(B\) has full column rank \(m<n\), does
+\(B^\top AB\succ0\) imply \(A\succ0\)?
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Set \(C=A^{1/2}B\). Then \(B^\top AB=C^\top C\succeq0\), with
+kernel \(\ker C\).
+Spectral decomposition gives \(\ker A^{1/2}=\ker A\).
+Therefore \(Cx=0\) iff \(ABx=0\); equal kernels on the \(m\)-dimensional
+domain give equal ranks, proving (a). The rank is zero exactly when
+\(AB=0\), giving (b).
+If \(A\succ0\), multiplication by \(A^{1/2}\) preserves rank, so
+the Gram matrix has rank \(\operatorname{rank}B\).
+It is PD exactly when \(B\) has rank \(m\), and zero exactly when \(B=0\).
+For (d), take \(A=\operatorname{diag}(1,0)\) and \(B=(1,0)^\top\).
+Then \(B^\top AB=[1]\succ0\), but \(A\) is singular.
+\end{solution}
+
+\begin{problem}[Congruence preserves the sign of a form]\label{ex:09:congruence}
+If \(A\) is real symmetric and \(B\) is invertible of the same order,
+prove
+\[
+ B^\top AB\succ0\iff A\succ0,\qquad
+ B^\top AB\succeq0\iff A\succeq0.
+\]
+\end{problem}
+\begin{solution}
+For every \(x\),
+\(x^\top B^\top ABx=(Bx)^\top A(Bx)\).
+An invertible \(B\) maps all vectors bijectively onto all vectors and
+nonzero vectors onto nonzero vectors. The required strict or weak
+inequality therefore holds on one side exactly when it holds on the
+other. The two matrices need not have the same eigenvalues; this is
+a statement about signs of quadratic values.
+\end{solution}
+
+\begin{problem}[Eigenvalues between zero and one]\label{ex:09:shrinkage}
+Let \(A\succeq0\), \(B\succ0\). Prove every eigenvalue of
+\((A+B)^{-1}A\) lies in \([0,1)\).
+\end{problem}
+\begin{solution}
+Set \(C=A+B\succ0\).
+The given matrix is similar, via \(C^{1/2}\), to
+\(H=C^{-1/2}AC^{-1/2}\), which is symmetric PSD.
+Moreover
+\(I-H=C^{-1/2}BC^{-1/2}\succ0\).
+For a unit eigenvector of \(H\), these two sign statements give
+\(\lambda\geqslant0\) and \(1-\lambda>0\).
+Similarity preserves the eigenvalues, proving the result even though
+\((A+B)^{-1}A\) need not itself be symmetric.
+\end{solution}
+
+\begin{problem}[Principal submatrices]\label{ex:09:principal}
+Prove every principal submatrix of a PSD matrix is PSD, and every
+principal submatrix of a PD matrix is PD.
+\end{problem}
+\begin{solution}
+For selected coordinates indexed by \(S\), let \(A_S\) be the principal
+submatrix. Extend a vector \(y\) on those coordinates to \(x\) by
+putting zeros in all other coordinates. Then \(y^\top A_Sy=x^\top Ax\).
+Nonnegativity follows for every \(y\), and \(y\ne0\) gives \(x\ne0\),
+so strict positivity is also inherited.
+\end{solution}
+
+\begin{problem}[*Positive leading principal minors]\label{ex:09:leading-minors}
+Prove a real symmetric \(A\) is PD if and only if all leading principal
+minors are positive.
+\end{problem}
+\begin{solution}
+If \(A\) is PD, every leading principal submatrix is PD and has positive
+determinant, proving necessity.
+For sufficiency induct on \(n\). The case \(n=1\) is immediate.
+Write \(A=\begin{pmatrix}a&b^\top\\b&D\end{pmatrix}\), with \(a>0\).
+For each leading principal submatrix \(S_k\) of
+\(S=D-bb^\top/a\), the Schur determinant formula gives
+\(\det S_k=\det A_{k+1}/a>0\).
+By induction \(S\succ0\).
+For \(x=(t,y^\top)^\top\),
+\[
+ x^\top Ax=a\left(t+\frac{b^\top y}{a}\right)^2+y^\top Sy.
+\]
+This is strictly positive if \(y\ne0\), or if \(y=0,t\ne0\).
+Hence \(A\succ0\).
+\end{solution}
+
+\begin{problem}[*All principal minors for semidefiniteness]\label{ex:09:all-minors}
+Prove a real symmetric \(A\) is PSD if and only if all its principal
+minors, not merely the leading ones, are nonnegative.
+\end{problem}
+\begin{solution}
+Necessity follows because principal submatrices of a PSD matrix are PSD
+and their eigenvalue products are nonnegative.
+Conversely expand \(\det(tI+A)\) by multilinearity in the columns.
+Selecting columns from \(A\) at positions in \(S\), and \(te_j\)
+elsewhere, contributes \(t^{n-|S|}\det A_S\).
+The cofactor sign for selecting the same omitted rows and columns is
+positive. Therefore
+\[
+ \det(tI+A)=\sum_{S\subseteq\{1,\ldots,n\}}t^{n-|S|}\det A_S,
+ \qquad \det A_\varnothing=1.
+\]
+If all principal minors are nonnegative, this expression is strictly
+positive for \(t>0\), because it includes \(t^n\).
+A negative eigenvalue \(\lambda\) of \(A\) would make it zero at
+\(t=-\lambda>0\), a contradiction.
+All eigenvalues are nonnegative, so \(A\succeq0\).
+\end{solution}
+
+\begin{problem}[Small minors and one zero determinant]\label{ex:09:small-minors}
+\begin{enumerate}
+\item For real \(a,b,p\), classify
+\[
+ A=\begin{pmatrix}0&0\\0&p\end{pmatrix},\qquad
+ B=\begin{pmatrix}1&a&b\\a&a^2&ab\\b&ab&p\end{pmatrix}
+\]
+as PD or PSD, and list their principal minors. Explain why their
+leading principal minors are nonnegative for every \(p\).
+\item If a symmetric \(n\times n\) matrix has positive leading principal
+minors of orders \(1,\ldots,n-1\), but determinant zero, prove it is PSD.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Neither displayed matrix is PD: \(Ae_1=0\), and
+\(B(a,-1,0)^\top=0\).
+For \(A\), the principal minors are \(0,p\) and \(0\), so it is PSD
+exactly when \(p\geqslant0\).
+For \(B\), the order-one minors are \(1,a^2,p\); the order-two minors,
+on indices \(12,13,23\), are
+\(0,p-b^2,a^2(p-b^2)\), and its determinant is zero.
+Its quadratic form is
+\((x+ay+bz)^2+(p-b^2)z^2\), hence it is PSD exactly when \(p\geqslant b^2\).
+The leading minors are \(0,0\) for \(A\), and \(1,0,0\) for \(B\),
+regardless of \(p\).
+
+For (b), the case \(n=1\) is the zero scalar matrix.
+For \(n>1\), partition as
+\(M=\begin{pmatrix}C&b\\b^\top&d\end{pmatrix}\), where \(C\succ0\)
+by the leading-minor criterion. The determinant formula gives
+\(0=\det C(d-b^\top C^{-1}b)\), so \(d=b^\top C^{-1}b\).
+Then
+\[
+ (x^\top,t)M(x^\top,t)^\top
+ =(x+tC^{-1}b)^\top C(x+tC^{-1}b)\geqslant0.
+\]
+\end{solution}
+
+\begin{problem}[Adding a PSD matrix increases determinant]\label{ex:09:det-monotone}
+If \(A\succ0\), \(B\succeq0\), prove
+\(\det(A+B)\geqslant\det A\), with equality exactly when \(B=0\).
+\end{problem}
+\begin{solution}
+Set \(C=A^{-1/2}BA^{-1/2}\succeq0\).
+Factoring gives
+\(\det(A+B)=\det A\,\det(I+C)
+=\det A\prod_i(1+\mu_i)\), where \(\mu_i\geqslant0\).
+Each factor is at least one. Equality holds exactly when all \(\mu_i=0\),
+which by spectral decomposition means \(C=0\), equivalently \(B=0\).
+\end{solution}
+
+\begin{problem}[Real eigenvalues of a nonsymmetric product]\label{ex:09:real-product}
+If \(A,B\) are real symmetric and at least one is PSD, prove that
+\(p_{AB}\) splits into real linear factors.
+\end{problem}
+\begin{solution}
+Suppose \(A\succeq0\).
+Set \(X=A^{1/2}\) and \(Y=A^{1/2}B\).
+Then \(XY=AB\), while \(YX=A^{1/2}BA^{1/2}\) is symmetric.
+The equal-size product identity gives identical characteristic
+polynomials for \(XY,YX\), including their zero roots.
+The real spectral theorem factors the characteristic polynomial of
+\(YX\) into real linear factors. The same is therefore true for
+\(AB\), even when \(A\) is singular.
+If \(B\succeq0\), apply the argument to \(BA\), which has the same
+characteristic polynomial as \(AB\).
+\end{solution}
+
+\begin{problem}[Simultaneous congruence with one positive form]\label{ex:09:simultaneous-congruence}
+Let \(A\succ0\) and \(B=B^\top\) have the same order.
+Prove there are invertible \(T\) and real diagonal \(\Lambda\) such that
+\[
+ A=TT^\top,\qquad B=T\Lambda T^\top,
+\]
+where \(\Lambda\) contains the eigenvalues of \(A^{-1}B\).
+\end{problem}
+\begin{solution}
+The matrix \(H=A^{-1/2}BA^{-1/2}\) is real symmetric.
+Choose orthogonal \(Q\) with \(H=Q\Lambda Q^\top\), and put
+\(T=A^{1/2}Q\).
+Then \(TT^\top=A\) and \(T\Lambda T^\top=B\).
+Also
+\(A^{1/2}(A^{-1}B)A^{-1/2}=H\), so \(A^{-1}B\) is similar to \(H\)
+and has the eigenvalues on the diagonal of \(\Lambda\).
+\end{solution}
+
+\begin{problem}[Subtract a rank-one matrix]\label{ex:09:downdate}
+For \(A\succ0\) and a real column \(a\), prove
+\(A-aa^\top\succ0\) if and only if \(a^\top A^{-1}a<1\).
+\end{problem}
+\begin{solution}
+Congruence by \(A^{-1/2}\) turns the matrix into \(I-uu^\top\),
+where \(u=A^{-1/2}a\).
+If \(u=0\), this is \(I\) and the condition is \(0<1\).
+Otherwise it acts as \(1-\norm u^2\) on \(\operatorname{span}u\)
+and as \(1\) on \(u^\perp\).
+Thus it is PD exactly when \(\norm u^2=a^\top A^{-1}a<1\).
+\end{solution}
+
+\begin{problem}[Diagonal blocks and their order]\label{ex:09:block-sign}
+\begin{enumerate}
+\item Prove \(\operatorname{diag}(A,D)\) is PD (respectively PSD)
+exactly when both \(A,D\) are PD (respectively PSD).
+\item Prove
+\[
+ \begin{pmatrix}A&B\\B^\top&D\end{pmatrix}\succ0
+ \quad\Longleftrightarrow\quad
+ \begin{pmatrix}D&B^\top\\B&A\end{pmatrix}\succ0.
+\]
+\end{enumerate}
+\end{problem}
+\begin{solution}
+For (a), the quadratic form is \(x^\top Ax+y^\top Dy\).
+Both positive terms give the stated sign; necessity follows by setting
+one of \(x,y\) to zero.
+For (b), interchange the coordinate groups \(x,y\).
+This is an invertible permutation of all nonzero vectors, and the
+quadratic value is unchanged. Equivalently the matrices are congruent
+by an orthogonal block permutation.
+\end{solution}
+
+\begin{problem}[Fischer's determinant inequality]\label{ex:09:fischer}
+If \(Z=\begin{pmatrix}A&B\\B^\top&D\end{pmatrix}\succeq0\), prove
+\(\det Z\leqslant\det A\det D\).
+\end{problem}
+\begin{solution}
+First suppose \(Z\succ0\). Its principal block \(A\) is PD, and testing
+vectors \((-A^{-1}By,y^\top)^\top\) shows
+\(S=D-B^\top A^{-1}B\succ0\).
+The determinant formula gives \(\det Z=\det A\det S\).
+Since \(D=S+B^\top A^{-1}B\) and the second term is PSD,
+the determinant monotonicity result gives \(\det D\geqslant\det S\).
+Multiplying by \(\det A>0\) proves the inequality.
+
+For general PSD \(Z\), apply this to \(Z+\epsilon I\), \(\epsilon>0\).
+Its diagonal blocks are \(A+\epsilon I,D+\epsilon I\), giving
+\[
+ \det(Z+\epsilon I)
+ \leqslant\det(A+\epsilon I)\det(D+\epsilon I).
+\]
+Each determinant is a polynomial in \(\epsilon\) and hence continuous.
+Let \(\epsilon\) decrease to zero to obtain the stated inequality,
+including singular diagonal blocks.
+\end{solution}
+
+\begin{problem}[Positive Schur complements]\label{ex:09:positive-schur}
+For symmetric diagonal blocks in
+\(Z=\begin{pmatrix}A&B\\B^\top&D\end{pmatrix}\), prove that \(Z\succ0\)
+exactly when \(A\succ0\) and \(D-B^\top A^{-1}B\succ0\).
+Prove the equivalent criterion using \(D\) and \(A-BD^{-1}B^\top\).
+\end{problem}
+\begin{solution}
+When \(A\succ0\), complete the square:
+\[
+ (x^\top,y^\top)Z(x^\top,y^\top)^\top
+ =(x+A^{-1}By)^\top A(x+A^{-1}By)
+   +y^\top(D-B^\top A^{-1}B)y.
+\]
+If both named blocks are PD, the right side is positive for every
+nonzero pair \((x,y)\): either \(y\ne0\), or \(y=0,x\ne0\).
+Conversely \(Z\succ0\) implies \(A\succ0\) by principal submatrices,
+and choosing \(x=-A^{-1}By\), \(y\ne0\), makes the second form strictly
+positive. Interchanging the two coordinate groups gives the criterion
+using \(D\).
+\end{solution}
+
+\begin{problem}[*Positive block matrices and contractions]\label{ex:09:contractions}
+For real symmetric \(A\) of order \(m\), \(D\) of order \(n\), and
+\(B\in\R^{m\times n}\), prove that
+\[
+ \begin{pmatrix}A&B\\B^\top&D\end{pmatrix}\succeq0
+\]
+if and only if \(A,D\succeq0\) and there is \(C\in\R^{m\times n}\) with
+\(B=A^{1/2}CD^{1/2}\) and \(C^\top C\preceq I_n\).
+\end{problem}
+\begin{solution}
+For sufficiency, put \(u=A^{1/2}x\), \(v=D^{1/2}y\).
+The block quadratic form is
+\[
+ \norm u^2+2u^\top Cv+\norm v^2
+ =\norm{u+Cv}^2+v^\top(I-C^\top C)v\geqslant0.
+\]
+
+For necessity, the principal blocks are PSD.
+If \(x\in\ker A\), testing \((tx,y)\) for all real \(t\) gives
+\(2t\,x^\top By+y^\top Dy\geqslant0\), hence \(B^\top x=0\).
+Likewise \(y\in\ker D\) implies \(By=0\).
+Take orthonormal matrices \(U,V\) spanning the positive eigenspaces of
+\(A,D\), and write
+\(A=U\Delta U^\top\), \(D=V\Gamma V^\top\), where the diagonal
+entries of \(\Delta,\Gamma\) are positive.
+The kernel relations give
+\(B=UU^\top B VV^\top\).
+If either positive eigenspace is zero, then \(B=0\), and \(C=0\) works.
+
+Otherwise define
+\(C_0=\Delta^{-1/2}U^\top BV\Gamma^{-1/2}\).
+Restrict the original quadratic form to these eigenspaces and scale
+coordinates by the inverse square roots. This gives
+\(\begin{pmatrix}I&C_0\\C_0^\top&I\end{pmatrix}\succeq0\).
+Testing \((-C_0z,z)\) yields
+\(z^\top(I-C_0^\top C_0)z\geqslant0\).
+Set \(C=UC_0V^\top\).
+Then \(A^{1/2}CD^{1/2}=B\), and
+\[
+ \norm{Cy}^2=\norm{C_0V^\top y}^2
+ \leqslant\norm{V^\top y}^2\leqslant\norm y^2.
+\]
+Thus \(C^\top C\preceq I_n\). No inverse of a singular diagonal block
+has been used.
+\end{solution}
+
+\begin{problem}[*A bordered Gram matrix]\label{ex:09:bordered-kernel}
+Let \(A\succeq0\) have order \(m\), \(B\in\R^{m\times n}\), and
+\[
+ Z=\begin{pmatrix}A&B\\B^\top&0\end{pmatrix},\qquad G=A+BB^\top.
+\]
+Give an example where \(A\) is singular and \(Z\) is invertible, and
+state whether \(G\) is singular in that example.
+Prove that \(Z\) is invertible exactly when \(B\) has full column rank
+and \(G\succ0\).
+\end{problem}
+\begin{solution}
+Take scalar blocks \(A=0,B=1\). Then \(Z\) exchanges the two coordinates
+and is invertible, while \(G=1\) is also invertible.
+
+In general \(G\succeq0\), and
+\(u^\top Gu=u^\top Au+\norm{B^\top u}^2\).
+For a PSD matrix, \(u^\top Au=0\) iff \(Au=0\), by its spectral
+representation. Therefore
+\(\ker G=\ker A\cap\ker B^\top\).
+The equations \(Z(u,v)^\top=0\) are
+\(Au+Bv=0\), \(B^\top u=0\).
+Multiplying the first by \(u^\top\) gives \(u^\top Au=0\), hence
+\(Au=0\) and \(Bv=0\).
+Thus
+\[
+ \ker Z=(\ker G)\times(\ker B).
+\]
+It is zero precisely when \(G\) is invertible, equivalently PD,
+and \(B\) has full column rank.
+The same kernel decomposition gives the stronger rank formula
+\(\operatorname{rank}Z=\operatorname{rank}G+\operatorname{rank}B\).
+\end{solution}
+
+\begin{problem}[Inverse and determinant of the bordered matrix]\label{ex:09:bordered-formulas}
+Use \(A,B,Z,G\) as in the preceding problem.
+\begin{enumerate}
+\item If \(Z\) is invertible, put \(H=B^\top G^{-1}B\).
+Prove \(H\succ0\) and
+\[
+ Z^{-1}=
+ \begin{pmatrix}
+ G^{-1}-G^{-1}BH^{-1}B^\top G^{-1}&G^{-1}BH^{-1}\\
+ H^{-1}B^\top G^{-1}&I-H^{-1}
+ \end{pmatrix}.
+\]
+\item Assuming only \(G\) is invertible, prove
+\(\det Z=(-1)^n\det G\det(B^\top G^{-1}B)\).
+\item If \(A\) is invertible, prove
+\(\det Z=(-1)^n\det A\det(B^\top A^{-1}B)\).
+Deduce, for PD \(A\), the equality of the two products without
+the factor \((-1)^n\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+For (a), invertibility of \(Z\) gives \(G\succ0\) and full column rank
+of \(B\), so \(H\succ0\) by the matrix quadratic-form result.
+Write the proposed blocks as \(M,N,N^\top,K\), in order.
+Then \(B^\top M=0\), \(B^\top N=I\).
+Using \(A=G-BB^\top\),
+\[
+ AM=GM=I-BN^\top,\qquad
+ AN+BK=B H^{-1}-B+B-BH^{-1}=0.
+\]
+Thus multiplication by \(Z\) on the left gives the identity.
+Both matrices are symmetric, so transposing gives the other product
+as well. This proves the inverse formula.
+
+For (b), add \(B\) times the second block row of \(Z\) to its first.
+This leaves the determinant unchanged and gives
+\(\begin{pmatrix}G&B\\B^\top&0\end{pmatrix}\).
+Its Schur complement is \(-B^\top G^{-1}B\), proving (b).
+No invertibility of that Schur complement is required.
+If \(A\) is invertible, apply the same Schur formula directly to \(Z\),
+giving (c). For \(A\succ0\), \(G=A+BB^\top\succ0\), so both formulas
+apply to the same determinant. Cancelling \((-1)^n\) gives
+\[
+ \det G\det(B^\top G^{-1}B)=\det A\det(B^\top A^{-1}B),
+\]
+even if \(B\) is not full column rank and both sides vanish.
+\end{solution}
+
+\subsection*{Idempotents and projections}
+In this section \(P^2=P\) means that \(P\) is idempotent. Matrices are
+real; symmetry is imposed only when stated.
+
+\begin{problem}[Basic idempotent operations]\label{ex:09:idempotent-basics}
+\begin{enumerate}
+\item Determine the diagonal entries of a diagonal idempotent.
+\item If \(P\) is idempotent, show \(P^\top,P^k\) for \(k\geqslant1\),
+and \(I-P\) are idempotent. When is \(-P\) idempotent?
+\item Show \(\operatorname{diag}(P,Q)\) is idempotent exactly when both
+diagonal blocks are idempotent.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+A diagonal entry satisfies \(d^2=d\), so it is \(0\) or \(1\).
+Transposing \(P^2=P\) gives \((P^\top)^2=P^\top\).
+Induction gives \(P^k=P\), while
+\((I-P)^2=I-2P+P^2=I-P\).
+For \(-P\), the required identity is \(P=-P\), equivalent over the
+reals to \(P=0\).
+Finally block multiplication gives
+\(\operatorname{diag}(P,Q)^2=\operatorname{diag}(P^2,Q^2)\),
+proving the last equivalence.
+\end{solution}
+
+\begin{problem}[Nonsymmetric examples and a false converse]\label{ex:09:idempotent-examples}
+\leavevmode\par
+\begin{enumerate}
+\item Construct a nonsymmetric idempotent of rank greater than one.
+\item Prove an idempotent's eigenvalues belong to \(\{0,1\}\).
+Does an eigenvalue list contained in \(\{0,1\}\) imply idempotence?
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Take \(P=\begin{pmatrix}1&0&1\\0&1&0\\0&0&0\end{pmatrix}\).
+Its square is itself, its first two columns are independent and its
+image is their span, so its rank is two; it is not symmetric.
+If \(Pv=\lambda v\), then \(Pv=P^2v=\lambda^2v\), giving
+\(\lambda^2=\lambda\).
+Conversely \(\begin{pmatrix}1&1\\0&1\end{pmatrix}\) has only
+eigenvalue \(1\), but its square is
+\(\begin{pmatrix}1&2\\0&1\end{pmatrix}\), so it is not idempotent.
+The missing property is diagonalizability, which idempotence itself
+does imply.
+\end{solution}
+
+\begin{problem}[Ordering orthogonal projectors]\label{ex:09:projector-order}
+If \(P,Q\) are symmetric idempotents of the same order, prove
+\(P\succeq Q\) if and only if \(PQ=Q\).
+\end{problem}
+\begin{solution}
+Suppose \(P-Q\succeq0\). If \(u\in\operatorname{im}Q\), then \(Qu=u\),
+so
+\(0\leqslant u^\top(P-Q)u=\norm{Pu}^2-\norm u^2\leqslant0\).
+The last inequality is the Pythagorean decomposition
+\(u=Pu+(I-P)u\) for an orthogonal projector.
+Equality forces \((I-P)u=0\); hence \(Pu=u\) on \(\operatorname{im}Q\),
+giving \(PQ=Q\).
+Conversely, \(PQ=Q\) and transposition give \(QP=Q\). Thus
+\((P-Q)^2=P-Q\), and \(P-Q\) is symmetric idempotent.
+Its eigenvalues are \(0,1\), so it is PSD.
+\end{solution}
+
+\begin{problem}[Diagonal form and trace of an idempotent]\label{ex:09:idempotent-diagonal}
+Let \(P\) be an idempotent of order \(n\).
+\begin{enumerate}
+\item Prove \(\R^n=\operatorname{im}P\oplus\ker P\), and construct a
+similarity \(T^{-1}PT=\operatorname{diag}(I_r,0)\).
+\item Construct an orthogonal, matrix \(S\) with
+\(S^\top PS=\begin{pmatrix}I_r&C\\0&0\end{pmatrix}\).
+\item Prove \(\operatorname{rank}P=\tr P=r\), where \(r\) is the
+algebraic multiplicity of eigenvalue \(1\).
+\item Prove rank \(n\) is equivalent to \(P=I\), and all eigenvalues
+zero is equivalent to \(P=0\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Every vector decomposes as
+\(x=Px+(x-Px)\), with first term in the image and second in the kernel.
+If \(y=Pz\) and \(Py=0\), then \(y=P^2z=Py=0\), proving directness.
+Take \(T\)'s first columns as a basis of the image, on which \(P\)
+acts as the identity, and the remaining columns as a basis of the kernel,
+on which it acts as zero. This proves (a), with \(r=\operatorname{rank}P\).
+
+For (b), choose instead an orthonormal basis of the image and extend it
+to an orthonormal basis of the whole space. The first columns are fixed
+by \(P\), and every remaining column is mapped into the image.
+Therefore its matrix has exactly the displayed form.
+The diagonalization in (a) gives characteristic polynomial
+\((t-1)^r t^{n-r}\) and trace \(r\), since trace is similarity invariant.
+This proves (c).
+If rank is \(n\), the image is the whole space and \(P\) acts as the
+identity. If all eigenvalues are zero, \(r=0\), so the rank is zero
+and \(P=0\). Both converses are immediate.
+\end{solution}
+
+\begin{problem}[A rank characterization of idempotence]\label{ex:09:idempotent-ranks}
+For any real square \(A\) of order \(n\), prove
+\[
+ A^2=A\quad\Longleftrightarrow\quad
+ \operatorname{rank}A+\operatorname{rank}(I-A)=n.
+\]
+In particular this holds for symmetric \(A\).
+\end{problem}
+\begin{solution}
+If \(A^2=A\), then
+\(\operatorname{im}(I-A)=\ker A\), by the decomposition in the
+preceding problem. Rank--nullity gives the rank equality.
+Conversely \(x=Ax+(I-A)x\) shows
+\(\operatorname{im}A+\operatorname{im}(I-A)=\R^n\).
+If the dimensions sum to \(n\), the intersection is zero.
+But for every \(x\),
+\(A(I-A)x=(I-A)Ax\) belongs to both images, so it is zero.
+Hence \(A-A^2=0\).
+\end{solution}
+
+\begin{problem}[When a sum is idempotent]\label{ex:09:idempotent-sum}
+Let \(P,Q\) be idempotents of the same order.
+\begin{enumerate}
+\item Prove \(P+Q\) is idempotent exactly when \(PQ=QP=0\).
+\item In that case, prove
+\(\operatorname{rank}(P+Q)=\operatorname{rank}P+\operatorname{rank}Q\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Expanding gives \((P+Q)^2=P+Q+PQ+QP\).
+If the sum is idempotent, \(PQ+QP=0\).
+Multiplying this equation by \(P\) on the left and on the right gives
+\(PQ+PQP=0\) and \(PQP+QP=0\), respectively.
+Subtracting yields \(PQ=QP\); combined with their zero sum, this gives
+\(PQ=QP=0\). The converse follows from the expansion.
+All three matrices are now idempotent, so rank equals trace for each:
+\[
+ \operatorname{rank}(P+Q)=\tr(P+Q)=\tr P+\tr Q
+ =\operatorname{rank}P+\operatorname{rank}Q.
+\]
+No symmetry was used.
+\end{solution}
+
+\begin{problem}[Two absorption identities]\label{ex:09:absorption}
+If \(AB=A\) and \(BA=B\), prove that both \(A,B\) are idempotent.
+\end{problem}
+\begin{solution}
+Associativity gives
+\(A^2=(AB)A=A(BA)=AB=A\).
+Likewise \(B^2=(BA)B=B(AB)=BA=B\).
+\end{solution}
+
+\begin{problem}[Two complementary column spaces]\label{ex:09:complementary}
+Let \(A=(A_1\ A_2)\) be square of order \(n\), with
+\(\operatorname{rank}A_1+\operatorname{rank}A_2=n\) and
+\(A_1^\top A_2=0\). Prove
+\[
+ A_1(A_1^\top A_1)^{-1}A_1^\top
+ +A_2(A_2^\top A_2)^{-1}A_2^\top=I_n.
+\]
+\end{problem}
+\begin{solution}
+If the respective column counts are \(k,n-k\), their ranks are at most
+these counts; the rank sum forces equality in each. Thus both Gram
+matrices are invertible.
+The column spaces are orthogonal by \(A_1^\top A_2=0\), and their
+dimensions sum to \(n\); hence their orthogonal direct sum is \(\R^n\).
+Each displayed term is the orthogonal projector onto its corresponding
+column space. Their sum therefore fixes every vector and equals \(I_n\).
+The projector formula follows directly by solving the normal equations
+for projection, or by an orthonormal basis of each column space.
+Empty column groups may be omitted from the formula.
+\end{solution}
+
+\subsection*{Extrema and complete numerical examples}
+
+\begin{problem}[Convex and concave extremal eigenvalues]\label{ex:09:eigen-convexity}
+For symmetric \(A,B\) of order \(n\) and \(0\leqslant\alpha\leqslant1\),
+prove
+\[
+ \lambda_{\max}(\alpha A+(1-\alpha)B)
+ \leqslant\alpha\lambda_{\max}(A)+(1-\alpha)\lambda_{\max}(B),
+\]
+\[
+ \lambda_{\min}(\alpha A+(1-\alpha)B)
+ \geqslant\alpha\lambda_{\min}(A)+(1-\alpha)\lambda_{\min}(B).
+\]
+\end{problem}
+\begin{solution}
+For every unit \(x\), the Rayleigh bounds give
+\[
+ \alpha\lambda_{\min}(A)+(1-\alpha)\lambda_{\min}(B)
+ \leqslant x^\top\{\alpha A+(1-\alpha)B\}x
+ \leqslant\alpha\lambda_{\max}(A)+(1-\alpha)\lambda_{\max}(B).
+\]
+Taking the minimum in the first inequality and maximum in the second
+proves the two claims. The nonnegative weights are essential.
+Thus the largest eigenvalue is a convex function of the symmetric
+matrix, and the smallest is concave.
+\end{solution}
+
+\begin{problem}[Extrema on a circle]\label{ex:09:circle}
+Find the eigenvalues and maximum of the quadratic form on the unit
+circle for
+\[
+ A=\begin{pmatrix}2&-1\\-1&2\end{pmatrix},\qquad
+ B=\begin{pmatrix}1&1\\1&0\end{pmatrix}.
+\]
+\end{problem}
+\begin{solution}
+\(p_A(t)=(t-2)^2-1=(t-1)(t-3)\).
+Unit eigenvectors are \((1,1)^\top/\sqrt2\) for \(1\) and
+\((1,-1)^\top/\sqrt2\) for \(3\).
+The maximum is \(3\), attained at both signs of the latter vector.
+
+For \(B\), \(p_B(t)=t(t-1)-1=t^2-t-1\), giving
+\(\lambda_\pm=(1\pm\sqrt5)/2\).
+A vector for \(\lambda\) is \((\lambda,1)^\top\), because
+\((\lambda+1,\lambda)^\top=(\lambda^2,\lambda)^\top\).
+The maximum is \(\lambda_+\), attained at
+\(\pm(\lambda_+,1)^\top/\sqrt{\lambda_+^2+1}\).
+\end{solution}
+
+\begin{problem}[Extrema on a sphere]\label{ex:09:sphere-example}
+Find the eigenvalues and maximum of the associated quadratic form on
+the unit sphere for
+\(T=\begin{pmatrix}2&-1&0\\-1&2&-1\\0&-1&2\end{pmatrix}\).
+\end{problem}
+\begin{solution}
+Expansion gives
+\[
+ p_T(t)=(t-2)\{(t-2)^2-1\}-(t-2)
+       =(t-2)\{(t-2)^2-2\}.
+\]
+The eigenvalues are \(2-\sqrt2,2,2+\sqrt2\), with unit eigenvectors
+\[
+ \tfrac12(1,\sqrt2,1)^\top,\qquad
+ \tfrac1{\sqrt2}(1,0,-1)^\top,\qquad
+ \tfrac12(1,-\sqrt2,1)^\top,
+\]
+respectively. Direct multiplication verifies the equations; their
+pairwise dot products are zero.
+The maximum is \(2+\sqrt2\), attained at both signs of the last vector.
+\end{solution}
+
+\begin{problem}[A form with positive and negative extrema]\label{ex:09:mixed-form}
+Find the maximum and minimum of \(3x^2+5xy-4y^2\) on \(x^2+y^2=1\).
+\end{problem}
+\begin{solution}
+The symmetric matrix is
+\(A=\begin{pmatrix}3&5/2\\5/2&-4\end{pmatrix}\), with
+\(p_A(t)=t^2+t-73/4\).
+Thus the extrema are the eigenvalues
+\[
+ \lambda_{\max}=\frac{-1+\sqrt{74}}2,\qquad
+ \lambda_{\min}=\frac{-1-\sqrt{74}}2 .
+\]
+Eigenvectors for these values are
+\(v_\pm=(5,-7\pm\sqrt{74})^\top\):
+the first equation \(3x+(5/2)y=\lambda x\) holds directly, and the
+second follows from the characteristic equation.
+Normalize each \(v_\pm\); the maximum and minimum are attained at both
+signs of the respective unit vectors. Their dot product is
+\(25+49-74=0\), as symmetry predicts.
+\end{solution}
+
+\begin{problem}[Symmetric idempotents and their factors]\label{ex:09:projector-factor}
+\begin{enumerate}
+\item Prove that a real symmetric matrix whose eigenvalues all belong
+to \(\{0,1\}\) is idempotent.
+\item If \(P\) is a symmetric idempotent of rank \(r\), prove \(P\succeq0\)
+and construct an \(n\times r\) matrix \(S\) with
+\(S^\top S=I_r\), \(P=SS^\top\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+The spectral theorem gives \(P=Q\Lambda Q^\top\).
+For eigenvalues \(0,1\), \(\Lambda^2=\Lambda\), so \(P^2=P\).
+Conversely an idempotent's eigenvalues satisfy \(\lambda^2=\lambda\),
+so a symmetric idempotent is PSD.
+Take \(S\) to consist of the orthonormal eigenvectors for eigenvalue \(1\).
+There are \(r\) such vectors, and
+\(SS^\top=\sum_{\lambda_j=1}q_jq_j^\top=P\).
+For \(r=0\), this is the empty factorization of the zero matrix.
+\end{solution}
+
+\subsection*{Functions of matrices: reading practice}
+For the following problems, a matrix power series is interpreted by
+convergence of every entry. The usual scalar series for the exponential,
+logarithm, and binomial function are assumed from calculus wherever they
+are invoked.
+
+\begin{problem}[Functions of diagonal matrices]\label{ex:09:diagonal-functions}
+\begin{enumerate}
+\item If \(D=\operatorname{diag}(d_1,\ldots,d_n)\) and the series converges,
+prove
+\[
+ \sum_{j=0}^\infty c_jD^j
+ =\operatorname{diag}\left(\sum_{j=0}^\infty c_jd_1^j,\ldots,
+                           \sum_{j=0}^\infty c_jd_n^j\right).
+\]
+Deduce \(\exp(I_n)=eI_n\).
+\item For \(A=\operatorname{diag}(a,b)\), compute \(\exp A\).
+If real \(|a|,|b|<1\), compute \((I+A)^\nu\) and \(\log(I+A)\)
+from their scalar series.
+\item If instead \(|a|,|b|>1\) and \(\nu\) is an integer, compute
+\((I+A)^\nu\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Every finite partial sum is diagonal with the stated scalar partial sums
+on its diagonal. Taking their limits proves (a).
+Using the exponential series gives \(\exp(I_n)=eI_n\), and
+\(\exp A=\operatorname{diag}(e^a,e^b)\).
+For \(|a|,|b|<1\), \(1+a,1+b>0\) and the scalar series give
+\[
+ (I+A)^\nu=\operatorname{diag}((1+a)^\nu,(1+b)^\nu),\qquad
+ \log(I+A)=\operatorname{diag}(\log(1+a),\log(1+b)).
+\]
+In (c), repeated diagonal multiplication gives the same power formula
+for nonnegative integers. Since \(|a|,|b|>1\) excludes \(a=b=-1\)
+individually, both \(1+a,1+b\) are nonzero; inverse diagonal
+multiplication extends the formula to negative integers.
+No binomial-series convergence is claimed outside its scalar interval.
+\end{solution}
+
+\begin{problem}[Nilpotence terminates a power series]\label{ex:09:nilpotent-functions}
+If \(A^k=0\), prove that every formal series
+\(\sum_{j=0}^\infty c_jA^j\) reduces to a polynomial of degree at most
+\(k-1\).
+\end{problem}
+\begin{solution}
+For \(j\geqslant k\), \(A^j=A^kA^{j-k}=0\).
+Thus every partial sum from index \(k-1\) onward equals
+\(c_0I+c_1A+\cdots+c_{k-1}A^{k-1}\).
+The matrix series therefore requires no convergence assumption on the
+coefficients beyond these finitely many terms.
+\end{solution}
+
+\begin{problem}[Functions of an idempotent]\label{ex:09:idempotent-functions}
+For an idempotent \(P\), prove
+\[
+ (I+P)^{-1}=I-\tfrac12P,\qquad
+ \exp P=I+(e-1)P,\qquad
+ \log(I+P)=(\log2)P .
+\]
+\end{problem}
+\begin{solution}
+In either multiplication order,
+\((I+P)(I-P/2)=I+P/2-P^2/2=I\).
+For every \(j\geqslant1\), \(P^j=P\), so the exponential series gives
+\[
+ \exp P=I+\left(\sum_{j=1}^\infty\frac1{j!}\right)P
+       =I+(e-1)P.
+\]
+The logarithm series has partial sums
+\(\sum_{j=1}^N(-1)^{j+1}P^j/j
+=\{\sum_{j=1}^N(-1)^{j+1}/j\}P\).
+The scalar alternating harmonic series converges to \(\log2\);
+hence every matrix entry converges to that of \((\log2)P\).
+Symmetry is not needed.
+\end{solution}
+
+\begin{problem}[A geometric matrix series]\label{ex:09:geometric-series}
+Let \(I-A\) be invertible.
+\begin{enumerate}
+\item For each integer \(k\geqslant0\), prove
+\[
+ (I-A)^{-1}=(I-A)^{-1}A^k+\sum_{j=0}^{k-1}A^j,
+\]
+where the sum is empty for \(k=0\).
+\item Assume in addition that \(A\) is symmetric and each of its real
+eigenvalues lies strictly between \(-1\) and \(1\).
+Prove \((I-A)^{-1}=\sum_{j=0}^\infty A^j\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+The telescoping identity
+\((I-A)\sum_{j=0}^{k-1}A^j=I-A^k\)
+gives (a) after multiplication by the inverse.
+For (b), write \(A=Q\Lambda Q^\top\) using the real spectral theorem.
+Then \(A^k=Q\operatorname{diag}(\lambda_1^k,\ldots,\lambda_n^k)Q^\top\).
+Every \(\lambda_i^k\) tends to zero, since \(|\lambda_i|<1\).
+Each matrix entry is a fixed finite linear combination of these powers,
+so \(A^k\) tends entrywise to zero.
+Letting \(k\to\infty\) in (a) proves the asserted convergence.
+The additional assumptions already imply invertibility of \(I-A\),
+since none of its eigenvalues \(1-\lambda_i\) is zero.
+\end{solution}
+
+\begin{problem}[Real orthogonal matrices as rotation blocks]\label{ex:09:rotation-blocks}
+Let \(R(\theta)=\begin{pmatrix}\cos\theta&-\sin\theta\\
+\sin\theta&\cos\theta\end{pmatrix}\).
+\begin{enumerate}
+\item For orthogonal \(S\), prove
+\(S\operatorname{diag}(R(\theta_1),\ldots,R(\theta_k))S^\top\)
+is orthogonal with determinant \(1\).
+\item Prove the same after appending a final scalar block \(1\).
+\item Prove these forms represent every real orthogonal matrix of
+determinant \(1\), in even and odd order respectively.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Each rotation block is orthogonal with determinant \(1\).
+Block multiplication and orthogonal similarity preserve these facts,
+including an appended scalar block \(1\). This proves (a,b).
+
+For (c), let \(A\) be real orthogonal and put \(H=(A+A^\top)/2\).
+The matrix \(H\) is real symmetric, so its mutually orthogonal
+eigenspaces span \(\R^n\). Since \(AH=HA=(A^2+I)/2\), each eigenspace
+\(E_c(H)\) is invariant under \(A\).
+For a unit \(u\in E_c(H)\),
+\[
+ c=u^\top Hu=u^\top Au,\qquad |c|\leqslant\norm u\,\norm{Au}=1.
+\]
+On \(E_c(H)\), write \(A=cI+K\). The identity \(A+A^\top=2cI\)
+shows \(K^\top=-K\) on this space. Orthogonality gives
+\[
+ I=(cI-K)(cI+K)=c^2I-K^2,\qquad K^2=-(1-c^2)I.
+\]
+If \(c=\pm1\), then
+\(\norm{Ku}^2=-u^\top K^2u=0\), so \(K=0\) and \(A=cI\).
+If \(|c|<1\), put \(s=\sqrt{1-c^2}>0\).
+For any unit \(u\) in this space, set \(v=Ku/s\). Then
+\[
+ \norm v=1,\quad u^\top v=0,\quad Ku=sv,\quad Kv=-su.
+\]
+Thus in the orthonormal basis \((u,v)\) this invariant plane has matrix
+\(\begin{pmatrix}c&-s\\s&c\end{pmatrix}=R(\theta)\).
+Its orthogonal complement in \(E_c(H)\) is \(K\)-invariant:
+for \(z\) perpendicular to the plane and \(w\) in it,
+\(w^\top Kz=-(Kw)^\top z=0\).
+Repeat on that complement. This constructs all rotation planes using
+only real vectors.
+The remaining directions carry \(+1\) or \(-1\).
+There are an even number of \(-1\) directions because \(\det A=1\);
+pair them into \(R(\pi)\). Pair \(+1\) directions into \(R(0)\).
+Exactly one \(+1\) direction remains when the total order is odd.
+Collecting these orthonormal bases proves (c).
+\end{solution}
+
+\begin{problem}[Canonical blocks of a real skew-symmetric matrix]\label{ex:09:skew-blocks}
+Let \(A\) be real and \(A^\top=-A\).
+\begin{enumerate}
+\item Prove that an orthogonal \(S\) exists with
+\[
+ S^\top AS=\operatorname{diag}
+ \left(\begin{pmatrix}0&-\theta_1\\\theta_1&0\end{pmatrix},
+ \ldots,\begin{pmatrix}0&-\theta_k\\\theta_k&0\end{pmatrix},0\right),
+\]
+for real \(\theta_j>0\) and \(k\leqslant n/2\); the zero block may
+have size zero.
+\item Deduce \(\det A=0\) in odd order and \(\det A\geqslant0\)
+in even order.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+The matrix \(-A^2=A^\top A\) is real symmetric positive semidefinite.
+If it is zero, \(\norm{Ax}^2=x^\top(-A^2)x=0\) for every \(x\),
+so \(A=0\).
+Otherwise the real spectral theorem supplies a unit \(u\) with
+\(-A^2u=\theta^2u\), \(\theta>0\).
+Set \(v=Au/\theta\). Then
+\[
+ \norm v^2=u^\top(-A^2)u/\theta^2=1,\qquad
+ u^\top v=u^\top Au/\theta=0,
+ \qquad Au=\theta v,\quad Av=-\theta u.
+\]
+The plane spanned by \(u,v\) is invariant and has the required block.
+Its orthogonal complement is invariant too:
+\(w^\top Az=-(Aw)^\top z=0\) for \(w\) in the plane and \(z\)
+perpendicular to it.
+Repeat for the skew-symmetric restriction to that smaller space.
+If its squared Gram matrix becomes zero, the restriction itself is zero
+by the first argument. Finite induction yields (a).
+Every nonzero two-by-two block has determinant \(\theta_j^2>0\).
+A positive-size zero block makes the determinant zero.
+Odd order necessarily leaves such a block, whereas even order gives
+either zero or a product of positive numbers. This proves (b).
+\end{solution}
+
+\needspace{22\baselineskip}
+\begin{problem}[A power series in a symmetric matrix]\label{ex:09:spectral-functions}
+Let \(A=Q\Lambda Q^\top\) be real symmetric with \(Q\) orthogonal.
+Suppose the scalar series \(f(t)=\sum_{j=0}^\infty c_jt^j\) converges at
+every eigenvalue of \(A\). Prove that the matrix series converges and
+\[
+ \sum_{j=0}^\infty c_jA^j
+ =Q\operatorname{diag}(f(\lambda_1),\ldots,f(\lambda_n))Q^\top.
+\]
+\end{problem}
+\begin{solution}
+Cancellation of \(Q^\top Q\) gives \(A^j=Q\Lambda^jQ^\top\) for every
+\(j\geqslant0\), including \(j=0\).
+Each finite partial sum therefore equals \(Q\) times the diagonal matrix
+of the scalar partial sums, times \(Q^\top\).
+There are only finitely many diagonal positions, each converging by
+assumption. Each entry of the product is a fixed finite linear
+combination of them, so it converges to the stated value.
+Within a repeated eigenspace the value is the same scalar
+\(f(\lambda)\); thus changing its orthonormal eigenbasis does not
+change the resulting matrix.
+\end{solution}

@@ -1,0 +1,527 @@
+\needspace{8\baselineskip}
+\subsection*{Inner products and their norms}
+
+\begin{problem}\label{ex:06:examples}
+Verify the inner-product axioms for (a) \(\R^m\) with \(\sum_i x_i y_i\);
+(b) real \(m\times n\) matrices with \(\tr(A^\top B)\).
+\end{problem}
+\begin{solution}
+In (a), symmetry and linearity follow term by term; \(\sum_i x_i^2\)
+is nonnegative and vanishes precisely when every coordinate is zero.
+In (b), \(\tr(A^\top B)=\sum_{i,j}a_{ij}b_{ij}\), so the same argument
+applies to the entries.
+\end{solution}
+
+\begin{problem}\label{ex:06:schwarz}
+In a real inner-product space prove \(|\ip{x}{y}|\leqslant\norm{x}\norm{y}\).
+Determine exactly when equality holds, including zero vectors.
+\end{problem}
+\begin{solution}
+If \(y=0\), both sides vanish. For \(y\ne0\), put
+\(r=x-\ip{x}{y}y/\norm{y}^2\). Then
+\[
+0\leqslant\norm{r}^2=\norm{x}^2-\frac{\ip{x}{y}^2}{\norm{y}^2}.
+\]
+Multiplication by \(\norm{y}^2\) proves the inequality. Equality holds
+exactly when \(r=0\), or \(x\) is a scalar multiple of \(y\).
+Including the case \(y=0\), the condition is that the pair is linearly dependent.
+\end{solution}
+
+\begin{problem}\label{ex:06:parallelogram}
+Prove \(\norm{x+y}^2+\norm{x-y}^2=2\norm{x}^2+2\norm{y}^2\)
+and explain its name, the parallelogram identity.
+\end{problem}
+\begin{solution}
+The two squares expand to \(\norm{x}^2\pm2\ip{x}{y}+\norm{y}^2\);
+adding cancels the mixed terms. A parallelogram with adjacent side vectors
+\(x,y\) has diagonals \(x+y,x-y\). Thus the sum of the squared diagonal
+lengths equals the sum of the squared lengths of its four sides.
+\end{solution}
+
+\begin{problem}\label{ex:06:norm}
+A norm satisfies \(\nu(ax)=|a|\nu(x)\), positivity with equality only at
+zero, and \(\nu(x+y)\leqslant\nu(x)+\nu(y)\).
+Prove that \(\nu(x)=\sqrt{\ip{x}{x}}\) is a norm. Include the Frobenius
+norm as a special case.
+\end{problem}
+\begin{solution}
+Bilinearity gives \(\ip{ax}{ax}=a^2\ip{x}{x}\), proving homogeneity.
+Positive definiteness gives positivity and its equality condition.
+Schwarz gives
+\[
+\norm{x+y}^2=\norm{x}^2+2\ip{x}{y}+\norm{y}^2
+\leqslant(\norm{x}+\norm{y})^2.
+\]
+Taking nonnegative square roots proves the triangle inequality.
+For matrices the product is \(\tr(A^\top B)\), so the norm is
+\(\sqrt{\sum_{i,j}a_{ij}^2}\) and all three conclusions apply.
+\end{solution}
+
+\begin{problem}\label{ex:06:polarization}
+Prove that a real inner product is recovered from its norm by
+\[\ip{x}{y}=\tfrac14(\norm{x+y}^2-\norm{x-y}^2).\]
+\end{problem}
+\begin{solution}
+Expanding the two squares and subtracting cancels the two pure-square
+terms and leaves \(4\ip{x}{y}\). In particular two inner products
+inducing the same norm must agree on every pair.
+\end{solution}
+
+\begin{problem}\label{ex:06:noninner-norm}
+For \(m\geqslant2\), let \(\nu(x)=\sum_{i=1}^m|x_i|\) on \(\R^m\).
+Prove that \(\nu\) is a norm but is not induced by an inner product.
+\end{problem}
+\begin{solution}
+Absolute values give \(\nu(ax)=|a|\nu(x)\) and
+\(\nu(x+y)\leqslant\sum_i(|x_i|+|y_i|)=\nu(x)+\nu(y)\).
+Every summand is nonnegative; their sum is zero exactly when \(x=0\).
+For distinct coordinate vectors \(e_1,e_2\), however,
+\[
+\nu(e_1+e_2)^2+\nu(e_1-e_2)^2=8,
+\qquad 2\nu(e_1)^2+2\nu(e_2)^2=4.
+\]
+The parallelogram identity fails, so no inner product induces this norm.
+\end{solution}
+
+\begin{problem}\label{ex:06:distance}
+For \(d(x,y)=\norm{x-y}\), prove (a) \(d(x,x)=0\);
+(b) \(d(x,y)>0\) for \(x\ne y\); (c) symmetry;
+(d) \(d(x,y)\leqslant d(x,z)+d(z,y)\). Interpret these in \(\R^2\).
+\end{problem}
+\begin{solution}
+The first two assertions are norm positivity. Symmetry follows from
+\(\norm{-(x-y)}=\norm{x-y}\). Finally
+\(x-y=(x-z)+(z-y)\), so the norm triangle inequality proves (d).
+In the plane, coincident points have distance zero and distinct points
+have positive distance; reversing a route does not change its length;
+and the direct segment is no longer than the two-segment route through \(z\).
+\end{solution}
+
+\begin{problem}\label{ex:06:continuity}
+Suppose \(\norm{x_k-x}\to0\) and \(\norm{y_k-y}\to0\) in a real
+inner-product space. Prove convergence of the norms and of
+\(\ip{x_k}{y_k}\) to \(\ip{x}{y}\).
+\end{problem}
+\begin{solution}
+The triangle inequality in both directions gives
+\(\big|\norm{x_k}-\norm{x}\big|\leqslant\norm{x_k-x}\to0\),
+and similarly for \(y_k\). In particular \(\norm{x_k}\) is bounded.
+By bilinearity and Schwarz,
+\[
+|\ip{x_k}{y_k}-\ip{x}{y}|
+\leqslant\norm{x_k}\norm{y_k-y}+\norm{x_k-x}\norm{y}\longrightarrow0.
+\]
+\end{solution}
+
+\needspace{8\baselineskip}
+\subsection*{Orthogonality and construction}
+
+\begin{problem}\label{ex:06:orthogonal-vectors}
+Show that zero is orthogonal to every vector. Find every vector in
+\(\R^3\) orthogonal to \((2,2,-1)^\top\).
+\end{problem}
+\begin{solution}
+Linearity gives \(\ip{0}{v}=\ip{0+0}{v}=2\ip{0}{v}\), hence zero.
+The coordinate condition is \(2x+2y-z=0\); its complete solution is
+\((s,t,2s+2t)^\top=s(1,0,2)^\top+t(0,1,2)^\top\), with \(s,t\in\R\).
+\end{solution}
+
+\begin{problem}\label{ex:06:pythagoras}
+In a real inner-product space show that \(x\perp y\) implies
+\(\norm{x+y}^2=\norm{x}^2+\norm{y}^2\). Does the converse hold?
+\end{problem}
+\begin{solution}
+Expansion gives \(\norm{x+y}^2-\norm{x}^2-\norm{y}^2=2\ip{x}{y}\).
+Thus each condition is equivalent to the other over the real field.
+\end{solution}
+
+\begin{problem}\label{ex:06:orthonormal-independent}
+Show that the columns of \(I_n\) are orthonormal and independent.
+Then prove that every orthonormal list is independent.
+\end{problem}
+\begin{solution}
+For coordinate columns, \(e_i^\top e_j\) equals one for \(i=j\) and zero
+otherwise, and \(\sum_i c_i e_i=(c_1,\ldots,c_n)^\top\) vanishes only
+when all coefficients vanish. More generally, taking the inner product
+of \(\sum_i c_i q_i=0\) with \(q_j\) gives \(c_j=0\) for every \(j\).
+\end{solution}
+
+\begin{problem}\label{ex:06:walls}
+Two subspaces are orthogonal when every vector of either is orthogonal
+to every vector of the other. Explain why a room's front and side walls,
+viewed as planes through a corner, are not orthogonal subspaces.
+Show also that the zero subspace is orthogonal to every subspace.
+\end{problem}
+\begin{solution}
+A nonzero vector along the common vertical edge belongs to both planes.
+It has positive inner product with itself, contradicting subspace
+orthogonality. The zero subspace contains only zero, whose inner product
+with every vector is zero.
+\end{solution}
+
+\begin{problem}\label{ex:06:complement}
+For a subspace \(W\) of an inner-product space \(V\), determine
+\(\{0\}^\perp\), prove that \(W^\perp\) is a subspace, and show that
+\(W\cap W^\perp=\{0\}\).
+\end{problem}
+\begin{solution}
+Every vector is perpendicular to zero, so \(\{0\}^\perp=V\).
+If \(x,y\in W^\perp\), then for every \(w\in W\),
+\(\ip{ax+by}{w}=a\ip{x}{w}+b\ip{y}{w}=0\); zero also belongs to the
+set. Finally a vector in the intersection is perpendicular to itself,
+so positive definiteness forces it to be zero.
+\end{solution}
+
+\begin{problem}\label{ex:06:orthonormal-basis}
+Prove that every finite-dimensional real inner-product space has an
+orthonormal basis.
+\end{problem}
+\begin{solution}
+For the zero space use the empty list. Otherwise take a basis
+\(v_1,\ldots,v_n\), and recursively set
+\(u_j=v_j-\sum_{i<j}\ip{v_j}{u_i}u_i/\norm{u_i}^2\).
+Inductively the previously constructed \(u_i\) are nonzero and mutually
+orthogonal, and their span equals that of \(v_1,\ldots,v_{j-1}\).
+Taking inner products proves \(u_j\perp u_i\). If \(u_j=0\), then
+\(v_j\) is in the preceding span, contradicting independence.
+The formula and its rearrangement show equality of the two spans at
+stage \(j\). Thus all \(u_j\) exist, and \(u_j/\norm{u_j}\) form the
+required orthonormal basis.
+\end{solution}
+
+\begin{problem}\label{ex:06:gs-three}
+Apply Gram--Schmidt, in the given order, to obtain orthonormal bases for
+the spans of these lists:
+\begin{enumerate}
+\item \((1,1,-1)^\top,(1,0,1)^\top\);
+\item \((2,1,1)^\top,(1,3,-1)^\top\);
+\item \((1,2,1,0)^\top,(1,2,3,1)^\top\);
+\item \((1,1,0,0)^\top,(1,-1,1,1)^\top,(-1,0,2,1)^\top\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) The vectors are already orthogonal, with squared norms \(3,2\);
+divide them by \(\sqrt3,\sqrt2\).
+(b) The first squared norm is \(6\), and the mixed product is \(4\).
+The residual is \((1,3,-1)^\top-\tfrac23(2,1,1)^\top
+=\tfrac13(-1,7,-5)^\top\). An orthonormal basis is
+\((2,1,1)^\top/\sqrt6,\ (-1,7,-5)^\top/\sqrt{75}\).
+(c) The mixed product is \(8\), and the first squared norm is \(6\).
+Subtracting \(\tfrac43(1,2,1,0)^\top\) leaves
+\(\tfrac13(-1,-2,5,3)^\top\). Divide the directions
+\((1,2,1,0)^\top,(-1,-2,5,3)^\top\) by \(\sqrt6,\sqrt{39}\).
+(d) The first two vectors are orthogonal, with squared norms \(2,4\).
+Their inner products with the third are \(-1,2\), respectively, so its
+residual is
+\[
+(-1,0,2,1)^\top+\tfrac12(1,1,0,0)^\top
+-\tfrac12(1,-1,1,1)^\top=\tfrac12(-2,2,3,1)^\top.
+\]
+The required basis consists of the first two vectors divided by
+\(\sqrt2,2\), followed by \((-2,2,3,1)^\top/\sqrt{18}\).
+\end{solution}
+
+\begin{problem}\label{ex:06:gs-systems}
+Find an orthogonal basis for each solution space:
+\begin{enumerate}
+\item \(2x+y-z=0,\quad y+z=0\);
+\item \(x-y+z=0\);
+\item \(4x+7y-\pi z=0,\quad2x-y+z=0\);
+\item \(x+y+z=0,\quad x-y=0,\quad y+z=0\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) The equations give \((x,y,z)=t(1,-1,1)\); the single displayed
+nonzero vector is an orthogonal basis.
+(b) Write \((x,y,z)=s(1,1,0)+t(-1,0,1)\).
+Subtracting the projection of the second direction onto the first leaves
+\((-1/2,1/2,1)\), so \((1,1,0)^\top,(-1,1,2)^\top\) is an
+orthogonal basis.
+(c) Substitution \(y=2x+z\) gives \(18x+(7-\pi)z=0\).
+Thus the entire solution space is spanned by
+\((\pi-7,2\pi+4,18)^\top\), which is nonzero.
+(d) The second and third equations give \(x=y=-z\); the first forces
+\(x=0\). The zero space has the empty orthogonal basis.
+\end{solution}
+
+\begin{problem}\label{ex:06:gs-polynomials-two}
+For \(\ip{f}{g}=\int_0^1fg\), apply Gram--Schmidt to \(t,t^2\)
+and obtain an orthonormal basis of their span.
+\end{problem}
+\begin{solution}
+The first squared norm is \(1/3\), and \(\ip{t^2}{t}=1/4\).
+Hence the residual is \(u=t^2-\tfrac34t\), with
+\[
+\norm{u}^2=\tfrac15-\tfrac32\tfrac14+\tfrac9{16}\tfrac13
+=\tfrac1{80}.
+\]
+Normalize to obtain \(\sqrt3\,t\) and \(\sqrt5(4t^2-3t)\).
+The nonzero residual also verifies independence of the original pair.
+\end{solution}
+
+\begin{problem}\label{ex:06:gs-polynomials-three}
+For \(\ip{f}{g}=\int_0^1fg\), apply Gram--Schmidt to \(1,t,t^2\)
+and give an orthonormal basis of their span.
+\end{problem}
+\begin{solution}
+The first vector is \(1\), already normalized. The next residual is
+\(u_2=t-\tfrac12\), with squared norm \(1/12\).
+For \(t^2\), the products with \(1,u_2\) are \(1/3,1/12\), so
+\[
+u_3=t^2-\tfrac13-u_2=t^2-t+\tfrac16,
+\qquad \norm{u_3}^2
+=\tfrac15-\tfrac12+\tfrac49-\tfrac16+\tfrac1{36}=\tfrac1{180}.
+\]
+Thus an orthonormal basis is
+\(1,\ \sqrt3(2t-1),\ \sqrt5(6t^2-6t+1)\).
+\end{solution}
+
+\begin{problem}\label{ex:06:gs-dependent}
+Let \(A_1,\ldots,A_k\) be matrices in a real inner-product space,
+possibly dependent. Show that coefficients can be chosen so that
+\(B_j=A_j-\sum_{i<j}c_{ij}B_i\) are mutually orthogonal.
+Show that \(c_{ij}=\ip{A_j}{B_i}/\norm{B_i}^2\) is forced when
+\(B_i\ne0\), and determine how many \(B_i\) are nonzero.
+Describe how to obtain an orthonormal basis for the original span.
+\end{problem}
+\begin{solution}
+Construct successively. For each earlier nonzero \(B_i\), choose the
+displayed coefficient, and choose zero when \(B_i=0\).
+Orthogonality of the previous list gives
+\(\ip{B_j}{B_i}=\ip{A_j}{B_i}-c_{ij}\norm{B_i}^2=0\)
+for nonzero \(B_i\); for zero \(B_i\) it is automatic.
+The same equation proves uniqueness of each coefficient attached to a
+nonzero vector; coefficients attached to zero are arbitrary.
+The triangular formulas in both directions show
+\(\operatorname{span}(B_1,\ldots,B_j)=\operatorname{span}(A_1,\ldots,A_j)\).
+The nonzero \(B_i\) are orthogonal and hence independent. They therefore
+form a basis of the original span, and their number is its dimension.
+Discard zero vectors and normalize the remaining ones to get the requested
+orthonormal basis.
+\end{solution}
+
+\begin{problem}\label{ex:06:qr-dependent}
+Let \(A\) be a real \(m\times k\) matrix of rank \(r\).
+Show that \(A=QR_1\), where \(Q\) has \(r\) orthonormal columns and
+\(R_1\) consists of the nonzero rows of an upper triangular \(k\times k\)
+matrix \(R\). Require \(R\) to have \(r\) positive diagonal entries and
+\(k-r\) zero rows.
+\end{problem}
+\begin{solution}
+Apply the preceding construction to the columns \(a_j\), obtaining
+orthogonal residuals \(b_j\). For every nonzero \(b_i\), set
+\(q_i=b_i/\norm{b_i}\), keeping its original index for now, and set
+\(R_{ij}=\ip{q_i}{a_j}\). For zero \(b_i\), set row \(i\) of \(R\)
+equal to zero. A nonzero \(b_i\) is perpendicular to the span of
+\(a_1,\ldots,a_{i-1}\), so \(R_{ij}=0\) for \(j<i\);
+further \(R_{ii}=\norm{b_i}>0\).
+Each \(a_j\) lies in the span of the nonzero residuals through index \(j\),
+so its orthogonal expansion is \(a_j=\sum_{i\leqslant j,\ b_i\ne0}q_iR_{ij}\).
+Assemble the \(r\) nonzero normalized residuals into \(Q\), and retain
+exactly their rows in \(R_1\). These column identities give \(A=QR_1\)
+and \(Q^\top Q=I_r\). For \(r=0\), use an empty \(Q,R_1\) and \(R=0\).
+\end{solution}
+
+\begin{problem}\label{ex:06:trace-complement}
+On the space \(V\) of real symmetric \(n\times n\) matrices, \(n\geqslant1\),
+prove that \(\ip{A}{B}=\tr(AB)\) is an inner product.
+If \(W=\{A\in V:\tr A=0\}\), prove \(\dim W^\perp=1\).
+\end{problem}
+\begin{solution}
+For symmetric matrices \(\tr(AB)=\tr(A^\top B)=\sum_{i,j}a_{ij}b_{ij}\),
+so this is the restriction of the Frobenius inner product.
+Also \(\ip{I}{A}=\tr A\), hence \(\operatorname{span}(I)\subseteq W^\perp\).
+If \(B\in W^\perp\), let \(C=B-(\tr B/n)I\). Then \(C\in W\), and
+\(0=\ip{B}{C}=\ip{C}{C}+(\tr B/n)\tr C=\norm{C}^2\).
+Thus \(B=(\tr B/n)I\), so \(W^\perp=\operatorname{span}(I)\), of dimension one.
+\end{solution}
+
+\begin{problem}\label{ex:06:dimension}
+For a subspace \(W\) of a finite-dimensional inner-product space \(V\),
+prove \(\dim W+\dim W^\perp=\dim V\).
+\end{problem}
+\begin{solution}
+Take an orthonormal basis \(q_1,\ldots,q_k\) of \(W\), extend it to a
+basis of \(V\), and Gram--Schmidt the added vectors. This leaves the
+first \(k\) vectors unchanged and gives an orthonormal basis
+\(q_1,\ldots,q_n\) of \(V\). The last \(n-k\) vectors are perpendicular
+to \(W\). Conversely, if \(v\perp W\), its coefficients along the first
+\(k\) basis vectors vanish, so it is in the span of the last \(n-k\).
+They form a basis of \(W^\perp\), proving the formula, including \(k=0,n\).
+\end{solution}
+
+\needspace{8\baselineskip}
+\subsection*{Forms, matrices, and functions}
+
+\begin{problem}\label{ex:06:positive-form}
+For symmetric \(A\), let \(g(x,y)=x^\top Ay\).
+\begin{enumerate}
+\item Prove symmetry and linearity in each argument.
+\item Give a \(1\times1\) and a nonzero \(2\times2\) matrix for which positivity fails.
+\item Give a symmetric positive definite \(2\times2\) example.
+\item If \(A=\begin{pmatrix}a&b\\b&d\end{pmatrix}\), \(a>0\), prove positivity
+is equivalent to \(ad-b^2>0\).
+\item If \(a<0\), show that positivity fails.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) Matrix multiplication is linear in each vector and
+\(x^\top Ay=(x^\top Ay)^\top=y^\top A^\top x=y^\top Ax\).
+(b) Take \((-1)\) and \(\operatorname{diag}(1,0)\); the former is negative
+on \(1\), and the latter vanishes on nonzero \(e_2\).
+(c) \(I_2\) works because \(x_1^2+x_2^2>0\) for nonzero \(x\).
+(d) Completing the square gives
+\[
+ax^2+2bxy+dy^2=a(x+by/a)^2+\frac{ad-b^2}{a}y^2.
+\]
+If both coefficients are positive, the expression vanishes only at
+\((0,0)\). Conversely set \((x,y)=(-b/a,1)\); positive definiteness
+forces \((ad-b^2)/a>0\).
+(e) Evaluation at \(e_1\) gives \(a<0\), contradicting positivity.
+\end{solution}
+
+\begin{problem}\label{ex:06:positive-classification}
+Determine which matrices are positive definite:
+\[
+\begin{array}{lll}
+\text{(a) }\begin{pmatrix}3&-1\\-1&2\end{pmatrix}&
+\text{(b) }\begin{pmatrix}-2&1\\1&5\end{pmatrix}&
+\text{(c) }\begin{pmatrix}4&1\\1&2\end{pmatrix}\\[6pt]
+\text{(d) }\begin{pmatrix}4&4\\4&1\end{pmatrix}&
+\text{(e) }\begin{pmatrix}4&1\\1&10\end{pmatrix}&
+\text{(f) }\begin{pmatrix}4&-1\\-1&10\end{pmatrix}.
+\end{array}
+\]
+\end{problem}
+\begin{solution}
+In (a), (c), (e), (f), the first diagonal entries are positive and the
+values \(ad-b^2\) are respectively \(5,7,39,39\); all four are positive
+definite by the preceding square completion. In (b), \(e_1^\top Ae_1=-2\).
+In (d), evaluating at \((-1,1)^\top\) gives \(4-8+1=-3\).
+Thus (b) and (d) fail positivity.
+\end{solution}
+
+\begin{problem}\label{ex:06:symmetric-bilinear}
+For a real square matrix \(A\), prove that \(g_A(x,y)=x^\top Ay\) is
+symmetric in its arguments if and only if \(A=A^\top\).
+\end{problem}
+\begin{solution}
+If \(A=A^\top\), transposing the scalar \(x^\top Ay\) gives
+\(x^\top Ay=y^\top A^\top x=y^\top Ax\).
+Conversely, symmetry on \((e_i,e_j)\) gives
+\(a_{ij}=g_A(e_i,e_j)=g_A(e_j,e_i)=a_{ji}\) for every \(i,j\).
+Thus \(A=A^\top\). This assertion alone imposes no positivity condition.
+\end{solution}
+
+\begin{problem}\label{ex:06:bilinear-coordinates}
+Write \(x^\top Ay\) fully in coordinates for each matrix:
+\[
+\begin{array}{lll}
+\text{(a) }\begin{pmatrix}2&-3\\4&1\end{pmatrix}&
+\text{(b) }\begin{pmatrix}4&1\\-2&5\end{pmatrix}&
+\text{(c) }\begin{pmatrix}-5&2\\\pi&7\end{pmatrix}\\[6pt]
+\text{(d) }\begin{pmatrix}1&2&-1\\-3&1&4\\2&5&-1\end{pmatrix}&
+\text{(e) }\begin{pmatrix}-4&2&1\\3&1&1\\2&5&7\end{pmatrix}&
+\text{(f) }\begin{pmatrix}-\frac12&2&-5\\1&\frac23&4\\-1&0&3\end{pmatrix}.
+\end{array}
+\]
+\end{problem}
+\begin{solution}
+Use \(x^\top Ay=\sum_{i,j}a_{ij}x_i y_j\). The answers are
+\begin{align*}
+\text{(a)}\quad&2x_1y_1-3x_1y_2+4x_2y_1+x_2y_2,\\
+\text{(b)}\quad&4x_1y_1+x_1y_2-2x_2y_1+5x_2y_2,\\
+\text{(c)}\quad&-5x_1y_1+2x_1y_2+\pi x_2y_1+7x_2y_2,\\
+\text{(d)}\quad&x_1y_1+2x_1y_2-x_1y_3-3x_2y_1+x_2y_2+4x_2y_3\\
+&\hspace{1em}+2x_3y_1+5x_3y_2-x_3y_3,\\
+\text{(e)}\quad&-4x_1y_1+2x_1y_2+x_1y_3+3x_2y_1+x_2y_2+x_2y_3\\
+&\hspace{1em}+2x_3y_1+5x_3y_2+7x_3y_3,\\
+\text{(f)}\quad&-\tfrac12x_1y_1+2x_1y_2-5x_1y_3+x_2y_1+\tfrac23x_2y_2+4x_2y_3\\
+&\hspace{1em}-x_3y_1+3x_3y_3.
+\end{align*}
+\end{solution}
+
+\begin{problem}\label{ex:06:trig-orthogonal}
+On the continuous real functions on \([0,2\pi]\), use
+\(\ip{f}{g}=\int_0^{2\pi}fg\). For \(g_n(t)=\cos(nt)\), \(n\geqslant0\),
+and \(h_m(t)=\sin(mt)\), \(m\geqslant1\), compute their norms.
+Show that \(g_n\perp g_m\) when \(n\ne m\) and that \(g_n\perp h_m\) always.
+\end{problem}
+\begin{solution}
+For nonzero integer \(k\), the integrals of \(\cos kt\) and \(\sin kt\)
+over a full period vanish. Use
+\(2\cos nt\cos mt=\cos((n-m)t)+\cos((n+m)t)\) and
+\(2\cos nt\sin mt=\sin((m+n)t)+\sin((m-n)t)\).
+The first integral is zero for \(n\ne m\), and the second is always zero,
+including the zero-frequency term. Also
+\(\cos^2 nt=(1+\cos2nt)/2\) for \(n\geqslant1\) and
+\(\sin^2 mt=(1-\cos2mt)/2\). Hence
+\(\norm{g_0}=\sqrt{2\pi}\), and
+\(\norm{g_n}=\norm{h_m}=\sqrt\pi\) for positive indices.
+\end{solution}
+
+\begin{problem}\label{ex:06:fourier-linear}
+With the preceding product, compute the inner products of \(f(t)=t\)
+with \(g_n,h_n\), and its Fourier coefficients
+\(\ip{f}{g_n}/\norm{g_n}^2\), \(\ip{f}{h_n}/\norm{h_n}^2\).
+\end{problem}
+\begin{solution}
+For \(n=0\), \(\ip{t}{1}=2\pi^2\), giving coefficient \(\pi\).
+For \(n\geqslant1\), integration by parts gives
+\[
+\int_0^{2\pi}t\cos nt\,dt=
+\left[\frac{t\sin nt}{n}+\frac{\cos nt}{n^2}\right]_0^{2\pi}=0,
+\]
+\[
+\int_0^{2\pi}t\sin nt\,dt=
+\left[-\frac{t\cos nt}{n}+\frac{\sin nt}{n^2}\right]_0^{2\pi}
+=-\frac{2\pi}{n}.
+\]
+Dividing by the squared norms \(\pi\) gives coefficients \(0,-2/n\).
+\end{solution}
+
+\begin{problem}\label{ex:06:fourier-quadratic}
+Compute the same inner products and Fourier coefficients for \(f(t)=t^2\).
+\end{problem}
+\begin{solution}
+The constant inner product is \(\int_0^{2\pi}t^2dt=8\pi^3/3\), giving
+coefficient \(4\pi^2/3\). For \(n\geqslant1\), integration by parts,
+using the two integrals in the preceding solution, gives
+\[
+\int_0^{2\pi}t^2\cos nt\,dt
+=-\frac2n\int_0^{2\pi}t\sin nt\,dt=\frac{4\pi}{n^2},
+\]
+\[
+\int_0^{2\pi}t^2\sin nt\,dt
+=-\frac{4\pi^2}{n}+\frac2n\int_0^{2\pi}t\cos nt\,dt
+=-\frac{4\pi^2}{n}.
+\]
+The nonconstant coefficients are therefore \(4/n^2\) and \(-4\pi/n\).
+\end{solution}
+
+\begin{problem}\label{ex:06:function-norms}
+For the same integral product on \([0,2\pi]\), find the norms of
+\(f(t)=t\) and \(g(t)=t^2\).
+\end{problem}
+\begin{solution}
+By definition,
+\(\norm{f}^2=\int_0^{2\pi}t^2dt=8\pi^3/3\) and
+\(\norm{g}^2=\int_0^{2\pi}t^4dt=32\pi^5/5\).
+The norms are the positive square roots of these quantities.
+\end{solution}
+
+\begin{problem}\label{ex:06:parseval-basis}
+Let \(q_1,\ldots,q_m\) be orthonormal in a finite-dimensional real
+inner-product space \(V\). Suppose
+\(\norm{v}^2=\sum_i\ip{v}{q_i}^2\) for every \(v\in V\).
+Prove that the list is a basis of \(V\).
+\end{problem}
+\begin{solution}
+Orthogonality proves independence. For any \(v\), set
+\(p=\sum_i\ip{v}{q_i}q_i\). Direct expansion gives
+\[
+\norm{v-p}^2=\norm{v}^2-2\sum_i\ip{v}{q_i}^2
++\sum_i\ip{v}{q_i}^2=0.
+\]
+Thus \(v=p\), proving that the list spans \(V\). It is therefore a basis.
+\end{solution}

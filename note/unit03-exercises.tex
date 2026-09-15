@@ -1,0 +1,287 @@
+\begin{problem}[Parallelograms]\label{ex:03:parallelogram}
+Prove that $\{su+tv:0\leqslant s,t\leqslant1\}$ is convex for any two fixed vectors $u,v$.
+\end{problem}
+\begin{solution}
+For points $x=s_1u+t_1v$ and $y=s_2u+t_2v$ and $\lambda\in[0,1]$, their combination has coefficients $(1-\lambda)s_1+\lambda s_2$ and $(1-\lambda)t_1+\lambda t_2$. Each is nonnegative and at most $(1-\lambda)+\lambda=1$, so the combination belongs to the set. No independence of $u,v$ is required.
+\end{solution}
+
+\begin{problem}[Half-spaces]\label{ex:03:halfspace}
+Let $a\ne0$ in $\R^n$ and $c\in\R$. Prove that $\{x:a\cdot x\geqslant c\}$ is convex.
+\end{problem}
+\begin{solution}
+If $a\cdot x,a\cdot y\geqslant c$ and $t\in[0,1]$, then $a\cdot((1-t)x+ty)=(1-t)a\cdot x+t a\cdot y\geqslant(1-t)c+tc=c$. This is the defining convexity condition.
+\end{solution}
+
+\begin{problem}[Scaling a convex set]\label{ex:03:convex-scale}
+If $S$ is convex and $c\in\R$, prove that $cS=\{cs:s\in S\}$ is convex.
+\end{problem}
+\begin{solution}
+For $x=cs_1,y=cs_2\in cS$, we have $(1-t)x+ty=c((1-t)s_1+ts_2)\in cS$. This proof includes negative $c$ and $c=0$, and does not divide by $c$. If $S$ is empty, so is $cS$, and convexity is vacuous.
+\end{solution}
+
+\begin{problem}[Intersection]\label{ex:03:convex-intersection}
+Prove that the intersection of two convex sets is convex.
+\end{problem}
+\begin{solution}
+If $x,y\in S\cap T$, their segment lies in $S$ and in $T$, hence in $S\cap T$. The same argument is valid when the intersection is empty: there are no endpoints for which the condition could fail.
+\end{solution}
+
+\begin{problem}[Translation]\label{ex:03:convex-translation}
+If $S$ is convex and $w$ is fixed, prove that $w+S$ is convex.
+\end{problem}
+\begin{solution}
+For $x=w+s_1,y=w+s_2$, the combination $(1-t)x+ty=w+((1-t)s_1+ts_2)$ belongs to $w+S$, because the coefficients of $w$ sum to one.
+\end{solution}
+
+\begin{problem}[Dependence criteria]\label{ex:03:dependence-criteria}
+Prove the following for finite lists.
+\begin{enumerate}
+\item A list consisting only of zero is dependent; any list containing zero is dependent.
+\item A list of nonzero vectors is dependent if and only if one vector is a linear combination of the others.
+\item A list of nonzero vectors $x_1,\ldots,x_n$ is dependent if and only if some $x_j$, $2\leqslant j\leqslant n$, is a linear combination of $x_1,\ldots,x_{j-1}$.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) Give the zero vector coefficient one and all other vectors coefficient zero.
+(b) In a nontrivial relation choose a nonzero coefficient and solve for its vector. Conversely, an expression for one vector gives a relation with coefficient one on that vector.
+(c) Given a nontrivial relation, let $j$ be its largest index with nonzero coefficient. The hypothesis $x_1\ne0$ excludes $j=1$. Solving for $x_j$ expresses it in terms of its predecessors. Conversely, move such an expression to one side and assign coefficient zero to every later vector.
+\end{solution}
+
+\begin{problem}[Column and row relations]\label{ex:03:matrix-relations}
+Prove that the columns of $I_n$ are independent. For
+\[
+ A=\begin{pmatrix}1&3&2&0\\1&-5&-3&1\\5&-1&0&2\end{pmatrix},
+\]
+show that its columns are dependent and determine whether its rows are dependent.
+\end{problem}
+\begin{solution}
+The equation $\sum_i c_ie_i=0$ has coordinate $i$ equal to $c_i$, so all coefficients vanish. If $a_j$ denotes column $j$ of $A$, then $3a_1-a_2-8a_4=0$, a nontrivial relation. If $r_i$ denotes row $i$, then $3r_1+2r_2-r_3=0$. Thus both lists are dependent. These two calculations concern different lists of vectors, in $\R^3$ and $\R^4$ respectively.
+\end{solution}
+
+\begin{problem}[Triangular independence]\label{ex:03:triangular}
+Prove that the columns of a square triangular matrix are independent if and only if every diagonal entry is nonzero.
+\end{problem}
+\begin{solution}
+For a lower triangular matrix $A$, if every diagonal entry is nonzero, the equations $Ax=0$ successively force $x_1=0,x_2=0,\ldots,x_n=0$.
+For the converse, choose the largest index $i$ with $a_{ii}=0$. Set $x_1=\cdots=x_{i-1}=0$ and $x_i=1$. The first $i$ equations hold. Each subsequent equation has a nonzero diagonal coefficient, so it determines the next $x_j$. The resulting vector is nonzero and satisfies $Ax=0$.
+For an upper triangular matrix, run the first argument from the last row upward. If a diagonal entry is zero, choose the smallest such index $i$, set $x_{i+1}=\cdots=x_n=0$, $x_i=1$, and solve the earlier equations upward; their diagonal entries are nonzero.
+\end{solution}
+
+\begin{problem}[Pairwise sums]\label{ex:03:pairwise-sums}
+If $x,y,z$ are independent real vectors, are $x+y,x+z,y+z$ independent?
+\end{problem}
+\begin{solution}
+Yes. A zero combination has coefficients $\alpha+\beta$, $\alpha+\gamma$, $\beta+\gamma$ on $x,y,z$, respectively. Independence makes these three sums zero. The first two give $\beta=\gamma=-\alpha$, and the third gives $-2\alpha=0$. Thus all three coefficients vanish.
+\end{solution}
+
+\begin{problem}[A parameter-dependent list]\label{ex:03:parameter-list}
+For which real $\lambda$ are $(\lambda,1,0)^\top$, $(1,\lambda,1)^\top$, and $(0,1,\lambda)^\top$ dependent? Exhibit a nontrivial relation in each exceptional case.
+\end{problem}
+\begin{solution}
+Coefficients $\alpha,\beta,\gamma$ must satisfy
+$\lambda\alpha+\beta=0$, $\alpha+\lambda\beta+\gamma=0$, $\beta+\lambda\gamma=0$.
+The first two give $\beta=-\lambda\alpha$ and $\gamma=(\lambda^2-1)\alpha$. The last becomes $\lambda(\lambda^2-2)\alpha=0$. If $\lambda\notin\{0,\sqrt2,-\sqrt2\}$, then $\alpha=\beta=\gamma=0$. For $\lambda=0$, take $(\alpha,\beta,\gamma)=(1,0,-1)$. For $\lambda=\pm\sqrt2$, take $(1,-\lambda,1)$. These relations prove all the stated exceptions.
+\end{solution}
+
+\begin{problem}[A finite span of random variables]\label{ex:03:random-span}
+Let $X_1,\ldots,X_n$ be random variables with finite second moments, identifying random variables that are equal with probability one. Show that the vector space
+$V=\{\sum_{i=1}^n a_iX_i:a_i\in\R\}$ is finite dimensional.
+\end{problem}
+\begin{solution}
+The listed random variables span $V$ by its definition. The basis-extraction theorem gives a basis selected from this list, so $\dim V\leqslant n$. Equality need not hold, because the $X_i$ may be dependent as vectors. Finite second moments ensure the stated class is closed: pointwise Cauchy--Schwarz gives $(\sum_i a_iX_i)^2\leqslant(\sum_i a_i^2)(\sum_iX_i^2)$, whose expectation is finite. No covariance-rank assertion is needed.
+\end{solution}
+
+\begin{problem}[Infinitely many bases]\label{ex:03:many-bases}
+Find two different bases of $\R^3$ and prove that $\R^3$ has infinitely many bases.
+\end{problem}
+\begin{solution}
+The standard basis is one. For every $\alpha\ne0$, the three columns
+\[
+ b_1=(1,0,2)^\top,\quad b_2=(0,2,0)^\top,\quad b_3=(0,0,\alpha)^\top
+\]
+form a basis: every $x$ has the unique expression
+$x=x_1b_1+(x_2/2)b_2+((x_3-2x_1)/\alpha)b_3$.
+Taking $\alpha=1$ supplies a second basis, and varying $\alpha$ over positive reals supplies infinitely many distinct bases.
+\end{solution}
+
+\begin{problem}[Selecting a basis]\label{ex:03:select-basis}
+Let $a_1,\ldots,a_9$ be the columns of
+\[
+ A=\begin{pmatrix}1&1&1&1&1&1&2&2&5\\0&1&1&2&2&3&-1&3&3\\1&1&2&3&5&5&1&0&4\end{pmatrix}.
+\]
+Which lists form a basis of $\R^3$?
+\begin{enumerate}
+\item $a_1,a_2$;
+\item $a_1,a_4,a_6,a_8$;
+\item $a_2,a_4,a_7$;
+\item $a_3,a_5,a_9$.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) No: two vectors cannot span a space of dimension three.
+(b) No: four vectors in $\R^3$ are dependent.
+(c) Yes. A zero combination with coefficients $x,y,z$ gives
+$x+y+2z=0$, $x+2y-z=0$, $x+3y+z=0$.
+Subtracting the first equation from the second gives $y-3z=0$; subtracting the second from the third gives $y+2z=0$. Hence $z=y=x=0$. Three independent vectors form a basis.
+(d) No: $7a_3-2a_5-a_9=0$ is a nontrivial relation.
+\end{solution}
+
+\begin{problem}[Constructing bases]\label{ex:03:basis-algorithms}
+In a finite-dimensional vector space, prove that any spanning set contains a basis and that any independent list can be extended to a basis. Deduce existence of a basis in the nonzero finite-dimensional case from a maximal independent list.
+\end{problem}
+\begin{solution}
+First choose a finite spanning list of the ambient finite-dimensional space. If $S$ is any spanning set, each vector of that list is a finite combination of elements of $S$. Their combined finitely many elements form a finite spanning list drawn from $S$. Scan this list in order, discarding every vector in the span of those kept. The kept list is independent by the adjoining criterion. Each discarded vector is in its span, so spanning is preserved. For extension, place the given independent list first and append a fixed finite spanning list. Apply the same procedure: no vector of the initial list is discarded. Finally, a maximal independent list spans, because any vector outside its span could be adjoined while preserving independence. A bound on the size of independent lists ensures that a maximal list can be obtained after finitely many adjunctions.
+\end{solution}
+
+\begin{problem}[Comparing sizes]\label{ex:03:compare-sizes}
+Suppose $x_1,\ldots,x_n$ spans $V$ and $y_1,\ldots,y_m$ is independent in $V$.
+\begin{enumerate}
+\item Prove $m\leqslant n$ without assuming the $x_i$ are independent.
+\item Deduce that every basis of a finite-dimensional space has the same size.
+\item If $\dim V=d$, show that more than $d$ vectors cannot be independent and fewer than $d$ vectors cannot span.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) Write $y_j=\sum_i a_{ij}x_i$. If $m>n$, the homogeneous system $\sum_j a_{ij}c_j=0$ has a nonzero solution $c$. It gives $\sum_j c_jy_j=0$, a contradiction.
+(b) Use (a) twice, interchanging which basis is the spanning list and which is independent.
+(c) Compare an independent list to a basis of size $d$ for the first claim, and compare a spanning list to that basis as an independent list for the second.
+\end{solution}
+
+\begin{problem}[Coordinates and full dimension]\label{ex:03:full-dimension}
+Let $\dim V=n$.
+\begin{enumerate}
+\item Show that each vector has unique coordinates relative to a given basis.
+\item Show that every independent list of $n$ vectors is a basis, and that every basis has $n$ vectors.
+\item For a subspace $W\subseteq V$, prove $\dim W\leqslant n$, with equality if and only if $W=V$.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) Spanning supplies coordinates; subtracting two expressions and using independence proves uniqueness, including for zero.
+(b) If an independent list of $n$ vectors failed to span, a vector outside its span could be adjoined, contradicting the generator bound. All bases have size $n$ by the equal-size theorem.
+(c) Select vectors of $W$ outside the span of previous choices. The process stops after at most $n$ choices and gives a basis of $W$. If there are $n$ choices, part (b) makes it a basis of $V$, so $V=W$. If $V=W$, their dimensions are equal by definition.
+\end{solution}
+
+\begin{problem}[A sum of subspaces]\label{ex:03:direct-sum-dimension}
+Let $U,W$ be finite-dimensional subspaces. Suppose finite lists $A$ and $B$ span $U$ and $W$, respectively.
+\begin{enumerate}
+\item Prove that their combined list spans $U+W$.
+\item Assuming $U\cap W=\{0\}$, prove $\dim(U+W)=\dim U+\dim W$ by first choosing bases from the two spanning lists.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) Every $u+w$ is the sum of a combination from $A$ and a combination from $B$, hence a combination of the combined list. Conversely such combinations belong to $U+W$.
+(b) Extract bases $u_1,\ldots,u_r$ and $w_1,\ldots,w_s$. In a relation $\sum_i a_iu_i+\sum_j b_jw_j=0$, the vector $\sum_i a_iu_i=-\sum_jb_jw_j$ lies in $U\cap W$, hence equals zero. Independence of each basis gives all $a_i,b_j=0$. The combined list is therefore a basis of $U+W$ with $r+s$ elements. The original spanning lists need not themselves be bases.
+\end{solution}
+
+\begin{problem}[Numerical independence]\label{ex:03:numerical-independence}
+Prove independence of each list:
+\begin{enumerate}
+\item $(1,1,1),(0,1,-2)$;
+\item $(1,0),(1,1)$;
+\item $(-1,1,0),(0,1,2)$;
+\item $(2,-1),(1,0)$;
+\item $(\pi,0),(0,1)$;
+\item $(1,2),(1,3)$;
+\item $(1,1,0),(1,1,1),(0,1,-1)$;
+\item $(0,1,1),(0,2,1),(1,5,3)$.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+In (a), the first and second coordinates of a zero combination force its two coefficients to be zero. In (b), use the second and then first coordinates. In (c), use the first and third. In (d), use the second and first. In (e), use both coordinates and $\pi\ne0$. In (f), $\alpha+\beta=0$ and $2\alpha+3\beta=0$ imply $\beta=\alpha=0$.
+In (g), coefficients $\alpha,\beta,\gamma$ give $\alpha+\beta=0$, $\alpha+\beta+\gamma=0$, $\beta-\gamma=0$. Hence $\gamma=\beta=\alpha=0$.
+In (h), the first coordinate gives $\gamma=0$; the others give $\alpha+2\beta=0$ and $\alpha+\beta=0$, so $\beta=\alpha=0$.
+\end{solution}
+
+\begin{problem}[Two-dimensional coordinates]\label{ex:03:coordinates-two}
+Find the coordinates of $x$ relative to the ordered pair $(a,b)$ in each case:
+\begin{enumerate}
+\item $x=(1,0)$, $a=(1,1)$, $b=(0,1)$;
+\item $x=(2,1)$, $a=(1,-1)$, $b=(1,1)$;
+\item $x=(1,1)$, $a=(2,1)$, $b=(-1,0)$;
+\item $x=(4,3)$, with the same $a,b$ as in (c).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Solve $\alpha a+\beta b=x$. In (a), $\alpha=1$, $\alpha+\beta=0$, giving $(1,-1)^\top$. In (b), $\alpha+\beta=2$, $-\alpha+\beta=1$, giving $(1/2,3/2)^\top$. In (c), $\alpha=1$ and $2\alpha-\beta=1$, giving $(1,1)^\top$. In (d), $\alpha=3$ and $2\alpha-\beta=4$, giving $(3,2)^\top$. In each case the coefficient equations with zero right side have only the zero solution, so the ordered pair is a basis and these coordinates are unique.
+\end{solution}
+
+\begin{problem}[Three-dimensional coordinates]\label{ex:03:coordinates-three}
+Find coordinates in the indicated ordered basis:
+\begin{enumerate}
+\item $x=(1,0,0)$; $a=(1,1,1)$, $b=(-1,1,0)$, $c=(1,0,-1)$;
+\item $x=(1,1,1)$; $a=(0,1,-1)$, $b=(1,1,0)$, $c=(1,0,2)$;
+\item $x=(0,0,1)$, with the basis in (a).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+For the basis in (a), the equations are $\alpha-\beta+\gamma=x_1$, $\alpha+\beta=x_2$, $\alpha-\gamma=x_3$. Thus $3\alpha=x_1+x_2+x_3$, $\beta=x_2-\alpha$, $\gamma=\alpha-x_3$. Parts (a) and (c) give $(1/3,-1/3,1/3)^\top$ and $(1/3,-1/3,-2/3)^\top$.
+For (b), $\beta+\gamma=1$, $\alpha+\beta=1$, $-\alpha+2\gamma=1$ give $\gamma=1$, $\alpha=1$, $\beta=0$. The coordinates are $(1,0,1)^\top$. Setting the right sides to zero in either system forces all three coefficients to be zero, verifying independence of each basis.
+\end{solution}
+
+\begin{problem}[Independence of functions on $\R$]\label{ex:03:functions}
+Prove that each pair is independent as real functions on $\R$:
+\begin{enumerate}
+\item $1,t$; \item $t,t^2$; \item $t,t^4$;
+\item $e^t,t$; \item $te^t,e^{2t}$;
+\item $\sin t,\cos t$; \item $t,\sin t$;
+\item $\sin t,\sin2t$; \item $\cos t,\cos3t$.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Write $af(t)+bg(t)=0$ for every $t$.
+(a) At $0$ and $1$, obtain $a=0$ and then $b=0$.
+(b) At $1$ and $-1$, obtain $a+b=0$ and $-a+b=0$.
+(c) The same two values give $a+b=0$ and $-a+b=0$.
+(d) At $0$, obtain $a=0$; at $1$, obtain $b=0$.
+(e) At $0$, obtain $b=0$; at $1$, obtain $a=0$.
+(f) Use $0$ and $\pi/2$.
+(g) At $\pi$, obtain $a\pi=0$; at $\pi/2$, obtain $b=0$.
+(h) At $\pi/2$, obtain $a=0$; at $\pi/4$, obtain $b=0$.
+(i) At $0$ and $\pi/3$, obtain $a+b=0$ and $a/2-b=0$, giving $a=b=0$.
+\end{solution}
+
+\begin{problem}[Functions on the positive half-line]\label{ex:03:positive-functions}
+Prove independence on $t>0$ of (a) $t,1/t$ and (b) $e^t,\log t$.
+\end{problem}
+\begin{solution}
+(a) A relation $at+b/t=0$ gives $a+b=0$ at $t=1$ and $2a+b/2=0$ at $t=2$. Multiplying the second equation by two and subtracting the first yields $3a=0$, hence $b=0$.
+(b) At $t=1$, a relation $ae^t+b\log t=0$ gives $ae=0$, so $a=0$. At $t=e$, it then gives $b=0$. Both test values belong to the specified domain.
+\end{solution}
+
+\begin{problem}[Coordinates of a derivative]\label{ex:03:derivative-coordinates}
+Find the coordinates of $f(t)=3\sin t+5\cos t$ and its derivative relative to the ordered basis $(\sin t,\cos t)$ of their span.
+\end{problem}
+\begin{solution}
+The coordinate columns are $[f]=(3,5)^\top$ and $[f']=(-5,3)^\top$, because $f'(t)=-5\sin t+3\cos t$. Independence of sine and cosine proves uniqueness of both expressions.
+\end{solution}
+
+\begin{problem}[Bases of matrix spaces]\label{ex:03:matrix-bases}
+Exhibit bases, prove their basis properties, and compute dimensions for:
+\begin{enumerate}
+\item all $2\times2$ real matrices and, more generally, all $m\times n$ real matrices;
+\item diagonal $n\times n$ matrices;
+\item upper triangular $n\times n$ matrices;
+\item symmetric $2\times2$, $3\times3$, and general $n\times n$ matrices.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Write $E_{ij}$ for the matrix unit. In (a), the basis is all $E_{ij}$, since $A=\sum_{i,j}a_{ij}E_{ij}$ and the coefficient of each unit is fixed by the corresponding entry. The dimensions are $4$ and $mn$.
+In (b), use $E_{11},\ldots,E_{nn}$, giving dimension $n$.
+In (c), use the $E_{ij}$ with $i\leqslant j$; the number is $n+(n-1)+\cdots+1=n(n+1)/2$.
+In (d), use $E_{ii}$ for $1\leqslant i\leqslant n$ and $E_{ij}+E_{ji}$ for $i<j$. A symmetric matrix is their combination with coefficients $a_{ii},a_{ij}$. If the combination is zero, its diagonal and upper triangular entries force all coefficients zero. There are $n+n(n-1)/2$ basis matrices, giving dimensions $3$, $6$, and $n(n+1)/2$, respectively.
+\end{solution}
+
+\begin{problem}[Classifying low-dimensional subspaces]\label{ex:03:classify-subspaces}
+Classify the subspaces of $\R^2$ and of $\R^3$ using dimension.
+\end{problem}
+\begin{solution}
+A subspace of $\R^2$ has dimension zero, one, or two. Dimension zero means $\{0\}$; dimension one means a line $\{tu:t\in\R\}$ with $u\ne0$; dimension two means the whole space by the full-dimension theorem.
+A subspace of $\R^3$ has dimension zero, one, two, or three. The first two cases are zero and a line through zero. Dimension two gives $\{su+tv:s,t\in\R\}$ for independent $u,v$, a plane through zero. Dimension three gives all of $\R^3$. Each described set is indeed a subspace, since it is a span.
+\end{solution}
+
+\begin{problem}[Arbitrarily long independent lists]\label{ex:03:polynomial-powers}
+In the real vector space of polynomials of all degrees, prove that $1,t,\ldots,t^n$ are independent for every positive integer $n$. Deduce that the space is infinite dimensional.
+\end{problem}
+\begin{solution}
+If $\sum_{j=0}^n a_jt^j=0$ for every real $t$, its $k$th derivative at zero is $k!a_k=0$, for $0\leqslant k\leqslant n$. Hence all coefficients vanish. If the space had finite dimension $d$, it could not contain the independent list $1,t,\ldots,t^d$ of size $d+1$. Thus no finite basis exists.
+\end{solution}

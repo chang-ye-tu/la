@@ -1,0 +1,867 @@
+\subsection*{Scalars, eigenvalues, and eigenspaces}
+
+
+\begin{problem}[Three quadratic characteristic equations]\label{ex:08:two-eigenvalues}
+Find all eigenvalues, including nonreal ones, of
+\[
+ A=\begin{pmatrix}3&5\\-2&-4\end{pmatrix},\quad
+ B=\begin{pmatrix}3&4\\-5&-5\end{pmatrix},\quad
+ C=\begin{pmatrix}3&5\\5&7\end{pmatrix}.
+\]
+\end{problem}
+\begin{solution}
+Their characteristic polynomials are
+\[
+ \begin{aligned}
+ p_A(t)&=(t-3)(t+4)+10=(t-1)(t+2),\\
+ p_B(t)&=(t-3)(t+5)+20=(t+1)^2+4,\\
+ p_C(t)&=(t-3)(t-7)-25=(t-5)^2-29.
+ \end{aligned}
+\]
+Thus the eigenvalues are \(1,-2\); \(-1+2i,-1-2i\); and
+\(5+\sqrt{29},5-\sqrt{29}\), respectively.
+\end{solution}
+
+\begin{problem}[Three eigenvalues with different block structures]\label{ex:08:three-eigenvalues}
+Find the eigenvalues of
+\[
+ A=\begin{pmatrix}7&0&0\\0&3&0\\0&0&3\end{pmatrix},\quad
+ B=\begin{pmatrix}7&0&0\\0&3&5\\0&5&4\end{pmatrix},\quad
+ C=\begin{pmatrix}7&0&0\\0&3&1\\0&0&3\end{pmatrix}.
+\]
+\end{problem}
+\begin{solution}
+For \(A,C\), triangularity gives \(7,3,3\).
+For \(B\), expansion in the first column gives
+\[
+ p_B(t)=(t-7)\{(t-3)(t-4)-25\}=(t-7)(t^2-7t-13).
+\]
+Its eigenvalues are \(7,(7+\sqrt{101})/2,(7-\sqrt{101})/2\).
+The common list for \(A,C\) alone does not determine eigenspace dimensions.
+\end{solution}
+
+\begin{problem}[A repeated root and its eigenspace]\label{ex:08:ma-three}
+For \(A=\begin{pmatrix}1&3&0\\0&1&0\\2&1&5\end{pmatrix}\), find the
+characteristic equation, eigenvalues, rank, and all eigenvectors.
+Can independent eigenvectors be chosen? Are the eigenspaces orthogonal?
+\end{problem}
+\begin{solution}
+Expansion in the second row gives \(p_A(t)=(t-1)^2(t-5)\).
+Thus the eigenvalues are \(1,1,5\), and \(\det A=5\), so its rank is \(3\).
+For \(\lambda=1\), the equations are \(3y=0\), \(2x+y+4z=0\);
+hence \(E_1=\operatorname{span}\{(-2,0,1)^\top\}\).
+For \(\lambda=5\), \(-4y=0\) and \(-4x+3y=0\), giving
+\(E_5=\operatorname{span}\{(0,0,1)^\top\}\).
+All eigenvectors are the nonzero vectors in these two lines.
+One vector from each gives an independent pair, but there is no
+three-vector eigenbasis. Their dot product is \(1\), so the lines
+are not orthogonal.
+\end{solution}
+
+\begin{problem}[The general real two-by-two matrix]\label{ex:08:quadratic}
+For real \(A=\begin{pmatrix}a&b\\c&d\end{pmatrix}\):
+\begin{enumerate}
+\item Find \(p_A\) and all its eigenvalues, including nonreal ones.
+Show that their sum and product are \(\tr A\) and \(\det A\).
+\item Show that if one eigenvalue is nonreal, both are nonreal and
+one is the conjugate of the other.
+\item If \(b=c\), prove that both eigenvalues are real.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Set \(\Delta=(a-d)^2+4bc\). Completing the square gives
+\[
+ p_A(t)=t^2-(a+d)t+ad-bc
+       =\left(t-\frac{a+d}{2}\right)^2-\frac{\Delta}{4}.
+\]
+For \(\Delta\geqslant0\), the eigenvalues are
+\((a+d\pm\sqrt\Delta)/2\), including a repeated root when \(\Delta=0\).
+For \(\Delta<0\), they are
+\[
+ \lambda_\pm=\frac{a+d\pm i\sqrt{-\Delta}}2.
+\]
+In either case \(\lambda_++\lambda_-=a+d=\tr A\), and
+\[
+ \lambda_+\lambda_-=\frac{(a+d)^2-\Delta}{4}=ad-bc=\det A.
+\]
+The negative-discriminant case gives both assertions in(b) explicitly.
+For \(b=c\), \(\Delta=(a-d)^2+4b^2\geqslant0\), proving(c).
+\end{solution}
+
+\begin{problem}[What does an eigenvalue determine?]\label{ex:08:uniqueness}
+\begin{enumerate}
+\item Must matrices with the same characteristic polynomial be equal?
+\item Can a nonzero vector be an eigenvector for two distinct eigenvalues
+of the same matrix?
+\item Can distinct vectors be eigenvectors for the same eigenvalue?
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) No: \(I_2\) and \(\begin{pmatrix}1&1\\0&1\end{pmatrix}\) both have
+polynomial \((t-1)^2\), but differ.
+(b) If \(Av=\lambda v=\mu v\), then \((\lambda-\mu)v=0\); since \(v\ne0\),
+\(\lambda=\mu\).
+(c) Yes: \(v\) and \(2v\) have the same eigenvalue whenever \(v\) is an
+eigenvector. For \(I_2\), the independent vectors \(e_1,e_2\) also share
+an eigenvalue.
+\end{solution}
+
+\begin{problem}[A shear and a scalar matrix]\label{ex:08:shear}
+Find all eigenvalues and eigenvectors of
+\[
+ A=\begin{pmatrix}1&1\\0&1\end{pmatrix},\qquad
+ B=\begin{pmatrix}2&0\\0&2\end{pmatrix}.
+\]
+\end{problem}
+\begin{solution}
+For \(A\), the only eigenvalue is \(1\), with algebraic multiplicity two.
+The equation \((A-I)(x,y)^\top=0\) is \(y=0\); its eigenvectors are
+\((x,0)^\top\), \(x\ne0\). For \(B\), the only eigenvalue is \(2\),
+also of multiplicity two, and every nonzero vector is an eigenvector.
+Only \(B\) has a two-vector eigenbasis.
+\end{solution}
+
+\begin{problem}[Scaling, powers, and inverse]\label{ex:08:polynomials}
+Let \(Av=\lambda v\), \(v\ne0\).
+\begin{enumerate}
+\item Show that \(tv\), \(t\ne0\), has the same eigenvalue, and that
+\(v\) is an eigenvector of \(tA\) with eigenvalue \(t\lambda\).
+\item Show that \(v\) is an eigenvector of \(sI-tA\) and of \(A^k\),
+\(k\geqslant2\), and give their eigenvalues.
+\item If \(A\) is invertible, prove the corresponding assertion for \(A^{-1}\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Linearity gives \(A(tv)=\lambda(tv)\) and \((tA)v=(t\lambda)v\).
+Also \((sI-tA)v=(s-t\lambda)v\).
+Inductively \(A^kv=\lambda^kv\).
+If \(A\) is invertible, \(\lambda=0\) would force \(v=0\); thus
+\(\lambda\ne0\), and multiplying \(Av=\lambda v\) by \(A^{-1}\) gives
+\(A^{-1}v=\lambda^{-1}v\).
+The statement about \(tA\) allows \(t=0\); every nonzero vector is then
+an eigenvector of the zero matrix.
+\end{solution}
+
+\begin{problem}[Transpose and eigenspaces]\label{ex:08:transpose}
+For a real square matrix \(A\), show that \(A\) and \(A^\top\) have the
+same characteristic polynomial and eigenvalues with multiplicities,
+including nonreal ones.
+Must they have the same eigenvectors?
+\end{problem}
+\begin{solution}
+Transpose invariance of the determinant gives
+\(\det(tI-A^\top)=\det((tI-A)^\top)=\det(tI-A)\).
+Thus all roots, real or nonreal, and their multiplicities agree.
+The eigenvectors need not coincide. For
+\(A=\begin{pmatrix}1&1\\0&1\end{pmatrix}\),
+\(\ker(A-I)=\operatorname{span}e_1\), whereas
+\(\ker(A^\top-I)=\operatorname{span}e_2\).
+\end{solution}
+
+\begin{problem}[Conjugate pairs and odd dimension]\label{ex:08:odd-real}
+\begin{enumerate}
+\item Prove that nonreal eigenvalues of a real matrix occur in conjugate
+pairs, with conjugate eigenvectors.
+\item Prove that every real matrix of odd order has a real eigenvalue.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+For \(Az=\lambda z\), \(z\ne0\), conjugate every coordinate:
+\[
+ \sum_j a_{ij}\bar z_j
+ =\overline{\sum_j a_{ij}z_j}
+ =\overline{\lambda z_i}
+ =\bar\lambda\,\bar z_i.
+\]
+Here \(a_{ij}\) is real. Thus \(A\bar z=\bar\lambda\,\bar z\), with
+\(\bar z\ne0\); when \(\lambda\) is nonreal, \(\bar\lambda\ne\lambda\).
+For(b), the characteristic polynomial is monic of odd degree.
+For large \(M>0\), \(p_A(M)>0\) and \(p_A(-M)<0\).
+The intermediate value theorem gives a real \(\lambda\) with
+\(p_A(\lambda)=0\). Then \(A-\lambda I\) has a nonzero real kernel vector.
+This proves the odd-order assertion without needing a general theorem
+counting all polynomial roots.
+\end{solution}
+
+\begin{problem}[*Eigenvalues of a real skew-symmetric matrix]\label{ex:08:skew}
+Let \(A\) be real and \(A^\top=-A\). Prove that every eigenvalue is
+zero or purely imaginary. What follows when the order of \(A\) is odd?
+\end{problem}
+\begin{solution}
+Let \(A(x+iy)=(a+bi)(x+iy)\), with real \(x,y,a,b\) and
+\((x,y)\ne(0,0)\). Equating real and imaginary parts gives
+\[
+ Ax=ax-by,\qquad Ay=bx+ay.
+\]
+For every real \(u\), skew-symmetry gives
+\(u^\top Au=u^\top A^\top u=-u^\top Au\), hence \(u^\top Au=0\).
+Take the dot products of the two equations with \(x,y\), then add:
+\[
+ 0=x^\top Ax+y^\top Ay
+  =a(\norm x^2+\norm y^2)+b(-x^\top y+y^\top x)
+  =a(\norm x^2+\norm y^2).
+\]
+The factor in parentheses is positive, so \(a=0\).
+Thus \(\lambda=bi\), with \(b=0\) allowed; in particular, the only
+possible real eigenvalue is zero.
+In odd order there is a real eigenvalue by the preceding problem.
+It must be zero, so \(A\) is singular.
+\end{solution}
+
+\begin{problem}[Eigenvalues do not count the rank]\label{ex:08:shift}
+Let \(J\) be \(n\times n\), with \(1\) immediately above the diagonal
+and zero elsewhere. Find its eigenvalues and rank.
+\end{problem}
+\begin{solution}
+It is triangular with zero diagonal, so \(p_J(t)=t^n\): all eigenvalues
+are zero. Its action is
+\(J(x_1,\ldots,x_n)^\top=(x_2,\ldots,x_n,0)^\top\).
+Thus its image is \(\operatorname{span}(e_1,\ldots,e_{n-1})\),
+of dimension \(n-1\), including rank zero for \(n=1\).
+Counting nonzero eigenvalues would give the wrong rank for \(n>1\).
+\end{solution}
+
+\begin{problem}[An invertible perturbation]\label{ex:08:perturbation}
+If \(A\) is singular, show that some nonzero real \(\epsilon\) makes
+\(A+\epsilon I\) invertible.
+\end{problem}
+\begin{solution}
+The polynomial \(q(\epsilon)=\det(A+\epsilon I)\) is monic of degree \(n\),
+so it has only finitely many real roots. Choose any nonzero real number
+outside that finite set. Then \(q(\epsilon)\ne0\).
+The choice may be made arbitrarily close to zero, because every punctured
+interval contains infinitely many real numbers.
+\end{solution}
+
+\begin{problem}[Similarity transports eigenspaces]\label{ex:08:similarity}
+If \(B=P^{-1}AP\), prove that \(A,B\) have identical eigenvalues with
+multiplicities. Must their eigenvectors be identical?
+\end{problem}
+\begin{solution}
+\[
+ \det(tI-B)=\det\{P^{-1}(tI-A)P\}=\det(tI-A).
+\]
+The eigenspace relation is \(E_\lambda(B)=P^{-1}E_\lambda(A)\), so
+the actual vectors need not be the same.
+For example \(A=\operatorname{diag}(1,2)\) and
+\(P=\begin{pmatrix}1&1\\0&1\end{pmatrix}\) give
+\(B=\begin{pmatrix}1&-1\\0&2\end{pmatrix}\).
+The eigenvalue \(2\) has eigenvectors on the line \(\operatorname{span}e_2\)
+for \(A\), but on \(\operatorname{span}(-1,1)^\top\) for \(B\).
+\end{solution}
+
+\begin{problem}[Rectangular products]\label{ex:08:ab-ba}
+Let \(A\in\R^{m\times n}\) and \(B\in\R^{n\times m}\).
+\begin{enumerate}
+\item Show \(\det(I_m-AB)=\det(I_n-BA)\).
+\item Show their nonzero eigenvalues, real or nonreal, agree with algebraic
+multiplicities.
+\item If \(n>m\), prove that \(BA\) has at least \(n-m\) zero eigenvalues.
+Why may there be more?
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Eliminate either off-diagonal block in
+\(\begin{pmatrix}I_m&A\\B&I_n\end{pmatrix}\) to prove (a).
+For \(t\ne0\), apply (a) with \(A/t\):
+\[
+ t^n p_{AB}(t)=t^m p_{BA}(t).
+\]
+This is a polynomial identity, since it holds for infinitely many \(t\).
+Away from zero the powers of \(t\) do not affect root multiplicities,
+giving (b). If \(n>m\), cancellation gives
+\(p_{BA}(t)=t^{n-m}p_{AB}(t)\), proving (c).
+There are additional zero roots when \(AB\) is singular; for \(A=0\),
+all \(n\) eigenvalues of \(BA\) vanish.
+\end{solution}
+
+\begin{problem}[Elementary symmetric functions and power sums]\label{ex:08:newton-three}
+Let \(\lambda_1,\lambda_2,\lambda_3\) be real and write
+\[
+ \prod_{i=1}^3(t-\lambda_i)=t^3+p_2t^2+p_1t+p_0,
+\]
+and put \(s_1=\sum_i\lambda_i\),
+\(s_2=\lambda_1\lambda_2+\lambda_1\lambda_3+\lambda_2\lambda_3\),
+\(s_3=\lambda_1\lambda_2\lambda_3\), and
+\(\sigma_k=\sum_i\lambda_i^k\).
+Find the \(p_i\) in terms of the \(s_i\), and prove that
+\((s_1,s_2,s_3)\) and \((\sigma_1,\sigma_2,\sigma_3)\) determine one another.
+\end{problem}
+\begin{solution}
+Expansion gives \(p_2=-s_1,p_1=s_2,p_0=-s_3\).
+Furthermore
+\[
+ \sigma_1=s_1,\quad \sigma_2=s_1^2-2s_2,\quad
+ \sigma_3=s_1^3-3s_1s_2+3s_3.
+\]
+The first follows by definition, the second by squaring \(s_1\),
+and the third by expanding \(s_1^3\) and \(s_1s_2\).
+Conversely
+\[
+ s_1=\sigma_1,\quad s_2=(\sigma_1^2-\sigma_2)/2,\quad
+ s_3=(\sigma_3-\sigma_1^3+3\sigma_1s_2)/3.
+\]
+These explicit inverse formulas prove the one-to-one correspondence.
+\end{solution}
+
+\begin{problem}[When traces of powers determine eigenvalues]\label{ex:08:newton-general}
+For real square matrices \(A,B\) of order \(n\), assume that both
+characteristic polynomials split over \(\R\). Prove that their eigenvalues
+agree with algebraic multiplicities if and only if
+\(\tr A^k=\tr B^k\) for \(k=1,\ldots,n\).
+\end{problem}
+\begin{solution}
+Triangularize a matrix as in the reading supplement. Its \(k\)-th power
+has diagonal entries \(\lambda_i^k\), and trace is unchanged by
+similarity, since \(\tr(XY)=\tr(YX)\). Thus
+\(\tr A^k=\sum_i\lambda_i^k\).
+To see that the first \(n\) power sums determine the characteristic
+polynomial, write
+\(f(z)=\prod_i(1-\lambda_i z)=\sum_{r=0}^n(-1)^r e_rz^r\), \(e_0=1\).
+The product rule gives
+\(f'(z)=-\sum_i\lambda_i\prod_{j\ne i}(1-\lambda_jz)\).
+Multiply the finite geometric identity
+\((1-\lambda_i z)\sum_{k=1}^n\lambda_i^kz^{k-1}
+=\lambda_i-\lambda_i^{n+1}z^n\)
+by \(\prod_{j\ne i}(1-\lambda_jz)\), and compare coefficients of
+degrees below \(n\). Summing in \(i\) yields the recursion
+\[
+ r e_r=\sum_{k=1}^r(-1)^{k-1}e_{r-k}\sigma_k
+ \quad(1\leqslant r\leqslant n).
+\]
+Hence the \(\sigma_k\) determine \(e_1,\ldots,e_n\) successively.
+Equal traces give equal characteristic polynomials and therefore equal
+root multisets. The converse follows directly from the power-sum formula.
+\end{solution}
+
+\begin{problem}[A matrix that cannot be diagonalized]\label{ex:08:three-jordan}
+Prove that \(\begin{pmatrix}1&1&0\\0&1&1\\0&0&1\end{pmatrix}\)
+cannot be diagonalized.
+\end{problem}
+\begin{solution}
+Its characteristic polynomial is \((t-1)^3\).
+The equation \((A-I)x=0\) gives \(x_2=x_3=0\), so its eigenspace
+has dimension one and cannot provide a basis of \(\R^3\).
+Equivalently, a diagonal matrix with all eigenvalues \(1\) is \(I\);
+similarity to \(I\) would make \(A=PIP^{-1}=I\), a contradiction.
+\end{solution}
+
+\begin{problem}[Real QR factorization]\label{ex:08:qr}
+Let \(A\in\R^{m\times n}\) have independent columns, \(m\geqslant n\).
+Prove \(A=QR\), where \(Q^\top Q=I_n\) and \(R\) is real upper
+triangular with positive diagonal.
+\end{problem}
+\begin{solution}
+Apply the real Gram--Schmidt process to the columns \(a_j\).
+Given \(q_1,\ldots,q_{j-1}\), put
+\[
+ r_{ij}=q_i^\top a_j\quad(i<j),\qquad
+ w_j=a_j-\sum_{i<j}q_ir_{ij}.
+\]
+Taking the dot product with any earlier \(q_h\) gives
+\(q_h^\top w_j=q_h^\top a_j-r_{hj}=0\).
+The vector \(w_j\) is nonzero: otherwise \(a_j\) would lie in the span
+of the preceding columns, contrary to independence.
+Set \(r_{jj}=\norm{w_j}>0\), \(q_j=w_j/r_{jj}\), and \(r_{ij}=0\) for
+\(i>j\). Induction gives orthonormal columns, and the identities
+\(a_j=\sum_{i\leqslant j}q_ir_{ij}\) give \(A=QR\).
+All quantities are real by construction.
+\end{solution}
+
+\begin{problem}[A rank-one product and its update]\label{ex:08:rank-one}
+For real \(x,y\in\R^n\):
+\begin{enumerate}
+\item Prove that \(xy^\top\) has \(n-1\) zero eigenvalues and one
+eigenvalue \(y^\top x\), counted with multiplicity.
+\item Prove \(\det(I+xy^\top)=1+y^\top x\).
+\item If \(\mu=1+y^\top x\ne0\), prove
+\((I+xy^\top)^{-1}=I-\mu^{-1}xy^\top\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+The rectangular determinant identity, applied to an \(n\)-by-\(1\)
+column and a \(1\)-by-\(n\) row, gives
+\(p_{xy^\top}(t)=t^{n-1}(t-y^\top x)\), first for \(t\ne0\) and then
+as a polynomial identity. This proves (a), including \(x=0\), \(y=0\),
+or \(y^\top x=0\).
+The same identity at \(I+xy^\top\) proves (b).
+Put \(M=xy^\top\); then \(M^2=(y^\top x)M=(\mu-1)M\).
+Both products of \(I+M\) and \(I-\mu^{-1}M\) equal
+\(I+\{1-\mu^{-1}-\mu^{-1}(\mu-1)\}M=I\), proving (c).
+\end{solution}
+
+\begin{problem}[Left and right eigenvectors]\label{ex:08:left}
+A real left eigenvector of \(A\) for a real \(\lambda\) is a nonzero
+column \(y\) with \(y^\top A=\lambda y^\top\).
+\begin{enumerate}
+\item Show \(A^\top y=\lambda y\).
+\item If \(Ax=\lambda x\), \(y^\top A=\mu y^\top\), and
+\(\lambda\ne\mu\), prove \(y^\top x=0\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Taking transposes proves (a). For (b), evaluate one scalar in two ways:
+\[
+ y^\top Ax=\lambda y^\top x=\mu y^\top x.
+\]
+Thus \((\lambda-\mu)y^\top x=0\), and the nonzero factor gives
+\(y^\top x=0\).
+This pairs a left eigenvector with a right eigenvector; two right
+eigenvectors need not be orthogonal.
+\end{solution}
+
+\begin{problem}[A companion matrix]\label{ex:08:companion}
+Let \(C\) have \(1\) in positions \((j,j+1)\), \(j<n\), last row
+\((-a_0,-a_1,\ldots,-a_{n-1})\), and zero elsewhere.
+Prove \(p_C(t)=t^n+a_{n-1}t^{n-1}+\cdots+a_1t+a_0\).
+\end{problem}
+\begin{solution}
+For \(n=1\), \(C=[-a_0]\), giving \(t+a_0\).
+For \(n>1\), expand \(tI-C\) in its first column.
+The top entry contributes \(t\) times the determinant of the companion
+pattern with coefficients \(a_1,\ldots,a_{n-1}\).
+The bottom entry \(a_0\) contributes \(a_0\):
+its cofactor sign is \((-1)^{n+1}\), and its minor is lower triangular
+with \(n-1\) diagonal entries \(-1\), so the signs cancel.
+Induction yields
+\(t(t^{n-1}+a_{n-1}t^{n-2}+\cdots+a_1)+a_0\).
+\end{solution}
+
+\begin{problem}[Commuting matrices and simple eigenvalues]\label{ex:08:commuting-simple}
+\begin{enumerate}
+\item If \(AB=BA\) and \(\lambda\) is a simple real eigenvalue of \(A\),
+prove that each eigenvector of \(A\) for \(\lambda\) is an eigenvector of \(B\).
+\item If \(A\) has \(n\) distinct real eigenvalues and \(AB=BA\), prove that
+one change of basis diagonalizes both matrices.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+If \(Av=\lambda v\), then \(A(Bv)=B(Av)=\lambda Bv\).
+The eigenspace \(E_\lambda(A)\) has dimension one because its geometric
+multiplicity is positive and at most the algebraic multiplicity one.
+Thus \(Bv=\mu v\) for a scalar \(\mu\), including \(\mu=0\).
+Since \(v\ne0\), it is an eigenvector of \(B\).
+In (b), the distinct eigenvalues of \(A\) provide a basis \(v_1,\ldots,v_n\).
+By (a), the same vectors are eigenvectors of \(B\); their column matrix
+diagonalizes both.
+\end{solution}
+
+\subsection*{Triangular form and polynomial consequences}
+\begin{problem}[*Strict triangularity and rank decrease]\label{ex:08:nilpotent}
+Let \(A\) be strictly upper triangular of order \(n\).
+\begin{enumerate}
+\item Prove \(A^n=0\).
+\item Put \(r_j=\operatorname{rank}(A^j)\). Prove that
+\(r_{j+1}<r_j\) whenever \(r_j>0\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Every nonzero term in \((A^k)_{ij}\) requires a chain
+\(i<i_1<\cdots<i_{k-1}<j\), so \(j-i\geqslant k\).
+No such pair exists for \(k=n\), proving (a).
+Let \(W=\operatorname{im}A^j\ne\{0\}\). Then \(AW=\operatorname{im}A^{j+1}\).
+If the dimensions were equal, the map \(A:W\to W\) would be surjective
+and hence invertible. Its \(n\)-th power would be invertible on the
+nonzero space \(W\), contradicting \(A^n=0\).
+Thus \(\dim AW<\dim W\), proving (b).
+\end{solution}
+
+\begin{problem}[A growing zero block]\label{ex:08:triangular-product}
+Let \(A,B\) be upper triangular of order \(n\), \(1\leqslant k<n\).
+Assume \(a_{ij}=0\) for \(1\leqslant i,j\leqslant k\), and
+\(b_{k+1,k+1}=0\). Show that \(AB\) is upper triangular and its
+upper-left \((k+1)\)-by-\((k+1)\) block is zero.
+\end{problem}
+\begin{solution}
+An entry \(c_{ij}=\sum_\ell a_{i\ell}b_{\ell j}\) can have nonzero
+terms only for \(i\leqslant\ell\leqslant j\); hence \(c_{ij}=0\)
+when \(i>j\). If \(i\leqslant j\leqslant k\), every \(a_{i\ell}\)
+in that range lies in the zero block. If \(j=k+1\), the terms with
+\(\ell\leqslant k\) vanish from \(A\), and the remaining term contains
+\(b_{k+1,k+1}=0\). This includes \(i=k+1\), proving the claim.
+\end{solution}
+
+\begin{problem}[An elementary similarity]\label{ex:08:elementary-similarity}
+Let \(e_i,e_j\) be distinct standard basis vectors, and
+\(T(\theta)=I-\theta e_ie_j^\top\).
+\begin{enumerate}
+\item Prove \(T(\theta)^{-1}=T(-\theta)\).
+\item If \(A\) is upper triangular and \(i<j\), prove
+\[
+ T(\theta)^{-1}AT(\theta)=A+\theta(e_ie_j^\top A-Ae_ie_j^\top),
+\]
+and describe every possibly changed entry.
+\item If \(a_{ii}\ne a_{jj}\), take
+\(\theta=a_{ij}/(a_{ii}-a_{jj})\). What does this achieve?
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Put \(E=e_ie_j^\top\). Since \(e_j^\top e_i=0\), \(E^2=0\);
+thus \((I+\theta E)(I-\theta E)=I\) in either order.
+Expansion in (b) gives \(A+\theta(EA-AE)-\theta^2EAE\).
+Here \(EAE=a_{ji}E=0\), by upper triangularity.
+For \(P=EA-AE\),
+\[
+ P_{h\ell}=\delta_{hi}a_{j\ell}-a_{hi}\delta_{j\ell}.
+\]
+The only possible changes are in row \(i\) at columns \(\ell\geqslant j\),
+and in column \(j\) at rows \(h\leqslant i\).
+At their intersection \(P_{ij}=a_{jj}-a_{ii}\); hence the chosen
+\(\theta\) makes the new \((i,j)\) entry zero.
+All other changed entries lie farther above the diagonal, and no
+diagonal entry changes.
+\end{solution}
+
+\begin{problem}[Separate unequal diagonal blocks]\label{ex:08:block-separation}
+Let an upper triangular \(A\) have distinct diagonal values
+\(\lambda_1,\ldots,\lambda_k\), grouped contiguously with multiplicities
+\(n_1,\ldots,n_k\). Write its diagonal blocks as \(A_1,\ldots,A_k\).
+Using elementary similarities, prove that \(A\) is similar to
+\(\operatorname{diag}(A_1,\ldots,A_k)\).
+\end{problem}
+\begin{solution}
+An entry \((i,j)\) with \(i<j\) lying in two different diagonal blocks
+has \(a_{ii}\ne a_{jj}\). Apply the preceding elementary similarity to
+make it zero. That operation changes only positions \((i,\ell)\) with
+\(\ell>j\), or \((h,j)\) with \(h<i\), besides the targeted entry.
+These positions have strictly larger distance above the diagonal.
+They also remain between different diagonal blocks, because
+\(h\leqslant i<j\leqslant\ell\) and the blocks are contiguous.
+Process distances \(j-i=1,2,\ldots,n-1\), removing all off-block
+entries at each distance. No operation changes an entry already removed,
+or any entry within a diagonal block. The resulting matrix is the
+stated block diagonal matrix; the product of the elementary similarity
+matrices is invertible.
+\end{solution}
+
+\begin{problem}[A unit triangular eigenvector matrix]\label{ex:08:unit-triangular}
+If \(A\) is upper triangular with distinct diagonal entries, prove that
+there is a unit upper triangular \(P\) such that
+\(P^{-1}AP=\operatorname{diag}(a_{11},\ldots,a_{nn})\).
+\end{problem}
+\begin{solution}
+For column \(j\), seek an eigenvector \(v_j\) for \(a_{jj}\) with
+coordinates \(v_{jj}=1\) and \(v_{ij}=0\) for \(i>j\).
+Rows below \(j\) and row \(j\) of \((A-a_{jj}I)v_j=0\) then hold.
+For \(i=j-1,\ldots,1\), solve successively
+\[
+ (a_{ii}-a_{jj})v_{ij}=-\sum_{\ell=i+1}^{j}a_{i\ell}v_{\ell j}.
+\]
+The divisor is nonzero by distinctness. Thus all \(v_j\) exist.
+Their column matrix \(P\) is upper triangular with diagonal \(1\), hence
+invertible, and \(AP=P\operatorname{diag}(a_{ii})\).
+\end{solution}
+
+\begin{problem}[Triangular inverses]\label{ex:08:triangular-inverse}
+\begin{enumerate}
+\item Prove that an upper triangular matrix with nonzero diagonal has an
+upper triangular inverse with nonzero diagonal.
+\item Prove that a unit upper triangular matrix with integer entries has
+a unit upper triangular inverse with integer entries.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+In \(AX=I\), solve each column by back substitution.
+For column \(j\), rows \(i>j\) give \(x_{ij}=0\), and row \(j\) gives
+\(x_{jj}=a_{jj}^{-1}\). The remaining entries follow successively from
+\[
+ x_{ij}=-a_{ii}^{-1}\sum_{\ell=i+1}^j a_{i\ell}x_{\ell j}
+ \quad(i<j).
+\]
+This proves (a). In (b), every divisor \(a_{ii}\) is \(1\);
+the recurrence uses only sums and products of integers, proving (b).
+Equivalently, if \(A=I+N\), strict triangularity gives \(N^n=0\), and
+\(A^{-1}=I-N+\cdots+(-N)^{n-1}\).
+\end{solution}
+
+\begin{problem}[Trace of powers with real roots]\label{ex:08:trace-powers}
+Let \(A\) be real and suppose
+\(p_A(t)=\prod_{j=1}^n(t-\lambda_j)\), with real \(\lambda_j\).
+Prove
+\(\tr A^k=\sum_j\lambda_j^k\) for every integer \(k\geqslant1\).
+\end{problem}
+\begin{solution}
+The real-root triangularization proof gives \(A=PTP^{-1}\),
+where \(T\) is upper triangular with diagonal entries \(\lambda_j\).
+Then \(A^k=PT^kP^{-1}\), and cyclic trace gives
+\(\tr A^k=\tr(T^kP^{-1}P)=\tr T^k\).
+For upper triangular \(U,V\), the only possible nonzero term in
+\((UV)_{jj}=\sum_\ell u_{j\ell}v_{\ell j}\) has \(\ell=j\).
+Thus \((UV)_{jj}=u_{jj}v_{jj}\). Induction gives
+\((T^k)_{jj}=\lambda_j^k\); summing proves the formula.
+\end{solution}
+
+\begin{problem}[Nonzero eigenvalues and rank]\label{ex:08:rank-bound}
+If the characteristic polynomial of a real \(n\times n\) matrix has
+\(r\) nonzero roots, real or nonreal, counted with algebraic multiplicity,
+prove that its rank is at least \(r\).
+\end{problem}
+\begin{solution}
+Put \(d=\dim\ker A\). Extending a basis of \(\ker A\) to a basis of
+\(\R^n\) represents \(A\) by
+\(\begin{pmatrix}0&B\\0&C\end{pmatrix}\), where the first diagonal
+block has order \(d\). Its characteristic polynomial is
+\(t^d\det(tI-C)\). The polynomial on the right after removing \(t^d\)
+has degree \(n-d\), so it can have at most \(n-d\) nonzero roots
+with multiplicity. Hence \(r\leqslant n-d=\operatorname{rank}A\).
+Equality need not hold, as a nonzero strictly upper triangular matrix shows.
+\end{solution}
+
+\begin{problem}[A simple eigenvalue and the converse]\label{ex:08:simple-rank}
+\begin{enumerate}
+\item If \(\lambda\) is a simple real eigenvalue, prove
+\(\operatorname{rank}(\lambda I-A)=n-1\). Does the rank condition
+imply that \(\lambda\) is simple?
+\item Deduce the rank when zero is a simple eigenvalue.
+If zero has algebraic multiplicity \(k\geqslant2\), must the rank be \(n-k\)?
+\end{enumerate}
+\end{problem}
+\begin{solution}
+A simple eigenvalue has a nonzero eigenspace of dimension at most one,
+hence exactly one. Rank--nullity gives the stated rank.
+Conversely the rank condition implies a nonzero kernel and thus an
+eigenvalue, but it need not be simple:
+\(\begin{pmatrix}0&1\\0&0\end{pmatrix}\) has rank one and a double
+eigenvalue zero.
+If zero is simple, the rank is \(n-1\).
+For multiplicity \(k\geqslant2\), take
+\(A=\operatorname{diag}(J_k,I_{n-k})\), where \(J_k\) is the shift matrix.
+Then \(p_A(t)=t^k(t-1)^{n-k}\), but
+\(\operatorname{rank}A=(k-1)+(n-k)=n-1>n-k\).
+\end{solution}
+
+\begin{problem}[*The characteristic equation evaluated at the matrix]\label{ex:08:cayley-hamilton}
+For a real \(n\times n\) matrix, write
+\(p_A(t)=t^n+c_{n-1}t^{n-1}+\cdots+c_0\).
+Prove
+\[
+ p_A(A)=A^n+c_{n-1}A^{n-1}+\cdots+c_0I=0.
+\]
+If a factorization \(p_A(t)=\prod_j(t-\lambda_j)\) is given, allowing
+real or nonreal roots,
+deduce \(\prod_j(\lambda_j I-A)=0\).
+\end{problem}
+\begin{solution}
+For \(n=1\) the identity is \(A-a_{11}I=0\).
+For \(n>1\), the entries of \(\operatorname{adj}(tI-A)\) are
+polynomials of degree at most \(n-1\). Write
+\[
+ \operatorname{adj}(tI-A)=\sum_{j=0}^{n-1}B_jt^j.
+\]
+The cofactor identity, valid also when \(tI-A\) is singular, gives
+\[
+ (tI-A)\sum_{j=0}^{n-1}B_jt^j=p_A(t)I.
+\]
+Comparing coefficients yields
+\[
+ B_{n-1}=I,\qquad B_{k-1}-AB_k=c_kI\ (1\leqslant k<n),
+ \qquad -AB_0=c_0I.
+\]
+Multiply the middle identity on the left by \(A^k\), sum in \(k\),
+and include the last identity and \(A^n=A^nB_{n-1}\). The result is
+\[
+ p_A(A)=A^nB_{n-1}
+ +\sum_{k=1}^{n-1}(A^kB_{k-1}-A^{k+1}B_k)-AB_0=0,
+\]
+because every term cancels with its neighbor.
+No factorization of \(p_A\) was needed.
+When the displayed factorization exists, its factors are
+polynomials in \(A\), so they commute and their product is \(p_A(A)\).
+Changing the sign of all \(n\) factors proves the final assertion.
+\end{solution}
+
+\subsection*{Further complete calculations and applications}
+\begin{problem}[A reflection]\label{ex:08:reflection}
+Let \(H=\begin{pmatrix}\cos\theta&\sin\theta\\
+\sin\theta&-\cos\theta\end{pmatrix}\).
+Find a nonzero real \(v\) with \(Hv=v\), and prove that every vector
+perpendicular to \(v\) satisfies \(Hw=-w\).
+\end{problem}
+\begin{solution}
+Write \(c=\cos\theta,s=\sin\theta\).
+If \(c\ne1\), take \(v=(s,1-c)^\top\), which is nonzero.
+Multiplication gives
+\(Hv=(cs+s-sc,s^2-c+c^2)^\top=(s,1-c)^\top\).
+A perpendicular vector is a multiple of \(w=(-(1-c),s)^\top\);
+\[
+ Hw=(-c+c^2+s^2,-s+sc-cs)^\top=(1-c,-s)^\top=-w.
+\]
+If \(c=1\), then \(s=0\), \(H=\operatorname{diag}(1,-1)\);
+take \(v=e_1\), and every perpendicular vector is a multiple of \(e_2\).
+The two eigendirections describe reflection in the line spanned by \(v\).
+\end{solution}
+
+\begin{problem}[A commuting map preserves an eigenspace]\label{ex:08:commuting-space}
+Let \(S,T:V\to V\) be linear and \(ST=TS\).
+If \(v\) is an eigenvector of \(T\) for \(\lambda\), show that \(Sv\)
+is also one for \(\lambda\), provided \(Sv\ne0\).
+\end{problem}
+\begin{solution}
+\(T(Sv)=S(Tv)=S(\lambda v)=\lambda Sv\).
+The nonzero condition is needed only for the word eigenvector.
+Without it, the always valid assertion is \(S(E_\lambda(T))\subseteq
+E_\lambda(T)\).
+\end{solution}
+
+\begin{problem}[Two two-by-two eigenspace calculations]\label{ex:08:lang-two}
+Find the characteristic polynomials, eigenvalues and eigenspace bases of
+\[
+ A=\begin{pmatrix}1&2\\3&2\end{pmatrix},\qquad
+ B=\begin{pmatrix}3&2\\-1&0\end{pmatrix}.
+\]
+\end{problem}
+\begin{solution}
+For \(A\), \(p_A=(t-1)(t-2)-6=(t-4)(t+1)\).
+The first row gives bases \((2,3)^\top\) for \(4\) and
+\((-1,1)^\top\) for \(-1\).
+For \(B\), \(p_B=t(t-3)+2=(t-1)(t-2)\).
+The second row gives \(x=-\lambda y\), so bases are
+\((-1,1)^\top\) for \(1\) and \((-2,1)^\top\) for \(2\).
+Each listed vector also satisfies the other row.
+Every root is simple, so each nonzero vector spans its entire eigenspace.
+\end{solution}
+
+\begin{problem}[Three three-by-three eigenspace calculations]\label{ex:08:lang-three}
+Find the characteristic polynomials, eigenvalues and eigenspace bases of
+\[
+ A=\begin{pmatrix}4&0&1\\-2&1&0\\-2&0&1\end{pmatrix},\quad
+ B=\begin{pmatrix}1&-3&3\\3&-5&3\\6&-6&4\end{pmatrix},\quad
+ C=\begin{pmatrix}3&1&1\\2&4&2\\1&1&3\end{pmatrix}.
+\]
+\end{problem}
+\begin{solution}
+For \(A\), expansion in column \(2\) gives
+\((t-1)\{(t-4)(t-1)+2\}=(t-1)(t-2)(t-3)\).
+Bases for \(E_1,E_2,E_3\) are respectively
+\[
+ (0,1,0)^\top,\qquad(-1,2,2)^\top,\qquad(-1,1,1)^\top.
+\]
+They satisfy \(Av=\lambda v\), and simplicity of the roots proves
+completeness.
+For \(B\), expansion gives \(p_B=(t+2)^2(t-4)\).
+Here \(B+2I\) has all rows multiples of \((1,-1,1)\), so
+\[
+ E_{-2}=\{(x,y,z)^\top:x-y+z=0\}
+ =\operatorname{span}\{(1,1,0)^\top,(-1,0,1)^\top\}.
+\]
+The vector \((1,1,2)^\top\) spans \(E_4\).
+For \(C\), \(p_C=(t-2)^2(t-6)\), and
+\(C-2I=\begin{pmatrix}1\\2\\1\end{pmatrix}(1,1,1)\).
+Consequently
+\[
+ E_2=\operatorname{span}\{(-1,1,0)^\top,(-1,0,1)^\top\},\qquad
+ E_6=\operatorname{span}\{(1,2,1)^\top\}.
+\]
+The two independent vectors for each double root exhaust its algebraic
+multiplicity; the simple eigenspaces are one-dimensional. All three
+matrices are diagonalizable despite the repeated roots in \(B,C\).
+\end{solution}
+
+\begin{problem}[Two one-dimensional eigenspaces]\label{ex:08:lang-repeated}
+Find all eigenvalues and eigenspace bases of
+\[
+ A=\begin{pmatrix}2&-1\\1&0\end{pmatrix},\qquad
+ B=\begin{pmatrix}2&0\\1&2\end{pmatrix}.
+\]
+Show that the eigenvectors of each matrix span a one-dimensional space.
+\end{problem}
+\begin{solution}
+For \(A\), \(p_A=(t-1)^2\), and the equation
+\((A-I)(x,y)^\top=0\) is \(x=y\).
+Thus \(E_1=\operatorname{span}\{(1,1)^\top\}\).
+For \(B\), \(p_B=(t-2)^2\), and
+\((B-2I)(x,y)^\top=0\) is \(x=0\).
+Thus \(E_2=\operatorname{span}\{(0,1)^\top\}\).
+These are all eigenvalues and eigenvectors; both spans have dimension one.
+\end{solution}
+
+\begin{problem}[Real eigenspaces of a cyclic shift and a cubic]\label{ex:08:lang-cyclic}
+Find the real eigenvalues and eigenspace bases of
+\[
+ A=\begin{pmatrix}0&1&0&0\\0&0&1&0\\0&0&0&1\\1&0&0&0\end{pmatrix},
+ \qquad B=\begin{pmatrix}-1&0&1\\-1&3&0\\-4&13&-1\end{pmatrix}.
+\]
+\end{problem}
+\begin{solution}
+For \(A\), the eigenvector equations give
+\(x_2=\lambda x_1,x_3=\lambda^2x_1,x_4=\lambda^3x_1\) and
+\(x_1=\lambda^4x_1\). A nonzero solution needs \(x_1\ne0\).
+The only real solutions of \(\lambda^4=1\) are \(1,-1\).
+Their eigenspaces have respective bases
+\((1,1,1,1)^\top\) and \((1,-1,1,-1)^\top\).
+
+For \(B\), expansion gives
+\[
+ p_B(t)=t^3-t^2-t-2=(t-2)(t^2+t+1).
+\]
+Since \(t^2+t+1=(t+1/2)^2+3/4>0\), its only real eigenvalue is \(2\).
+Rows two and one of \((B-2I)(x,y,z)^\top=0\) give \(x=y\), \(z=3y\).
+The last row then vanishes, so the eigenspace is
+\(\operatorname{span}\{(1,1,3)^\top\}\).
+Neither matrix has enough real eigenvectors to form a basis.
+\end{solution}
+
+\begin{problem}[Trigonometric differentiation]\label{ex:08:derivative}
+\begin{enumerate}
+\item On the real space \(V=\operatorname{span}\{\sin t,\cos t\}\),
+does differentiation have a nonzero eigenvector?
+\item If \(k\) is a nonzero integer, show that \(\sin kx,\cos kx\)
+are eigenvectors of the second derivative and give the eigenvalue.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+In the ordered basis \((\sin t,\cos t)\), the derivative has matrix
+\(\begin{pmatrix}0&-1\\1&0\end{pmatrix}\), with polynomial \(t^2+1\).
+Thus it has no real eigenvalue and no nonzero eigenvector in the real
+space \(V\).
+Twice differentiating gives
+\(D^2\sin kx=-k^2\sin kx\) and \(D^2\cos kx=-k^2\cos kx\).
+Both functions are nonzero, and their common eigenvalue is \(-k^2\).
+They may be considered in the invariant space they span, so no domain
+ambiguity for the second derivative is needed.
+\end{solution}
+
+\begin{problem}[All eigenvectors in a distinct-eigenvalue basis]\label{ex:08:all-vectors}
+Suppose \(v_1,\ldots,v_n\) is an eigenvector basis of \(T\), with
+distinct eigenvalues \(c_1,\ldots,c_n\). Prove every eigenvector of \(T\)
+is a scalar multiple of one of these basis vectors.
+\end{problem}
+\begin{solution}
+Write \(v=\sum_i a_iv_i\) and suppose \(Tv=\lambda v\).
+Independence of the basis gives \((c_i-\lambda)a_i=0\) for every \(i\).
+At least one \(a_i\ne0\), so \(\lambda=c_i\) for that index.
+Distinctness makes all other coefficients zero. Thus
+\(v=a_iv_i\), with \(a_i\ne0\).
+\end{solution}
+
+\begin{problem}[Three further matrices]\label{ex:08:lang-further}
+Find eigenvalues and eigenspace bases of
+\[
+ A=\begin{pmatrix}-1&2&2\\2&2&2\\-3&-6&-6\end{pmatrix},\quad
+ B=\begin{pmatrix}3&2&1\\0&1&2\\0&1&-1\end{pmatrix},\quad
+ C=\begin{pmatrix}-1&4&-2\\-3&4&0\\-3&1&3\end{pmatrix}.
+\]
+\end{problem}
+\begin{solution}
+Expansion gives
+\[
+ p_A=t(t+2)(t+3),\qquad p_B=(t-3)(t^2-3),\qquad
+ p_C=(t-1)(t-2)(t-3).
+\]
+For \(A\), bases for eigenvalues \(-3,-2,0\) are respectively
+\((-1,0,1)^\top,(-2,1,0)^\top,(0,-1,1)^\top\).
+For \(B\), \(E_3=\operatorname{span}e_1\).
+For \(\lambda=\pm\sqrt3\), the last row gives \(y=(\lambda+1)z\);
+the first gives \(x=(2\lambda+3)z/(\lambda-3)\).
+Taking \(z=1\) yields
+\[
+ E_\lambda=\operatorname{span}
+ \left\{\left(\frac{2\lambda+3}{\lambda-3},\lambda+1,1\right)^\top\right\}.
+\]
+The second row holds because \(\lambda^2=3\).
+For \(C\), bases for \(1,2,3\) are respectively
+\((1,1,1)^\top\), \((2,3,3)^\top\), and \((1,3,4)^\top\).
+For instance \(C(2,3,3)^\top=(4,6,6)^\top\).
+All listed roots are simple; checking the displayed eigenvectors
+therefore also proves that the bases exhaust the eigenspaces.
+\end{solution}

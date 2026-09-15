@@ -1,0 +1,496 @@
+\subsection*{Centering and spectral decompositions}
+\begin{problem}[Centering and eigenvalue dispersion]\label{ex:12:centering}
+Let $C=I_n-\mathbf1\mathbf1^\top/n$. Prove that $C$ is symmetric
+idempotent, that $(Cx)_j=x_j-\bar x$, and that $C\mathbf1=0$.
+For symmetric positive semidefinite $A$, prove
+$\tr(A^2)-(\tr A)^2/n\geqslant0$.
+\end{problem}
+\begin{solution}
+The matrix $J=\mathbf1\mathbf1^\top/n$ is symmetric and
+$J^2=\mathbf1(\mathbf1^\top\mathbf1)\mathbf1^\top/n^2=J$.
+Thus $C^\top=C$ and $C^2=I-2J+J^2=C$.
+Since $Jx=\bar x\mathbf1$, the coordinate claim follows, and putting
+$x=\mathbf1$ gives $C\mathbf1=0$.
+If $\lambda=(\lambda_1,\ldots,\lambda_n)^\top$ lists the eigenvalues
+of $A$, spectral diagonalization gives
+\[
+\tr(A^2)-\frac{(\tr A)^2}{n}
+=\sum_i(\lambda_i-\bar\lambda)^2
+=\lambda^\top C\lambda\geqslant0.
+\]
+Equality holds exactly when all eigenvalues coincide, equivalently
+$A=\bar\lambda I$. The same inequality in fact holds for every real
+symmetric $A$.
+\end{solution}
+
+\begin{problem}[A resolution of the identity]
+Let $P_1,\ldots,P_m$ be symmetric idempotent $n\times n$ matrices with
+$\sum_iP_i=I$ and ranks $r_i$. Prove $\sum_i r_i=n$,
+$P_iP_j=0$ for $i\ne j$, and that $P_i+P_j$ is symmetric idempotent.
+\end{problem}
+\begin{solution}
+Since the trace of each projector equals its rank,
+$\sum_i r_i=\tr(\sum_iP_i)=n$.
+For $x\in\operatorname{col}(P_j)$, $P_jx=x$ and
+\[
+\norm x^2=x^\top\left(\sum_iP_i\right)x
+=\norm x^2+\sum_{i\ne j}\norm{P_ix}^2.
+\]
+Every summand in the remaining sum is nonnegative, so $P_ix=0$ for
+$i\ne j$. Apply this to $x=P_jy$ for arbitrary $y$ to get $P_iP_j=0$.
+Transposition also gives $P_jP_i=0$.
+Thus $(P_i+P_j)^2=P_i+P_j$, and symmetry is inherited from the two
+summands. This proves all assertions without a separate rank-inequality
+criterion for idempotence.
+\end{solution}
+
+\begin{problem}[Weighted sums of perpendicular projectors]
+Under the preceding hypotheses, let $A=\sum_i a_iP_i$.
+Find its eigenvalues with multiplicities, its determinant, and its inverse
+when every $a_i\ne0$.
+\end{problem}
+\begin{solution}
+On $\operatorname{col}(P_i)$ the matrix acts as $a_iI$, since
+$AP_i=a_iP_i$. The ranges are perpendicular and their direct sum is
+$\R^n$, as $x=\sum_iP_ix$ for every $x$.
+Choose an orthonormal basis in each range and concatenate them. The
+result diagonalizes $A$ with $a_i$ repeated $r_i$ times; if several
+$a_i$ coincide their multiplicities add. Ranges of rank zero contribute
+no eigenvectors. Thus $\det A=\prod_i a_i^{r_i}$, with zero-rank factors
+omitted. If all $a_i\ne0$, then
+\[
+A\left(\sum_i a_i^{-1}P_i\right)=\sum_iP_i=I,
+\]
+and the reversed product is also $I$, so
+$A^{-1}=\sum_i a_i^{-1}P_i$.
+\end{solution}
+
+\begin{problem}[Equicorrelation]\label{ex:12:equicorrelation}
+For $n\geqslant2$, let $A$ have diagonal entries $1$ and off-diagonal
+entries $t$. Find its eigenvalues/eigenvectors, determinant, inverse
+when it exists, and the exact range of $t$ for positive definiteness.
+\end{problem}
+\begin{solution}
+With $J=\mathbf1\mathbf1^\top/n$ and $C=I-J$,
+\[
+A=(1-t)I+t\mathbf1\mathbf1^\top
+=[1+(n-1)t]J+(1-t)C.
+\]
+Its eigenvalue on $\R\mathbf1$ is $a=1+(n-1)t$; on
+$\mathbf1^\perp$ it is $b=1-t$, of multiplicity $n-1$.
+For $t\ne0$ these two eigenvalues are distinct, so their eigenspaces
+are exactly those two subspaces. For $t=0$, $A=I$ and every nonzero
+vector is an eigenvector. An orthonormal eigenbasis is always
+$\mathbf1/\sqrt n$ followed by any orthonormal basis of $\mathbf1^\perp$.
+The determinant is $ab^{n-1}$. It is invertible exactly when
+$t\notin\{1,-1/(n-1)\}$, with $A^{-1}=a^{-1}J+b^{-1}C$.
+Positive definiteness requires both $a,b>0$, hence
+$-1/(n-1)<t<1$. At the two endpoints it is positive semidefinite and
+singular, with the zero eigenspace identified by the same decomposition.
+\end{solution}
+
+\begin{problem}[Pairwise differences]
+Find the matrix of the quadratic form $\sum_{i,j=1}^n(x_i-x_j)^2$ and
+all its eigenvalues and eigenspaces.
+\end{problem}
+\begin{solution}
+Expansion gives
+\[
+\sum_{i,j}(x_i-x_j)^2
+=2n\sum_i x_i^2-2\left(\sum_i x_i\right)^2
+=x^\top(2nI-2\mathbf1\mathbf1^\top)x=2n x^\top Cx.
+\]
+For $n>1$, the eigenvalue on $\R\mathbf1$ is $0$ and on
+$\mathbf1^\perp$ it is $2n$, with multiplicities $1$ and $n-1$.
+Thus an orthonormal eigenbasis is the normalized constant vector and
+any orthonormal basis of its perpendicular complement.
+For $n=1$, the form is identically zero and its only eigenvalue is $0$.
+The identity also shows that total pairwise squared differences equal
+$2n\sum_i(x_i-\bar x)^2$.
+\end{solution}
+
+\subsection*{Variational formulas and compression}
+In the next ten exercises, $A$ is real symmetric of order $n$,
+$\lambda_1\geqslant\cdots\geqslant\lambda_n$ are its eigenvalues,
+$s_1,\ldots,s_n$ is a corresponding orthonormal eigenbasis, and every
+Rayleigh quotient is evaluated only at a nonzero vector.
+
+\begin{problem}[Excluding selected eigenvectors]\label{ex:12:exclude}
+Let $R_j=(s_1\ \cdots\ s_j)$ and $T_j=(s_j\ \cdots\ s_n)$.
+Prove
+\[
+\lambda_k=\max_{R_{k-1}^\top x=0}\rho_A(x)
+=\min_{T_{k+1}^\top x=0}\rho_A(x).
+\]
+An empty matrix of constraints imposes no restriction.
+\end{problem}
+\begin{solution}
+Write $x=\sum_i c_is_i$. In the first feasible set,
+$c_1=\cdots=c_{k-1}=0$, so
+$\rho_A(x)=\sum_{i=k}^n\lambda_i c_i^2/\sum_{i=k}^n c_i^2
+\leqslant\lambda_k$. Equality occurs at $x=s_k$.
+In the second feasible set $c_{k+1}=\cdots=c_n=0$, so the analogous
+weighted average of $\lambda_1,\ldots,\lambda_k$ is at least
+$\lambda_k$, again attained at $s_k$.
+For $k=1$ in the maximum and $k=n$ in the minimum, the corresponding
+coefficient restriction is empty, giving the usual extreme Rayleigh bounds.
+\end{solution}
+
+\begin{problem}[Arbitrary linear restrictions]
+For every $B\in\R^{n\times(k-1)}$ and $C\in\R^{n\times(n-k)}$, prove
+\[
+\min_{C^\top x=0}\rho_A(x)\leqslant\lambda_k
+\leqslant\max_{B^\top x=0}\rho_A(x).
+\]
+Do not assume that the columns of $B$ or $C$ are independent.
+\end{problem}
+\begin{solution}
+Let $R=(s_1\ \cdots\ s_k)$. The matrix $B^\top R$ has $k$ columns
+and at most $k-1$ rows, so some nonzero $u$ satisfies $B^\top Ru=0$.
+Then $x=Ru\ne0$ is feasible and
+$\rho_A(x)=\sum_{i=1}^k\lambda_i u_i^2/\sum_i u_i^2\geqslant\lambda_k$.
+This proves the right inequality. For the left, take
+$T=(s_k\ \cdots\ s_n)$, whose $n-k+1$ columns exceed the row count
+of $C^\top T$. Choose $v\ne0$ in its kernel. Then $Tv\ne0$ is feasible
+and has Rayleigh quotient at most $\lambda_k$. Dependence among the
+constraint columns only increases these kernels, so it causes no problem.
+\end{solution}
+
+\begin{problem}[Fischer's min--max formulas]
+Prove
+\[
+\lambda_k=\min_{B^\top B=I_{k-1}}\ \max_{B^\top x=0}\rho_A(x)
+=\max_{C^\top C=I_{n-k}}\ \min_{C^\top x=0}\rho_A(x),
+\]
+where $B$ and $C$ have the dimensions in the preceding problem.
+\end{problem}
+\begin{solution}
+For every admissible $B$, the preceding problem makes the inner maximum
+at least $\lambda_k$. Choosing $B=(s_1\ \cdots\ s_{k-1})$ makes it
+exactly $\lambda_k$ by Exercise~\ref{ex:12:exclude}. Thus the outer
+minimum is $\lambda_k$ and is attained.
+For every admissible $C$, the inner minimum is at most $\lambda_k$.
+Choosing $C=(s_{k+1}\ \cdots\ s_n)$ attains equality, so the outer
+maximum is $\lambda_k$. The empty-column cases work by the stated
+constraint convention.
+\end{solution}
+
+\begin{problem}[Eigenvalue monotonicity]
+If $B$ is positive semidefinite, prove
+$\lambda_k(A+B)\geqslant\lambda_k(A)$ for every $k$.
+Show the inequalities are strict when $B$ is positive definite.
+\end{problem}
+\begin{solution}
+For every nonzero $x$,
+$\rho_{A+B}(x)=\rho_A(x)+\rho_B(x)
+\geqslant\rho_A(x)+\lambda_n(B)$.
+Apply the maximum over $k$-dimensional subspaces of the minimum Rayleigh
+quotient on each subspace to obtain
+$\lambda_k(A+B)\geqslant\lambda_k(A)+\lambda_n(B)$.
+For $B\succeq0$, $\lambda_n(B)\geqslant0$; for $B\succ0$, it is
+strictly positive. Thus positive definiteness gives strict increase for
+every ordered eigenvalue, even if $A$ itself is indefinite.
+\end{solution}
+
+\begin{problem}[$*$ Poincar\'e separation]\label{ex:12:separation}
+Let $G\in\R^{n\times r}$ satisfy $G^\top G=I_r$. If
+$\mu_1\geqslant\cdots\geqslant\mu_r$ are the eigenvalues of $G^\top AG$,
+prove $\lambda_{n-r+k}\leqslant\mu_k\leqslant\lambda_k$.
+\end{problem}
+\begin{solution}
+The map $y\mapsto Gy$ preserves lengths, dimensions and Rayleigh
+quotients. By max--min, $\mu_k$ is the maximum, over $k$-dimensional
+subspaces contained in $\operatorname{col}(G)$, of the minimum of
+$\rho_A$ on that subspace. Removing the restriction that the subspace
+lie in $\operatorname{col}(G)$ can only increase the maximum, giving
+$\mu_k\leqslant\lambda_k$.
+By min--max, $\mu_k$ is the minimum of the maximum over
+$(r-k+1)$-dimensional subspaces in $\operatorname{col}(G)$.
+Allowing all subspaces of that dimension can only decrease the minimum,
+giving the bound $\mu_k\geqslant\lambda_{n-r+k}$.
+Both arguments include $r=n$ and the endpoint eigenvalues.
+\end{solution}
+
+\begin{problem}[Compression by an orthogonal projector]
+Let $P=P^\top=P^2$ have rank $r\geqslant1$. Write the eigenvalues of
+$PAP$, apart from $n-r$ zero eigenvalues, as
+$\mu_1\geqslant\cdots\geqslant\mu_r$. Prove
+$\lambda_{n-r+k}\leqslant\mu_k\leqslant\lambda_k$.
+\end{problem}
+\begin{solution}
+Choose an orthonormal basis $G$ of the range of $P$ and complete it by
+$F$ to an orthogonal matrix. Then $P=GG^\top$ and
+\[
+(G\ F)^\top PAP(G\ F)
+=\begin{pmatrix}G^\top AG&0\\0&0\end{pmatrix}.
+\]
+Thus the $r$ listed eigenvalues are those of $G^\top AG$, including
+any zeros among those $r$ values. Apply the preceding separation theorem.
+The wording does not require $PAP$ to have rank exactly $r$.
+\end{solution}
+
+\begin{problem}[Principal submatrices]
+For any $r\times r$ principal submatrix $A_J$ of $A$, prove
+$\lambda_{n-r+k}(A)\leqslant\lambda_k(A_J)\leqslant\lambda_k(A)$.
+Write the full interlacing chain when $r=n-1$.
+\end{problem}
+\begin{solution}
+Let $G$ consist of the coordinate columns indexed by $J$.
+Then $G^\top G=I_r$ and $G^\top AG=A_J$, so separation applies.
+For $r=n-1$, putting $\mu_k=\lambda_k(A_J)$ gives
+$\lambda_{k+1}\leqslant\mu_k\leqslant\lambda_k$, or in full order,
+\[
+\lambda_n\leqslant\mu_{n-1}\leqslant\lambda_{n-1}
+\leqslant\mu_{n-2}\leqslant\cdots\leqslant\mu_1\leqslant\lambda_1.
+\]
+The selected indices need not be the first $r$ indices.
+\end{solution}
+
+\begin{problem}[Trace bounds and attaining subspaces]\label{ex:12:trace}
+Prove that the maximum and minimum of $\tr(Q^\top AQ)$ over
+$Q^\top Q=I_r$ are respectively $\sum_{k=1}^r\lambda_k$ and
+$\sum_{k=1}^r\lambda_{n-r+k}$. Deduce the same bounds for the trace
+of the leading $r\times r$ principal submatrix.
+\end{problem}
+\begin{solution}
+Let $\mu_1,\ldots,\mu_r$ be the eigenvalues of $Q^\top AQ$.
+Separation gives $\lambda_{n-r+k}\leqslant\mu_k\leqslant\lambda_k$.
+Summing yields the two bounds since $\tr(Q^\top AQ)=\sum_k\mu_k$.
+The upper bound is attained by $Q=(s_1\ \cdots\ s_r)$; the lower by
+$Q=(s_{n-r+1}\ \cdots\ s_n)$.
+Taking $Q=(e_1\ \cdots\ e_r)$ gives the principal-submatrix trace.
+This proof works for indefinite $A$ as well as for covariance matrices.
+\end{solution}
+
+\begin{problem}[Determinant bounds for compressed matrices]
+Now assume $A\succ0$. Find the maximum and minimum of
+$\det(Q^\top AQ)$ under $Q^\top Q=I_r$, and deduce bounds for the
+determinant of the leading $r\times r$ principal submatrix.
+\end{problem}
+\begin{solution}
+The compressed matrix is positive definite, since
+$y^\top Q^\top AQy>0$ for $y\ne0$.
+Its eigenvalues satisfy the positive bounds
+$0<\lambda_{n-r+k}\leqslant\mu_k\leqslant\lambda_k$.
+Multiplication, which preserves inequalities between positive numbers,
+gives
+\[
+\prod_{k=1}^r\lambda_{n-r+k}\leqslant\det(Q^\top AQ)
+\leqslant\prod_{k=1}^r\lambda_k.
+\]
+Both bounds are attained by bottom or top eigenvectors, respectively.
+The principal-submatrix result follows by choosing the first $r$
+coordinate vectors as columns of $Q$.
+\end{solution}
+
+\begin{problem}[A diagonal-product consequence]
+For $A=(a_{ij})\succ0$, prove
+$\prod_{k=1}^r\lambda_{n-r+k}\leqslant\prod_{k=1}^r a_{kk}$
+for $1\leqslant r\leqslant n$.
+\end{problem}
+\begin{solution}
+Let $B$ be the leading principal submatrix. The preceding determinant
+bound gives $\prod_{k=1}^r\lambda_{n-r+k}\leqslant\det B$.
+Write $B=R^\top R$ by applying Gram--Schmidt to a square root of $B$,
+with $R$ upper triangular. Then
+$\det B=\prod_{j=1}^r r_{jj}^2$, whereas
+$b_{jj}=\sum_{i\leqslant j}r_{ij}^2\geqslant r_{jj}^2$.
+Thus $\det B\leqslant\prod_j b_{jj}=\prod_{j=1}^r a_{jj}$.
+Combining the two inequalities proves the claim, including $r=n$.
+\end{solution}
+
+\subsection*{SVD structure and PCA calculations}
+\begin{problem}[Constructing the right singular directions]
+Let $A\in\R^{m\times n}$ have rank $r$, and let $P=(P_1\ P_2)$ be
+orthogonal with
+$P^\top AA^\top P=\operatorname{diag}(D^2,0)$, where $D$ is an
+invertible diagonal $r\times r$ matrix. Put $Q_1=A^\top P_1D^{-1}$
+and let $Q_2\in\R^{n\times(n-r)}$ satisfy $Q_1^\top Q_2=0$.
+Prove $P^\top A(Q_1\ Q_2)=\begin{pmatrix}D&0\\0&0\end{pmatrix}$.
+\end{problem}
+\begin{solution}
+$Q_1^\top Q_1=D^{-1}P_1^\top AA^\top P_1D^{-1}=I_r$.
+Also $P_2^\top AA^\top P_2=0$, so
+$\norm{A^\top P_2}_F^2=0$ and $P_2^\top A=0$.
+The relation $AA^\top P_1=P_1D^2$ gives
+$AQ_1=P_1D$. In particular $P_1^\top AQ_1=D$.
+Since $Q_1^\top=D^{-1}P_1^\top A$, the assumed
+$Q_1^\top Q_2=0$ gives $P_1^\top AQ_2=0$.
+The other two blocks vanish by $P_2^\top A=0$.
+The requested block identity follows; it does not require $Q_2$ to
+be orthonormal. To obtain an orthogonal SVD matrix $Q$, choose $Q_2$
+to be an orthonormal basis of $\ker Q_1^\top$.
+\end{solution}
+
+\begin{problem}[Grouping equal singular values]
+Suppose $A=\sum_{i=1}^r\sigma_i u_iv_i^\top$ is an SVD.
+For each distinct positive singular value $a_j$, let
+$W_j=\sum_{\{i:\sigma_i=a_j\}}u_iv_i^\top$.
+Prove $W_jW_j^\top W_j=W_j$, and for $j\ne l$,
+$W_l^\top W_j=0$ and $W_lW_j^\top=0$.
+\end{problem}
+\begin{solution}
+Let $I_j$ be the index set in the definition. Orthonormality gives
+\[
+W_j^\top W_j=\sum_{i\in I_j}v_iv_i^\top,
+\qquad W_jW_j^\top=\sum_{i\in I_j}u_iu_i^\top.
+\]
+Multiplying the second equality by $W_j$ makes all cross terms zero
+and keeps $u_iv_i^\top$ for each $i\in I_j$, giving $W_j$.
+For distinct groups the index sets are disjoint. In
+$W_l^\top W_j$, every summand contains $u_h^\top u_i=0$ with
+$h\in I_l,i\in I_j$; in $W_lW_j^\top$, every summand instead contains
+$v_h^\top v_i=0$. Thus both products vanish.
+\end{solution}
+
+\begin{problem}[Range and kernel in an SVD]
+For $A=P_1DQ_1^\top$ with $D$ invertible and $P=(P_1\ P_2)$,
+$Q=(Q_1\ Q_2)$ orthogonal, prove
+$\operatorname{col}(A)=\operatorname{col}(P_1)$ and
+$\ker A=\operatorname{col}(Q_2)$.
+\end{problem}
+\begin{solution}
+Every output of $A$ is in $\operatorname{col}(P_1)$, while
+$AQ_1D^{-1}=P_1$, giving the reverse inclusion.
+Also $Ax=0$ holds exactly when $Q_1^\top x=0$, because $P_1$ has
+independent columns and $D$ is invertible. The orthogonal expansion
+$x=Q_1Q_1^\top x+Q_2Q_2^\top x$ then shows that this kernel is exactly
+$\operatorname{col}(Q_2)$. Thus discarded zero singular directions
+describe a null space, not missing positive-variance directions.
+\end{solution}
+
+\begin{problem}[Two-variable PCA from observations]\label{ex:12:numerical-pca}
+For $D=\begin{pmatrix}12&21\\11&22\\9&18\\8&19\end{pmatrix}$, compute
+the mean, centered matrix, covariance, principal directions, score
+columns and explained-variance proportions. Reconstruct the observations
+with one component and compute the total squared reconstruction error.
+\end{problem}
+\begin{solution}
+The mean is $(10,20)^\top$ and
+$Z=\begin{pmatrix}2&1\\1&2\\-1&-2\\-2&-1\end{pmatrix}$.
+Thus $S=\frac13\begin{pmatrix}10&8\\8&10\end{pmatrix}$.
+The sum and difference directions are
+$v_1=(1,1)^\top/\sqrt2$, $v_2=(1,-1)^\top/\sqrt2$, with eigenvalues
+$6,2/3$. Their scores are $(3,3,-3,-3)^\top/\sqrt2$ and
+$(1,-1,1,-1)^\top/\sqrt2$, respectively.
+The proportions are $9/10$ and $1/10$.
+Keeping the first component gives
+\[
+D_1=\begin{pmatrix}23/2&43/2\\23/2&43/2\\17/2&37/2\\17/2&37/2\end{pmatrix}.
+\]
+Subtracting from $D$ gives residual rows
+$(1/2,-1/2),(-1/2,1/2),(1/2,-1/2),(-1/2,1/2)$.
+Their squared lengths sum to $2$, equal to $(n-1)\lambda_2=3(2/3)$.
+The best-rank theorem proves that no other rank-one centered fit has
+smaller squared error.
+\end{solution}
+
+\begin{problem}[More variables than observations]
+For $D=\begin{pmatrix}1&2&3&4\\2&4&6&8\\3&6&9&12\end{pmatrix}$,
+compute PCA using the observation Gram matrix, then recover the loading
+and scores. State the covariance rank and the number of nonzero components.
+\end{problem}
+\begin{solution}
+Put $a=(1,2,3,4)^\top$ and $u=(-1,0,1)^\top$.
+The mean is $2a$ and $Z=ua^\top$, where $a^\top a=30$, $u^\top u=2$.
+Thus $G=ZZ^\top/2=15uu^\top$ has unit eigenvector $u/\sqrt2$ with
+eigenvalue $30$, and has two zero eigenvalues.
+The recovered loading is
+\[
+v=\frac{Z^\top(u/\sqrt2)}{\sqrt{2\cdot30}}
+=\frac{a\sqrt2}{\sqrt{60}}=\frac a{\sqrt{30}}.
+\]
+Its scores are $Zv=\sqrt{30}\,u$.
+The covariance is $S=aa^\top$, of rank one with eigenvalues $30,0,0,0$.
+One component explains all variation and reconstructs $Z$ exactly.
+The other loadings may be any orthonormal basis of $a^\perp$ and have
+identically zero scores.
+\end{solution}
+
+\begin{problem}[Covariance and correlation PCA]\label{ex:12:standardize}
+For the covariance matrix $S=\begin{pmatrix}9&3\\3&1\end{pmatrix}$,
+compute covariance PCA and correlation PCA. Express the first standardized
+score as a linear combination of the original centered variables.
+\end{problem}
+\begin{solution}
+$S=aa^\top$ with $a=(3,1)^\top$.
+Covariance PCA has eigenvalues $10,0$ and first loading
+$(3,1)^\top/\sqrt{10}$.
+The standard-deviation matrix is $D_s=\operatorname{diag}(3,1)$.
+Thus $R=D_s^{-1}SD_s^{-1}=\begin{pmatrix}1&1\\1&1\end{pmatrix}$,
+with eigenvalues $2,0$ and first loading $(1,1)^\top/\sqrt2$ in
+standardized coordinates. For a centered observation $(z_1,z_2)$,
+its standardized score is $(z_1/3+z_2)/\sqrt2$.
+Both methods retain all variation with one component, but their unit
+loading directions and score scales are different. Standardization is
+valid because both marginal variances are positive, despite singularity
+of $S$.
+\end{solution}
+
+\begin{problem}[A tie at the cutoff]
+For $S=\operatorname{diag}(4,4,1)$, describe all optimal one-dimensional
+and two-dimensional PCA subspaces and their explained-variance proportions.
+For $Z=\operatorname{diag}(2,2,1)$, describe all best rank-one Frobenius
+approximations and determine the minimum squared error.
+\end{problem}
+\begin{solution}
+The total variance is $9$. Every line in $\operatorname{span}(e_1,e_2)$
+is an optimal first direction, explaining $4/9$. The optimal
+two-dimensional space is uniquely $\operatorname{span}(e_1,e_2)$,
+explaining $8/9$, because the gap after the second eigenvalue is positive.
+An orthonormal basis within that plane can still be rotated arbitrarily.
+For the separate approximation problem, $Z^\top Z=S$.
+The low-rank proof shows that an optimal rank-one matrix must equal
+$ZP$, where $P=vv^\top$ projects onto an optimal line with
+$v=(a,b,0)^\top$ and $a^2+b^2=1$.
+Thus every best approximation is $2vv^\top$ and has squared error
+$4+1=5$. Conversely each such choice attains that error.
+A rank-zero competitor has error $9$, so no additional zero-rank
+minimizer is missing.
+\end{solution}
+
+\begin{problem}[The affine reconstruction problem]
+For observations $d_1,\ldots,d_n\in\R^p$, fix a direction subspace $W$
+with projector $P$. Prove that an affine translate $a+W$ minimizes the
+sum of squared distances for this direction precisely when it contains
+the observation mean. Then identify the best direction space of dimension
+$k$ in terms of the sample covariance.
+\end{problem}
+\begin{solution}
+Write $d_i-a=(d_i-\bar d)+(\bar d-a)$.
+Since $\sum_i(d_i-\bar d)=0$, expansion gives
+\[
+\sum_i\norm{(I-P)(d_i-a)}^2
+=\sum_i\norm{(I-P)(d_i-\bar d)}^2
++n\norm{(I-P)(\bar d-a)}^2.
+\]
+The first term does not depend on $a$. The second is zero exactly when
+$\bar d-a\in W$, equivalently $\bar d\in a+W$.
+For such a translate, the objective is
+$(n-1)[\tr S-\tr(PS)]$.
+The trace variational theorem makes it minimal for a span of the top
+$k$ eigenvectors, with the cutoff-tie choices described there.
+The minimum is $(n-1)\sum_{i>k}\lambda_i(S)$.
+\end{solution}
+
+\begin{problem}[Equicorrelation interpreted as PCA]
+For the $p\times p$ equicorrelation covariance with $p\geqslant2$ and
+$-1/(p-1)<t<1$, determine the leading PCA subspace and its variance
+proportion when $t>0$, $t=0$, and $t<0$. What happens at the two
+positive-semidefinite endpoints?
+\end{problem}
+\begin{solution}
+The total variance is $p$. The constant direction has eigenvalue
+$a=1+(p-1)t$, and its perpendicular complement has eigenvalue $b=1-t$.
+If $t>0$, $a>b$ and the leading subspace is uniquely
+$\R\mathbf1$, explaining $a/p$.
+If $t=0$, all eigenvalues equal $1$, so every line is optimal and explains
+$1/p$. If $t<0$, $b>a$, and any line in $\mathbf1^\perp$ is optimal,
+explaining $b/p$; the entire leading eigenspace has dimension $p-1$.
+At $t=1$, $a=p,b=0$, so one constant-direction component captures
+everything. At $t=-1/(p-1)$, $a=0,b=p/(p-1)$, and the $p-1$
+perpendicular directions together capture all variance, each contributing
+$1/(p-1)$. For $p=2$ the perpendicular eigenspace is one-dimensional.
+\end{solution}
+
+\input{unit12-inequality-exercises.tex}

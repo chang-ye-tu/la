@@ -1,0 +1,719 @@
+\needspace{20\baselineskip}
+\subsection*{Dot products and norms}
+
+\begin{problem}\label{ex:01:orthogonality-transitivity}
+Give vectors $x,y,z$ for which $x\perp y$ and $y\perp z$, but
+$x$ is not perpendicular to $z$.
+\end{problem}
+\begin{solution}
+Take $x=z=(1,0)$ and $y=(0,1)$. Then
+$x\cdot y=y\cdot z=0$, whereas $x\cdot z=1$.
+\end{solution}
+
+\begin{problem}\label{ex:01:parallelogram-polarization}
+For $x,y\in\R^n$, prove
+\[
+\norm{x+y}^2+\norm{x-y}^2=2\norm{x}^2+2\norm{y}^2,
+\qquad
+\norm{x+y}^2-\norm{x-y}^2=4x\cdot y.
+\]
+Interpret the first identity as a parallelogram law.
+\end{problem}
+\begin{solution}
+The dot-product laws give
+\[
+\norm{x+y}^2=\norm{x}^2+2x\cdot y+\norm{y}^2,
+\qquad
+\norm{x-y}^2=\norm{x}^2-2x\cdot y+\norm{y}^2.
+\]
+Add and subtract these equations. The parallelogram with vertices
+$0,x,x+y,y$ has diagonals of lengths $\norm{x+y}$ and $\norm{x-y}$.
+The first identity says that the sum of their squared lengths equals
+the sum of the squared lengths of the four sides.
+\end{solution}
+
+\begin{problem}\label{ex:01:dot-cancellation}
+Give three nonzero vectors $a,b,c$ such that $a\cdot b=a\cdot c$
+but $b\ne c$.
+\end{problem}
+\begin{solution}
+Take $a=(1,0)$, $b=(1,1)$, and $c=(1,2)$. Both dot products are $1$,
+although $b\ne c$.
+\end{solution}
+
+\begin{problem}\label{ex:01:perpendicular-sum}
+Let $u_1,\ldots,u_r\in\R^n$ be nonzero and pairwise perpendicular.
+If $c_1u_1+\cdots+c_ru_r=0$, prove that $c_1=\cdots=c_r=0$.
+\end{problem}
+\begin{solution}
+For each $j$, take the dot product with $u_j$:
+\[
+0=\sum_{i=1}^r c_i(u_i\cdot u_j)=c_j\norm{u_j}^2.
+\]
+Since $u_j\ne0$, its squared norm is positive, so $c_j=0$.
+\end{solution}
+
+\begin{problem}\label{ex:01:numerical-projection}
+For $a=(2,-1,5)$ and $b=(-1,1,1)$, find the projection of $a$ along
+$b$ and the projection of $b$ along $a$.
+\end{problem}
+\begin{solution}
+Here $a\cdot b=-2-1+5=2$, $\norm{a}^2=30$, and
+$\norm{b}^2=3$. Thus the projections are, respectively,
+\[
+\frac{a\cdot b}{\norm{b}^2}b
+=\left(-\frac23,\frac23,\frac23\right),
+\qquad
+\frac{b\cdot a}{\norm{a}^2}a
+=\left(\frac{2}{15},-\frac{1}{15},\frac13\right).
+\]
+\end{solution}
+
+\begin{problem}\label{ex:01:triangle-equality}
+Use the Schwarz inequality to prove that, for $x,y\in\R^n$,
+\[
+\norm{x+y}\leqslant\norm{x}+\norm{y}.
+\]
+Prove that equality holds exactly when $y=0$ or $x=ky$ for some $k\geqslant0$.
+\end{problem}
+\begin{solution}
+By Schwarz,
+\[
+\norm{x+y}^2
+=\norm{x}^2+2x\cdot y+\norm{y}^2
+\leqslant\norm{x}^2+2\norm{x}\norm{y}+\norm{y}^2
+=(\norm{x}+\norm{y})^2.
+\]
+Taking nonnegative square roots proves the inequality. Equality requires
+$x\cdot y=\norm{x}\norm{y}$. If $y=0$, this holds. If $y\ne0$,
+the equality condition in Schwarz requires $x=ky$ for a real $k$.
+Then $x\cdot y=k\norm{y}^2$ and
+$\norm{x}\norm{y}=|k|\norm{y}^2$, which are equal exactly when $k\geqslant0$.
+\end{solution}
+
+\needspace{20\baselineskip}
+\subsection*{Lines and planes}
+
+\begin{problem}\label{ex:01:segment-proportion}
+Let $x\ne y$ and $0\leqslant\lambda\leqslant1$. Show that
+$z=(1-\lambda)x+\lambda y$ divides the segment from $x$ to $y$
+in the proportion $\lambda:(1-\lambda)$.
+\end{problem}
+\begin{solution}
+The representation $z=x+\lambda(y-x)$ places $z$ on the segment.
+Moreover,
+\[
+\norm{z-x}=\norm{\lambda(y-x)}=\lambda\norm{y-x},
+\qquad
+\norm{y-z}=(1-\lambda)\norm{y-x}.
+\]
+Since $\norm{y-x}>0$, these distances have the stated proportion,
+including $z=x$ at $\lambda=0$ and $z=y$ at $\lambda=1$.
+\end{solution}
+
+\begin{problem}\label{ex:01:plane-normal}
+Find the equation of the plane perpendicular to $(1,-1,3)$ and passing
+through $(4,2,-1)$.
+\end{problem}
+\begin{solution}
+A point $(x_1,x_2,x_3)$ lies on the plane exactly when
+\[
+(1,-1,3)\cdot(x_1-4,x_2-2,x_3+1)=0.
+\]
+Thus its equation is $x_1-x_2+3x_3=-1$.
+\end{solution}
+
+\begin{problem}\label{ex:01:perpendicular-slopes}
+Write down vectors perpendicular to the lines $y=mx+b$ and $y=m'x+c$.
+Show that these vectors are perpendicular to each other exactly when
+$mm'=-1$.
+\end{problem}
+\begin{solution}
+The equations $-mx+y=b$ and $-m'x+y=c$ give nonzero normal vectors
+$(-m,1)$ and $(-m',1)$. Their dot product is $mm'+1$,
+which vanishes exactly when $mm'=-1$.
+\end{solution}
+
+\begin{problem}\label{ex:01:line-plane-intersection}
+\begin{enumerate}
+\item Find the intersection of the line through $(1,3,5)$ with direction
+$(-2,1,1)$ and the plane $2x+3y-z=1$.
+\item Find the intersection of the plane $3x-4y+z=2$ and the line through
+$(1,2,-1)$ perpendicular to that plane.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) Substitute $(x,y,z)=(1-2t,3+t,5+t)$ into the plane equation:
+\[
+2(1-2t)+3(3+t)-(5+t)=6-2t=1.
+\]
+Hence $t=5/2$ and the intersection is $(-4,11/2,15/2)$.
+
+(b) The normal vector $(3,-4,1)$ gives the line
+$(x,y,z)=(1+3t,2-4t,-1+t)$. Substitution gives
+\[
+3(1+3t)-4(2-4t)+(-1+t)=-6+26t=2.
+\]
+Thus $t=4/13$ and the intersection is $(25/13,10/13,-9/13)$.
+\end{solution}
+
+\needspace{20\baselineskip}
+\subsection*{Matrix multiplication and transpose}
+
+\begin{problem}\label{ex:01:rectangular-associativity}
+Let
+\[
+A=\begin{pmatrix}2&1&-1\\3&1&2\end{pmatrix},\qquad
+B=\begin{pmatrix}1&1\\2&0\\3&-1\end{pmatrix},\qquad
+c=\begin{pmatrix}1\\3\end{pmatrix}.
+\]
+Compute $(AB)c$ and $A(Bc)$, showing the intermediate products.
+\end{problem}
+\begin{solution}
+The intermediate products have sizes $2\times2$ and $3\times1$:
+\[
+AB=\begin{pmatrix}2+2-3&2+1\\3+2+6&3-2\end{pmatrix}
+=\begin{pmatrix}1&3\\11&1\end{pmatrix},
+\qquad Bc=\begin{pmatrix}4\\2\\0\end{pmatrix}.
+\]
+Consequently,
+\[
+(AB)c=\begin{pmatrix}1+9\\11+3\end{pmatrix}
+=\begin{pmatrix}10\\14\end{pmatrix},
+\qquad
+A(Bc)=\begin{pmatrix}8+2\\12+2\end{pmatrix}
+=\begin{pmatrix}10\\14\end{pmatrix}.
+\]
+\end{solution}
+
+\begin{problem}\label{ex:01:reshuffle-order}
+On an ordered triple $(a_1,a_2,a_3)$, let $S$ reverse the order and let
+$T$ move the last entry to the first position. Show that performing $S$
+then $T$ need not give the same result as performing $T$ then $S$.
+Do this first with triples, then with matrices acting on column vectors.
+\end{problem}
+\begin{solution}
+Applying $S$ then $T$ gives
+$(a_1,a_2,a_3)\mapsto(a_3,a_2,a_1)\mapsto(a_1,a_3,a_2)$.
+Applying $T$ then $S$ gives
+$(a_1,a_2,a_3)\mapsto(a_3,a_1,a_2)\mapsto(a_2,a_1,a_3)$.
+For instance, the triple $(1,2,3)$ gives different results.
+The corresponding matrices are
+\[
+S=\begin{pmatrix}0&0&1\\0&1&0\\1&0&0\end{pmatrix},\qquad
+T=\begin{pmatrix}0&0&1\\1&0&0\\0&1&0\end{pmatrix}.
+\]
+The two orders give
+\[
+TS=\begin{pmatrix}1&0&0\\0&0&1\\0&1&0\end{pmatrix},\qquad
+ST=\begin{pmatrix}0&1&0\\1&0&0\\0&0&1\end{pmatrix},
+\]
+which are unequal.
+\end{solution}
+
+\begin{problem}\label{ex:01:matrix-constructions}
+Construct real $2\times2$ matrices satisfying each condition:
+\begin{enumerate}
+\item $A^2=-I$;
+\item $B^2=0$ but $B\ne0$;
+\item $CD=-DC$ and $CD\ne0$;
+\item $EF=0$, with every entry of both $E$ and $F$ nonzero.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) Take $A=\begin{pmatrix}0&-1\\1&0\end{pmatrix}$. Then
+$A^2=\begin{pmatrix}-1&0\\0&-1\end{pmatrix}=-I$.
+
+(b) Take $B=\begin{pmatrix}0&1\\0&0\end{pmatrix}$. It is nonzero,
+and direct multiplication gives $B^2=\begin{pmatrix}0&0\\0&0\end{pmatrix}$.
+
+(c) Take
+\[
+C=\begin{pmatrix}1&0\\0&-1\end{pmatrix},\qquad
+D=\begin{pmatrix}0&1\\1&0\end{pmatrix}.
+\]
+Then $CD=\begin{pmatrix}0&1\\-1&0\end{pmatrix}$ and
+$DC=\begin{pmatrix}0&-1\\1&0\end{pmatrix}=-CD$.
+
+(d) Take $E=\begin{pmatrix}1&1\\1&1\end{pmatrix}$ and
+$F=\begin{pmatrix}1&-1\\-1&1\end{pmatrix}$. Every entry is nonzero,
+but each entry of $EF$ is either $1-1$ or $-1+1$, so $EF=0$.
+\end{solution}
+
+\begin{problem}\label{ex:01:difference-of-squares}
+Two square matrices $A,B$ of the same size \emph{commute} if $AB=BA$.
+Prove that
+\[
+(A+B)(A-B)=A^2-B^2
+\]
+holds exactly when $A$ and $B$ commute.
+\end{problem}
+\begin{solution}
+Distributivity gives
+\[
+(A+B)(A-B)=A^2-AB+BA-B^2.
+\]
+This equals $A^2-B^2$ exactly when $-AB+BA=0$, or $AB=BA$.
+\end{solution}
+
+\begin{problem}\label{ex:01:symmetric-product}
+\begin{enumerate}
+\item For symmetric $n\times n$ matrices $A,B$, prove that $AB$ is
+symmetric exactly when $AB=BA$.
+\item Give two symmetric matrices whose product is not symmetric.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) Since $A^\top=A$ and $B^\top=B$,
+\[
+(AB)^\top=B^\top A^\top=BA.
+\]
+Thus $(AB)^\top=AB$ exactly when $BA=AB$.
+
+(b) The symmetric matrices
+$A=\begin{pmatrix}1&0\\0&2\end{pmatrix}$ and
+$B=\begin{pmatrix}0&1\\1&0\end{pmatrix}$ give
+$AB=\begin{pmatrix}0&1\\2&0\end{pmatrix}$, which is not symmetric.
+\end{solution}
+
+\begin{problem}\label{ex:01:symmetric-decomposition}
+A real square matrix $K$ is \emph{skew-symmetric} if
+$K^\top=-K$. Let $A$ be a real square matrix.
+\begin{enumerate}
+\item Prove that $A-A^\top$ is skew-symmetric.
+\item Express $A$ as the sum of a symmetric matrix and a skew-symmetric
+matrix.
+\item Prove that every diagonal entry of a skew-symmetric matrix is zero.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) Entrywise transposition gives
+$(A-A^\top)^\top=A^\top-A=-(A-A^\top)$.
+
+(b) Set
+\[
+H=\frac{A+A^\top}2,\qquad K=\frac{A-A^\top}2.
+\]
+Then $A=H+K$, $H^\top=H$, and $K^\top=-K$.
+
+(c) If $K^\top=-K$, the $(i,i)$ entry gives $k_{ii}=-k_{ii}$.
+Hence $2k_{ii}=0$, so $k_{ii}=0$.
+\end{solution}
+
+\begin{problem}\label{ex:01:outer-product-symmetry}
+For real columns $a,b$ of the same length, determine exactly when
+$ab^\top=ba^\top$.
+\end{problem}
+\begin{solution}
+If $b=0$, both matrices are zero. Suppose $b\ne0$ and choose an index
+$j$ with $b_j\ne0$. Equality of the $(i,j)$ entries gives
+$a_i b_j=b_i a_j$ for every $i$, so
+\[
+a=\frac{a_j}{b_j}b.
+\]
+Conversely, if $a=kb$ for a real $k$, then
+$ab^\top=kbb^\top=ba^\top$.
+The exact condition is therefore $b=0$ or $a=kb$ for some real $k$;
+this includes $a=0$.
+\end{solution}
+
+\begin{problem}\label{ex:01:outer-product-sums}
+Let $A=[\,a_1\ \cdots\ a_n\,]$ be an $m\times n$ real matrix.
+Prove
+\[
+AA^\top=\sum_{j=1}^n a_j a_j^\top,
+\qquad
+(A^\top A)_{ij}=a_i\cdot a_j.
+\]
+\end{problem}
+\begin{solution}
+Write the entries of $A$ as $a_{rj}$. The $(r,s)$ entry of the first
+product is
+\[
+(AA^\top)_{rs}=\sum_{j=1}^n a_{rj}a_{sj}
+=\sum_{j=1}^n(a_j a_j^\top)_{rs}.
+\]
+For the second product,
+\[
+(A^\top A)_{ij}=\sum_{r=1}^m a_{ri}a_{rj}=a_i\cdot a_j.
+\]
+Both identities follow by equality of entries.
+\end{solution}
+
+\begin{problem}\label{ex:01:gram-product-cancellation}
+Let $A\in\R^{m\times n}$ and $B,C\in\R^{n\times p}$. Prove:
+\begin{enumerate}
+\item $A^\top A=0$ if and only if $A=0$;
+\item $AB=0$ if and only if $A^\top AB=0$;
+\item $AB=AC$ if and only if $A^\top AB=A^\top AC$.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) If $A^\top A=0$, then, for every column $j$,
+\[
+0=(A^\top A)_{jj}=\sum_{i=1}^m a_{ij}^2.
+\]
+A sum of squares of real numbers is zero only when every summand is
+zero. Thus all entries of $A$ vanish. The converse follows by multiplication.
+
+(b) The forward implication follows by multiplying $AB=0$ on the left
+by $A^\top$. Conversely, if $A^\top AB=0$, then
+\[
+(AB)^\top(AB)=B^\top A^\top AB=0.
+\]
+Part (a), applied to $AB$, gives $AB=0$.
+
+(c) Apply part (b) with $B-C$ in place of $B$:
+\[
+AB=AC\ \Longleftrightarrow\ A(B-C)=0
+\ \Longleftrightarrow\ A^\top A(B-C)=0
+\ \Longleftrightarrow\ A^\top AB=A^\top AC.
+\]
+\end{solution}
+
+\begin{problem}\label{ex:01:trace-product}
+For a square matrix $M$, define its \emph{trace} by
+$\tr(M)=\sum_i M_{ii}$.
+\begin{enumerate}
+\item If $A,B$ are real $m\times n$ matrices, prove
+\[
+\tr(A^\top B)=\tr(BA^\top)
+=\tr(AB^\top)=\tr(B^\top A).
+\]
+\item Prove $\tr(ABC)=\tr(CAB)=\tr(BCA)$ and specify the compatible
+sizes of $A,B,C$.
+\item Must $\tr(ABC)=\tr(ACB)$ whenever both sides are defined?
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) If the entries of $A,B$ are $a_{ij},b_{ij}$, then
+\[
+\tr(A^\top B)=\sum_{j=1}^n\sum_{i=1}^m a_{ij}b_{ij},
+\qquad
+\tr(BA^\top)=\sum_{i=1}^m\sum_{j=1}^n b_{ij}a_{ij}.
+\]
+These are equal because finite sums can be reordered and real
+multiplication commutes. Interchanging $A$ and $B$ gives the other two
+traces, with the same sum.
+
+(b) Take $A$ of size $m\times n$, $B$ of size $n\times p$, and $C$
+of size $p\times m$. Then $ABC,CAB,BCA$ are square matrices of sizes
+$m,p,n$, respectively. For $U$ of size $r\times s$ and $V$ of size
+$s\times r$, part (a) applied to $U^\top,V$ gives
+$\tr(UV)=\tr(VU)$. Hence
+\[
+\tr(ABC)=\tr((AB)C)=\tr(C(AB))=\tr(CAB),
+\]
+and, applying the same rule to $CA$ and $B$,
+$\tr(CAB)=\tr(BCA)$.
+
+(c) No. Take
+\[
+A=\begin{pmatrix}1&0\\0&0\end{pmatrix},\quad
+B=\begin{pmatrix}0&1\\0&0\end{pmatrix},\quad
+C=\begin{pmatrix}0&0\\1&0\end{pmatrix}.
+\]
+Here $BC=A$, whereas $CB=\begin{pmatrix}0&0\\0&1\end{pmatrix}$.
+Thus $ABC=A$ and $ACB=0$, giving traces $1$ and $0$.
+\end{solution}
+
+\needspace{20\baselineskip}
+\subsection*{Inverses and repeated multiplication}
+
+\begin{problem}\label{ex:01:inverse-products-transposes}
+Let $A,B$ be invertible real $n\times n$ matrices. Prove that $AB$ and
+$A^\top$ are invertible, with
+\[
+(AB)^{-1}=B^{-1}A^{-1},\qquad
+(A^\top)^{-1}=(A^{-1})^\top.
+\]
+\end{problem}
+\begin{solution}
+Associativity gives both required products:
+\[
+(AB)(B^{-1}A^{-1})=A(BB^{-1})A^{-1}=AA^{-1}=I,
+\]
+\[
+(B^{-1}A^{-1})(AB)=B^{-1}(A^{-1}A)B=B^{-1}B=I.
+\]
+For the transpose, the product rule gives
+\[
+A^\top(A^{-1})^\top=(A^{-1}A)^\top=I,
+\qquad
+(A^{-1})^\top A^\top=(AA^{-1})^\top=I.
+\]
+Each displayed candidate is a two-sided inverse, so uniqueness of the
+inverse proves the formulas.
+\end{solution}
+
+\begin{problem}\label{ex:01:polynomial-inverses}
+Let $A$ be a real $n\times n$ matrix. In each case, prove that the
+indicated matrix is invertible by finding its inverse:
+\begin{enumerate}
+\item $I-A$, if $A^k=0$ for a positive integer $k$;
+\item $A$, if $A^2+2A+I=0$;
+\item $A$, if $A^2-A+I=0$.
+\end{enumerate}
+Here $A^0=I$ and $A^j$ means a product of $j$ copies of $A$ for $j\geqslant1$.
+\end{problem}
+\begin{solution}
+(a) Put $S=\sum_{j=0}^{k-1}A^j$. Distributivity and associativity give
+\[
+(I-A)S=S(I-A)=\sum_{j=0}^{k-1}A^j-\sum_{j=1}^{k}A^j
+=I-A^k=I.
+\]
+Thus $(I-A)^{-1}=S$. When $k=1$, the hypothesis says $A=0$ and
+$S=I$, so the calculation includes that case.
+
+(b) The hypothesis gives
+\[
+A(-A-2I)=(-A-2I)A=-A^2-2A=I.
+\]
+Hence $A^{-1}=-A-2I$.
+
+(c) The hypothesis gives
+\[
+A(I-A)=(I-A)A=A-A^2=I,
+\]
+so $A^{-1}=I-A$.
+\end{solution}
+
+\begin{problem}\label{ex:01:centering-matrix}
+Let $n\geqslant1$, let $j=(1,\ldots,1)^\top\in\R^n$, and set
+\[
+P=I_n-\frac1n jj^\top.
+\]
+Prove that $P$ is symmetric and \emph{idempotent}, meaning $P^2=P$.
+Explain these properties by describing $Px$ for a column $x\in\R^n$.
+\end{problem}
+\begin{solution}
+Since $j^\top j=n$, associativity gives
+\[
+(jj^\top)^2=j(j^\top j)j^\top=n jj^\top.
+\]
+Therefore
+\[
+P^2=I_n-\frac2n jj^\top+\frac1{n^2}(jj^\top)^2
+=I_n-\frac1n jj^\top=P.
+\]
+Also $(jj^\top)^\top=jj^\top$, so
+$P^\top=P$.
+If $\bar x=\frac1n\sum_{i=1}^n x_i$, then
+\[
+Px=x-\bar xj.
+\]
+Thus $P$ subtracts the mean from each coordinate. The result has
+coordinate sum $\sum_i(x_i-\bar x)=0$, so applying $P$ again changes
+nothing. Its diagonal entries are $1-1/n$ and its off-diagonal entries
+are $-1/n$: each coordinate contributes the same amount to every other
+coordinate, giving symmetry.
+\end{solution}
+
+\needspace{20\baselineskip}
+\subsection*{Homogeneous systems and solution sets}
+
+\begin{problem}\label{ex:01:two-equations-three-unknowns}
+For each system, write its coefficient matrix, reduce it to row echelon
+form, and find all solutions.
+\begin{enumerate}[label=(\alph*)]
+\item $2x-3y+4z=0$, $3x+y+z=0$.
+\item $-x+2y-4z+w=0$, $x+3y+z-w=0$.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) The coefficient matrix and a row reduction are
+\[
+\begin{pmatrix}2&-3&4\\3&1&1\end{pmatrix}
+\xrightarrow{R_2\leftarrow R_2-\frac32R_1}
+\begin{pmatrix}2&-3&4\\0&11/2&-5\end{pmatrix}.
+\]
+The second row gives $y=10z/11$. Substituting into the first gives
+\[
+2x=3y-4z=\frac{30}{11}z-4z=-\frac{14}{11}z,
+\qquad x=-\frac7{11}z.
+\]
+Writing $z=11t$, all solutions are $t(-7,10,11)^\top$, $t\in\R$.
+
+(b) Here
+\[
+\begin{pmatrix}-1&2&-4&1\\1&3&1&-1\end{pmatrix}
+\xrightarrow{R_2\leftarrow R_2+R_1}
+\begin{pmatrix}-1&2&-4&1\\0&5&-3&0\end{pmatrix}.
+\]
+Thus $y=3z/5$, and the first row gives
+$x=2y-4z+w=6z/5-4z+w=w-14z/5$.
+With $z=5s$ and $w=t$, all solutions are
+\[
+(x,y,z,w)^\top=(-14s+t,3s,5s,t)^\top,\qquad s,t\in\R.
+\]
+In both parts the free coordinates can be chosen arbitrarily, and back
+substitution determines the remaining coordinates. Hence the displayed
+sets include every solution; substituting the formulas verifies them.
+\end{solution}
+
+\begin{problem}\label{ex:01:combining-homogeneous-solutions}
+Let $a_1,\ldots,a_m\in\R^n$. Suppose $x\cdot a_i=y\cdot a_i=0$
+for every $i$. Prove that $x+y$ also satisfies these equations and that
+$cx$ satisfies them for every real number $c$.
+\end{problem}
+\begin{solution}
+For each $i$, distributivity gives
+$(x+y)\cdot a_i=x\cdot a_i+y\cdot a_i=0$.
+Scalar compatibility gives $(cx)\cdot a_i=c(x\cdot a_i)=0$.
+These equalities hold for every row, proving both assertions.
+\end{solution}
+
+\begin{problem}\label{ex:01:translated-solutions}
+Let $A\in\R^{m\times n}$ and suppose $Ax=b$.
+If $Ax'=b$ as well, prove that $x'=x+y$ for some $y$ satisfying $Ay=0$.
+Conversely, show that $x+y$ solves the original system whenever $Ay=0$.
+\end{problem}
+\begin{solution}
+Set $y=x'-x$. Then $Ay=Ax'-Ax=b-b=0$ and $x'=x+y$.
+Conversely, $A(x+y)=Ax+Ay=b+0=b$. Thus the full solution set is
+one particular solution plus all solutions of the homogeneous system.
+\end{solution}
+
+\begin{problem}\label{ex:01:affine-combinations-of-solutions}
+Let $A\in\R^{m\times n}$, $B\in\R^{m\times p}$, and suppose
+$AX_i=B$ for $i=1,\ldots,k$, where every $X_i$ is $n\times p$.
+If real numbers $c_1,\ldots,c_k$ satisfy $\sum_i c_i=1$, prove that
+$\sum_i c_iX_i$ also solves $AX=B$.
+\end{problem}
+\begin{solution}
+All matrices in the sum have the same size. Distributivity gives
+\[
+A\left(\sum_{i=1}^k c_iX_i\right)
+=\sum_{i=1}^k c_iAX_i
+=\sum_{i=1}^k c_iB
+=\left(\sum_{i=1}^k c_i\right)B=B.
+\]
+Thus the asserted matrix is a solution, including when $B=0$.
+\end{solution}
+
+\needspace{20\baselineskip}
+\subsection*{Consistency and exceptional parameters}
+
+\begin{problem}\label{ex:01:dependent-equations-parameter}
+For which real numbers $k$ does the system
+\[
+x_1+x_2=1,\qquad 2x_1+2x_2=k
+\]
+have a solution? When it has a solution, is that solution unique?
+\end{problem}
+\begin{solution}
+Subtracting twice the first equation from the second gives $0=k-2$.
+Thus a solution exists exactly when $k=2$. In that case the second
+equation repeats the first, and all solutions are $(1-t,t)^\top$, $t\in\R$.
+There are infinitely many, so the solution is not unique.
+\end{solution}
+
+\begin{problem}\label{ex:01:universal-right-hand-sides}
+Can a matrix $A$ be chosen so that $Ax=b$ is inconsistent for every
+right-hand side $b$ of the appropriate size?
+Can a matrix $A$ be chosen so that $Ax=b$ is consistent for every such
+$b$? Justify each answer.
+\end{problem}
+\begin{solution}
+The first answer is no: for every matrix $A$, the right-hand side $b=0$
+has the solution $x=0$.
+The second answer is yes: choose $A=I_m$. Then $x=b$ solves $Ax=b$
+for every $b\in\R^m$.
+\end{solution}
+
+\begin{problem}\label{ex:01:inconsistent-three-equations}
+Does the following system have a solution?
+\[
+\begin{aligned}
+2x_1+3x_2+x_3&=7,\\
+x_1+2x_2-2x_3&=8,\\
+3x_1+4x_2+4x_3&=20.
+\end{aligned}
+\]
+\end{problem}
+\begin{solution}
+The coefficient rows satisfy
+\[
+2(2,3,1)-(1,2,-2)=(3,4,4).
+\]
+Thus twice the first left-hand side minus the second equals the third
+left-hand side. The same operation on the right-hand sides gives
+$2(7)-8=6$, not $20$. Subtracting twice row one and adding row two to
+row three therefore produces $0=14$. The system is inconsistent.
+\end{solution}
+
+\begin{problem}\label{ex:01:two-parameter-consistency}
+For real parameters $\alpha,\beta$, consider
+\[
+\begin{aligned}
+\alpha x_1+\beta x_2+2x_3&=1,\\
+\alpha x_1+(2\beta-1)x_2+3x_3&=1,\\
+\alpha x_1+\beta x_2+(\beta+3)x_3&=2\beta-1.
+\end{aligned}
+\]
+When does a solution exist, and when is it unique?
+\end{problem}
+\begin{solution}
+Subtract the first equation from the second and third. The equivalent
+system is
+\[
+\alpha x_1+\beta x_2+2x_3=1,\qquad
+(\beta-1)x_2+x_3=0,\qquad
+(\beta+1)x_3=2(\beta-1).
+\]
+If $\beta=-1$, the last equation is $0=-4$, so there is no solution.
+If $\beta=1$, then $x_3=0$ and $\alpha x_1+x_2=1$; all solutions are
+$(t,1-\alpha t,0)^\top$, $t\in\R$, for every $\alpha$.
+
+For $\beta\ne\pm1$, the last equation first gives $x_3$, and the
+second gives $x_2=-x_3/(\beta-1)$. Hence
+\[
+x_3=\frac{2(\beta-1)}{\beta+1},\qquad
+x_2=-\frac2{\beta+1}.
+\]
+Substituting into the first equation now gives
+\[
+\alpha x_1=1-\beta x_2-2x_3
+=1+\frac{2\beta}{\beta+1}-\frac{4(\beta-1)}{\beta+1}
+=\frac{5-\beta}{\beta+1}.
+\]
+If $\alpha\ne0$, there is exactly one solution, with
+$x_1=(5-\beta)/(\alpha(\beta+1))$.
+If $\alpha=0$, consistency requires $\beta=5$; the solutions are then
+$(t,-1/3,4/3)^\top$, $t\in\R$.
+Thus uniqueness holds exactly when $\alpha\ne0$ and $\beta\ne\pm1$.
+The remaining consistent cases are $\beta=1$ with arbitrary $\alpha$,
+and $(\alpha,\beta)=(0,5)$; each has infinitely many solutions.
+All other parameter pairs give no solution.
+\end{solution}
+
+\needspace{20\baselineskip}
+\subsection*{Point--plane distances}
+
+\begin{problem}\label{ex:01:point-plane-distance}
+Find the distance between each point and plane:
+\begin{enumerate}
+\item $(1,1,2)$ and $3x+y-5z=2$;
+\item $(-1,3,2)$ and $2x-4y+z=1$;
+\item $(3,-2,1)$ and the $yz$-plane;
+\item $(-3,-2,1)$ and the $yz$-plane.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+For a plane $n\cdot x=c$ with $n\ne0$ and a point $q$, the distance is
+$|n\cdot q-c|/\norm n$.
+(a) Here $n=(3,1,-5)$, $c=2$, and $\norm n=\sqrt{9+1+25}=\sqrt{35}$.
+Thus
+\[
+d=\frac{|3(1)+1-5(2)-2|}{\sqrt{35}}=\frac8{\sqrt{35}}.
+\]
+(b) Here $n=(2,-4,1)$, $c=1$, and $\norm n=\sqrt{4+16+1}=\sqrt{21}$.
+Hence
+\[
+d=\frac{|2(-1)-4(3)+2-1|}{\sqrt{21}}=\frac{13}{\sqrt{21}}.
+\]
+(c,d) The $yz$-plane has equation $x=0$, with unit normal $(1,0,0)$.
+The two distances are therefore $|3|=3$ and $|-3|=3$.
+The points lie on opposite sides of the plane; the absolute value makes
+both distances nonnegative.
+\end{solution}

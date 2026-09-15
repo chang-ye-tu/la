@@ -1,0 +1,407 @@
+
+\subsection*{1. The two-dimensional determinant}
+For columns \(v=(a,c)^\top\) and \(w=(b,d)^\top\), set
+\[
+ \det(v,w)=\begin{vmatrix}a&b\\c&d\end{vmatrix}=ad-bc.
+\]
+This expression is linear in each column separately, vanishes when the
+columns coincide, and takes the value \(1\) on \((e_1,e_2)\).
+
+\begin{proposition}[Characterization in dimension two]
+If \(f:\R^2\times\R^2\to\R\) is linear in each argument,
+\(f(v,v)=0\), and \(f(e_1,e_2)=1\), then \(f(v,w)=\det(v,w)\).
+\end{proposition}
+\begin{proof}
+Expanding \(0=f(v+w,v+w)\) gives \(f(v,w)=-f(w,v)\).
+Consequently
+\[
+ f(ae_1+ce_2,be_1+de_2)
+ =abf(e_1,e_1)+adf(e_1,e_2)+cbf(e_2,e_1)+cdf(e_2,e_2)
+ =ad-bc .
+\]
+\end{proof}
+Thus exchanging columns reverses the sign; adding a multiple of one column
+to the other leaves the determinant unchanged. These are consequences of
+linearity and vanishing on repeated columns, not special computational tricks.
+
+\begin{example}
+For \(A=\begin{pmatrix}2&1\\1&4\end{pmatrix}\), \(\det A=8-1=7\).
+Replacing its second column by the second column minus twice the first gives
+\(\begin{pmatrix}2&-3\\1&2\end{pmatrix}\), still with determinant \(4+3=7\).
+The vectors \((2,1)^\top,(1,4)^\top\) are independent: taking determinants of
+\(x(2,1)^\top+y(1,4)^\top=0\) against each column gives \(7x=7y=0\).
+\end{example}
+
+\subsection*{2. Cofactors and determinant operations}
+For a square matrix \(A=(a_{ij})\), let \(A_{ij}\) be the matrix obtained by
+deleting row \(i\) and column \(j\). Its \emph{minor} is \(\det A_{ij}\),
+and its \emph{cofactor} is \(c_{ij}=(-1)^{i+j}\det A_{ij}\).
+Set \(\det[\,]=1\) for the empty matrix and \(\det[a]=a\).
+The recursive first-row definition is
+\[
+ \det A=\sum_{j=1}^n a_{1j}(-1)^{1+j}\det A_{1j}.
+\]
+For \(n=3\) it gives
+\[
+ \det A=a_{11}a_{22}a_{33}+a_{12}a_{23}a_{31}+a_{13}a_{21}a_{32}
+       -a_{13}a_{22}a_{31}-a_{12}a_{21}a_{33}-a_{11}a_{23}a_{32}.
+\]
+
+\begin{theorem}[Determinant laws]\label{thm:07:laws}
+The determinant is the unique function of \(n\) columns that is linear in
+each column, vanishes on repeated columns, and equals \(1\) on \(I_n\).
+Moreover,
+\[
+ \det A^\top=\det A,\qquad
+ \det A=\sum_j a_{ij}c_{ij}=\sum_i a_{ij}c_{ij}
+\]
+for each fixed row \(i\) and each fixed column \(j\), respectively.
+\end{theorem}
+The complete construction and proof are in the reading supplement below.
+The following consequences will be used in every calculation.
+
+\begin{proposition}[Row and column operations]
+Exchanging two rows changes the sign; multiplying one row by \(c\) multiplies
+the determinant by \(c\); adding a multiple of another row leaves it
+unchanged. A zero row or two equal rows give determinant zero.
+The same statements hold for columns. In particular,
+\[
+ \det(cA)=c^n\det A.
+\]
+For a triangular matrix, \(\det A=\prod_{i=1}^n a_{ii}\).
+\end{proposition}
+\begin{proof}
+For columns, expand by linearity. The sign rule follows by expanding the
+determinant with two selected columns both equal to \(u+v\); the two repeated
+terms vanish. A row statement follows by transposition. Scaling the whole
+matrix scales each of its \(n\) rows. For an upper triangular matrix, expand
+in its first column and repeat. For a lower triangular matrix, transpose.
+\end{proof}
+
+\begin{example}[A cofactor expansion and an elimination calculation]
+For
+\[
+ A=\begin{pmatrix}3&0&1\\1&2&5\\-1&4&2\end{pmatrix},
+\]
+expansion in column \(2\) gives
+\[
+ \det A=2\begin{vmatrix}3&1\\-1&2\end{vmatrix}
+       -4\begin{vmatrix}3&1\\1&5\end{vmatrix}
+       =2(7)-4(14)=-42.
+\]
+Alternatively \(R_3\leftarrow R_3-2R_2\) gives
+\(\det A=2\begin{vmatrix}3&1\\-3&-8\end{vmatrix}=2(-21)=-42\).
+For
+\[
+ B=\begin{pmatrix}1&3&1&1\\2&1&5&2\\1&-1&2&3\\4&1&-3&7\end{pmatrix},
+\]
+use \(R_1\leftarrow R_1+3R_3\), \(R_2\leftarrow R_2+R_3\),
+\(R_4\leftarrow R_4+R_3\). Expansion in column \(2\) then gives
+\[
+ \det B=\begin{vmatrix}4&7&10\\3&7&5\\5&-1&10\end{vmatrix}
+ =4(75)-7(5)+10(-38)=-115.
+\]
+The coefficient is \(+1\): the entry \(-1\) in position \((3,2)\) and its
+cofactor sign \((-1)^5\) cancel.
+\end{example}
+
+\subsection*{3. Dependence and rank}
+\begin{theorem}[Nonsingularity criterion]\label{thm:07:nonsingular}
+For a square matrix \(A\), the following are equivalent:
+\(\det A\ne0\); its columns are independent; \(A\) is invertible;
+\(Ax=b\) has exactly one solution for every \(b\).
+\end{theorem}
+\begin{proof}
+The last three equivalences are the square-system theorem.
+If a column is a combination of the others, multilinearity expresses
+\(\det A\) as a sum of determinants with repeated columns, hence zero.
+Conversely, if the columns are independent, elimination gives an upper
+triangular matrix with all diagonal entries nonzero. Each elementary
+operation changes the determinant by a nonzero factor, and the final
+determinant is the product of its nonzero diagonal entries. Thus
+\(\det A\ne0\).
+\end{proof}
+
+For a rectangular matrix, a minor of order \(r\) is the determinant of a
+submatrix obtained by selecting \(r\) rows and \(r\) columns.
+
+\begin{proposition}[Rank from minors]
+The rank of \(A\) is the largest order of a nonzero minor. The zero matrix
+has rank zero.
+\end{proposition}
+\begin{proof}
+A nonzero minor of order \(s\) makes its \(s\) selected columns independent,
+even after the discarded coordinates are restored; thus \(s\leqslant
+\operatorname{rank}A\). If the rank is \(r>0\), select \(r\) independent
+columns and call the resulting matrix \(C\). Row rank equals column rank,
+so \(C\) has \(r\) independent rows. Selecting them gives a nonsingular
+\(r\times r\) matrix, hence a nonzero minor of \(A\).
+\end{proof}
+
+\begin{example}[A zero minor does not determine the rank]
+The first three columns of
+\[
+ A=\begin{pmatrix}3&1&2&5\\1&2&-1&2\\4&3&1&1\end{pmatrix}
+\]
+have determinant zero, since the last row in that submatrix is the sum of
+the first two. But the last three columns have determinant
+\[
+ \begin{vmatrix}1&2&5\\2&-1&2\\3&1&1\end{vmatrix}
+ =-3+8+25=30.
+\]
+Thus \(\operatorname{rank}A=3\).
+If its bottom-right entry is changed to \(7\), the entire third row is the
+sum of the first two. The rank is then \(2\), since
+\(\begin{vmatrix}3&1\\1&2\end{vmatrix}=5\ne0\).
+\end{example}
+
+\subsection*{4. Cramer's rule and the inverse}
+\begin{theorem}[Cramer's rule]
+Suppose \(\det A\ne0\). Let \(A[j:b]\) denote \(A\) with its \(j\)-th
+column replaced by \(b\). The solution of \(Ax=b\) satisfies
+\[
+ x_j=\frac{\det A[j:b]}{\det A}.
+\]
+\end{theorem}
+\begin{proof}
+Write \(b=\sum_k x_k a_k\), where \(a_k\) is column \(k\) of \(A\).
+Expand \(\det A[j:b]\) in column \(j\). Every term except \(k=j\)
+has a repeated column and vanishes, leaving \(x_j\det A\).
+\end{proof}
+
+\begin{example}
+For
+\[
+ \begin{pmatrix}3&2&4\\2&-1&1\\1&2&3\end{pmatrix}
+ \begin{pmatrix}x\\y\\z\end{pmatrix}
+ =\begin{pmatrix}1\\0\\1\end{pmatrix},
+\]
+the denominator is
+\(3(-5)-2(5)+4(5)=-5\). The three numerator determinants are
+\[
+ \begin{vmatrix}1&2&4\\0&-1&1\\1&2&3\end{vmatrix}=1,\quad
+ \begin{vmatrix}3&1&4\\2&0&1\\1&1&3\end{vmatrix}=0,\quad
+ \begin{vmatrix}3&2&1\\2&-1&0\\1&2&1\end{vmatrix}=-2.
+\]
+Therefore \((x,y,z)=(-1/5,0,2/5)\). Substitution gives
+\((-3/5+8/5,-2/5+2/5,-1/5+6/5)=(1,0,1)\).
+\end{example}
+
+Let \(C=(c_{ij})\) be the cofactor matrix and define
+\(\operatorname{adj}A=C^\top\), the \emph{adjugate}.
+
+\begin{proposition}[Adjugate identities]\label{prop:07:adj}
+For every square \(A\), including singular matrices,
+\[
+ A\operatorname{adj}A=\operatorname{adj}A\,A=(\det A)I.
+\]
+If \(\det A\ne0\), then \(A^{-1}=(\det A)^{-1}\operatorname{adj}A\).
+\end{proposition}
+\begin{proof}
+Entry \((i,k)\) of \(AC^\top\) is \(\sum_j a_{ij}c_{kj}\).
+For \(i=k\), this is the cofactor expansion of \(\det A\).
+For \(i\ne k\), it is the expansion in row \(k\) of the matrix obtained by
+replacing row \(k\) by row \(i\): the cofactors in that row do not change,
+and the repeated rows make the determinant zero. The column version
+proves \(C^\top A=(\det A)I\). Division gives the inverse formula when
+\(\det A\ne0\).
+\end{proof}
+
+\begin{example}[Compute every column of the inverse]
+For
+\[
+ A=\begin{pmatrix}3&1&-2\\-1&1&2\\1&-2&1\end{pmatrix},
+\qquad
+ C=\begin{pmatrix}5&3&1\\3&5&7\\4&-4&4\end{pmatrix},
+\]
+the first row gives \(\det A=3(5)+1(3)-2(1)=16\).
+For instance, \(c_{23}=-\det\begin{pmatrix}3&1\\1&-2\end{pmatrix}=7\).
+Thus
+\[
+ A^{-1}=\frac1{16}\begin{pmatrix}5&3&4\\3&5&-4\\1&7&4\end{pmatrix}.
+\]
+Multiplication gives
+\[
+ A\begin{pmatrix}5&3&4\\3&5&-4\\1&7&4\end{pmatrix}
+ =\begin{pmatrix}16&0&0\\0&16&0\\0&0&16\end{pmatrix}.
+\]
+The transpose of the cofactor matrix is essential.
+\end{example}
+
+\subsection*{5. Products and block elimination}
+\begin{theorem}[Multiplicativity]\label{thm:07:product}
+For square matrices \(A,B\) of the same order,
+\[
+ \det(AB)=\det A\,\det B.
+\]
+Consequently \(\det A^{-1}=1/\det A\) for invertible \(A\), and an
+orthogonal matrix has determinant \(1\) or \(-1\).
+\end{theorem}
+\begin{proof}
+Fix \(A\) and put \(f(b_1,\ldots,b_n)=\det(Ab_1,\ldots,Ab_n)\).
+This is alternating and multilinear. Expanding the columns in standard
+coordinates, as in the uniqueness proof in the supplement, shows that
+\(f(b_1,\ldots,b_n)=f(e_1,\ldots,e_n)\det B\).
+Here \(f(e_1,\ldots,e_n)=\det A\), including when it is zero.
+The inverse formula follows from \(\det I=1\). If \(Q^\top Q=I\),
+then \(1=\det Q^\top\det Q=(\det Q)^2\).
+\end{proof}
+
+\begin{proposition}[Block triangular and Schur complement formulas]
+For conformable blocks with \(A\) of order \(m\) and \(D\) of order \(n\),
+\[
+ \det\begin{pmatrix}A&B\\0&D\end{pmatrix}=\det A\det D.
+\]
+If \(A\) is invertible, then
+\[
+ \det\begin{pmatrix}A&B\\C&D\end{pmatrix}
+ =\det A\,\det(D-CA^{-1}B).
+\]
+Neither \(D\) nor the whole block matrix is assumed invertible.
+\end{proposition}
+\begin{proof}
+In the permutation formula, a nonzero term of the block triangular
+determinant must assign the last \(n\) rows to the last \(n\) columns;
+the remaining rows go to the first \(m\) columns. The sum factors into the
+two determinant sums. Transposition gives the lower triangular formula.
+For the second assertion, multiply on the left by
+\(\begin{pmatrix}I&0\\-CA^{-1}&I\end{pmatrix}\), whose determinant is \(1\).
+The result is
+\(\begin{pmatrix}A&B\\0&D-CA^{-1}B\end{pmatrix}\).
+\end{proof}
+
+\subsection*{6. Area, volume, and interpolation}
+\begin{proposition}[Geometric meaning]
+If \(v,w\in\R^2\), the area of their parallelogram is
+\(|\det(v,w)|\). If \(v_1,\ldots,v_n\in\R^n\), the volume of their
+parallelotope is \(|\det(v_1,\ldots,v_n)|\).
+Consequently a linear map with matrix \(T\) multiplies such volumes by
+\(|\det T|\).
+\end{proposition}
+\begin{proof}
+In the plane, the case \(v=0\) is immediate. Otherwise write
+\(v=(a,c)^\top\), \(w=(b,d)^\top\), and take the unit normal
+\(u=(-c,a)^\top/\norm v\). The signed height of \(w\) above the directed
+line through \(v\) is \(u^\top w=(ad-bc)/\norm v\).
+Base times absolute height is therefore \(|ad-bc|\).
+
+For independent vectors in \(\R^n\), Gram--Schmidt gives \(V=QR\), with
+\(Q\) orthogonal and \(R\) upper triangular with positive diagonal.
+The successive perpendicular heights are \(r_{11},\ldots,r_{nn}\);
+base times height recursively gives volume \(\prod_i r_{ii}\).
+Since \(|\det Q|=1\), this equals \(|\det V|\).
+Dependent vectors lie in a proper subspace and have zero \(n\)-dimensional
+volume, as does their determinant. Finally
+\(|\det(TV)|=|\det T|\,|\det V|\).
+\end{proof}
+Here the geometric base-times-height rule, and the fact that a region in a
+proper subspace has zero ambient volume, are the usual Euclidean volume
+facts. A derivation from signed planar area is also supplied below.
+
+\begin{example}
+The parallelogram with vertices \(p=(1,1)\), \(q=(2,-1)\),
+\(r=(4,6)\), and \(q+r-p\) has adjacent sides
+\(q-p=(1,-2)\), \(r-p=(3,5)\); its area is \(|5+6|=11\).
+The map \(T=\begin{pmatrix}2&1\\1&4\end{pmatrix}\) takes these sides to
+\((0,-7)\), \((11,23)\), whose determinant is \(77=7\cdot11\).
+Translation of the initial point does not change the side vectors.
+\end{example}
+
+\begin{example}[Vandermonde and quadratic interpolation]
+For distinct \(x_0,x_1,x_2\),
+\[
+ \det\begin{pmatrix}1&x_0&x_0^2\\1&x_1&x_1^2\\1&x_2&x_2^2\end{pmatrix}
+ =(x_1-x_0)(x_2-x_0)(x_2-x_1).
+\]
+Subtract the first row from each of the other rows, factor
+\(x_1-x_0\) and \(x_2-x_0\), and expand in column \(1\).
+The remaining determinant is
+\(\det\begin{pmatrix}1&x_1+x_0\\1&x_2+x_0\end{pmatrix}=x_2-x_1\).
+Thus values \(y_0,y_1,y_2\) at three distinct points determine exactly one
+polynomial of degree at most two. For nodes \(-1,0,1\) and values \(2,1,4\),
+the equations are \(a_0-a_1+a_2=2\), \(a_0=1\),
+\(a_0+a_1+a_2=4\), giving \(p(t)=1+t+2t^2\).
+The general determinant and interpolation construction are proved in the
+starred exercises.
+\end{example}
+
+\subsection*{Reading supplement: construction of the determinant}
+A permutation \(\sigma\) of \(\{1,\ldots,n\}\) has sign
+\(\operatorname{sgn}\sigma=(-1)^{N(\sigma)}\), where \(N(\sigma)\)
+counts pairs \(i<j\) with \(\sigma(i)>\sigma(j)\).
+Interchanging two positions reverses this sign: for positions \(r<s\),
+the pair \((r,s)\) reverses, while the changes from intermediate positions
+occur in pairs. Sorting a permutation by adjacent exchanges proves that
+a product of \(k\) exchanges has sign \((-1)^k\); in particular sign
+multiplies under composition and
+\(\operatorname{sgn}(\sigma^{-1})=\operatorname{sgn}\sigma\).
+
+Define
+\[
+ D(A)=\sum_{\sigma}\operatorname{sgn}(\sigma)
+           \prod_{j=1}^n a_{\sigma(j),j}.
+\]
+Each factor contains one entry from each column, so \(D\) is multilinear.
+Exchanging two columns permutes the summands by an exchange of two
+positions and reverses the sign. Thus repeated columns give \(D=-D=0\).
+Only the identity permutation contributes to \(D(I)\), giving \(1\).
+
+Conversely, let \(f\) be any alternating multilinear function.
+Expanding \(a_j=\sum_i a_{ij}e_i\) gives
+\[
+ f(a_1,\ldots,a_n)
+ =\sum_{i_1,\ldots,i_n}a_{i_1,1}\cdots a_{i_n,n}
+                      f(e_{i_1},\ldots,e_{i_n}).
+\]
+Repeated indices give zero. All remaining index lists are permutations,
+and exchanging entries shows that
+\(f(e_{\sigma(1)},\ldots,e_{\sigma(n)})
+ =\operatorname{sgn}(\sigma)f(e_1,\ldots,e_n)\).
+Hence \(f(A)=f(I)D(A)\). This proves uniqueness.
+
+Replacing \(\sigma\) by \(\sigma^{-1}\) in the sum proves
+\(D(A^\top)=D(A)\). To expand in entry \(a_{ij}\), group permutations
+having \(\sigma(j)=i\). Moving row \(i\) and column \(j\) to the first
+positions takes \(i-1+j-1\) exchanges; the resulting sign is
+\((-1)^{i+j}\). The remaining permutation sum is \(D(A_{ij})\).
+Grouping all choices of \(j\) in fixed row \(i\) gives
+\(D(A)=\sum_j(-1)^{i+j}a_{ij}D(A_{ij})\); transpose gives column
+expansion. In particular \(D\) satisfies the recursive definition, proving
+all claims of Theorem~\ref{thm:07:laws}.
+
+\subsection*{Reading supplement: why signed area is alternating and linear}
+Give a parallelogram the sign of the orientation of its ordered side
+vectors, and call its signed area \(F(v,w)\). A degenerate parallelogram
+has area zero; the standard square has signed area \(1\).
+For a positive integer \(k\), the parallelogram on \(kv,w\) is a union
+of \(k\) translates of the parallelogram on \(v,w\), with intersections
+only along edges. Additivity and translation invariance of area give
+\(F(kv,w)=kF(v,w)\). Applying this to \(v/k\) gives rational positive
+scaling. For real \(c>0\), approximate \(c\) above and below by positive
+rationals. The corresponding parallelograms are nested, so monotonicity
+squeezes their unsigned areas to \(c\) times the original area.
+Negating one side reverses orientation and preserves unsigned area.
+Thus \(F(cv,w)=cF(v,w)\) for every real \(c\), including \(c=0\).
+Exchanging the side vectors reverses orientation and preserves area:
+\(F(w,v)=-F(v,w)\).
+
+Replacing \(v\) by \(v+tw\) is a shear parallel to the base \(w\).
+The base and signed perpendicular height are unchanged, so
+\(F(v+tw,w)=F(v,w)\). This also follows by cutting off one triangular
+piece and translating it to the other end of the base.
+
+It remains to prove additivity, without assuming it. If \(w=0\), it is
+immediate. Choose \(u\) independent of \(w\). Write
+\(v=au+bw\) and \(z=cu+dw\). Scaling and shear invariance give
+\(F(v,w)=aF(u,w)\), also when \(a=0\); likewise
+\(F(z,w)=cF(u,w)\) and \(F(v+z,w)=(a+c)F(u,w)\).
+Hence \(F(v+z,w)=F(v,w)+F(z,w)\). Alternation gives linearity in the
+second variable. The two-dimensional characterization now yields
+\(F(v,w)=\det(v,w)\).
+
+\clearpage
+\section*{Exercises and solutions}
+A star marks an advanced exercise. In block matrices, all products are
+assumed conformable; each problem states any additional size or
+invertibility assumptions.
+\input{unit07-exercises}

@@ -1,0 +1,306 @@
+\section*{Matrix equations and orthogonal complements}
+For $A\in\R^{m\times n}$, the matrix rule $L_A:\R^n\to\R^m$ has
+\[
+ \operatorname{im}L_A=\operatorname{col}A,\qquad
+ \ker L_A=\{x:Ax=0\},\qquad
+ \dim\ker L_A=n-\operatorname{rank}A.
+\]
+The equation $Ax=b$ is solvable exactly when $b\in\operatorname{col}A$. If $x_0$ is one solution, its complete solution set is
+\[
+ x_0+\ker L_A=\{x_0+z:Az=0\}.
+\]
+Indeed $Ax=b=Ax_0$ is equivalent to $A(x-x_0)=0$. The dimension of this affine solution set means the dimension of its direction subspace, namely $n-\operatorname{rank}A$.
+
+\begin{example}[A kernel with two parameters]
+Let $A=\begin{pmatrix}2&-1&1&2\\1&1&-2&-1\end{pmatrix}$. The first two columns are independent, so $\operatorname{rank}A=2$ and $\dim\ker A=2$. Set $x_3=s$, $x_4=t$. The remaining equations give
+\[
+ x_1=\frac{s-t}{3},\qquad x_2=\frac{5s+4t}{3}.
+\]
+Consequently
+\[
+ \ker A=\operatorname{span}\left\{
+ \begin{pmatrix}1\\5\\3\\0\end{pmatrix},
+ \begin{pmatrix}-1\\4\\0\\3\end{pmatrix}\right\}.
+\]
+The third and fourth coordinates prove independence of this list. The parameterization proves spanning, rather than merely checking that two proposed vectors satisfy the equations.
+\end{example}
+
+\begin{example}[Consistency and translation]
+The system
+\[
+ 3x-y+z=1,\qquad 2x+y-z=2,\qquad x-2y+2z=5
+\]
+is inconsistent: subtracting the second coefficient row from the first gives the third coefficient row, but subtracting the right sides gives $-1$, not $5$.
+The system $2x+y+z=1$, $y-z=0$ has solutions
+\[
+ (x,y,z)=(1/2,0,0)+t(-1,1,1),\qquad t\in\R.
+\]
+Here $(1/2,0,0)$ is a particular solution and $(-1,1,1)$ is a basis of the homogeneous solution space. Thus the solution set is an affine line, not a subspace.
+\end{example}
+
+For a subspace $W\subseteq\R^n$, its \emph{orthogonal complement} is
+\[
+ W^\perp=\{x\in\R^n:x\cdot w=0\text{ for every }w\in W\}.
+\]
+This is a subspace: zero is perpendicular to every $w$, and $(ax+by)\cdot w=a(x\cdot w)+b(y\cdot w)$.
+
+\begin{theorem}[Complement dimension and decomposition]\label{thm:05:complement}
+If $W\subseteq\R^n$ has dimension $r$, then
+\[
+ \dim W^\perp=n-r,\qquad (W^\perp)^\perp=W.
+\]
+Every $x\in\R^n$ has exactly one decomposition $x=w+z$ with $w\in W$, $z\in W^\perp$.
+\end{theorem}
+\begin{proof}
+Let $w_1,\ldots,w_r$ be a basis of $W$ and put their transposes in the rows of an $r\times n$ matrix $R$. A vector is perpendicular to every element of $W$ exactly when it is perpendicular to every basis vector, so $W^\perp=\ker R$. The rows are independent, hence $\operatorname{rank}R=r$. Rank--nullity gives $\dim W^\perp=n-r$. This includes $r=0$, when there are no equations and the kernel is all of $\R^n$.
+
+Every $w\in W$ is perpendicular to $W^\perp$, so $W\subseteq(W^\perp)^\perp$. Applying the dimension formula twice gives the right side dimension $r$, proving equality.
+If $v\in W\cap W^\perp$, then $v\cdot v=0$, so $v=0$. The dimension formula for a sum now gives $\dim(W+W^\perp)=r+(n-r)=n$, hence $W+W^\perp=\R^n$. This proves existence. If $w+z=w'+z'$, then $w-w'=z'-z\in W\cap W^\perp$, proving uniqueness.
+\end{proof}
+
+The four subspaces associated with a matrix satisfy
+\[
+ (\operatorname{col}A)^\perp=\ker A^\top,\qquad
+ (\operatorname{col}A^\top)^\perp=\ker A.
+\]
+For example, $A^\top y=0$ says that $y$ is perpendicular to every column of $A$, equivalently to their whole span. Their dimensions are $r,m-r,r,n-r$, respectively, when $r=\operatorname{rank}A$. Therefore a further consistency criterion is
+\[
+ Ax=b\text{ is solvable}\quad\Longleftrightarrow\quad
+ y^\top b=0\text{ whenever }A^\top y=0.
+\]
+The reverse direction uses $b\in(\ker A^\top)^\perp=\operatorname{col}A$.
+
+\begin{example}[All four subspaces]\label{eg:05:four-spaces}
+For $A=\begin{pmatrix}1&2\\3&4\\5&6\end{pmatrix}$, its column space is the plane
+\[
+ \operatorname{col}A
+ =\left\{\begin{pmatrix}s\\t\\-s+2t\end{pmatrix}:s,t\in\R\right\}
+ =\operatorname{span}\left\{\begin{pmatrix}1\\0\\-1\end{pmatrix},
+ \begin{pmatrix}0\\1\\2\end{pmatrix}\right\}.
+\]
+To verify every point in the plane is obtained, solve $x+2y=s$, $3x+4y=t$, giving $x=-2s+t$, $y=(3s-t)/2$. The third coordinate is then $-s+2t$.
+Its orthogonal complement is $\ker A^\top=\operatorname{span}(1,-2,1)^\top$: the two equations $z_1+3z_2+5z_3=0$, $2z_1+4z_2+6z_3=0$ give $z_2=-2z_3$, $z_1=z_3$.
+The first two rows of $A$ are independent and span $\R^2$, so $\operatorname{col}A^\top=\R^2$ and $\ker A=\{0\}$. The two dimension sums are $2+1=3$ and $2+0=2$. In particular, $Ax=b$ is solvable precisely when $b_1-2b_2+b_3=0$.
+\end{example}
+
+\begin{theorem}[A matrix and its Gram products]\label{thm:05:gram}
+For every real matrix $A$,
+\[
+ \ker(AA^\top)=\ker A^\top,\qquad
+ \operatorname{col}(AA^\top)=\operatorname{col}A,
+\]
+\[
+ \operatorname{rank}(AA^\top)=\operatorname{rank}A
+ =\operatorname{rank}(A^\top A).
+\]
+\end{theorem}
+\begin{proof}
+If $A^\top x=0$, then $AA^\top x=0$. Conversely, if $AA^\top x=0$, then
+$0=x^\top AA^\top x=\norm{A^\top x}^2$, hence $A^\top x=0$.
+The common kernels are the orthogonal complements of the column spaces of $AA^\top$ and $A$, respectively. Taking complements and using Theorem~\ref{thm:05:complement} proves equality of the column spaces and their dimensions. Apply the same result to $A^\top$ and use equality of ranks under transpose for the last claim.
+\end{proof}
+
+For the matrix in Example~\ref{eg:05:four-spaces},
+\[ AA^\top=\begin{pmatrix}5&11&17\\11&25&39\\17&39&61\end{pmatrix}. \]
+Its columns all satisfy $z_1-2z_2+z_3=0$. The first two are independent: $5a+11b=0$ and $11a+25b=0$ imply $4b=0$, then $a=0$. They therefore span the same two-dimensional plane as the columns of $A$, verifying both inclusions in this numerical case.
+
+\begin{example}[Preserving rank with Gram factors]\label{eg:05:gram-sandwich}
+For conformable real matrices $A,B$,
+\[
+ \operatorname{rank}(A^\top AB)=\operatorname{rank}(AB)
+ =\operatorname{rank}(ABB^\top).
+\]
+The first equality follows from the two opposite bounds
+\[
+ \operatorname{rank}(AB)
+ =\operatorname{rank}(B^\top A^\top AB)
+ \leqslant\operatorname{rank}(A^\top AB)
+ \leqslant\operatorname{rank}(AB).
+\]
+Here the first equality applies the Gram theorem to the single matrix $AB$; the inequalities use the product-rank bound. For the second equality, use
+\[
+ \operatorname{rank}(AB)
+ =\operatorname{rank}(ABB^\top A^\top)
+ \leqslant\operatorname{rank}(ABB^\top)
+ \leqslant\operatorname{rank}(AB).
+\]
+No invertibility or full-rank hypothesis on either factor is required.
+\end{example}
+
+\section*{Matrices representing linear mappings}
+Let $\mathcal B=(v_1,\ldots,v_n)$ be a basis of $V$, and $\mathcal C=(w_1,\ldots,w_m)$ a basis of $W$.
+\begin{theorem}[Matrix representation]\label{thm:05:representation}
+For every linear $L:V\to W$, there is a unique $m\times n$ matrix $M$ satisfying
+\[
+ [L(v)]_{\mathcal C}=M[v]_{\mathcal B}\quad\text{for every }v\in V.
+\]
+Denote this matrix by $[L]_{\mathcal C\leftarrow\mathcal B}$. Its $j$th column is $[L(v_j)]_{\mathcal C}$. Conversely, arbitrary prescribed images of the basis vectors determine exactly one linear mapping.
+\end{theorem}
+\begin{proof}
+Write $L(v_j)=\sum_i m_{ij}w_i$. If $v=\sum_j x_jv_j$, then
+\[
+ L(v)=\sum_j x_jL(v_j)=\sum_i\left(\sum_j m_{ij}x_j\right)w_i.
+\]
+Thus its coordinate column is $Mx$. Taking $v=v_j$ forces column $j$, proving uniqueness. Conversely, given images $z_j\in W$, define $L(\sum_j x_jv_j)=\sum_j x_jz_j$. Unique coordinates make this well defined. Coordinates of a sum or scalar multiple obey the same operations, so this rule is linear; any linear map with those basis images must obey it.
+\end{proof}
+For standard bases, this says the columns of the matrix of $L:\R^n\to\R^m$ are $L(e_j)$. Source and target bases may be different, even for a map from a space to itself.
+
+\begin{example}[Reading columns from prescribed images]
+Suppose $v_1,v_2,v_3$ is a basis and
+\[
+ L(v_1)=2v_1-v_2,\quad
+ L(v_2)=v_1+v_2-4v_3,\quad
+ L(v_3)=5v_1+4v_2+2v_3.
+\]
+Then $[L]_{\mathcal B\leftarrow\mathcal B}=\begin{pmatrix}2&1&5\\-1&1&4\\0&-4&2\end{pmatrix}$.
+For example, $v=v_1-2v_2+v_3$ has coordinate column $(1,-2,1)^\top$, and its image coordinates are $(5,1,10)^\top$. Computing directly from the three image formulas gives the same coefficients.
+\end{example}
+
+\begin{example}[Differentiation in two bases of function spaces]
+On $\operatorname{span}(\cos t,\sin t)$, the derivative has matrix
+\[
+ [D]_{(\cos,\sin)}=\begin{pmatrix}0&1\\-1&0\end{pmatrix},
+\]
+because $D(\cos)=-\sin$ and $D(\sin)=\cos$. On $P_2$, relative to $(1,t,t^2)$, it has matrix
+\[
+ [D]=\begin{pmatrix}0&1&0\\0&0&2\\0&0&0\end{pmatrix}.
+\]
+The zero first column reflects the constant kernel; the first two standard coordinate directions span the image.
+\end{example}
+
+\subsection*{Changing a basis}
+Let $\mathcal B'=(v'_1,\ldots,v'_n)$ be another basis of $V$. Put $[v'_j]_{\mathcal B}$ in column $j$ of $N$. Then
+\[
+ [v]_{\mathcal B}=N[v]_{\mathcal B'}.
+\]
+This follows by expanding $v=\sum_j x'_jv'_j$ in the old basis. Reversing the roles of the bases produces a matrix $P$ with $[v]_{\mathcal B'}=P[v]_{\mathcal B}$. Hence $PN=NP=I$, so $P=N^{-1}$.
+For $L:V\to V$, if $M$ is its matrix in $\mathcal B$, then
+\[
+ [L(v)]_{\mathcal B'}=N^{-1}[L(v)]_{\mathcal B}
+ =N^{-1}MN[v]_{\mathcal B'},
+\]
+so its matrix in $\mathcal B'$ is $N^{-1}MN$. The position of each inverse follows from the direction of coordinate conversion.
+
+\begin{example}[A complete change of coordinates]\label{eg:05:basis-change}
+On $\R^2$, let $L(x,y)=(2x,-y)$, and take $\mathcal B'=((1,1),(-1,2))$. Relative to the standard basis,
+\[
+ M=\begin{pmatrix}2&0\\0&-1\end{pmatrix},\quad
+ N=\begin{pmatrix}1&-1\\1&2\end{pmatrix},\quad
+ N^{-1}=\frac13\begin{pmatrix}2&1\\-1&1\end{pmatrix}.
+\]
+Thus $N^{-1}MN=\begin{pmatrix}1&-2\\-1&0\end{pmatrix}$.
+Check the columns geometrically: $L(1,1)=(2,-1)=(1,1)-(-1,2)$, and $L(-1,2)=(-2,-2)=-2(1,1)$. These are exactly the new matrix columns $(1,-1)^\top$ and $(-2,0)^\top$.
+For $x=(1,0)$, old coordinates are $(1,0)^\top$, new coordinates $(2/3,-1/3)^\top$. The new matrix gives image coordinates $(4/3,-2/3)^\top$, and multiplication by $N$ recovers the actual image $(2,0)^\top$.
+\end{example}
+
+\section*{Composition and inverses}
+For $L:U\to V$ and $F:V\to W$, the composition $F\circ L:U\to W$ is $(F\circ L)(u)=F(L(u))$. The rightmost map acts first. Composition is associative: both $(G\circ F)\circ L$ and $G\circ(F\circ L)$ send $u$ to $G(F(L(u)))$.
+If $F,L$ are linear, then their composition is linear, since
+\[
+ F(L(au+bv))=F(aL(u)+bL(v))=aF(L(u))+bF(L(v)).
+\]
+For compatible linear mappings, composition distributes over addition on both sides and satisfies $(cF)L=c(FL)=F(cL)$; the right-hand distributive and scalar rules use linearity of the outer map.
+
+\begin{proposition}[Composition and matrix multiplication]
+For bases $\mathcal B,\mathcal C,\mathcal D$ of $U,V,W$,
+\[
+ [FL]_{\mathcal D\leftarrow\mathcal B}
+ =[F]_{\mathcal D\leftarrow\mathcal C}
+  [L]_{\mathcal C\leftarrow\mathcal B}.
+\]
+\end{proposition}
+\begin{proof}
+Apply the coordinate rule twice:
+$[F(Lu)]_{\mathcal D}=[F]_{\mathcal D\leftarrow\mathcal C}[Lu]_{\mathcal C}
+=[F]_{\mathcal D\leftarrow\mathcal C}[L]_{\mathcal C\leftarrow\mathcal B}[u]_{\mathcal B}$.
+Uniqueness of the representing matrix gives the assertion.
+\end{proof}
+
+An inverse of a map $L:V\to W$ is a map $G:W\to V$ satisfying $GL=I_V$ and $LG=I_W$. Such a map exists exactly when $L$ is both injective and onto: then $G(w)$ is the unique preimage of $w$. The inverse is unique, since if $G,H$ are both inverses, $G=G(LH)=(GL)H=H$.
+
+\begin{theorem}[Inverse of a linear mapping]\label{thm:05:inverse}
+The inverse of an invertible linear mapping is linear. If $\dim V=\dim W<\infty$, a linear mapping $L:V\to W$ is invertible exactly when its kernel is zero, equivalently exactly when it is onto.
+\end{theorem}
+\begin{proof}
+Let $u=L^{-1}(y)$ and $v=L^{-1}(z)$. Then $L(au+bv)=ay+bz$, so uniqueness of preimages gives
+$L^{-1}(ay+bz)=aL^{-1}(y)+bL^{-1}(z)$.
+For the finite-dimensional assertion, rank--nullity and equality of the two dimensions show that zero kernel and surjectivity are equivalent. Zero kernel is equivalent to injectivity, and a bijection has the inverse just described.
+\end{proof}
+In particular, an $n\times n$ matrix is invertible exactly when its columns are independent, exactly when they span $\R^n$, exactly when its rank is $n$. For different finite dimensions, injectivity and surjectivity are not equivalent.
+
+\begin{example}[Constructing an inverse]
+For $L(x,y)=(3x-y,4x+2y)$, solve $u=3x-y$, $v=4x+2y$. Substituting $y=3x-u$ gives $v=10x-2u$, hence
+\[
+ L^{-1}(u,v)=\left(\frac{2u+v}{10},\frac{-4u+3v}{10}\right).
+\]
+Substitution in either order verifies the two identity compositions. The inverse matrix is therefore $\frac1{10}\begin{pmatrix}2&1\\-4&3\end{pmatrix}$.
+\end{example}
+
+\subsection*{Projections and direct sums}
+A linear map $P:V\to V$ satisfying $P^2=P$ is a \emph{projection}. This algebraic definition does not assume an inner product.
+\begin{proposition}[The decomposition associated with a projection]\label{prop:05:projection}
+If $P^2=P$ and $Q=I-P$, then
+\[
+ Q^2=Q,\quad PQ=QP=0,\quad
+ \operatorname{im}P=\ker Q,\quad\operatorname{im}Q=\ker P.
+\]
+Every $v\in V$ has a unique decomposition as a sum of a vector in $\operatorname{im}P$ and one in $\ker P$.
+\end{proposition}
+\begin{proof}
+Expansion gives $Q^2=I-2P+P^2=I-P$ and $PQ=QP=P-P^2=0$. If $x=Pv$, then $Qx=0$, so $\operatorname{im}P\subseteq\ker Q$. Conversely, $Qx=0$ means $x=Px$, so $x\in\operatorname{im}P$. Interchanging $P,Q$ gives the other equality.
+Write $v=Pv+Qv$. The first summand is in the image of $P$ and the second in its kernel. If $x\in\operatorname{im}P\cap\ker P$, write $x=Py$; then $x=P^2y=Px=0$. Two decompositions differ by such a common vector, proving uniqueness.
+\end{proof}
+A decomposition $V=U+W$ with $U\cap W=\{0\}$ is written $V=U\oplus W$, a \emph{direct sum}. Conversely, for such a sum, the rule $P(u+w)=u$ is well defined and linear by uniqueness of the components; it satisfies $P^2=P$, has image $U$ and kernel $W$.
+The symmetric/odd-part mappings of Unit 4 fit this algebra. If $T^2=I$, then $P=(I+T)/2$ and $Q=(I-T)/2$ are complementary projections, since expanding their squares gives $P^2=P,Q^2=Q$ and their product is $(I-T^2)/4=0$.
+
+\begin{example}[Why finite dimension matters]
+On the space of all real sequences, define
+\[
+ F(x_1,x_2,\ldots)=(0,x_1,x_2,\ldots),\qquad
+ G(x_1,x_2,\ldots)=(x_2,x_3,\ldots).
+\]
+The map $F$ is linear and injective, but its image contains only sequences whose first entry is zero. The map $G$ is linear and onto, but has kernel $\operatorname{span}(1,0,0,\ldots)$. Moreover $GF=I$, whereas $FG$ replaces the first coordinate by zero. Thus a one-sided inverse does not supply a two-sided inverse for these infinite-dimensional maps.
+\end{example}
+
+\section*{Block matrices and elimination}
+Partition a matrix as $Z=\begin{pmatrix}A&B\\C&D\end{pmatrix}$, with block sizes $A:m\times p$, $B:m\times q$, $C:n\times p$, $D:n\times q$. If a second matrix is partitioned with row sizes $p,q$, splitting the summation index at $p$ gives
+\[
+ \begin{pmatrix}A&B\\C&D\end{pmatrix}
+ \begin{pmatrix}E&F\\G&H\end{pmatrix}
+ =\begin{pmatrix}AE+BG&AF+BH\\CE+DG&CF+DH\end{pmatrix}.
+\]
+This is ordinary matrix multiplication with compatible groups of indices. In particular,
+\[
+ \begin{pmatrix}I&B\\0&I\end{pmatrix}^{-1}
+ =\begin{pmatrix}I&-B\\0&I\end{pmatrix},\qquad
+ \begin{pmatrix}I&0\\C&I\end{pmatrix}^{-1}
+ =\begin{pmatrix}I&0\\-C&I\end{pmatrix},
+\]
+because both products have identity diagonal blocks and zero off-diagonal blocks.
+
+\begin{theorem}[Eliminating a whole block]\label{thm:05:schur}
+If $A$ is square and invertible, put $S=D-CA^{-1}B$. Then
+\[
+ \begin{pmatrix}I&0\\-CA^{-1}&I\end{pmatrix}
+ Z
+ \begin{pmatrix}I&-A^{-1}B\\0&I\end{pmatrix}
+ =\begin{pmatrix}A&0\\0&S\end{pmatrix}.
+\]
+Consequently $\operatorname{rank}Z=\operatorname{rank}A+\operatorname{rank}S$. If $Z$ is square, it is invertible exactly when $S$ is invertible.
+\end{theorem}
+\begin{proof}
+The first multiplication gives $\begin{pmatrix}A&B\\0&D-CA^{-1}B\end{pmatrix}$; the second clears $B$ and leaves the lower-right block unchanged. Both multiplying matrices are invertible by the preceding identities. Thus they preserve rank. The column space of a block diagonal matrix is the product of its two block column spaces, whose dimension is the sum of their dimensions. This gives the rank formula. In the square case, full rank of $Z$ is equivalent to full rank of the remaining square block $S$.
+\end{proof}
+The matrix $S$ is the \emph{Schur complement} of $A$. The multiplication order in $CA^{-1}B$ is forced by block sizes.
+When $S$ is invertible, reversing the displayed factorization gives
+\[
+ Z^{-1}=\begin{pmatrix}
+ A^{-1}+A^{-1}BS^{-1}CA^{-1}&-A^{-1}BS^{-1}\\
+ -S^{-1}CA^{-1}&S^{-1}
+ \end{pmatrix}.
+\]
+Indeed the inverse equals
+$\begin{pmatrix}I&-A^{-1}B\\0&I\end{pmatrix}
+ \begin{pmatrix}A^{-1}&0\\0&S^{-1}\end{pmatrix}
+ \begin{pmatrix}I&0\\-CA^{-1}&I\end{pmatrix}$;
+block multiplication yields exactly the stated four blocks. This is a derivation from elementary operations, not a determinant formula.

@@ -1,0 +1,1021 @@
+\section*{I. Vectors}
+
+\subsection*{I.1--2. Coordinates and displacements}
+
+A vector in \(\R^n\) is an ordered list \(x=(x_1,\ldots,x_n)\) of real
+numbers. Two vectors are equal when their corresponding coordinates are
+equal. For \(x,y\in\R^n\) and \(c\in\R\), define
+\[
+x+y=(x_1+y_1,\ldots,x_n+y_n),\qquad
+cx=(cx_1,\ldots,cx_n).
+\]
+The zero vector is \(0=(0,\ldots,0)\), and \(x-y=x+(-1)y\).
+These operations satisfy
+\begin{align*}
+x+y&=y+x,&(x+y)+z&=x+(y+z),\\
+c(x+y)&=cx+cy,&(c+d)x&=cx+dx,\\
+c(dx)&=(cd)x,&1x&=x,\\
+x+0&=x,&x+(-x)&=0.
+\end{align*}
+Each identity follows by applying the corresponding real-number identity
+to every coordinate. A \textbf{linear combination} of vectors
+\(v_1,\ldots,v_k\) is a vector \(c_1v_1+\cdots+c_kv_k\), with real coefficients.
+
+The same coordinates can specify a point. The displacement from a point
+\(p\) to a point \(q\) is \(q-p\); translating both points by \(a\) leaves it
+unchanged:
+\[
+(q+a)-(p+a)=q-p.
+\]
+
+\subsection*{I.3. Scalar product}
+
+The \textbf{scalar product}, or \textbf{dot product}, of \(x,y\in\R^n\) is
+\[
+x\cdot y=\sum_{i=1}^n x_i y_i.
+\]
+For example, \((1,3,-2)\cdot(-1,4,-3)=-1+12+6=17\).
+For \(x,y,z\in\R^n\) and \(c,d\in\R\),
+\begin{align*}
+x\cdot y&=y\cdot x,\\
+x\cdot(cy+dz)&=c(x\cdot y)+d(x\cdot z),\\
+x\cdot x&\geqslant0,\qquad x\cdot x=0\ \Longleftrightarrow\ x=0.
+\end{align*}
+Symmetry follows from \(x_i y_i=y_i x_i\). To verify the second identity,
+expand the coordinates before collecting the two sums:
+\[
+x\cdot(cy+dz)=\sum_i x_i(cy_i+dz_i)
+=c\sum_i x_iy_i+d\sum_i x_iz_i
+=c(x\cdot y)+d(x\cdot z).
+\]
+Symmetry gives the same rule in the first argument. Finally,
+\(x\cdot x=\sum_i x_i^2\). Every summand is nonnegative; if \(x\ne0\),
+some \(x_j\ne0\), so the sum is at least \(x_j^2>0\).
+
+Vectors \(x,y\) are \textbf{orthogonal}, written \(x\perp y\), if
+\(x\cdot y=0\). The zero vector is orthogonal to every vector. Let \(e_i\)
+have coordinate 1 in position \(i\) and 0 elsewhere. Then
+\[
+x=\sum_{i=1}^n x_i e_i,\qquad x\cdot e_i=x_i,\qquad
+e_i\cdot e_j=\begin{cases}1,&i=j,\\0,&i\ne j.\end{cases}
+\]
+
+\subsection*{I.4. Norm, projection, and angles}
+
+The \textbf{norm} of \(x\) and the \textbf{distance} between \(x\) and \(y\) are
+\[
+\norm{x}=\sqrt{x\cdot x},\qquad d(x,y)=\norm{x-y}.
+\]
+In the plane, the classical Pythagorean theorem identifies
+\(\sqrt{x_1^2+x_2^2}\) with the length of the vector. In space, applying
+it first in the coordinate plane and then in the perpendicular direction
+gives \(\sqrt{x_1^2+x_2^2+x_3^2}\). The norm extends this length formula
+to \(\R^n\).
+Thus \(\norm{x}\geqslant0\), with equality exactly when \(x=0\), and
+\[
+\norm{cx}=\sqrt{c^2(x\cdot x)}=|c|\norm{x}.
+\]
+A vector has \textbf{unit norm} if its norm is 1. For \(x\ne0\),
+\[
+\left\lVert\frac{x}{\norm{x}}\right\rVert
+=\frac{1}{\norm{x}}\norm{x}=1.
+\]
+Two nonzero vectors have the \textbf{same direction} when one is a
+positive multiple of the other. Thus \(x/\norm{x}\) is the unit vector
+in the direction of \(x\), and
+\(x=\norm{x}\bigl(x/\norm{x}\bigr)\).
+
+For a center \(a\) and radius \(r>0\), the sets
+\[
+\{x:\norm{x-a}<r\},\qquad
+\{x:\norm{x-a}\leqslant r\},\qquad
+\{x:\norm{x-a}=r\}
+\]
+are the \textbf{open ball}, \textbf{closed ball}, and \textbf{sphere}.
+Every point of the sphere is \(a+ru\) for a unit vector \(u\): one
+direction follows from \(\norm{ru}=r\), and the other from
+\(u=(x-a)/r\). In \(\R^2\) the sphere is a circle.
+
+\begin{proposition}[Pythagoras]\label{prop:01:pythagoras}
+For \(x,y\in\R^n\),
+\[
+\norm{x+y}^2=\norm{x}^2+2x\cdot y+\norm{y}^2.
+\]
+Consequently, \(x\perp y\) if and only if
+\(\norm{x+y}^2=\norm{x}^2+\norm{y}^2\).
+\end{proposition}
+\begin{proof}
+Using the scalar-product identities,
+\begin{align*}
+\norm{x+y}^2&=(x+y)\cdot(x+y)\\
+&=x\cdot x+x\cdot y+y\cdot x+y\cdot y\\
+&=\norm{x}^2+2x\cdot y+\norm{y}^2.
+\end{align*}
+Thus the norm identity without the cross term holds exactly when
+\(2x\cdot y=0\), which is the definition of orthogonality.
+\end{proof}
+
+\begin{proposition}[Projection onto a line]\label{prop:01:projection}
+Let \(b\ne0\). For each \(x\in\R^n\), there is a unique real number \(c\)
+such that \(x-cb\perp b\), namely
+\[
+c=\frac{x\cdot b}{b\cdot b}.
+\]
+The vector \(p=cb\) is the \textbf{orthogonal projection} of \(x\) onto the
+line of multiples of \(b\). Writing \(r=x-p\),
+\[
+x=p+r,\qquad p\perp r,\qquad
+\norm{x}^2=\norm{p}^2+\norm{r}^2.
+\]
+\end{proposition}
+\begin{proof}
+We seek a multiple \(cb\) whose difference from \(x\) is perpendicular
+to \(b\). The condition is
+\[
+0=(x-cb)\cdot b=x\cdot b-c(b\cdot b).
+\]
+Since \(b\cdot b>0\), this equation forces the displayed value of \(c\).
+Conversely, that value gives
+\[
+\left(x-\frac{x\cdot b}{b\cdot b}b\right)\cdot b
+=x\cdot b-\frac{x\cdot b}{b\cdot b}(b\cdot b)=0.
+\]
+Hence the required multiple exists and is unique. With \(p=cb\) and
+\(r=x-cb\), we have \(p\cdot r=c(b\cdot r)=0\), so Pythagoras applies
+to \(x=p+r\).
+\end{proof}
+
+The coefficient \(c\) is a scalar; the projection \(cb\) is a vector. When
+\(b\) has unit norm, \(c=x\cdot b\).
+
+\begin{example}\label{example:01:projection}
+\leavevmode\par
+\begin{minipage}[c]{.55\linewidth}
+For \(x=(3,1)\) and \(b=(1,1)\),
+\[
+c=\frac{3+1}{1+1}=2,\quad p=(2,2),\quad r=(1,-1).
+\]
+Thus \(r\cdot b=0\), and Pythagoras gives
+\(\norm{x}^2=10=8+2=\norm{p}^2+\norm{r}^2\).
+\end{minipage}\hfill
+\begin{minipage}[c]{.42\linewidth}
+\centering
+\begin{tikzpicture}[scale=.72,>=Stealth, every node/.style={font=\small}]
+  \draw[thin] (-.3,-.3)--(2.65,2.65) node[above]{\(\{tb:t\in\R\}\)};
+  \draw[->,thick] (0,0)--(3,1) node[right]{\(x=(3,1)\)};
+  \draw[->,thick] (0,0)--(2,2) node[above left]{\(p=(2,2)\)};
+  \draw[->,thick] (2,2)--(3,1) node[midway,above right]{\(r=(1,-1)\)};
+  \draw (1.84,1.84)--(2,1.68)--(2.16,1.84);
+  \node[below left] at (0,0){\(0\)};
+\end{tikzpicture}
+\end{minipage}
+\end{example}
+
+\paragraph{The geometric angle.}
+For two nonzero vectors in the plane or in space, place their tails at
+the same point. Their geometric angle \(\theta\) lies in \([0,\pi]\).
+The following proof uses ordinary Euclidean lengths and right-triangle
+trigonometry.
+
+\begin{proposition}[Cosine law]\label{prop:01:cosine-law}
+If two sides of a triangle have lengths \(p,q>0\), their included angle
+is \(\theta\), and the opposite side has length \(c\), then
+\[
+c^2=p^2+q^2-2pq\cos\theta.
+\]
+The formula also holds for a degenerate triangle with \(\theta=0\) or
+\(\theta=\pi\).
+\end{proposition}
+\begin{proof}
+Let the vertices be \(O,P,Q\), with \(|OP|=p\), \(|OQ|=q\), and
+\(\angle POQ=\theta\). For \(0<\theta<\pi\), drop a perpendicular
+from \(Q\) to the line through \(O,P\), meeting it at \(H\).
+Let \(t\) be the signed distance from \(O\) to \(H\), positive in the
+direction of \(P\), and put \(h=|HQ|\).
+
+\begin{center}
+\begin{tikzpicture}[scale=.9, every node/.style={font=\small}]
+  \coordinate (O) at (0,0);
+  \coordinate (P) at (3,0);
+  \coordinate (Q) at (-1.2,1.9);
+  \coordinate (H) at (-1.2,0);
+  \draw[thick] (O)--node[below]{\(p\)}(P)
+      --node[above right]{\(c\)}(Q)--node[right]{\(q\)}cycle;
+  \draw[dashed] (O)--(H)--node[left]{\(h\)}(Q);
+  \draw (-1.2,.16)--(-1.04,.16)--(-1.04,0);
+  \draw (.52,0) arc[start angle=0,end angle=122.3,radius=.52];
+  \node at (.34,.64){\(\theta\)};
+  \node[below] at (O){\(O\)};
+  \node[below] at (P){\(P\)};
+  \node[above] at (Q){\(Q\)};
+  \node[below] at (H){\(H\)};
+\end{tikzpicture}
+\end{center}
+
+For an acute angle, \(t=q\cos\theta\). For a right angle, both sides
+are zero. For an obtuse angle, \(H\) lies on the opposite ray and
+\(t=-q\cos(\pi-\theta)=q\cos\theta\). The classical geometric
+Pythagorean theorem gives
+\(t^2+h^2=q^2\) and
+\[
+c^2=(p-t)^2+h^2
+    =p^2-2pt+(t^2+h^2)
+    =p^2+q^2-2pq\cos\theta.
+\]
+The squared distance \((p-t)^2\) also covers a foot beyond \(P\).
+If \(\theta=0\), then \(c=|p-q|\); if \(\theta=\pi\), then \(c=p+q\).
+Substitution proves the two degenerate cases.
+\end{proof}
+
+Apply the cosine law to the triangle with vertices \(0,a,b\), for
+nonzero \(a,b\in\R^2\) or \(\R^3\). Euclidean distance agrees with the
+coordinate norm by Pythagoras, so
+\[
+\norm{a-b}^2=\norm{a}^2+\norm{b}^2
+             -2\norm{a}\norm{b}\cos\theta.
+\]
+On the other hand, expansion of the coordinate dot product gives
+\[
+\norm{a-b}^2=(a-b)\cdot(a-b)
+             =\norm{a}^2+\norm{b}^2-2a\cdot b.
+\]
+Comparing the two expressions yields the geometric formula
+\[
+\boxed{a\cdot b=\norm{a}\norm{b}\cos\theta.}
+\]
+Thus the coordinate definition of the dot product agrees with the
+geometric definition \(\norm{a}\norm{b}\cos\theta\). For nonzero vectors,
+\(a\cdot b=0\) is equivalent to \(\theta=\pi/2\).
+
+\Needspace{12\baselineskip}
+The coordinate bound \(|x_i|\leqslant\norm{x}\) follows from
+\(x_i^2\leqslant\sum_jx_j^2\). Projection gives the same bound along
+any unit direction \(e\). Put \(c=x\cdot e\). Then
+\[
+x=(x-ce)+ce,\qquad
+\norm{x}^2=\norm{x-ce}^2+c^2\geqslant c^2,
+\]
+so \(|x\cdot e|\leqslant\norm{x}\). The next theorem allows an
+arbitrary second vector.
+
+\begin{theorem}[Schwarz inequality]\label{thm:01:schwarz}
+For all \(x,y\in\R^n\),
+\[
+|x\cdot y|\leqslant\norm{x}\norm{y}.
+\]
+If \(y\ne0\), equality holds exactly when \(x\) is a scalar multiple of
+\(y\). If \(y=0\), equality always holds.
+\end{theorem}
+\begin{proof}
+The case \(y=0\) gives \(0=0\). For \(y\ne0\), let
+\(c=(x\cdot y)/\norm{y}^2\) and \(r=x-cy\). By
+Proposition~\ref{prop:01:projection},
+\[
+\norm{x}^2=\norm{r}^2+c^2\norm{y}^2
+=\norm{r}^2+\frac{(x\cdot y)^2}{\norm{y}^2}
+\geqslant\frac{(x\cdot y)^2}{\norm{y}^2}.
+\]
+Multiply by \(\norm{y}^2\) and take nonnegative square roots.
+Equality holds exactly when \(\norm{r}=0\), equivalently \(x=cy\).
+\end{proof}
+
+For nonzero \(a,b\in\R^n\), Schwarz gives
+\[
+-1\leqslant\frac{a\cdot b}{\norm{a}\norm{b}}\leqslant1.
+\]
+We therefore \textbf{define the angle} between them to be the unique
+\(\theta\in[0,\pi]\) such that
+\[
+\cos\theta=\frac{a\cdot b}{\norm{a}\norm{b}},
+\qquad\text{equivalently}\qquad
+\theta=\arccos\frac{a\cdot b}{\norm{a}\norm{b}}.
+\]
+This extends the geometric angle in \(\R^2\) and \(\R^3\). An angle with
+the zero vector is undefined. For nonzero vectors, a positive, zero, or
+negative dot product means respectively \(\theta<\pi/2\),
+\(\theta=\pi/2\), or \(\theta>\pi/2\).
+
+\begin{proposition}[Triangle inequality]\label{prop:01:triangle}
+For \(x,y\in\R^n\), \(\norm{x+y}\leqslant\norm{x}+\norm{y}\).
+\end{proposition}
+\begin{proof}
+Expanding and applying Schwarz gives
+\[
+\norm{x+y}^2
+=\norm{x}^2+2x\cdot y+\norm{y}^2
+\leqslant\norm{x}^2+2\norm{x}\norm{y}+\norm{y}^2
+=(\norm{x}+\norm{y})^2.
+\]
+Both sides of the claimed inequality are nonnegative, so taking square
+roots preserves the inequality.
+\end{proof}
+
+\subsection*{I.5. Parametric lines}
+
+The line through \(a\in\R^n\) with direction \(d\ne0\) is
+\[
+\ell=\{a+td:t\in\R\}.
+\]
+For distinct points \(a,q\), take \(d=q-a\). Restricting \(0\leqslant t\leqslant1\)
+gives the segment joining the two points:
+\[
+a+t(q-a)=(1-t)a+tq,\qquad
+a+0(q-a)=a,\quad a+1(q-a)=q.
+\]
+The distance traveled from \(a\) is \(\norm{t(q-a)}=t\norm{q-a}\),
+so the parameter is the fraction of the segment traversed.
+Differences of points on
+\(\ell\) are multiples of \(d\):
+\[
+(a+td)-(a+sd)=(t-s)d.
+\]
+Replacing \(d\) by \(cd\), for \(c\ne0\), gives the same line because
+\(ct\) still ranges over all real numbers. If \(c<0\), increasing the
+new parameter moves in the opposite direction.
+
+For \(a=(1,-3,4)\), \(q=(5,1,-2)\), the point one third of the way
+from \(a\) to \(q\) is
+\[
+a+\tfrac13(q-a)=(1,-3,4)+\tfrac13(4,4,-6)
+=(7/3,-5/3,2).
+\]
+
+\begin{example}\label{example:01:line}
+Take \(a=(1,0,1)\) and \(d=(1,1,0)\). Then
+\[
+x=a+td=(1+t,t,1)
+\quad\Longleftrightarrow\quad
+\begin{cases}x_1-x_2=1,\\x_3=1.\end{cases}
+\]
+The parameterization implies both equations. Conversely, if the equations
+hold, setting \(t=x_2\) recovers the parameterization.
+\end{example}
+
+\subsection*{I.6. Planes}
+
+A plane through \(a\in\R^3\), with nonzero \textbf{normal vector} \(n\),
+has equation
+\[
+n\cdot(x-a)=0,\qquad\text{equivalently}\qquad n\cdot x=n\cdot a.
+\]
+If \(p,q\) lie in the plane, then \(n\cdot(q-p)=0\): the normal is
+perpendicular to displacements within the plane. A position vector \(p\)
+need not be perpendicular to \(n\).
+For \(n=(n_1,n_2,n_3)\), the equation reads
+\[
+n_1x_1+n_2x_2+n_3x_3=n\cdot a.
+\]
+Thus the coefficients of a plane equation give its normal. Multiplying
+the equation by any nonzero scalar changes neither its solutions nor
+the line of normal vectors; a negative scalar reverses the normal.
+In \(\R^2\), the equation \(n\cdot(x-a)=0\)
+defines the line through \(a\) perpendicular to \(n\).
+
+More generally, for \(n\in\R^k\setminus\{0\}\), the equation
+\(n\cdot x=\alpha\) defines a \textbf{hyperplane}. It contains the origin
+exactly when \(\alpha=0\). If \(a\) is one solution, then
+\[
+\{x:n\cdot x=\alpha\}
+=\{a+v:n\cdot v=0\}.
+\]
+This follows by substituting \(x=a+v\) and subtracting \(n\cdot a=\alpha\).
+
+\begin{example}\label{example:01:plane}
+The plane with normal \(n=(1,-1,0)\) through \(a=(1,0,1)\) is
+\[
+x_1-x_2=1.
+\]
+It contains the line in Example~\ref{example:01:line}, since
+\(n\cdot d=0\). The point \((1,0,0)\) is in the plane but not on that line:
+the line also requires \(x_3=1\).
+\end{example}
+
+\begin{example}[A plane through three points]\label{example:01:three-points}
+Find a plane through \(p_1=(1,2,-1)\), \(p_2=(-1,1,4)\), and
+\(p_3=(1,3,-2)\). A normal \(n=(a,b,c)\) must satisfy
+\[
+n\cdot(p_2-p_1)=0,\qquad n\cdot(p_3-p_1)=0.
+\]
+Since \(p_2-p_1=(-2,-1,5)\) and \(p_3-p_1=(0,1,-1)\), these are
+\[
+-2a-b+5c=0,\qquad b-c=0.
+\]
+Taking \(b=c=1\) gives \(a=2\). Hence \(n=(2,1,1)\) is a nonzero
+normal, and the plane is
+\[
+2x_1+x_2+x_3=n\cdot p_1=3.
+\]
+Substituting each of the three points gives \(3\).
+\end{example}
+
+Two planes are parallel when their normals are parallel, and
+perpendicular when their normals have dot product zero. Choosing
+normals \(n,m\) determines an angle by
+\(\cos\theta=(n\cdot m)/(\norm n\norm m)\). Reversing one normal
+replaces \(\theta\) by \(\pi-\theta\). The smaller, unoriented angle
+\(\phi\in[0,\pi/2]\) therefore satisfies
+\[
+\cos\phi=\frac{|n\cdot m|}{\norm n\norm m}.
+\]
+For \(2x_1-x_2+x_3=0\) and \(x_1+2x_2-x_3=1\), the displayed
+normals are \((2,-1,1)\), \((1,2,-1)\). Their dot product is \(-1\)
+and both have norm \(\sqrt6\); thus \(\cos\theta=-1/6\) and
+\(\cos\phi=1/6\).
+
+\begin{proposition}[Distance from a point to a plane]\label{prop:01:plane-distance}
+Let \(H=\{x:n\cdot(x-a)=0\}\), where \(n\ne0\). For a point \(q\),
+the perpendicular foot on \(H\) and the distance to \(H\) are
+\[
+q'=q-\frac{(q-a)\cdot n}{\norm n^2}n,\qquad
+\operatorname{dist}(q,H)=\frac{|(q-a)\cdot n|}{\norm n}.
+\]
+\end{proposition}
+\begin{proof}
+Set \(e=n/\norm n\), a unit normal. The component of \(q-a\) along
+\(e\) is \(c=(q-a)\cdot e\). Subtracting this normal component gives
+the candidate foot \(q'=q-ce\).
+\begin{center}
+\begin{tikzpicture}[scale=.8,>=Stealth,every node/.style={font=\small}]
+\draw (-.5,0)--(4,0) node[right]{\(H\), in cross-section};
+\draw[->,thick] (0,0)--(3,2) node[midway,above left]{\(q-a\)};
+\draw[->,thick] (3,0)--(3,2) node[midway,right]{\(ce\)};
+\draw[->] (0,0)--(3,0) node[midway,below]{\(q'-a\)};
+\draw (2.8,0)--(2.8,.2)--(3,.2);
+\node[below left] at (0,0){\(a\)};
+\node[below right] at (3,0){\(q'\)};
+\node[above] at (3,2){\(q\)};
+\end{tikzpicture}
+\end{center}
+Indeed,
+\[
+(q'-a)\cdot e=(q-a)\cdot e-c(e\cdot e)=c-c=0,
+\]
+so \(q'\in H\), and \(q-q'=ce\) is perpendicular to the plane.
+For any \(x\in H\), the displacement \(q'-x\) is perpendicular to
+\(e\). Therefore
+\[
+q-x=ce+(q'-x),\qquad
+\norm{q-x}^2=c^2+\norm{q'-x}^2\geqslant c^2.
+\]
+Equality holds exactly at \(x=q'\). The shortest distance is consequently
+\[
+\norm{ce}=|c|=\frac{|(q-a)\cdot n|}{\norm n}.
+\]
+\end{proof}
+
+\begin{example}\label{example:01:plane-distance}
+For \(q=(1,3,5)\) and the plane \(-x_1+x_2-x_3=-5\), take
+\(a=(-1,1,7)\), \(n=(-1,1,-1)\). Then
+\[
+q-a=(2,2,-2),\qquad(q-a)\cdot n=2,\qquad\norm n=\sqrt3.
+\]
+The distance is \(2/\sqrt3\), and the foot is
+\[
+q'=q-\tfrac23n=(5/3,7/3,17/3).
+\]
+Its coordinates satisfy \(-5/3+7/3-17/3=-5\), as required.
+\end{example}
+
+\section*{II. Matrices and linear equations}
+
+\subsection*{II.1. Matrices}
+
+An \(m\times n\) matrix \(A=(a_{ij})\) has \(m\) rows and \(n\) columns;
+\(a_{ij}\) is the entry in row \(i\), column \(j\). Two matrices are equal
+when they have the same size and equal corresponding entries.
+For matrices of the same size,
+\[
+(A+B)_{ij}=a_{ij}+b_{ij},\qquad (cA)_{ij}=ca_{ij}.
+\]
+The zero matrix has every entry zero. A matrix is \textbf{square} when
+\(m=n\).
+Addition and scalar multiplication satisfy the same eight rules as for
+vectors, because each rule holds at every entry. For example,
+\[
+\bigl(c(A+B)\bigr)_{ij}=c(a_{ij}+b_{ij})
+=ca_{ij}+cb_{ij}=(cA+cB)_{ij}.
+\]
+
+The \textbf{transpose} \(A^\top\) is the \(n\times m\) matrix with
+\((A^\top)_{ji}=a_{ij}\). Thus
+\[
+A=\begin{pmatrix}1&2&-1\\0&1&3\end{pmatrix}
+\quad\Longrightarrow\quad
+A^\top=\begin{pmatrix}1&0\\2&1\\-1&3\end{pmatrix}.
+\]
+A square matrix is \textbf{symmetric} if \(A^\top=A\). Entrywise definitions
+give
+\[
+(A^\top)^\top=A,\qquad (A+B)^\top=A^\top+B^\top,\qquad(cA)^\top=cA^\top.
+\]
+
+In matrix products, vectors are columns:
+\[
+x=\begin{pmatrix}x_1\\\vdots\\x_n\end{pmatrix},\qquad
+x^\top=(x_1,\ldots,x_n).
+\]
+The tuples used in Chapter I specify these same coordinates; a row vector
+in a matrix product is written explicitly as a transpose.
+
+\subsection*{II.2. Multiplication of matrices}
+
+For \(A\in\R^{m\times n}\) and \(B\in\R^{n\times p}\), define
+\[
+AB\in\R^{m\times p},\qquad
+(AB)_{ij}=\sum_{k=1}^n a_{ik}b_{kj}.
+\]
+The shared size \(n\) is required: an entry of \(AB\) is the dot product
+of a row of \(A\) and a column of \(B\).
+
+\begin{example}\label{example:01:product}
+For
+\[
+A=\begin{pmatrix}1&2&-1\\0&1&3\end{pmatrix},\qquad
+B=\begin{pmatrix}2&0\\1&-1\\0&2\end{pmatrix},
+\]
+\[
+AB=\begin{pmatrix}
+1(2)+2(1)-1(0)&1(0)+2(-1)-1(2)\\
+0(2)+1(1)+3(0)&0(0)+1(-1)+3(2)
+\end{pmatrix}
+=\begin{pmatrix}4&-4\\1&5\end{pmatrix}.
+\]
+\end{example}
+
+If \(a_1,\ldots,a_n\) are the columns of \(A\), the entry formula also gives
+\[
+Ax=x_1a_1+\cdots+x_na_n,\qquad
+AB=\begin{pmatrix}Ab_1&\cdots&Ab_p\end{pmatrix},
+\]
+where \(b_j\) is column \(j\) of \(B\). For
+Example~\ref{example:01:product}, the first column of \(AB\) is
+\[
+2a_1+a_2=2\begin{pmatrix}1\\0\end{pmatrix}
++\begin{pmatrix}2\\1\end{pmatrix}
+=\begin{pmatrix}4\\1\end{pmatrix}.
+\]
+In particular,
+\[
+Ax=b\quad\Longleftrightarrow\quad
+\sum_{j=1}^n a_{ij}x_j=b_i\quad(i=1,\ldots,m).
+\]
+For the matrix \(A\) above, \(Ax=(4,1)^\top\) means
+\(x_1+2x_2-x_3=4\) and \(x_2+3x_3=1\).
+
+For column vectors \(x,y\in\R^n\),
+\[
+x^\top y=x\cdot y\quad\text{is a scalar},\qquad
+xy^\top=(x_i y_j)_{ij}\quad\text{is an }n\times n\text{ matrix}.
+\]
+
+\paragraph{Product laws.}
+Whenever the products and sums have compatible sizes,
+\begin{gather*}
+A(B+C)=AB+AC,\qquad (A+B)C=AC+BC,\\
+(cA)B=A(cB)=c(AB),\qquad (AB)C=A(BC).
+\end{gather*}
+Distributivity and scalar compatibility follow by distributing each entry's
+sum. More explicitly, let \(r_i\) be row \(i\) of \(A\), and let
+\(b_j,c_j\) be column \(j\) of \(B,C\). Then
+\[
+\bigl(A(B+C)\bigr)_{ij}
+=r_i\cdot(b_j+c_j)=r_i\cdot b_j+r_i\cdot c_j
+=(AB+AC)_{ij}.
+\]
+The equality \(r_i\cdot(cb_j)=c(r_i\cdot b_j)\) proves scalar
+compatibility. Applying the same calculation to a sum of rows proves
+\((A+B)C=AC+BC\).
+
+\textit{Associativity proof (reading).} If \(A,B,C\) have sizes \(m\times n\), \(n\times p\),
+\(p\times q\), respectively, both sides have entry
+\begin{align*}
+\bigl((AB)C\bigr)_{ij}
+&=\sum_{k=1}^p(AB)_{ik}c_{kj}
+=\sum_{k=1}^p\left(\sum_{\ell=1}^n a_{i\ell}b_{\ell k}\right)c_{kj}\\
+&=\sum_{\ell=1}^n a_{i\ell}
+  \left(\sum_{k=1}^p b_{\ell k}c_{kj}\right)
+=\sum_{\ell=1}^n a_{i\ell}(BC)_{\ell j}
+=\bigl(A(BC)\bigr)_{ij}.
+\end{align*}
+The interchange is valid because both sums are finite. Associativity
+permits writing \(ABC\).
+
+The \textbf{identity matrix} \(I_n\) has diagonal entries 1 and all other
+entries 0. For \(A\in\R^{m\times n}\), the entry formula gives
+\[
+I_mA=A=AI_n.
+\]
+Indeed, column \(j\) of \(AI_n\) is \(Ae_j\), the \(j\)th column
+of \(A\), while row \(i\) of \(I_mA\) is row \(i\) of \(A\).
+The matrix \(cI_n\) is called a \textbf{scalar matrix}.
+For square \(A\), define \(A^0=I_n\), \(A^1=A\), and
+\(A^{k+1}=A^kA\). Associativity gives
+\[
+A^rA^s=A^{r+s}\qquad(r,s\geqslant0).
+\]
+
+\begin{example}[Population transitions]\label{example:01:markov}
+Let \(x_k,y_k,z_k\) be the populations of Los Angeles, Chicago, and
+Boston in year \(k\). Each year the fractions moving are
+\[
+\begin{array}{c|ccc}
+\text{from}\backslash\text{to}&\text{Los Angeles}&\text{Chicago}&\text{Boston}\\\hline
+\text{Los Angeles}&\text{remain}&1/7&1/4\\
+\text{Chicago}&1/5&\text{remain}&1/3\\
+\text{Boston}&1/6&1/8&\text{remain}
+\end{array}
+\]
+The fractions remaining are \(1-1/7-1/4=17/28\),
+\(1-1/5-1/3=7/15\), and \(1-1/6-1/8=17/24\). Thus
+\begin{align*}
+x_{k+1}&=\tfrac{17}{28}x_k+\tfrac15y_k+\tfrac16z_k,\\
+y_{k+1}&=\tfrac17x_k+\tfrac7{15}y_k+\tfrac18z_k,\\
+z_{k+1}&=\tfrac14x_k+\tfrac13y_k+\tfrac{17}{24}z_k.
+\end{align*}
+Writing populations as a column gives
+\[
+X_{k+1}=AX_k,\qquad
+A=\begin{pmatrix}
+17/28&1/5&1/6\\1/7&7/15&1/8\\1/4&1/3&17/24
+\end{pmatrix},\qquad
+X_k=\begin{pmatrix}x_k\\y_k\\z_k\end{pmatrix}.
+\]
+Column \(j\) records where the population of city \(j\) goes.
+Each column sums to \(1\), so adding the three recurrence equations
+gives
+\[
+x_{k+1}+y_{k+1}+z_{k+1}=x_k+y_k+z_k.
+\]
+A square matrix with nonnegative entries and column sums \(1\) is a
+\textbf{Markov matrix} under this column-vector convention. Repeated
+application gives
+\[
+X_2=AX_1,\quad X_3=A(AX_1)=A^2X_1,\quad
+X_{k+1}=A^kX_1.
+\]
+\end{example}
+
+\begin{proposition}[Transpose of a product]\label{prop:01:transpose}
+If \(AB\) is defined, then \((AB)^\top=B^\top A^\top\).
+\end{proposition}
+\begin{proof}
+For \(A\in\R^{m\times n}\), \(B\in\R^{n\times p}\), both matrices on the
+right and left have size \(p\times m\), and
+\[
+\bigl((AB)^\top\bigr)_{ij}
+=(AB)_{ji}=\sum_{k=1}^n a_{jk}b_{ki}
+=\sum_{k=1}^n (B^\top)_{ik}(A^\top)_{kj}
+=(B^\top A^\top)_{ij}.
+\]
+\end{proof}
+Consequently \(Ax=b\) can also be written
+\(x^\top A^\top=b^\top\), with the order reversed.
+
+\begin{example}\label{example:01:noncommute}
+Let
+\[
+P=\begin{pmatrix}1&0\\0&0\end{pmatrix},\qquad
+N=\begin{pmatrix}0&1\\0&0\end{pmatrix}.
+\]
+Then \(PN=N\), whereas \(NP=0\). Thus matrix multiplication need not
+commute, and a product of two nonzero matrices may be zero.
+Also \(P^2=PI_2=P\), although \(P\ne I_2\); cancelling a nonzero matrix
+from an equation is not valid in general.
+\end{example}
+
+\paragraph{Inverses.}
+An \textbf{inverse} of a square matrix \(A\in\R^{n\times n}\) is an
+\(n\times n\) matrix \(B\) satisfying both \(AB=I_n\) and \(BA=I_n\).
+A matrix with an inverse is \textbf{invertible}. The inverse is unique:
+if \(B\) and \(C\) are inverses, then
+\[
+B=BI_n=B(AC)=(BA)C=I_nC=C.
+\]
+We denote it by \(A^{-1}\).
+
+For example,
+\[
+A=\begin{pmatrix}1&1\\0&1\end{pmatrix},\qquad
+B=\begin{pmatrix}1&-1\\0&1\end{pmatrix}
+\quad\Longrightarrow\quad AB=BA=I_2,
+\]
+so \(B=A^{-1}\). In contrast, the matrix \(P\) in
+Example~\ref{example:01:noncommute} has no inverse: every product \(PC\)
+has zero second row and therefore cannot equal \(I_2\).
+
+If \(A\) is invertible and \(AX=AY\), multiplication on the left by
+\(A^{-1}\) gives \(X=Y\). This cancellation uses invertibility, not merely
+\(A\ne0\).
+
+Transposing the two inverse identities gives
+\[
+(A^{-1})^\top A^\top=(AA^{-1})^\top=I_n,\qquad
+A^\top(A^{-1})^\top=(A^{-1}A)^\top=I_n.
+\]
+Thus \(A^\top\) is invertible and
+\((A^\top)^{-1}=(A^{-1})^\top\).
+
+\begin{example}[Rotations]\label{example:01:rotation}
+For \(\theta\in\R\), put
+\[
+R(\theta)=\begin{pmatrix}\cos\theta&-\sin\theta\\
+\sin\theta&\cos\theta\end{pmatrix}.
+\]
+A unit vector in the plane has the form
+\(u=(\cos\varphi,\sin\varphi)^\top\). Multiplication gives
+\[
+R(\theta)u
+=\begin{pmatrix}
+\cos\theta\cos\varphi-\sin\theta\sin\varphi\\
+\sin\theta\cos\varphi+\cos\theta\sin\varphi
+\end{pmatrix}
+=\begin{pmatrix}\cos(\theta+\varphi)\\\sin(\theta+\varphi)\end{pmatrix}.
+\]
+The last equality is the pair of trigonometric addition formulas.
+For any nonzero \(x=ru\), where \(r=\norm{x}\),
+\(R(\theta)x=rR(\theta)u\): multiplication preserves length and turns
+the direction through \(\theta\). It fixes the zero vector.
+For example, rotating \((2,5)^\top\) through \(\pi/3\) gives
+\[
+\begin{pmatrix}1/2&-\sqrt3/2\\\sqrt3/2&1/2\end{pmatrix}
+\begin{pmatrix}2\\5\end{pmatrix}
+=\begin{pmatrix}1-5\sqrt3/2\\\sqrt3+5/2\end{pmatrix}.
+\]
+If coordinates are written as a row, the same rotation is
+\(x^\top R(\theta)^\top\), by the transpose-product rule.
+\end{example}
+
+\subsection*{II.3. Homogeneous linear equations and elimination}
+
+For \(A=(a_{ij})\in\R^{m\times n}\), \(b\in\R^m\), and an unknown
+column \(x\in\R^n\), the system
+\[
+\sum_{j=1}^n a_{ij}x_j=b_i\quad(1\leqslant i\leqslant m)
+\qquad\text{is written}\qquad Ax=b.
+\]
+It has \(m\) equations and \(n\) unknowns. A \textbf{solution} is a column
+whose entries satisfy every equation. The system is \textbf{consistent}
+if it has a solution, and \textbf{homogeneous} if \(b=0\).
+The homogeneous system always has the \textbf{trivial solution} \(x=0\);
+a \textbf{nontrivial solution} has at least one nonzero coordinate.
+If the rows of \(A\) are \(r_1^\top,\ldots,r_m^\top\), then
+\[
+Ax=0\quad\Longleftrightarrow\quad
+r_i\cdot x=0\ \text{for every }i.
+\]
+
+\begin{example}[Eliminate one variable, then recover it]\label{example:01:two-equations}
+Consider
+\[
+2x+3y-z=0,\qquad x+y+z=0.
+\]
+Subtracting twice the second equation from the first gives \(y-3z=0\).
+Set \(z=t\). Then \(y=3t\), and the second original equation gives
+\(x=-y-z=-4t\). The first original equation is also satisfied, since
+\[
+2x+3y-z=2(x+y+z)+(y-3z)=0.
+\]
+Thus every \(t(-4,3,1)\) is a solution, and every solution is obtained
+by taking \(t=z\). Choosing \(t=1\) gives a nontrivial solution.
+\end{example}
+
+\begin{example}\label{example:01:homogeneous}
+Let
+\[
+A=\begin{pmatrix}1&2&-1&1\\2&4&-1&3\\3&6&-2&4\end{pmatrix}.
+\]
+The third equation of \(Ax=0\) is the sum of the first two. Subtracting
+twice the first equation from the second leaves the equivalent system
+\[
+x_1+2x_2-x_3+x_4=0,\qquad x_3+x_4=0.
+\]
+Choose \(x_2=s\), \(x_4=t\). Solving backwards gives \(x_3=-t\),
+\(x_1=-2s-2t\). Thus all solutions are
+\[
+x=\begin{pmatrix}-2s-2t\\s\\-t\\t\end{pmatrix}
+=s\begin{pmatrix}-2\\1\\0\\0\end{pmatrix}
++t\begin{pmatrix}-2\\0\\-1\\1\end{pmatrix},\qquad s,t\in\R.
+\]
+Every pair \((s,t)\) gives a solution, and every solution has this form
+because its second and fourth coordinates determine \(s,t\).
+The solution is nontrivial exactly when \((s,t)\ne(0,0)\).
+\end{example}
+
+\begin{theorem}[More unknowns than equations]\label{thm:01:excess}
+If \(A\in\R^{m\times n}\) and \(n>m\), then \(Ax=0\) has a nontrivial
+solution.
+\end{theorem}
+\begin{proof}
+We induct on the number \(m\) of equations. For one equation
+\[
+a_1x_1+\cdots+a_nx_n=0,\qquad n>1,
+\]
+if all coefficients vanish, \(x=e_1\) is a nontrivial solution.
+Otherwise renumber the variables so that \(a_1\ne0\). Set
+\(x_2=\cdots=x_n=1\), and then set
+\[
+x_1=-\frac{a_2+\cdots+a_n}{a_1}.
+\]
+This solves the equation and is nontrivial because \(x_2=1\).
+
+Suppose the claim holds for \(m-1\) equations in more than \(m-1\)
+unknowns. If \(A=0\), again use \(e_1\). Otherwise renumber equations
+and variables so that \(a_{11}\ne0\). For each \(i=2,\ldots,m\),
+subtract \(a_{i1}/a_{11}\) times the first equation from equation \(i\).
+Writing \(r_i^\top\) for row \(i\), the new equations are
+\[
+\left(r_i-\frac{a_{i1}}{a_{11}}r_1\right)\cdot x=0,
+\qquad i=2,\ldots,m.
+\]
+The coefficient of \(x_1\) is
+\(a_{i1}-(a_{i1}/a_{11})a_{11}=0\). Hence these equations are
+\[
+\sum_{j=2}^n\left(a_{ij}-\frac{a_{i1}}{a_{11}}a_{1j}\right)x_j=0,
+\qquad i=2,\ldots,m,
+\]
+a system of \(m-1\) equations in \(n-1>m-1\) unknowns.
+By induction, choose a solution \((x_2,\ldots,x_n)\ne0\).
+Recover the first coordinate from the first original equation:
+\[
+x_1=-\frac{a_{12}x_2+\cdots+a_{1n}x_n}{a_{11}}.
+\]
+Now \(r_1\cdot x=0\). For every remaining original row,
+\[
+r_i\cdot x
+=\left(r_i-\frac{a_{i1}}{a_{11}}r_1\right)\cdot x
+ +\frac{a_{i1}}{a_{11}}(r_1\cdot x)=0.
+\]
+Thus \(Ax=0\), and \(x\ne0\) because its last \(n-1\) coordinates
+were chosen not all zero. This completes the induction.
+\end{proof}
+
+\subsection*{II.4. Row operations and Gauss elimination}
+
+The \textbf{augmented matrix} \([A\mid b]\) records the coefficients and
+the right-hand side of \(Ax=b\). The \textbf{elementary row operations} are
+\[
+\begin{array}{lll}
+\text{Interchange:}&R_i\leftrightarrow R_j,&i\ne j,\\
+\text{Scaling:}&R_i\leftarrow cR_i,&c\ne0,\\
+\text{Replacement:}&R_i\leftarrow R_i+cR_j,&i\ne j.
+\end{array}
+\]
+Two matrices are \textbf{row equivalent}, written \(M\sim N\), if a finite
+sequence of these operations changes one into the other. The sequence
+may be empty.
+
+\begin{proposition}\label{prop:01:equivalent}
+Row operations on the augmented matrix preserve exactly the solutions
+of a linear system.
+\end{proposition}
+\begin{proof}
+Interchanging equations only changes their order. Multiplying an equation
+by \(c\ne0\) preserves its solutions, since division by \(c\) recovers it.
+For replacement, the two old equations
+\[
+r_i\cdot x=b_i,\qquad r_j\cdot x=b_j
+\]
+imply
+\[
+(r_i+cr_j)\cdot x=b_i+cb_j,\qquad r_j\cdot x=b_j.
+\]
+Conversely, subtracting \(c\) times the unchanged second equation from
+the new first equation recovers \(r_i\cdot x=b_i\). Thus each operation
+preserves the solution set in both directions, as does a sequence of them.
+\end{proof}
+
+The operation acts on the \emph{entire} row, including its right-hand
+side. Multiplication by zero is excluded because it can discard an
+equation. In a replacement, row \(j\) remains unchanged.
+
+A matrix is in \textbf{row echelon form} if its zero rows are at the
+bottom and the first nonzero entry of each successive nonzero row occurs
+strictly farther to the right. These first nonzero entries are the
+\textbf{pivots}; their columns are \textbf{pivot columns}.
+Pivots need not equal 1. For example,
+\[
+\begin{pmatrix}0&2&-1&3\\0&0&0&-4\\0&0&0&0\end{pmatrix}
+\]
+has pivots in columns 2 and 4.
+
+\begin{theorem}[Gauss elimination]\label{thm:01:echelon}
+Every matrix is row equivalent to a matrix in row echelon form.
+\end{theorem}
+\begin{proof}
+If the matrix is zero, it is already in echelon form. Otherwise choose
+the leftmost nonzero column, say column \(j\), and interchange rows
+to put a nonzero entry \(p\) in the first row. The matrix now has the form
+\[
+\begin{pmatrix}
+0&\cdots&0&p&b_{1,j+1}&\cdots&b_{1n}\\
+0&\cdots&0&b_{2j}&b_{2,j+1}&\cdots&b_{2n}\\
+\vdots&&\vdots&\vdots&\vdots&&\vdots\\
+0&\cdots&0&b_{mj}&b_{m,j+1}&\cdots&b_{mn}
+\end{pmatrix},\qquad p\ne0.
+\]
+The initial \(j-1\) columns are zero. Apply
+\(R_i\leftarrow R_i-(b_{ij}/p)R_1\) for \(i=2,\ldots,m\).
+In column \(j\) this gives \(b_{ij}-(b_{ij}/p)p=0\); in a later
+column \(k\) it gives \(b'_{ik}=b_{ik}-(b_{ij}/p)b_{1k}\). Thus
+\[
+\begin{pmatrix}
+0&\cdots&0&p&b_{1,j+1}&\cdots&b_{1n}\\
+0&\cdots&0&0&b'_{2,j+1}&\cdots&b'_{2n}\\
+\vdots&&\vdots&\vdots&\vdots&&\vdots\\
+0&\cdots&0&0&b'_{m,j+1}&\cdots&b'_{mn}
+\end{pmatrix}
+\]
+is row equivalent to the original matrix. Repeat the procedure on the
+smaller matrix
+\[
+B'=\begin{pmatrix}
+b'_{2,j+1}&\cdots&b'_{2n}\\
+\vdots&&\vdots\\
+b'_{m,j+1}&\cdots&b'_{mn}
+\end{pmatrix}.
+\]
+Operations among these lower rows preserve all their earlier zero
+entries. Each stage fixes a new pivot strictly to the right of the
+previous pivot and leaves fewer rows and columns to process.
+If the remaining matrix is zero or has no rows or columns, stop.
+The fixed pivot rows followed by any zero rows form an echelon matrix.
+\end{proof}
+
+For a system, apply this procedure to the coefficient columns and carry
+the right-hand side along. Write the result as \([U\mid d]\), with
+\(U\) in echelon form. If \(U\) has \(r\) nonzero rows, their pivot
+columns \(j_1<\cdots<j_r\) identify the \textbf{pivot variables}
+\(x_{j_1},\ldots,x_{j_r}\). The other variables are \textbf{free}.
+
+\begin{proposition}[Consistency and free variables]\label{prop:01:consistency}
+The system is consistent if and only if every zero row of \(U\) has
+corresponding entry zero in \(d\). If consistent, every choice of the
+\(n-r\) free variables determines exactly one solution. A consistent
+system has a unique solution if and only if there are no free variables.
+\end{proposition}
+\begin{proof}
+A row \([0\ \cdots\ 0\mid d_i]\) requires \(0=d_i\). If these
+requirements hold, assign arbitrary values to the free variables and
+solve the nonzero rows from bottom to top. In row \(i\),
+\[
+x_{j_i}=\frac{d_i-\sum_{k>j_i}u_{ik}x_k}{u_{i j_i}}.
+\]
+The denominator is nonzero. Every variable on the right is either free
+or already determined by a lower row, so the formula gives exactly one
+value. This also shows that every solution is obtained. Different
+choices of a free coordinate give different solutions.
+\end{proof}
+
+\begin{example}\label{example:01:inhomogeneous}
+For the matrix \(A\) of Example~\ref{example:01:homogeneous}, let
+\(b=(b_1,b_2,b_3)^\top\). The operations
+\[
+R_2\leftarrow R_2-2R_1,\qquad
+R_3\leftarrow R_3-3R_1,\qquad
+R_3\leftarrow R_3-R_2
+\]
+give
+\[
+\left[\begin{array}{rrrr|r}
+1&2&-1&1&b_1\\2&4&-1&3&b_2\\3&6&-2&4&b_3
+\end{array}\right]
+\sim
+\left[\begin{array}{rrrr|l}
+1&2&-1&1&b_1\\0&0&1&1&b_2-2b_1\\0&0&1&1&b_3-3b_1
+\end{array}\right]
+\]
+after the first two operations, and the last operation gives
+\[
+\left[\begin{array}{rrrr|l}
+1&2&-1&1&b_1\\0&0&1&1&b_2-2b_1\\0&0&0&0&b_3-b_1-b_2
+\end{array}\right].
+\]
+Hence \(Ax=b\) is consistent exactly when \(b_3=b_1+b_2\).
+The pivot variables are \(x_1,x_3\); the free variables are \(x_2,x_4\).
+When the condition holds, back substitution gives
+\[
+x_2=s,\quad x_4=t,\quad x_3=b_2-2b_1-t,\qquad
+x_1=b_1-2s+x_3-t=b_2-b_1-2s-2t.
+\]
+Thus the complete solution is
+\[
+x=\begin{pmatrix}b_2-b_1-2s-2t\\s\\b_2-2b_1-t\\t\end{pmatrix},
+\qquad s,t\in\R.
+\]
+For \(b=(1,3,4)^\top\), the solutions are
+\((2-2s-2t,s,1-t,t)^\top\). For \(b=(1,3,5)^\top\), there is no solution.
+\end{example}
+
+\paragraph{The same existence theorem in echelon form.}
+We can now give a second proof of Theorem~\ref{thm:01:excess}.
+Elimination leaves at most one pivot per row, so the number \(r\) of
+pivots satisfies \(r\leqslant m<n\). Row operations leave the zero right-hand
+side zero; the system is consistent. At least one variable is free.
+Set one free variable to 1 and all other free variables to 0, then use
+back substitution to determine the pivot variables. The resulting
+solution is nonzero because its chosen free coordinate is 1.
+
+The condition \(n>m\) is sufficient, not necessary: \(x_1+x_2=0\) and
+\(2x_1+2x_2=0\) have nontrivial solutions with \(n=m=2\).
+For a nonhomogeneous system, \(n>m\) does not ensure consistency, as
+Example~\ref{example:01:inhomogeneous} shows.

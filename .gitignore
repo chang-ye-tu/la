@@ -1,57 +1,22 @@
-# Local agent/session state (never publish)
-.codex-home/
-**/.codex-home/
-**/.claude/settings.local.json
+# Publish the course page and the self-contained lecture notes only.
+# Local authoring records, exams, attic files, agent data and editor state
+# remain on disk but are outside this allowlist.
+/*
+!/.gitignore
+!/README.md
+!/note/
 
-# Editor and operating-system files
-.DS_Store
-Thumbs.db
-*~
-*.swp
-*.swo
+# Keep PDFs and every LaTeX dependency, including the shared preamble and
+# Unit 12's supplementary exercise source. Build output stays ignored.
+/note/*
+!/note/Makefile
+!/note/*.tex
+!/note/unit[0-9][0-9].pdf
+!/note/unit01-2up.pdf
 
-# Python
-__pycache__/
-*.py[cod]
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.venv/
-venv/
-
-# R / knitr local state
-.RData
-.Rhistory
-.Ruserdata
-.Rproj.user/
-*_cache/
-*_files/
-
-# LaTeX intermediates (the course PDFs themselves are intentionally committed)
-*.aux
-*.bbl
-*.bcf
-*.blg
-*.dvi
-*.fdb_latexmk
-*.fls
-*.lof
-*.log
-*.lot
-*.nav
-*.out
-*.run.xml
-*.snm
-*.synctex.gz
-*.toc
-*.vrb
-*.xdv
-_minted*/
-*.minted
-
-# Local packaging output
-/dist/
-
-# One-off drafting transcript / extracted-text checks
-previous_dialog_with_fable.txt
-note/unit08.txt
+# Editor lock/backup files can resemble source filenames.
+**/.#*
+**/#*#
+**/*~
+**/*.swp
+**/*.swo
