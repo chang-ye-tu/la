@@ -1,527 +1,858 @@
-\needspace{8\baselineskip}
-\subsection*{Inner products and their norms}
+% Original problems, selected subparts, scans, and proof adaptations:
+% authoring/notes/unit06-exercise-sources.md.
+All vectors and matrices in these exercises are real.
 
-\begin{problem}\label{ex:06:examples}
-Verify the inner-product axioms for (a) \(\R^m\) with \(\sum_i x_i y_i\);
-(b) real \(m\times n\) matrices with \(\tr(A^\top B)\).
-\end{problem}
-\begin{solution}
-In (a), symmetry and linearity follow term by term; \(\sum_i x_i^2\)
-is nonnegative and vanishes precisely when every coordinate is zero.
-In (b), \(\tr(A^\top B)=\sum_{i,j}a_{ij}b_{ij}\), so the same argument
-applies to the entries.
-\end{solution}
+\subsection*{Dot products and norms}
 
-\begin{problem}\label{ex:06:schwarz}
-In a real inner-product space prove \(|\ip{x}{y}|\leqslant\norm{x}\norm{y}\).
-Determine exactly when equality holds, including zero vectors.
-\end{problem}
-\begin{solution}
-If \(y=0\), both sides vanish. For \(y\ne0\), put
-\(r=x-\ip{x}{y}y/\norm{y}^2\). Then
+% MA 1.8, complete.
+\begin{problem}[Computing dot products]\label{ex:06:dot-products}
+Let
 \[
-0\leqslant\norm{r}^2=\norm{x}^2-\frac{\ip{x}{y}^2}{\norm{y}^2}.
+x=(1,2,-3)^\top,\quad y=(4,-5,1)^\top,\quad
+z=(1,1,1)^\top,\quad w=(3,\alpha,1)^\top.
 \]
-Multiplication by \(\norm{y}^2\) proves the inequality. Equality holds
-exactly when \(r=0\), or \(x\) is a scalar multiple of \(y\).
-Including the case \(y=0\), the condition is that the pair is linearly dependent.
-\end{solution}
-
-\begin{problem}\label{ex:06:parallelogram}
-Prove \(\norm{x+y}^2+\norm{x-y}^2=2\norm{x}^2+2\norm{y}^2\)
-and explain its name, the parallelogram identity.
+Compute \(x^\top y,x^\top z,y^\top z\), and find all \(\alpha\)
+such that \(y^\top w=0\).
 \end{problem}
 \begin{solution}
-The two squares expand to \(\norm{x}^2\pm2\ip{x}{y}+\norm{y}^2\);
-adding cancels the mixed terms. A parallelogram with adjacent side vectors
-\(x,y\) has diagonals \(x+y,x-y\). Thus the sum of the squared diagonal
-lengths equals the sum of the squared lengths of its four sides.
-\end{solution}
-
-\begin{problem}\label{ex:06:norm}
-A norm satisfies \(\nu(ax)=|a|\nu(x)\), positivity with equality only at
-zero, and \(\nu(x+y)\leqslant\nu(x)+\nu(y)\).
-Prove that \(\nu(x)=\sqrt{\ip{x}{x}}\) is a norm. Include the Frobenius
-norm as a special case.
-\end{problem}
-\begin{solution}
-Bilinearity gives \(\ip{ax}{ax}=a^2\ip{x}{x}\), proving homogeneity.
-Positive definiteness gives positivity and its equality condition.
-Schwarz gives
+Directly,
 \[
-\norm{x+y}^2=\norm{x}^2+2\ip{x}{y}+\norm{y}^2
-\leqslant(\norm{x}+\norm{y})^2.
+x^\top y=4-10-3=-9,\qquad x^\top z=1+2-3=0,\qquad
+y^\top z=4-5+1=0.
 \]
-Taking nonnegative square roots proves the triangle inequality.
-For matrices the product is \(\tr(A^\top B)\), so the norm is
-\(\sqrt{\sum_{i,j}a_{ij}^2}\) and all three conclusions apply.
+Since \(y^\top w=12-5\alpha+1=13-5\alpha\), the last condition
+holds exactly when \(\alpha=13/5\).
 \end{solution}
 
-\begin{problem}\label{ex:06:polarization}
-Prove that a real inner product is recovered from its norm by
-\[\ip{x}{y}=\tfrac14(\norm{x+y}^2-\norm{x-y}^2).\]
-\end{problem}
-\begin{solution}
-Expanding the two squares and subtracting cancels the two pure-square
-terms and leaves \(4\ip{x}{y}\). In particular two inner products
-inducing the same norm must agree on every pair.
-\end{solution}
-
-\begin{problem}\label{ex:06:noninner-norm}
-For \(m\geqslant2\), let \(\nu(x)=\sum_{i=1}^m|x_i|\) on \(\R^m\).
-Prove that \(\nu\) is a norm but is not induced by an inner product.
-\end{problem}
-\begin{solution}
-Absolute values give \(\nu(ax)=|a|\nu(x)\) and
-\(\nu(x+y)\leqslant\sum_i(|x_i|+|y_i|)=\nu(x)+\nu(y)\).
-Every summand is nonnegative; their sum is zero exactly when \(x=0\).
-For distinct coordinate vectors \(e_1,e_2\), however,
-\[
-\nu(e_1+e_2)^2+\nu(e_1-e_2)^2=8,
-\qquad 2\nu(e_1)^2+2\nu(e_2)^2=4.
-\]
-The parallelogram identity fails, so no inner product induces this norm.
-\end{solution}
-
-\begin{problem}\label{ex:06:distance}
-For \(d(x,y)=\norm{x-y}\), prove (a) \(d(x,x)=0\);
-(b) \(d(x,y)>0\) for \(x\ne y\); (c) symmetry;
-(d) \(d(x,y)\leqslant d(x,z)+d(z,y)\). Interpret these in \(\R^2\).
-\end{problem}
-\begin{solution}
-The first two assertions are norm positivity. Symmetry follows from
-\(\norm{-(x-y)}=\norm{x-y}\). Finally
-\(x-y=(x-z)+(z-y)\), so the norm triangle inequality proves (d).
-In the plane, coincident points have distance zero and distinct points
-have positive distance; reversing a route does not change its length;
-and the direct segment is no longer than the two-segment route through \(z\).
-\end{solution}
-
-\begin{problem}\label{ex:06:continuity}
-Suppose \(\norm{x_k-x}\to0\) and \(\norm{y_k-y}\to0\) in a real
-inner-product space. Prove convergence of the norms and of
-\(\ip{x_k}{y_k}\) to \(\ip{x}{y}\).
-\end{problem}
-\begin{solution}
-The triangle inequality in both directions gives
-\(\big|\norm{x_k}-\norm{x}\big|\leqslant\norm{x_k-x}\to0\),
-and similarly for \(y_k\). In particular \(\norm{x_k}\) is bounded.
-By bilinearity and Schwarz,
-\[
-|\ip{x_k}{y_k}-\ip{x}{y}|
-\leqslant\norm{x_k}\norm{y_k-y}+\norm{x_k-x}\norm{y}\longrightarrow0.
-\]
-\end{solution}
-
-\needspace{8\baselineskip}
-\subsection*{Orthogonality and construction}
-
-\begin{problem}\label{ex:06:orthogonal-vectors}
-Show that zero is orthogonal to every vector. Find every vector in
-\(\R^3\) orthogonal to \((2,2,-1)^\top\).
-\end{problem}
-\begin{solution}
-Linearity gives \(\ip{0}{v}=\ip{0+0}{v}=2\ip{0}{v}\), hence zero.
-The coordinate condition is \(2x+2y-z=0\); its complete solution is
-\((s,t,2s+2t)^\top=s(1,0,2)^\top+t(0,1,2)^\top\), with \(s,t\in\R\).
-\end{solution}
-
-\begin{problem}\label{ex:06:pythagoras}
-In a real inner-product space show that \(x\perp y\) implies
-\(\norm{x+y}^2=\norm{x}^2+\norm{y}^2\). Does the converse hold?
-\end{problem}
-\begin{solution}
-Expansion gives \(\norm{x+y}^2-\norm{x}^2-\norm{y}^2=2\ip{x}{y}\).
-Thus each condition is equivalent to the other over the real field.
-\end{solution}
-
-\begin{problem}\label{ex:06:orthonormal-independent}
-Show that the columns of \(I_n\) are orthonormal and independent.
-Then prove that every orthonormal list is independent.
-\end{problem}
-\begin{solution}
-For coordinate columns, \(e_i^\top e_j\) equals one for \(i=j\) and zero
-otherwise, and \(\sum_i c_i e_i=(c_1,\ldots,c_n)^\top\) vanishes only
-when all coefficients vanish. More generally, taking the inner product
-of \(\sum_i c_i q_i=0\) with \(q_j\) gives \(c_j=0\) for every \(j\).
-\end{solution}
-
-\begin{problem}\label{ex:06:walls}
-Two subspaces are orthogonal when every vector of either is orthogonal
-to every vector of the other. Explain why a room's front and side walls,
-viewed as planes through a corner, are not orthogonal subspaces.
-Show also that the zero subspace is orthogonal to every subspace.
-\end{problem}
-\begin{solution}
-A nonzero vector along the common vertical edge belongs to both planes.
-It has positive inner product with itself, contradicting subspace
-orthogonality. The zero subspace contains only zero, whose inner product
-with every vector is zero.
-\end{solution}
-
-\begin{problem}\label{ex:06:complement}
-For a subspace \(W\) of an inner-product space \(V\), determine
-\(\{0\}^\perp\), prove that \(W^\perp\) is a subspace, and show that
-\(W\cap W^\perp=\{0\}\).
-\end{problem}
-\begin{solution}
-Every vector is perpendicular to zero, so \(\{0\}^\perp=V\).
-If \(x,y\in W^\perp\), then for every \(w\in W\),
-\(\ip{ax+by}{w}=a\ip{x}{w}+b\ip{y}{w}=0\); zero also belongs to the
-set. Finally a vector in the intersection is perpendicular to itself,
-so positive definiteness forces it to be zero.
-\end{solution}
-
-\begin{problem}\label{ex:06:orthonormal-basis}
-Prove that every finite-dimensional real inner-product space has an
-orthonormal basis.
-\end{problem}
-\begin{solution}
-For the zero space use the empty list. Otherwise take a basis
-\(v_1,\ldots,v_n\), and recursively set
-\(u_j=v_j-\sum_{i<j}\ip{v_j}{u_i}u_i/\norm{u_i}^2\).
-Inductively the previously constructed \(u_i\) are nonzero and mutually
-orthogonal, and their span equals that of \(v_1,\ldots,v_{j-1}\).
-Taking inner products proves \(u_j\perp u_i\). If \(u_j=0\), then
-\(v_j\) is in the preceding span, contradicting independence.
-The formula and its rearrangement show equality of the two spans at
-stage \(j\). Thus all \(u_j\) exist, and \(u_j/\norm{u_j}\) form the
-required orthonormal basis.
-\end{solution}
-
-\begin{problem}\label{ex:06:gs-three}
-Apply Gram--Schmidt, in the given order, to obtain orthonormal bases for
-the spans of these lists:
+% MA 1.11(a-d), complete.
+\begin{problem}[Normalization]\label{ex:06:normalization}
+For \(x\ne0\), put \(x_\circ=x/\|x\|\).
 \begin{enumerate}
-\item \((1,1,-1)^\top,(1,0,1)^\top\);
-\item \((2,1,1)^\top,(1,3,-1)^\top\);
-\item \((1,2,1,0)^\top,(1,2,3,1)^\top\);
-\item \((1,1,0,0)^\top,(1,-1,1,1)^\top,(-1,0,2,1)^\top\).
+\item Prove that \(\|x_\circ\|=1\).
+\item Find the norms of \(a=(1,2)^\top,b=(1,0)^\top,c=(3,4)^\top\).
+\item Normalize \(a,b,c\).
+\item Prove that \(x\) and \(\lambda x\) have the same normalized vector
+for every \(\lambda>0\).
 \end{enumerate}
 \end{problem}
 \begin{solution}
-(a) The vectors are already orthogonal, with squared norms \(3,2\);
-divide them by \(\sqrt3,\sqrt2\).
-(b) The first squared norm is \(6\), and the mixed product is \(4\).
-The residual is \((1,3,-1)^\top-\tfrac23(2,1,1)^\top
-=\tfrac13(-1,7,-5)^\top\). An orthonormal basis is
-\((2,1,1)^\top/\sqrt6,\ (-1,7,-5)^\top/\sqrt{75}\).
-(c) The mixed product is \(8\), and the first squared norm is \(6\).
-Subtracting \(\tfrac43(1,2,1,0)^\top\) leaves
-\(\tfrac13(-1,-2,5,3)^\top\). Divide the directions
-\((1,2,1,0)^\top,(-1,-2,5,3)^\top\) by \(\sqrt6,\sqrt{39}\).
-(d) The first two vectors are orthogonal, with squared norms \(2,4\).
-Their inner products with the third are \(-1,2\), respectively, so its
-residual is
+\begin{enumerate}
+\item Positivity gives \(\|x\|>0\), and homogeneity gives
+\(\|x/\|x\|\|=\|x\|/\|x\|=1\).
+\item The squared norms are \(1+4=5,1,9+16=25\), respectively.
+Thus the norms are \(\sqrt5,1,5\).
+\item The answers are
 \[
-(-1,0,2,1)^\top+\tfrac12(1,1,0,0)^\top
--\tfrac12(1,-1,1,1)^\top=\tfrac12(-2,2,3,1)^\top.
+a_\circ=\frac1{\sqrt5}(1,2)^\top,\qquad
+b_\circ=(1,0)^\top,\qquad c_\circ=\frac15(3,4)^\top.
 \]
-The required basis consists of the first two vectors divided by
-\(\sqrt2,2\), followed by \((-2,2,3,1)^\top/\sqrt{18}\).
+\item Since \(\|\lambda x\|=|\lambda|\|x\|\),
+\[
+(\lambda x)_\circ=\frac{\lambda}{|\lambda|}\,x_\circ=x_\circ
+\qquad(\lambda>0).
+\]
+For \(\lambda<0\) this formula gives \(-x_\circ\);
+for \(\lambda=0\) normalization is undefined.
+\end{enumerate}
 \end{solution}
 
-\begin{problem}\label{ex:06:gs-systems}
-Find an orthogonal basis for each solution space:
+% MA 1.12(a,b); (c) is proved in the main text.
+\begin{problem}[All orthogonal columns]\label{ex:06:orthogonal-r2}
+Find all columns of \(\R^2\) orthogonal to
+(a) \(a=(1,2)^\top\), and (b) \(b=(1,0)^\top\).
+\end{problem}
+\begin{solution}
+Writing \(x=(x_1,x_2)^\top\), condition (a) is \(x_1+2x_2=0\).
+All its solutions are \(x=\lambda(2,-1)^\top\), \(\lambda\in\R\).
+Condition (b) is \(x_1=0\), whose solutions are
+\(x=\lambda(0,1)^\top\).
+Substitution verifies each displayed family; the scalar equations show
+that no other columns occur.
+\end{solution}
+
+% MA 1.14, complete; the second original counterexample uses MA 1.8.
+\begin{problem}[Failure of transitivity]\label{ex:06:nontransitivity}
+Does \(x\perp y\) and \(y\perp z\) imply \(x\perp z\)?
+Give a counterexample if the implication fails.
+\end{problem}
+\begin{solution}
+Take the three columns, in this order,
+\[
+x=(1,2,-3)^\top,\qquad y=(1,1,1)^\top,\qquad z=(4,-5,1)^\top.
+\]
+Then \(x^\top y=0\), \(y^\top z=0\), but \(x^\top z=-9\ne0\).
+More generally, if \(x\ne0\) and \(x\perp y\), taking \(z=x\) gives
+the first two orthogonality conditions but \(x^\top z=\|x\|^2>0\).
+\end{solution}
+
+% MA 3.38*(a), finite real specialization; geometric part (b) omitted.
+\begin{problem}[The parallelogram identity \(^{*}\)]\label{ex:06:parallelogram}
+An inner product on \(\R^m\) is a function
+\(h:\R^m\times\R^m\to\R\) that is symmetric, linear in each variable,
+and satisfies \(h(x,x)>0\) for \(x\ne0\).
+Linearity gives \(h(0,0)=h(0+0,0)=2h(0,0)\), hence \(h(0,0)=0\).
+Write \(\|x\|_h=\sqrt{h(x,x)}\).
+Prove, using these properties, that
+\[
+\|x+y\|_h^2+\|x-y\|_h^2=2\|x\|_h^2+2\|y\|_h^2.
+\]
+\end{problem}
+\begin{solution}
+Bilinearity and symmetry give
+\[
+h(x+y,x+y)=h(x,x)+2h(x,y)+h(y,y),
+\]
+\[
+h(x-y,x-y)=h(x,x)-2h(x,y)+h(y,y).
+\]
+Adding cancels the two cross terms and proves the identity.
+The calculation applies to every such \(h\), including \(h(x,y)=x^\top y\).
+\end{solution}
+
+% MA 3.40(a), finite real specialization; complex part (b) omitted.
+\begin{problem}[Recovering an inner product]\label{ex:06:polarization}
+For an inner product \(h\) as in Exercise~\ref{ex:06:parallelogram},
+prove
+\[
+h(x,y)=\frac14\bigl(\|x+y\|_h^2-\|x-y\|_h^2\bigr).
+\]
+\end{problem}
+\begin{solution}
+Subtracting the two expansions in Exercise~\ref{ex:06:parallelogram}
+gives
+\[
+\|x+y\|_h^2-\|x-y\|_h^2=4h(x,y).
+\]
+Thus two inner products inducing the same norm have the same values
+on every pair \(x,y\).
+\end{solution}
+
+% MA 3.41*(a,b), complete after correcting m>=2; U6-S02.
+\begin{problem}[A norm not induced by an inner product \(^{*}\)]\label{ex:06:l1-norm}
+Let \(m\geqslant2\) and put \(\nu(x)=\sum_{i=1}^m|x_i|\).
 \begin{enumerate}
-\item \(2x+y-z=0,\quad y+z=0\);
-\item \(x-y+z=0\);
-\item \(4x+7y-\pi z=0,\quad2x-y+z=0\);
-\item \(x+y+z=0,\quad x-y=0,\quad y+z=0\).
+\item Prove the three norm properties:
+\[
+\nu(cx)=|c|\nu(x),\quad
+\nu(x)\geqslant0\text{ with equality iff }x=0,\quad
+\nu(x+y)\leqslant\nu(x)+\nu(y).
+\]
+\item Prove that no inner product \(h\) on \(\R^m\) satisfies
+\(\nu(x)=\sqrt{h(x,x)}\) for every \(x\).
 \end{enumerate}
 \end{problem}
 \begin{solution}
-(a) The equations give \((x,y,z)=t(1,-1,1)\); the single displayed
-nonzero vector is an orthogonal basis.
-(b) Write \((x,y,z)=s(1,1,0)+t(-1,0,1)\).
-Subtracting the projection of the second direction onto the first leaves
-\((-1/2,1/2,1)\), so \((1,1,0)^\top,(-1,1,2)^\top\) is an
-orthogonal basis.
-(c) Substitution \(y=2x+z\) gives \(18x+(7-\pi)z=0\).
-Thus the entire solution space is spanned by
-\((\pi-7,2\pi+4,18)^\top\), which is nonzero.
-(d) The second and third equations give \(x=y=-z\); the first forces
-\(x=0\). The zero space has the empty orthogonal basis.
-\end{solution}
-
-\begin{problem}\label{ex:06:gs-polynomials-two}
-For \(\ip{f}{g}=\int_0^1fg\), apply Gram--Schmidt to \(t,t^2\)
-and obtain an orthonormal basis of their span.
-\end{problem}
-\begin{solution}
-The first squared norm is \(1/3\), and \(\ip{t^2}{t}=1/4\).
-Hence the residual is \(u=t^2-\tfrac34t\), with
-\[
-\norm{u}^2=\tfrac15-\tfrac32\tfrac14+\tfrac9{16}\tfrac13
-=\tfrac1{80}.
-\]
-Normalize to obtain \(\sqrt3\,t\) and \(\sqrt5(4t^2-3t)\).
-The nonzero residual also verifies independence of the original pair.
-\end{solution}
-
-\begin{problem}\label{ex:06:gs-polynomials-three}
-For \(\ip{f}{g}=\int_0^1fg\), apply Gram--Schmidt to \(1,t,t^2\)
-and give an orthonormal basis of their span.
-\end{problem}
-\begin{solution}
-The first vector is \(1\), already normalized. The next residual is
-\(u_2=t-\tfrac12\), with squared norm \(1/12\).
-For \(t^2\), the products with \(1,u_2\) are \(1/3,1/12\), so
-\[
-u_3=t^2-\tfrac13-u_2=t^2-t+\tfrac16,
-\qquad \norm{u_3}^2
-=\tfrac15-\tfrac12+\tfrac49-\tfrac16+\tfrac1{36}=\tfrac1{180}.
-\]
-Thus an orthonormal basis is
-\(1,\ \sqrt3(2t-1),\ \sqrt5(6t^2-6t+1)\).
-\end{solution}
-
-\begin{problem}\label{ex:06:gs-dependent}
-Let \(A_1,\ldots,A_k\) be matrices in a real inner-product space,
-possibly dependent. Show that coefficients can be chosen so that
-\(B_j=A_j-\sum_{i<j}c_{ij}B_i\) are mutually orthogonal.
-Show that \(c_{ij}=\ip{A_j}{B_i}/\norm{B_i}^2\) is forced when
-\(B_i\ne0\), and determine how many \(B_i\) are nonzero.
-Describe how to obtain an orthonormal basis for the original span.
-\end{problem}
-\begin{solution}
-Construct successively. For each earlier nonzero \(B_i\), choose the
-displayed coefficient, and choose zero when \(B_i=0\).
-Orthogonality of the previous list gives
-\(\ip{B_j}{B_i}=\ip{A_j}{B_i}-c_{ij}\norm{B_i}^2=0\)
-for nonzero \(B_i\); for zero \(B_i\) it is automatic.
-The same equation proves uniqueness of each coefficient attached to a
-nonzero vector; coefficients attached to zero are arbitrary.
-The triangular formulas in both directions show
-\(\operatorname{span}(B_1,\ldots,B_j)=\operatorname{span}(A_1,\ldots,A_j)\).
-The nonzero \(B_i\) are orthogonal and hence independent. They therefore
-form a basis of the original span, and their number is its dimension.
-Discard zero vectors and normalize the remaining ones to get the requested
-orthonormal basis.
-\end{solution}
-
-\begin{problem}\label{ex:06:qr-dependent}
-Let \(A\) be a real \(m\times k\) matrix of rank \(r\).
-Show that \(A=QR_1\), where \(Q\) has \(r\) orthonormal columns and
-\(R_1\) consists of the nonzero rows of an upper triangular \(k\times k\)
-matrix \(R\). Require \(R\) to have \(r\) positive diagonal entries and
-\(k-r\) zero rows.
-\end{problem}
-\begin{solution}
-Apply the preceding construction to the columns \(a_j\), obtaining
-orthogonal residuals \(b_j\). For every nonzero \(b_i\), set
-\(q_i=b_i/\norm{b_i}\), keeping its original index for now, and set
-\(R_{ij}=\ip{q_i}{a_j}\). For zero \(b_i\), set row \(i\) of \(R\)
-equal to zero. A nonzero \(b_i\) is perpendicular to the span of
-\(a_1,\ldots,a_{i-1}\), so \(R_{ij}=0\) for \(j<i\);
-further \(R_{ii}=\norm{b_i}>0\).
-Each \(a_j\) lies in the span of the nonzero residuals through index \(j\),
-so its orthogonal expansion is \(a_j=\sum_{i\leqslant j,\ b_i\ne0}q_iR_{ij}\).
-Assemble the \(r\) nonzero normalized residuals into \(Q\), and retain
-exactly their rows in \(R_1\). These column identities give \(A=QR_1\)
-and \(Q^\top Q=I_r\). For \(r=0\), use an empty \(Q,R_1\) and \(R=0\).
-\end{solution}
-
-\begin{problem}\label{ex:06:trace-complement}
-On the space \(V\) of real symmetric \(n\times n\) matrices, \(n\geqslant1\),
-prove that \(\ip{A}{B}=\tr(AB)\) is an inner product.
-If \(W=\{A\in V:\tr A=0\}\), prove \(\dim W^\perp=1\).
-\end{problem}
-\begin{solution}
-For symmetric matrices \(\tr(AB)=\tr(A^\top B)=\sum_{i,j}a_{ij}b_{ij}\),
-so this is the restriction of the Frobenius inner product.
-Also \(\ip{I}{A}=\tr A\), hence \(\operatorname{span}(I)\subseteq W^\perp\).
-If \(B\in W^\perp\), let \(C=B-(\tr B/n)I\). Then \(C\in W\), and
-\(0=\ip{B}{C}=\ip{C}{C}+(\tr B/n)\tr C=\norm{C}^2\).
-Thus \(B=(\tr B/n)I\), so \(W^\perp=\operatorname{span}(I)\), of dimension one.
-\end{solution}
-
-\begin{problem}\label{ex:06:dimension}
-For a subspace \(W\) of a finite-dimensional inner-product space \(V\),
-prove \(\dim W+\dim W^\perp=\dim V\).
-\end{problem}
-\begin{solution}
-Take an orthonormal basis \(q_1,\ldots,q_k\) of \(W\), extend it to a
-basis of \(V\), and Gram--Schmidt the added vectors. This leaves the
-first \(k\) vectors unchanged and gives an orthonormal basis
-\(q_1,\ldots,q_n\) of \(V\). The last \(n-k\) vectors are perpendicular
-to \(W\). Conversely, if \(v\perp W\), its coefficients along the first
-\(k\) basis vectors vanish, so it is in the span of the last \(n-k\).
-They form a basis of \(W^\perp\), proving the formula, including \(k=0,n\).
-\end{solution}
-
-\needspace{8\baselineskip}
-\subsection*{Forms, matrices, and functions}
-
-\begin{problem}\label{ex:06:positive-form}
-For symmetric \(A\), let \(g(x,y)=x^\top Ay\).
 \begin{enumerate}
-\item Prove symmetry and linearity in each argument.
-\item Give a \(1\times1\) and a nonzero \(2\times2\) matrix for which positivity fails.
-\item Give a symmetric positive definite \(2\times2\) example.
-\item If \(A=\begin{pmatrix}a&b\\b&d\end{pmatrix}\), \(a>0\), prove positivity
-is equivalent to \(ad-b^2>0\).
-\item If \(a<0\), show that positivity fails.
+\item Each term \(|x_i|\) is nonnegative; their sum is zero exactly
+when every \(x_i=0\). Also \(|cx_i|=|c||x_i|\), which proves homogeneity.
+For real \(s,t\), the inequalities \(-|s|\leqslant s\leqslant|s|\)
+and \(-|t|\leqslant t\leqslant|t|\) give
+\[
+-(|s|+|t|)\leqslant s+t\leqslant|s|+|t|,
+\quad\text{hence }|s+t|\leqslant|s|+|t|.
+\]
+Apply this to each coordinate and add.
+\item Take
+\[
+x=(1,1,0,\ldots,0)^\top,\qquad y=(1,-1,0,\ldots,0)^\top.
+\]
+Then \(\nu(x)=\nu(y)=\nu(x+y)=\nu(x-y)=2\), so
+\[
+\nu(x+y)^2+\nu(x-y)^2=8\ne16=2\nu(x)^2+2\nu(y)^2.
+\]
+This contradicts the necessary identity proved in
+Exercise~\ref{ex:06:parallelogram}.
+The restriction \(m\geqslant2\) matters: in \(\R\), \(\nu(x)=|x|\)
+is induced by \(h(x,y)=xy\).
+\end{enumerate}
+\end{solution}
+
+% MA 2.39*(a-c), complete; original star verified in scan.
+\begin{problem}[The Frobenius norm \(^{*}\)]\label{ex:06:frobenius-norm}
+For \(A,B\in\R^{m\times n}\), define
+\[
+\langle A,B\rangle_F=\sum_{i=1}^m\sum_{j=1}^n a_{ij}b_{ij}
+ =\tr(A^\top B),\qquad
+\|A\|_F=\left(\sum_{i,j}a_{ij}^2\right)^{1/2}.
+\]
+Prove
+(a) \(\|cA\|_F=|c|\|A\|_F\);
+(b) \(\|A\|_F\geqslant0\), with equality iff \(A=0\);
+(c) \(\|A+B\|_F\leqslant\|A\|_F+\|B\|_F\).
+\end{problem}
+\begin{solution}
+Let \(a,b\in\R^{mn}\) list the entries of \(A,B\) in the same order,
+column by column. Directly from the definitions,
+\[
+\langle A,B\rangle_F=a^\top b,\quad
+\|A\|_F=\|a\|,\quad \|B\|_F=\|b\|,\quad \|A+B\|_F=\|a+b\|.
+\]
+The trace equality follows because
+\((A^\top B)_{jj}=\sum_i a_{ij}b_{ij}\).
+The list for \(cA\) is \(ca\), and \(a=0\) iff \(A=0\).
+The three assertions therefore follow from the proved vector norm
+properties. The same correspondence proves symmetry, bilinearity,
+and strict positivity of \(\langle\ ,\ \rangle_F\);
+these properties will also be used for matrix subspaces below.
+\end{solution}
+
+% MA 3.44(a,b), complete finite real specialization.
+\begin{problem}[Zero and an orthogonal complement]\label{ex:06:orthogonal-r3}
+\begin{enumerate}
+\item Prove that the zero column is orthogonal to every column.
+\item Find all columns in \(\R^3\) orthogonal to \((2,2,-1)^\top\).
 \end{enumerate}
 \end{problem}
 \begin{solution}
-(a) Matrix multiplication is linear in each vector and
-\(x^\top Ay=(x^\top Ay)^\top=y^\top A^\top x=y^\top Ax\).
-(b) Take \((-1)\) and \(\operatorname{diag}(1,0)\); the former is negative
-on \(1\), and the latter vanishes on nonzero \(e_2\).
-(c) \(I_2\) works because \(x_1^2+x_2^2>0\) for nonzero \(x\).
-(d) Completing the square gives
+\begin{enumerate}
+\item \(0^\top y=\sum_i0y_i=0\) for every \(y\).
+\item Writing \(y=(y_1,y_2,y_3)^\top\), the necessary and sufficient
+equation is \(2y_1+2y_2-y_3=0\). Thus all solutions, with unrestricted
+\(s,t\in\R\), are
 \[
-ax^2+2bxy+dy^2=a(x+by/a)^2+\frac{ad-b^2}{a}y^2.
+y=(s,t,2s+2t)^\top=s(1,0,2)^\top+t(0,1,2)^\top.
 \]
-If both coefficients are positive, the expression vanishes only at
-\((0,0)\). Conversely set \((x,y)=(-b/a,1)\); positive definiteness
-forces \((ad-b^2)/a>0\).
-(e) Evaluation at \(e_1\) gives \(a<0\), contradicting positivity.
+Both generators have dot product zero with the given column, verifying
+the reverse inclusion.
+\end{enumerate}
 \end{solution}
 
-\begin{problem}\label{ex:06:positive-classification}
-Determine which matrices are positive definite:
+\subsection*{Orthonormal bases}
+
+% Lang LA V.2.0, complete.
+\begin{problem}[Two orthogonality conditions]\label{ex:06:complement-dimension}
+What is the dimension of the subspace of \(\R^6\) orthogonal to both
 \[
-\begin{array}{lll}
-\text{(a) }\begin{pmatrix}3&-1\\-1&2\end{pmatrix}&
-\text{(b) }\begin{pmatrix}-2&1\\1&5\end{pmatrix}&
-\text{(c) }\begin{pmatrix}4&1\\1&2\end{pmatrix}\\[6pt]
-\text{(d) }\begin{pmatrix}4&4\\4&1\end{pmatrix}&
-\text{(e) }\begin{pmatrix}4&1\\1&10\end{pmatrix}&
-\text{(f) }\begin{pmatrix}4&-1\\-1&10\end{pmatrix}.
-\end{array}
+a=(1,1,-2,3,4,5)^\top,\qquad b=(0,0,1,1,0,7)^\top?
 \]
 \end{problem}
 \begin{solution}
-In (a), (c), (e), (f), the first diagonal entries are positive and the
-values \(ad-b^2\) are respectively \(5,7,39,39\); all four are positive
-definite by the preceding square completion. In (b), \(e_1^\top Ae_1=-2\).
-In (d), evaluating at \((-1,1)^\top\) gives \(4-8+1=-3\).
-Thus (b) and (d) fail positivity.
+In a relation \(sa+tb=0\), coordinate 1 gives \(s=0\), and coordinate 3
+then gives \(t=0\). Hence \(\dim\Span(a,b)=2\).
+Being orthogonal to \(a,b\) is equivalent, by linearity, to being
+orthogonal to every \(sa+tb\).
+The required space is \(\Span(a,b)^\perp\), of dimension \(6-2=4\).
 \end{solution}
 
-\begin{problem}\label{ex:06:symmetric-bilinear}
-For a real square matrix \(A\), prove that \(g_A(x,y)=x^\top Ay\) is
-symmetric in its arguments if and only if \(A=A^\top\).
+% Lang LA V.2.1(a,b), complete with original manual calculations.
+\begin{problem}[Two bases in \(\R^3\)]\label{ex:06:gs-r3}
+Find an orthonormal basis for the span of each list:
+\begin{enumerate}
+\item \((1,1,-1)^\top,\ (1,0,1)^\top\).
+\item \((2,1,1)^\top,\ (1,3,-1)^\top\).
+\end{enumerate}
 \end{problem}
 \begin{solution}
-If \(A=A^\top\), transposing the scalar \(x^\top Ay\) gives
-\(x^\top Ay=y^\top A^\top x=y^\top Ax\).
-Conversely, symmetry on \((e_i,e_j)\) gives
-\(a_{ij}=g_A(e_i,e_j)=g_A(e_j,e_i)=a_{ji}\) for every \(i,j\).
-Thus \(A=A^\top\). This assertion alone imposes no positivity condition.
+\begin{enumerate}
+\item Put \(a=(1,1,-1)^\top,b=(1,0,1)^\top\).
+Then \(a^\top b=1-1=0\), \(\|a\|^2=3\), and \(\|b\|^2=2\).
+The two nonzero orthogonal columns are independent, so
+\[
+\frac{a}{\sqrt3},\qquad\frac{b}{\sqrt2}
+\]
+is an orthonormal list with the required span.
+\item Put \(a=(2,1,1)^\top,b=(1,3,-1)^\top\).
+Here \(a^\top a=6\) and \(a^\top b=4\), so
+\[
+u=b-\frac46a=\frac13(-1,7,-5)^\top,\qquad
+a^\top(-1,7,-5)^\top=-2+7-5=0.
+\]
+The squared norm of \((-1,7,-5)^\top\) is \(1+49+25=75\).
+An answer is
+\[
+\frac1{\sqrt6}(2,1,1)^\top,\qquad
+\frac1{\sqrt{75}}(-1,7,-5)^\top.
+\]
+Both are nonzero and orthogonal. Since \(u=b-\frac23a\) and
+\(b=u+\frac23a\), the new and original lists have the same span.
+\end{enumerate}
 \end{solution}
 
-\begin{problem}\label{ex:06:bilinear-coordinates}
-Write \(x^\top Ay\) fully in coordinates for each matrix:
+% Lang LA V.2.2(a,b), complete.
+\begin{problem}[Two bases in \(\R^4\)]\label{ex:06:gs-r4}
+Find an orthonormal basis for the span of each list:
+\begin{enumerate}
+\item \((1,2,1,0)^\top,\ (1,2,3,1)^\top\).
+\item \((1,1,0,0)^\top,\ (1,-1,1,1)^\top,\ (-1,0,2,1)^\top\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+\begin{enumerate}
+\item Call the two given columns \(a,b\), in order.
+Then \(a^\top a=6\), \(a^\top b=8\), so
 \[
-\begin{array}{lll}
-\text{(a) }\begin{pmatrix}2&-3\\4&1\end{pmatrix}&
-\text{(b) }\begin{pmatrix}4&1\\-2&5\end{pmatrix}&
-\text{(c) }\begin{pmatrix}-5&2\\\pi&7\end{pmatrix}\\[6pt]
-\text{(d) }\begin{pmatrix}1&2&-1\\-3&1&4\\2&5&-1\end{pmatrix}&
-\text{(e) }\begin{pmatrix}-4&2&1\\3&1&1\\2&5&7\end{pmatrix}&
-\text{(f) }\begin{pmatrix}-\frac12&2&-5\\1&\frac23&4\\-1&0&3\end{pmatrix}.
-\end{array}
+u=b-\frac86a=\frac13(-1,-2,5,3)^\top.
+\]
+The numerator has squared norm \(1+4+25+9=39\), and its dot product
+with \(a\) is \(-1-4+5=0\).
+The answer is
+\[
+\frac1{\sqrt6}(1,2,1,0)^\top,\qquad
+\frac1{\sqrt{39}}(-1,-2,5,3)^\top.
+\]
+The relations \(u=b-\frac43a\), \(b=u+\frac43a\) prove span equality.
+\item Write the original columns as \(a,b,c\).
+Their relevant products are
+\[
+a^\top b=0,\quad a^\top a=2,\quad b^\top b=4,\quad
+c^\top a=-1,\quad c^\top b=2.
+\]
+Hence
+\[
+u=c+\frac12a-\frac12b=\frac12(-2,2,3,1)^\top.
+\]
+For \(d=(-2,2,3,1)^\top\), \(a^\top d=0\),
+\(b^\top d=-2-2+3+1=0\), and \(d^\top d=18\).
+An answer is
+\[
+\frac1{\sqrt2}(1,1,0,0)^\top,\qquad
+\frac12(1,-1,1,1)^\top,\qquad
+\frac1{\sqrt{18}}(-2,2,3,1)^\top.
+\]
+The formulas for \(u\) and \(c=u-\frac12a+\frac12b\) prove equality
+of the old and new spans. Nonzero orthogonal columns are independent,
+so both displayed lists are bases.
+\end{enumerate}
+\end{solution}
+
+% Harville 6.4(a)(1-3),(b), complete for real matrices with Frobenius inner product.
+\begin{problem}[Gram--Schmidt with dependent inputs]\label{ex:06:dependent-gs}
+Let \(A_1,\ldots,A_k\in\R^{m\times n}\), \(k\geqslant1\), possibly
+dependent or zero. Use the inner product
+\(\langle A,B\rangle_F=\tr(A^\top B)\).
+\begin{enumerate}
+\item Prove all three assertions:
+\begin{enumerate}[label=(\arabic*)]
+\item Scalars \(c_{ij}\), \(i<j\), can be chosen so that
+\[
+B_1=A_1,\qquad B_j=A_j-\sum_{i<j}c_{ij}B_i
+\quad(2\leqslant j\leqslant k)
+\]
+are pairwise orthogonal.
+\item For every nonzero \(B_i\), orthogonality forces the unique value
+\[
+c_{ij}=\frac{\langle A_j,B_i\rangle_F}{\langle B_i,B_i\rangle_F}
+\qquad(i<j).
+\]
+\item The number of nonzero \(B_i\)'s equals
+\(\dim\Span(A_1,\ldots,A_k)\).
+\end{enumerate}
+\item Describe a procedure yielding an orthonormal basis of
+\(\Span(A_1,\ldots,A_k)\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+\begin{enumerate}
+\item Suppose \(B_1,\ldots,B_{j-1}\) have been chosen and are pairwise
+orthogonal; the assertion is empty for \(j=1\).
+For \(i<j\), orthogonality of the preceding matrices gives
+\[
+\langle B_j,B_i\rangle_F
+=\langle A_j,B_i\rangle_F-c_{ij}\|B_i\|_F^2.
+\]
+If \(B_i\ne0\), its squared norm is positive, so this vanishes for
+exactly the stated coefficient. If \(B_i=0\), the equation is \(0=0\);
+any coefficient works, and we choose \(c_{ij}=0\).
+Induction proves (1) and (2), without division by zero.
+
+For (3), induction on \(j\) using the defining expression for \(B_j\)
+shows that each \(B_j\in\Span(A_1,\ldots,A_j)\).
+Conversely
+\[
+A_j=B_j+\sum_{i<j}c_{ij}B_i
+\]
+puts each \(A_j\) in \(\Span(B_1,\ldots,B_j)\).
+Thus every prefix has the same span.
+If a linear combination of the nonzero \(B_i\)'s is zero, taking its
+inner product with \(B_\ell\ne0\) gives its coefficient times
+\(\|B_\ell\|_F^2=0\); each coefficient is therefore zero.
+The nonzero outputs form a basis, proving the dimension assertion.
+\item Compute these residuals, discard exactly the zero outputs, and
+divide every remaining \(B_i\) by \(\|B_i\|_F\).
+This preserves their span and makes the basis orthonormal.
+If every input is zero, every output is zero and the resulting empty
+list is the basis of the zero space.
+\end{enumerate}
+\end{solution}
+
+\subsection*{Orthogonal matrices and ranks}
+
+% MA 4.23(b,c); original (a) is already the Unit 2 square inverse criterion.
+\begin{problem}[Rectangular orthonormality]\label{ex:06:rectangular-orthogonality}
+\begin{enumerate}
+\item Let \(A\in\R^{m\times n}\), with \(m<n\). Prove that no
+\(B\in\R^{m\times n}\) can satisfy \(B^\top A=I_n\).
+\item Give an \(m\times n\) example, \(m\ne n\), satisfying
+\(AA^\top=I_m\) or \(A^\top A=I_n\), but not both.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+\begin{enumerate}
+\item If \(B^\top A=I_n\), the product-rank bound would give
+\[
+n=\rank(B^\top A)\leqslant\rank A\leqslant m<n.
+\]
+This is impossible.
+\item Take \(n>1\), let \(e_1\) be the first standard basis column of
+\(\R^n\), and set \(A=e_1^\top\), so \(m=1\).
+Then \(AA^\top=e_1^\top e_1=I_1\). However,
+\(A^\top A=e_1e_1^\top\ne I_n\), since its \((2,2)\) entry is zero.
+Transposing this example gives the other alternative.
+\end{enumerate}
+\end{solution}
+
+% MA 4.27(a-d), complete.
+\begin{problem}[Orthogonal matrices]\label{ex:06:orthogonal-matrices}
+Let \(A\in\R^{n\times n}\) satisfy \(A^\top A=I_n\).
+Prove
+(a) \(A\) is invertible;
+(b) \(A^{-1}=A^\top\);
+(c) \(A^\top\) is orthogonal;
+(d) \(AB\) is orthogonal whenever \(B\in\R^{n\times n}\) is orthogonal.
+\end{problem}
+\begin{solution}
+For (a) and (b), the square one-sided inverse criterion of Unit 2
+applied to \(A^\top A=I_n\) gives \(A^{-1}=A^\top\) and \(AA^\top=I_n\).
+For (c), writing \(C=A^\top\) gives \(C^\top C=AA^\top=I_n\).
+For (d),
+\[
+(AB)^\top(AB)=B^\top A^\top AB=B^\top B=I_n.
+\]
+For completeness, the reverse product is also
+\((AB)(AB)^\top=ABB^\top A^\top=AA^\top=I_n\).
+\end{solution}
+
+% MA 8.4(a-c), complete; quantify part (b) and include n>1 in the original counterexample.
+\begin{problem}[Preserving one norm or every norm]\label{ex:06:norm-preservation}
+\begin{enumerate}
+\item Prove that an orthogonal \(Q\in\R^{n\times n}\) satisfies
+\(\|Qx\|=\|x\|\) for every \(x\in\R^n\).
+\item For a particular nonzero \(x\), does \(\|Qx\|=\|x\|\) imply
+that \(Q\) is orthogonal?
+\item Suppose a fixed square \(Q\), independent of \(x\), satisfies
+\(\|Qx\|=\|x\|\) for every \(x\in\R^n\). Prove that \(Q\) is orthogonal.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+\begin{enumerate}
+\item \(\|Qx\|^2=x^\top Q^\top Qx=x^\top x=\|x\|^2\);
+both norms are nonnegative, so they are equal.
+\item For \(n>1,x\ne0\), take
+\[
+Q=\frac{xx^\top}{x^\top x}.
+\]
+Then \(Qx=x\), \(Q^\top=Q\), and \(Q^2=Q\), by direct multiplication.
+Its columns are multiples of \(x\), and \(Qx=x\ne0\); hence \(\rank Q=1<n\).
+Thus \(Q^\top Q=Q\ne I_n\), so \(Q\) is not orthogonal.
+For \(n=1\), however, the answer is yes: if \(x\ne0\) and
+\(|qx|=|x|\), then \(|q|=1\), hence \(q^2=1\).
+\item Put \(H=I_n-Q^\top Q\), a fixed symmetric matrix.
+The hypothesis gives \(x^\top Hx=0\) for every \(x\).
+Taking \(x=e_i\) gives \(h_{ii}=0\).
+For \(i\ne j\), taking \(x=e_i+e_j\) then gives
+\[
+0=h_{ii}+h_{ij}+h_{ji}+h_{jj}=2h_{ij}.
+\]
+Every entry of \(H\) is zero, so \(Q^\top Q=I_n\).
+\end{enumerate}
+\end{solution}
+
+% MA 4.18*, complete (not MA 4.25, whose full-rank special cases occur in Unit 4).
+\begin{problem}[Rank equalities \(^{*}\)]\label{ex:06:rank-equalities}
+For \(A\in\R^{m\times n}\), \(B\in\R^{n\times p}\), prove
+\[
+\rank(A^\top AB)=\rank(AB)=\rank(ABB^\top).
 \]
 \end{problem}
 \begin{solution}
-Use \(x^\top Ay=\sum_{i,j}a_{ij}x_i y_j\). The answers are
-\begin{align*}
-\text{(a)}\quad&2x_1y_1-3x_1y_2+4x_2y_1+x_2y_2,\\
-\text{(b)}\quad&4x_1y_1+x_1y_2-2x_2y_1+5x_2y_2,\\
-\text{(c)}\quad&-5x_1y_1+2x_1y_2+\pi x_2y_1+7x_2y_2,\\
-\text{(d)}\quad&x_1y_1+2x_1y_2-x_1y_3-3x_2y_1+x_2y_2+4x_2y_3\\
-&\hspace{1em}+2x_3y_1+5x_3y_2-x_3y_3,\\
-\text{(e)}\quad&-4x_1y_1+2x_1y_2+x_1y_3+3x_2y_1+x_2y_2+x_2y_3\\
-&\hspace{1em}+2x_3y_1+5x_3y_2+7x_3y_3,\\
-\text{(f)}\quad&-\tfrac12x_1y_1+2x_1y_2-5x_1y_3+x_2y_1+\tfrac23x_2y_2+4x_2y_3\\
-&\hspace{1em}-x_3y_1+3x_3y_3.
-\end{align*}
+Proposition~\ref{prop:06:gram} gives \(\rank(X^\top X)=\rank X\).
+Applying it to \(X^\top\), and using the equality of row and column
+ranks, also gives
+\(\rank(XX^\top)=\rank(X^\top)=\rank X\).
+The product-rank bounds now yield
+\[
+\rank(AB)
+=\rank(B^\top A^\top AB)
+\leqslant\rank(A^\top AB)
+\leqslant\rank(AB),
+\]
+and
+\[
+\rank(AB)
+=\rank(ABB^\top A^\top)
+\leqslant\rank(ABB^\top)
+\leqslant\rank(AB).
+\]
+Each middle rank is trapped between two equal quantities.
+No full-rank assumption on \(A\) or \(B\) is required.
 \end{solution}
 
-\begin{problem}\label{ex:06:trig-orthogonal}
-On the continuous real functions on \([0,2\pi]\), use
-\(\ip{f}{g}=\int_0^{2\pi}fg\). For \(g_n(t)=\cos(nt)\), \(n\geqslant0\),
-and \(h_m(t)=\sin(mt)\), \(m\geqslant1\), compute their norms.
-Show that \(g_n\perp g_m\) when \(n\ne m\) and that \(g_n\perp h_m\) always.
+\Needspace{12\baselineskip}
+\subsection*{Identifying projection matrices}
+
+% MA 8.64(a,b), complete; replace the source trace-rank proof in (b) by a direct sum.
+\begin{problem}[A sum of idempotents]\label{ex:06:idempotent-sum}
+Let \(A,B\in\R^{n\times n}\) satisfy \(A^2=A,B^2=B\).
+\begin{enumerate}
+\item Prove that \(A+B\) is idempotent if and only if \(AB=BA=0\).
+\item If \(A+B\) is idempotent, prove
+\(\rank(A+B)=\rank A+\rank B\).
+\end{enumerate}
 \end{problem}
 \begin{solution}
-For nonzero integer \(k\), the integrals of \(\cos kt\) and \(\sin kt\)
-over a full period vanish. Use
-\(2\cos nt\cos mt=\cos((n-m)t)+\cos((n+m)t)\) and
-\(2\cos nt\sin mt=\sin((m+n)t)+\sin((m-n)t)\).
-The first integral is zero for \(n\ne m\), and the second is always zero,
-including the zero-frequency term. Also
-\(\cos^2 nt=(1+\cos2nt)/2\) for \(n\geqslant1\) and
-\(\sin^2 mt=(1-\cos2mt)/2\). Hence
-\(\norm{g_0}=\sqrt{2\pi}\), and
-\(\norm{g_n}=\norm{h_m}=\sqrt\pi\) for positive indices.
+\begin{enumerate}
+\item If \(AB=BA=0\), expanding gives \((A+B)^2=A+B\).
+Conversely, idempotence of the sum gives \(AB+BA=0\).
+Multiplying this equation on the left and on the right by \(A\) gives
+\[
+AB+ABA=0,\qquad ABA+BA=0.
+\]
+Subtracting gives \(AB=BA\). Thus \(2AB=0\), and over \(\R\)
+we obtain \(AB=BA=0\).
+\item Put \(U=\mathcal C(A)\), \(V=\mathcal C(B)\).
+Certainly \(\mathcal C(A+B)\subseteq U+V\).
+For every \(u=Ax\), \(v=By\), part (a) gives
+\[
+(A+B)(u+v)=A^2x+BAx+ABy+B^2y=u+v.
+\]
+Hence \(U+V\subseteq\mathcal C(A+B)\).
+If \(z=Ax=By\in U\cap V\), then \(Az=z\), but also \(Az=ABy=0\);
+therefore \(z=0\).
+The sum is direct, so the dimension formula gives
+\[
+\rank(A+B)=\dim(U\oplus V)=\dim U+\dim V.
+\]
+\end{enumerate}
 \end{solution}
 
-\begin{problem}\label{ex:06:fourier-linear}
-With the preceding product, compute the inner products of \(f(t)=t\)
-with \(g_n,h_n\), and its Fourier coefficients
-\(\ip{f}{g_n}/\norm{g_n}^2\), \(\ip{f}{h_n}/\norm{h_n}^2\).
+% MA 8.67, complete; first original proof, with invertibility and empty-block details.
+\begin{problem}[Two complementary column blocks]\label{ex:06:complementary-blocks}
+Let \(A=[\,A_1\ A_2\,]\) be \(n\times n\).
+Suppose
+\[
+\rank A_1+\rank A_2=n,\qquad A_1^\top A_2=0.
+\]
+Prove that the two Gram inverses in the following expression exist,
+and that
+\[
+A_1(A_1^\top A_1)^{-1}A_1^\top+
+A_2(A_2^\top A_2)^{-1}A_2^\top=I_n.
+\]
+If a block has no columns, interpret its entire term as the zero matrix.
 \end{problem}
 \begin{solution}
-For \(n=0\), \(\ip{t}{1}=2\pi^2\), giving coefficient \(\pi\).
-For \(n\geqslant1\), integration by parts gives
+If \(n=0\), both terms are the empty zero matrix by the stated convention,
+so the identity holds. Now let \(n>0\).
+If one block is empty, the other is a square full-rank matrix \(C\),
+hence invertible. The inverse product rule gives
 \[
-\int_0^{2\pi}t\cos nt\,dt=
-\left[\frac{t\sin nt}{n}+\frac{\cos nt}{n^2}\right]_0^{2\pi}=0,
+C(C^\top C)^{-1}C^\top
+=CC^{-1}(C^\top)^{-1}C^\top=I_n.
 \]
+Together with the zero term from the empty block, this proves the formula.
+
+Now suppose both blocks are nonempty, with \(n_i\) columns in \(A_i\).
+Since \(n_1+n_2=n\) and
+\(\rank A_i\leqslant n_i\), the rank-sum hypothesis forces
+\(\rank A_i=n_i\) for both \(i\).
+Thus \(G_i=A_i^\top A_i\) is invertible by
+Proposition~\ref{prop:06:gram}.
+If \(A_1x+A_2y=0\), multiplication by \(A_1^\top\) gives \(G_1x=0\),
+so \(x=0\); full column rank of \(A_2\) then gives \(y=0\).
+Hence \(A\) is invertible.
+
+Orthogonality and transposition give
 \[
-\int_0^{2\pi}t\sin nt\,dt=
-\left[-\frac{t\cos nt}{n}+\frac{\sin nt}{n^2}\right]_0^{2\pi}
-=-\frac{2\pi}{n}.
+A^\top A=\begin{pmatrix}G_1&0\\0&G_2\end{pmatrix},\qquad
+(A^\top A)^{-1}=\begin{pmatrix}G_1^{-1}&0\\0&G_2^{-1}\end{pmatrix};
 \]
-Dividing by the squared norms \(\pi\) gives coefficients \(0,-2/n\).
+the inverse formula is checked by multiplication in both orders.
+The inverse product rule gives \((A^\top A)^{-1}=A^{-1}(A^\top)^{-1}\).
+Therefore
+\[
+I_n=A(A^\top A)^{-1}A^\top
+=A_1G_1^{-1}A_1^\top+A_2G_2^{-1}A_2^\top.
+\]
 \end{solution}
 
-\begin{problem}\label{ex:06:fourier-quadratic}
-Compute the same inner products and Fourier coefficients for \(f(t)=t^2\).
+% MA 8.70(a,b), complete; image/dimension proof replaces rank=trace.
+\begin{problem}[Two projection criteria]\label{ex:06:projection-criteria}
+Let \(A\in\R^{n\times n}\) be symmetric and idempotent, and let
+\(B\in\R^{n\times m}\) have rank \(m\).
+\begin{enumerate}
+\item If \(AB=B\) and \(\rank A=\rank B\), prove
+\[
+A=B(B^\top B)^{-1}B^\top.
+\]
+\item If \(AB=0\) and \(\rank A+\rank B=n\), prove
+\[
+A=I_n-B(B^\top B)^{-1}B^\top.
+\]
+\end{enumerate}
 \end{problem}
 \begin{solution}
-The constant inner product is \(\int_0^{2\pi}t^2dt=8\pi^3/3\), giving
-coefficient \(4\pi^2/3\). For \(n\geqslant1\), integration by parts,
-using the two integrals in the preceding solution, gives
+The Gram inverse exists by Proposition~\ref{prop:06:gram}.
+\begin{enumerate}
+\item The equation \(AB=B\) shows that \(\mathcal C(B)\subseteq\mathcal C(A)\).
+Their dimensions are equal, so these spaces coincide.
+Proposition~\ref{prop:06:projector} says \(A\) projects orthogonally
+onto \(\mathcal C(A)\); Proposition~\ref{prop:06:full-rank} identifies
+\(B(B^\top B)^{-1}B^\top\) as the projection onto \(\mathcal C(B)\).
+Uniqueness of the projection of every vector gives equality of the matrices.
+\item Put \(C=I_n-A\). Directly, \(C^\top=C\) and \(C^2=C\), while
+\(CB=B\).
+By Proposition~\ref{prop:06:projector},
+\(\mathcal C(C)=\mathcal C(A)^\perp\); the complement dimension formula gives
 \[
-\int_0^{2\pi}t^2\cos nt\,dt
-=-\frac2n\int_0^{2\pi}t\sin nt\,dt=\frac{4\pi}{n^2},
+\rank C=n-\rank A=\rank B.
 \]
-\[
-\int_0^{2\pi}t^2\sin nt\,dt
-=-\frac{4\pi^2}{n}+\frac2n\int_0^{2\pi}t\cos nt\,dt
-=-\frac{4\pi^2}{n}.
-\]
-The nonconstant coefficients are therefore \(4/n^2\) and \(-4\pi/n\).
+Part (a), applied to \(C,B\), gives
+\(C=B(B^\top B)^{-1}B^\top\), which is the required formula.
+\end{enumerate}
 \end{solution}
 
-\begin{problem}\label{ex:06:function-norms}
-For the same integral product on \([0,2\pi]\), find the norms of
-\(f(t)=t\) and \(g(t)=t^2\).
+\subsection*{Inequalities and equality conditions}
+
+% MA 12.1(a,b); original (c), using PSD matrices, is not selected.
+\begin{problem}[Two matrix proofs of Schwarz]\label{ex:06:matrix-schwarz}
+For \(a,b\in\R^n\), prove
+\[
+(a^\top b)^2\leqslant(a^\top a)(b^\top b),
+\]
+with equality exactly when \(a,b\) are linearly dependent.
+Give a proof using each of the following matrices:
+\begin{enumerate}
+\item \(H=ab^\top-ba^\top\).
+\item \(P=I_n-bb^\top/(b^\top b)\), for \(b\ne0\), treating \(b=0\) separately.
+\end{enumerate}
 \end{problem}
 \begin{solution}
-By definition,
-\(\norm{f}^2=\int_0^{2\pi}t^2dt=8\pi^3/3\) and
-\(\norm{g}^2=\int_0^{2\pi}t^4dt=32\pi^5/5\).
-The norms are the positive square roots of these quantities.
+\begin{enumerate}
+\item Expanding each entry gives
+\[
+\begin{aligned}
+\|H\|_F^2
+&=\sum_{i=1}^n\sum_{j=1}^n(a_i b_j-b_i a_j)^2\\
+&=\left(\sum_i a_i^2\right)\left(\sum_j b_j^2\right)
+ +\left(\sum_i b_i^2\right)\left(\sum_j a_j^2\right)
+ -2\left(\sum_i a_i b_i\right)\left(\sum_j a_j b_j\right)\\
+&=2(a^\top a)(b^\top b)-2(a^\top b)^2\geqslant0.
+\end{aligned}
+\]
+Equality holds exactly when \(a_i b_j=b_i a_j\) for every \(i,j\).
+If \(b\ne0\), choose \(j\) with \(b_j\ne0\); these equations give
+\(a_i=(a_j/b_j)b_i\) for every \(i\), so \(a\) is a multiple of \(b\).
+If \(b=0\), equality holds for every \(a\).
+Conversely, either \(b=0\) or \(a=cb\) gives \(H=0\).
+These are exactly the dependent pairs.
+\item If \(b=0\), both sides are zero.
+For \(b\ne0\), put \(E=bb^\top/(b^\top b)\).
+Then \(E^\top=E\) and
+\[
+E^2=\frac{b(b^\top b)b^\top}{(b^\top b)^2}=E.
+\]
+Consequently \(P^\top=P\), \(P^2=P\), and
+\[
+(a^\top a)(b^\top b)-(a^\top b)^2
+=(b^\top b)a^\top Pa
+=(b^\top b)\|Pa\|^2\geqslant0.
+\]
+Equality is equivalent to \(Pa=0\), or
+\(a=((b^\top a)/(b^\top b))b\).
+Conversely, this relation makes \(Pa=0\).
+\end{enumerate}
 \end{solution}
 
-\begin{problem}\label{ex:06:parseval-basis}
-Let \(q_1,\ldots,q_m\) be orthonormal in a finite-dimensional real
-inner-product space \(V\). Suppose
-\(\norm{v}^2=\sum_i\ip{v}{q_i}^2\) for every \(v\in V\).
-Prove that the list is a basis of \(V\).
+% MA 12.5(a-c), complete; MA 12.6 supplies the local skew-part identity for full equality cases.
+\begin{problem}[Three trace inequalities]\label{ex:06:trace-inequalities}
+For \(A,B\in\R^{m\times n}\), prove all three inequalities and their
+equality conditions:
+\begin{enumerate}
+\item
+\[
+\bigl(\tr(A^\top B)\bigr)^2
+\leqslant\tr(A^\top A)\tr(B^\top B),
+\]
+with equality iff one of \(A,B\) is a scalar multiple of the other.
+\item
+\[
+\tr\bigl((A^\top B)^2\bigr)\leqslant\tr(A^\top AB^\top B),
+\]
+with equality iff \(AB^\top\) is symmetric.
+\item
+\[
+\tr\bigl((A^\top B)^2\bigr)\leqslant\tr(AA^\top BB^\top),
+\]
+with equality iff \(A^\top B\) is symmetric.
+\end{enumerate}
 \end{problem}
 \begin{solution}
-Orthogonality proves independence. For any \(v\), set
-\(p=\sum_i\ip{v}{q_i}q_i\). Direct expansion gives
+\begin{enumerate}
+\item List the entries of \(A,B\) in the same order as \(a,b\in\R^{mn}\).
+Then the three traces are \(a^\top b,a^\top a,b^\top b\).
+Theorem~\ref{thm:06:schwarz} gives the inequality, with equality iff
+\(b=0\) or \(a=cb\) for some \(c\in\R\).
+In matrix terms this is \(B=0\) or \(A=cB\), exactly the stated condition
+that one is a multiple of the other.
+\item For any real square \(C\), the trace laws give
 \[
-\norm{v-p}^2=\norm{v}^2-2\sum_i\ip{v}{q_i}^2
-+\sum_i\ip{v}{q_i}^2=0.
+\begin{aligned}
+\|C-C^\top\|_F^2
+&=\tr(C^\top C)-\tr((C^\top)^2)-\tr(C^2)+\tr(CC^\top)\\
+&=2\bigl[\tr(C^\top C)-\tr(C^2)\bigr].
+\end{aligned}
 \]
-Thus \(v=p\), proving that the list spans \(V\). It is therefore a basis.
+Thus \(\tr(C^2)\leqslant\tr(C^\top C)\), with equality iff \(C=C^\top\).
+Take \(C=AB^\top\). By cyclicity and transposition,
+\[
+\tr(C^2)=\tr(B^\top AB^\top A)
+=\tr\bigl((A^\top B)^2\bigr),
+\]
+\[
+\tr(C^\top C)=\tr(BA^\top AB^\top)=\tr(A^\top AB^\top B).
+\]
+The preceding identity proves (b), including its exact equality condition.
+\item Apply the same identity to \(C=A^\top B\). Now
+\[
+\tr(C^\top C)=\tr(B^\top AA^\top B)=\tr(AA^\top BB^\top).
+\]
+Equality holds exactly when this \(C\) is symmetric, proving (c).
+\end{enumerate}
+\end{solution}
+
+% MA 12.4(a); (b,c) require later eigenvalue theory and are not selected.
+\begin{problem}[A bound for a sum]\label{ex:06:sum-bound}
+For \(x_1,\ldots,x_n\in\R\), \(n\geqslant1\), prove
+\[
+\left(\sum_{i=1}^n x_i\right)^2\leqslant n\sum_{i=1}^n x_i^2,
+\]
+with equality iff \(x_1=\cdots=x_n\).
+\end{problem}
+\begin{solution}
+Let \(\boldsymbol1=(1,\ldots,1)^\top\in\R^n\) and
+\(M=I_n-\boldsymbol1\boldsymbol1^\top/n\).
+Since \(\boldsymbol1^\top\boldsymbol1=n\), multiplication gives
+\[
+M^\top=M,\qquad
+M^2=I_n-\frac2n\boldsymbol1\boldsymbol1^\top
++\frac1n\boldsymbol1\boldsymbol1^\top=M.
+\]
+Therefore
+\[
+0\leqslant\|Mx\|^2=x^\top Mx
+=\sum_i x_i^2-\frac1n\left(\sum_i x_i\right)^2.
+\]
+Multiplying by \(n>0\) proves the bound.
+Equality holds iff \(Mx=0\), or
+\(x_i=(\sum_jx_j)/n\) for every \(i\), which is equivalent to all
+the entries being equal.
+\end{solution}
+
+\subsection*{Matrix subspaces and least squares}
+
+% Harville 12.2, complete; Frobenius inner product specified.
+\begin{problem}[A dimension obstruction]\label{ex:06:matrix-orthogonality}
+Let \(U,V\) be subspaces of \(\R^{m\times n}\), with inner product
+\(\langle A,B\rangle_F=\tr(A^\top B)\).
+Prove that if \(\dim V>\dim U\), then \(V\) contains a nonzero matrix
+orthogonal to every member of \(U\).
+\end{problem}
+\begin{solution}
+Take bases \(A_1,\ldots,A_r\) of \(U\) and \(B_1,\ldots,B_s\) of \(V\),
+where \(s>r\).
+If \(r=0\), any \(B_1\ne0\) has the required property, since \(U=\{0\}\).
+If \(r>0\), define \(H\in\R^{r\times s}\) by
+\[
+h_{ij}=\langle A_i,B_j\rangle_F.
+\]
+There are more unknowns than equations in \(Hx=0\), so a nonzero
+solution \(x=(x_1,\ldots,x_s)^\top\) exists.
+Put \(C=\sum_{j=1}^s x_jB_j\in V\).
+Independence of the \(B_j\)'s gives \(C\ne0\), and
+\[
+\langle A_i,C\rangle_F=\sum_j h_{ij}x_j=(Hx)_i=0
+\qquad(1\leqslant i\leqslant r).
+\]
+Every \(A\in U\) is a linear combination of the \(A_i\)'s;
+bilinearity then gives \(\langle A,C\rangle_F=0\), as required.
+\end{solution}
+
+% Harville 12.3, complete, arbitrary-rank X; manual trace proof retained.
+\begin{problem}[Projecting a matrix column by column]\label{ex:06:matrix-projection}
+Let \(U\subseteq\R^m\) be a subspace and define
+\[
+\mathcal M=\{[\,w_1\ \cdots\ w_n\,]:w_j\in U\text{ for every }j\}
+\subseteq\R^{m\times n}.
+\]
+Let \(Y\in\R^{m\times n}\), and let \(X\in\R^{m\times p}\)
+have columns spanning \(U\), without assuming they are independent.
+Use \(\langle A,B\rangle_F=\tr(A^\top B)\).
+Here the orthogonal projection is the matrix \(Z\in\mathcal M\) with
+\(\langle Y-Z,W\rangle_F=0\) for every \(W\in\mathcal M\).
+Show that this projection exists, is unique, and satisfies
+\[
+Z=XB_*,\qquad\text{for every solution }B_*\in\R^{p\times n}
+\text{ of }X^\top XB=X^\top Y.
+\]
+\end{problem}
+\begin{solution}
+The zero matrix is in \(\mathcal M\), and linear combinations of its
+members stay in \(\mathcal M\), because this holds for each column in \(U\).
+Thus \(\mathcal M\) is a subspace.
+Write \(Y=[\,y_1\ \cdots\ y_n\,]\), put \(v_j=P_Uy_j\), and
+let \(V=[\,v_1\ \cdots\ v_n\,]\in\mathcal M\).
+For every \(W=[\,w_1\ \cdots\ w_n\,]\in\mathcal M\),
+\[
+\langle Y-V,W\rangle_F
+=\sum_{j=1}^n(y_j-v_j)^\top w_j=0.
+\]
+Consequently, for any \(W\in\mathcal M\), the two terms in
+\(Y-W=(Y-V)+(V-W)\) are orthogonal, and expansion gives
+\[
+\|Y-W\|_F^2=\|Y-V\|_F^2+\|V-W\|_F^2.
+\]
+It follows that \(V\) is the unique closest matrix.
+If another \(Z'\in\mathcal M\) has residual orthogonal to \(\mathcal M\),
+put \(D=Z'-V\in\mathcal M\). Then
+\[
+\|D\|_F^2
+=\langle Y-V,D\rangle_F-\langle Y-Z',D\rangle_F=0,
+\]
+so \(D=0\) and \(Z'=V\).
+This also proves uniqueness under the defining projection conditions;
+thus \(Z=V\).
+
+By Theorem~\ref{thm:06:normal}, each system
+\(X^\top Xb_j=X^\top y_j\) is consistent, even if \(X\) has dependent
+columns. Stacking one solution of each system gives a solution \(B\).
+For every solution \(B_*\), the same theorem gives
+\(Xb_{*j}=P_Uy_j=v_j\) for all \(j\).
+Therefore \(XB_*=V=Z\), independently of which coefficient solution is used.
+\end{solution}
+
+% Lang LA V.2.9, complete finite-coordinate specialization.
+\begin{problem}[Recognizing an orthonormal basis]\label{ex:06:parseval-converse}
+Let \(V\subseteq\R^n\) be a subspace and let \(v_1,\ldots,v_r\in V\)
+be an orthonormal list. Suppose that
+\[
+\|v\|^2=\sum_{i=1}^r(v^\top v_i)^2
+\qquad\text{for every }v\in V.
+\]
+Prove that \(v_1,\ldots,v_r\) is a basis of \(V\).
+\end{problem}
+\begin{solution}
+Orthonormal columns are independent by Proposition~\ref{prop:06:orthogonal-list}.
+For \(v\in V\), put \(w=\sum_i(v^\top v_i)v_i\).
+Orthogonality gives
+\[
+w^\top w=\sum_i(v^\top v_i)^2,\qquad
+v^\top w=\sum_i(v^\top v_i)^2.
+\]
+The assumed equality now yields
+\[
+\|v-w\|^2=\|v\|^2-2v^\top w+w^\top w=0.
+\]
+Thus \(v=w\) is in the span, proving that the list is a basis.
+If \(r=0\), the assumption says \(\|v\|^2=0\) for every \(v\in V\);
+then \(V=\{0\}\) and the empty list is its basis.
 \end{solution}

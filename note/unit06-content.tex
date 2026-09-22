@@ -1,363 +1,815 @@
-\section*{Inner products}
-\subsection*{From coordinates to a scalar product}
-All vector spaces in the main text are real. An \textbf{inner product}
-on \(V\) assigns a number \(\ip{u}{v}\) to each ordered pair, satisfying
-\[
-\ip{u}{v}=\ip{v}{u},\qquad
-\ip{au+bw}{v}=a\ip{u}{v}+b\ip{w}{v},\qquad
-\ip{v}{v}>0\quad(v\ne0).
-\]
-Linearity gives \(\ip{0}{v}=0\), and symmetry gives linearity in the
-second argument. Define \(\norm{v}=\sqrt{\ip{v}{v}}\).
-Vectors are orthogonal if their inner product is zero.
-An orthonormal list consists of mutually orthogonal unit vectors.
+% Harville 6.1b, 6.3; MA 1.9 and Harville Exercise 6.1.
+\section*{1. Inner products and orthonormal bases}
 
-The coordinate product on \(\R^n\) is one example. Two further examples
-will keep the abstraction concrete.
-On real \(m\times n\) matrices,
+\notetarget{note:06:dot}For real columns \(x,y\in\R^n\), define the
+\textbf{inner product} and \textbf{Euclidean norm} by
 \[
-\ip{A}{B}_F=\sum_{i,j}a_{ij}b_{ij}=\tr(A^\top B)
+x\cdot y=x^\top y=\sum_{i=1}^n x_i y_i,\qquad
+\norm{x}=\sqrt{x^\top x}=\sqrt{\sum_{i=1}^n x_i^2}.
 \]
-is an inner product, with \(\norm{A}_F^2=\sum_{i,j}a_{ij}^2\).
-Indeed the first two axioms follow from finite sums and the third from
-the sum of squares. This is the \textbf{Frobenius inner product}.
-On the real continuous functions on \([0,1]\),
+The finite sum gives symmetry and bilinearity:
 \[
-\ip{f}{g}=\int_0^1 f(t)g(t)\,dt
+x^\top y=y^\top x,\qquad
+(ax+by)^\top z=a x^\top z+b y^\top z.
 \]
-is an inner product. Symmetry and linearity follow from integration.
-If \(f\ne0\), continuity gives an interval of positive length on which
-\(|f|\) is bounded below by a positive number, so \(\int_0^1 f^2>0\).
-This argument uses continuity; a value at a single point would not suffice.
+Linearity in the second argument follows by symmetry. Every \(x_i^2\)
+is nonnegative, and their sum is zero exactly when all \(x_i=0\). Thus
+\[
+\norm{x}\geqslant0,\qquad \norm{x}=0\Longleftrightarrow x=0,\qquad
+\norm{cx}=\sqrt{c^2\sum_i x_i^2}=|c|\norm{x}.
+\]
+Vectors \(x,y\) are \textbf{orthogonal}, written \(x\perp y\), if
+\(x^\top y=0\). Expanding the product gives
+\[
+\norm{x+y}^2=\norm{x}^2+2x^\top y+\norm{y}^2.
+\]
+In particular, \(x\perp y\) implies the \textbf{Pythagorean identity}
+\(\norm{x+y}^2=\norm{x}^2+\norm{y}^2\).
 
-Expansion of the axioms gives
+\begin{theorem}[Schwarz and triangle inequalities]\label{thm:06:schwarz}
+\notetarget{note:06:schwarz}
+For \(x,y\in\R^n\),
 \[
-\norm{u+v}^2=\norm{u}^2+2\ip{u}{v}+\norm{v}^2,\qquad
-\norm{cv}=|c|\norm{v}.
+|x^\top y|\leqslant\norm{x}\norm{y},\qquad
+\norm{x+y}\leqslant\norm{x}+\norm{y}.
 \]
-Thus Pythagoras holds for orthogonal vectors in any real inner-product
-space, not only for coordinate vectors.
-
-\begin{proposition}[Coefficients in an orthogonal list]
-Nonzero mutually orthogonal vectors \(u_1,\ldots,u_r\) are independent.
-If \(v=\sum_i c_i u_i\), then
-\[
-c_j=\frac{\ip{v}{u_j}}{\norm{u_j}^2}.
-\]
-For arbitrary \(v\), the vector
-\[
-p=\sum_{i=1}^r\frac{\ip{v}{u_i}}{\norm{u_i}^2}u_i
-\]
-satisfies \(v-p\perp u_j\) for every \(j\), hence \(v-p\) is perpendicular
-to their whole span.
-\end{proposition}
-\begin{proof}
-Taking the inner product of \(\sum_i c_i u_i\) with \(u_j\) leaves
-\(c_j\norm{u_j}^2\). Applied to a zero combination, this proves that every
-coefficient is zero. Applied to \(v\), it gives the formula.
-For arbitrary \(v\), subtracting the displayed \(p\) gives
-\[
-\ip{v-p}{u_j}
-=\ip{v}{u_j}-\frac{\ip{v}{u_j}}{\norm{u_j}^2}\norm{u_j}^2=0.
-\]
-Linearity gives orthogonality to any combination of the \(u_j\).
-\end{proof}
-
-\begin{theorem}[Projection, best approximation, and Bessel]
-Let \(W=\operatorname{span}\{u_1,\ldots,u_r\}\) for a nonzero orthogonal
-list. The vector \(p\) just defined is the unique vector of \(W\) with
-\(v-p\perp W\). It is also the unique closest vector of \(W\) to \(v\).
-For every \(w\in W\),
-\[
-\norm{v-w}^2=\norm{v-p}^2+\norm{p-w}^2.
-\]
-In particular,
-\[
-\sum_{i=1}^r\frac{\ip{v}{u_i}^2}{\norm{u_i}^2}\leqslant\norm{v}^2,
-\]
-with equality exactly when \(v\in W\).
+Equality in the first holds exactly when \(y=0\) or \(x=ty\) for
+some real \(t\). Equality in the second holds exactly when \(y=0\)
+or \(x=ty\) for some \(t\geqslant0\).
 \end{theorem}
-\begin{proof}
-The preceding proposition proves existence of the orthogonal residual.
-If \(p'\in W\) has the same property, \(p-p'\) belongs to \(W\) and is
-perpendicular to \(W\); its inner product with itself is zero, so \(p=p'\).
-Now \(v-w=(v-p)+(p-w)\) is an orthogonal sum. Pythagoras proves the
-distance identity. Its second term vanishes exactly at \(w=p\),
-proving the minimizing assertion with uniqueness.
-At \(w=0\), the identity gives
-\(\norm{v}^2=\norm{v-p}^2+\norm{p}^2\).
-Expansion in the orthogonal list yields
-\(\norm{p}^2=\sum_i\ip{v}{u_i}^2/\norm{u_i}^2\).
-Equality holds precisely when \(v=p\).
+\begin{proof}\notetarget{note:06:schwarz-proof}
+\begin{itemize}
+\item For \(y=0\), both equalities hold. For \(y\ne0\), put
+  \(t=(x^\top y)/(y^\top y)\). Expansion yields
+  \[
+  0\leqslant\norm{x-ty}^2
+  =\norm{x}^2-\frac{(x^\top y)^2}{\norm{y}^2}.
+  \]
+  Multiply by \(\norm{y}^2>0\) and take nonnegative square roots.
+  Equality is equivalent to \(\norm{x-ty}^2=0\), hence to \(x=ty\).
+  Conversely, \(x=ty\) gives \(|x^\top y|=|t|\norm{y}^2
+  =\norm{x}\norm{y}\).
+\item By the expansion above and Schwarz,
+  \[
+  \norm{x+y}^2
+  \leqslant\norm{x}^2+2|x^\top y|+\norm{y}^2
+  \leqslant(\norm{x}+\norm{y})^2.
+  \]
+  Taking square roots proves the triangle inequality.
+  For \(y\ne0\), equality requires equality in both steps:
+  \(x=ty\) and \(x^\top y\geqslant0\). Since
+  \(x^\top y=t\norm{y}^2\), this is exactly \(t\geqslant0\).
+  Conversely, that condition gives
+  \(\norm{x+y}=(t+1)\norm{y}=\norm{x}+\norm{y}\).
+\end{itemize}
 \end{proof}
-For \(W=\{0\}\), use the empty list and \(p=0\).
-For an orthonormal list \(q_i\), the coefficients simplify to
-\(\ip{v}{q_i}\). When that list is a basis of \(V\), the Bessel inequality
-is the equality \(\norm{v}^2=\sum_i\ip{v}{q_i}^2\).
 
-\begin{proposition}[Schwarz and the triangle inequality]
-For all \(u,v\),
+\notetarget{note:06:orthogonal-list}A list \((u_1,\ldots,u_r)\) is
+\textbf{orthogonal} if \(u_i^\top u_j=0\) whenever \(i\ne j\).
+It is \textbf{orthonormal} if, in addition, \(u_i^\top u_i=1\) for every \(i\).
+
+\begin{proposition}\label{prop:06:orthogonal-list}
+\notetarget{note:06:coefficients}
+Nonzero orthogonal vectors \(u_1,\ldots,u_r\) are independent.
+If \(x\) belongs to their span, then
 \[
-|\ip{u}{v}|\leqslant\norm{u}\norm{v},\qquad
-\norm{u+v}\leqslant\norm{u}+\norm{v}.
+x=\sum_{i=1}^r\frac{u_i^\top x}{u_i^\top u_i}u_i.
 \]
-For \(v\ne0\), Schwarz equality means \(u\) is a multiple of \(v\);
-for \(v=0\), equality always holds.
+For an orthonormal list \((q_1,\ldots,q_r)\), this becomes
+\(x=\sum_i(q_i^\top x)q_i\).
 \end{proposition}
-\begin{proof}
-For \(v\ne0\), apply the preceding theorem to the one-vector list \(v\),
-multiply by \(\norm{v}^2\), and take square roots. Its equality condition
-gives the claim. If \(v=0\), both sides of Schwarz are zero.
-Then
-\[
-\norm{u+v}^2
-=\norm{u}^2+2\ip{u}{v}+\norm{v}^2
-\leqslant(\norm{u}+\norm{v})^2.
-\]
-Both quantities whose squares are compared are nonnegative.
+\begin{proof}\notetarget{note:06:coefficients-proof}
+\begin{itemize}
+\item If \(\sum_i c_i u_i=0\), multiply by \(u_j^\top\).
+  All cross terms vanish, leaving \(c_j\norm{u_j}^2=0\).
+  Since \(u_j\ne0\), \(c_j=0\) for each \(j\).
+\item If \(x=\sum_i c_i u_i\), the same multiplication gives
+  \(u_j^\top x=c_j u_j^\top u_j\), which determines the displayed
+  coefficients. For an orthonormal list, the denominators are 1.
+\end{itemize}
 \end{proof}
 
-\begin{example}[A weighted geometry]\label{eg:06:weighted}
-Let
-\[
-G=\begin{pmatrix}3&-1\\-1&2\end{pmatrix},\qquad
-\ip{x}{y}_G=x^\top Gy.
-\]
-Symmetry of \(G\) gives symmetry of this pairing, and products give
-bilinearity. Its positivity follows by completing the square:
-\[
-x^\top Gx=3x_1^2-2x_1x_2+2x_2^2
-=3(x_1-x_2/3)^2+\frac53x_2^2>0\quad(x\ne0).
-\]
-Such a symmetric matrix is called \textbf{positive definite}.
-In this geometry \(\ip{e_1}{e_2}_G=-1\), so the coordinate axes are not
-orthogonal. Projection of \(e_1\) onto \(\operatorname{span}\{e_2\}\) gives
-\[
-p=\frac{-1}{2}e_2,\qquad r=e_1-p=(1,1/2)^\top.
-\]
-Check \(\ip{r}{e_2}_G=-1+2(1/2)=0\). The squared norms are
-\(\norm{e_1}_G^2=3,\ \norm{p}_G^2=1/2,\ \norm{r}_G^2=5/2\).
-For a general candidate \(te_2\),
-\[
-\norm{e_1-te_2}_G^2=3+2t+2t^2
-=\frac52+2(t+1/2)^2.
-\]
-The minimum and its unique location agree with the projection formula.
-\end{example}
-
-\section*{Orthogonal bases and complements}
-\begin{theorem}[Gram--Schmidt]
-For an independent list \(v_1,\ldots,v_k\), define
+% Lang ILA VI.2.1, including the reverse span equation; Harville 6.4.
+\begin{theorem}[Gram--Schmidt]\label{thm:06:gs}\notetarget{note:06:gs}
+For an independent list \(v_1,\ldots,v_r\in\R^n\), \(r\geqslant1\), define successively
 \[
 u_1=v_1,\qquad
-u_j=v_j-\sum_{i<j}\frac{\ip{v_j}{u_i}}{\norm{u_i}^2}u_i.
+u_j=v_j-\sum_{i<j}\frac{u_i^\top v_j}{u_i^\top u_i}u_i
+\quad(2\leqslant j\leqslant r).
 \]
-Every \(u_j\) is nonzero, the list is orthogonal, and
-\(\operatorname{span}\{u_1,\ldots,u_j\}
-=\operatorname{span}\{v_1,\ldots,v_j\}\) at every stage.
-Thus \(q_j=u_j/\norm{u_j}\) is an orthonormal basis of the original span.
+The vectors \(u_1,\ldots,u_r\) are nonzero and orthogonal. For every \(j\),
+\[
+\Span(u_1,\ldots,u_j)=\Span(v_1,\ldots,v_j).
+\]
+Consequently, \(q_j=u_j/\norm{u_j}\) form an orthonormal basis of
+\(\Span(v_1,\ldots,v_r)\).
 \end{theorem}
-\begin{proof}
-Independence gives \(u_1=v_1\ne0\).
-Suppose the conclusions hold before stage \(j\).
-The projection calculation makes \(u_j\) perpendicular to every earlier
-\(u_i\). If \(u_j=0\), then \(v_j\) is a combination of earlier \(u_i\),
-and hence of earlier \(v_i\), contrary to independence.
-The defining formula puts \(u_j\) in the span of \(v_j\) and earlier
-vectors; rearranging puts \(v_j\) in the span of \(u_j\) and earlier
-vectors. These two inclusions prove equality of the new spans.
-Induction proves all claims. Normalizing preserves orthogonality and span.
+\begin{proof}\notetarget{note:06:gs-proof}
+\begin{itemize}
+\item For \(j=1\), \(u_1=v_1\ne0\), and the spans agree.
+  Suppose the conclusions hold through \(j-1\). All denominators
+  in the definition of \(u_j\) are positive.
+\item For \(k<j\), orthogonality of the preceding vectors gives
+  \[
+  u_k^\top u_j=u_k^\top v_j
+  -\frac{u_k^\top v_j}{u_k^\top u_k}u_k^\top u_k=0.
+  \]
+  If \(u_j=0\), its definition puts \(v_j\) in the span of the
+  preceding \(u_i\), hence of \(v_1,\ldots,v_{j-1}\), a contradiction.
+\item The definition puts \(u_j\) in \(\Span(v_1,\ldots,v_j)\).
+  The reverse equation
+  \[
+  v_j=u_j+\sum_{i<j}\frac{u_i^\top v_j}{u_i^\top u_i}u_i
+  \]
+  gives the reverse inclusion of spans, using the induction hypothesis
+  for the preceding vectors. This completes the induction.
+\item Dividing each nonzero vector by its norm preserves the span and
+  orthogonality, and gives norm 1. Independence follows from
+  Proposition~\ref{prop:06:orthogonal-list}.
+\end{itemize}
 \end{proof}
 
-\begin{proposition}[Extension and decomposition]
-An orthonormal list in a finite-dimensional inner-product space extends
-to an orthonormal basis. If \(W\) is a subspace of such a space \(V\),
-define
-\[
-W^\perp=\{v:\ip{v}{w}=0\text{ for all }w\in W\}.
-\]
-Then \(W^\perp\) is a subspace, and
-\[
-V=W\oplus W^\perp,\qquad
-\dim W+\dim W^\perp=\dim V,\qquad
-(W^\perp)^\perp=W.
-\]
-Here the direct sum means every vector has a unique decomposition into
-one component in each subspace.
-\end{proposition}
-\begin{proof}
-An orthonormal list is independent. Extend it to a basis and apply
-Gram--Schmidt in that order; its initial orthonormal vectors are unchanged.
-The remaining vectors normalize to give the claimed extension.
+\notetarget{note:06:extension}Every subspace \(W\subseteq\R^n\) has an
+orthonormal basis: for \(W\ne\{0\}\), apply Gram--Schmidt to a basis
+supplied by Unit 3, Theorem~\ref{three-thm:03:extract}.
+For \(W=\{0\}\), use the empty basis.
+An existing orthonormal list in \(W\) can be extended to an orthonormal
+basis of \(W\): first extend it to a basis by Unit 3,
+Theorem~\ref{three-thm:03:extract}, then apply Gram--Schmidt.
+Each existing vector is unchanged, because its inner products with its
+predecessors are zero and its norm is already 1.
 
-The defining equations of \(W^\perp\) are preserved by linear combinations.
-Choose an orthonormal basis \(q_1,\ldots,q_r\) of \(W\) and extend it
-to \(q_1,\ldots,q_n\) of \(V\). In
-\(v=\sum_i\ip{v}{q_i}q_i\), the first \(r\) terms belong to \(W\),
-and the rest are perpendicular to \(W\).
-Conversely, if \(v\perp W\), its first \(r\) coefficients are zero.
-Thus \(q_{r+1},\ldots,q_n\) form a basis of \(W^\perp\).
-This proves existence, the dimension formula, and the double-complement
-identity. If a vector belongs to both subspaces, it is perpendicular
-to itself and is zero. Subtracting two decompositions therefore proves
-uniqueness. Empty lists include the cases \(W=0\) and \(W=V\).
-\end{proof}
-
-\begin{example}[A plane: basis, orthogonalization, and projection]\label{eg:06:plane}
-Consider \(W=\{(x,y,z)^\top:3x-2y+z=0\}\).
-Because \(z=-3x+2y\), this space has dimension two. The vectors
-\(a=(1,2,1)^\top\), \(b=(3,5,1)^\top\) lie in \(W\) and are independent:
-the first and third coordinates of \(\alpha a+\beta b=0\) give
-\(\alpha+3\beta=0,\alpha+\beta=0\), hence \(\alpha=\beta=0\).
-Now
+% Lang ILA VI.2 Example 3; same data in Lang LA V.2.
+\begin{example}\label{example:06:gs}\notetarget{note:06:gs-example}
+Find an orthonormal basis of the span of
 \[
-a\cdot a=6,\quad a\cdot b=14,\quad
-b-\frac{14}{6}a=\frac13(2,1,-4)^\top.
+a=(1,1,0,1)^\top,\quad b=(1,-2,0,0)^\top,\quad c=(1,0,-1,2)^\top.
 \]
-With \(c=(2,1,-4)^\top\), we have \(a\cdot c=0,\ c\cdot c=21\).
-Hence \(q_1=a/\sqrt6,\ q_2=c/\sqrt{21}\) is an orthonormal basis of \(W\).
-Its complement has unit basis \(q_3=(3,-2,1)^\top/\sqrt{14}\).
-
-For \(v=e_3\), the coefficients in the plane basis are
-\(v\cdot q_1=1/\sqrt6\), \(v\cdot q_2=-4/\sqrt{21}\).
-Thus
-\[
-p=\frac16a-\frac4{21}c
-=\frac1{14}(-3,2,13)^\top,\qquad
-r=e_3-p=\frac1{14}(3,-2,1)^\top.
-\]
-Directly, \(3p_1-2p_2+p_3=0\).
-Also \(\norm{r}^2=1/14,\ \norm{p}^2=13/14\); their sum is \(\norm{e_3}^2\).
-The closest-point identity is
-\(\norm{e_3-w}^2=1/14+\norm{p-w}^2\) for every \(w\in W\).
+\par\smallskip
+\notetarget{note:06:gs-solution}
+\begin{itemize}
+\item \(a^\top a=3\) and \(a^\top b=-1\), so
+  \[
+  b'=b+\tfrac13a=\tfrac13(4,-5,0,1)^\top,
+  \qquad \norm{b'}^2=\tfrac{14}{3}.
+  \]
+\item \(a^\top c=3\) and \(b'^\top c=2\), so
+  \[
+  c'=c-a-\tfrac37b'=\tfrac17(-4,-2,-7,6)^\top,
+  \qquad \norm{c'}^2=\tfrac{15}{7}.
+  \]
+  The dot products \(a^\top b',a^\top c',b'^\top c'\) are respectively
+  \((4-5+1)/3,(-4-2+6)/7,(-16+10+6)/21\), all zero.
+\item All three outputs are nonzero. The identities
+  \(b=b'-a/3\), \(c=c'+a+3b'/7\) prove that they span the original
+  space: the definitions give one span inclusion, and these reverse
+  identities give the other. Orthogonality proves independence.
+  After normalization an orthonormal basis is
+  \[
+  \frac{(1,1,0,1)^\top}{\sqrt3},\qquad
+  \frac{(4,-5,0,1)^\top}{\sqrt{42}},\qquad
+  \frac{(-4,-2,-7,6)^\top}{\sqrt{105}}.
+  \]
+\end{itemize}
 \end{example}
 
-\begin{proposition}[Projection matrices]
-If \(Q\) has an orthonormal basis of \(W\subseteq\R^n\) as columns, then
+\notetarget{note:06:orthogonal-matrix}A real square matrix \(Q:n\times n\)
+is \textbf{orthogonal} if \(Q^\top Q=I_n\). Entry \((i,j)\) of this
+product is \(q_i^\top q_j\), so the condition says exactly that its columns
+are orthonormal. The one-sided inverse criterion of Unit 2 gives
+\(Q^{-1}=Q^\top\), hence \(QQ^\top=I_n\). Moreover,
 \[
-P_W=QQ^\top,\quad P_W^\top=P_W,\quad P_W^2=P_W,\quad
-\operatorname{im}P_W=W,\quad \ker P_W=W^\perp.
+\norm{Qx}^2=x^\top Q^\top Qx=\norm{x}^2\quad(x\in\R^n),\qquad
+(\det Q)^2=\det(Q^\top Q)=1.
 \]
-Also \(I-P_W=P_{W^\perp}\).
-Conversely, a real symmetric idempotent matrix is the orthogonal
-projection onto its image.
-\end{proposition}
-\begin{proof}
-The coefficient formula is \(P_Wx=\sum_jq_j(q_j^\top x)=QQ^\top x\).
-Since \(Q^\top Q=I\), transposing and squaring give the identities.
-The decomposition proves the image, kernel and complementary formula.
-Conversely, for \(P^\top=P=P^2\), \(Px\) is in its image and
-\[
-\ip{x-Px}{Py}=x^\top(P-P^\top P)y=0.
-\]
-Thus the decomposition relative to the image has component \(Px\),
-as claimed. For the zero space the projector is zero.
-\end{proof}
-For the preceding plane, the formulas from its plane basis and its normal
-\(n=(3,-2,1)^\top\) agree:
-\[
-\frac{aa^\top}{6}+\frac{cc^\top}{21}
-=\frac1{14}\begin{pmatrix}5&6&-3\\6&10&2\\-3&2&13\end{pmatrix}
-=I-\frac{nn^\top}{14}.
-\]
-The equality can be checked entry by entry; for example the \((1,2)\)
-entry is \(2/6+2/21=6/14\).
+The second equality uses determinant multiplication and transpose
+invariance from Unit 5; thus \(\det Q=1\) or \(-1\).
 
-For a matrix \(A\), \(Ax=0\) means \(x\) is perpendicular to every row.
-Consequently
+% Harville 6.4(d): normalized Gram--Schmidt; uniqueness by column induction.
+\begin{theorem}[Thin QR decomposition]\label{thm:06:qr}
+\notetarget{note:06:qr}
+Let \(A=[\,a_1\ \cdots\ a_p\,]:m\times p\) have independent columns,
+where \(1\leqslant p\leqslant m\). There is a unique factorization
 \[
-\ker A=\operatorname{row}(A)^\perp,\qquad
-(\ker A)^\perp=\operatorname{row}(A).
+A=QR,\qquad Q^\top Q=I_p,
 \]
-These identities and rank--nullity give another proof that row rank
-equals column rank: both equal \(n-\dim\ker A\).
-
-\section*{Bilinear maps and matrices}
-A map \(g:U\times V\to W\) is \textbf{bilinear} if it is linear in each
-argument with the other fixed. It need not be linear in the pair:
-for example \(g(u,v)=uv\) on \(\R\times\R\) is bilinear, but
-\(g(2u,2v)=4uv\), not generally \(2uv\).
-A scalar-valued bilinear map is a \textbf{bilinear form}.
-Matrix multiplication is bilinear in its two matrix arguments;
-the scalar-valued coordinate example is
-\[
-g_A(x,y)=x^\top Ay=\sum_{i=1}^m\sum_{j=1}^n a_{ij}x_i y_j,
-\qquad A\in\R^{m\times n},\ x\in\R^m,\ y\in\R^n.
-\]
-
-\begin{theorem}[Representation of a bilinear form]
-Given ordered bases \(B=(b_1,\ldots,b_m)\) of \(U\) and
-\(C=(c_1,\ldots,c_n)\) of \(V\), every bilinear form \(g\) has a unique
-matrix \(A\in\R^{m\times n}\) such that
-\[
-g(u,v)=[u]_B^\top A[v]_C,\qquad a_{ij}=g(b_i,c_j).
-\]
-This correspondence is a linear bijection between matrices and bilinear
-forms. In particular the space of these forms has dimension \(mn\).
+where \(Q:m\times p\) and \(R:p\times p\) is upper triangular with
+positive diagonal entries. Moreover, \(R=Q^\top A\) and
+\(\mathcal C(Q)=\mathcal C(A)\).
 \end{theorem}
-\begin{proof}
-Write \(u=\sum_i x_i b_i\), \(v=\sum_j y_j c_j\).
-Linearity in the first argument and then in the second gives
-\(g(u,v)=\sum_{i,j}x_i y_j g(b_i,c_j)\), proving existence.
-If two matrices give all the same values, substitute \(u=b_i,v=c_j\)
-to recover each entry, proving uniqueness.
-Conversely the coordinate formula for any \(A\) is bilinear.
-Finally \(g_{A+D}=g_A+g_D\), \(g_{aA}=ag_A\), by the product laws.
-Thus the correspondence is linear and bijective; the matrix units give
-\(mn\) independent coordinate directions.
+\begin{proof}\notetarget{note:06:qr-proof}
+\begin{itemize}
+\item Apply Gram--Schmidt to the columns of \(A\). In terms of the
+  normalized vectors, its recursion is
+  \[
+  u_j=a_j-\sum_{i<j}(q_i^\top a_j)q_i,\qquad
+  r_{jj}=\norm{u_j}>0,\qquad q_j=u_j/r_{jj}.
+  \]
+  Theorem~\ref{thm:06:gs} ensures that each \(u_j\ne0\) and that
+  the \(q_j\) are orthonormal. Set \(r_{ij}=q_i^\top a_j\) for
+  \(i<j\), and \(r_{ij}=0\) for \(i>j\). Then
+  \[
+  a_j=\sum_{i<j}r_{ij}q_i+r_{jj}q_j
+  \quad(1\leqslant j\leqslant p),
+  \]
+  which is precisely \(A=QR\). Multiplication by \(Q^\top\) gives
+  \(R=Q^\top A\). The prefix-span equality in Gram--Schmidt gives
+  \(\mathcal C(Q)=\mathcal C(A)\).
+\item For uniqueness, consider any such factorization. Its first column
+  is \(a_1=r_{11}q_1\); hence \(r_{11}=\norm{a_1}\) and
+  \(q_1=a_1/\norm{a_1}\). Suppose \(q_1,\ldots,q_{j-1}\) have been
+  determined. Orthonormality in the \(j\)th column gives
+  \[
+  r_{ij}=q_i^\top a_j\ (i<j),\qquad
+  r_{jj}q_j=a_j-\sum_{i<j}(q_i^\top a_j)q_i=u_j.
+  \]
+  Since \(r_{jj}>0\) and \(\norm{q_j}=1\), necessarily
+  \(r_{jj}=\norm{u_j}\) and \(q_j=u_j/\norm{u_j}\).
+  Thus every column and every entry of the two factors is determined.
+\end{itemize}
 \end{proof}
 
-\begin{proposition}[Symmetry and a change of basis]
-On one space with the same basis in both positions, \(g_A\) is symmetric
-if and only if \(A=A^\top\). A symmetric bilinear form is an inner product
-if and only if \(x^\top Ax>0\) for every nonzero coordinate column \(x\).
-If \(S\) converts new first-argument coordinates to old ones, and \(T\)
-does the same for the second argument, the new matrix is
+\notetarget{note:06:qr-gs-example}For the vectors \(a,b,c\) in
+Example~\ref{example:06:gs}, the computed relations
 \[
-A_{\rm new}=S^\top A_{\rm old}T.
+b=-\tfrac13a+b',\qquad c=a+\tfrac37b'+c'
 \]
-In particular the Gram matrix of an inner product changes by
-\(G_{\rm new}=S^\top G_{\rm old}S\).
+give the QR factors directly:
+\[
+[\,a\ b\ c\,]=QR,\qquad
+Q=\left[\,\frac{a}{\sqrt3}\ \frac{3b'}{\sqrt{42}}\
+  \frac{7c'}{\sqrt{105}}\,\right],\qquad
+R=\begin{pmatrix}
+\sqrt3&-1/\sqrt3&\sqrt3\\
+0&\sqrt{42}/3&\sqrt{42}/7\\
+0&0&\sqrt{105}/7
+\end{pmatrix}.
+\]
+Each column of this product is the corresponding relation above
+(with \(a=\sqrt3q_1\)). Here \(Q\) has four rows and three columns;
+\(Q^\top Q=I_3\), while \(QQ^\top\ne I_4\), since its rank is at most three.
+
+\section*{2. Orthogonal complements and projections}
+
+\notetarget{note:06:complement}For a subspace \(W\subseteq\R^n\), define
+its \textbf{orthogonal complement} (in \(\R^n\)) by
+\[
+W^\perp=\{x\in\R^n:w^\top x=0\text{ for every }w\in W\}.
+\]
+It contains zero, and \(x,y\in W^\perp\) imply
+\(w^\top(ax+by)=a w^\top x+b w^\top y=0\) for all \(w\in W\);
+thus it is a subspace. If \(x\in W\cap W^\perp\), then \(x^\top x=0\),
+so \(x=0\).
+For any spanning list \(w_1,\ldots,w_r\) of \(W\),
+\[
+x\in W^\perp\Longleftrightarrow w_i^\top x=0\quad(1\leqslant i\leqslant r).
+\]
+The forward implication is the definition. Conversely, for
+\(w=\sum_i c_i w_i\), \(w^\top x=\sum_i c_i w_i^\top x=0\).
+
+\begin{theorem}\label{thm:06:complement}\notetarget{note:06:decomposition}
+Let \(W\subseteq\R^n\) be a subspace of dimension \(r\). Then
+\[
+\R^n=W\oplus W^\perp,\qquad
+\dim W^\perp=n-r,\qquad (W^\perp)^\perp=W.
+\]
+\end{theorem}
+\begin{proof}\notetarget{note:06:decomposition-proof}
+\begin{itemize}
+\item Extend an orthonormal basis \(q_1,\ldots,q_r\) of \(W\) to an
+  orthonormal basis \(q_1,\ldots,q_n\) of \(\R^n\), as proved above.
+  Every \(x\in\R^n\) has the unique expansion
+  \[
+  x=\sum_{i=1}^n(q_i^\top x)q_i.
+  \]
+  It belongs to \(W^\perp\) exactly when its first \(r\) coefficients
+  vanish. Thus \(q_{r+1},\ldots,q_n\) are a basis of \(W^\perp\).
+\item Splitting the expansion into its first \(r\) and last \(n-r\)
+  terms gives the sum \(W+W^\perp=\R^n\). Its intersection is zero,
+  as already proved, so the sum is direct and the dimensions follow.
+\item Symmetry of the inner product gives
+  \(W\subseteq(W^\perp)^\perp\). Applying the dimension formula twice
+  gives \(\dim(W^\perp)^\perp=n-(n-r)=r\). The equal-dimension
+  subspace criterion of Unit 3 proves equality.
+\end{itemize}
+Empty lists and sums include \(W=\{0\}\) and \(W=\R^n\).
+\end{proof}
+
+% Harville 12.1.3--4, restricted to finite real coordinate spaces.
+\begin{theorem}[Orthogonal projection]\label{thm:06:projection}
+\notetarget{note:06:projection}
+Let \(W\subseteq\R^n\) be a subspace. For each \(y\in\R^n\),
+there is exactly one \(p\in W\) such that
+\(y-p\in W^\perp\). For any orthonormal basis \((q_1,\ldots,q_r)\) of \(W\),
+\[
+p=\sum_{i=1}^r(q_i^\top y)q_i.
+\]
+This vector is the \textbf{orthogonal projection} of \(y\) on \(W\),
+denoted \(P_W y\).
+\end{theorem}
+\begin{proof}\notetarget{note:06:projection-proof}
+\begin{itemize}
+\item The displayed vector belongs to \(W\), and
+  \(q_j^\top(y-p)=q_j^\top y-q_j^\top y=0\) for every \(j\).
+  The spanning-list test above gives \(y-p\in W^\perp\).
+\item If \(p'\) also satisfies the two conditions, then
+  \(p-p'\in W\) and \(p-p'=(y-p')-(y-p)\in W^\perp\).
+  Their intersection is zero, so \(p=p'\).
+\end{itemize}
+For \(W=\{0\}\), the empty sum is \(p=0\), which has the same properties.
+\end{proof}
+
+\notetarget{note:06:projection-linear}Uniqueness shows that \(P_Wy\)
+is independent of the chosen orthonormal basis. The formula gives linearity:
+\[
+P_W(ay+bz)=\sum_i q_i(q_i^\top(ay+bz))=aP_Wy+bP_Wz.
+\]
+Also \(P_Wy=y\) exactly when \(y\in W\): one direction follows because
+the image lies in \(W\); in the other, \(p=y\) has zero residual and
+therefore satisfies the defining conditions.
+
+\begin{theorem}[Closest point]\label{thm:06:closest}\notetarget{note:06:closest}
+Let \(W\subseteq\R^n\) be a subspace and \(p=P_Wy\).
+For every \(w\in W\),
+\[
+\norm{y-w}^2=\norm{y-p}^2+\norm{p-w}^2.
+\]
+Consequently \(p\) is the unique minimizer of \(\norm{y-w}\) over \(w\in W\).
+A vector \(w\in W\) is that minimizer if and only if \(y-w\in W^\perp\).
+\end{theorem}
+\begin{proof}\notetarget{note:06:closest-proof}
+\begin{itemize}
+\item Write \(y-w=(y-p)+(p-w)\). The first summand belongs to
+  \(W^\perp\), the second to \(W\); hence their inner product is zero.
+  The Pythagorean identity gives the displayed equality.
+\item The last term is nonnegative and is zero exactly when \(w=p\).
+  Thus the squared norm, and hence the norm, has its unique minimum at \(p\).
+\item If \(y-w\in W^\perp\), projection uniqueness gives \(w=p\).
+  Conversely, every minimizer equals \(p\), whose residual belongs to \(W^\perp\).
+\end{itemize}
+\end{proof}
+
+\begin{proposition}[Projection matrices]\label{prop:06:projector}
+\notetarget{note:06:projector}
+Let \(W\subseteq\R^n\) be a subspace, and let
+\(Q=[\,q_1\ \cdots\ q_r\,]\) contain an orthonormal basis of \(W\).
+The matrix of \(P_W\) in standard coordinates is
+\[
+P=QQ^\top,\qquad P^\top=P,\quad P^2=P,\quad
+\mathcal C(P)=W,\quad N(P)=W^\perp.
+\]
+Moreover, \(I_n-P\) is the matrix of \(P_{W^\perp}\).
+A real square matrix is an orthogonal projection matrix if and only if
+it is symmetric and idempotent.
 \end{proposition}
-\begin{proof}
-The scalar identity \(y^\top Ax=x^\top A^\top y\) proves the symmetry
-claim by uniqueness of the representing matrix. Bilinearity is already
-known, so precisely positivity remains for an inner product.
-If the new coordinate columns are \(x',y'\), then the old ones are
-\(Sx',Ty'\); substitution gives
-\(g=x'^\top S^\top ATy'\), proving the transformation rule.
-For an inner product, \(G_{ij}=\ip{b_i}{b_j}\); it is symmetric, and
-\[
-x^\top Gx=\left\|\sum_i x_i b_i\right\|^2>0\quad(x\ne0),
-\]
-because the basis is independent.
+\begin{proof}\notetarget{note:06:projector-proof}
+\begin{itemize}
+\item Matrix multiplication gives
+  \(QQ^\top y=\sum_i q_i(q_i^\top y)=P_Wy\), so the matrices agree.
+  Since \(Q^\top Q=I_r\),
+  \[
+  (QQ^\top)^\top=QQ^\top,\qquad
+  (QQ^\top)^2=Q(Q^\top Q)Q^\top=QQ^\top.
+  \]
+\item Every \(Py\) belongs to \(W\), and every \(w\in W\) satisfies
+  \(Pw=w\), proving \(\mathcal C(P)=W\).
+  If \(y\in W^\perp\), all coefficients \(q_i^\top y\) vanish, so \(Py=0\).
+  Conversely, \(Py=0\) gives \(y=y-Py\in W^\perp\).
+\item For every \(y\), \((I_n-P)y\in W^\perp\) and its residual
+  \(Py\) lies in \(W=(W^\perp)^\perp\). Uniqueness of projection onto
+  \(W^\perp\) gives \((I_n-P)y=P_{W^\perp}y\) for every \(y\).
+\item Conversely, suppose \(H^\top=H\) and \(H^2=H\).
+  For every \(y\), \(Hy\in\mathcal C(H)\), and for every \(Hz\in\mathcal C(H)\),
+  \[
+  (Hz)^\top(y-Hy)=z^\top(H-H^2)y=0.
+  \]
+  Thus \(Hy\) satisfies the defining conditions of the projection
+  of \(y\) on \(\mathcal C(H)\), proving the converse.
+\end{itemize}
+When \(r=0\), the empty matrix product is \(QQ^\top=0_{n\times n}\);
+the same identities hold with the empty-sum conventions of Unit 4.
 \end{proof}
 
-\begin{example}[Reading and changing a bilinear form]\label{eg:06:bilinear}
-For \(A=\begin{pmatrix}1&2\\3&-1\end{pmatrix}\),
+% Bapat 2.9: original projection question; matrix/residual are worked consequences.
+\begin{example}\label{example:06:projection}\notetarget{note:06:projection-example}
+Project \(y=(2,1,0)^\top\) onto
 \[
-g_A(x,y)=x_1y_1+2x_1y_2+3x_2y_1-x_2y_2.
+W=\Span\{u=(1,-1,1)^\top,\ v=(0,1,1)^\top\}.
 \]
-For example \(g_A(e_1,e_2)=2\), whereas \(g_A(e_2,e_1)=3\);
-this form is not symmetric.
-Take the new basis \(b_1=(1,1)^\top,b_2=(1,-1)^\top\), with
-\(S=\begin{pmatrix}1&1\\1&-1\end{pmatrix}\).
-Then
-\[
-AS=\begin{pmatrix}3&-1\\2&4\end{pmatrix},\qquad
-S^\top AS=\begin{pmatrix}5&3\\1&-5\end{pmatrix}.
-\]
-The \((1,2)\) entry is checked directly:
-\(g_A(b_1,b_2)=(1,1)(-1,4)^\top=3\).
-For the ordinary dot product the same basis has Gram matrix
-\(S^\top S=2I\). Thus the basis is orthogonal with squared lengths two,
-and its coordinate norm formula is \(2x_1'^2+2x_2'^2\).
+Find the projection matrix, residual, and minimum squared distance as well.
+\par\smallskip
+\notetarget{note:06:projection-solution}
+\begin{itemize}
+\item \(u^\top v=0\), \(u^\top u=3\), \(v^\top v=2\), and
+  \(u^\top y=v^\top y=1\). Hence
+  \[
+  p=\tfrac13u+\tfrac12v=(\tfrac13,\tfrac16,\tfrac56)^\top,
+  \qquad e=y-p=(\tfrac53,\tfrac56,-\tfrac56)^\top.
+  \]
+\item The orthonormal basis is \(u/\sqrt3,v/\sqrt2\), so
+  \[
+  P=\frac{uu^\top}{3}+\frac{vv^\top}{2}
+   =\frac16\begin{pmatrix}2&-2&2\\-2&5&1\\2&1&5\end{pmatrix}.
+  \]
+  Direct multiplication gives \(Py=p\), \(u^\top e=0\), and \(v^\top e=0\).
+\item The squared residual norm is
+  \[
+  \norm{e}^2=\frac{25}{9}+\frac{25}{36}+\frac{25}{36}=\frac{25}{6}.
+  \]
+  Theorem~\ref{thm:06:closest} therefore gives, for every \(w\in W\),
+  \[
+  \norm{y-w}^2=\frac{25}{6}+\norm{p-w}^2.
+  \]
+  Thus \(p\) alone attains the minimum squared distance \(25/6\).
+\end{itemize}
 \end{example}
 
-\paragraph{Calculus connection.}
-For a twice continuously differentiable real function \(f\) near a point,
-its Hessian \(H=(\partial^2f/\partial x_i\partial x_j)\) represents the
-bilinear form \((u,v)\mapsto u^\top Hv\). Equality of mixed partials under
-this regularity assumption makes it symmetric. Symmetry alone does not
-imply positivity: \(f(x_1,x_2)=x_1^2-x_2^2\) has Hessian
-\(\operatorname{diag}(2,-2)\).
+\begin{proposition}\label{prop:06:gram}\notetarget{note:06:gram}
+For any real \(A:m\times p\),
+\[
+\begin{gathered}
+\mathcal C(A)^\perp=N(A^\top),\qquad N(A)^\perp=\mathcal C(A^\top),\\
+N(A^\top A)=N(A),\qquad \rank(A^\top A)=\rank A,\\
+\mathcal C(A^\top A)=\mathcal C(A^\top).
+\end{gathered}
+\]
+The \textbf{Gram matrix} \(A^\top A\) is invertible if and only if
+the columns of \(A\) are independent.
+\end{proposition}
+\begin{proof}\notetarget{note:06:gram-proof}
+\begin{itemize}
+\item For \(A=[\,a_1\ \cdots\ a_p\,]\), a column \(z\) is orthogonal
+  to \(\mathcal C(A)\) exactly when every \(a_j^\top z=0\), or \(A^\top z=0\).
+  Applying this identity to \(A^\top\) gives
+  \(\mathcal C(A^\top)^\perp=N(A)\); taking complements and using
+  Theorem~\ref{thm:06:complement} gives the second identity.
+\item If \(Ax=0\), then \(A^\top Ax=0\). Conversely,
+  \[
+  A^\top Ax=0\Longrightarrow
+  0=x^\top A^\top Ax=(Ax)^\top(Ax)=\norm{Ax}^2
+  \Longrightarrow Ax=0.
+  \]
+  The two matrices have the same domain \(\R^p\) and the same kernel.
+  Unit 3, Theorem~\ref{three-thm:03:nullity}, therefore gives equal ranks.
+\item Every \(A^\top Ax\) is in \(\mathcal C(A^\top)\), proving inclusion.
+  The two column spaces have equal dimension, since
+  \(\rank(A^\top A)=\rank A=\rank A^\top\) by Unit 3.
+  The equal-dimension subspace criterion proves equality.
+\item By the square-matrix inverse criterion of Unit 2,
+  \(A^\top A\) is invertible exactly when its null space is \(\{0\}\).
+  The kernel identity makes this equivalent to \(N(A)=\{0\}\),
+  which is independence of the columns of \(A\).
+\end{itemize}
+\end{proof}
+
+% Harville 7.3.1, specialized to one right-hand side; complement proof.
+\begin{proposition}[Consistency and the left null space]\label{prop:06:compatibility}
+\notetarget{note:06:compatibility}
+For \(A:m\times p\) and \(b\in\R^m\),
+\[
+Ax=b\text{ is consistent}
+\quad\Longleftrightarrow\quad
+z^\top b=0\text{ for every }z\in N(A^\top).
+\]
+It suffices to test the vectors of any basis of \(N(A^\top)\).
+\end{proposition}
+\begin{proof}\notetarget{note:06:compatibility-proof}
+By Proposition~\ref{prop:06:gram} and the double-complement identity,
+\[
+Ax=b\text{ is consistent}
+\Longleftrightarrow b\in\mathcal C(A)
+\Longleftrightarrow b\in N(A^\top)^\perp.
+\]
+The last condition is exactly the stated orthogonality test.
+Testing a basis suffices because \((\sum_i c_i z_i)^\top b
+=\sum_i c_i z_i^\top b\).
+\end{proof}
+
+% MA 4.1(a): original matrix and two space descriptions.
+% Projection, residual, distance, and consistency are course developments.
+\begin{example}\label{example:06:constraint}\notetarget{note:06:constraint-example}
+Let
+\[
+A=\begin{pmatrix}1&2\\3&4\\5&6\end{pmatrix},\qquad W=\mathcal C(A).
+\]
+Find bases for \(W\) and \(W^\perp\). Compute the projection matrix
+\(P\) onto \(W\) both from an orthogonal basis of \(W\) and from
+\(W^\perp\). For arbitrary \(b\in\R^3\), find the residual
+\(b-Pb\), the minimum of \(\norm{b-Ax}^2\), and the condition for
+\(Ax=b\) to be consistent. In the consistent case, find its solution.
+\par\smallskip
+\notetarget{note:06:constraint-spaces}
+\begin{itemize}
+\item Write
+  \[
+  u=(1,0,-1)^\top,\quad v=(0,1,2)^\top,\qquad
+  Ax=(x_1+2x_2)u+(3x_1+4x_2)v.
+  \]
+  Conversely, prescribed coefficients \(\lambda_1,\lambda_2\) arise from
+  \[
+  x_1=\lambda_2-2\lambda_1,\qquad
+  x_2=(3\lambda_1-\lambda_2)/2.
+  \]
+  Thus \(W=\operatorname{span}(u,v)\). Their first two coordinates show
+  that \(u,v\) are independent.
+\item To find \(W^\perp=N(A^\top)\), solve
+  \[
+  z_1+3z_2+5z_3=0,\qquad 2z_1+4z_2+6z_3=0.
+  \]
+  Subtract twice the first equation from the second:
+  \(z_2=-2z_3\), and then \(z_1=z_3\). Therefore
+  \[
+  W^\perp=\operatorname{span}(n),\qquad n=(1,-2,1)^\top.
+  \]
+\end{itemize}
+\notetarget{note:06:constraint-projectors}
+\begin{itemize}
+\item Gram--Schmidt on \(u,v\) gives
+  \[
+  u^\top u=2,\quad u^\top v=-2,\qquad
+  w=v-\frac{u^\top v}{u^\top u}u=v+u=(1,1,1)^\top.
+  \]
+  Since \(u^\top w=0\) and \(w^\top w=3\),
+  \[
+  P=\frac{uu^\top}{2}+\frac{ww^\top}{3}
+   =\frac16\begin{pmatrix}5&2&-1\\2&2&2\\-1&2&5\end{pmatrix}.
+  \]
+\item Alternatively, \(n^\top n=6\), so the complementary projection is
+  \[
+  I_3-P=\frac{nn^\top}{6}
+  =\frac16\begin{pmatrix}1&-2&1\\-2&4&-2\\1&-2&1\end{pmatrix}.
+  \]
+  Subtraction from \(I_3\) gives the same \(P\).
+\end{itemize}
+\notetarget{note:06:constraint-residual}
+\begin{itemize}
+\item Put \(\delta=n^\top b=b_1-2b_2+b_3\). Then
+  \[
+  e=b-Pb=\frac{\delta}{6}n,\qquad
+  \norm{e}^2=\frac{\delta^2}{36}n^\top n=\frac{\delta^2}{6}.
+  \]
+  Every \(Ax\) lies in \(W\), and \(Pb\) is attained by some \(Ax\).
+  The closest-point theorem therefore gives
+  \(\min_x\norm{b-Ax}^2=\delta^2/6\).
+\item The consistency criterion is \(\delta=0\). In that case,
+  \(b=b_1u+b_2v\), so
+  \[
+  x_1=b_2-2b_1,\qquad x_2=(3b_1-b_2)/2.
+  \]
+  These satisfy the first two equations, and
+  \(5x_1+6x_2=-b_1+2b_2=b_3\). The first two equations determine
+  \(x_1,x_2\) uniquely.
+\end{itemize}
+\end{example}
+
+\section*{3. Least squares}
+
+\notetarget{note:06:ls-problem}Given \(A:m\times p\) and \(y\in\R^m\),
+the \textbf{least squares problem} asks for all \(\beta\in\R^p\) minimizing
+\[
+\norm{y-A\beta}^2
+=\sum_{i=1}^m\left(y_i-\sum_{j=1}^p a_{ij}\beta_j\right)^2.
+\]
+The vectors \(A\beta\) range over exactly \(\mathcal C(A)\).
+
+% Harville 12.2.1, 12.2.5, 12.4.2--3: existence proved by the constructed projection.
+\begin{theorem}[Normal equations]\label{thm:06:normal}\notetarget{note:06:normal}
+For every \(A:m\times p\) and \(y\in\R^m\), the equations
+\[
+A^\top A\beta=A^\top y
+\]
+are consistent. Their solutions are exactly the least squares minimizers.
+If \(\beta_0\) is one solution, all solutions are
+\[
+\beta=\beta_0+z,\qquad z\in N(A).
+\]
+They all give the same fitted vector \(\hat y=A\beta_0=P_{\mathcal C(A)}y\).
+\end{theorem}
+\begin{proof}\notetarget{note:06:normal-proof}
+\begin{itemize}
+\item The projection \(\hat y=P_{\mathcal C(A)}y\) exists and belongs
+  to \(\mathcal C(A)\), so \(\hat y=A\beta_0\) for some \(\beta_0\).
+  Its residual is orthogonal to \(\mathcal C(A)\); by
+  Proposition~\ref{prop:06:gram},
+  \(A^\top(y-A\beta_0)=0\). This proves consistency.
+\item By Theorem~\ref{thm:06:closest}, \(\beta\) minimizes the criterion
+  exactly when \(y-A\beta\perp\mathcal C(A)\), or
+  \(A^\top A\beta=A^\top y\). Projection uniqueness then gives
+  \(A\beta=\hat y\).
+\item Subtracting the equations for \(\beta\) and \(\beta_0\) gives
+  \(\beta-\beta_0\in N(A^\top A)=N(A)\).
+  Conversely, adding any \(z\in N(A)\) preserves the fitted vector
+  and the normal equations. This proves the full solution formula.
+\end{itemize}
+In particular, the coefficients are unique exactly when \(N(A)=\{0\}\),
+even though the fitted vector is unique for every rank of \(A\).
+\end{proof}
+
+\begin{proposition}[Full column rank]\label{prop:06:full-rank}
+\notetarget{note:06:full-rank}
+Let \(A:m\times p\), \(y\in\R^m\), and \(\rank A=p\).
+The unique least squares coefficient vector and
+the projection matrix onto \(\mathcal C(A)\) are
+\[
+\hat\beta=(A^\top A)^{-1}A^\top y,\qquad
+P=A(A^\top A)^{-1}A^\top.
+\]
+With \(e=y-A\hat\beta\),
+\[
+A^\top e=0,\qquad
+\norm{e}^2=y^\top(I_m-P)y,\qquad \rank(I_m-P)=m-p.
+\]
+\end{proposition}
+\begin{proof}\notetarget{note:06:full-rank-proof}
+\begin{itemize}
+\item The Gram matrix is invertible by Proposition~\ref{prop:06:gram}.
+  Solving the normal equations gives \(\hat\beta\). Multiplication by
+  \(A\) gives the displayed matrix for the unique fitted vector,
+  hence for the projection.
+\item The normal equations give \(A^\top e=0\).
+  Proposition~\ref{prop:06:projector} gives
+  \(P^\top=P=P^2\). Therefore
+  \[
+  \begin{aligned}
+  \norm{e}^2&=y^\top(I_m-P)^\top(I_m-P)y\\
+  &=y^\top(I_m-2P+P^2)y=y^\top(I_m-P)y.
+  \end{aligned}
+  \]
+\item The image of \(I_m-P\) is \(\mathcal C(A)^\perp\), whose
+  dimension is \(m-\dim\mathcal C(A)=m-p\).
+\end{itemize}
+\end{proof}
+
+% Harville Exercise 12.4 and Example 12.2(c): original data and solution.
+\begin{example}\label{example:06:least-squares}\notetarget{note:06:ls-example}
+Find the least squares coefficients, fitted vector, residual, projection
+matrix, and minimum sum of squares for
+\[
+A=\begin{pmatrix}0&-2\\3&2\\6&4\end{pmatrix},\qquad
+y=\begin{pmatrix}3\\-38/5\\74/5\end{pmatrix}.
+\]
+Then append the column \(a_3=(-2,1,2)^\top\) to form
+\(\widetilde A=[\,A\ a_3\,]\), and determine all least squares coefficients
+for \(\widetilde A\). Compare the fitted vectors and minimum sums of squares.
+\par\smallskip
+\notetarget{note:06:ls-solution}
+\begin{itemize}
+\item Direct multiplication gives
+  \[
+  A^\top A=\begin{pmatrix}45&30\\30&24\end{pmatrix},\qquad
+  A^\top y=\binom{66}{38}.
+  \]
+  Since \(\det(A^\top A)=45\cdot24-30^2=180\ne0\), the Gram matrix
+  is invertible and \(A\) has full column rank. The \(2\times2\) inverse
+  formula gives
+  \[
+  (A^\top A)^{-1}=\begin{pmatrix}2/15&-1/6\\-1/6&1/4\end{pmatrix}.
+  \]
+  Thus
+  \[
+  \hat\beta=\binom{37/15}{-3/2},\qquad
+  \hat y=A\hat\beta=(3,22/5,44/5)^\top,
+  \qquad e=(0,-12,6)^\top.
+  \]
+\item Multiplying \(A(A^\top A)^{-1}A^\top\) gives
+  \[
+  P=\begin{pmatrix}1&0&0\\0&1/5&2/5\\0&2/5&4/5\end{pmatrix},\qquad
+  A^\top e=\binom{-36+36}{-24+24}=0,\qquad \norm{e}^2=180.
+  \]
+\end{itemize}
+\notetarget{note:06:dependent-solution}
+\begin{itemize}
+\item If \(a_1,a_2\) are the columns of \(A\), then
+  \(a_3=a_2-a_1/3\). Hence \(\mathcal C(\widetilde A)=\mathcal C(A)\),
+  so the fitted vector and minimum sum of squares remain \(\hat y\) and 180.
+  For \(b=(b_1,b_2,b_3)^\top\),
+  \[
+  \widetilde A b=A\binom{b_1-b_3/3}{b_2+b_3}.
+  \]
+  Because \(A\) has independent columns, this equals \(\hat y\)
+  exactly when \(b_1-b_3/3=37/15\) and \(b_2+b_3=-3/2\).
+  Therefore all minimizing coefficients are
+  \[
+  b=\begin{pmatrix}37/15+t/3\\-3/2-t\\t\end{pmatrix},\qquad t\in\R.
+  \]
+\item The singular normal equations are explicitly
+  \[
+  \begin{pmatrix}45&30&15\\30&24&14\\15&14&9\end{pmatrix}b
+  =\begin{pmatrix}66\\38\\16\end{pmatrix}.
+  \]
+  The third column of the coefficient matrix is its second minus
+  one third of its first. The equations are nevertheless consistent:
+  substitution of the displayed \(b\) gives \((66,38,16)^\top\)
+  for every \(t\). For instance \(t=-1\) gives
+  \(b=(32/15,-1/2,-1)^\top\), with the same fit and residual.
+\end{itemize}
+\end{example}
+
+% Harville 6.4(d) combined with the squared-distance proof of 12.4.1.
+% The explicit QR residual identity is supplied here as a consequence.
+\begin{proposition}[Least squares by QR]\label{prop:06:qr-ls}
+\notetarget{note:06:qr-ls}
+Let \(A=QR\) be the thin QR decomposition of a full-column-rank
+\(m\times p\) matrix, \(p\geqslant1\), and put \(P=QQ^\top\).
+For every \(y\in\R^m\) and \(\beta\in\R^p\),
+\[
+\norm{y-A\beta}^2
+=\norm{(I_m-P)y}^2+\norm{Q^\top y-R\beta}^2.
+\]
+The unique least squares coefficients are obtained by back substitution
+in \(R\hat\beta=Q^\top y\). The fitted vector and minimum sum of squares are
+\[
+\hat y=QQ^\top y,\qquad
+\norm{y-\hat y}^2=\norm{y}^2-\norm{Q^\top y}^2.
+\]
+\end{proposition}
+\begin{proof}\notetarget{note:06:qr-ls-proof}
+\begin{itemize}
+\item The columns of \(Q\) form an orthonormal basis of
+  \(\mathcal C(A)\), so \(P\) is its projection matrix. Decompose
+  \[
+  y-QR\beta=(I_m-P)y+Q(Q^\top y-R\beta).
+  \]
+  The two terms are orthogonal: the first is in
+  \(\mathcal C(Q)^\perp\) and the second in \(\mathcal C(Q)\).
+  Also \(\norm{Qz}^2=z^\top Q^\top Qz=\norm{z}^2\).
+  Pythagoras now gives the displayed identity.
+\item Put \(c=Q^\top y\). Since all \(r_{jj}>0\), back substitution
+  determines exactly one vector:
+  \[
+  \hat\beta_p=c_p/r_{pp},\qquad
+  \hat\beta_j=\frac{c_j-\sum_{k=j+1}^p r_{jk}\hat\beta_k}{r_{jj}}
+  \quad(j=p-1,\ldots,1).
+  \]
+  This makes \(\norm{c-R\beta}^2\) zero; every other \(\beta\)
+  makes it positive. Thus it gives the unique minimum, with
+  \(A\hat\beta=Qc=Py\).
+\item Applying Pythagoras to \(y=Py+(I_m-P)y\) gives
+  \[
+  \norm{y}^2=\norm{Py}^2+\norm{(I_m-P)y}^2,
+  \qquad \norm{Py}^2=\norm{Q^\top y}^2.
+  \]
+  Rearrangement gives the stated minimum sum of squares.
+\end{itemize}
+\end{proof}
+
+% Harville Exercise 6.3(a,b): the first two original vectors are the columns
+% of A; the original part (b) vector is y. QR/LS are new uses of these data.
+% The first two orthogonalization steps follow the solutions manual, 6.3(a).
+\begin{example}\label{example:06:qr-ls}\notetarget{note:06:qr-ls-example}
+Find the thin QR decomposition of \(A\), then use it to find the least
+squares coefficients, fitted vector, residual, and minimum sum of squares:
+\[
+A=\begin{pmatrix}6&-2\\0&4\\-2&4\\3&2\end{pmatrix},\qquad
+ y=\begin{pmatrix}0\\1\\0\\0\end{pmatrix}.
+\]
+\par\smallskip
+\notetarget{note:06:qr-ls-factors}
+\begin{itemize}
+\item Let \(a_1,a_2\) be the columns. Then
+  \[
+  \norm{a_1}^2=49,\qquad a_1^\top a_2=-14,\qquad
+  q_1=\frac17(6,0,-2,3)^\top,\qquad r_{12}=q_1^\top a_2=-2.
+  \]
+  The second residual is
+  \[
+  u_2=a_2+2q_1=\frac17(-2,28,24,20)^\top,
+  \qquad \norm{u_2}^2=\frac{4+784+576+400}{49}=36.
+  \]
+  Directly, \(a_1^\top u_2=(-12-48+60)/7=0\).
+  Both residuals are nonzero, and
+  \(a_1=7q_1\), \(a_2=-2q_1+6q_2\), where \(q_2=u_2/6\).
+  Hence \(A\) has independent columns and its QR factors are
+  \[
+  Q=\begin{pmatrix}
+  6/7&-1/21\\0&2/3\\-2/7&4/7\\3/7&10/21
+  \end{pmatrix},\qquad
+  R=\begin{pmatrix}7&-2\\0&6\end{pmatrix}.
+  \]
+\end{itemize}
+\notetarget{note:06:qr-ls-fit}
+\begin{itemize}
+\item Since \(y\) is the second coordinate vector,
+  \[
+  Q^\top y=\binom{0}{2/3},\qquad
+  6\hat\beta_2=2/3,\qquad
+  7\hat\beta_1-2\hat\beta_2=0.
+  \]
+  Back substitution gives \(\hat\beta_2=1/9\),
+  \(\hat\beta_1=2/63\). Thus
+  \[
+  \hat y=Q\binom{0}{2/3}
+  =\frac1{63}\begin{pmatrix}-2\\28\\24\\20\end{pmatrix},\qquad
+  e=y-\hat y=\frac1{63}\begin{pmatrix}2\\35\\-24\\-20\end{pmatrix}.
+  \]
+\item The residual is orthogonal to the columns of \(A\):
+  \[
+  A^\top e=\frac1{63}\binom{12+48-60}{-4+140-96-40}=0.
+  \]
+  The QR identity gives
+  \[
+  \min_\beta\norm{y-A\beta}^2=1-(2/3)^2=5/9.
+  \]
+  Directly, \(\norm{e}^2=(4+1225+576+400)/63^2=5/9\).
+\end{itemize}
+\end{example}

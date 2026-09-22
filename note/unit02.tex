@@ -1,18 +1,19 @@
 \documentclass[12pt]{article}
 \def\unitnumber{2}
-\def\pdftitle{Unit 2: Elementary Matrices and Vector Spaces}
+\def\pdftitle{Unit 2: Matrix Algebra and Subspaces}
 \def\runningtitle{Unit 2}
 \input{unit-preamble.tex}
-\AddToHook{env/problem/before}{\needspace{10\baselineskip}}
+\externaldocument[one-]{.build/unit01/unit01}[unit01.pdf]
+\AddToHook{env/problem/before}{\needspace{8\baselineskip}}
 \AddToHook{env/problem/after}{\nopagebreak[4]}
 \begin{document}
-{\Large\bfseries Unit 2. Elementary Matrices and Vector Spaces}\par
+{\Large\bfseries Unit 2. Matrix Algebra and Subspaces}\par
 \input{unit02-content.tex}
 \clearpage
 \section*{Exercises and solutions}
-Suggested practice: \ref{ex:02:elementary-formulas}, \ref{ex:02:row-column},
-\ref{ex:02:inverse-practice}, \ref{ex:02:one-sided}, \ref{ex:02:update},
-\ref{ex:02:plane-classification}, \ref{ex:02:sum-uniqueness},
-\ref{ex:02:geometric-span}, \ref{ex:02:commuting}, \ref{ex:02:nilpotent}.
+Suggested practice: Exercises~\ref{ex:02:bapat-2-15},
+\ref{ex:02:bapat-2-13}, \ref{ex:02:block-calculation},
+\ref{ex:02:bapat-1-11}, \ref{ex:02:bapat-1-8}, and
+\ref{ex:02:r2-subspaces}.
 \input{unit02-exercises.tex}
 \end{document}

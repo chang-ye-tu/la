@@ -1,230 +1,546 @@
-\section*{Row rank and column rank}
-For an $m\times n$ real matrix $A$, its \emph{row space} is the span of its rows in $\R^n$, and its \emph{column space} is
+% Harville 22.1, 22.2.1, 22.4; Lang LA III and IV.
+\section*{1. Linear maps, kernels, and images}
+
+\notetarget{note:04:linear}All spaces in this unit are finite-dimensional real
+linear spaces. A \textbf{linear map} \(T:V\to W\) satisfies
 \[
- \operatorname{col}A=\{Ax:x\in\R^n\}\subseteq\R^m.
+T(ax+by)=aT(x)+bT(y)\qquad(x,y\in V,\ a,b\in\R).
 \]
-The dimensions of these spaces are initially called the row rank and column rank. Each equals the size of a largest independent sublist of the corresponding rows or columns, by basis extraction.
-
-\begin{theorem}[What elementary operations preserve]\label{thm:04:operations}
-Elementary row and column operations preserve both the row rank and the column rank.
-\end{theorem}
-\begin{proof}
-A row operation replaces each new row by a combination of old rows; the inverse operation expresses each old row in terms of new rows. Therefore their row spaces are equal.
-
-Write the row operation as $A\mapsto EA$, where $E$ is invertible. For any coefficient column $c$,
+Here \(V\) is the domain and \(W\) the codomain. Taking \(a=b=0\)
+gives \(T(0)=0\); repeated addition then gives
 \[
- Ac=0\quad\Longleftrightarrow\quad EAc=0.
+T\left(\sum_{j=1}^k c_jv_j\right)=\sum_{j=1}^k c_jT(v_j),
 \]
-Thus exactly the same coefficients give relations among the corresponding columns before and after the operation. This applies to any chosen column sublist by setting all other coefficients to zero. Consequently a chosen sublist is independent before the operation exactly when it is independent afterward. The column ranks are equal, although the column spaces need not be the same subsets of $\R^m$.
+including the empty sum. The zero map \(x\mapsto0\) and identity map
+\(I_V:x\mapsto x\) satisfy the defining equality directly.
+For \(A:m\times n\), \(T_A:\R^n\to\R^m,\ x\mapsto Ax\), is linear by
+the distributive laws. More generally, fixed \(A:m\times p,B:q\times n\) give
+the linear map \(X\mapsto AXB\) from \(\R^{p\times q}\) to \(\R^{m\times n}\), since
+\[
+A(aX+bY)B=aAXB+bAYB.
+\]
 
-Transposing turns column operations into row operations, interchanging the roles of rows and columns. Hence column operations also preserve both ranks.
+\notetarget{note:04:kernel-image}Define
+\[
+\ker T=\{x\in V:T(x)=0\},\qquad
+\im T=T(V)=\{T(x):x\in V\}.
+\]
+The map is \textbf{injective} if \(T(x)=T(y)\) implies \(x=y\), and
+\textbf{surjective} if \(\im T=W\). In the matrix case,
+\(\ker T_A=N(A)\) and \(\im T_A=\mathcal C(A)\).
+
+\begin{proposition}\label{prop:04:basic}\notetarget{note:04:basic}
+For a linear map \(T:V\to W\):
+\begin{enumerate}
+\item \(\ker T\) and \(\im T\) are subspaces of \(V\) and \(W\).
+\item \(T(\Span(v_1,\ldots,v_k))=\Span(T(v_1),\ldots,T(v_k))\).
+\item \(T\) is injective if and only if \(\ker T=\{0\}\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}\notetarget{note:04:basic-proof}
+\begin{itemize}
+\item Both sets contain zero. If \(x,y\in\ker T\), then
+  \(T(ax+by)=0\). If \(u=T(x),v=T(y)\), then
+  \(au+bv=T(ax+by)\in\im T\). These are the subspace tests.
+\item As \(c_1,\ldots,c_k\) range over \(\R\), the identity
+  \[
+  T\left(\sum_jc_jv_j\right)=\sum_jc_jT(v_j)
+  \]
+  gives every vector on each side of (b). Empty lists give \(\{0\}\).
+\item An injective map has only one preimage of zero, namely zero.
+  Conversely, \(T(x)=T(y)\) gives \(x-y\in\ker T\);
+  if that kernel is \(\{0\}\), then \(x=y\).
+\end{itemize}
 \end{proof}
 
-\begin{theorem}[Rank normal form]\label{thm:04:rank}
-Every $m\times n$ matrix can be transformed by elementary row and column operations into
-\[
- J_r=\begin{pmatrix}I_r&0\\0&0\end{pmatrix},
- \qquad 0\leqslant r\leqslant\min(m,n),
-\]
-with the block sizes determined by the original rectangular shape. Its row rank and column rank both equal $r$.
+\begin{theorem}[Prescribing the images of a basis]\label{thm:04:prescribed}
+\notetarget{note:04:prescribed}
+Let \(B=(v_1,\ldots,v_n)\) be a basis of \(V\) and let
+\(w_1,\ldots,w_n\) be any vectors of \(W\).
+There is exactly one linear map \(T:V\to W\) such that \(T(v_j)=w_j\).
 \end{theorem}
-\begin{proof}
-If $A=0$, take $r=0$. Otherwise move a nonzero entry to position $(1,1)$ by row and column interchanges. Subtract multiples of row one to clear the rest of column one. Then subtract multiples of column one to clear the rest of row one. The matrix now has the form
-\[
- \begin{pmatrix}a&0\\0&B\end{pmatrix},\qquad a\ne0.
-\]
-Operations on $B$ leave the first row and column undisturbed. Repeat on the smaller rectangular block while it is nonzero. This process terminates after at most $\min(m,n)$ steps and gives a diagonal string of nonzero entries followed by zeros. Scale the rows containing those entries to make them one. The resulting matrix is $J_r$, whose first $r$ rows and columns are independent and span their respective spaces. Theorem~\ref{thm:04:operations} transfers both ranks back to $A$.
+\begin{proof}\notetarget{note:04:prescribed-proof}
+\begin{itemize}
+\item Each \(v\in V\) has unique coefficients \(v=\sum_jx_jv_j\).
+  Define \(T(v)=\sum_jx_jw_j\). Uniqueness of the coefficients makes
+  this a well-defined map.
+\item If \(v=\sum_jx_jv_j,\ u=\sum_jy_jv_j\), the coefficients of
+  \(av+bu\) are \(ax_j+by_j\). Hence
+  \[
+  T(av+bu)=\sum_j(ax_j+by_j)w_j=aT(v)+bT(u).
+  \]
+  In particular \(T(v_j)=w_j\).
+\item Any linear map with these basis images must send
+  \(\sum_jx_jv_j\) to \(\sum_jx_jw_j\), so it equals \(T\).
+\end{itemize}
+For \(V=\{0\}\), the empty basis prescribes the unique map \(0\mapsto0\).
 \end{proof}
-Their common value is the \emph{rank}, denoted $\operatorname{rank}A$. In particular,
-\[
- \operatorname{rank}A=\operatorname{rank}A^\top,\qquad
- 0\leqslant\operatorname{rank}A\leqslant\min(m,n).
-\]
-A matrix has \emph{full column rank} if its rank is $n$ and \emph{full row rank} if its rank is $m$.
 
-\begin{example}[Column reduction]
-For
+\notetarget{note:04:basis-images}Thus two linear maps agreeing on a basis
+agree everywhere. More generally, agreement on a spanning list suffices:
+expand any vector in that list and apply linearity to each summand.
+
+\begin{theorem}[Rank--nullity]\label{thm:04:nullity}\notetarget{note:04:nullity}
+For every linear map \(T:V\to W\),
 \[
- A=\begin{pmatrix}1&2&-3\\2&1&0\\-2&-1&3\\-1&4&-2\end{pmatrix},
+\dim V=\dim\ker T+\dim\im T.
 \]
-perform $C_2\leftarrow C_2-2C_1$, $C_3\leftarrow C_3+3C_1$, and then $C_3\leftarrow C_3+2C_2$ using the current second column. The result is
+The number \(\dim\im T\) is the \textbf{rank} of \(T\), written \(\rank T\).
+\end{theorem}
+\begin{proof}\notetarget{note:04:nullity-proof}
+\begin{itemize}
+\item Extend a basis \((z_1,\ldots,z_s)\) of \(\ker T\) to a basis
+  \((x_1,\ldots,x_r,z_1,\ldots,z_s)\) of \(V\), using Unit 3,
+  Theorem~\ref{three-thm:03:extract}.
+\item Write any \(v\in V\) as
+  \(v=\sum_i a_ix_i+\sum_jb_jz_j\). Then
+  \(T(v)=\sum_i a_iT(x_i)\); hence the \(T(x_i)\) span \(\im T\).
+\item Suppose \(\sum_i c_iT(x_i)=0\). Then
+  \(\sum_i c_ix_i\in\ker T\), so \(\sum_i c_ix_i=\sum_jd_jz_j\).
+  Independence of the extended basis forces every \(c_i,d_j\) to be zero.
+  Thus \(T(x_1),\ldots,T(x_r)\) are independent.
+\item They form an image basis. Consequently
+  \(\dim\im T=r,\ \dim\ker T=s,\ \dim V=r+s\).
+\end{itemize}
+The argument includes either empty list and the zero domain.
+\end{proof}
+
+\notetarget{note:04:isomorphism}A linear bijection is an \textbf{isomorphism}.
+\begin{itemize}
+\item Its inverse is linear: if \(y=T(x),y'=T(x')\), then
 \[
- \begin{pmatrix}1&0&0\\2&-3&0\\-2&3&3\\-1&6&7\end{pmatrix}.
+T^{-1}(ay+by')=T^{-1}(T(ax+bx'))=ax+bx'.
 \]
-In a zero combination of its columns, rows one, two, and three successively force all coefficients to vanish. Thus there are three independent columns, and the rank is three. These operations preserve rank; their new columns should not be reported as columns selected from the original matrix.
+\item If \((v_j)\) is a basis of \(V\), surjectivity gives
+\(w=T(v)=\sum_jc_jT(v_j)\) for every \(w\in W\). Thus the images span \(W\).
+For independence,
+\[
+\sum_jc_jT(v_j)=0
+\ \Longrightarrow\ T\left(\sum_jc_jv_j\right)=0
+\ \Longrightarrow\ \sum_jc_jv_j=0
+\ \Longrightarrow\ c_j=0\quad(\forall j).
+\]
+Here the last two implications use injectivity and the original basis.
+An isomorphism therefore sends a basis to a basis, so \(\dim V=\dim W\).
+\item Conversely, given bases \((v_j)\), \((w_j)\) of the same length,
+Theorem~\ref{thm:04:prescribed} constructs \(T(v_j)=w_j\).
+Every \(\sum_jc_jw_j\) has the unique preimage \(\sum_jc_jv_j\),
+so \(T\) is an isomorphism.
+\end{itemize}
+
+\begin{proposition}\label{prop:04:equal-dim}\notetarget{note:04:equal-dim}
+If \(\dim V=\dim W\), a linear map \(T:V\to W\) is injective
+if and only if it is surjective.
+\end{proposition}
+\begin{proof}\notetarget{note:04:equal-dim-proof}
+By Proposition~\ref{prop:04:basic} and rank--nullity,
+\[
+T\text{ injective}
+\Longleftrightarrow\dim\ker T=0
+\Longleftrightarrow\dim\im T=\dim V=\dim W.
+\]
+Since \(\im T\subseteq W\), the last equality is equivalent to
+\(\im T=W\), by the equal-dimension subspace criterion of Unit 3.
+\end{proof}
+
+% Lang LA III §3.15(a,b,c), Shakarchi III §3.15; image is an added application.
+\begin{example}[Symmetrization]\label{example:04:symmetrization}
+\notetarget{note:04:symmetrization}
+On \(\R^{n\times n}\), \(n\geqslant1\), define
+\[
+P(A)=\frac{A+A^\top}{2}.
+\]
+(a) Prove linearity. (b) Find \(\ker P\). (c) Find its dimension.
+Also determine \(\im P\) and \(\rank P\).
+\par\smallskip
+\notetarget{note:04:symmetrization-solution}
+(a) Transpose is linear, so
+\[
+P(aA+bB)=\frac{aA+bB+aA^\top+bB^\top}{2}=aP(A)+bP(B).
+\]
+(b) \(P(A)=0\) is exactly \(A^\top=-A\): the kernel is the skew-symmetric space.
+(c) Such matrices have zero diagonal and \(a_{ji}=-a_{ij}\). Thus
+\[
+A=\sum_{i<j}a_{ij}(E_{ij}-E_{ji}).
+\]
+These matrices are independent by their entries above the diagonal.
+They form a basis with \(n(n-1)/2\) members: the \(n(n-1)\) ordered
+distinct pairs occur in reversal pairs.
+Every \(P(A)\) is symmetric; conversely, a symmetric \(S\) satisfies
+\(P(S)=S\). Therefore the image is the symmetric space and
+\[
+\rank P=n^2-\frac{n(n-1)}2=\frac{n(n+1)}2.
+\]
 \end{example}
 
-\begin{proposition}[Rank and echelon form]\label{prop:04:pivots}
-The rank of a row-echelon matrix is its number of nonzero rows. Consequently elimination computes rank by counting pivots.
-\end{proposition}
-\begin{proof}
-Let the nonzero rows have successive pivot columns $j_1<\cdots<j_r$. In a zero combination of these rows, column $j_1$ forces the coefficient of row one to be zero; column $j_2$ then forces the coefficient of row two to be zero, and so on. Thus the nonzero rows are independent. They span the row space because every remaining row is zero. Row operations preserve rank.
-\end{proof}
-To extract a column basis of an original matrix, take its columns at the pivot indices of an echelon form. The selected echelon columns are independent, so the corresponding original columns are independent by Theorem~\ref{thm:04:operations}. Their number equals the rank, hence they span the original column space. The nonzero echelon rows themselves form a basis of the original row space.
+\section*{2. Coordinates and matrix representations}
 
-\begin{example}[Different ranks from similar-looking matrices]\label{eg:04:numerical-rank}
+\notetarget{note:04:coordinates}For an \textbf{ordered basis}
+\(B=(v_1,\ldots,v_n)\), the coordinate column \([v]_B\) is defined by
+\[
+v=\sum_jx_jv_j,\qquad [v]_B=(x_1,\ldots,x_n)^\top.
+\]
+The coordinate map \(v\mapsto[v]_B\) is a linear bijection onto \(\R^n\).
+Indeed, coefficients of \(av+bu\) are \(a[v]_B+b[u]_B\);
+equal coordinate columns give equal vectors, and every \(x\in\R^n\)
+is the coordinate column of \(\sum_jx_jv_j\).
+The order is part of the basis data.
+For the zero space, \(\R^0\) contains just the empty coordinate column.
+The unique \(0\times0\) matrix is \(I_0\); its product with itself is
+\(I_0\), so \(I_0^{-1}=I_0\). Products with empty inner index sets use
+the empty-sum convention of Unit 3.
+
+\begin{theorem}[Matrix of a linear map]\label{thm:04:representation}
+\notetarget{note:04:representation}
+Let \(B=(v_1,\ldots,v_n)\) and \(C=(w_1,\ldots,w_m)\) be ordered bases
+of \(V,W\). For a linear map \(T:V\to W\), put
+\[
+A=[T]_{C\leftarrow B}
+ =\bigl[\,[T(v_1)]_C\ \cdots\ [T(v_n)]_C\,\bigr]\in\R^{m\times n}.
+\]
+Then \([T(v)]_C=A[v]_B\) for every \(v\in V\).
+This identity determines \(A\) uniquely.
+Conversely, every \(m\times n\) matrix is the matrix of exactly one
+linear map in these bases.
+\end{theorem}
+\begin{proof}\notetarget{note:04:representation-proof}
+\begin{itemize}
+\item Write \(T(v_j)=\sum_i a_{ij}w_i\) and \(v=\sum_jx_jv_j\). Then
+  \[
+  T(v)=\sum_jx_j\sum_i a_{ij}w_i
+  =\sum_i\left(\sum_j a_{ij}x_j\right)w_i.
+  \]
+  Uniqueness of the \(C\)-coefficients gives \([T(v)]_C=Ax\).
+\item Applying the identity to \(v_j\), whose coordinate column is \(e_j\),
+  determines each column of \(A\).
+\item Given \(A\), prescribe \(T(v_j)=\sum_i a_{ij}w_i\).
+  Theorem~\ref{thm:04:prescribed} gives existence and uniqueness.
+\end{itemize}
+\end{proof}
+
+\notetarget{note:04:rank-coordinates}Coordinates also identify the two
+kernels and the two images:
+\[
+\{[v]_B:v\in\ker T\}=N(A),\qquad
+\{[w]_C:w\in\im T\}=\mathcal C(A).
+\]
+For the first equality, \(T(v)=0\) is equivalent to \(A[v]_B=0\),
+and every coordinate column has a preimage \(v\).
+For the second, each image coordinate is \(A[v]_B\); conversely,
+any \(Ax\) is the coordinate column of \(T(\sum_jx_jv_j)\).
+The restricted coordinate maps are linear bijections. Since such maps
+preserve bases, they preserve dimension, giving
+\[
+\rank T=\rank A,\qquad \dim\ker T=\dim N(A).
+\]
+
+% Lang LA IV §3 Example 1; original numerical values retained.
+\begin{example}\label{example:04:representation}\notetarget{note:04:matrix-example}
+Suppose \(B=(v_1,v_2)\), \(C=(w_1,w_2,w_3)\) are ordered bases
+of \(V,W\), and a linear map \(T:V\to W\) satisfies
+\[
+T(v_1)=3w_1-w_2+17w_3,\qquad T(v_2)=w_1+w_2-w_3.
+\]
+Find the representing matrix and the image of \(x_1v_1+x_2v_2\).
+\par\smallskip
+\notetarget{note:04:matrix-example-solution}
+The coefficients of the two displayed images are the two columns:
+\[
+[T]_{C\leftarrow B}=
+\begin{pmatrix}3&1\\-1&1\\17&-1\end{pmatrix}.
+\]
+Consequently
+\[
+T(x_1v_1+x_2v_2)
+=(3x_1+x_2)w_1+(-x_1+x_2)w_2+(17x_1-x_2)w_3.
+\]
+\end{example}
+
+\notetarget{note:04:map-operations}For maps \(T,S:V\to W\), define
+\((aT+bS)(v)=aT(v)+bS(v)\). If both maps are linear, expansion at
+\(\alpha u+\beta v\) gives
+\[
+(aT+bS)(\alpha u+\beta v)
+=\alpha(aT+bS)(u)+\beta(aT+bS)(v).
+\]
+Thus their linear combination is linear; its values on basis members give
+\([aT+bS]_{C\leftarrow B}=a[T]_{C\leftarrow B}+b[S]_{C\leftarrow B}\).
+
+\begin{proposition}[Composition and inverses]\label{prop:04:composition}
+\notetarget{note:04:composition}
+Let \(T:V\to W\) and \(S:W\to U\) be linear, with representing matrices
+\(A=[T]_{C\leftarrow B}\) and \(D=[S]_{E\leftarrow C}\).
+The composition \(ST:v\mapsto S(T(v))\) is linear, and
+\[
+[ST]_{E\leftarrow B}=DA.
+\]
+Also \([I_V]_{B\leftarrow B}=I_n\). If \(T\) is an isomorphism,
+\[
+[T^{-1}]_{B\leftarrow C}=A^{-1}.
+\]
+\end{proposition}
+\begin{proof}\notetarget{note:04:composition-proof}
+\begin{itemize}
+\item Successive linearity gives
+  \(ST(av+bu)=S(aT(v)+bT(u))=aST(v)+bST(u)\).
+\item For every \(v\),
+  \([ST(v)]_E=D[T(v)]_C=DA[v]_B\).
+  Uniqueness of the representing matrix gives the formula.
+\item The identity sends \(v_j\) to \(v_j\), giving the columns \(e_j\).
+  The inverse map is linear, as already proved.
+  Its matrix \(H\) satisfies \(HA=I_n\) and \(AH=I_m\) from
+  \(T^{-1}T=I_V,\ TT^{-1}=I_W\).
+  An isomorphism preserves dimension, so \(m=n\), and \(H=A^{-1}\).
+\end{itemize}
+\end{proof}
+
+\begin{theorem}[Changing bases]\label{thm:04:change}\notetarget{note:04:change}
+Keep \(A=[T]_{C\leftarrow B}\). Let \(E=(u_1,\ldots,u_n)\)
+and \(F=(z_1,\ldots,z_m)\) be new bases of \(V,W\). Set
+\[
+R=[I_V]_{B\leftarrow E},\qquad Q=[I_W]_{C\leftarrow F}.
+\]
+Then \(R,Q\) are invertible, and
+\[
+[v]_B=R[v]_E,\qquad [w]_C=Q[w]_F,\qquad
+[T]_{F\leftarrow E}=Q^{-1}AR.
+\]
+\end{theorem}
+\begin{proof}\notetarget{note:04:change-proof}
+\begin{itemize}
+\item The first two identities are the representation formula applied
+  to identity maps. Composing the coordinate changes in reverse order
+  gives \(I_n\) or \(I_m\); hence both changes are invertible.
+\item For every \(v\in V\),
+  \[
+  Q[T(v)]_F=[T(v)]_C=A[v]_B=AR[v]_E.
+  \]
+  Multiplying by \(Q^{-1}\) gives the claimed matrix.
+\end{itemize}
+\end{proof}
+
+\notetarget{note:04:similarity}For \(T:V\to V\), using the same basis
+on domain and codomain gives the special rule
+\[
+[T]_{E\leftarrow E}=R^{-1}[T]_{B\leftarrow B}R.
+\]
+Matrices \(A,H\) are called \textbf{similar} if \(H=R^{-1}AR\) for an
+invertible \(R\).
+Every such \(R\) is a change-of-basis matrix: define \(u_j\) by
+\([u_j]_B=Re_j\). Its columns form a basis of \(\R^n\), and the inverse
+coordinate map sends that basis to \((u_j)\).
+Thus similar matrices represent the same linear map in different bases.
+In particular they have equal rank, by the coordinate rank equality above.
+
+% Lang LA IV §3.1(a); manual gives final matrix only, intermediate steps supplied.
+\begin{example}[A change of coordinates]\label{example:04:change}
+\notetarget{note:04:change-example}
+In \(\R^3\), take the ordered lists
+\[
+B=((1,1,0)^\top,(-1,1,1)^\top,(0,1,2)^\top),\qquad
+C=((2,1,1)^\top,(0,0,1)^\top,(-1,1,1)^\top).
+\]
+Verify that they are bases and find \(P=[I]_{C\leftarrow B}\).
+\par\smallskip
+\notetarget{note:04:change-example-solution}
+Let \(U,V\) contain the columns of \(B,C\):
+\[
+U=\begin{pmatrix}1&-1&0\\1&1&1\\0&1&2\end{pmatrix},
+\qquad V=\begin{pmatrix}2&0&-1\\1&0&1\\1&1&1\end{pmatrix}.
+\]
+If \(U(a,b,c)^\top=0\), its first and third equations give \(a=b,\ b=-2c\);
+the second gives \(a+b+c=-3c=0\). Thus all three coefficients are zero,
+and the columns of \(U\) are a basis.
+For any \(u=(u_1,u_2,u_3)^\top\), solve \(Vp=u\):
+\[
+2p_1-p_3=u_1,\qquad p_1+p_3=u_2,\qquad p_1+p_2+p_3=u_3.
+\]
+These have the unique solution
+\[
+p_1=(u_1+u_2)/3,\qquad p_2=u_3-u_2,\qquad
+p_3=(2u_2-u_1)/3,
+\]
+also proving that \(C\) is a basis. Substitute the three columns of \(U\):
+\[
+P=\begin{pmatrix}2/3&0&1/3\\-1&0&1\\1/3&1&2/3\end{pmatrix},
+\qquad VP=U.
+\]
+The direction is fixed by \([v]_C=P[v]_B\).
+\end{example}
+
+\section*{3. Restrictions, product ranks, and matrix equations}
+
+\notetarget{note:04:restriction}For a subspace \(U\subseteq V\),
+the \textbf{restriction} \(T|_U:U\to W\) is defined by
+\(T|_U(x)=T(x)\) for \(x\in U\).
+It is linear: \(ax+by\in U\) and
+\(T|_U(ax+by)=aT|_U(x)+bT|_U(y)\).
+Its kernel and image are
+\[
+\ker(T|_U)=\{x\in U:T(x)=0\}=U\cap\ker T,
+\qquad \im(T|_U)=\{T(x):x\in U\}=T(U).
+\]
+
+\begin{theorem}[Rank of a composition]\label{thm:04:restriction}
+\notetarget{note:04:product-rank}
+For linear maps \(S:V\to W,\ T:W\to Z\),
+\[
+\rank(TS)=\rank S-\dim(\im S\cap\ker T).
+\]
+In particular, for \(A:m\times n,\ B:n\times p\),
+\[
+\rank(AB)=\rank B-\dim(\mathcal C(B)\cap N(A)).
+\]
+\end{theorem}
+\begin{proof}\notetarget{note:04:product-rank-proof}
+\begin{itemize}
+\item Put \(U=\im S\). Then
+\(\ker(T|_U)=U\cap\ker T\) and
+\(\im(T|_U)=T(S(V))=\im(TS)\).
+\item Rank--nullity for \(T|_U\) gives
+\[
+\rank(TS)=\dim U-\dim(U\cap\ker T)
+=\rank S-\dim(\im S\cap\ker T).
+\]
+\item Take \(S(x)=Bx,\ T(y)=Ay\) to obtain the matrix formula.
+\end{itemize}
+\end{proof}
+
+\begin{proposition}[Product-rank bounds]\label{prop:04:bounds}
+\notetarget{note:04:bounds}
+For \(A:m\times n,\ B:n\times p\),
+\[
+\rank A+\rank B-n
+\leqslant\rank(AB)\leqslant\min(\rank A,\rank B).
+\]
+Moreover,
+\[
+AB=0\Longleftrightarrow\mathcal C(B)\subseteq N(A);
+\quad AB=0\Longrightarrow\rank A+\rank B\leqslant n.
+\]
+\end{proposition}
+\begin{proof}\notetarget{note:04:bounds-proof}
+\begin{itemize}
+\item The intersection in Theorem~\ref{thm:04:restriction} has dimension
+  between \(0\) and \(\dim N(A)=n-\rank A\). Substitution gives the
+  lower bound and the upper bound \(\rank(AB)\leqslant\rank B\).
+\item Every column combination \(ABx=A(Bx)\) lies in \(\mathcal C(A)\).
+  Hence \(\mathcal C(AB)\subseteq\mathcal C(A)\), giving the other upper bound.
+\item \(AB=0\) means that \(A\) annihilates every column of \(B\).
+  By linearity this is equivalent to annihilating their entire span.
+  The final inequality follows by setting \(\rank(AB)=0\) in the lower bound.
+\end{itemize}
+\end{proof}
+
+\notetarget{note:04:rank-equality}The exact formula also shows
+\[
+\rank(AB)=\rank B
+\Longleftrightarrow\mathcal C(B)\cap N(A)=\{0\}.
+\]
+Indeed, equality holds exactly when the subtracted dimension is zero;
+a subspace has dimension zero exactly when it is \(\{0\}\).
+The lower bound is called \textbf{Sylvester's inequality}.
+
+% MA 4.16; original counterexample retained.
+\begin{example}\label{example:04:ab-ba}\notetarget{note:04:ab-ba}
+Must \(AB\) and \(BA\) have the same rank for square matrices \(A,B\)?
 Consider
 \[
- A=\begin{pmatrix}1&5&6\\2&6&8\\7&1&8\end{pmatrix},\qquad
- B=\begin{pmatrix}1&5&6&3\\2&1&4&1\\3&5&5&4\end{pmatrix}.
+A=\begin{pmatrix}1&0\\1&0\end{pmatrix},
+\qquad B=\begin{pmatrix}0&0\\1&1\end{pmatrix}.
 \]
-For $A$, the third column is the sum of the first two. The first two are independent: their first two coordinates give $x+5y=0$, $2x+6y=0$, hence $x=y=0$. Thus $\operatorname{rank}A=2$.
-For $B$, subtract twice row one from row two and three times row one from row three:
+\par\smallskip
+\notetarget{note:04:ab-ba-solution}
+Direct multiplication gives
 \[
- B\longrightarrow
- \begin{pmatrix}1&5&6&3\\0&-9&-8&-5\\0&-10&-13&-5\end{pmatrix}.
+AB=0,\qquad BA=\begin{pmatrix}0&0\\2&0\end{pmatrix}.
 \]
-Replacing row three by $9R_3-10R_2$ gives $(0,0,-37,5)$, so there are three pivots and $\operatorname{rank}B=3$. A $3\times4$ matrix cannot have rank four because its column space is contained in $\R^3$.
+Their ranks are \(0\) and \(1\): the second matrix has one nonzero column.
+Thus their ranks can differ, although Unit 2 gives
+\(\tr(AB)=\tr(BA)\).
 \end{example}
 
-\begin{theorem}[Rank factorization]\label{thm:04:factorization}
-If $A$ has rank $r>0$, there exist $B\in\R^{m\times r}$ and $C\in\R^{n\times r}$, both of rank $r$, such that $A=BC^\top$. Consequently $A$ is a sum of $r$ rank-one matrices.
+\begin{proposition}[Frobenius's inequality]\label{prop:04:frobenius}
+\notetarget{note:04:frobenius}
+For \(A:m\times n,\ B:n\times p,\ C:p\times q\),
+\[
+\rank(AB)+\rank(BC)\leqslant\rank B+\rank(ABC).
+\]
+\end{proposition}
+\begin{proof}\notetarget{note:04:frobenius-proof}
+\begin{itemize}
+\item Set \(U=\mathcal C(B)\), \(U'=\mathcal C(BC)\).
+Since \(BCx=B(Cx)\), we have \(U'\subseteq U\).
+\item Apply Theorem~\ref{thm:04:restriction} twice:
+\[
+\begin{aligned}
+\rank B-\rank(AB)&=\dim(U\cap N(A)),\\
+\rank(BC)-\rank(ABC)&=\dim(U'\cap N(A)).
+\end{aligned}
+\]
+\item The inclusion \(U'\cap N(A)\subseteq U\cap N(A)\) gives
+\[
+\rank(BC)-\rank(ABC)\leqslant\rank B-\rank(AB).
+\]
+Rearrange to obtain the stated inequality.
+\end{itemize}
+\end{proof}
+
+\begin{theorem}[A matrix of right-hand sides]\label{thm:04:matrix-equation}
+\notetarget{note:04:matrix-equation}
+Let \(A:m\times n\), \(B:m\times q\), with \(m,n,q\geqslant1\),
+and let \(X:n\times q\) be unknown.
+Then
+\[
+AX=B\text{ is consistent}
+\Longleftrightarrow\mathcal C(B)\subseteq\mathcal C(A)
+\Longleftrightarrow\rank[\,A\ B\,]=\rank A.
+\]
+If \(X_0\) is a solution and the columns of \(K:n\times(n-r)\)
+form a basis of \(N(A)\), where \(r=\rank A\), all solutions are
+\[
+X=X_0+KZ,\qquad Z\in\R^{(n-r)\times q}.
+\]
+Different \(Z\) give different solutions. In particular, a consistent
+equation has a unique solution exactly when \(\rank A=n\).
 \end{theorem}
-\begin{proof}
-Select a basis $b_1,\ldots,b_r$ from the columns of $A$ and let $B$ have these columns. Write each column $a_j$ uniquely as $\sum_{i=1}^r c_{ji}b_i$. Then $A=BC^\top$. The columns of $C^\top$ at the selected indices are the standard vectors of $\R^r$, because the selected columns of $A$ are the $b_i$ themselves. Thus $C^\top$ has rank $r$, and so does $C$.
-If $c_i$ is column $i$ of $C$, multiplication gives
-$A=\sum_{i=1}^r b_ic_i^\top$. Each outer product has rank one: its columns are multiples of the nonzero vector $b_i$, and at least one multiple is nonzero because $c_i\ne0$.
-\end{proof}
-For rank zero, $A=0$ and the corresponding sum is empty.
-
-\begin{example}[Constructing the factors]\label{eg:04:factorization}
-For the matrix $A$ in Example~\ref{eg:04:numerical-rank}, choose
-\[
- B=\begin{pmatrix}1&5\\2&6\\7&1\end{pmatrix},\qquad
- C=\begin{pmatrix}1&0\\0&1\\1&1\end{pmatrix}.
-\]
-The coordinate columns of $a_1,a_2,a_3$ are $(1,0)^\top,(0,1)^\top,(1,1)^\top$, so
-\[
- A=BC^\top
- =\begin{pmatrix}1\\2\\7\end{pmatrix}(1,0,1)
-  +\begin{pmatrix}5\\6\\1\end{pmatrix}(0,1,1).
-\]
-Both factors have two independent columns. Merely displaying a product with two inner columns would prove only an upper bound on rank; their independence establishes the full factorization claim.
-\end{example}
-
-\section*{Mappings and linear mappings}
-A \emph{mapping} $F:V\to W$ assigns exactly one element $F(v)\in W$ to each $v\in V$. Its \emph{image} is $F(V)=\{F(v):v\in V\}$. For a subset $S\subseteq V$, write $F(S)=\{F(s):s\in S\}$; for $T\subseteq W$, its \emph{preimage} is $F^{-1}(T)=\{v:F(v)\in T\}$. Preimage notation does not assert that an inverse mapping exists.
-
-\begin{example}[An image requires both inclusions]
-Let $F(x,y)=(2x,3y)$ and let $S=\{(x,y):x^2+y^2=1\}$. If $(u,v)=F(x,y)$ with $(x,y)\in S$, then $u^2/4+v^2/9=1$. Conversely, a point satisfying this ellipse equation is the image of $(u/2,v/3)$, which belongs to $S$. Therefore
-\[
- F(S)=\{(u,v):u^2/4+v^2/9=1\}.
-\]
-Showing only that images satisfy the ellipse equation would establish containment, not equality.
-\end{example}
-
-A mapping $L:V\to W$ between real vector spaces is \emph{linear} if
-\[
- L(u+v)=L(u)+L(v),\qquad L(cu)=cL(u)
-\]
-for all $u,v\in V$ and $c\in\R$. These rules give $L(0)=0$, $L(-v)=-L(v)$, and, by induction,
-\[
- L\left(\sum_i c_iv_i\right)=\sum_i c_iL(v_i).
-\]
-The sum and scalar multiple of linear mappings are linear under pointwise operations, so the collection of linear mappings $V\to W$ is itself a vector space.
-
-\begin{example}[Linear and nonlinear rules]
-Matrix multiplication $L_A(x)=Ax$, the functional $x\mapsto a\cdot x$, the identity and zero mappings, and the coordinate projection $(x,y,z)\mapsto(x,y)$ are linear. For example, the matrix rule follows from $A(x+y)=Ax+Ay$ and $A(cx)=cAx$.
-Differentiation $D:C^1(\R)\to C(\R)$ is linear by the sum and scalar rules for derivatives. A translation $x\mapsto x+b$ is linear exactly when $b=0$: otherwise it does not send zero to zero. The function $(x,y)\mapsto xy$ sends zero to zero but is not linear, since it takes $(1,0)$ and $(0,1)$ to zero and their sum to one.
-\end{example}
-
-\begin{example}[Characterizing the identity by its action]
-The equation $I_nx=x$ holds for every $x\in\R^n$ by the coordinate formula. Conversely, if a matrix $B\in\R^{n\times n}$ satisfies $Bx=x$ for every $x$, then $Be_j=e_j$ for each $j$. These are the columns of $B$, so $B=I_n$. More generally, for $A\in\R^{m\times n}$, multiplying its columns by $I_m$ gives $I_mA=A$, while column $j$ of $AI_n$ is $Ae_j$, the original column $j$. Thus $I_mA=AI_n=A$ with the two identity sizes determined separately.
-\end{example}
-
-\begin{proposition}[Coordinate test for linearity]
-A mapping $F:V\to\R^m$, written $F(v)=(f_1(v),\ldots,f_m(v))^\top$, is linear if and only if every scalar-valued coordinate function $f_i$ is linear.
-\end{proposition}
-\begin{proof}
-Both linearity identities for $F$ hold exactly when they hold in each coordinate. Equality of vectors is equality of all their coordinates.
+\begin{proof}\notetarget{note:04:matrix-equation-proof}
+\begin{itemize}
+\item Writing \(X=[\,x_1\ \cdots\ x_q\,]\), \(B=[\,b_1\ \cdots\ b_q\,]\)
+  gives \(AX=B\) exactly when \(Ax_j=b_j\) for every \(j\).
+  This is equivalent to all columns of \(B\) lying in \(\mathcal C(A)\).
+\item Since \(\mathcal C(A)\subseteq\mathcal C([\,A\ B\,])\), these
+  spaces are equal exactly when their dimensions agree.
+  Equality is equivalent to \(\mathcal C(B)\subseteq\mathcal C(A)\).
+\item \(AK=0\), so \(A(X_0+KZ)=B\) for every \(Z\).
+  Conversely, \(AX=B=AX_0\) gives \(A(X-X_0)=0\).
+  Expand each column of \(X-X_0\) in the basis columns of \(K\);
+  collecting these coefficients gives \(X-X_0=KZ\).
+\item Independence of the columns of \(K\) gives
+  \(KZ=KZ'\Rightarrow Z=Z'\), by comparing columns.
+  There are \((n-r)q\) independent scalar parameters.
+  For \(r=n\), the empty product \(KZ\) is zero.
+  For \(r<n\) and \(q\geqslant1\), changing a parameter gives a different solution.
+\end{itemize}
 \end{proof}
 
-\begin{example}[Using prescribed values]\label{eg:04:prescribed}
-Suppose $L:\R^2\to\R^2$ is linear and
+% Bapat 2.16: original dimensions; the answer's counting hint is expanded.
+\begin{example}\label{example:04:matrix-kernel}\notetarget{note:04:matrix-kernel}
+Given \(A:9\times7\) and \(B:4\times3\), prove that there is a nonzero
+\(7\times4\) matrix \(X\) satisfying \(AXB=0\).
+\par\smallskip
+\notetarget{note:04:matrix-kernel-solution}
+The map
 \[
- L(1,1)=(1,4),\qquad L(2,-1)=(-2,3).
+\Phi:\R^{7\times4}\longrightarrow\R^{9\times3},\qquad X\longmapsto AXB
 \]
-Since $(3,-1)=\tfrac13(1,1)+\tfrac43(2,-1)$, linearity forces
+is linear by the distributive calculation at the start of the unit.
+The matrix-unit bases give dimensions \(28\) and \(27\). Since
+\(\im\Phi\) is a subspace of the codomain, \(\rank\Phi\leqslant27\).
+Consequently
 \[
- L(3,-1)=\tfrac13(1,4)+\tfrac43(-2,3)=(-7/3,16/3).
+\dim\ker\Phi=28-\rank\Phi\geqslant1.
 \]
-For arbitrary $(x,y)$, the basis coefficients are $(x+2y)/3$ and $(x-y)/3$. Hence the formula
-\[
- L(x,y)=\frac{x+2y}{3}(1,4)+\frac{x-y}{3}(-2,3)
-\]
-defines a linear mapping having the prescribed values. Thus existence, as well as the forced value, is verified.
+The kernel therefore contains a nonzero matrix, and every such matrix
+satisfies \(AXB=0\).
 \end{example}
-
-\begin{proposition}[Linear images and convexity]\label{prop:04:convex}
-A linear mapping sends a subspace to a subspace, and the preimage of a subspace is a subspace. It also sends a convex set to a convex set, and the preimage of a convex set is convex.
-\end{proposition}
-\begin{proof}
-For a subspace $U\subseteq V$, zero belongs to $L(U)$; and $aL(u)+bL(v)=L(au+bv)\in L(U)$. For a subspace $Z\subseteq W$, if $L(u),L(v)\in Z$, then $L(au+bv)\in Z$, proving closure of $L^{-1}(Z)$; it also contains zero.
-
-For a convex $S\subseteq V$, write any two points of $L(S)$ as $L(u),L(v)$ with $u,v\in S$. Their convex combination is $L((1-t)u+tv)\in L(S)$. For convex $T\subseteq W$, if $L(u),L(v)\in T$, then $L((1-t)u+tv)=(1-t)L(u)+tL(v)\in T$. Thus the convex combination belongs to $L^{-1}(T)$. Empty sets cause no exception to the convexity statements.
-\end{proof}
-A line $p+tu$ has image $L(p)+tL(u)$, which is a line if $L(u)\ne0$ and a point otherwise. A segment has the corresponding segment image, possibly a point. The same coefficient argument applies to a parallelogram, which may collapse to a segment or point.
-
-\section*{Kernel, image, and dimension}
-For a linear mapping $L:V\to W$, define
-\[
- \ker L=\{v\in V:L(v)=0\},\qquad
- \operatorname{im}L=L(V).
-\]
-They are subspaces, by the preceding proposition with the zero subspace and with $U=V$.
-
-\begin{proposition}[Zero kernel and independence]\label{prop:04:kernel}
-If $\ker L=\{0\}$, then $L$ sends every independent list to an independent list. Also, $L$ is injective if and only if $\ker L=\{0\}$.
-\end{proposition}
-\begin{proof}
-If $\sum_i c_iL(v_i)=0$, then $L(\sum_i c_iv_i)=0$. A zero kernel gives $\sum_i c_iv_i=0$, and independence gives all $c_i=0$.
-If $L$ is injective, $L(v)=0=L(0)$ forces $v=0$. Conversely, if the kernel is zero and $L(u)=L(v)$, then $u-v\in\ker L$, hence $u=v$.
-\end{proof}
-
-\begin{theorem}[Rank--nullity]\label{thm:04:rank-nullity}
-If $V$ is finite dimensional and $L:V\to W$ is linear, then
-\[
- \dim V=\dim\ker L+\dim\operatorname{im}L.
-\]
-The codomain $W$ need not be finite dimensional.
-\end{theorem}
-\begin{proof}
-Images of a finite basis of $V$ span $\operatorname{im}L$, so the image is finite dimensional. Let $w_1,\ldots,w_r$ be its basis, and choose $v_i\in V$ with $L(v_i)=w_i$. Let $u_1,\ldots,u_s$ be a basis of $\ker L$, which exists because it is a subspace of $V$.
-
-We prove that $u_1,\ldots,u_s,v_1,\ldots,v_r$ is a basis of $V$. Given $v\in V$, write $L(v)=\sum_i a_iw_i$. Then
-\[
- L\left(v-\sum_i a_iv_i\right)=0,
-\]
-so the difference is a combination of the $u_j$. This proves spanning.
-If $\sum_j b_ju_j+\sum_i a_iv_i=0$, apply $L$ to obtain $\sum_i a_iw_i=0$. Independence gives all $a_i=0$. The remaining relation among the $u_j$ gives all $b_j=0$. Thus the list is independent and has $s+r=\dim V$ elements. Empty kernel or image bases are allowed.
-\end{proof}
-
-\begin{example}[A scalar equation and its kernel]
-Let $L:\R^3\to\R$ be $L(x,y,z)=3x-2y+z$. Since $L(0,0,t)=t$, its image is $\R$. Its kernel has the explicit description
-\[
- \ker L=\{(x,y,-3x+2y):x,y\in\R\}
- =\operatorname{span}\{(1,0,-3),(0,1,2)\}.
-\]
-The two displayed vectors are independent by the first two coordinates. Therefore rank--nullity reads $3=2+1$.
-\end{example}
-
-\begin{example}[A derivative between polynomial spaces]\label{eg:04:derivative}
-Let $P_d$ be the space of real polynomials of degree at most $d$, including zero. For $d\geqslant1$, differentiation $D:P_d\to P_{d-1}$ is onto: the polynomial $\sum_{j=0}^{d-1}a_jt^j$ is the derivative of $\sum_{j=0}^{d-1}a_jt^{j+1}/(j+1)$. Its kernel consists exactly of constants. Hence
-\[
- \dim P_d=d+1=1+d=\dim\ker D+\dim\operatorname{im}D.
-\]
-The image basis $1,t,\ldots,t^{d-1}$ has lifts $t,t^2/2,\ldots,t^d/d$. Together with the kernel basis $1$, these give the particular domain basis constructed in the theorem's proof.
-\end{example}
-
-\begin{proposition}[Dimension of a sum]\label{prop:04:sum-dimension}
-For finite-dimensional subspaces $U,W$ of a vector space,
-\[
- \dim(U+W)=\dim U+\dim W-\dim(U\cap W).
-\]
-\end{proposition}
-\begin{proof}
-The product $U\times W$ has componentwise operations and basis
-\[ (u_1,0),\ldots,(u_r,0),(0,w_1),\ldots,(0,w_s) \]
-when the component lists are bases. Spanning and independence follow by comparing the two components, so its dimension is $r+s$.
-The mapping $T:U\times W\to U+W$, $T(u,w)=u-w$, is linear and onto: $u+w=T(u,-w)$. Its kernel is $\{(v,v):v\in U\cap W\}$. A basis $z_1,\ldots,z_k$ of the intersection gives the kernel basis $(z_1,z_1),\ldots,(z_k,z_k)$, again by componentwise comparison. Rank--nullity now gives $r+s=k+\dim(U+W)$.
-\end{proof}

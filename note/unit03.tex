@@ -1,15 +1,22 @@
 \documentclass[12pt]{article}
 \def\unitnumber{3}
-\def\pdftitle{Unit 3: Convexity, Bases, and Dimension}
+\def\pdftitle{Unit 3: Bases, Dimension, and Rank}
 \def\runningtitle{Unit 3}
 \input{unit-preamble.tex}
+\externaldocument[one-]{.build/unit01/unit01}[unit01.pdf]
+\externaldocument[two-]{.build/unit02/unit02}[unit02.pdf]
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Span}{span}
 \AddToHook{env/problem/before}{\needspace{8\baselineskip}}
 \AddToHook{env/problem/after}{\nopagebreak[4]}
 \begin{document}
-{\Large\bfseries Unit 3. Convexity, Bases, and Dimension}\par
+{\Large\bfseries Unit 3. Bases, Dimension, and Rank}\par
 \input{unit03-content.tex}
-\needspace{12\baselineskip}
+\clearpage
 \section*{Exercises and solutions}
-Suggested practice: \ref{ex:03:dependence-criteria}, \ref{ex:03:triangular}, \ref{ex:03:parameter-list}, \ref{ex:03:select-basis}, \ref{ex:03:compare-sizes}, \ref{ex:03:direct-sum-dimension}, \ref{ex:03:coordinates-three}, \ref{ex:03:functions}, \ref{ex:03:matrix-bases}.
+Suggested practice: Exercises~\ref{ex:03:chosen-columns},
+\ref{ex:03:exchange}, \ref{ex:03:row-column-sums},
+\ref{ex:03:two-factorizations}, \ref{ex:03:border}, and
+\ref{ex:03:changed-entries}.
 \input{unit03-exercises.tex}
 \end{document}

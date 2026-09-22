@@ -1,697 +1,857 @@
-\begin{problem}[Perpendicular constraints]\label{ex:05:perpendicular-dimension}
+% Exact sources and completed proofs: authoring/notes/unit05-exercise-sources.md.
+All matrices and scalars below are real. Matrix orders are positive integers.
+The determinant of the empty matrix is 1, as in the cofactor convention above.
+
+\subsection*{Expansion, structure, and adjugates}
+
+% MA 4.29, complete.
+\begin{problem}[The six terms of a determinant]\label{ex:05:six-terms}
+Show that for a \(3\times3\) matrix \(A=(a_{ij})\),
+\[
+\begin{aligned}
+\det A={}&a_{11}a_{22}a_{33}-a_{11}a_{23}a_{32}
+-a_{12}a_{21}a_{33}\\
+&+a_{12}a_{23}a_{31}+a_{13}a_{21}a_{32}
+-a_{13}a_{22}a_{31}.
+\end{aligned}
+\]
+\end{problem}
+\begin{solution}
+In the row form of the permutation sum from Proposition~\ref{prop:05:operations},
+the column lists and their inversion
+counts are
+\[
+\begin{array}{c|rrrrrr}
+(j_1,j_2,j_3)&(1,2,3)&(1,3,2)&(2,1,3)&(2,3,1)&(3,1,2)&(3,2,1)\\
+\text{inversions}&0&1&1&2&2&3
+\end{array}
+\]
+These are all six permutations. Their signs are respectively
+\(+,\,-,\,-,\,+,\,+,\,-\). Multiplying each sign by
+\(a_{1j_1}a_{2j_2}a_{3j_3}\) gives the displayed formula.
+\end{solution}
+
+% Harville 13.5(a,b); Harville_sol_16.tex 136--179, original data.
+\begin{problem}[A sparse determinant in two ways]\label{ex:05:sparse}
+Compute
+\[
+\det A,\qquad
+A=\begin{pmatrix}0&4&0&5\\1&0&-1&2\\0&3&0&-2\\0&0&-6&0\end{pmatrix}.
+\]
 \begin{enumerate}
-\item If $a\ne0$ in $\R^n$, find the dimension of $\{x:a\cdot x=0\}$.
-\item Find the dimension of the subspace of $\R^6$ perpendicular to $(1,1,-2,3,4,5)$ and $(0,0,1,1,0,7)$.
-\item For $a\ne0$ and fixed $p\in\R^n$, find the dimension of $\{x:a\cdot x=a\cdot p\}$.
+\item Find and sum every nonzero term of the permutation formula.
+\item Expand successively by cofactors, passing through determinants of
+orders 3, 2, and 1.
 \end{enumerate}
 \end{problem}
 \begin{solution}
-(a) The span of $a$ has dimension one, so its complement has dimension $n-1$.
-(b) The two constraint vectors are independent: the first coordinate of a zero combination forces the first coefficient zero, and then the third coordinate forces the second zero. Their span has dimension two, so the complement has dimension four.
-(c) Subtracting $p$ identifies the set as $p+\operatorname{span}(a)^\perp$, an affine set of dimension $n-1$.
+\begin{enumerate}
+\item A nonzero row-wise product must use column 3 in row 4 and column 1
+in row 2: column 1 has no other nonzero entry. Rows 1 and 3 then use
+columns 2 and 4 in either order. The two possible lists are
+\((2,1,4,3)\) and \((4,1,2,3)\), with 2 and 3 inversions. Therefore
+\[
+\det A=(-1)^2\,4(1)(-2)(-6)+(-1)^3\,5(1)(3)(-6)=48+90=138.
+\]
+\item Expand first along column 1, then along the last row of its minor:
+\[
+\begin{aligned}
+\det A
+&=(-1)^{2+1}\begin{vmatrix}4&0&5\\3&0&-2\\0&-6&0\end{vmatrix}\\
+&=(-1)^3(-6)(-1)^{3+2}\begin{vmatrix}4&5\\3&-2\end{vmatrix}\\
+&=-6\bigl(4\det[-2]-5\det[3]\bigr)
+=-6(-8-15)=138.
+\end{aligned}
+\]
+The last step uses the order-one determinants \(\det[-2]=-2\) and \(\det[3]=3\).
+\end{enumerate}
 \end{solution}
 
-\begin{problem}[Bases of solution spaces]\label{ex:05:solution-bases}
-Find a basis and dimension for each solution space:
+% MA 4.40; reduced minor is expanded along its first column.
+\begin{problem}[A tridiagonal determinant]\label{ex:05:tridiagonal}
+Let \(A_n=(a_{ij})\) be \(n\times n\), where
+\[
+a_{ij}=\begin{cases}2&i=j,\\-1&|i-j|=1,\\0&|i-j|>1.\end{cases}
+\]
+Prove that \(\det A_n=n+1\).
+\end{problem}
+\begin{solution}
+Write \(d_n=\det A_n\). Directly, \(d_1=2\) and
+\(d_2=4-1=3\). For \(n\geqslant3\), expansion along row 1 gives
+\(d_n=2d_{n-1}+\det M_n\), where \(M_n\) is obtained by deleting
+row 1 and column 2 of \(A_n\). The first column of \(M_n\) is
+\((-1,0,\ldots,0)^\top\); deleting its first row and column leaves \(A_{n-2}\).
+Thus \(\det M_n=-d_{n-2}\), so
+\[
+d_n-d_{n-1}=d_{n-1}-d_{n-2}.
+\]
+Induction from \(d_2-d_1=1\) gives \(d_n-d_{n-1}=1\) for every
+\(n\geqslant2\). Hence \(d_n=2+(n-1)=n+1\).
+\end{solution}
+
+% Bapat 1.2; original matrix, Chapter 12 parity hint completed.
+\begin{problem}[Parity without evaluation]\label{ex:05:parity}
+Decide whether the determinant of the following integer matrix is even or odd,
+without evaluating it explicitly:
+\[
+A=\begin{pmatrix}
+387&456&589&238\\488&455&677&382\\440&982&654&651\\892&564&786&442
+\end{pmatrix}.
+\]
+\end{problem}
+\begin{solution}
+Replace each entry by its remainder on division by 2. The resulting matrix is
+\[
+B=\begin{pmatrix}1&0&1&0\\0&1&1&0\\0&0&0&1\\0&0&0&0\end{pmatrix}.
+\]
+For integers, replacing a factor by one differing by an even integer changes
+a product by an even integer. Thus every signed product in the permutation
+formula for \(\det A\) has the same parity as its counterpart for \(\det B\).
+The last row of \(B\) is zero, so \(\det B=0\). Therefore \(\det A\) is even.
+\end{solution}
+
+% Bapat 1.6; Chapter 12 Laplace hint replaced by a full permutation argument.
+\begin{problem}[A large zero submatrix]\label{ex:05:zero-submatrix}
+Suppose that an \(n\times n\) matrix \(A\) has an \(r\times s\) zero
+submatrix, where \(r+s=n+1\). Prove that \(\det A=0\).
+The selected rows and columns need not be consecutive.
+\end{problem}
+\begin{solution}
+Let \(I\) be the selected set of \(r\) rows and \(J\) the selected set
+of \(s\) columns. In a permutation product, the rows in \(I\) use \(r\)
+distinct columns. Only \(n-s=r-1\) columns lie outside \(J\), so at least
+one of those rows must use a column in \(J\). Its entry is zero.
+Every permutation product therefore vanishes, and their signed sum is zero.
+\end{solution}
+
+% Harville 13.3, complete original direction.
+\begin{problem}[An integer matrix and its inverse]\label{ex:05:integer-inverse}
+Let \(A\) be an invertible \(n\times n\) matrix. If every entry of
+\(A\) and \(A^{-1}\) is an integer, prove that \(\det A=\pm1\).
+\end{problem}
+\begin{solution}
+The permutation formula makes \(\det A\) and \(\det A^{-1}\) integers.
+Their product is \(\det I_n=1\). Two integers with product 1 are both 1
+or both \(-1\): their nonzero absolute values are positive integers whose
+product is 1. Thus \(\det A=\pm1\).
+\end{solution}
+
+% Harville 13.6, complete.
+\begin{problem}[Cofactors of a symmetric matrix]\label{ex:05:symmetric-cofactors}
+Prove that the cofactor matrix of a symmetric matrix is symmetric.
+\end{problem}
+\begin{solution}
+For \(A=A^\top\), the ordered submatrices obtained by deleting row \(i\),
+column \(j\), or row \(j\), column \(i\), satisfy
+\(A_{(ij)}^\top=A_{(ji)}\). Therefore
+\[
+C_{ij}=(-1)^{i+j}\det A_{(ij)}
+=(-1)^{j+i}\det A_{(ji)}=C_{ji}.
+\]
+For order 1 both minors are the empty matrix, so the same convention applies.
+\end{solution}
+
+% MA 4.46*(a-d), full; singular cases and polynomial bridge completed.
+\begin{problem}[Adjugate identities*]\label{ex:05:adjugate}
+Let \(A,B\) be \(n\times n\) matrices. Prove the following.
 \begin{enumerate}
-\item $2x+y-z=0$, $2x+y+z=0$;
-\item $x-y+z=0$;
-\item $4x+7y-\pi z=0$, $2x-y+z=0$;
-\item $x+y+z=0$, $x-y=0$, $y+z=0$.
+\item \(A\adj(A)=\adj(A)A=(\det A)I_n\).
+\item If \(A\) is invertible, then \(A^{-1}=\adj(A)/\det A\).
+\item For \(n\geqslant2\), \(\det\adj(A)=(\det A)^{n-1}\).
+For \(n=1\), \(\det\adj(A)=1\).
+\item \(\adj(AB)=\adj(B)\adj(A)\), including singular \(A\) and \(B\).
 \end{enumerate}
 \end{problem}
 \begin{solution}
-(a) Subtracting gives $z=0$, then $y=-2x$. Basis $(1,-2,0)$; dimension one.
-(b) Write $x=y-z$. Basis $(1,1,0),(-1,0,1)$; dimension two, with independence read from the last two coordinates.
-(c) From $y=2x+z$, the first equation gives $18x+(7-\pi)z=0$. Set $z=18t$, obtaining $(x,y,z)=t(\pi-7,2\pi+4,18)$. The vector is nonzero, so it is a basis and the dimension is one.
-(d) The second and third equations give $x=y$, $z=-y$; the first then gives $y=0$. The space is zero, with empty basis and dimension zero.
+\begin{enumerate}
+\item If \(C_{ij}\) are the cofactors of \(A\), then
+\((A\adj A)_{ik}=\sum_j a_{ij}C_{kj}\).
+For \(i=k\) this is row \(i\)'s cofactor expansion. For \(i\ne k\),
+replace row \(k\) by row \(i\); the cofactors along row \(k\) do not
+change, while the new determinant is zero because two rows agree.
+Thus \(A\adj A=(\det A)I_n\). The column version gives
+\((\adj A\,A)_{ik}=\sum_j C_{ji}a_{jk}\), equal to \(\det A\) if
+\(i=k\) and zero otherwise, by replacing column \(i\) with column \(k\).
+\item Invertibility gives \(\det A\ne0\). Dividing both identities in (a)
+by \(\det A\) shows that \(\adj(A)/\det A\) is the two-sided inverse.
+\item Taking determinants in (a) gives
+\[
+(\det A)\det\adj(A)=(\det A)^n.
+\]
+For invertible \(A\), division proves the claim. If \(A\ne0\) is singular
+and \(\adj(A)\) were invertible, \(A\adj(A)=0\) would imply \(A=0\),
+a contradiction. Hence \(\adj(A)\) is singular. If \(A=0\) and
+\(n\geqslant2\), all its order \(n-1\) minors are zero, so \(\adj(A)=0\).
+Thus both sides of the claimed formula are zero in every singular case
+with \(n\geqslant2\). For \(n=1\), the empty-minor convention gives
+\(\adj[a]=[1]\) for every \(a\).
+\item If both matrices are invertible, (b) and the order of an inverse product give
+\[
+\adj(AB)=\det(AB)(AB)^{-1}
+=(\det B)B^{-1}(\det A)A^{-1}=\adj(B)\adj(A).
+\]
+For singular matrices, use the following polynomial argument.
+\begin{itemize}
+\item For \(k\geqslant1\), multiplication and cancellation give
+\[
+t^k-a^k=(t-a)\sum_{r=0}^{k-1}t^{k-1-r}a^r.
+\]
+Consequently, for \(p(t)=\sum_{k=0}^d c_kt^k\),
+\[
+p(t)-p(a)=(t-a)q(t),\qquad
+q(t)=\sum_{k=1}^d c_k\sum_{r=0}^{k-1}t^{k-1-r}a^r.
+\]
+\item If \(p\) has degree \(d\geqslant1\), then \(q\) has degree \(d-1\),
+since its leading coefficient is \(c_d\ne0\). If \(p(a)=0\), every other
+root of \(p\) is a root of \(q\). Induction on \(d\), starting with a
+nonzero constant having no roots, proves that a nonzero polynomial of
+degree \(d\) has at most \(d\) distinct real roots. In particular, a
+polynomial vanishing at infinitely many real numbers has every coefficient zero.
+\label{proof:05:polynomial-bridge}
+
+\item Every determinant of a matrix with polynomial entries is a polynomial,
+by its finite permutation sum, and the same holds for every adjugate entry.
+Moreover, \(\det(A+tI_n)\) is monic of degree \(n\): the term \(t^n\)
+can only come from choosing all diagonal \(t\)'s in the identity permutation.
+\item Thus each of \(A+tI_n\) and \(B+tI_n\) is invertible except at finitely
+many real \(t\). For every other \(t\), the already proved invertible case gives
+\[
+\adj\bigl((A+tI_n)(B+tI_n)\bigr)
+=\adj(B+tI_n)\adj(A+tI_n).
+\]
+Each entry of the difference is a polynomial with infinitely many roots,
+so it is zero for all \(t\). Evaluation at \(t=0\) proves (d).
+\end{itemize}
+\end{enumerate}
 \end{solution}
 
-\begin{problem}[Counting free directions]\label{ex:05:solution-dimensions}
-Find the dimensions of the following homogeneous solution spaces:
+% Harville 13.10(a,b); original cofactor ratio and nonzero c retained.
+% Added bridge: existence of a nonsingular minor of order rank(A).
+\begin{problem}[Rank and the adjugate]\label{ex:05:adjugate-rank}
+Let \(A\) be \(n\times n\), \(n\geqslant2\), with cofactors \(C_{ij}\).
 \begin{enumerate}
-\item $2x-3y+z=0$, $x+y-z=0$;
-\item $2x+7y=0$, $x-2y+z=0$;
-\item $2x-3y+z=0$, $x+y-z=0$, $3x+4y=0$, $5x+y+z=0$;
-\item $x+y+z=0$, $2x+2y+2z=0$.
+\item Suppose \(\rank A=n-1\). For any nonzero columns \(x,y\) satisfying
+\(Ax=0\), \(A^\top y=0\), show that
+\[
+\adj(A)=cxy^\top
+\]
+for a nonzero scalar \(c\). Show also that
+\(c=C_{ij}/(y_i x_j)\) whenever \(y_i\ne0\) and \(x_j\ne0\).
+\item If \(\rank A\leqslant n-2\), prove that \(\adj(A)=0\).
 \end{enumerate}
 \end{problem}
 \begin{solution}
-(a) The second equation gives $z=x+y$; the first gives $3x-2y=0$. All solutions are $t(2,3,5)$, so dimension one.
-(b) Put $y=2t$; then $x=-7t$ and $z=11t$, again dimension one.
-(c) The first two equations give $t(2,3,5)$ as in (a). The third gives $18t=0$, so only zero remains and the dimension is zero.
-(d) There is one independent equation, and the solutions are $s(1,0,-1)+t(0,1,-1)$, so dimension two.
-\end{solution}
+First connect minors to rank.
+\begin{itemize}
+\item If a matrix has rank \(r>0\), use Theorem~\ref{three-thm:03:extract}
+to extract \(r\) independent columns and call
+the resulting matrix \(F\). It has column rank \(r\), hence row rank \(r\)
+by Theorem~\ref{three-thm:03:row-column}.
+Extract \(r\) independent rows of \(F\). They form a square matrix \(G\)
+with row rank \(r\), hence column rank \(r\). The invertibility criterion
+gives \(\det G\ne0\). Thus the original matrix has a nonzero order \(r\) minor.
+\item Conversely, a nonsingular order \(k\) submatrix forces its \(k\) selected
+columns of the original matrix to be independent: any relation among
+those columns restricts on the selected rows to a relation among the
+submatrix columns, whose coefficients must all vanish. Therefore \(k\leqslant r\).
+This also shows that a rank-zero matrix has no nonzero minor of positive order.
+\end{itemize}
+\label{proof:05:minor-rank-bridge}
 
-\begin{problem}[Column spaces and perpendicular spaces]\label{ex:05:column-perp}
-For $A\in\R^{m\times n}$, prove that every vector in $\operatorname{col}A$ is perpendicular to every vector in $\ker A^\top$, that $(\operatorname{col}A)^\perp=\ker A^\top$, and that their dimensions sum to $m$.
-\end{problem}
-\begin{solution}
-If $x=Av$ and $A^\top y=0$, then $x\cdot y=v^\top A^\top y=0$. This proves one inclusion in the complement identity. Conversely, a vector perpendicular to the column space is perpendicular to each column, so every entry of $A^\top y$ is zero. The complement dimension theorem now gives $\dim\operatorname{col}A+\dim\ker A^\top=m$.
-\end{solution}
-
-\begin{problem}[Gram kernels and spaces]\label{ex:05:gram-spaces}
-For a real matrix $A$, prove
-\[
- \ker A^\top=\ker(AA^\top),\quad
- (\operatorname{col}A)^\perp=(\operatorname{col}(AA^\top))^\perp,\quad
- \operatorname{col}A=\operatorname{col}(AA^\top),
-\]
-and $\operatorname{rank}A=\operatorname{rank}(AA^\top)=\operatorname{rank}(A^\top A)$.
-\end{problem}
-\begin{solution}
-One kernel inclusion follows by multiplying $A^\top x=0$ by $A$. For the converse, $AA^\top x=0$ gives $\norm{A^\top x}^2=x^\top AA^\top x=0$, hence $A^\top x=0$. Since $AA^\top$ is symmetric, the complement identity for column spaces gives the second equality. Taking complements again gives the third. Their dimensions are equal, and applying the same reasoning to $A^\top$ proves the remaining rank equality.
-\end{solution}
-
-\begin{problem}[A numerical Gram-rank comparison]\label{ex:05:numerical-gram}
-For $A=\begin{pmatrix}1&5&6\\2&6&8\\7&1&8\end{pmatrix}$, find the ranks of $A$, $A^\top$, $AA^\top$, and $A^\top A$.
-\end{problem}
-\begin{solution}
-Column three is the sum of columns one and two. The first two are independent because the equations $x+5y=0$, $2x+6y=0$ force $x=y=0$. Thus the rank is two. Equality under transpose and the Gram-rank theorem show that all four ranks are two. This reasoning avoids unnecessary multiplication of two larger Gram matrices while proving their exact ranks.
-\end{solution}
-
-\begin{problem}[Gram factors inside products]\label{ex:05:gram-product-ranks}
-For conformable real matrices, prove
-\[
- \operatorname{rank}(A^\top AB)=\operatorname{rank}(AB)
- =\operatorname{rank}(ABB^\top).
-\]
-Deduce $\operatorname{rank}(BA)=\operatorname{rank}(B^\top BA)$ and $\operatorname{rank}(AC)=\operatorname{rank}(ACC^\top)$.
-\end{problem}
-\begin{solution}
-The Gram theorem and product-rank inequality give
-\[
- \operatorname{rank}(AB)=\operatorname{rank}(B^\top A^\top AB)
- \leqslant\operatorname{rank}(A^\top AB)\leqslant\operatorname{rank}(AB).
-\]
-Likewise
-\[
- \operatorname{rank}(AB)=\operatorname{rank}(ABB^\top A^\top)
- \leqslant\operatorname{rank}(ABB^\top)\leqslant\operatorname{rank}(AB).
-\]
-The opposite bounds force both equalities. Replace the pair $(A,B)$ by $(B,A)$ for the first deduction and by $(A,C)$ for the second. No nonzero-rank assumption is needed.
-\end{solution}
-
-\begin{problem}[Matrices in standard coordinates]\label{ex:05:standard-matrices}
-Find the matrices of the following linear maps:
 \begin{enumerate}
-\item the projections of $\R^4$ onto its first two and its first three coordinates;
-\item $x\mapsto cx$ on $\R^n$, including $c=7,-1$, and $(x,y)\mapsto(3x,3y)$;
-\item $(x_1,x_2,x_3,x_4)\mapsto(x_1,x_2,0,0)$;
-\item $F:\R^3\to\R^2$ with $F(e_1)=(1,-3)^\top$, $F(e_2)=(-4,2)^\top$, $F(e_3)=(3,1)^\top$;
-\item $F(x_1,x_2,x_3)=(3x_1-2x_2+x_3,4x_1-x_2+5x_3)^\top$.
+\item
+\begin{itemize}
+\item Theorems~\ref{three-thm:03:nullity} and~\ref{three-thm:03:row-column} give
+\(\dim N(A)=\dim N(A^\top)=1\). Since \(x,y\ne0\),
+\[
+N(A)=\Span(x),\qquad N(A^\top)=\Span(y).
+\]
+\item Since \(\det A=0\), Exercise~\ref{ex:05:adjugate}(a) gives
+\(A\adj(A)=\adj(A)A=0\). Every column of \(\adj(A)\) lies in
+\(N(A)=\Span(x)\), so \(\adj(A)=xz^\top\) for some \(z\).
+Choose \(x_k\ne0\). Row \(k\) of \(xz^\top A=0\) gives
+\[
+x_kz^\top A=0\ \Longrightarrow\ z^\top A=0
+\ \Longrightarrow\ z\in N(A^\top)=\Span(y).
+\]
+Thus \(z=cy\) and \(\adj(A)=cxy^\top\).
+\item Some order \(n-1\) minor is nonzero by the argument above.
+Hence \(\adj(A)\ne0\), so \(c\ne0\). Entry \((j,i)\) gives
+\(C_{ij}=cx_jy_i\); for every \(x_jy_i\ne0\),
+\[
+c=\frac{C_{ij}}{y_i x_j}.
+\]
+\end{itemize}
+\item A nonzero order \(n-1\) minor would force \(\rank A\geqslant n-1\)
+by the converse just proved. Hence all such minors, and therefore all
+cofactors, are zero. Their transpose \(\adj(A)\) is zero.
 \end{enumerate}
-\end{problem}
-\begin{solution}
-The matrices are, respectively,
-\[
- \begin{pmatrix}1&0&0&0\\0&1&0&0\end{pmatrix},\quad
- \begin{pmatrix}1&0&0&0\\0&1&0&0\\0&0&1&0\end{pmatrix};\qquad
- cI_n\text{ and }3I_2;
-\]
-\[
- \operatorname{diag}(1,1,0,0);\qquad
- \begin{pmatrix}1&-4&3\\-3&2&1\end{pmatrix};\qquad
- \begin{pmatrix}3&-2&1\\4&-1&5\end{pmatrix}.
-\]
-Each column is the image of the matching standard vector. Multiplying by a general coordinate column verifies each displayed rule.
 \end{solution}
 
-\begin{problem}[Images in an abstract basis]\label{ex:05:abstract-matrices}
-Let $(v_1,v_2,v_3)$ be a basis. Find the matrix in this basis for each specification:
+% Harville 13.12(a,b), full singular bordered identity and Schur comparison.
+\begin{problem}[A bordered determinant without invertibility]\label{ex:05:bordered-adjugate}
+Let \(A\) be \(n\times n\), \(x,y\in\R^n\), and \(c\in\R\).
 \begin{enumerate}
-\item $Fv_1=3v_2-v_3$, $Fv_2=v_1-2v_2+v_3$, $Fv_3=-2v_1+4v_2+5v_3$;
-\item $Fv_1=3v_1$, $Fv_2=-7v_2$, $Fv_3=5v_3$;
-\item $Fv_1=-2v_1+7v_3$, $Fv_2=-v_3$, $Fv_3=v_1$.
-\end{enumerate}
-\end{problem}
-\begin{solution}
-Place each image's coordinate column in the corresponding column of the matrix. The answers are
+\item Prove that
 \[
- \begin{pmatrix}0&1&-2\\3&-2&4\\-1&1&5\end{pmatrix},\qquad
- \begin{pmatrix}3&0&0\\0&-7&0\\0&0&5\end{pmatrix},\qquad
- \begin{pmatrix}-2&0&1\\0&0&0\\7&-1&0\end{pmatrix}.
+\det\begin{pmatrix}A&y\\x^\top&c\end{pmatrix}
+=c\det A-x^\top\adj(A)y.
 \]
-For a general $v=\sum_j x_jv_j$, linearity makes these products the coordinate columns of $Fv$, which verifies the representation beyond its values on the basis.
-\end{solution}
-
-\begin{problem}[Different source and target bases]\label{ex:05:two-bases}
-Given bases $(v_1,\ldots,v_n)$ of $V$ and $(w_1,\ldots,w_m)$ of $W$, describe and justify the matrix of a linear map $L:V\to W$ and its effect on coordinate columns.
-\end{problem}
-\begin{solution}
-Write $L(v_j)=\sum_i a_{ij}w_i$ and set $A=(a_{ij})\in\R^{m\times n}$. If $v=\sum_j x_jv_j$, then $L(v)=\sum_i(\sum_j a_{ij}x_j)w_i$. Thus $[L(v)]_{(w_i)}=A[v]_{(v_j)}$. Taking $v=v_j$ forces column $j$ to be the displayed coordinate column, so this matrix is unique. Different domain and codomain dimensions and bases are both allowed.
-\end{solution}
-
-\begin{problem}[Diagonal actions and derivatives]\label{ex:05:diagonal-derivatives}
-\begin{enumerate}
-\item If a basis $(v_i)$ satisfies $L(v_i)=c_iv_i$, find the matrix of $L$.
-\item Find the derivative matrix on $\operatorname{span}(\cos t,\sin t)$ in the ordered basis $(\cos t,\sin t)$.
-\item Find the derivative matrix on $P_2$ in $(1,t,t^2)$.
-\end{enumerate}
-\end{problem}
-\begin{solution}
-(a) Column $i$ is $c_ie_i$, so the matrix is $\operatorname{diag}(c_1,\ldots,c_n)$.
-(b) The derivatives are $-\sin t$ and $\cos t$, giving $\begin{pmatrix}0&1\\-1&0\end{pmatrix}$.
-(c) The derivatives are $0,1,2t$, giving $\begin{pmatrix}0&1&0\\0&0&2\\0&0&0\end{pmatrix}$. The order of the functions specifies the order of coordinate entries.
-\end{solution}
-
-\begin{problem}[Polynomial identities for mappings]\label{ex:05:map-polynomials}
-Let $F,L:V\to V$ be linear and satisfy $FL=LF$. Prove $(F+L)^2=F^2+2FL+L^2$, $(F-L)^2=F^2-2FL+L^2$, and $(F+L)(F-L)=F^2-L^2$. For any linear $F$ and integer $r\geqslant0$, prove $(I-F)(I+F+\cdots+F^r)=I-F^{r+1}$.
-\end{problem}
-\begin{solution}
-Distributing the first product gives $F^2+FL+LF+L^2$; commuting combines the middle terms. Changing the signs gives the second identity, while $F^2-FL+LF-L^2=F^2-L^2$ gives the third. For the last identity, subtract $F+F^2+\cdots+F^{r+1}$ from $I+F+\cdots+F^r$; all intermediate powers cancel. The same calculation works in the reverse order because powers of a single mapping commute.
-\end{solution}
-
-\begin{problem}[Complementary projections]\label{ex:05:projection-algebra}
-\begin{enumerate}
-\item For linear $T$ with $T^2=I$, set $P=(I+T)/2$, $Q=(I-T)/2$. Prove $P^2=P$, $Q^2=Q$, $P+Q=I$, $\ker P=\operatorname{im}Q$ and $\operatorname{im}P=\ker Q$.
-\item More generally, if $P^2=P$, set $Q=I-P$ and prove the same assertions involving $P,Q$.
-\item Prove $V=\ker P\oplus\operatorname{im}P$ and uniqueness of the two summands. Verify that $(u,w)\mapsto(u,0)$ on $U\times W$ is a projection.
-\end{enumerate}
-\end{problem}
-\begin{solution}
-(a) Expanding $(I\pm T)^2/4$ and using $T^2=I$ gives $(I\pm T)/2$. Their sum is $I$, and their product in either order is $(I-T^2)/4=0$.
-(b) From $P^2=P$, one has $Q^2=I-2P+P^2=Q$, $PQ=QP=0$ and $P+Q=I$. If $v=Px$, then $Qv=0$. Conversely $Qv=0$ gives $v=Pv$, hence $v\in\operatorname{im}P$. Interchanging $P,Q$ gives the other kernel-image equality, which also proves the remaining assertions in (a).
-(c) Every $v=Pv+Qv$ has the required components. If $v=Px$ and $Pv=0$, then $v=P^2x=Pv=0$, so the intersection is zero. Differences of two decompositions lie in that intersection, proving uniqueness. Finally the product-space map is linear componentwise and sends $(u,0)$ to itself, so its square equals itself. Its codomain is $U\times W$, which makes its square defined.
-\end{solution}
-
-\begin{problem}[Rank of a composition]\label{ex:05:composition-rank}
-For linear maps $L:V\to W$ and $F:W\to U$ of finite-dimensional spaces, prove
-$\dim\operatorname{im}(FL)\leqslant\min(\dim\operatorname{im}F,\dim\operatorname{im}L)$. Deduce the matrix product-rank inequalities.
-\end{problem}
-\begin{solution}
-The image of $FL$ is contained in the image of $F$, proving one bound. A basis $w_1,\ldots,w_r$ of $\operatorname{im}L$ has images $F(w_i)$ spanning $F(\operatorname{im}L)=\operatorname{im}(FL)$, proving dimension at most $r$. Matrix multiplication represents composition, and its image dimension is its column rank, giving both matrix inequalities.
-\end{solution}
-
-\begin{problem}[Translation and a matrix map]\label{ex:05:translation-order}
-Let $A\in\R^{n\times n}$ and $c\in\R^n$, with $L_A(x)=Ax$ and $T_c(x)=x+c$. Write formulas for $L_AT_c$ and $T_cL_A$, and exhibit a case where they differ.
-\end{problem}
-\begin{solution}
-They are $L_AT_c(x)=Ax+Ac$ and $T_cL_A(x)=Ax+c$. For example, take $A=2I_n$ and $c\ne0$; the constant terms are $2c$ and $c$, so the mappings differ. In general they coincide exactly when $Ac=c$.
-\end{solution}
-
-\begin{problem}[Inverse laws]\label{ex:05:inverse-laws}
-Find the inverse of counterclockwise rotation through $\theta$ and its matrix. For invertible linear maps $F,G:V\to V$, prove $(FG)^{-1}=G^{-1}F^{-1}$.
-\end{problem}
-\begin{solution}
-The inverse rotation is through $-\theta$, with matrix
-$\begin{pmatrix}\cos\theta&\sin\theta\\-\sin\theta&\cos\theta\end{pmatrix}$.
-Multiplication in either order with the rotation matrix gives $I_2$ using $\cos^2\theta+\sin^2\theta=1$.
-For the mapping identity,
-$(FG)(G^{-1}F^{-1})=F(GG^{-1})F^{-1}=I$ and
-$(G^{-1}F^{-1})(FG)=G^{-1}(F^{-1}F)G=I$.
-Thus the proposed map is the two-sided inverse, and uniqueness gives the result.
-\end{solution}
-
-\begin{problem}[Inverting coordinate formulas]\label{ex:05:inverse-formulas}
-Prove invertibility and find an inverse for each map:
-\begin{enumerate}
-\item $(x,y)\mapsto(x+y,x-y)$;
-\item $(x,y)\mapsto(2x+y,3x-5y)$;
-\item $(x,y,z)\mapsto(x-y,x+z,x+y+3z)$;
-\item $(x,y,z)\mapsto(2x-y+z,x+y,3x+y+z)$.
-\end{enumerate}
-\end{problem}
-\begin{solution}
-Given output $(u,v)$, (a) has inverse $((u+v)/2,(u-v)/2)$.
-For (b), $y=u-2x$ and $v=3x-5(u-2x)$ give $x=(5u+v)/13$, $y=(3u-2v)/13$.
-For (c), $y=x-u$, $z=v-x$, and $w=x+y+3z=3v-u-x$, so
+\item If \(A\) is invertible, rewrite this as
+\(\det A\,(c-x^\top A^{-1}y)\).
+Relate it to the general block identities, for invertible \(T:n\times n\),
+\(U:n\times m\), \(V:m\times n\), \(W:m\times m\),
 \[
- (x,y,z)=(3v-u-w,\ 3v-2u-w,\ u-2v+w).
-\]
-For (d), subtracting the first output from the third gives $w-u=x+2y$, while $v=x+y$. Thus $y=w-u-v$, $x=u+2v-w$, and the first equation yields $z=-2u-5v+3w$.
-Each derivation gives exactly one input for every output; substitution in the original formulas verifies existence, so each map is bijective and has the displayed inverse.
-\end{solution}
-
-\begin{problem}[Inverses from a vanishing power]\label{ex:05:nilpotent-inverses}
-Let $L:V\to V$ be linear.
-\begin{enumerate}
-\item If $L^r=0$ for a positive integer $r$, prove $I-L$ is invertible; include the cases $r=2,3$ explicitly.
-\item If $L^2+2L+I=0$, prove $L$ is invertible.
-\end{enumerate}
-\end{problem}
-\begin{solution}
-(a) The finite geometric identity in both orders gives
-$(I-L)(I+L+\cdots+L^{r-1})=(I+L+\cdots+L^{r-1})(I-L)=I-L^r=I$.
-For $r=2$ the inverse is $I+L$, and for $r=3$ it is $I+L+L^2$. This does not require finite-dimensional $V$.
-(b) Rearrange the hypothesis as $L(-L-2I)=(-L-2I)L=I$. Thus $L^{-1}=-L-2I$, again by a two-sided identity.
-\end{solution}
-
-\begin{problem}[A basis adapted to a square-zero map]\label{ex:05:square-zero-basis}
-Let $\dim V=2$, $L^2=0$, and $L\ne0$. Choose $v$ with $L(v)\ne0$ and put $w=L(v)$. Prove that $(v,w)$ is a basis of $V$.
-\end{problem}
-\begin{solution}
-If $av+bw=0$, apply $L$: $aw+bL^2v=aw=0$. Since $w\ne0$, $a=0$, and then $bw=0$ gives $b=0$. Thus $v,w$ are independent, and their number equals $\dim V$, so they form a basis.
-\end{solution}
-
-\begin{problem}[A direct sum as a product]\label{ex:05:sum-product}
-If $V=U\oplus W$, prove that $L:U\times W\to V$, $L(u,w)=u+w$, is a bijective linear mapping.
-\end{problem}
-\begin{solution}
-Componentwise operations give linearity. The equality $V=U+W$ gives surjectivity. If $u+w=0$, then $u=-w\in U\cap W=\{0\}$, so both components are zero; the kernel is zero and $L$ is injective. Its inverse assigns the unique two components of each vector.
-\end{solution}
-
-\subsection*{Block matrix applications}
-All blocks below are real and have compatible sizes. For $Z=\begin{pmatrix}A&B\\C&D\end{pmatrix}$, the default sizes are $A:m\times p$, $B:m\times q$, $C:n\times p$, $D:n\times q$; additional squareness or invertibility hypotheses are stated when required.
-
-\begin{problem}[Block arithmetic and shape]\label{ex:05:block-arithmetic}
-\begin{enumerate}
-\item State the size conditions for adding two $2\times2$ block matrices, and prove that their sum is obtained by adding matching blocks.
-\item Prove the block multiplication rule, specifying the matching inner block sizes.
-\item Prove $Z^\top=\begin{pmatrix}A^\top&C^\top\\B^\top&D^\top\end{pmatrix}$. If $A,D$ are square, prove $\tr Z=\tr A+\tr D$.
-\item When $A,D$ are square, show that symmetry, diagonality, or upper triangularity of $Z$ implies the same property for $A,D$. Find the additional conditions for each converse.
-\end{enumerate}
-\end{problem}
-\begin{solution}
-(a) Corresponding blocks must have equal sizes. Addition is entrywise, so grouping the resulting entries gives the sum blockwise.
-(b) If the first matrix has row block sizes $m,n$ and column sizes $p,q$, the second must have row sizes $p,q$ and may have column sizes $r,s$. Split each dot-product sum into the first $p$ indices and the final $q$ indices. The four resulting formulas are $AE+BG$, $AF+BH$, $CE+DG$, $CF+DH$.
-(c) Transpose interchanges the row and column index, putting the transposed off-diagonal blocks in the opposite positions. When diagonal blocks are square, the diagonal entries of $Z$ are exactly those of $A$ and $D$, giving the trace formula.
-(d) Restricting the relevant entry equalities or zero pattern to a diagonal block proves necessity. Conversely, symmetric $A,D$ give symmetric $Z$ exactly when $C=B^\top$; diagonal $A,D$ give diagonal $Z$ exactly when $B=C=0$; upper triangular $A,D$ give upper triangular $Z$ exactly when $C=0$.
-\end{solution}
-
-\begin{problem}[Elementary operations on whole blocks]\label{ex:05:block-operations}
-Verify the following left and right multiplication rules, with the identity sizes fixed by the default partition:
-\[
- \begin{pmatrix}0&I_n\\I_m&0\end{pmatrix}Z=\begin{pmatrix}C&D\\A&B\end{pmatrix},\quad
- \begin{pmatrix}E&0\\0&I_n\end{pmatrix}Z=\begin{pmatrix}EA&EB\\C&D\end{pmatrix},
-\]
-\[
- \begin{pmatrix}I_m&E\\0&I_n\end{pmatrix}Z=\begin{pmatrix}A+EC&B+ED\\C&D\end{pmatrix},
-\]
-\[
- Z\begin{pmatrix}0&I_p\\I_q&0\end{pmatrix}=\begin{pmatrix}B&A\\D&C\end{pmatrix},\quad
- Z\begin{pmatrix}F&0\\0&I_q\end{pmatrix}=\begin{pmatrix}AF&B\\CF&D\end{pmatrix},
-\]
-\[
- Z\begin{pmatrix}I_p&F\\0&I_q\end{pmatrix}=\begin{pmatrix}A&B+AF\\C&D+CF\end{pmatrix}.
-\]
-\end{problem}
-\begin{solution}
-Apply the four block product formulas. In the first rule, for example, the upper block row is $0(A,B)+I_n(C,D)=(C,D)$, and the lower is $(A,B)$. In the second, the upper row is $(EA,EB)$ and the lower unchanged. The third adds $E$ times the lower row to the upper. The right-multiplication rules analogously interchange, scale, or add block columns. The scaling $E$ is $m\times m$ and the row-addition $E$ is $m\times n$; the scaling $F$ is $p\times p$ and the column-addition $F$ is $p\times q$. The repeated letters denote separate conformable choices, not one matrix with conflicting sizes.
-\end{solution}
-
-\begin{problem}[Block involutions and commuting shears]\label{ex:05:block-involutions}
-\begin{enumerate}
-\item Show that $Z=\begin{pmatrix}-I_m&B\\C&I_n\end{pmatrix}$ satisfies $Z^2=I$ if $B=0$ or $C=0$. Is this condition necessary?
-\item Prove that $\begin{pmatrix}I_m&B_1\\0&I_n\end{pmatrix}$ and $\begin{pmatrix}I_m&B_2\\0&I_n\end{pmatrix}$ commute.
-\end{enumerate}
-\end{problem}
-\begin{solution}
-(a) Squaring gives $\operatorname{diag}(I_m+BC,I_n+CB)$, so the exact condition is $BC=CB=0$. The proposed condition is sufficient but unnecessary. For $m=n=2$, take $B=C=\begin{pmatrix}0&1\\0&0\end{pmatrix}$; both are nonzero and both products vanish.
-(b) Either product equals $\begin{pmatrix}I_m&B_1+B_2\\0&I_n\end{pmatrix}$, since addition of the off-diagonal blocks is commutative.
-\end{solution}
-
-\begin{problem}[The two Schur eliminations]\label{ex:05:schur-eliminations}
-\begin{enumerate}
-\item Assuming $A$ is square and invertible, verify separately the left and right operations that clear $C$ and $B$, and their combined result $\operatorname{diag}(A,D-CA^{-1}B)$.
-\item Assuming instead that $D$ is square and invertible, verify the analogous operations and their combined result $\operatorname{diag}(A-BD^{-1}C,D)$.
-\end{enumerate}
-\end{problem}
-\begin{solution}
-(a) Left multiplication by $L=\begin{pmatrix}I_m&0\\-CA^{-1}&I_n\end{pmatrix}$ gives $LZ=\begin{pmatrix}A&B\\0&D-CA^{-1}B\end{pmatrix}$. Right multiplication by $R=\begin{pmatrix}I_m&-A^{-1}B\\0&I_q\end{pmatrix}$ gives $ZR=\begin{pmatrix}A&0\\C&D-CA^{-1}B\end{pmatrix}$. Multiplying $LZ$ by $R$ gives the claimed diagonal block matrix.
-(b) Set $L=\begin{pmatrix}I_m&-BD^{-1}\\0&I_n\end{pmatrix}$ and $R=\begin{pmatrix}I_p&0\\-D^{-1}C&I_n\end{pmatrix}$. The products are
-$LZ=\begin{pmatrix}A-BD^{-1}C&0\\C&D\end{pmatrix}$ and
-$ZR=\begin{pmatrix}A-BD^{-1}C&B\\0&D\end{pmatrix}$, whence the combined product is $\operatorname{diag}(A-BD^{-1}C,D)$. Each multiplier is invertible by changing the sign of its off-diagonal block.
-\end{solution}
-
-\begin{problem}[Inverses with two zero blocks]\label{ex:05:two-zero-inverse}
-\begin{enumerate}
-\item Find the inverse of $\operatorname{diag}(A,D)$ when $A,D$ are invertible.
-\item Find the inverse of $Z=\begin{pmatrix}0&B\\C&0\end{pmatrix}$ when $B,C$ are square and invertible. Show that $\begin{pmatrix}0&B\\B^{-1}&0\end{pmatrix}$ is its own inverse.
-\item A real square matrix is called orthogonal when its transpose is its inverse. Determine when each matrix in (b) is orthogonal.
-\end{enumerate}
-\end{problem}
-\begin{solution}
-(a) The inverse is $\operatorname{diag}(A^{-1},D^{-1})$, because either product is block diagonal with identity blocks.
-(b) The inverse is $\begin{pmatrix}0&C^{-1}\\B^{-1}&0\end{pmatrix}$: multiplying in either order gives the appropriate identity diagonal blocks. Substituting $C=B^{-1}$ gives the second assertion. The off-diagonal square blocks may have different sizes; the inverse reverses the row/column partition accordingly.
-(c) Comparing the transpose with the inverse gives $C^\top=C^{-1}$ and $B^\top=B^{-1}$, so both $B,C$ must be orthogonal, and this is sufficient. In the special case $C=B^{-1}$, this holds exactly when $B$ is orthogonal.
-\end{solution}
-
-\begin{problem}[Triangular block inverses]\label{ex:05:triangular-inverse}
-Find the inverses of $\begin{pmatrix}I&B\\0&I\end{pmatrix}$ and $\begin{pmatrix}I&0\\C&I\end{pmatrix}$. More generally, for square invertible $A,D$, find inverses of $\begin{pmatrix}A&B\\0&D\end{pmatrix}$ and $\begin{pmatrix}A&0\\C&D\end{pmatrix}$.
-\end{problem}
-\begin{solution}
-For identity diagonal blocks, change the sign of the single off-diagonal block. More generally the answers are
-\[
- \begin{pmatrix}A^{-1}&-A^{-1}BD^{-1}\\0&D^{-1}\end{pmatrix},\qquad
- \begin{pmatrix}A^{-1}&0\\-D^{-1}CA^{-1}&D^{-1}\end{pmatrix}.
-\]
-For the first, the upper-right block of the product in the original order is $-BD^{-1}+BD^{-1}=0$; in the reverse order it is $A^{-1}B-A^{-1}B=0$. All diagonal products are identities and the lower-left block is zero. The second verification gives lower-left blocks $CA^{-1}-CA^{-1}=0$ and $-D^{-1}C+D^{-1}C=0$, with identity diagonal blocks.
-\end{solution}
-
-\begin{problem}[A zero diagonal block]\label{ex:05:zero-diagonal-inverse}
-For invertible square $B,C$, find inverses of
-\[
- Z_1=\begin{pmatrix}A&B\\C&0\end{pmatrix},\qquad
- Z_2=\begin{pmatrix}0&B\\C&D\end{pmatrix}.
-\]
-Include the special cases where $B,C$ are identity matrices of their respective sizes.
-\end{problem}
-\begin{solution}
-The answers are
-\[
- Z_1^{-1}=\begin{pmatrix}0&C^{-1}\\B^{-1}&-B^{-1}AC^{-1}\end{pmatrix},\quad
- Z_2^{-1}=\begin{pmatrix}-C^{-1}DB^{-1}&C^{-1}\\B^{-1}&0\end{pmatrix}.
-\]
-For $Z_1$, multiplication in the forward order gives diagonal blocks $BB^{-1}$ and $CC^{-1}$, upper-right block $AC^{-1}-AC^{-1}=0$, and zero lower-left. Reverse multiplication gives diagonal identities and lower-left block $B^{-1}A-B^{-1}A=0$. For $Z_2$, the corresponding cancellation is $-DB^{-1}+DB^{-1}=0$ in the forward lower-left block and $-C^{-1}D+C^{-1}D=0$ in the reverse upper-right block. Setting $B=I_m,C=I_n$ gives the two identity-block formulas, with inverse partition reversed if $m\ne n$.
-\end{solution}
-
-\begin{problem}[A scalar border]\label{ex:05:scalar-border}
-\begin{enumerate}
-\item Let $A$ be invertible and $\varepsilon=\delta-c^\top A^{-1}b\ne0$. Prove
-\[
- \begin{pmatrix}A&b\\c^\top&\delta\end{pmatrix}^{-1}
- =\begin{pmatrix}A^{-1}&0\\0&0\end{pmatrix}
- +\frac1\varepsilon\begin{pmatrix}A^{-1}b\\-1\end{pmatrix}(c^\top A^{-1},-1).
-\]
-\item If $D$ is invertible and $\phi=\alpha-b^\top D^{-1}c\ne0$, prove
-\[
- \begin{pmatrix}\alpha&b^\top\\c&D\end{pmatrix}^{-1}
- =\begin{pmatrix}0&0\\0&D^{-1}\end{pmatrix}
- +\frac1\phi\begin{pmatrix}-1\\D^{-1}c\end{pmatrix}(-1,b^\top D^{-1}).
+\det\begin{pmatrix}T&U\\V&W\end{pmatrix}
+=\det\begin{pmatrix}W&V\\U&T\end{pmatrix}
+=\det T\det(W-VT^{-1}U).
 \]
 \end{enumerate}
 \end{problem}
 \begin{solution}
-(a) Eliminating the lower-left block gives Schur complement $\varepsilon$. In the four-block inverse formula, replace $B,C,D,S$ by $b,c^\top,\delta,\varepsilon$. The resulting blocks are
-$A^{-1}+A^{-1}bc^\top A^{-1}/\varepsilon$, $-A^{-1}b/\varepsilon$, $-c^\top A^{-1}/\varepsilon$, and $1/\varepsilon$, exactly the displayed outer-product expression.
-(b) Clear the upper-right block using $D^{-1}$, obtaining the diagonal blocks $\phi,D$. Reversing the two triangular elimination factors yields blocks
-$1/\phi$, $-b^\top D^{-1}/\phi$, $-D^{-1}c/\phi$, and $D^{-1}+D^{-1}cb^\top D^{-1}/\phi$. Expanding the asserted outer product gives those same four blocks. The hypotheses make every inverse used in these factorizations defined.
+\begin{enumerate}
+\item Let \(A_{\widehat j}\) be \(A\) with column \(j\) deleted, and
+let \(A_{(ij)}\) have row \(i\) and column \(j\) deleted.
+Expanding along the last row, then the last column of each remaining minor,
+gives
+\[
+\begin{aligned}
+\det\begin{pmatrix}A&y\\x^\top&c\end{pmatrix}
+&=c\det A+\sum_{j=1}^n x_j(-1)^{n+1+j}\det[\,A_{\widehat j}\ y\,],\\
+\det[\,A_{\widehat j}\ y\,]
+&=\sum_{i=1}^n y_i(-1)^{i+n}\det A_{(ij)}.
+\end{aligned}
+\]
+The combined sign is \((-1)^{2n+1+i+j}=-(-1)^{i+j}\).
+The double sum is therefore
+\(-\sum_{i,j}x_jC_{ij}y_i=-x^\top\adj(A)y\), proving (a).
+This uses no inverse and also holds for \(n=1\).
+\item Substitute \(\adj(A)=(\det A)A^{-1}\) in (a).
+For the general identity, block elimination gives
+\[
+\begin{pmatrix}I_n&0\\-VT^{-1}&I_m\end{pmatrix}
+\begin{pmatrix}T&U\\V&W\end{pmatrix}
+=\begin{pmatrix}T&U\\0&W-VT^{-1}U\end{pmatrix}.
+\]
+The multiplier has determinant 1, giving the last expression.
+To exchange the two block orders, apply the same permutation to rows and
+columns. If its permutation matrix is \(P\), the new matrix is
+\(PMP^{-1}\), whose determinant is \(\det M\) by multiplication and
+\(\det P\det P^{-1}=1\).
+Setting \(T=A,U=y,V=x^\top,W=[c]\) recovers the scalar formula.
+\end{enumerate}
 \end{solution}
 
-\begin{problem}[The two block inverse formulas]\label{ex:05:schur-inverses}
-For square $Z=\begin{pmatrix}A&B\\C&D\end{pmatrix}$, put $S=D-CA^{-1}B$ when $A$ is invertible, and $T=A-BD^{-1}C$ when $D$ is invertible.
+% MA 6.28(a,b), full; inverse formula refers to this course's proved result.
+\begin{problem}[Cramer's rule]\label{ex:05:cramer}
+Let \(A=(a_{ij})\) be invertible of order \(n\), with cofactors \(C_{ij}\).
+For the solution of \(Ax=b\), prove the following.
 \begin{enumerate}
-\item Assuming $A,S$ invertible, derive the inverse using $S$.
-\item Assuming $D,T$ invertible, derive the inverse using $T$.
+\item \(x_j=\dfrac{\sum_{i=1}^n b_iC_{ij}}{\det A}\), \(1\leqslant j\leqslant n\).
+\item Let \(A^{(j)}\) be \(A\) with column \(j\) replaced by \(b\).
+Then \(x_j=\det A^{(j)}/\det A\).
 \end{enumerate}
 \end{problem}
 \begin{solution}
-(a) Block elimination gives $LZR=\operatorname{diag}(A,S)$, hence
-\[ Z^{-1}=R\operatorname{diag}(A^{-1},S^{-1})L. \]
-Multiplying yields
-\[
- Z^{-1}=\begin{pmatrix}
- A^{-1}+A^{-1}BS^{-1}CA^{-1}&-A^{-1}BS^{-1}\\
- -S^{-1}CA^{-1}&S^{-1}
- \end{pmatrix}.
-\]
-(b) Now use $L=\begin{pmatrix}I&-BD^{-1}\\0&I\end{pmatrix}$ and $R=\begin{pmatrix}I&0\\-D^{-1}C&I\end{pmatrix}$, so $LZR=\operatorname{diag}(T,D)$. Reversing the factorization and multiplying gives
-\[
- Z^{-1}=\begin{pmatrix}
- T^{-1}&-T^{-1}BD^{-1}\\
- -D^{-1}CT^{-1}&D^{-1}+D^{-1}CT^{-1}BD^{-1}
- \end{pmatrix}.
-\]
-Each expression is obtained by inverting a product of invertible factors, which verifies the inverse in both orders.
+\begin{enumerate}
+\item The unique solution is
+\(x=A^{-1}b=(\det A)^{-1}\adj(A)b\).
+Since entry \((j,i)\) of \(\adj(A)\) is \(C_{ij}\), its \(j\)th component
+is the expression in (a).
+\item Deleting row \(i\) and column \(j\) removes the changed column,
+so the cofactors in column \(j\) of \(A^{(j)}\) are still \(C_{ij}\).
+The column expansion of Theorem~\ref{thm:05:cofactor} gives
+\(\det A^{(j)}=\sum_i b_iC_{ij}\).
+Substitution in (a) proves the ratio.
+\end{enumerate}
 \end{solution}
 
-\begin{problem}[Comparing two inverse descriptions]\label{ex:05:inverse-identity}
-When all displayed inverses exist, prove
+% MA 6.30*, complete original symbolic data; degree clarified as at most n.
+\begin{problem}[Fitting a polynomial*]\label{ex:05:interpolation}
+Let \(x_1,\ldots,x_{n+1}\) be distinct real numbers and let
+\(y_1,\ldots,y_{n+1}\) be prescribed real values.
+Determine all coefficients of the polynomial
 \[
- (A-BD^{-1}C)^{-1}=A^{-1}+A^{-1}B(D-CA^{-1}B)^{-1}CA^{-1},
+p(x)=\sum_{j=0}^n a_jx^j,\qquad p(x_i)=y_i\quad(1\leqslant i\leqslant n+1).
 \]
+The polynomial has degree at most \(n\); its highest coefficients may vanish.
+\end{problem}
+\begin{solution}
+Use the column Vandermonde matrix
 \[
- (D-CA^{-1}B)^{-1}=D^{-1}+D^{-1}C(A-BD^{-1}C)^{-1}BD^{-1}.
+V=\begin{pmatrix}
+1&1&\cdots&1\\x_1&x_2&\cdots&x_{n+1}\\
+x_1^2&x_2^2&\cdots&x_{n+1}^2\\
+\vdots&\vdots&&\vdots\\x_1^n&x_2^n&\cdots&x_{n+1}^n
+\end{pmatrix},\quad
+a=(a_0,\ldots,a_n)^\top,\quad y=(y_1,\ldots,y_{n+1})^\top.
+\]
+The equations are \(V^\top a=y\), and Example~\ref{example:05:vandermonde} gives
+\[
+\det V=\prod_{1\leqslant j<i\leqslant n+1}(x_i-x_j)\ne0.
+\]
+Thus there is exactly one coefficient column.
+For \(0\leqslant j\leqslant n\), let \(V_j\) be obtained from \(V\)
+by replacing row \(j+1\) by \(y^\top\). Replacing column \(j+1\) of
+\(V^\top\) by \(y\) gives \(V_j^\top\). Exercise~\ref{ex:05:cramer}
+and invariance of determinant under transpose now give all coefficients:
+\[
+a_j=\frac{\det V_j}{\displaystyle\prod_{1\leqslant k<i\leqslant n+1}(x_i-x_k)}
+\qquad(0\leqslant j\leqslant n).
+\]
+These coefficients solve \(V^\top a=y\), so the resulting polynomial has
+the required values. Uniqueness of the coefficient column proves uniqueness
+of the polynomial. For example, zero prescribed values yield all coefficients
+zero; this is why degree exactly \(n\) is not required.
+\end{solution}
+
+\subsection*{Block elimination and determinant identities}
+
+% MA 5.16(a,b), complete; both factor inverses are verified.
+\begin{problem}[The two block inverse formulas]\label{ex:05:block-inverse}
+Let
+\(M=\begin{pmatrix}A&B\\C&D\end{pmatrix}\), where
+\(A:m\times m\), \(B:m\times n\), \(C:n\times m\), \(D:n\times n\).
+Prove the following formulas under their respective hypotheses.
+\begin{enumerate}
+\item If \(A\) and \(E=D-CA^{-1}B\) are invertible, then
+\[
+M^{-1}=\begin{pmatrix}
+A^{-1}+A^{-1}BE^{-1}CA^{-1}&-A^{-1}BE^{-1}\\
+-E^{-1}CA^{-1}&E^{-1}
+\end{pmatrix}.
+\]
+\item If \(D\) and \(F=A-BD^{-1}C\) are invertible, then
+\[
+M^{-1}=\begin{pmatrix}
+F^{-1}&-F^{-1}BD^{-1}\\
+-D^{-1}CF^{-1}&D^{-1}+D^{-1}CF^{-1}BD^{-1}
+\end{pmatrix}.
+\]
+\end{enumerate}
+\end{problem}
+\begin{solution}
+\begin{enumerate}
+\item Direct block multiplication gives
+\[
+LM=N,\quad
+L=\begin{pmatrix}I_m&0\\-CA^{-1}&I_n\end{pmatrix},\quad
+N=\begin{pmatrix}A&B\\0&E\end{pmatrix}.
+\]
+The inverse of \(L\) is obtained by changing the minus sign to plus.
+Furthermore,
+\[
+H=\begin{pmatrix}A^{-1}&-A^{-1}BE^{-1}\\0&E^{-1}\end{pmatrix}
+\]
+satisfies \(NH=HN=I_{m+n}\): the upper-right blocks are respectively
+\(-BE^{-1}+BE^{-1}=0\) and \(A^{-1}B-A^{-1}B=0\), and the diagonal
+blocks are identities. Thus \(M^{-1}=HL\). Multiplication gives
+\[
+HL=\begin{pmatrix}
+A^{-1}+A^{-1}BE^{-1}CA^{-1}&-A^{-1}BE^{-1}\\
+-E^{-1}CA^{-1}&E^{-1}
+\end{pmatrix},
+\]
+as required.
+\item With
+\[
+L=\begin{pmatrix}I_m&-BD^{-1}\\0&I_n\end{pmatrix},\quad
+N=\begin{pmatrix}F&0\\C&D\end{pmatrix},
+\]
+we have \(LM=N\); again \(L^{-1}\) changes the minus sign to plus.
+Set
+\[
+H=\begin{pmatrix}F^{-1}&0\\-D^{-1}CF^{-1}&D^{-1}\end{pmatrix}.
+\]
+The lower-left blocks of \(NH\) and \(HN\) are
+\(CF^{-1}-CF^{-1}=0\) and \(-D^{-1}C+D^{-1}C=0\), respectively;
+the other blocks give \(NH=HN=I_{m+n}\).
+Consequently
+\[
+M^{-1}=HL=\begin{pmatrix}
+F^{-1}&-F^{-1}BD^{-1}\\
+-D^{-1}CF^{-1}&D^{-1}+D^{-1}CF^{-1}BD^{-1}
+\end{pmatrix}.
+\]
+Both constructions prove existence of the inverse under exactly the stated
+hypotheses, as well as identifying its entries.
+\end{enumerate}
+\end{solution}
+
+% MA 5.23*(a-d), original star verified in scan; no Gram-matrix prerequisite.
+\begin{problem}[Two diagonal zero blocks*]\label{ex:05:antidiagonal}
+\begin{enumerate}
+\item Prove that
+\[
+\det\begin{pmatrix}0_{m\times n}&I_m\\I_n&0_{n\times m}\end{pmatrix}
+=(-1)^{mn}.
+\]
+\item Use (a) to prove, for square \(B:m\times m\) and \(C:n\times n\),
+\[
+\det\begin{pmatrix}0_{m\times n}&B\\C&0_{n\times m}\end{pmatrix}
+=(-1)^{mn}\det B\det C.
+\]
+\item Explain why the answer in (b) becomes \((-1)^m\det B\det C\)
+when \(m=n\).
+\item What happens when \(B\) and \(C\) are not square, but
+\(Z=\begin{pmatrix}0&B\\C&0\end{pmatrix}\) is square?
+\end{enumerate}
+\end{problem}
+\begin{solution}
+\begin{enumerate}
+\item Denote the matrix in (a) by \(Z\).
+Move the last \(m\) columns, in their existing order, before the
+first \(n\) columns. Each of those \(m\) columns crosses exactly \(n\)
+columns, so there are \(mn\) adjacent interchanges. The resulting matrix
+is \(I_{m+n}\). Since every interchange changes determinant sign,
+\(1=(-1)^{mn}\det Z\), and hence \(\det Z=(-1)^{mn}\).
+\item Factor the matrix as
+\[
+\begin{pmatrix}0&B\\C&0\end{pmatrix}
+=\begin{pmatrix}B&0\\0&C\end{pmatrix}
+\begin{pmatrix}0&I_m\\I_n&0\end{pmatrix}.
+\]
+Determinant multiplication, the block-diagonal formula, and (a) give the claim.
+\item The integer \(m^2-m=m(m-1)\) is even, since one of two consecutive
+integers is even. Thus \((-1)^{m^2}=(-1)^m\).
+\item Write \(B:r\times s\), \(C:u\times v\), where \(r+u=s+v\)
+and \(r\ne s\). If \(s>r\), the \(s\) columns of \(B\) are dependent,
+so \(Bz=0\) for some nonzero \(z\in\R^s\). Then
+\[
+Z\underbrace{\begin{pmatrix}0_v\\z\end{pmatrix}}_{\ne0}=0,
+\]
+so \(Z\) has a nonzero null vector.
+If \(s<r\), the size equality gives \(v>u\), so \(Cw=0\) for some
+nonzero \(w\in\R^v\), and \(Z\binom{w}{0_s}=0\).
+Thus \(Z\) is singular in both cases and its determinant is zero.
+\end{enumerate}
+\end{solution}
+
+% MA 5.26, complete.
+\begin{problem}[Eliminating a product block]\label{ex:05:product-block}
+For \(B:m\times n\) and any \(D:n\times n\), prove that
+\[
+\det\begin{pmatrix}I_m&B\\B^\top&B^\top B+D\end{pmatrix}=\det D.
 \]
 \end{problem}
 \begin{solution}
-Both block inverse formulas in the preceding exercise apply to the same matrix $Z$. The inverse is unique, so its upper-left blocks must be equal, giving the first identity. Equating its lower-right blocks gives the second. The assumption that all displayed inverses exist includes both diagonal blocks and both Schur complements.
+The block column operation is the explicit product
+\[
+\begin{pmatrix}I_m&B\\B^\top&B^\top B+D\end{pmatrix}
+\begin{pmatrix}I_m&-B\\0&I_n\end{pmatrix}
+=\begin{pmatrix}I_m&0\\B^\top&D\end{pmatrix}.
+\]
+The multiplier has determinant 1; the resulting lower block-triangular
+matrix has determinant \(\det I_m\det D=\det D\).
+Taking determinants proves the identity without an invertibility assumption on \(D\).
 \end{solution}
 
-\begin{problem}[A Gram matrix with two column groups]\label{ex:05:gram-block-inverse}
-Let $(A\ B)\in\R^{n\times(k+m)}$ have full column rank. Define
+% MA 5.28(a-c), all three original subparts.
+\begin{problem}[One diagonal zero block]\label{ex:05:zero-pivot-block}
+\begin{enumerate}
+\item If \(A:m\times m\) is invertible and \(b,c\in\R^m\), prove
 \[
- X=A^\top A,\quad Y=A^\top B,\quad Z=B^\top B,\quad
- G=\begin{pmatrix}X&Y\\Y^\top&Z\end{pmatrix},
+\det\begin{pmatrix}A&b\\c^\top&0\end{pmatrix}
+=-\det A\,(c^\top A^{-1}b).
 \]
+\item Generalize (a): for invertible \(A:m\times m\),
+\(B:m\times n\), \(C:n\times m\), prove
 \[
- M_A=I-AX^{-1}A^\top,\quad M_B=I-BZ^{-1}B^\top,
- \qquad E=B^\top M_AB,\quad F=A^\top M_BA.
+\det\begin{pmatrix}A&B\\C&0_{n\times n}\end{pmatrix}
+=(-1)^n\det A\det(CA^{-1}B).
 \]
-Express $G^{-1}$ first using $E^{-1}$ and then using $F^{-1}$, and justify existence of the inverses.
+\item For invertible \(D:n\times n\), \(B:m\times n\), \(C:n\times m\), prove
+\[
+\det\begin{pmatrix}0_{m\times m}&B\\C&D\end{pmatrix}
+=(-1)^m\det D\det(BD^{-1}C).
+\]
+\end{enumerate}
 \end{problem}
 \begin{solution}
-Full column rank of $(A\ B)$ implies full column rank of each sublist. Thus $X,Z,G$ are invertible by the Gram-kernel identity and the square zero-kernel criterion. Since $E=Z-Y^\top X^{-1}Y$ and $F=X-YZ^{-1}Y^\top$, the block-elimination rank criterion implies both $E$ and $F$ are invertible. Applying the two formulas gives
+\begin{enumerate}
+\item The determinant-one multiplier gives
 \[
- G^{-1}=\begin{pmatrix}
- X^{-1}+X^{-1}YE^{-1}Y^\top X^{-1}&-X^{-1}YE^{-1}\\
- -E^{-1}Y^\top X^{-1}&E^{-1}
- \end{pmatrix},
+\begin{pmatrix}I_m&0\\-c^\top A^{-1}&1\end{pmatrix}
+\begin{pmatrix}A&b\\c^\top&0\end{pmatrix}
+=\begin{pmatrix}A&b\\0&-c^\top A^{-1}b\end{pmatrix}.
 \]
+Its determinant is the product \(-\det A\,(c^\top A^{-1}b)\).
+\item Similarly,
 \[
- G^{-1}=\begin{pmatrix}
- F^{-1}&-F^{-1}YZ^{-1}\\
- -Z^{-1}Y^\top F^{-1}&Z^{-1}+Z^{-1}Y^\top F^{-1}YZ^{-1}
- \end{pmatrix}.
+\begin{pmatrix}I_m&0\\-CA^{-1}&I_n\end{pmatrix}
+\begin{pmatrix}A&B\\C&0\end{pmatrix}
+=\begin{pmatrix}A&B\\0&-CA^{-1}B\end{pmatrix}.
 \]
-Substituting the definitions of $X,Y,Z$ gives the formulas entirely in terms of $A,B,E,F$. This argument uses the given full column rank; an arbitrary pair of column groups would not justify the inverses.
+The right-hand determinant is \(\det A\det(-CA^{-1}B)\).
+Factoring \(-1\) from each of its last block's \(n\) rows gives the sign \((-1)^n\).
+\item The appropriate multiplier is now upper triangular:
+\[
+\begin{pmatrix}I_m&-BD^{-1}\\0&I_n\end{pmatrix}
+\begin{pmatrix}0&B\\C&D\end{pmatrix}
+=\begin{pmatrix}-BD^{-1}C&0\\C&D\end{pmatrix}.
+\]
+Its determinant is \(\det(-BD^{-1}C)\det D\), which gives the claimed
+\((-1)^m\) factor because \(BD^{-1}C\) has order \(m\).
+\end{enumerate}
 \end{solution}
 
-\begin{problem}[Three block rows]\label{ex:05:three-block}
+% MA 5.29(a-d), all; second pair of vectors renamed u,v to keep dimensions stable.
+\begin{problem}[Scalar pivots and matrix pivots]\label{ex:05:scalar-pivots}
+Let \(A:m\times m\), \(b,c\in\R^m\), \(D:n\times n\),
+\(u,v\in\R^n\), and let \(\alpha,\delta\) be scalars. Set
+\[
+Z_1=\begin{pmatrix}A&b\\c^\top&\delta\end{pmatrix},\qquad
+Z_2=\begin{pmatrix}\alpha&u^\top\\v&D\end{pmatrix}.
+\]
+Prove each formula using only its stated invertibility hypothesis.
+\begin{enumerate}
+\item If \(A\) is invertible, \(\det Z_1=\det A\,(\delta-c^\top A^{-1}b)\).
+\item If \(\delta\ne0\), \(\det Z_1=\delta\det(A-\delta^{-1}bc^\top)\).
+\item If \(D\) is invertible, \(\det Z_2=\det D\,(\alpha-u^\top D^{-1}v)\).
+\item If \(\alpha\ne0\), \(\det Z_2=\alpha\det(D-\alpha^{-1}vu^\top)\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+The following four products keep the assumptions separate:
+\begin{enumerate}
+\item
+\[
+\begin{pmatrix}I_m&0\\-c^\top A^{-1}&1\end{pmatrix}Z_1
+=\begin{pmatrix}A&b\\0&\delta-c^\top A^{-1}b\end{pmatrix}.
+\]
+\item
+\[
+\begin{pmatrix}I_m&-\delta^{-1}b\\0&1\end{pmatrix}Z_1
+=\begin{pmatrix}A-\delta^{-1}bc^\top&0\\c^\top&\delta\end{pmatrix}.
+\]
+\item
+\[
+\begin{pmatrix}1&-u^\top D^{-1}\\0&I_n\end{pmatrix}Z_2
+=\begin{pmatrix}\alpha-u^\top D^{-1}v&0\\v&D\end{pmatrix}.
+\]
+\item
+\[
+\begin{pmatrix}1&0\\-\alpha^{-1}v&I_n\end{pmatrix}Z_2
+=\begin{pmatrix}\alpha&u^\top\\0&D-\alpha^{-1}vu^\top\end{pmatrix}.
+\]
+\end{enumerate}
+Every left multiplier is block triangular with identity diagonal blocks,
+so its determinant is 1. Every resulting matrix is block triangular;
+taking the product of its diagonal-block determinants yields the four formulas.
+\end{solution}
+
+% MA 5.32(a,b), both; scaling block E may be singular.
+\begin{problem}[Operations on entire block rows]\label{ex:05:block-row-operations}
+Let \(M=\begin{pmatrix}A&B\\C&D\end{pmatrix}\), with
+\(A:m\times m\), \(B:m\times n\), \(C:n\times m\), \(D:n\times n\).
+\begin{enumerate}
+\item For every \(E:m\times m\), prove
+\[
+\det\begin{pmatrix}EA&EB\\C&D\end{pmatrix}=\det E\det M.
+\]
+\item For every \(E:n\times m\), prove
+\[
+\det\begin{pmatrix}A&B\\C+EA&D+EB\end{pmatrix}=\det M.
+\]
+\end{enumerate}
+\end{problem}
+\begin{solution}
+\begin{enumerate}
+\item Multiplication by \(\operatorname{diag}(E,I_n)\) gives exactly
+\(\begin{pmatrix}EA&EB\\C&D\end{pmatrix}\).
+The multiplier has determinant \(\det E\); determinant multiplication
+proves the formula, even if \(E\) is singular.
+\item Directly,
+\[
+\begin{pmatrix}I_m&0\\E&I_n\end{pmatrix}M
+=\begin{pmatrix}A&B\\C+EA&D+EB\end{pmatrix}.
+\]
+The multiplier's determinant is 1, so the determinant is unchanged.
+\end{enumerate}
+\end{solution}
+
+% MA 5.33, both identities; A and D can be singular.
+\begin{problem}[A diagonal block of an inverse]\label{ex:05:inverse-minors}
 Let
 \[
- Z=\begin{pmatrix}A&B&C\\B^\top&D&0\\C^\top&0&E\end{pmatrix}
+Z=\begin{pmatrix}A&B\\C&D\end{pmatrix},\qquad
+Z^{-1}=\begin{pmatrix}P&Q\\R&S\end{pmatrix},
 \]
-be symmetric, with $D,E$ invertible, and set $Q=A-BD^{-1}B^\top-CE^{-1}C^\top$.
-\begin{enumerate}
-\item If $Q$ is invertible, find $Z^{-1}$.
-\item Without requiring $Q$ invertible, prove $\operatorname{rank}Z=\operatorname{rank}D+\operatorname{rank}E+\operatorname{rank}Q$.
-\end{enumerate}
+where \(A,P:m\times m\), \(D,S:n\times n\), and the remaining blocks
+are conformable. Assume only that \(Z\) is invertible; \(A\) and \(D\)
+may be singular. Prove
+\[
+\det S=\frac{\det A}{\det Z},\qquad
+\det P=\frac{\det D}{\det Z}.
+\]
 \end{problem}
 \begin{solution}
-Group the last two block rows and columns. The lower-right grouped block is $H=\operatorname{diag}(D,E)$ with inverse $\operatorname{diag}(D^{-1},E^{-1})$, and its Schur complement is $Q$. This proves the rank formula by block elimination and rank additivity for block diagonal matrices.
-For the inverse, set $U=D^{-1}B^\top$ and $V=E^{-1}C^\top$. Since $D,E$ are symmetric, their inverses are symmetric. The second block inverse formula gives
+The four blocks of \(ZZ^{-1}=I_{m+n}\) are
 \[
- Z^{-1}=\begin{pmatrix}
- Q^{-1}&-Q^{-1}U^\top&-Q^{-1}V^\top\\
- -UQ^{-1}&D^{-1}+UQ^{-1}U^\top&UQ^{-1}V^\top\\
- -VQ^{-1}&VQ^{-1}U^\top&E^{-1}+VQ^{-1}V^\top
- \end{pmatrix}.
+AP+BR=I_m,\quad AQ+BS=0,\quad CP+DR=0,\quad CQ+DS=I_n.
 \]
-Expanding $U,V$ recovers every requested block. The grouped factorization proves the identity for all nine blocks simultaneously and verifies a two-sided inverse.
+Consequently,
+\[
+Z\begin{pmatrix}I_m&Q\\0&S\end{pmatrix}
+=\begin{pmatrix}A&0\\C&I_n\end{pmatrix},\qquad
+Z\begin{pmatrix}P&0\\R&I_n\end{pmatrix}
+=\begin{pmatrix}I_m&B\\0&D\end{pmatrix}.
+\]
+Taking determinants gives \(\det Z\det S=\det A\) and
+\(\det Z\det P=\det D\). Division by \(\det Z\ne0\) proves both
+identities. No inverse of \(A,D,P,\) or \(S\) was used.
 \end{solution}
 
-\begin{problem}[A bordered rectangular matrix]\label{ex:05:bordered-rank-inverse}
-Let $A\in\R^{m\times n}$, $a\in\R^n$, and $\alpha\in\R$, and set $Z=\begin{pmatrix}0&A\\\alpha&a^\top\end{pmatrix}$, where the upper-left zero is an $m$-component column.
-\begin{enumerate}
-\item Prove $\operatorname{rank}Z=\operatorname{rank}A$ if $\alpha=0$ and $a\in\operatorname{col}A^\top$, and $\operatorname{rank}Z=\operatorname{rank}A+1$ otherwise.
-\item If $m=n$, $A$ is invertible and $\alpha\ne0$, find $Z^{-1}$.
-\end{enumerate}
+% MA 5.35*, full including singular A; polynomial shift replaces continuity.
+\begin{problem}[When two blocks commute*]\label{ex:05:commuting-blocks}
+Let \(A,B,C,D\) all have order \(n\). If \(AC=CA\), prove
+\[
+\det\begin{pmatrix}A&B\\C&D\end{pmatrix}=\det(AD-CB).
+\]
+Include the case where \(A\) is singular.
 \end{problem}
 \begin{solution}
-(a) If $\alpha=0$, the zero first column can be discarded. The remaining matrix appends row $a^\top$ to $A$. Its row-space dimension is unchanged if that row lies in the old row space, and increases by one otherwise. If $\alpha\ne0$, subtract $(a_j/\alpha)$ times the first column from column $j+1$ for each $j$. The last row becomes $(\alpha,0,\ldots,0)$, so after a column-block swap the matrix is block diagonal with $A$ and $\alpha$, giving rank $\operatorname{rank}A+1$.
-(b) The inverse is
+\begin{itemize}
+\item If \(A\) is invertible, Theorems~\ref{thm:05:schur} and~\ref{thm:05:product} give
 \[
- Z^{-1}=\begin{pmatrix}-a^\top A^{-1}/\alpha&1/\alpha\\A^{-1}&0\end{pmatrix}.
+\begin{aligned}
+\det\begin{pmatrix}A&B\\C&D\end{pmatrix}
+&=\det A\det(D-CA^{-1}B)\\
+&=\det(AD-ACA^{-1}B)=\det(AD-CB),
+\end{aligned}
 \]
-In the forward product the upper-left block is $AA^{-1}=I$, upper-right is zero, lower-left is $-a^\top A^{-1}+a^\top A^{-1}=0$, and lower-right is one. The reverse product has scalar upper-left one, upper-right $-a^\top/\alpha+a^\top/\alpha=0$, zero lower-left, and lower-right $A^{-1}A=I$.
+since \(ACA^{-1}=CAA^{-1}=C\).
+\item For arbitrary \(A\), put \(A_t=A+tI_n\). Since
+\(A_tC=AC+tC=CA+tC=CA_t\), it still commutes with \(C\).
+The polynomial argument proved in Exercise~\ref{ex:05:adjugate}(d) shows
+that \(\det A_t\) is monic and nonzero except at finitely many real \(t\).
+For every other \(t\), the invertible case proves
+\[
+\det\begin{pmatrix}A+tI_n&B\\C&D\end{pmatrix}
+=\det(AD-CB+tD).
+\]
+Both sides are polynomials in \(t\), because their matrix entries are
+polynomials. Their difference vanishes at infinitely many real numbers;
+by the root bound already proved, it is the zero polynomial. Set \(t=0\)
+to obtain the identity, including singular \(A\).
+\end{itemize}
 \end{solution}
 
-\begin{problem}[Powers of a triangular block matrix]\label{ex:05:block-powers}
-Let $A,D$ be square and $Z=\begin{pmatrix}A&B\\0&D\end{pmatrix}$.
-\begin{enumerate}
-\item For positive integer $k$, prove $Z^k=\begin{pmatrix}A^k&Q_k\\0&D^k\end{pmatrix}$ where $Q_k=\sum_{j=1}^k A^{k-j}BD^{j-1}$.
-\item Simplify $Q_k$ when $D=I$ and $I-A$ is invertible.
-\item Determine the corresponding expression for negative powers when they exist.
-\end{enumerate}
+% MA 5.37(c) only; (a,b) are the classroom Sylvester identity, cited as a tool.
+\begin{problem}[A determinant after a matrix update]\label{ex:05:matrix-update}
+Let \(A:m\times m\) and \(D:n\times n\) be invertible, and let
+\(B:m\times n\), \(C:n\times m\). Use Sylvester's determinant identity
+to prove
+\[
+\det(A+BDC)=\det A\det D\det(D^{-1}+CA^{-1}B).
+\]
 \end{problem}
 \begin{solution}
-(a) The case $k=1$ is the original matrix. Multiplying $Z$ by the expression for $Z^k$ gives off-diagonal block $AQ_k+BD^k=\sum_{j=1}^{k+1}A^{k+1-j}BD^{j-1}=Q_{k+1}$ and the required diagonal powers. This proves the formula by induction.
-(b) Now $Q_k=(I+A+\cdots+A^{k-1})B=(I-A)^{-1}(I-A^k)B$ by the finite geometric identity.
-(c) The matrix is invertible exactly when both $A,D$ are invertible, by the block triangular rank criterion or its explicit inverse. Applying (a) to $Z^{-1}$ gives, for $k>0$,
+Apply \(\det(I_m+UV)=\det(I_n+VU)\) from Theorem~\ref{thm:05:update} to
+\(U=A^{-1}B:m\times n\), \(V=DC:n\times m\). Then
 \[
- Z^{-k}=\begin{pmatrix}A^{-k}&R_k\\0&D^{-k}\end{pmatrix},\qquad
- R_k=-\sum_{j=1}^k A^{-(k-j+1)}BD^{-j}.
+\begin{aligned}
+\det(A+BDC)
+&=\det A\det(I_m+A^{-1}BDC)\\
+&=\det A\det(I_n+DCA^{-1}B)\\
+&=\det A\det\bigl(D(D^{-1}+CA^{-1}B)\bigr)\\
+&=\det A\det D\det(D^{-1}+CA^{-1}B).
+\end{aligned}
 \]
-The positive-index sum formula cannot simply be read with a negative upper limit.
+The factors inside the last determinant retain their original order.
 \end{solution}
 
-\begin{problem}[Zero blocks and rank]\label{ex:05:zero-block-ranks}
-\begin{enumerate}
-\item Prove $\operatorname{rank}\begin{pmatrix}A&0\\0&D\end{pmatrix}=\operatorname{rank}A+\operatorname{rank}D$ and the analogous formula for $\begin{pmatrix}0&B\\C&0\end{pmatrix}$, without requiring square blocks.
-\item Give counterexamples to the same diagonal-rank formula for $Z_1=\begin{pmatrix}A&B\\0&D\end{pmatrix}$ and $Z_2=\begin{pmatrix}A&0\\C&D\end{pmatrix}$.
-\item Prove the formula for both $Z_1,Z_2$ if either $A$ or $D$ is square and invertible. Is that condition necessary?
-\end{enumerate}
+% MA 5.38, complete; no commutation or invertibility hypothesis.
+\begin{problem}[A block difference of squares]\label{ex:05:difference-squares}
+For any two \(n\times n\) matrices \(A,B\), prove
+\[
+\det\begin{pmatrix}A&B\\B&A\end{pmatrix}
+=\det(A+B)\det(A-B).
+\]
 \end{problem}
 \begin{solution}
-(a) The column space of the diagonal block matrix is $\operatorname{col}A\times\operatorname{col}D$, with dimension the sum of component dimensions. Swapping column groups gives the off-diagonal formula.
-(b) Set the scalar blocks $A=D=0$ and take $B=1$ for $Z_1$ or $C=1$ for $Z_2$. The whole matrix has rank one while both diagonal ranks vanish.
-(c) If $A$ is invertible, clear $B$ by column addition in $Z_1$, or clear $C$ by row addition in $Z_2$. If $D$ is invertible, clear $B$ by row addition or clear $C$ by column addition. Each reduces to the diagonal block matrix using invertible operations, proving the equality. The condition is not necessary: if $B=C=0$, the equality holds even when both diagonal blocks are singular.
+Let \(Z\) denote the displayed block matrix. Direct multiplication gives
+\[
+\begin{pmatrix}I_n&I_n\\0&I_n\end{pmatrix}Z
+=\begin{pmatrix}A+B&A+B\\B&A\end{pmatrix}
+\]
+and the factorization
+\[
+\begin{pmatrix}A+B&A+B\\B&A\end{pmatrix}
+=\begin{pmatrix}A+B&0\\0&I_n\end{pmatrix}
+ \begin{pmatrix}I_n&0\\B&I_n\end{pmatrix}
+ \begin{pmatrix}I_n&I_n\\0&A-B\end{pmatrix}.
+\]
+The first multiplier has determinant 1. The three factors on the right
+have determinants \(\det(A+B)\), 1, and \(\det(A-B)\), respectively.
+Taking determinants proves the claim. None of these products requires
+\(AB=BA\), or invertibility of \(A+B\) or \(A-B\).
 \end{solution}
 
-\begin{problem}[Lower bounds from a zero block]\label{ex:05:zero-block-bounds}
-Prove
+% MA 5.39, complete symmetric-matrix data restored from 5.19.
+\begin{problem}[Three groups of coordinates]\label{ex:05:three-blocks}
+Let \(A:m\times m\), \(D:n\times n\), \(E:p\times p\) be symmetric,
+and let \(B:m\times n\), \(C:m\times p\). If \(D,E\) are invertible, prove
 \[
- \operatorname{rank}\begin{pmatrix}A&B\\0&D\end{pmatrix}\geqslant\operatorname{rank}A+\operatorname{rank}D,\qquad
- \operatorname{rank}\begin{pmatrix}A&0\\C&D\end{pmatrix}\geqslant\operatorname{rank}A+\operatorname{rank}D.
+\det\begin{pmatrix}A&B&C\\B^\top&D&0\\C^\top&0&E\end{pmatrix}
+=\det D\det E\det(A-BD^{-1}B^\top-CE^{-1}C^\top).
 \]
-Show that the inequality need not hold if all four blocks can be nonzero.
 \end{problem}
 \begin{solution}
-Choose independent column lists $a_1,\ldots,a_r$ from $A$ and $d_1,\ldots,d_s$ from $D$. In the first whole matrix, choose the columns $(a_i,0)^\top$ and the columns $(b_j,d_j)^\top$ with the selected lower blocks. In a zero combination, the lower component and independence of the $d_j$ force those $s$ coefficients zero. The upper component and independence of the $a_i$ then force the remaining $r$ coefficients zero. Thus at least $r+s$ columns are independent. Transposing proves the second inequality. For a counterexample with no zero block, $\begin{pmatrix}1&1\\1&1\end{pmatrix}$ has rank one although both diagonal blocks have rank one.
+Combine the last two coordinate groups:
+\[
+F=[\,B\ C\,],\quad H=\begin{pmatrix}D&0\\0&E\end{pmatrix},\quad
+H^{-1}=\begin{pmatrix}D^{-1}&0\\0&E^{-1}\end{pmatrix}.
+\]
+The formula for \(H^{-1}\) follows by multiplying in both orders.
+The original matrix is \(\begin{pmatrix}A&F\\F^\top&H\end{pmatrix}\).
+Theorem~\ref{thm:05:schur}, using the invertible lower-right block, yields
+\[
+\det H\det(A-FH^{-1}F^\top).
+\]
+Here \(\det H=\det D\det E\), and block multiplication gives
+\[
+FH^{-1}F^\top
+=[\,BD^{-1}\ CE^{-1}\,]\begin{pmatrix}B^\top\\C^\top\end{pmatrix}
+=BD^{-1}B^\top+CE^{-1}C^\top.
+\]
+Substitution proves the required determinant.
 \end{solution}
 
-\begin{problem}[Moving a pivot block]\label{ex:05:off-diagonal-rank}
-\begin{enumerate}
-\item If $B$ is square and invertible, prove
-$\operatorname{rank}\begin{pmatrix}A&B\\0&D\end{pmatrix}=\operatorname{rank}B+\operatorname{rank}(DB^{-1}A)$.
-If $C$ is square and invertible, prove
-$\operatorname{rank}\begin{pmatrix}A&0\\C&D\end{pmatrix}=\operatorname{rank}C+\operatorname{rank}(AC^{-1}D)$.
-\item Set $X=\begin{pmatrix}A&B\\C&0\end{pmatrix}$ and $Y=\begin{pmatrix}0&B\\C&D\end{pmatrix}$. Prove that both ranks equal $\operatorname{rank}B+\operatorname{rank}C$ if either $B$ or $C$ is square and invertible, and that both ranks are at least that sum without this assumption.
-\item Prove $\operatorname{rank}X=\operatorname{rank}A+\operatorname{rank}(CA^{-1}B)$ when $A$ is invertible, and $\operatorname{rank}Y=\operatorname{rank}D+\operatorname{rank}(BD^{-1}C)$ when $D$ is invertible.
-\end{enumerate}
+% MA 5.40, full original hypotheses.
+\begin{problem}[A scalar at the opposite corner]\label{ex:05:corner-scalar}
+Let \(A\) be invertible of order \(m\), let \(a\in\R^m\), and let
+\(\alpha\ne0\). Prove
+\[
+\det\begin{pmatrix}0_{m\times1}&A\\\alpha&a^\top\end{pmatrix}
+=(-1)^m\alpha\det A.
+\]
 \end{problem}
 \begin{solution}
-(a) Swap the two column groups in the first matrix to obtain $\begin{pmatrix}B&A\\D&0\end{pmatrix}$. Its Schur complement at the invertible block $B$ is $-DB^{-1}A$, whose rank equals that of $DB^{-1}A$. For the second matrix, swap the row groups to obtain $\begin{pmatrix}C&D\\A&0\end{pmatrix}$ and use the same argument with Schur complement $-AC^{-1}D$.
-(b) Swapping column groups turns $X$ into $\begin{pmatrix}B&A\\0&C\end{pmatrix}$ and $Y$ into $\begin{pmatrix}B&0\\D&C\end{pmatrix}$. The zero-block rank equality under an invertible diagonal block and the preceding lower bounds give exactly the assertions.
-(c) Eliminate using $A$ in $X$ or $D$ in $Y$. The remaining Schur blocks are $-CA^{-1}B$ and $-BD^{-1}C$, respectively; multiplication by $-1$ does not change rank.
+Column 1 has only the bottom entry \(\alpha\) nonzero. Deleting its
+row \(m+1\) and column 1 leaves exactly \(A\), so expansion gives
+\[
+\det\begin{pmatrix}0&A\\\alpha&a^\top\end{pmatrix}
+=\alpha(-1)^{(m+1)+1}\det A=(-1)^m\alpha\det A.
+\]
 \end{solution}
 
-\begin{problem}[Frobenius and Sylvester inequalities]\label{ex:05:rank-inequalities}
-\begin{enumerate}
-\item For a defined triple product $ABC$, prove
-$\operatorname{rank}(AB)+\operatorname{rank}(BC)\leqslant\operatorname{rank}B+\operatorname{rank}(ABC)$ using block matrices.
-\item For $A:m\times p$, $B:p\times n$, deduce $\operatorname{rank}(AB)\geqslant\operatorname{rank}A+\operatorname{rank}B-p$.
-\item Deduce that $AB=0$ implies $\operatorname{rank}A\leqslant p-\operatorname{rank}B$.
-\end{enumerate}
+% Bapat 1.4; no Chapter 12 answer, complete proof supplied.
+\begin{problem}[A block identity without a pivot]\label{ex:05:block-sum}
+For arbitrary \(n\times n\) matrices \(A,B\), prove
+\[
+\det\begin{pmatrix}A+B&A\\A&A\end{pmatrix}=\det A\det B.
+\]
 \end{problem}
 \begin{solution}
-(a) Write $A:m\times n$, $B:n\times p$, $C:p\times q$ and set $Z=\begin{pmatrix}0&AB\\BC&B\end{pmatrix}$. The block identity
+Subtract the second block row from the first by multiplying:
 \[
- \begin{pmatrix}I_m&-A\\0&I_n\end{pmatrix}
- Z
- \begin{pmatrix}I_q&0\\-C&I_p\end{pmatrix}
- =\begin{pmatrix}-ABC&0\\0&B\end{pmatrix}
+\begin{pmatrix}I_n&-I_n\\0&I_n\end{pmatrix}
+\begin{pmatrix}A+B&A\\A&A\end{pmatrix}
+=\begin{pmatrix}B&0\\A&A\end{pmatrix}.
 \]
-is verified by two multiplications. Its multipliers are invertible, so $\operatorname{rank}Z=\operatorname{rank}(ABC)+\operatorname{rank}B$. The lower bound for a zero diagonal block gives $\operatorname{rank}Z\geqslant\operatorname{rank}(AB)+\operatorname{rank}(BC)$.
-(b) Apply (a) to the triple $(A,I_p,B)$ and rearrange.
-(c) Substitute $\operatorname{rank}(AB)=0$ into (b).
-\end{solution}
-
-\begin{problem}[Two rank formulas for one block matrix]\label{ex:05:schur-ranks}
-\begin{enumerate}
-\item If $A$ is invertible, prove
-\[ \operatorname{rank}Z=\operatorname{rank}A+\operatorname{rank}(D-CA^{-1}B). \]
-Prove the analogous formula pivoting on invertible $D$.
-\item For $B:m\times n$, prove
-\[
- \operatorname{rank}\begin{pmatrix}I_m&B\\B^\top&I_n\end{pmatrix}
- =m+\operatorname{rank}(I_n-B^\top B)
- =n+\operatorname{rank}(I_m-BB^\top).
-\]
-\item For $B:m\times n$, $C:n\times m$, prove
-$\operatorname{rank}(I_m-BC)=\operatorname{rank}(I_n-CB)+m-n$.
-Include the square case explicitly.
-\end{enumerate}
-\end{problem}
-\begin{solution}
-(a) The two Schur eliminations use invertible multipliers and give diagonal block matrices, so rank is the sum of the indicated block ranks.
-(b) Apply (a) to the two identity diagonal blocks of the displayed matrix.
-(c) Similarly, for $Z=\begin{pmatrix}I_m&B\\C&I_n\end{pmatrix}$, pivoting on $I_m$ gives rank $m+\operatorname{rank}(I_n-CB)$, while pivoting on $I_n$ gives $n+\operatorname{rank}(I_m-BC)$. Equating and rearranging gives the formula. If $m=n$, it becomes equality of the two ranks. The whole block matrix has an additional identity-block rank; that term must not be omitted.
-\end{solution}
-
-\begin{problem}[Another proof of the sum-rank bound]\label{ex:05:block-sum-rank}
-Use partitioned matrices to prove $\operatorname{rank}(A+B)\leqslant\operatorname{rank}A+\operatorname{rank}B$ for $A,B\in\R^{m\times n}$.
-\end{problem}
-\begin{solution}
-The identity
-\[
- A+B=(I_m\ I_m)\begin{pmatrix}A&0\\0&B\end{pmatrix}\begin{pmatrix}I_n\\I_n\end{pmatrix}
-\]
-expresses the sum as a product through a block diagonal matrix. Product rank cannot exceed the rank of that middle factor, which is $\operatorname{rank}A+\operatorname{rank}B$. This is a block proof with no assumption that either matrix is square.
-\end{solution}
-
-\subsection*{Optional computational practice: sweeping}
-For a square matrix $A=(a_{ij})$ and an index $k$ with $a_{kk}\ne0$, define $B=\operatorname{SWP}(A,k)$ by
-\[
- b_{kk}=-\frac1{a_{kk}},\quad b_{ik}=\frac{a_{ik}}{a_{kk}},\quad
- b_{kj}=\frac{a_{kj}}{a_{kk}},\quad
- b_{ij}=a_{ij}-\frac{a_{ik}a_{kj}}{a_{kk}}
- \quad(i,j\ne k).
-\]
-All entries on the right refer to the matrix before that sweep.
-
-\begin{problem}[Two successive sweeps]\label{ex:05:sweep-two}
-For $A=\begin{pmatrix}a&b\\c&d\end{pmatrix}$, compute $A^{(1)}=\operatorname{SWP}(A,1)$ and $A^{(2)}=\operatorname{SWP}(A^{(1)},2)$, state all nonzero-pivot conditions, and prove $A^{(2)}=-A^{-1}$ when both sweeps are defined.
-\end{problem}
-\begin{solution}
-The first sweep requires $a\ne0$ and gives
-\[
- A^{(1)}=\begin{pmatrix}-1/a&b/a\\c/a&d-bc/a\end{pmatrix}.
-\]
-The second additionally requires $d-bc/a\ne0$, equivalently $ad-bc\ne0$. Substitution in the definition gives
-\[
- A^{(2)}=-\frac1{ad-bc}\begin{pmatrix}d&-b\\-c&a\end{pmatrix}.
-\]
-For example, its upper-left entry is $-1/a-(bc/a^2)/(d-bc/a)=-d/(ad-bc)$; the other three entries follow directly from the pivot row and column rules. Multiplying the final displayed matrix by $A$ in either order gives $-I_2$, proving the inverse claim without a determinant theorem.
-\end{solution}
-
-\begin{problem}[Sweeping an interior index]\label{ex:05:sweep-general}
-Compute $\operatorname{SWP}(A,2)$ for a general $3\times3$ matrix and give the corresponding block formula for $\operatorname{SWP}(A,p)$ in an $n\times n$ matrix. State the condition for each formula.
-\end{problem}
-\begin{solution}
-For $3\times3$, the answer is
-\[
- \begin{pmatrix}
- a_{11}-a_{12}a_{21}/a_{22}&a_{12}/a_{22}&a_{13}-a_{12}a_{23}/a_{22}\\
- a_{21}/a_{22}&-1/a_{22}&a_{23}/a_{22}\\
- a_{31}-a_{32}a_{21}/a_{22}&a_{32}/a_{22}&a_{33}-a_{32}a_{23}/a_{22}
- \end{pmatrix},
-\]
-requiring $a_{22}\ne0$. For the general case, group indices before $p$, the single index $p$, and indices after $p$, and write
-\[
- A=\begin{pmatrix}A_{11}&u&A_{13}\\v^\top&a&w^\top\\A_{31}&z&A_{33}\end{pmatrix}.
-\]
-Here $a=a_{pp}$; the result, for $a\ne0$, is
-\[
- \begin{pmatrix}
- A_{11}-uv^\top/a&u/a&A_{13}-uw^\top/a\\
- v^\top/a&-1/a&w^\top/a\\
- A_{31}-zv^\top/a&z/a&A_{33}-zw^\top/a
- \end{pmatrix}.
-\]
-Each block is obtained by collecting exactly the entry updates in the definition. For $p=1$ or $p=n$, the absent before/after block groups are simply omitted.
-\end{solution}
-
-\begin{problem}[The sweeping theorem]\label{ex:05:sweep-theorem}
-Starting with $A^{(0)}=A\in\R^{n\times n}$, define $A^{(k)}=\operatorname{SWP}(A^{(k-1)},k)$ for $k=1,\ldots,p$, assuming every required pivot is nonzero. With the original partition $A=\begin{pmatrix}P&Q\\R&S\end{pmatrix}$ and $P:p\times p$, prove
-\[
- A^{(p)}=\begin{pmatrix}-P^{-1}&P^{-1}Q\\RP^{-1}&S-RP^{-1}Q\end{pmatrix}.
-\]
-Deduce that a complete defined sequence of sweeps gives $A^{(n)}=-A^{-1}$.
-\end{problem}
-\begin{solution}
-View $y=Ax$ as a relation between coordinates. Solving its $k$th equation for $x_k$ shows that replacing the input coordinate $x_k$ by $y_k$ and the output coordinate $y_k$ by $-x_k$ changes its matrix exactly according to the sweep definition. Indeed,
-\[
- -x_k=-y_k/a_{kk}+\sum_{j\ne k}(a_{kj}/a_{kk})x_j,
-\]
-and substituting $x_k$ in each other equation gives coefficient $a_{ik}/a_{kk}$ on $y_k$ and coefficient $a_{ij}-a_{ik}a_{kj}/a_{kk}$ on $x_j$.
-After the first $p$ sweeps, the new input is $(y_1,\ldots,y_p,x_{p+1},\ldots,x_n)$ and the new output is $(-x_1,\ldots,-x_p,y_{p+1},\ldots,y_n)$. The hypotheses ensure this is a well-defined linear rule for every new input. The equation $Px=0$ therefore has only the zero solution: set the unswept input coordinates to zero and the first $p$ original output coordinates to zero, so the new input is zero and hence its new output, including $-x$, is zero. Thus $P$ is invertible.
-Writing the original input and output in blocks as $x=(u,v)$ and $y=(r,s)$, the original equations now give
-\[
- -u=-P^{-1}r+P^{-1}Qv,\qquad
- s=RP^{-1}r+(S-RP^{-1}Q)v.
-\]
-These are exactly the asserted blocks. When $p=n$, there are no unswept coordinates and the matrix is $-A^{-1}$.
-\end{solution}
-
-\begin{problem}[Solving equations by sweeping]\label{ex:05:sweep-system}
-Explain how a defined sequence of sweeps can solve $PX=Q$ for an invertible square $P$. Explain how equation-row permutations can arrange usable pivots if the original fixed order fails. Solve $2x_1+3x_2=8$, $4x_1+5x_2=14$ using sweeps.
-\end{problem}
-\begin{solution}
-Place $P,Q$ in the upper block row of a square matrix $\begin{pmatrix}P&Q\\0&0\end{pmatrix}$, with lower block sizes chosen to make it square. Sweeping the indices of $P$ gives upper-right block $P^{-1}Q$ by the theorem. A prescribed fixed sweep order may fail even for invertible $P$; an equation-row permutation must be applied to both $P$ and $Q$ to arrange usable successive elimination pivots. Ordinary Gaussian pivot selection supplies such a permutation for invertible $P$.
-For the numerical system, start with
-\[
- A^{(0)}=\begin{pmatrix}2&3&8\\4&5&14\\0&0&0\end{pmatrix}.
-\]
-The first pivot is $2$, and the sweep gives
-\[
- A^{(1)}=\begin{pmatrix}-1/2&3/2&4\\2&-1&-2\\0&0&0\end{pmatrix}.
-\]
-The second pivot is $-1$, and the next sweep gives
-\[
- A^{(2)}=\begin{pmatrix}5/2&-3/2&1\\-2&1&2\\0&0&0\end{pmatrix}.
-\]
-The upper-right column is $(1,2)^\top$, the solution. Substitution gives $2+6=8$ and $4+10=14$.
+The multiplier has determinant 1. The lower block-triangular matrix has
+determinant \(\det B\det A\), which equals \(\det A\det B\) because
+these two factors are real scalars. This proves the formula also when
+\(A\) or \(B\) is singular.
 \end{solution}

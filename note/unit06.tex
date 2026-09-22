@@ -1,17 +1,25 @@
 \documentclass[12pt]{article}
 \def\unitnumber{6}
-\def\pdftitle{Unit 6: Inner products and bilinear forms}
+\def\pdftitle{Unit 6: Orthogonality, Projections, and Least Squares}
 \def\runningtitle{Unit 6}
 \input{unit-preamble.tex}
+\externaldocument[one-]{.build/unit01/unit01}[unit01.pdf]
+\externaldocument[two-]{.build/unit02/unit02}[unit02.pdf]
+\externaldocument[three-]{.build/unit03/unit03}[unit03.pdf]
+\externaldocument[four-]{.build/unit04/unit04}[unit04.pdf]
+\externaldocument[five-]{.build/unit05/unit05}[unit05.pdf]
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Span}{span}
 \AddToHook{env/problem/before}{\needspace{8\baselineskip}}
+\AddToHook{env/problem/after}{\nopagebreak[4]}
 \begin{document}
-\begin{center}
-{\Large\bfseries Unit 6: Inner products and bilinear forms}
-\end{center}
+{\Large\bfseries Unit 6. Orthogonality, Projections, and Least Squares}\par
 \input{unit06-content.tex}
 \clearpage
 \section*{Exercises and solutions}
-All spaces and scalars are real.
-\textbf{Suggested practice:} \ref{ex:06:examples}, \ref{ex:06:noninner-norm}, \ref{ex:06:continuity}, \ref{ex:06:walls}, \ref{ex:06:gs-three}, \ref{ex:06:gs-systems}, \ref{ex:06:gs-polynomials-three}, \ref{ex:06:gs-dependent}, \ref{ex:06:trace-complement}, \ref{ex:06:positive-form}, \ref{ex:06:bilinear-coordinates}, \ref{ex:06:parseval-basis}.
+Suggested practice: Exercises~\ref{ex:06:dot-products},
+\ref{ex:06:gs-r3}, \ref{ex:06:rectangular-orthogonality},
+\ref{ex:06:dependent-gs}, \ref{ex:06:projection-criteria}, and
+\ref{ex:06:parseval-converse}.
 \input{unit06-exercises.tex}
 \end{document}

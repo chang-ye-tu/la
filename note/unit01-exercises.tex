@@ -1,163 +1,4 @@
-\needspace{20\baselineskip}
-\subsection*{Dot products and norms}
-
-\begin{problem}\label{ex:01:orthogonality-transitivity}
-Give vectors $x,y,z$ for which $x\perp y$ and $y\perp z$, but
-$x$ is not perpendicular to $z$.
-\end{problem}
-\begin{solution}
-Take $x=z=(1,0)$ and $y=(0,1)$. Then
-$x\cdot y=y\cdot z=0$, whereas $x\cdot z=1$.
-\end{solution}
-
-\begin{problem}\label{ex:01:parallelogram-polarization}
-For $x,y\in\R^n$, prove
-\[
-\norm{x+y}^2+\norm{x-y}^2=2\norm{x}^2+2\norm{y}^2,
-\qquad
-\norm{x+y}^2-\norm{x-y}^2=4x\cdot y.
-\]
-Interpret the first identity as a parallelogram law.
-\end{problem}
-\begin{solution}
-The dot-product laws give
-\[
-\norm{x+y}^2=\norm{x}^2+2x\cdot y+\norm{y}^2,
-\qquad
-\norm{x-y}^2=\norm{x}^2-2x\cdot y+\norm{y}^2.
-\]
-Add and subtract these equations. The parallelogram with vertices
-$0,x,x+y,y$ has diagonals of lengths $\norm{x+y}$ and $\norm{x-y}$.
-The first identity says that the sum of their squared lengths equals
-the sum of the squared lengths of the four sides.
-\end{solution}
-
-\begin{problem}\label{ex:01:dot-cancellation}
-Give three nonzero vectors $a,b,c$ such that $a\cdot b=a\cdot c$
-but $b\ne c$.
-\end{problem}
-\begin{solution}
-Take $a=(1,0)$, $b=(1,1)$, and $c=(1,2)$. Both dot products are $1$,
-although $b\ne c$.
-\end{solution}
-
-\begin{problem}\label{ex:01:perpendicular-sum}
-Let $u_1,\ldots,u_r\in\R^n$ be nonzero and pairwise perpendicular.
-If $c_1u_1+\cdots+c_ru_r=0$, prove that $c_1=\cdots=c_r=0$.
-\end{problem}
-\begin{solution}
-For each $j$, take the dot product with $u_j$:
-\[
-0=\sum_{i=1}^r c_i(u_i\cdot u_j)=c_j\norm{u_j}^2.
-\]
-Since $u_j\ne0$, its squared norm is positive, so $c_j=0$.
-\end{solution}
-
-\begin{problem}\label{ex:01:numerical-projection}
-For $a=(2,-1,5)$ and $b=(-1,1,1)$, find the projection of $a$ along
-$b$ and the projection of $b$ along $a$.
-\end{problem}
-\begin{solution}
-Here $a\cdot b=-2-1+5=2$, $\norm{a}^2=30$, and
-$\norm{b}^2=3$. Thus the projections are, respectively,
-\[
-\frac{a\cdot b}{\norm{b}^2}b
-=\left(-\frac23,\frac23,\frac23\right),
-\qquad
-\frac{b\cdot a}{\norm{a}^2}a
-=\left(\frac{2}{15},-\frac{1}{15},\frac13\right).
-\]
-\end{solution}
-
-\begin{problem}\label{ex:01:triangle-equality}
-Use the Schwarz inequality to prove that, for $x,y\in\R^n$,
-\[
-\norm{x+y}\leqslant\norm{x}+\norm{y}.
-\]
-Prove that equality holds exactly when $y=0$ or $x=ky$ for some $k\geqslant0$.
-\end{problem}
-\begin{solution}
-By Schwarz,
-\[
-\norm{x+y}^2
-=\norm{x}^2+2x\cdot y+\norm{y}^2
-\leqslant\norm{x}^2+2\norm{x}\norm{y}+\norm{y}^2
-=(\norm{x}+\norm{y})^2.
-\]
-Taking nonnegative square roots proves the inequality. Equality requires
-$x\cdot y=\norm{x}\norm{y}$. If $y=0$, this holds. If $y\ne0$,
-the equality condition in Schwarz requires $x=ky$ for a real $k$.
-Then $x\cdot y=k\norm{y}^2$ and
-$\norm{x}\norm{y}=|k|\norm{y}^2$, which are equal exactly when $k\geqslant0$.
-\end{solution}
-
-\needspace{20\baselineskip}
-\subsection*{Lines and planes}
-
-\begin{problem}\label{ex:01:segment-proportion}
-Let $x\ne y$ and $0\leqslant\lambda\leqslant1$. Show that
-$z=(1-\lambda)x+\lambda y$ divides the segment from $x$ to $y$
-in the proportion $\lambda:(1-\lambda)$.
-\end{problem}
-\begin{solution}
-The representation $z=x+\lambda(y-x)$ places $z$ on the segment.
-Moreover,
-\[
-\norm{z-x}=\norm{\lambda(y-x)}=\lambda\norm{y-x},
-\qquad
-\norm{y-z}=(1-\lambda)\norm{y-x}.
-\]
-Since $\norm{y-x}>0$, these distances have the stated proportion,
-including $z=x$ at $\lambda=0$ and $z=y$ at $\lambda=1$.
-\end{solution}
-
-\begin{problem}\label{ex:01:plane-normal}
-Find the equation of the plane perpendicular to $(1,-1,3)$ and passing
-through $(4,2,-1)$.
-\end{problem}
-\begin{solution}
-A point $(x_1,x_2,x_3)$ lies on the plane exactly when
-\[
-(1,-1,3)\cdot(x_1-4,x_2-2,x_3+1)=0.
-\]
-Thus its equation is $x_1-x_2+3x_3=-1$.
-\end{solution}
-
-\begin{problem}\label{ex:01:perpendicular-slopes}
-Write down vectors perpendicular to the lines $y=mx+b$ and $y=m'x+c$.
-Show that these vectors are perpendicular to each other exactly when
-$mm'=-1$.
-\end{problem}
-\begin{solution}
-The equations $-mx+y=b$ and $-m'x+y=c$ give nonzero normal vectors
-$(-m,1)$ and $(-m',1)$. Their dot product is $mm'+1$,
-which vanishes exactly when $mm'=-1$.
-\end{solution}
-
-\begin{problem}\label{ex:01:line-plane-intersection}
-\begin{enumerate}
-\item Find the intersection of the line through $(1,3,5)$ with direction
-$(-2,1,1)$ and the plane $2x+3y-z=1$.
-\item Find the intersection of the plane $3x-4y+z=2$ and the line through
-$(1,2,-1)$ perpendicular to that plane.
-\end{enumerate}
-\end{problem}
-\begin{solution}
-(a) Substitute $(x,y,z)=(1-2t,3+t,5+t)$ into the plane equation:
-\[
-2(1-2t)+3(3+t)-(5+t)=6-2t=1.
-\]
-Hence $t=5/2$ and the intersection is $(-4,11/2,15/2)$.
-
-(b) The normal vector $(3,-4,1)$ gives the line
-$(x,y,z)=(1+3t,2-4t,-1+t)$. Substitution gives
-\[
-3(1+3t)-4(2-4t)+(-1+t)=-6+26t=2.
-\]
-Thus $t=4/13$ and the intersection is $(25/13,10/13,-9/13)$.
-\end{solution}
-
-\needspace{20\baselineskip}
+\needspace{12\baselineskip}
 \subsection*{Matrix multiplication and transpose}
 
 \begin{problem}\label{ex:01:rectangular-associativity}
@@ -186,24 +27,24 @@ A(Bc)=\begin{pmatrix}8+2\\12+2\end{pmatrix}
 \]
 \end{solution}
 
-\begin{problem}\label{ex:01:reshuffle-order}
+\begin{problem}\label{ex:01:reshuffle-order}\notetarget{note:01:exercise-shuffles}
 On an ordered triple $(a_1,a_2,a_3)$, let $S$ reverse the order and let
 $T$ move the last entry to the first position. Show that performing $S$
 then $T$ need not give the same result as performing $T$ then $S$.
 Do this first with triples, then with matrices acting on column vectors.
 \end{problem}
-\begin{solution}
+\begin{solution}\notetarget{note:01:exercise-shuffles-solution}
 Applying $S$ then $T$ gives
 $(a_1,a_2,a_3)\mapsto(a_3,a_2,a_1)\mapsto(a_1,a_3,a_2)$.
 Applying $T$ then $S$ gives
 $(a_1,a_2,a_3)\mapsto(a_3,a_1,a_2)\mapsto(a_2,a_1,a_3)$.
 For instance, the triple $(1,2,3)$ gives different results.
-The corresponding matrices are
+\notetarget{note:01:exercise-shuffles-matrices}The corresponding matrices are
 \[
 S=\begin{pmatrix}0&0&1\\0&1&0\\1&0&0\end{pmatrix},\qquad
 T=\begin{pmatrix}0&0&1\\1&0&0\\0&1&0\end{pmatrix}.
 \]
-The two orders give
+\notetarget{note:01:exercise-shuffles-products}The two orders give
 \[
 TS=\begin{pmatrix}1&0&0\\0&0&1\\0&1&0\end{pmatrix},\qquad
 ST=\begin{pmatrix}0&1&0\\1&0&0\\0&0&1\end{pmatrix},
@@ -318,29 +159,30 @@ this includes $a=0$.
 \end{solution}
 
 \begin{problem}\label{ex:01:outer-product-sums}
-Let $A=[\,a_1\ \cdots\ a_n\,]$ be an $m\times n$ real matrix.
-Prove
+Let $A=[\,a_1\ \cdots\ a_n\,]$ be an $m\times n$ real matrix,
+with entries $a_{rj}$. Prove
 \[
 AA^\top=\sum_{j=1}^n a_j a_j^\top,
 \qquad
-(A^\top A)_{ij}=a_i\cdot a_j.
+(A^\top A)_{ij}=\sum_{r=1}^m a_{ri}a_{rj}.
 \]
 \end{problem}
 \begin{solution}
-Write the entries of $A$ as $a_{rj}$. The $(r,s)$ entry of the first
-product is
+The $(r,s)$ entry of the first product is
 \[
 (AA^\top)_{rs}=\sum_{j=1}^n a_{rj}a_{sj}
 =\sum_{j=1}^n(a_j a_j^\top)_{rs}.
 \]
-For the second product,
+For the second product, $(A^\top)_{ir}=a_{ri}$, so
 \[
-(A^\top A)_{ij}=\sum_{r=1}^m a_{ri}a_{rj}=a_i\cdot a_j.
+(A^\top A)_{ij}
+=\sum_{r=1}^m(A^\top)_{ir}A_{rj}
+=\sum_{r=1}^m a_{ri}a_{rj}.
 \]
-Both identities follow by equality of entries.
+Both identities follow from the finite-sum definition of multiplication.
 \end{solution}
 
-\begin{problem}\label{ex:01:gram-product-cancellation}
+\begin{problem}[$\ast$]\label{ex:01:gram-product-cancellation}
 Let $A\in\R^{m\times n}$ and $B,C\in\R^{n\times p}$. Prove:
 \begin{enumerate}
 \item $A^\top A=0$ if and only if $A=0$;
@@ -369,113 +211,6 @@ AB=AC\ \Longleftrightarrow\ A(B-C)=0
 \ \Longleftrightarrow\ A^\top A(B-C)=0
 \ \Longleftrightarrow\ A^\top AB=A^\top AC.
 \]
-\end{solution}
-
-\begin{problem}\label{ex:01:trace-product}
-For a square matrix $M$, define its \emph{trace} by
-$\tr(M)=\sum_i M_{ii}$.
-\begin{enumerate}
-\item If $A,B$ are real $m\times n$ matrices, prove
-\[
-\tr(A^\top B)=\tr(BA^\top)
-=\tr(AB^\top)=\tr(B^\top A).
-\]
-\item Prove $\tr(ABC)=\tr(CAB)=\tr(BCA)$ and specify the compatible
-sizes of $A,B,C$.
-\item Must $\tr(ABC)=\tr(ACB)$ whenever both sides are defined?
-\end{enumerate}
-\end{problem}
-\begin{solution}
-(a) If the entries of $A,B$ are $a_{ij},b_{ij}$, then
-\[
-\tr(A^\top B)=\sum_{j=1}^n\sum_{i=1}^m a_{ij}b_{ij},
-\qquad
-\tr(BA^\top)=\sum_{i=1}^m\sum_{j=1}^n b_{ij}a_{ij}.
-\]
-These are equal because finite sums can be reordered and real
-multiplication commutes. Interchanging $A$ and $B$ gives the other two
-traces, with the same sum.
-
-(b) Take $A$ of size $m\times n$, $B$ of size $n\times p$, and $C$
-of size $p\times m$. Then $ABC,CAB,BCA$ are square matrices of sizes
-$m,p,n$, respectively. For $U$ of size $r\times s$ and $V$ of size
-$s\times r$, part (a) applied to $U^\top,V$ gives
-$\tr(UV)=\tr(VU)$. Hence
-\[
-\tr(ABC)=\tr((AB)C)=\tr(C(AB))=\tr(CAB),
-\]
-and, applying the same rule to $CA$ and $B$,
-$\tr(CAB)=\tr(BCA)$.
-
-(c) No. Take
-\[
-A=\begin{pmatrix}1&0\\0&0\end{pmatrix},\quad
-B=\begin{pmatrix}0&1\\0&0\end{pmatrix},\quad
-C=\begin{pmatrix}0&0\\1&0\end{pmatrix}.
-\]
-Here $BC=A$, whereas $CB=\begin{pmatrix}0&0\\0&1\end{pmatrix}$.
-Thus $ABC=A$ and $ACB=0$, giving traces $1$ and $0$.
-\end{solution}
-
-\needspace{20\baselineskip}
-\subsection*{Inverses and repeated multiplication}
-
-\begin{problem}\label{ex:01:inverse-products-transposes}
-Let $A,B$ be invertible real $n\times n$ matrices. Prove that $AB$ and
-$A^\top$ are invertible, with
-\[
-(AB)^{-1}=B^{-1}A^{-1},\qquad
-(A^\top)^{-1}=(A^{-1})^\top.
-\]
-\end{problem}
-\begin{solution}
-Associativity gives both required products:
-\[
-(AB)(B^{-1}A^{-1})=A(BB^{-1})A^{-1}=AA^{-1}=I,
-\]
-\[
-(B^{-1}A^{-1})(AB)=B^{-1}(A^{-1}A)B=B^{-1}B=I.
-\]
-For the transpose, the product rule gives
-\[
-A^\top(A^{-1})^\top=(A^{-1}A)^\top=I,
-\qquad
-(A^{-1})^\top A^\top=(AA^{-1})^\top=I.
-\]
-Each displayed candidate is a two-sided inverse, so uniqueness of the
-inverse proves the formulas.
-\end{solution}
-
-\begin{problem}\label{ex:01:polynomial-inverses}
-Let $A$ be a real $n\times n$ matrix. In each case, prove that the
-indicated matrix is invertible by finding its inverse:
-\begin{enumerate}
-\item $I-A$, if $A^k=0$ for a positive integer $k$;
-\item $A$, if $A^2+2A+I=0$;
-\item $A$, if $A^2-A+I=0$.
-\end{enumerate}
-Here $A^0=I$ and $A^j$ means a product of $j$ copies of $A$ for $j\geqslant1$.
-\end{problem}
-\begin{solution}
-(a) Put $S=\sum_{j=0}^{k-1}A^j$. Distributivity and associativity give
-\[
-(I-A)S=S(I-A)=\sum_{j=0}^{k-1}A^j-\sum_{j=1}^{k}A^j
-=I-A^k=I.
-\]
-Thus $(I-A)^{-1}=S$. When $k=1$, the hypothesis says $A=0$ and
-$S=I$, so the calculation includes that case.
-
-(b) The hypothesis gives
-\[
-A(-A-2I)=(-A-2I)A=-A^2-2A=I.
-\]
-Hence $A^{-1}=-A-2I$.
-
-(c) The hypothesis gives
-\[
-A(I-A)=(I-A)A=A-A^2=I,
-\]
-so $A^{-1}=I-A$.
 \end{solution}
 
 \begin{problem}\label{ex:01:centering-matrix}
@@ -509,8 +244,8 @@ are $-1/n$: each coordinate contributes the same amount to every other
 coordinate, giving symmetry.
 \end{solution}
 
-\needspace{20\baselineskip}
-\subsection*{Homogeneous systems and solution sets}
+\needspace{12\baselineskip}
+\subsection*{Solving systems and describing all solutions}
 
 \begin{problem}\label{ex:01:two-equations-three-unknowns}
 For each system, write its coefficient matrix, reduce it to row echelon
@@ -551,16 +286,84 @@ substitution determines the remaining coordinates. Hence the displayed
 sets include every solution; substituting the formulas verifies them.
 \end{solution}
 
-\begin{problem}\label{ex:01:combining-homogeneous-solutions}
-Let $a_1,\ldots,a_m\in\R^n$. Suppose $x\cdot a_i=y\cdot a_i=0$
-for every $i$. Prove that $x+y$ also satisfies these equations and that
-$cx$ satisfies them for every real number $c$.
+\begin{problem}\label{ex:01:gaussian-unique-solutions}
+Solve both systems by Gaussian elimination:
+\[
+\text{(a)}\quad
+\begin{pmatrix}2&1&-3\\5&2&-6\\3&-1&-4\end{pmatrix}x
+=\begin{pmatrix}1\\5\\7\end{pmatrix},
+\qquad
+\text{(b)}\quad
+\begin{pmatrix}2&1&-2\\3&2&2\\5&4&3\end{pmatrix}x
+=\begin{pmatrix}10\\1\\4\end{pmatrix}.
+\]
 \end{problem}
 \begin{solution}
-For each $i$, distributivity gives
-$(x+y)\cdot a_i=x\cdot a_i+y\cdot a_i=0$.
-Scalar compatibility gives $(cx)\cdot a_i=c(x\cdot a_i)=0$.
-These equalities hold for every row, proving both assertions.
+(a) Divide the first row of the augmented matrix by $2$, then subtract
+$5$ times the new first row from row two and $3$ times it from row three:
+\[
+\left(\begin{array}{rrr|r}
+2&1&-3&1\\5&2&-6&5\\3&-1&-4&7
+\end{array}\right)
+\longrightarrow
+\left(\begin{array}{rrr|r}
+1&1/2&-3/2&1/2\\0&-1/2&3/2&5/2\\0&-5/2&1/2&11/2
+\end{array}\right).
+\]
+Multiply row two by $-2$, add $5/2$ times this row to row three,
+and divide row three by $-7$. This gives
+\[
+\left(\begin{array}{rrr|r}
+1&1/2&-3/2&1/2\\0&1&-3&-5\\0&0&1&1
+\end{array}\right).
+\]
+Back substitution yields $x_3=1$, $x_2=-5+3=-2$, and
+$x_1=1/2-x_2/2+3x_3/2=3$.
+
+(b) Divide row one by $2$ and eliminate the entries below its first entry:
+\[
+\left(\begin{array}{rrr|r}
+2&1&-2&10\\3&2&2&1\\5&4&3&4
+\end{array}\right)
+\longrightarrow
+\left(\begin{array}{rrr|r}
+1&1/2&-1&5\\0&1/2&5&-14\\0&3/2&8&-21
+\end{array}\right).
+\]
+Multiply row two by $2$, subtract $3/2$ times this row from row three,
+and divide row three by $-7$:
+\[
+\left(\begin{array}{rrr|r}
+1&1/2&-1&5\\0&1&10&-28\\0&0&1&-3
+\end{array}\right).
+\]
+Thus $x_3=-3$, $x_2=-28-10(-3)=2$, and
+$x_1=5-x_2/2+x_3=1$.
+
+Each echelon system determines all three coordinates, so the solutions
+are unique. Substitution into the original systems gives, respectively,
+\[
+\begin{pmatrix}6-2-3\\15-4-6\\9+2-4\end{pmatrix}
+=\begin{pmatrix}1\\5\\7\end{pmatrix},
+\qquad
+\begin{pmatrix}2+2+6\\3+4-6\\5+8-9\end{pmatrix}
+=\begin{pmatrix}10\\1\\4\end{pmatrix}.
+\]
+\end{solution}
+
+\begin{problem}\label{ex:01:combining-homogeneous-solutions}
+Let $A\in\R^{m\times n}$ and suppose $Ax=Ay=0$.
+Prove that $x+y$ also solves the homogeneous system and that $cx$
+solves it for every real number $c$.
+\end{problem}
+\begin{solution}
+Distributivity and compatibility with scalar multiplication give
+\[
+A(x+y)=Ax+Ay=0+0=0,
+\qquad
+A(cx)=c(Ax)=c0=0.
+\]
+Thus both asserted columns belong to $N(A)$.
 \end{solution}
 
 \begin{problem}\label{ex:01:translated-solutions}
@@ -591,7 +394,7 @@ A\left(\sum_{i=1}^k c_iX_i\right)
 Thus the asserted matrix is a solution, including when $B=0$.
 \end{solution}
 
-\needspace{20\baselineskip}
+\needspace{12\baselineskip}
 \subsection*{Consistency and exceptional parameters}
 
 \begin{problem}\label{ex:01:dependent-equations-parameter}
@@ -621,7 +424,34 @@ The second answer is yes: choose $A=I_m$. Then $x=b$ solves $Ax=b$
 for every $b\in\R^m$.
 \end{solution}
 
-\begin{problem}\label{ex:01:inconsistent-three-equations}
+\begin{problem}\label{ex:01:homogeneous-parameter-systems}
+For each real $k$, find all solutions of the following systems:
+\begin{enumerate}
+\item $x_1+3x_2=0$, \quad $2x_1+kx_2=0$;
+\item $x_1+2x_2=0$, \quad $3x_1+6x_2=0$, \quad $2x_1+kx_2=0$.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) Subtracting twice the first equation from the second gives
+\[
+x_1+3x_2=0,\qquad (k-6)x_2=0.
+\]
+For $k\ne6$, only $(x_1,x_2)=(0,0)$ is possible.
+For $k=6$, choose $x_2=t$ freely; all solutions are
+$t(-3,1)^\top$, $t\in\R$.
+
+(b) Subtract three times the first equation from the second and twice
+the first from the third:
+\[
+x_1+2x_2=0,\qquad 0=0,\qquad (k-4)x_2=0.
+\]
+For $k\ne4$, the only solution is zero. For $k=4$, all solutions
+are $t(-2,1)^\top$, $t\in\R$.
+These reversible operations prove completeness; direct substitution
+checks each displayed family.
+\end{solution}
+
+\begin{problem}\label{ex:01:inconsistent-three-equations}\notetarget{note:01:exercise-inconsistency}
 Does the following system have a solution?
 \[
 \begin{aligned}
@@ -631,7 +461,7 @@ x_1+2x_2-2x_3&=8,\\
 \end{aligned}
 \]
 \end{problem}
-\begin{solution}
+\begin{solution}\notetarget{note:01:exercise-inconsistency-solution}
 The coefficient rows satisfy
 \[
 2(2,3,1)-(1,2,-2)=(3,4,4).
@@ -661,12 +491,13 @@ system is
 (\beta-1)x_2+x_3=0,\qquad
 (\beta+1)x_3=2(\beta-1).
 \]
-If $\beta=-1$, the last equation is $0=-4$, so there is no solution.
-If $\beta=1$, then $x_3=0$ and $\alpha x_1+x_2=1$; all solutions are
-$(t,1-\alpha t,0)^\top$, $t\in\R$, for every $\alpha$.
-
-For $\beta\ne\pm1$, the last equation first gives $x_3$, and the
-second gives $x_2=-x_3/(\beta-1)$. Hence
+\begin{itemize}
+\item $\beta=-1$: the last equation is $0=-4$, so no solution exists.
+\item $\beta=1$: the equations reduce to $x_3=0$ and
+$\alpha x_1+x_2=1$. For every $\alpha$, all solutions are
+$(t,1-\alpha t,0)^\top$, $t\in\R$.
+\item $\beta\ne\pm1$: solve the last equation for $x_3$, then the
+second for $x_2=-x_3/(\beta-1)$:
 \[
 x_3=\frac{2(\beta-1)}{\beta+1},\qquad
 x_2=-\frac2{\beta+1}.
@@ -677,43 +508,234 @@ Substituting into the first equation now gives
 =1+\frac{2\beta}{\beta+1}-\frac{4(\beta-1)}{\beta+1}
 =\frac{5-\beta}{\beta+1}.
 \]
-If $\alpha\ne0$, there is exactly one solution, with
-$x_1=(5-\beta)/(\alpha(\beta+1))$.
-If $\alpha=0$, consistency requires $\beta=5$; the solutions are then
-$(t,-1/3,4/3)^\top$, $t\in\R$.
+For $\alpha\ne0$, this determines
+$x_1=(5-\beta)/(\alpha(\beta+1))$, so the solution is unique.
+For $\alpha=0$, it is consistent exactly when $\beta=5$; then the solutions
+are $(t,-1/3,4/3)^\top$, $t\in\R$.
+\end{itemize}
 Thus uniqueness holds exactly when $\alpha\ne0$ and $\beta\ne\pm1$.
 The remaining consistent cases are $\beta=1$ with arbitrary $\alpha$,
 and $(\alpha,\beta)=(0,5)$; each has infinitely many solutions.
 All other parameter pairs give no solution.
 \end{solution}
 
-\needspace{20\baselineskip}
-\subsection*{Point--plane distances}
+\Needspace{20\baselineskip}
+\subsection*{Column sets and independence}
 
-\begin{problem}\label{ex:01:point-plane-distance}
-Find the distance between each point and plane:
+\begin{problem}\label{ex:01:concrete-column-null-sets}
+Let
+\[
+A=\begin{pmatrix}1&2\\3&4\\5&6\end{pmatrix},
+\qquad
+u=\begin{pmatrix}1\\0\\-1\end{pmatrix},
+\quad v=\begin{pmatrix}0\\1\\2\end{pmatrix}.
+\]
+Prove the following descriptions, including both directions of each
+set equality:
 \begin{enumerate}
-\item $(1,1,2)$ and $3x+y-5z=2$;
-\item $(-1,3,2)$ and $2x-4y+z=1$;
-\item $(3,-2,1)$ and the $yz$-plane;
-\item $(-3,-2,1)$ and the $yz$-plane.
+\item $\mathcal C(A)=\{su+tv:s,t\in\R\}$ and
+$N(A^\top)=\{r(1,-2,1)^\top:r\in\R\}$;
+\item $\mathcal C(A^\top)=\R^2$ and $N(A)=\{0\}$;
+\item $\mathcal C(AA^\top)=\mathcal C(A)$.
 \end{enumerate}
 \end{problem}
 \begin{solution}
-For a plane $n\cdot x=c$ with $n\ne0$ and a point $q$, the distance is
-$|n\cdot q-c|/\norm n$.
-(a) Here $n=(3,1,-5)$, $c=2$, and $\norm n=\sqrt{9+1+25}=\sqrt{35}$.
-Thus
+(a) For $y=(y_1,y_2)^\top$, put
+$s=y_1+2y_2$ and $t=3y_1+4y_2$. Then
 \[
-d=\frac{|3(1)+1-5(2)-2|}{\sqrt{35}}=\frac8{\sqrt{35}}.
+Ay=(s,t,5y_1+6y_2)^\top=(s,t,-s+2t)^\top=su+tv.
 \]
-(b) Here $n=(2,-4,1)$, $c=1$, and $\norm n=\sqrt{4+16+1}=\sqrt{21}$.
-Hence
+Conversely, any prescribed $s,t$ arise from
 \[
-d=\frac{|2(-1)-4(3)+2-1|}{\sqrt{21}}=\frac{13}{\sqrt{21}}.
+y_1=-2s+t,\qquad y_2=\frac{3s-t}{2}.
 \]
-(c,d) The $yz$-plane has equation $x=0$, with unit normal $(1,0,0)$.
-The two distances are therefore $|3|=3$ and $|-3|=3$.
-The points lie on opposite sides of the plane; the absolute value makes
-both distances nonnegative.
+Substitution gives $y_1+2y_2=s$ and $3y_1+4y_2=t$, proving both
+inclusions in the first equality.
+
+The equation $A^\top x=0$ is
+\[
+x_1+3x_2+5x_3=0,\qquad 2x_1+4x_2+6x_3=0.
+\]
+Subtracting twice the first equation from the second gives
+$-2x_2-4x_3=0$. Thus $x_2=-2x_3$ and $x_1=x_3$.
+Taking $x_3=r$ gives exactly the asserted family.
+
+(b) Given $(s,t)^\top\in\R^2$, choose
+\[
+x=\left(\frac{3t}{2}-2s,\ s-\frac t2,\ 0\right)^\top.
+\]
+Then $A^\top x=(s,t)^\top$, so every column in $\R^2$ lies in
+$\mathcal C(A^\top)$. The reverse inclusion follows from the size of $A^\top$.
+
+If $Ay=0$, its first two equations are
+$y_1+2y_2=0$ and $3y_1+4y_2=0$. Subtracting three times the first
+from the second gives $-2y_2=0$, and then $y_1=0$.
+Conversely, $A0=0$, so $N(A)=\{0\}$.
+
+(c) For every $z\in\R^3$, $AA^\top z=A(A^\top z)$ belongs to $\mathcal C(A)$.
+This proves $\mathcal C(AA^\top)\subseteq \mathcal C(A)$.
+For the reverse inclusion, compute
+\[
+AA^\top=\begin{pmatrix}5&11&17\\11&25&39\\17&39&61\end{pmatrix}
+=[\,d_1\ d_2\ d_3\,].
+\]
+Its first two columns satisfy
+\[
+\frac{25d_1-11d_2}{4}=u,\qquad
+\frac{-11d_1+5d_2}{4}=v.
+\]
+Consequently every $su+tv$ is a linear combination of $d_1,d_2$.
+Part (a) now gives $\mathcal C(A)\subseteq \mathcal C(AA^\top)$.
+\end{solution}
+
+\begin{problem}\label{ex:01:same-column-set}
+Let $a,b,c\in\R^m$ satisfy $a+b+c=0$.
+Prove that
+\[
+\mathcal C([\,a\ b\,])=\mathcal C([\,a\ c\,]).
+\]
+\end{problem}
+\begin{solution}
+Since $b=-a-c$, every column in the first set has the form
+\[
+sa+tb=sa+t(-a-c)=(s-t)a-tc,
+\]
+and hence belongs to the second set.
+Conversely, $c=-a-b$, so
+\[
+pa+qc=pa+q(-a-b)=(p-q)a-qb
+\]
+belongs to the first set. The two inclusions prove the equality.
+Neither calculation requires any of the three columns to be nonzero
+or independent.
+\end{solution}
+
+\begin{problem}\label{ex:01:dependence-relations}
+Prove the following statements about finite lists of real column vectors:
+\begin{enumerate}
+\item The list consisting only of the zero column is linearly dependent.
+\item Any list containing the zero column is linearly dependent.
+\item A list of nonzero columns $x_1,\ldots,x_n$ is linearly dependent
+if and only if one of its columns is a linear combination of the others.
+\item A list of nonzero columns $x_1,\ldots,x_n$ is linearly dependent
+if and only if some $x_j$, with $2\leqslant j\leqslant n$, is a linear
+combination of $x_1,\ldots,x_{j-1}$.
+\end{enumerate}
+An empty sum is understood to be zero.
+\end{problem}
+\begin{solution}
+(a) The relation $1\cdot0=0$ has a nonzero coefficient.
+
+(b) Give coefficient $1$ to a zero column and coefficient $0$ to every
+other column. This is a nontrivial relation.
+
+(c) If $x_j=\sum_{i\ne j}a_ix_i$, subtract $x_j$ to obtain
+\[
+\sum_{i\ne j}a_ix_i-x_j=0.
+\]
+Its coefficient of $x_j$ is $-1$, so the list is dependent.
+Conversely, take a relation $\sum_i c_ix_i=0$ with at least one
+$c_j\ne0$. Solving for that column gives
+\[
+x_j=-\sum_{i\ne j}\frac{c_i}{c_j}x_i.
+\]
+
+(d) A relation $x_j=\sum_{i<j}a_ix_i$ gives a nontrivial relation on
+the full list by setting later coefficients to zero.
+Conversely, start with a nontrivial relation and let $j$ be the
+largest index with $c_j\ne0$. This index cannot be $1$, since then
+$c_1x_1=0$ would contradict $x_1\ne0$. All coefficients after $j$
+vanish, and therefore
+\[
+x_j=-\sum_{i=1}^{j-1}\frac{c_i}{c_j}x_i.
+\]
+For a one-column list with $x_1\ne0$, both sides of each equivalence
+in (c) and (d) are false, as required.
+\end{solution}
+
+\begin{problem}\label{ex:01:triangular-independence}
+\begin{enumerate}
+\item Prove that the columns of $I_n$ are linearly independent.
+\item Show that the columns of
+\[
+A=\begin{pmatrix}1&3&2&0\\1&-5&-3&1\\5&-1&0&2\end{pmatrix}
+\]
+are linearly dependent. Are its rows linearly dependent?
+For rows, dependence means a nontrivial linear combination equal to
+the zero row.
+\item A square matrix is \emph{upper triangular} if its entries below
+the diagonal are zero, and \emph{lower triangular} if its entries above
+the diagonal are zero. Prove that the columns of a triangular matrix
+are linearly independent exactly when every diagonal entry is nonzero.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) If $c_1e_1+\cdots+c_ne_n=0$, the $i$th coordinate is $c_i=0$.
+Thus all coefficients vanish.
+
+(b) Denote the columns by $a_1,\ldots,a_4$ and the rows by
+$r_1,r_2,r_3$. Direct calculation gives nontrivial relations:
+\[
+3a_1-a_2-8a_4
+=\begin{pmatrix}3-3\\3+5-8\\15+1-16\end{pmatrix}=0,
+\]
+\[
+3r_1+2r_2-r_3
+=(3+2-5,\ 9-10+1,\ 6-6,\ 2-2)=0.
+\]
+Hence both lists are dependent.
+
+(c) Let the triangular matrix be $T=(t_{ij})$.
+If all diagonal entries are nonzero, back substitution for an upper
+triangular matrix gives $x_n=0,x_{n-1}=0,\ldots,x_1=0$ in $Tx=0$.
+For a lower triangular matrix, solve from the first row downward
+instead. Thus only $x=0$ solves the system, proving column independence.
+
+For the converse, construct a nonzero solution whenever a diagonal entry is zero.
+\begin{itemize}
+\item Upper triangular: let $k$ be the \emph{first} zero diagonal index.
+Set $x_k=1$ and $x_j=0$ for $j>k$. Row $k$ vanishes because $t_{kk}=0$;
+rows below it involve only zero coordinates. For $i<k$, we have $t_{ii}\ne0$,
+so define
+\[
+x_i=-\frac{1}{t_{ii}}\sum_{j=i+1}^{k}t_{ij}x_j,
+\qquad i=k-1,k-2,\ldots,1.
+\]
+Each step makes row $i$ vanish, and $x_k=1$ ensures $x\ne0$.
+\item Lower triangular: let $k$ be the \emph{last} zero diagonal index.
+Set $x_j=0$ for $j<k$ and $x_k=1$. Rows above $k$ involve only zero
+coordinates; row $k$ vanishes because $t_{kk}=0$.
+All later diagonal entries are nonzero, so define
+\[
+x_i=-\frac{1}{t_{ii}}\sum_{j=k}^{i-1}t_{ij}x_j,
+\qquad i=k+1,k+2,\ldots,n.
+\]
+Again every row vanishes and $x_k=1$.
+\end{itemize}
+Thus a zero diagonal entry gives a nonzero solution of $Tx=0$, hence
+linearly dependent columns.
+\end{solution}
+
+\begin{problem}\label{ex:01:independent-pairwise-sums}
+Let $A,B,C$ be linearly independent real $m\times n$ matrices.
+Determine whether $A+B$, $A+C$, and $B+C$ are linearly independent.
+\end{problem}
+\begin{solution}
+Suppose
+\[
+\alpha(A+B)+\beta(A+C)+\gamma(B+C)=0.
+\]
+Collecting coefficients gives
+\[
+(\alpha+\beta)A+(\alpha+\gamma)B+(\beta+\gamma)C=0.
+\]
+Independence of $A,B,C$ implies
+\[
+\alpha+\beta=0,\qquad
+\alpha+\gamma=0,\qquad
+\beta+\gamma=0.
+\]
+The first two equations give $\beta=\gamma=-\alpha$; the last then
+gives $-2\alpha=0$. Hence $\alpha=\beta=\gamma=0$.
+The three pairwise sums are therefore linearly independent.
 \end{solution}

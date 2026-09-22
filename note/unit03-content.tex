@@ -1,204 +1,496 @@
-\section*{Convex sets}
-A subset $S$ of a real vector space is \emph{convex} if
-\[
- p,q\in S,\quad 0\leqslant t\leqslant1
- \quad\Longrightarrow\quad (1-t)p+tq\in S.
-\]
-Thus every segment with endpoints in $S$ lies in $S$. The empty set and every one-point set are convex. A vector subspace is convex, but a convex set need not contain zero or be closed under arbitrary scalar multiplication.
+% Sources, proof dependencies and board coverage: authoring/notes/unit03-editorial.md.
+\section*{1. Bases and the number of independent vectors}
 
-\begin{example}[Parallelograms and half-spaces]
-For fixed vectors $u,v$, the parallelogram
+\notetarget{note:03:basis}A \textbf{basis} of a real linear space \(V\) is a finite list
+\(v_1,\ldots,v_r\) that is linearly independent and spans \(V\).
+The empty list is a basis of \(\{0\}\): its only linear combination is zero,
+and it has no nonzero coefficient relation.
+For a basis, every \(v\in V\) has exactly one expression
 \[
- S=\{su+tv:0\leqslant s,t\leqslant1\}
+v=c_1v_1+\cdots+c_rv_r.
 \]
-is convex. Indeed, the combination $(1-\lambda)(s_1u+t_1v)+\lambda(s_2u+t_2v)$ has coefficients $(1-\lambda)s_1+\lambda s_2$ and $(1-\lambda)t_1+\lambda t_2$, both in $[0,1]$ when $0\leqslant\lambda\leqslant1$.
-For $a\in\R^n$ and $c\in\R$, the half-space $H=\{x:a\cdot x\geqslant c\}$ is convex: if $x,y\in H$, then
+Existence is the spanning property. Subtracting two expressions gives
+\(\sum_i(c_i-d_i)v_i=0\); independence gives \(c_i=d_i\) for all \(i\).
+The standard columns \(e_1,\ldots,e_n\) form a basis of \(\R^n\), since
+\(x=\sum_i x_ie_i\) and coordinate \(i\) of \(\sum_j c_je_j\) is \(c_i\).
+
+\begin{example}\label{example:03:coordinates}\notetarget{note:03:coordinates}
+Show that \(u=(1,1)^\top\) and \(v=(-1,2)^\top\) form a basis of \(\R^2\),
+and express an arbitrary \((a,b)^\top\) in this basis.
+
+\notetarget{note:03:coordinates-solution}The coefficient equations are
 \[
- a\cdot((1-t)x+ty)=(1-t)a\cdot x+t a\cdot y\geqslant c.
+x-y=a,\qquad x+2y=b.
 \]
-The same calculation works with $\leqslant$, or with either strict inequality. For example, each region $2x-3y\geqslant6$ and $2x-3y\leqslant6$ is convex.
+Subtracting the first from the second gives \(3y=b-a\), so
+\[
+\boxed{\begin{pmatrix}a\\b\end{pmatrix}
+=\frac{2a+b}{3}\begin{pmatrix}1\\1\end{pmatrix}
++\frac{b-a}{3}\begin{pmatrix}-1\\2\end{pmatrix}.}
+\]
+These coefficients exist for every \(a,b\). For \(a=b=0\) both are zero,
+which proves independence as well as spanning.
 \end{example}
 
-A \emph{convex combination} of $p_1,\ldots,p_k$ is $\sum_{i=1}^k t_ip_i$ with $t_i\geqslant0$ and $\sum_i t_i=1$. Write
+\begin{proposition}[Adjoining one vector]\label{prop:03:adjoin}\notetarget{note:03:adjoin}
+If \(v_1,\ldots,v_r\) are independent, then
 \[
- \operatorname{conv}\{p_1,\ldots,p_k\}
- =\left\{\sum_{i=1}^k t_ip_i:t_i\geqslant0,\ \sum_{i=1}^k t_i=1\right\}.
+v_1,\ldots,v_r,w\text{ are independent}
+\quad\Longleftrightarrow\quad
+w\notin\Span(v_1,\ldots,v_r).
 \]
-\begin{theorem}[Convex hull]\label{thm:03:hull}
-For a nonempty finite list of points, its set of convex combinations is convex and is contained in every convex set containing those points.
-\end{theorem}
-\begin{proof}
-If $x=\sum_i a_ip_i$ and $y=\sum_i b_ip_i$ are convex combinations, then
-\[
- (1-t)x+ty=\sum_i\bigl((1-t)a_i+tb_i\bigr)p_i.
-\]
-The new coefficients are nonnegative and have sum $(1-t)+t=1$, proving convexity.
-
-For the second assertion, let $S$ be convex and contain every $p_i$. We prove by induction on $k$ that every convex combination belongs to $S$. The case $k=1$ is immediate. If $t_k=1$, the combination equals $p_k$. Otherwise $1-t_k>0$, and
-\[
- q=\sum_{i=1}^{k-1}\frac{t_i}{1-t_k}p_i
-\]
-is a convex combination of $k-1$ points, so $q\in S$ by induction. Therefore
-$\sum_i t_ip_i=(1-t_k)q+t_kp_k\in S$.
-\end{proof}
-For three noncollinear points, the convex hull is the filled triangle, including its edges. The span allows arbitrary real coefficients; an affine combination requires their sum to be one; a convex combination also requires nonnegative coefficients.
-
-\section*{Linear independence, bases, and coordinates}
-A list $v_1,\ldots,v_k$ is \emph{linearly independent} if
-\[
- c_1v_1+\cdots+c_kv_k=0\quad\Longrightarrow\quad c_1=\cdots=c_k=0.
-\]
-It is \emph{dependent} if a relation exists with at least one nonzero coefficient. A relation is an equality of vectors, so for functions it must hold at every point of their domain. The empty list is independent. A list containing zero is dependent, since the coefficient of that vector can be one and all other coefficients zero.
-
-\begin{proposition}[Dependence and adjoining a vector]\label{prop:03:adjoin}
-A finite list is dependent exactly when one of its vectors is a linear combination of the others. If $v_1,\ldots,v_k$ is independent, then $v_1,\ldots,v_k,w$ is independent exactly when $w\notin\operatorname{span}(v_1,\ldots,v_k)$.
 \end{proposition}
-\begin{proof}
-In a nontrivial relation, choose $c_j\ne0$ and solve
-$v_j=-\sum_{i\ne j}(c_i/c_j)v_i$. Conversely, moving such an expression to one side gives a relation whose coefficient of $v_j$ is one. For the second assertion, a relation $\sum_i c_iv_i+dw=0$ with $d=0$ has all coefficients zero. Thus any nontrivial relation must have $d\ne0$ and expresses $w$ in the old span.
-\end{proof}
-In particular, two vectors are dependent exactly when one is a scalar multiple of the other. The scalar may be zero; the criterion includes a pair consisting of zero and a nonzero vector.
-
-A \emph{basis} of $V$ is an independent list that spans $V$. If $\mathcal B=(v_1,\ldots,v_k)$ is an ordered basis and $v=\sum_i c_iv_i$, its \emph{coordinate column} is
-$[v]_{\mathcal B}=(c_1,\ldots,c_k)^\top$.
-\begin{proposition}[Unique coefficients]\label{prop:03:unique}
-An independent list gives at most one expression for any vector as its linear combination. A basis gives exactly one expression for each vector in the space.
-\end{proposition}
-\begin{proof}
-Subtract two expressions to obtain $\sum_i(c_i-d_i)v_i=0$. Independence gives $c_i=d_i$ for every $i$. Spanning supplies existence for a basis.
+\begin{proof}\notetarget{note:03:adjoin-proof}
+\begin{itemize}
+\item If \(w=\sum_i a_iv_i\), then \(\sum_i a_iv_i-w=0\) has
+coefficient \(-1\) on \(w\), so the enlarged list is dependent.
+\item Suppose \(w\notin\Span(v_1,\ldots,v_r)\) and
+\(\sum_i c_iv_i+dw=0\). If \(d\ne0\), then
+\(w=-\sum_i(c_i/d)v_i\), a contradiction.
+Thus \(d=0\); independence of the original list gives every \(c_i=0\).
+\end{itemize}
 \end{proof}
 
-\begin{example}[A basis and its coordinate rule]
-Let $u=(1,1)$ and $v=(-1,2)$. Solving $\alpha u+\beta v=(s,t)$ gives
-\[
- \alpha-\beta=s,\qquad \alpha+2\beta=t,
- \qquad
- \alpha=\frac{2s+t}{3},\quad\beta=\frac{t-s}{3}.
-\]
-Every $(s,t)$ has exactly one such expression, so $(u,v)$ is a basis. In particular $[(1,0)]_{(u,v)}=(2/3,-1/3)^\top$. Coordinates refer to the chosen basis and its order.
-\end{example}
-
-\begin{proposition}[The two-coordinate test]
-The vectors $(a,b)$ and $(c,d)$ are independent if and only if $\Delta=ad-bc\ne0$. When independent, they form a basis of $\R^2$.
-\end{proposition}
-\begin{proof}
-If $\Delta\ne0$, then the equations $a\alpha+c\beta=s$, $b\alpha+d\beta=t$ have the unique solution
-\[
- \alpha=\frac{ds-ct}{\Delta},\qquad
- \beta=\frac{at-bs}{\Delta};
-\]
-substitution verifies both equations. The zero right side proves independence, and arbitrary $(s,t)$ proves spanning.
-If $\Delta=0$ and $(a,c)\ne(0,0)$, then the nonzero coefficient pair $(c,-a)$ gives the zero combination. If $a=c=0$ and $(b,d)\ne(0,0)$, use $(d,-b)$. If all four entries vanish, either vector alone gives a nontrivial relation.
-\end{proof}
-
-\begin{example}[Independence of functions]
-In the space of real functions on $\R$, suppose $ae^t+be^{2t}=0$ for every $t$. Differentiating gives $ae^t+2be^{2t}=0$. Subtraction yields $be^{2t}=0$, hence $b=0$ and $a=0$. Thus $(e^t,e^{2t})$ is a basis of its span, and the coordinates of $3e^t+5e^{2t}$ are $(3,5)^\top$.
-
-Likewise $a\sin t+b\cos t=0$ for every $t$ gives $b=0$ at $t=0$ and $a=0$ at $t=\pi/2$. These functions form a basis of their span. Testing one value would give only a necessary equation, not independence of the functions.
-\end{example}
-
-\begin{example}[Matrices with equal row and column sums]\label{eg:03:equal-sums}
-Let $W_n$ consist of the $n\times n$ real matrices whose row sums and column sums are all equal to the same number, which may vary with the matrix. The zero matrix belongs to $W_n$, and the common sum of $\alpha A+\beta B$ is $\alpha s_A+\beta s_B$; thus $W_n$ is a subspace.
-
-For $n=2$, equating row and column sums forces the form
-\[
- \begin{pmatrix}a&b\\b&a\end{pmatrix}
- =a\begin{pmatrix}1&0\\0&1\end{pmatrix}
-  +b\begin{pmatrix}0&1\\1&0\end{pmatrix}.
-\]
-The two displayed matrices span $W_2$ and are independent by their first rows.
-
-For $n=3$, write the top-left four entries as $a,b,c,d$ and the common sum as $s$. The first two row sums and column sums force
-\[
- A=\begin{pmatrix}
- a&b&s-a-b\\c&d&s-c-d\\s-a-c&s-b-d&a+b+c+d-s
- \end{pmatrix}.
-\]
-Both remaining sums now equal $s$. Put $e=s-a-b-c-d$ to obtain
-\[
- A=\begin{pmatrix}a&b&c+d+e\\c&d&a+b+e\\b+d+e&a+c+e&-e\end{pmatrix}
- =aM_1+bM_2+cM_3+dM_4+eM_5,
-\]
-where
-\[
- M_1=\begin{pmatrix}1&0&0\\0&0&1\\0&1&0\end{pmatrix},\quad
- M_2=\begin{pmatrix}0&1&0\\0&0&1\\1&0&0\end{pmatrix},\quad
- M_3=\begin{pmatrix}0&0&1\\1&0&0\\0&1&0\end{pmatrix},
-\]
-\[
- M_4=\begin{pmatrix}0&0&1\\0&1&0\\1&0&0\end{pmatrix},\qquad
- M_5=\begin{pmatrix}0&0&1\\0&0&1\\1&1&-1\end{pmatrix}.
-\]
-Each $M_i$ satisfies the required sums. These matrices span by the parameterization. A zero combination has entries $(1,1),(1,2),(2,1),(2,2),(3,3)$ equal to $a,b,c,d,-e$, forcing every coefficient to vanish. They therefore form a basis of $W_3$.
-\end{example}
-
-\section*{Dimension}
-\begin{theorem}[The generator bound]\label{thm:03:bound}
-If $V$ is spanned by $m$ vectors, then every list of more than $m$ vectors in $V$ is dependent.
+\begin{theorem}[Independent lists and spanning lists]\label{thm:03:bound}\notetarget{note:03:bound}
+If \(v_1,\ldots,v_m\) span \(V\), every independent list in \(V\)
+has at most \(m\) members.
 \end{theorem}
-\begin{proof}
-Let $v_1,\ldots,v_m$ span $V$ and let $w_1,\ldots,w_k\in V$ with $k>m$. Choose coefficients $a_{ij}$ such that $w_j=\sum_{i=1}^m a_{ij}v_i$. The homogeneous system
+\begin{proof}\notetarget{note:03:bound-proof}
+\begin{itemize}
+\item If \(m=0\), then \(V=\{0\}\), so every nonempty list is dependent.
+\item Suppose \(m>0\) and \(w_1,\ldots,w_k\in V\), with \(k>m\). Write their coefficients
+in columns of an \(m\times k\) matrix \(C=(c_{ij})\):
 \[
- \sum_{j=1}^k a_{ij}c_j=0\qquad (i=1,\ldots,m)
+w_j=\sum_{i=1}^m c_{ij}v_i\qquad(1\leqslant j\leqslant k).
 \]
-has a nonzero solution, because it has more unknowns than equations. For that choice,
+\item By Unit 1, Proposition~\ref{one-prop:01:excess}, \(Ct=0\) has a nonzero
+solution \(t\in\R^k\). Regrouping the finite sum gives
 \[
- \sum_{j=1}^k c_jw_j
- =\sum_{i=1}^m\left(\sum_{j=1}^k a_{ij}c_j\right)v_i=0.
+\sum_{j=1}^k t_jw_j
+=\sum_{i=1}^m\left(\sum_{j=1}^k c_{ij}t_j\right)v_i=0.
 \]
-Thus the $w_j$ are dependent. The generators $v_i$ need not be independent: vanishing of the inner coefficients is sufficient for the relation. If $m=0$, then $V=\{0\}$ and the assertion follows directly.
+Thus the \(w_j\) are dependent.
+\end{itemize}
 \end{proof}
 
-\begin{theorem}[Existence and size of bases]\label{thm:03:bases}
-Every space with a finite spanning list has a basis obtained from that list. All its bases have the same size.
-\end{theorem}
-\begin{proof}
-Process a finite spanning list in order. Keep a vector exactly when it is outside the span of the previously kept vectors. Proposition~\ref{prop:03:adjoin} shows that the kept list is independent. Each discarded vector is in its span, so the kept list still spans $V$. For $V=\{0\}$ the kept list is empty.
-
-If two bases have sizes $m$ and $n$, the first spans and the second is independent, so Theorem~\ref{thm:03:bound} gives $n\leqslant m$. Interchanging their roles gives $m\leqslant n$, hence equality.
-\end{proof}
-A space with a finite basis is \emph{finite dimensional}; its \emph{dimension} is the number of basis vectors. In particular, $\dim\{0\}=0$, and $\dim\R^n=n$ because the standard vectors $e_1,\ldots,e_n$ form a basis.
-
-\begin{theorem}[Extension and subspaces]\label{thm:03:extension}
-Let $\dim V=n$.
+\begin{theorem}[Extracting and extending a basis]\label{thm:03:extract}\notetarget{note:03:extract}
+Let \(V\) be spanned by a finite list.
 \begin{enumerate}
-\item Every independent list in $V$ extends to a basis of $V$.
-\item An independent list of $n$ vectors is a basis. A spanning list of $n$ vectors is a basis.
-\item Every subspace $W\subseteq V$ has a finite basis and $\dim W\leqslant n$. Equality holds exactly when $W=V$.
+\item A basis can be extracted from any finite spanning list.
+\item Any independent list in \(V\) can be extended to a basis of \(V\).
+\item Every subspace \(W\subseteq V\) has a finite basis.
 \end{enumerate}
 \end{theorem}
-\begin{proof}
-(a) Append a fixed basis of $V$ to the given independent list and apply the deletion procedure in Theorem~\ref{thm:03:bases}. No original vector is discarded, and the resulting list is a basis.
-
-(b) An independent list of size $n$ cannot acquire another vector under extension, because all bases have size $n$. A spanning list can be reduced to a basis, but none of its $n$ vectors can be discarded without producing a basis of size less than $n$.
-
-(c) Starting with the empty list, choose a vector in $W$ outside the span of those already chosen whenever possible. Every choice preserves independence. The generator bound prohibits more than $n$ choices, so the procedure stops and its list spans $W$. Its size is at most $n$. If its size is $n$, part (b) makes this list a basis of $V$, giving $V\subseteq W$. The converse is immediate.
+\begin{proof}\notetarget{note:03:extract-proof}
+\begin{itemize}
+\item Scan the spanning list from left to right, retaining a vector exactly
+when it lies outside the span of those already retained.
+Proposition~\ref{prop:03:adjoin} preserves independence at each step.
+Every discarded vector belongs to the final span, so the retained list
+still spans \(V\).
+\item To retain specified independent vectors, place them first, followed
+by a spanning list of \(V\), and apply the same procedure. None of the
+specified vectors is discarded.
+\item Starting with the empty list, choose a vector of \(W\) outside the
+current span whenever one exists. The list stays independent.
+If \(V\) is spanned by \(m\) vectors, Theorem~\ref{thm:03:bound}
+forces the procedure to stop after at most \(m\) choices.
+At that point the retained list spans \(W\). If \(W=\{0\}\), it stops
+without choosing a vector.
+\end{itemize}
 \end{proof}
 
-\begin{example}[Removing a redundant vector and extending a basis]\label{eg:03:extend}
-Consider the columns $a_1,a_2,a_3$ of
-\[
- A=\begin{pmatrix}1&2&3\\-2&3&8\\5&1&-3\\-3&-4&-5\end{pmatrix},
- \qquad W=\operatorname{span}(a_1,a_2,a_3).
-\]
-The relation $a_1-2a_2+a_3=0$ removes $a_3$. If $sa_1+ta_2=0$, the first two coordinates give $s+2t=0$, $-2s+3t=0$, hence $s=t=0$. Therefore $(a_1,a_2)$ is a basis of $W$ and $\dim W=2$.
+\section*{2. Dimension and adapted bases}
 
-Extend it by $e_3,e_4$. In $sa_1+ta_2+ue_3+ve_4=0$, the first two coordinates still give $s=t=0$; the last two then give $u=v=0$. These four vectors are independent in $\R^4$, hence form a basis. More explicitly, for $x=(x_1,x_2,x_3,x_4)^\top$,
+\notetarget{note:03:dimension}Any two bases of \(V\) have the same number of members:
+if their lengths are \(r,s\), Theorem~\ref{thm:03:bound} gives both
+\(r\leqslant s\) and \(s\leqslant r\).
+This common number is the \textbf{dimension}, denoted \(\dim V\).
+In particular \(\dim\{0\}=0\) and \(\dim\R^n=n\).
+
+\notetarget{note:03:matrix-polynomial-bases}Let \(E_{ij}\) be the \(m\times n\) matrix with its only nonzero entry,
+equal to 1, in position \((i,j)\). Then
 \[
- s=\frac{3x_1-2x_2}{7},\quad t=\frac{2x_1+x_2}{7},\quad
- u=x_3-5s-t,\quad v=x_4+3s+4t
+A=\sum_{i=1}^m\sum_{j=1}^n a_{ij}E_{ij}.
 \]
-give its coordinates in this extended basis. The coefficients $s,t$ are not themselves coordinates for an arbitrary vector relative to $(a_1,a_2)$ unless $u=v=0$.
+Reading entry \((i,j)\) proves uniqueness, so the \(mn\) matrices \(E_{ij}\)
+form a basis and \(\dim\R^{m\times n}=mn\).
+In the polynomial coefficient space \(\mathcal P_d\) of Unit 2,
+\(1,t,\ldots,t^d\) form a basis by the same coefficient argument;
+thus \(\dim\mathcal P_d=d+1\).
+
+\begin{proposition}[Dimension tests]\label{prop:03:dimension-tests}\notetarget{note:03:dimension-tests}
+Let \(\dim V=n\) and \(W\subseteq V\) be a subspace.
+\begin{enumerate}
+\item Every independent list of \(n\) vectors in \(V\) is a basis.
+\item Every spanning list of \(n\) vectors in \(V\) is a basis.
+\item \(\dim W\leqslant n\), with equality exactly when \(W=V\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}\notetarget{note:03:dimension-tests-proof}
+\begin{itemize}
+\item Extend the independent list to a basis. Every basis has \(n\)
+members, so no vector can have been added.
+\item Extract a basis from the spanning list. Its length is \(n\), so
+no vector can have been discarded.
+\item A basis of \(W\) is independent in \(V\), giving the inequality.
+At equality it is a basis of \(V\) by (a), and hence \(W=V\).
+The reverse implication follows from equality of the spaces.
+\end{itemize}
+\end{proof}
+
+\begin{example}\label{example:03:extend}\notetarget{note:03:extend-example}
+Let \(V\) be the column span of
+\[
+A=\begin{pmatrix}1&2&3\\-2&3&8\\5&1&-3\\-3&-4&-5\end{pmatrix}
+=[\,a_1\ a_2\ a_3\,].
+\]
+Find a basis of \(V\), its dimension, and an extension to a basis of \(\R^4\).
+
+\notetarget{note:03:extend-solution}The relation \(a_3=2a_2-a_1\) permits deletion of \(a_3\).
+If \(sa_1+ta_2=0\), the first two coordinates give
+\[
+s+2t=0,\qquad -2s+3t=0\quad\Longrightarrow\quad 7t=0, s=0.
+\]
+Thus \((a_1,a_2)\) is a basis of \(V\) and \(\dim V=2\).
+For an extension, use \((a_1,a_2,e_3,e_4)\).
+In a zero combination of these four columns the first two coordinates
+again force the coefficients of \(a_1,a_2\) to be zero;
+coordinates 3 and 4 then force the other two coefficients to be zero.
+Four independent columns in \(\R^4\) form a basis.
 \end{example}
 
-\begin{example}[Dimensions of matrix and polynomial spaces]
-Let $E_{ij}$ have a one in position $(i,j)$ and zeros elsewhere. Every $m\times n$ matrix has the unique expression $A=\sum_{i,j}a_{ij}E_{ij}$, so $\dim\R^{m\times n}=mn$. For diagonal matrices, use $E_{11},\ldots,E_{nn}$. For upper triangular matrices, use $E_{ij}$ with $i\leqslant j$, giving dimension $n(n+1)/2$.
+\begin{theorem}[Dimension of a sum]\label{thm:03:sum}\notetarget{note:03:sum}
+For subspaces \(U,W\) of a finite-dimensional real space,
+\[
+\boxed{\dim(U+W)=\dim U+\dim W-\dim(U\cap W).}
+\]
+\end{theorem}
+\begin{proof}\notetarget{note:03:sum-proof}
+\begin{itemize}
+\item Choose a basis \(c_1,\ldots,c_k\) of \(U\cap W\), and extend it to bases
+\[
+(c_1,\ldots,c_k,u_1,\ldots,u_p)\text{ of }U,\qquad
+(c_1,\ldots,c_k,w_1,\ldots,w_q)\text{ of }W.
+\]
+\item The combined list \((c_1,\ldots,c_k,u_1,\ldots,u_p,w_1,\ldots,w_q)\)
+spans \(U+W\): add the two basis representations and collect the \(c_i\) coefficients.
+\item For independence, suppose
+\[
+\sum_i a_ic_i+\sum_j b_ju_j+\sum_\ell d_\ell w_\ell=0.
+\]
+Then
+\[
+\sum_\ell d_\ell w_\ell=-\sum_i a_ic_i-\sum_j b_ju_j
+\in U\cap W=\Span(c_1,\ldots,c_k).
+\]
+Write this vector as \(\sum_i e_ic_i\). The relation
+\(\sum_\ell d_\ell w_\ell-\sum_i e_ic_i=0\) in the basis of \(W\)
+gives every \(d_\ell=e_i=0\). The original relation now lies in the
+basis of \(U\), giving every \(a_i=b_j=0\).
+\item The combined basis has \(k+p+q=(k+p)+(k+q)-k\) members.
+\end{itemize}
+\end{proof}
 
+\notetarget{note:03:intersection-bound}Since \(U+W\subseteq V\), this also gives
+\[
+\dim(U\cap W)\geqslant \dim U+\dim W-\dim V.
+\]
+In particular, if \(\dim U+\dim W>\dim V\), the intersection contains a
+nonzero vector. For \(U\cap W=\{0\}\), the formula becomes
+\(\dim(U\oplus W)=\dim U+\dim W\).
+
+\begin{example}\label{example:03:matrix-spaces}\notetarget{note:03:matrix-spaces}
+In \(\R^{n\times n}\), find bases and dimensions for the upper triangular
+space \(T\), the symmetric space \(S\), and \(T\cap S\); determine \(T+S\).
+
+\notetarget{note:03:matrix-spaces-solution}A basis of \(T\) is \(E_{ij}\), \(i\leqslant j\), since an upper
+triangular matrix has the unique expression \(\sum_{i\leqslant j}a_{ij}E_{ij}\).
 A symmetric matrix has the unique expression
 \[
- A=\sum_i a_{ii}E_{ii}+\sum_{i<j}a_{ij}(E_{ij}+E_{ji}).
+\sum_i a_{ii}E_{ii}+\sum_{i<j}a_{ij}(E_{ij}+E_{ji}).
 \]
-Thus the displayed matrices form a basis and the symmetric subspace has dimension $n+n(n-1)/2=n(n+1)/2$.
-
-The polynomials of degree at most $d$, together with the zero polynomial, have basis $1,t,\ldots,t^d$. Spanning follows from the polynomial expression. If $\sum_{j=0}^d c_jt^j=0$ for every real $t$, evaluating its $j$th derivative at zero gives $j!c_j=0$. Thus the basis is independent and this space has dimension $d+1$. The space of all polynomials is infinite dimensional, since it contains independent lists of arbitrarily large size.
+Hence a basis of \(S\) consists of \(E_{ii}\) and \(E_{ij}+E_{ji}\), \(i<j\).
+There are \(n\) diagonal positions and \(n(n-1)/2\) unordered distinct
+pairs: each of the \(n(n-1)\) ordered pairs belongs to one pair of reversals.
+Thus \(\dim T=\dim S=n(n+1)/2\).
+An upper triangular symmetric matrix is diagonal, so
+\[
+T\cap S=\Span(E_{11},\ldots,E_{nn}),\qquad \dim(T\cap S)=n.
+\]
+The sum formula gives \(\dim(T+S)=n^2\). Since \(T+S\subseteq\R^{n\times n}\),
+Proposition~\ref{prop:03:dimension-tests} gives \(T+S=\R^{n\times n}\).
 \end{example}
+
+\begin{proposition}[Complements]\label{prop:03:complement}\notetarget{note:03:complement}
+Every subspace \(W\subseteq V\) of a finite-dimensional space has a
+subspace \(U\) such that \(V=W\oplus U\).
+\end{proposition}
+\begin{proof}\notetarget{note:03:complement-proof}
+\begin{itemize}
+\item Extend a basis \((w_1,\ldots,w_r)\) of \(W\) to a basis
+\((w_1,\ldots,w_r,u_1,\ldots,u_s)\) of \(V\), and set
+\(U=\Span(u_1,\ldots,u_s)\).
+\item The extended basis spans \(V\), so \(W+U=V\).
+\item If \(\sum_i a_iw_i=\sum_j b_ju_j\), independence of the full list gives
+all \(a_i=b_j=0\). Thus \(W\cap U=\{0\}\), proving the direct sum.
+\end{itemize}
+\end{proof}
+
+\begin{example}\label{example:03:complements}\notetarget{note:03:complement-example}
+Let \(W=\Span((2,1)^\top)\) in \(\R^2\). Show that both
+\(U=\Span((0,1)^\top)\) and \(U'=\Span((1,1)^\top)\) are complements of \(W\).
+
+\notetarget{note:03:complement-solution}For every \((x,y)^\top\),
+\[
+\begin{pmatrix}x\\y\end{pmatrix}
+=\frac{x}{2}\begin{pmatrix}2\\1\end{pmatrix}
++\left(y-\frac{x}{2}\right)\begin{pmatrix}0\\1\end{pmatrix}
+=(x-y)\begin{pmatrix}2\\1\end{pmatrix}
++(2y-x)\begin{pmatrix}1\\1\end{pmatrix}.
+\]
+The equations \(a(2,1)^\top=b(0,1)^\top\) and
+\(a(2,1)^\top=b(1,1)^\top\) each force \(a=b=0\), by their two coordinates.
+Both sums are therefore direct. Since \((0,1)^\top\notin U'\),
+the two complements differ.
+\end{example}
+
+\section*{3. Rank and rank factorization}
+
+\notetarget{note:03:rank-definition}For \(A\in\R^{m\times n}\), let \(\mathcal C(A)\) be its column space,
+\(N(A)=\{x:Ax=0\}\), and define its \textbf{row space}, represented by columns,
+as \(\mathcal R(A)=\mathcal C(A^\top)\subseteq\R^n\).
+The column rank is \(\dim\mathcal C(A)\); the row rank is \(\dim\mathcal R(A)\).
+
+\begin{theorem}[Equality of the two ranks]\label{thm:03:row-column}\notetarget{note:03:row-column}
+The column rank and row rank of every real matrix are equal.
+Their common value is denoted \(\rank A\).
+\end{theorem}
+\begin{proof}\notetarget{note:03:row-column-proof}
+\begin{itemize}
+\item If \(A=0\), both spaces are \(\{0\}\), so both ranks are zero.
+\item For \(A\ne0\), let \(c=\dim\mathcal C(A)\).
+Extract a basis \(b_1,\ldots,b_c\) from
+the columns of \(A\) and put \(B=[\,b_1\ \cdots\ b_c\,]\).
+Express each column of \(A\) in this basis and collect the coefficient columns in \(F\):
+\[
+A=BF,\qquad B:m\times c,\quad F:c\times n.
+\]
+\item Row \(i\) of \(A\) is \(\sum_{j=1}^c b_{ij}\operatorname{row}_j(F)\).
+Hence \(\mathcal R(A)\subseteq\mathcal R(F)\), and
+\[
+\dim\mathcal R(A)\leqslant c=\dim\mathcal C(A).
+\]
+\item Applying the same inequality to \(A^\top\) reverses it:
+\[
+\dim\mathcal C(A)=\dim\mathcal R(A^\top)
+\leqslant\dim\mathcal C(A^\top)=\dim\mathcal R(A).
+\]
+Thus the two ranks are equal.
+\end{itemize}
+\end{proof}
+
+\notetarget{note:03:rank-basic}Consequently,
+\[
+0\leqslant\rank A\leqslant\min(m,n),\qquad
+\rank A^\top=\rank A,\qquad
+\rank A=0\Longleftrightarrow A=0.
+\]
+The bound follows because the column and row spaces lie in \(\R^m\) and
+\(\R^n\). Rank zero means every column belongs to \(\{0\}\).
+A matrix has \textbf{full column rank} if its \(n\) columns are independent,
+equivalently \(\rank A=n\); it has \textbf{full row rank} if \(\rank A=m\).
+These equivalences follow by extracting bases from the respective lists.
+
+\begin{proposition}[Full rank factors]\label{prop:03:factorization}\notetarget{note:03:factorization}
+If \(\rank A=r>0\), there is a factorization
+\[
+A=BF,\qquad B\in\R^{m\times r},\quad F\in\R^{r\times n},
+\qquad\rank B=\rank F=r.
+\]
+For this factorization,
+\[
+\mathcal C(A)=\mathcal C(B),\qquad
+\mathcal R(A)=\mathcal R(F),\qquad N(A)=N(F).
+\]
+\end{proposition}
+\begin{proof}\notetarget{note:03:factorization-proof}
+\begin{itemize}
+\item Use the extracted-column construction in Theorem~\ref{thm:03:row-column}.
+The basis columns give \(\rank B=r\) and \(\mathcal C(A)=\mathcal C(B)\).
+\item At the \(r\) selected column positions, the corresponding columns of \(F\)
+are \(e_1,\ldots,e_r\), by uniqueness of basis coefficients.
+Thus \(\rank F=r\).
+\item Since \(\mathcal R(A)\subseteq\mathcal R(F)\)
+and both have dimension \(r\), they are equal.
+\item Finally \(BFx=0\) implies \(Fx=0\) by independence of the columns of \(B\);
+the converse follows by multiplication by \(B\).
+\end{itemize}
+\end{proof}
+\notetarget{note:03:zero-factorization}This is a \textbf{rank factorization}.
+For \(r=0\), it is the product of an \(m\times0\) and
+a \(0\times n\) matrix: each entry is an empty sum, hence zero.
+
+\begin{proposition}[Invertible multiplication]\label{prop:03:rank-invariance}\notetarget{note:03:rank-invariance}
+If \(P\) and \(Q\) are invertible of orders \(m\) and \(n\), then
+\[
+\rank(PAQ)=\rank A.
+\]
+\end{proposition}
+\begin{proof}\notetarget{note:03:rank-invariance-proof}
+\begin{itemize}
+\item The rows of \(PA\) are combinations of rows of \(A\);
+\(A=P^{-1}(PA)\) gives the reverse inclusion. Therefore
+\(\mathcal R(PA)=\mathcal R(A)\) and \(\rank(PA)=\rank A\).
+\item The columns of \(AQ\) are combinations of columns of \(A\);
+\(A=(AQ)Q^{-1}\) gives the reverse inclusion. Therefore
+\(\mathcal C(AQ)=\mathcal C(A)\) and \(\rank(AQ)=\rank A\).
+\item Apply both equalities: \(\rank(PAQ)=\rank(AQ)=\rank A\).
+\end{itemize}
+\end{proof}
+
+\section*{4. Computing bases and all solutions}
+
+\begin{theorem}[The bases revealed by elimination]\label{thm:03:pivots}\notetarget{note:03:pivots}
+Suppose row reduction gives an echelon matrix \(H=EA\), where \(E\)
+is invertible, with nonzero rows \(1,\ldots,r\) and pivot columns
+\(j_1<\cdots<j_r\).
+\begin{enumerate}
+\item The \(r\) nonzero rows of \(H\), transposed, are a basis of \(\mathcal R(A)\).
+\item The original columns \(a_{j_1},\ldots,a_{j_r}\) are a basis of \(\mathcal C(A)\).
+\item In particular, \(\rank A=r\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}\notetarget{note:03:pivots-proof}
+\begin{itemize}
+\item The nonzero rows span the row space of \(H\), which equals \(\mathcal R(A)\)
+by the proof of Proposition~\ref{prop:03:rank-invariance}.
+In a zero combination of these rows, inspecting pivot position \(j_1\)
+forces the first coefficient to be zero. Inspecting \(j_2,j_3,\ldots\)
+in order forces all remaining coefficients to be zero. Thus the row rank is \(r\).
+
+\item For the pivot columns of \(H\), inspect row \(r\), then row \(r-1\),
+and continue upward in a zero combination. Each pivot is nonzero, so all
+coefficients vanish. There are \(r=\rank H\) independent pivot columns;
+they form a basis of \(\mathcal C(H)\).
+\item Multiplication by \(E\) preserves every coefficient relation among columns
+(Unit 2, Proposition~\ref{two-prop:02:relations}).
+Thus the original pivot columns are independent. If
+\(h_j=\sum_i c_ih_{j_i}\), then
+\[
+E\left(a_j-\sum_i c_ia_{j_i}\right)=0
+\quad\Longrightarrow\quad a_j=\sum_i c_ia_{j_i}.
+\]
+They also span \(\mathcal C(A)\), so they form a basis.
+\end{itemize}
+\end{proof}
+
+\notetarget{note:03:reduced-echelon}Starting at the last pivot, divide its row by the pivot and clear all
+entries above it; continue upward. In each row being used, earlier pivot
+columns are zero by echelon form, and later pivot columns are zero from
+the preceding clearing steps. Thus all other pivot columns are preserved.
+The resulting matrix \(R\) has
+a 1 in each pivot position and zeros everywhere else in a pivot column;
+it is a \textbf{reduced echelon matrix}. Its zero rows may be omitted when
+recording equations. This construction does not assert uniqueness.
+
+\begin{theorem}[Null-space basis]\label{thm:03:nullity}\notetarget{note:03:nullity}
+Let \(R\) be a reduced echelon matrix for \(A\), with pivots
+\(j_1,\ldots,j_r\) and free column set \(F\).
+For each \(k\in F\), set
+\[
+z_k=e_k-\sum_{i=1}^r R_{ik}e_{j_i}.
+\]
+Then \((z_k)_{k\in F}\) is a basis of \(N(A)\). In particular,
+\[
+\boxed{\dim N(A)=n-r,\qquad \rank A+\dim N(A)=n.}
+\]
+\end{theorem}
+\begin{proof}\notetarget{note:03:nullity-proof}
+\begin{itemize}
+\item In row \(i\), the equation \(Rx=0\) reads
+\[
+x_{j_i}+\sum_{k\in F}R_{ik}x_k=0.
+\]
+Thus every solution has the expression \(x=\sum_{k\in F}x_kz_k\),
+and conversely each such expression satisfies every row.
+\item The free coordinate \(\ell\in F\) of \(z_k\) is 1 if \(\ell=k\) and 0
+otherwise, so a zero combination of the \(z_k\) has all coefficients zero.
+\item Row operations preserve solutions, hence this is a basis of \(N(A)\).
+There are \(n-r\) free columns. When \(F\) is empty, the basis is empty
+and \(N(A)=\{0\}\); for \(A=0\), it is the standard basis of \(\R^n\).
+\end{itemize}
+\end{proof}
+
+\begin{example}\label{example:03:rank-computation}\notetarget{note:03:rank-example}
+For
+\[
+A=\begin{pmatrix}1&5&6\\2&6&8\\7&1&8\end{pmatrix},
+\]
+find its rank, bases for its column, row, and null spaces, a rank factorization,
+and all solutions of \(Ax=b\) for an arbitrary \(b=(b_1,b_2,b_3)^\top\).
+
+\notetarget{note:03:rank-example-reduction}Apply \(R_2\leftarrow R_2-2R_1\), \(R_3\leftarrow R_3-7R_1\),
+then \(R_3\leftarrow R_3-\tfrac{17}{2}R_2\):
+\[
+A\longrightarrow
+\begin{pmatrix}1&5&6\\0&-4&-4\\0&-34&-34\end{pmatrix}
+\longrightarrow
+\begin{pmatrix}1&5&6\\0&-4&-4\\0&0&0\end{pmatrix}
+\longrightarrow
+R=\begin{pmatrix}1&0&1\\0&1&1\\0&0&0\end{pmatrix}.
+\]
+The last step divides row 2 by \(-4\) and subtracts five times that row from row 1.
+There are two pivots, in columns 1 and 2. Therefore
+\[
+\rank A=2,\qquad
+\mathcal C(A)=\Span\left(\begin{pmatrix}1\\2\\7\end{pmatrix},
+\begin{pmatrix}5\\6\\1\end{pmatrix}\right),\qquad
+\mathcal R(A)=\Span\left(\begin{pmatrix}1\\0\\1\end{pmatrix},
+\begin{pmatrix}0\\1\\1\end{pmatrix}\right).
+\]
+Each displayed list is a basis. The free coordinate is \(x_3=t\), giving
+\[
+N(A)=\Span\left(\begin{pmatrix}-1\\-1\\1\end{pmatrix}\right),\qquad
+A=\begin{pmatrix}1&5\\2&6\\7&1\end{pmatrix}
+\begin{pmatrix}1&0&1\\0&1&1\end{pmatrix}.
+\]
+The product reproduces each original column, including \(a_3=a_1+a_2\).
+
+\notetarget{note:03:rank-example-system}Applying the same row operations to the right-hand side gives
+\[
+[\,A\mid b\,]\longrightarrow
+\left[\begin{array}{ccc|c}
+1&0&1&(5b_2-6b_1)/4\\
+0&1&1&(2b_1-b_2)/4\\
+0&0&0&b_3+10b_1-17b_2/2
+\end{array}\right].
+\]
+Thus the system is consistent exactly when
+\(20b_1-17b_2+2b_3=0\), and then its full solution set is
+\[
+x=\begin{pmatrix}(5b_2-6b_1)/4\\(2b_1-b_2)/4\\0\end{pmatrix}
++t\begin{pmatrix}-1\\-1\\1\end{pmatrix},\qquad t\in\R.
+\]
+\end{example}
+
+\begin{proposition}[Rank tests for solutions]\label{prop:03:consistent}\notetarget{note:03:consistent}
+For \(A\in\R^{m\times n}\),
+\begin{enumerate}
+\item \(Ax=b\) is consistent exactly when \(\rank[\,A\ b\,]=\rank A\).
+\item A consistent system has a unique solution exactly when \(\rank A=n\).
+\item \(Ax=b\) is consistent for every \(b\in\R^m\) exactly when \(\rank A=m\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}\notetarget{note:03:consistent-proof}
+\begin{itemize}
+\item The inclusion \(\mathcal C(A)\subseteq\mathcal C([\,A\ b\,])\)
+is equality exactly when \(b\in\mathcal C(A)\).
+For nested subspaces, equality is equivalent to equality of dimensions.
+\item By Unit 1, Theorem~\ref{one-thm:01:translate}, every nonempty solution
+set is \(x_0+N(A)\). It is a singleton exactly when \(\dim N(A)=0\),
+equivalently \(\rank A=n\) by Theorem~\ref{thm:03:nullity}.
+\item Solvability for every \(b\) says \(\mathcal C(A)=\R^m\),
+equivalently \(\dim\mathcal C(A)=m\).
+\end{itemize}
+\end{proof}

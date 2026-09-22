@@ -1,16 +1,21 @@
 LATEXMK ?= latexmk
 LATEXFLAGS = -silent -pdf -interaction=nonstopmode -halt-on-error
-UNITS := unit01 unit02 unit03 unit04 unit05 unit06 unit07 unit08 unit09 unit10 unit11 unit12
+UNIT_MASTERS := $(wildcard unit[0-9][0-9].tex)
+UNIT_PDFS := $(UNIT_MASTERS:.tex=.pdf)
 
 .PHONY: all
-all: $(addsuffix .pdf,$(UNITS)) unit01-2up.pdf
+all: $(UNIT_PDFS)
 
-unit01-2up.pdf: unit01-2up.tex unit01.pdf
-	$(LATEXMK) $(LATEXFLAGS) -outdir=.build/unit01-2up unit01-2up.tex
-	cp .build/unit01-2up/unit01-2up.pdf $@
+# Cross-unit references require the earlier auxiliary files even when a
+# checkout already contains the published PDFs. Build in teaching order;
+# grouped outputs prevent two requests from compiling the same unit.
+define UNIT_RULE
+$(1).pdf .build/$(1)/$(1).aux &: $(1).tex unit-preamble.tex $(wildcard $(1)-*.tex) $(2)
+	$$(LATEXMK) $$(LATEXFLAGS) -outdir=.build/$(1) $$<
+	cp .build/$(1)/$(1).pdf $(1).pdf
+endef
 
-unit12.pdf: unit12-inequality-exercises.tex
-
-unit%.pdf: unit%.tex unit%-content.tex unit%-exercises.tex unit-preamble.tex
-	$(LATEXMK) $(LATEXFLAGS) -outdir=.build/unit$* unit$*.tex
-	cp .build/unit$*/unit$*.pdf $@
+PREVIOUS_UNITS :=
+$(foreach unit,$(basename $(UNIT_MASTERS)),\
+  $(eval $(call UNIT_RULE,$(unit),$(foreach prior,$(PREVIOUS_UNITS),$(prior).pdf .build/$(prior)/$(prior).aux)))\
+  $(eval PREVIOUS_UNITS += $(unit)))

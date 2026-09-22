@@ -1,388 +1,794 @@
-\begin{problem}[Basic rank rules]\label{ex:04:rank-rules}
-For $A\in\R^{m\times n}$, prove $0\leqslant\operatorname{rank}A\leqslant\min(m,n)$, that its rank is zero exactly when $A=0$, that $\operatorname{rank}I_n=n$, and that $\operatorname{rank}(cA)=\operatorname{rank}A$ for $c\ne0$.
-\end{problem}
-\begin{solution}
-A column basis has at most $n$ vectors and is independent in $\R^m$, so its size is at most $m$. Dimension is nonnegative. A zero column space consists only of zero, so every column is zero; the converse is immediate. The columns of $I_n$ form the standard basis. If $c\ne0$, each column of $cA$ is a multiple of a column of $A$, and conversely each column of $A$ is $1/c$ times the corresponding column of $cA$, giving equal column spaces and ranks.
-\end{solution}
+% Selected original problems and all proof adaptations:
+% authoring/notes/unit04-exercise-sources.md.
+All vector spaces below are finite-dimensional real spaces.
 
+\subsection*{Linear maps and their kernels}
 
-\begin{problem}[A nontrivial homogeneous solution]\label{ex:04:null-rank}
-For $A\in\R^{m\times n}$ with $n\geqslant1$, show that $Ax=0$ has a nonzero solution if and only if $\operatorname{rank}A\leqslant n-1$.
-\end{problem}
-\begin{solution}
-A nonzero solution is exactly a nontrivial relation among the $n$ columns. Such a relation permits deleting a column from a spanning list, so their span has dimension at most $n-1$. Conversely, rank at most $n-1$ means that the $n$ columns cannot be independent, giving the required relation. Equivalently, rank--nullity gives $\dim\ker A=n-\operatorname{rank}A\geqslant1$.
-\end{solution}
-
-\begin{problem}[Diagonal and triangular ranks]\label{ex:04:diagonal}
-Show that a diagonal matrix has rank equal to the number of its nonzero diagonal entries. Is this rule true for triangular matrices?
-\end{problem}
-\begin{solution}
-The nonzero columns of a diagonal matrix are nonzero multiples of distinct standard vectors, hence independent; every other column is zero. For a triangular matrix the rule fails: $\begin{pmatrix}0&0\\1&0\end{pmatrix}$ has rank one and no nonzero diagonal entries. If all diagonal entries of an $n\times n$ triangular matrix are nonzero, successive substitution proves its columns independent, so its rank is $n$; this special case does remain valid.
-\end{solution}
-
-\begin{problem}[Rank one]\label{ex:04:rank-one}
-Prove that a real matrix $A$ has rank one if and only if $A=ab^\top$ for nonzero vectors $a,b$ of appropriate sizes.
-\end{problem}
-\begin{solution}
-If $A=ab^\top$, each column is $b_ja$. Since $b\ne0$, at least one such column is nonzero, and the column space is exactly the one-dimensional span of $a$. Conversely, choose a nonzero column $a$ of a rank-one matrix. Every column lies in its span, so write column $j$ as $b_ja$. At least one $b_j$ is nonzero, and the column-by-column equality is $A=ab^\top$.
-\end{solution}
-
-\begin{problem}[Increasing rank by adding a column]\label{ex:04:adjoin-column}
-Suppose adjoining a column $a$ to an $m\times n$ matrix $A$ increases its rank by one. Prove that the rows of $A$ are dependent.
-\end{problem}
-\begin{solution}
-If its $m$ rows were independent, then $\operatorname{rank}A=m$. The enlarged matrix still has $m$ rows, so its rank is at most $m$, contradicting the stipulated increase. Therefore the row rank is less than $m$ and the rows are dependent.
-\end{solution}
-
-\begin{problem}[Rank of a sum and a difference]\label{ex:04:sum-rank}
-For matrices $A,B$ of the same size, prove
-\[
- \operatorname{rank}(A+B)\leqslant\operatorname{rank}A+\operatorname{rank}B,\qquad
- \operatorname{rank}(A-B)\geqslant|\operatorname{rank}A-\operatorname{rank}B|.
-\]
-\end{problem}
-\begin{solution}
-Every column of $A+B$ belongs to $\operatorname{col}A+\operatorname{col}B$. Combining column bases of $A$ and $B$ gives a spanning list of this sum with $\operatorname{rank}A+\operatorname{rank}B$ elements, so the dimension of its subspace $\operatorname{col}(A+B)$ is at most that number.
-Apply this inequality to $A=(A-B)+B$ to obtain $\operatorname{rank}(A-B)\geqslant\operatorname{rank}A-\operatorname{rank}B$. Interchanging $A,B$ gives the other signed bound; rank is unchanged under multiplication by $-1$.
-\end{solution}
-
-\begin{problem}[Rank of a product]\label{ex:04:product-rank}
-For $A\in\R^{m\times n}$ and $B\in\R^{n\times p}$, prove
-\[
- \operatorname{col}(AB)\subseteq\operatorname{col}A,\qquad
- \operatorname{rank}(AB)\leqslant\min(\operatorname{rank}A,\operatorname{rank}B).
-\]
-\end{problem}
-\begin{solution}
-Each $ABx=A(Bx)$ belongs to $\operatorname{col}A$, giving the first containment and the rank bound by $\operatorname{rank}A$. Apply the same bound to $B^\top A^\top$ and use rank equality under transpose to get
-$\operatorname{rank}(AB)=\operatorname{rank}(B^\top A^\top)\leqslant\operatorname{rank}B^\top=\operatorname{rank}B$.
-\end{solution}
-
-\begin{problem}[Reversing factors]\label{ex:04:reversed-rank}
-Show by example that $AB$ and $BA$, when both are defined, need not have the same rank.
-\end{problem}
-\begin{solution}
-Take $A=\begin{pmatrix}1&0\\1&0\end{pmatrix}$ and $B=\begin{pmatrix}0&0\\1&1\end{pmatrix}$. Then $AB=0$, whereas $BA=\begin{pmatrix}0&0\\2&0\end{pmatrix}$ has rank one.
-\end{solution}
-
-\begin{problem}[Submatrices]\label{ex:04:submatrix}
-Prove that the rank of a submatrix of $A$ is at most $\operatorname{rank}A$.
-\end{problem}
-\begin{solution}
-If the selected row indices are $i_1,\ldots,i_r$, let $E$ have rows $e_{i_k}^\top$. If the selected column indices are $j_1,\ldots,j_s$, let $F$ have columns $e_{j_l}$. The submatrix is $EAF$. The product-rank inequality gives $\operatorname{rank}(EAF)\leqslant\operatorname{rank}(AF)\leqslant\operatorname{rank}A$.
-\end{solution}
-
-\begin{problem}[Invertible factors]\label{ex:04:invertible-rank}
-Let $A\in\R^{m\times n}$, and let $B\in\R^{m\times m}$ and $C\in\R^{n\times n}$ be invertible. Prove that $BA$, $AC$, and $BAC$ all have the same rank as $A$.
-\end{problem}
-\begin{solution}
-The product inequality gives $\operatorname{rank}(BAC)\leqslant\operatorname{rank}A$. But $A=B^{-1}(BAC)C^{-1}$ gives the reverse inequality. Taking $C=I_n$ proves the assertion for $BA$ and taking $B=I_m$ proves it for $AC$.
-\end{solution}
-
-\begin{problem}[Rectangular factors of full rank]\label{ex:04:full-rank-factors}
-For conformable real matrices, prove $\operatorname{rank}(BA)=\operatorname{rank}A$ if $B$ has full column rank, and $\operatorname{rank}(AC)=\operatorname{rank}A$ if $C$ has full row rank.
-\end{problem}
-\begin{solution}
-Full column rank means $By=0$ only for $y=0$. Thus $BAx=0$ if and only if $Ax=0$. Since $BA$ and $A$ have the same number of columns, rank--nullity gives equal ranks. If $C$ has full row rank, then $C^\top$ has full column rank. Applying the result just proved to $C^\top A^\top$ and transposing gives $\operatorname{rank}(AC)=\operatorname{rank}A$.
-\end{solution}
-
-\begin{problem}[Counting echelon rows]\label{ex:04:echelon-rank}
-Prove that the rank of a row-echelon matrix is the number of its nonzero rows.
-\end{problem}
-\begin{solution}
-Let the successive pivot columns be $j_1<\cdots<j_r$. In a zero combination of the nonzero rows, column $j_1$ contains a nonzero entry only in the first of these rows, so its coefficient is zero. After it is removed, column $j_2$ forces the next coefficient zero. Continue until every coefficient is zero. Thus the nonzero rows are independent; they span the row space because all remaining rows are zero. Pivot values need not be normalized to one.
-\end{solution}
-
-\begin{problem}[Computing rank]\label{ex:04:numerical-ranks}
-Find the rank of each matrix:
-\begin{enumerate}
-\item $\begin{pmatrix}2&1&3\\7&2&0\end{pmatrix}$;
-\item $\begin{pmatrix}-1&2&-2\\3&4&-5\end{pmatrix}$;
-\item $\begin{pmatrix}1&2&7\\2&4&-1\end{pmatrix}$;
-\item $\begin{pmatrix}1&2&-3\\-1&-2&3\\4&8&-12\\0&0&0\end{pmatrix}$;
-\item $\begin{pmatrix}2&0\\0&-5\end{pmatrix}$;
-\item $\begin{pmatrix}-1&0&1\\0&2&3\\0&0&7\end{pmatrix}$;
-\item $\begin{pmatrix}2&0&0\\-5&1&2\\3&8&-7\end{pmatrix}$;
-\item $\begin{pmatrix}1&2&-3\\-1&-2&3\\4&8&-12\\1&-1&5\end{pmatrix}$;
-\item $\begin{pmatrix}1&1&0&1\\1&2&2&1\\3&4&2&3\end{pmatrix}$.
-\end{enumerate}
-\end{problem}
-\begin{solution}
-(a) Rank two: the two rows are nonzero and not proportional (the third coordinates already exclude proportionality).
-(b) Rank two: the first coordinates would require proportionality factor $-3$, inconsistent with the second coordinates.
-(c) Rank two: twice row one has last coordinate $14$, not $-1$.
-(d) Rank one: every row is a multiple of the nonzero first row.
-(e) Rank two, by the two nonzero diagonal entries.
-(f) Rank three, by successive substitution in the triangular matrix.
-(g) A zero column relation gives $2x=0$, $-5x+y+2z=0$, $3x+8y-7z=0$. Thus $x=0$, $y=-2z$, and $-23z=0$, so the three columns are independent and the rank is three.
-(h) The first three rows span one line; the fourth is not a multiple of the first, so rank two.
-(i) Row three equals twice row one plus row two, and the first two rows are not proportional, so rank two.
-\end{solution}
-
-\begin{problem}[Evaluating mappings]\label{ex:04:evaluate-maps}
-Let $F(t)=(e^t,t)$ and $G(t)=(t,2t)$. Find $F(1)$, $F(0)$, $F(-1)$; $(F+G)(1)$, $(F+G)(2)$, $(F+G)(0)$; and $(2F)(0)$, $(\pi F)(1)$. Also let $H(x)=x\cdot(1,1,-1,3)+2$ on $\R^4$ and find $H(1,1,0,-1)$ and $H(2,3,-1,1)$.
-\end{problem}
-\begin{solution}
-The first three values are $(e,1),(1,0),(e^{-1},-1)$. Since $(F+G)(t)=(e^t+t,3t)$, its requested values are $(e+1,3),(e^2+2,6),(1,0)$. Pointwise scalar multiplication gives $(2F)(0)=(2,0)$ and $(\pi F)(1)=(\pi e,\pi)$. Finally, $H(1,1,0,-1)=1$ and $H(2,3,-1,1)=11$ by the stated dot products.
-\end{solution}
-
-\begin{problem}[Images of curves and surfaces]\label{ex:04:geometric-images}
-Describe each image and prove both inclusions:
-\begin{enumerate}
-\item the line $x=2$ under $F(x,y)=(xy,y)$;
-\item the line $x=c$ under $F(x,y)=(e^x\cos y,e^x\sin y)$, including $c=1$;
-\item all of $\R^2$ under $F(t,u)=(\cos t,\sin t,u)$;
-\item the ellipse $x^2/9+y^2/16=1$ under $F(x,y)=(x/3,y/4)$.
-\end{enumerate}
-\end{problem}
-\begin{solution}
-(a) The image is the line $\{(2s,s):s\in\R\}$: substituting $x=2$ gives every such point, and every image has this form.
-(b) Every image has squared norm $e^{2c}$. Conversely, every point on the circle of radius $e^c$ has polar coordinates $(e^c\cos y,e^c\sin y)$ for some real $y$, hence is the image of $(c,y)$. For $c=1$ the radius is $e$.
-(c) The image is the circular cylinder $\{(x,y,z):x^2+y^2=1\}$. The trigonometric identity proves containment; a point on the cylinder has $(x,y)=(\cos t,\sin t)$ for some $t$ and is the image of $(t,z)$.
-(d) The image is the unit circle: the squared norm of $(x/3,y/4)$ is one, and any $(u,v)$ on the unit circle is the image of $(3u,4v)$ on the ellipse.
-\end{solution}
-
+% Lang LA III.2.1(a-g); calculus part (h) not selected.
 \begin{problem}[Testing linearity]\label{ex:04:linearity}
-Determine which mappings are linear:
+Determine which maps are linear. Give a proof or a counterexample in each case.
 \begin{enumerate}
-\item $(x,y,z)\mapsto(x,z)$;
-\item $x\mapsto-x$ on $\R^4$;
-\item $x\mapsto x+(0,-1,0)$ on $\R^3$;
-\item $(x,y)\mapsto(2x+y,y)$;
-\item $(x,y)\mapsto(2x,y-x)$;
-\item $(x,y)\mapsto(y,x)$;
-\item $(x,y)\mapsto xy$.
-\end{enumerate}
-Also test $t\mapsto(e^t,t)$, $x\mapsto x\cdot(1,1,-1,3)+2$, $(x,y)\mapsto(2x,3y)$, and $(x,y)\mapsto(xy,y)$.
-\end{problem}
-\begin{solution}
-Parts (a),(b),(d),(e),(f) are linear: each output coordinate is a linear combination of the input coordinates, so the coordinate test applies. Part (c) is not, since its value at zero is nonzero. Part (g) is not, since the two coordinate unit vectors have value zero but their sum has value one.
-Of the four additional mappings only $(x,y)\mapsto(2x,3y)$ is linear. The first two fail at zero. For the last, $F(1,0)=(0,0)$, $F(0,1)=(0,1)$, but $F(1,1)=(1,1)$, so additivity fails.
-\end{solution}
-
-\begin{problem}[Kernel, image, and equality of matrix rules]\label{ex:04:elementary-map-proofs}
-Prove that the kernel and image of a linear mapping are subspaces. If $A,B\in\R^{m\times n}$ satisfy $Ax=Bx$ for every $x\in\R^n$, prove $A=B$. Determine which translations $x\mapsto x+u$ are linear.
-\end{problem}
-\begin{solution}
-The kernel contains zero, and if $Lx=Ly=0$, then $L(ax+by)=aLx+bLy=0$. The image contains zero, and $aLx+bLy=L(ax+by)$ belongs to it. For the matrix assertion, take $x=e_j$; equality gives equality of column $j$ for every $j$. A linear translation must send zero to zero, so $u=0$; conversely $u=0$ gives the linear identity mapping.
-\end{solution}
-
-\begin{problem}[Lines, segments, and collapsing parallelograms]\label{ex:04:affine-images}
-Let $L:V\to W$ be linear.
-\begin{enumerate}
-\item Show that a line maps to a line or point and a segment $[p,q]$ maps to $[L(p),L(q)]$.
-\item If $u,v$ and their images $L(u),L(v)$ are independent pairs, prove that the parallelogram $p+su+tv$, $0\leqslant s,t\leqslant1$, maps to a parallelogram.
-\item If $u,v$ are independent but their images are dependent, prove that the parallelogram spanned by $u,v$ maps to a segment or point.
+\item \(F:\R^3\to\R^2,\quad F(x,y,z)=(x,z)^\top\).
+\item \(F:\R^4\to\R^4,\quad F(x)=-x\).
+\item \(F:\R^3\to\R^3,\quad F(x)=x+(0,-1,0)^\top\).
+\item \(F:\R^2\to\R^2,\quad F(x,y)=(2x+y,y)^\top\).
+\item \(F:\R^2\to\R^2,\quad F(x,y)=(2x,y-x)^\top\).
+\item \(F:\R^2\to\R^2,\quad F(x,y)=(y,x)^\top\).
+\item \(F:\R^2\to\R,\quad F(x,y)=xy\).
 \end{enumerate}
 \end{problem}
 \begin{solution}
-(a) The formulas $L(p+tu)=L(p)+tL(u)$ and $L((1-t)p+tq)=(1-t)L(p)+tL(q)$ give equality of the indicated sets by allowing every parameter. The line collapses when $L(u)=0$.
-(b) The image is exactly $L(p)+sL(u)+tL(v)$ with the same parameter bounds; independence makes this a parallelogram with independent edge directions.
-(c) If both images are zero, the image is a point. Otherwise write $L(u)=az,L(v)=bz$ for a fixed nonzero $z$ and real $a,b$. Its coefficients are all $as+bt$ with $s,t\in[0,1]$. This set is the interval $[\min(0,a)+\min(0,b),\max(0,a)+\max(0,b)]$: it is the sum of the intervals traced by $as$ and $bt$. Thus the image is a segment on the line spanned by $z$.
-\end{solution}
-
-\begin{problem}[Square and rectangle images]\label{ex:04:rectangle-images}
-\begin{enumerate}
-\item A linear map satisfies $F(e_1)=(1,1)$, $F(e_2)=(-1,2)$. Describe the image of the unit square.
-\item Let $a,b\ne0$ in $\R^2$ be nonproportional and let $L(e_1)=a,L(e_2)=b$. Describe the image of the rectangle with vertices $(0,0),(3,0),(0,1),(3,1)$.
-\end{enumerate}
-\end{problem}
-\begin{solution}
-(a) The image is $\{s(1,1)+t(-1,2):s,t\in[0,1]\}$ with vertices $(0,0),(1,1),(-1,2),(0,3)$. Its edge vectors are independent, as their zero combination gives $s-t=0$, $s+2t=0$.
-(b) The image is $\{sa+tb:0\leqslant s\leqslant3,\ 0\leqslant t\leqslant1\}$, a parallelogram with vertices $0,3a,b,3a+b$. Every point with the displayed parameters has the preimage $(s,t)$, so this describes the complete image.
-\end{solution}
-
-\begin{problem}[Prescribed values determine coordinate images]\label{ex:04:prescribed-values}
-Find $L(1,0)$ and $L(0,1)$ for each linear map on $\R^2$ specified by:
-\begin{enumerate}
-\item $L(3,1)=(1,2)$, $L(-1,0)=(1,1)$;
-\item $L(4,1)=(1,1)$, $L(1,1)=(3,-2)$;
-\item $L(1,1)=(2,1)$, $L(-1,1)=(6,3)$.
-\end{enumerate}
-\end{problem}
-\begin{solution}
-Write $u=L(1,0)$ and $v=L(0,1)$.
-(a) $-u=(1,1)$ gives $u=(-1,-1)$; then $3u+v=(1,2)$ gives $v=(4,5)$.
-(b) Subtracting $u+v=(3,-2)$ from $4u+v=(1,1)$ gives $u=(-2/3,1)$, then $v=(11/3,-3)$.
-(c) The equations $u+v=(2,1)$ and $-u+v=(6,3)$ give $u=(-2,-1)$ and $v=(4,2)$. In every case $L(x,y)=xu+yv$ verifies existence with these values.
-\end{solution}
-
-\begin{problem}[Independent images]\label{ex:04:independent-images}
-If $L(v_1),\ldots,L(v_k)$ are independent, prove that $v_1,\ldots,v_k$ are independent.
-\end{problem}
-\begin{solution}
-Applying $L$ to $\sum_i c_iv_i=0$ gives $\sum_i c_iL(v_i)=0$. Independence of the image list gives every $c_i=0$. No injectivity of $L$ on its entire domain is assumed or needed.
-\end{solution}
-
-\begin{problem}[A nonzero scalar-valued map]\label{ex:04:functional-decomposition}
-Let $F:V\to\R$ be linear, let $W=\ker F\ne V$, and choose $v_0\notin W$. Prove that every $v\in V$ has the form $w+cv_0$ with $w\in W$. Show that $W$ is a subspace and that a basis $v_1,\ldots,v_n$ of $W$, preceded by $v_0$, is a basis of $V$.
-\end{problem}
-\begin{solution}
-Since $F(v_0)\ne0$, set $c=F(v)/F(v_0)$ and $w=v-cv_0$. Then $F(w)=0$, giving the expression. Kernel closure proves that $W$ is a subspace. The expression proves spanning of $v_0,v_1,\ldots,v_n$. In a zero combination $av_0+\sum_i b_iv_i=0$, applying $F$ gives $aF(v_0)=0$, hence $a=0$. Independence of the kernel basis then gives every $b_i=0$.
-\end{solution}
-
-\begin{problem}[Convexity under linear mappings]\label{ex:04:convex-maps}
-Prove that the image of a convex set under a linear map is convex, and that the preimage of a convex set is convex. Explain how scaling convex sets and convexity of $\{x:a\cdot x\geqslant c\}$ are special cases.
-\end{problem}
-\begin{solution}
-For $u,v$ in a convex domain set, $(1-t)L(u)+tL(v)=L((1-t)u+tv)$ is in its image. For $u,v$ whose images lie in a convex codomain set, the same identity proves that their convex combination has image in that set, so lies in the preimage. Scaling uses the linear map $x\mapsto cx$ and images. The half-space is the preimage of the convex interval $[c,\infty)$ under $x\mapsto a\cdot x$.
-\end{solution}
-
-\begin{problem}[Dimensions of images of lines and planes]\label{ex:04:line-plane-dimension}
-Show that a linear mapping sends a one-dimensional subspace to a point or line and a two-dimensional subspace to a point, line, or plane. Prove the same classifications for arbitrary translated lines and planes.
-\end{problem}
-\begin{solution}
-The image of $\operatorname{span}(u)$ is $\operatorname{span}(L(u))$, of dimension at most one. The image of $\operatorname{span}(u,v)$ is $\operatorname{span}(L(u),L(v))$, of dimension at most two. A subspace of dimension zero is the point zero. For a translate $p+S$, linearity gives $L(p+S)=L(p)+L(S)$; translating the image subspace gives exactly the corresponding affine point, line, or plane.
-\end{solution}
-
-\begin{problem}[Dimension and injectivity]\label{ex:04:dimension-criteria}
-Let $L:V\to W$ be linear between finite-dimensional spaces.
-\begin{enumerate}
-\item If $\dim V=\dim W$, prove that zero kernel is equivalent to image all of $W$.
-\item If $\dim V>\dim W$, prove that the kernel contains a nonzero vector.
-\end{enumerate}
-\end{problem}
-\begin{solution}
-(a) Write both dimensions as $n$. If the kernel has dimension zero, rank--nullity gives image dimension $n$, so the image subspace is all of $W$. Conversely, if the image is $W$, the same formula gives kernel dimension zero.
-(b) Since $\dim\operatorname{im}L\leqslant\dim W$, rank--nullity gives $\dim\ker L\geqslant\dim V-\dim W>0$, so a nonzero kernel vector exists.
-\end{solution}
-
-\begin{problem}[All preimages of one value]\label{ex:04:fiber}
-Suppose $L:V\to W$ is linear and $L(v_0)=w$. Prove that the solutions of $L(v)=w$ are exactly $v_0+\ker L$.
-\end{problem}
-\begin{solution}
-If $L(v)=w$, then $L(v-v_0)=w-w=0$, so $v-v_0\in\ker L$. Conversely, for $u\in\ker L$, $L(v_0+u)=w+0=w$. The existence assumption on $v_0$ is essential: if $w$ is outside the image, there are no solutions.
-\end{solution}
-
-\begin{problem}[Kernels of differential operators]\label{ex:04:derivative-kernels}
-On the space of infinitely differentiable real functions on $\R$, determine the kernels of $D$, $D^2$, $D^n$ for positive integer $n$, and $D-aI$ for real $a$ (including $a=1$).
-\end{problem}
-\begin{solution}
-A function with zero derivative is constant on $\R$ by the mean value theorem. Thus $\ker D=\operatorname{span}(1)$. Repeated integration, or induction using this fact, shows that $D^nf=0$ exactly when $f$ is a polynomial of degree at most $n-1$, giving $\ker D^n=\operatorname{span}(1,t,\ldots,t^{n-1})$. In particular $\ker D^2=\operatorname{span}(1,t)$.
-If $f'-af=0$, then $(e^{-at}f(t))'=e^{-at}(f'-af)=0$, so $f(t)=ce^{at}$. Conversely every such function satisfies the equation. Therefore $\ker(D-aI)=\operatorname{span}(e^{at})$, and for $a=1$ this is $\operatorname{span}(e^t)$.
-\end{solution}
-
-\begin{problem}[A zero sum and a zero trace]\label{ex:04:sum-trace}
-For positive integer $n$, find the dimensions of (a) $\{x\in\R^n:\sum_i x_i=0\}$ and (b) $\{A\in\R^{n\times n}:\tr A=0\}$.
-\end{problem}
-\begin{solution}
-(a) The coordinate-sum map is linear and onto $\R$, because it sends $(t,0,\ldots,0)$ to $t$. Its kernel has dimension $n-1$.
-(b) Trace is linear and onto $\R$, because $\tr(tE_{11})=t$. Its domain has dimension $n^2$, so its kernel has dimension $n^2-1$. These formulas include $n=1$, when both kernels are zero spaces.
-\end{solution}
-
-\begin{problem}[The symmetric-part map]\label{ex:04:symmetric-map}
-On $M=\R^{n\times n}$, define $P(A)=(A+A^\top)/2$. Prove linearity, identify its kernel and image, determine the dimension of the skew-symmetric subspace using rank--nullity, and exhibit a basis of that subspace.
-\end{problem}
-\begin{solution}
-Transpose distributes over sums and real scalar multiplication, proving linearity. The equation $P(A)=0$ is exactly $A^\top=-A$, so the kernel is the skew-symmetric subspace. Every $P(A)$ is symmetric, and every symmetric $B$ satisfies $P(B)=B$, proving equality of the image with the symmetric subspace. Its dimension is $n(n+1)/2$, hence the kernel dimension is $n^2-n(n+1)/2=n(n-1)/2$.
-A basis is $E_{ij}-E_{ji}$ for $i<j$: a skew-symmetric matrix has zero diagonal and the unique expression $\sum_{i<j}a_{ij}(E_{ij}-E_{ji})$. Its upper triangular entries verify independence.
-\end{solution}
-
-\begin{problem}[The skew-symmetric-part map]\label{ex:04:skew-map}
-For $Q(A)=(A-A^\top)/2$ on $\R^{n\times n}$, prove linearity, identify its kernel and its dimension, and identify its image.
-\end{problem}
-\begin{solution}
-Linearity follows from the transpose rules. The kernel equation $A-A^\top=0$ says precisely that $A$ is symmetric; its dimension is $n(n+1)/2$. Every output is skew-symmetric. Conversely, for a skew-symmetric $C$, $Q(C)=(C-(-C))/2=C$, so the image is the entire skew-symmetric subspace. Its dimension is $n(n-1)/2$ by the preceding basis construction.
-\end{solution}
-
-\begin{problem}[Even and odd parts]\label{ex:04:even-odd}
-A real function is even if $f(-x)=f(x)$ and odd if $f(-x)=-f(x)$. Verify that cosine is even and sine is odd. On the space of all real functions on $\R$, define
+The maps in (a), (b), (d), (e), and (f) are respectively multiplication by
 \[
- (Pf)(x)=\frac{f(x)+f(-x)}2,\qquad
- (Qf)(x)=\frac{f(x)-f(-x)}2.
+\begin{pmatrix}1&0&0\\0&0&1\end{pmatrix},\quad
+-I_4,\quad
+\begin{pmatrix}2&1\\0&1\end{pmatrix},\quad
+\begin{pmatrix}2&0\\-1&1\end{pmatrix},\quad
+\begin{pmatrix}0&1\\1&0\end{pmatrix}.
 \]
-Prove that both mappings are linear, and identify each kernel and image.
-\end{problem}
-\begin{solution}
-The trigonometric identities $\cos(-x)=\cos x$, $\sin(-x)=-\sin x$ give the first assertion. Substitution into each displayed formula proves additivity and homogeneity pointwise.
-The equation $Pf=0$ is exactly oddness; also $Pf$ is even, and every even $g$ satisfies $Pg=g$. Thus $\ker P$ is the odd subspace and $\operatorname{im}P$ the even subspace.
-Similarly $Qf=0$ is evenness; $Qf$ is odd, and every odd $h$ satisfies $Qh=h$. Thus $\ker Q$ is the even subspace and $\operatorname{im}Q$ the odd subspace. No finite-dimensional assertion is used for this function space.
+Each is linear because \(A(su+tv)=sAu+tAv\).
+In (c), \(F(0)=(0,-1,0)^\top\ne0\), which rules out linearity.
+In (g), \(F(1,0)=F(0,1)=0\) but \(F(1,1)=1\), so additivity fails.
 \end{solution}
 
-\begin{problem}[Products and diagonal subspaces]\label{ex:04:product-space}
-For vector spaces $U,W$, define componentwise addition and scalar multiplication on $U\times W$.
+% Lang LA III.2.18(a-c) and III.2.19(a-c), original data.
+\begin{problem}[Recovering a map from two values]\label{ex:04:two-values}
+In each case \(L:\R^2\to\R^2\) is linear. Find both \(L(1,0)\) and \(L(0,1)\).
 \begin{enumerate}
-\item Verify the vector-space axioms and identify zero.
-\item If $u_1,\ldots,u_r$ and $w_1,\ldots,w_s$ are bases, exhibit a basis of the product and find its dimension.
-\item For a subspace $S\subseteq V$, prove that $\{(s,s):s\in S\}$ is a subspace of $V\times V$ and find its basis from a basis of $S$.
+\item \(L(3,1)=(1,2)^\top,\quad L(-1,0)=(1,1)^\top\).
+\item \(L(4,1)=(1,1)^\top,\quad L(1,1)=(3,-2)^\top\).
+\item \(L(1,1)=(2,1)^\top,\quad L(-1,1)=(6,3)^\top\).
 \end{enumerate}
 \end{problem}
 \begin{solution}
-(a) Each axiom holds separately in each component, using the corresponding axiom in $U$ and $W$. Zero is $(0_U,0_W)$ and the negative of $(u,w)$ is $(-u,-w)$.
-(b) Use $(u_i,0)$ and $(0,w_j)$. The component basis expansions prove spanning; a zero combination has each component zero, and independence of the two component bases gives all coefficients zero. Thus the dimension is $r+s$.
-(c) Zero lies in the set, and $a(s,s)+b(t,t)=(as+bt,as+bt)$ lies in it. If $s_1,\ldots,s_k$ is a basis of $S$, then $(s_i,s_i)$ span the diagonal subspace and are independent by comparison of the first component. Its dimension is $k$.
-\end{solution}
-
-\begin{problem}[Dimension of a sum via a mapping]\label{ex:04:sum-dimension}
-Let $U,W$ be finite-dimensional subspaces of $V$. For $T:U\times W\to V$ given by $T(u,w)=u-w$, prove linearity, identify the image and kernel with their dimensions, and deduce
-$\dim(U+W)+\dim(U\cap W)=\dim U+\dim W$.
-\end{problem}
-\begin{solution}
-Componentwise operations give $T(a(u,w)+b(u',w'))=a(u-w)+b(u'-w')$. Every image lies in $U+W$, and $u+w=T(u,-w)$ proves the reverse containment. The kernel consists of pairs $(z,z)$ with $z\in U\cap W$; a basis $z_i$ of the intersection gives its basis $(z_i,z_i)$. Thus its dimension is $\dim(U\cap W)$. Since $\dim(U\times W)=\dim U+\dim W$, rank--nullity yields the desired equation.
-\end{solution}
-
-\subsection*{Rank, inverses, and equivalence}
-\begin{problem}[Rank and the inverse criterion]\label{ex:04:inverse-rank}
-Find the ranks of
+Express the standard columns using the given input columns, then apply \(L\).
+\begin{enumerate}
+\item The identities
 \[
- A=\begin{pmatrix}1&2\\2&4\end{pmatrix},\qquad
- B=\begin{pmatrix}1&3\\2&4\end{pmatrix}.
+e_1=-(-1,0)^\top,\qquad e_2=(3,1)^\top+3(-1,0)^\top
 \]
-For a general square matrix of order $n$, prove that an inverse exists if and only if its rank is $n$.
-\end{problem}
-\begin{solution}
-The second column of $A$ is twice its nonzero first column, so its rank is one. For $B$, the equations $x+3y=0$, $2x+4y=0$ imply $x=y=0$; its columns are independent and its rank is two.
-If a square matrix $C$ is invertible, $Cx=0$ implies $x=C^{-1}0=0$, so all $n$ columns are independent. Conversely, if its rank is $n$, its columns form a basis of $\R^n$. Choose $d_i$ with $Cd_i=e_i$ and form $D=(d_1\ \cdots\ d_n)$. Then $CD=I$. Moreover $C(DC-I)=0$, so every column of $DC-I$ is zero by independence of the columns of $C$. Thus $DC=I$ as well, proving that $D$ is an inverse. In particular $A$ has no inverse and $B$ has one.
-\end{solution}
-
-\begin{problem}[Reducing an echelon matrix by columns]\label{ex:04:echelon-equivalence}
-Let $H$ be an $m\times n$ row-echelon matrix of rank $r$. Prove that elementary column operations alone reduce $H$ to $J_r$. Deduce that for every $m\times n$ matrix $A$ of rank $r$ there are invertible matrices $E,F$, each a product of elementary matrices, such that $EAF=J_r$.
-\end{problem}
-\begin{solution}
-There are $r$ nonzero rows. Permute the pivot columns into positions $1,\ldots,r$, preserving their order. Their first $r$ rows form an upper triangular matrix with nonzero diagonal; all rows below row $r$ are zero. Scale pivot column $j$ to make its diagonal entry one. Starting with $j=1$, subtract suitable multiples of column $j$ from every later column to clear their entries in row $j$. At this step column $j$ has zeros above its diagonal by the earlier clearings and zeros below by echelon form; it is exactly $e_j$ in $\R^m$. The clearings therefore leave every other row unchanged. After $j=r$, the first $r$ columns are $e_1,\ldots,e_r$ and all other columns are zero. The result is $J_r$. For $r=0$, $H=0$ and no operation is required.
-Record these column operations as $HF=J_r$. Row reduction records $EA=H$. Thus $EAF=J_r$. Each factor is a product of invertible elementary matrices, so $E$ and $F$ are invertible, of orders $m$ and $n$ respectively.
-\end{solution}
-
-\begin{problem}[Same rank and equivalence]\label{ex:04:equivalent-ranks}
-Let $A,B\in\R^{m\times n}$. Prove that invertible matrices $E\in\R^{m\times m}$ and $F\in\R^{n\times n}$ satisfying $B=EAF$ exist if and only if $A$ and $B$ have the same rank.
-\end{problem}
-\begin{solution}
-Multiplication on the left by an invertible matrix preserves all relations among columns and hence their rank. Multiplication on the right preserves row relations by the transposed argument. Thus $B=EAF$ implies equal ranks.
-Conversely, suppose their common rank is $r$. The preceding construction gives
+give \(L(e_1)=(-1,-1)^\top\) and \(L(e_2)=(4,5)^\top\).
+They check the data: \(3L(e_1)+L(e_2)=(1,2)^\top\) and
+\(-L(e_1)=(1,1)^\top\).
+\item Here
 \[
- E_1AF_1=J_r=E_2BF_2.
+e_1=\tfrac13(4,1)^\top-\tfrac13(1,1)^\top,\qquad
+e_2=-\tfrac13(4,1)^\top+\tfrac43(1,1)^\top.
 \]
-Multiply on the left by $E_2^{-1}$ and on the right by $F_2^{-1}$ to obtain
+Thus \(L(e_1)=(-2/3,1)^\top\), \(L(e_2)=(11/3,-3)^\top\).
+The combinations \(4L(e_1)+L(e_2)\) and \(L(e_1)+L(e_2)\)
+are the two prescribed outputs.
+\item Finally,
 \[
- B=(E_2^{-1}E_1)A(F_1F_2^{-1}).
+e_1=\tfrac12(1,1)^\top-\tfrac12(-1,1)^\top,\qquad
+e_2=\tfrac12(1,1)^\top+\tfrac12(-1,1)^\top.
 \]
-The displayed left and right factors are invertible. This argument includes zero matrices, with $r=0$.
+Hence \(L(e_1)=(-2,-1)^\top\), \(L(e_2)=(4,2)^\top\).
+Their sum and their difference \(L(e_2)-L(e_1)\) recover the given outputs.
+\end{enumerate}
 \end{solution}
 
-\begin{problem}[A rectangular rank computation]\label{ex:04:seven-column-rank}
-Find the rank by reduction to echelon form:
+% Lang LA III.2.6, including the requested generalization to finitely many coordinates.
+\begin{problem}[Combining scalar-valued maps]\label{ex:04:coordinate-maps}
+Let \(f,g:V\to\R\) be linear. Prove that
+\(F:V\to\R^2\), \(F(v)=(f(v),g(v))^\top\), is linear.
+Generalize to any finite number of scalar-valued linear maps.
+\end{problem}
+\begin{solution}
+For linear \(f_1,\ldots,f_p:V\to\R\), \(p\geqslant1\), define
+\(F(v)=(f_1(v),\ldots,f_p(v))^\top\).
+For \(u,v\in V\) and \(a,b\in\R\), coordinate \(j\) gives
 \[
- A=\begin{pmatrix}
-2&1&4&0&6&7&10\\
-3&5&9&1&0&4&3\\
-7&7&3&2&8&1&1\\
--9&-8&7&-3&-10&9&11\\
-4&2&-20&2&4&-20&-24
+f_j(au+bv)=af_j(u)+bf_j(v)\qquad(1\leqslant j\leqslant p).
+\]
+Equality in every coordinate proves \(F(au+bv)=aF(u)+bF(v)\).
+The requested pair is the case \(p=2\).
+\end{solution}
+
+% Lang LA III.2.15.
+\begin{problem}[Independent images]\label{ex:04:independent-preimages}
+Let \(F:V\to W\) be linear. Suppose \(w_1,\ldots,w_k\) are independent
+and \(F(v_i)=w_i\) for every \(i\). Prove that \(v_1,\ldots,v_k\) are independent.
+\end{problem}
+\begin{solution}
+If \(\sum_i a_iv_i=0\), applying \(F\) gives
+\(\sum_i a_iw_i=0\). Independence of the \(w_i\) gives \(a_i=0\)
+for every \(i\). This proves the required independence without assuming
+that \(F\) is injective on all of \(V\).
+\end{solution}
+
+% Lang LA III.2.16 and III.2.17, both complete.
+\begin{problem}[A scalar-valued map]\label{ex:04:scalar-kernel}
+Let \(F:V\to\R\) be linear, let \(W=\ker F\ne V\), and fix \(v_0\notin W\).
+\begin{enumerate}
+\item Show that every \(v\in V\) can be written \(v=w+cv_0\), where
+\(w\in W\) and \(c\in\R\).
+\item Prove that \(W\) is a subspace. If \((v_1,\ldots,v_r)\) is a
+basis of \(W\), prove that \((v_0,v_1,\ldots,v_r)\) is a basis of \(V\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+\begin{enumerate}
+\item Since \(F(v_0)\ne0\), set
+\[
+c=\frac{F(v)}{F(v_0)},\qquad w=v-cv_0.
+\]
+Then \(F(w)=F(v)-cF(v_0)=0\), so \(w\in W\) and the formula holds.
+\item We have \(F(0)=0\), and for \(u,w\in W\),
+\(F(au+bw)=aF(u)+bF(w)=0\); hence \(W\) is a subspace.
+Part (a) and the basis of \(W\) prove spanning.
+In a relation \(a_0v_0+\sum_{i=1}^r a_iv_i=0\), applying \(F\) gives
+\(a_0F(v_0)=0\), hence \(a_0=0\).
+Independence in \(W\) gives all remaining coefficients zero.
+The argument also covers \(W=\{0\}\), when its basis is empty.
+\end{enumerate}
+\end{solution}
+
+% Harville 22.1.
+\begin{problem}[Extending a linear map]\label{ex:04:extension}
+Let \(U\subseteq V\) be a subspace and let \(S:U\to W\) be linear.
+Show that there is a linear \(T:V\to W\) whose restriction to \(U\) is \(S\).
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item Choose a basis \((u_1,\ldots,u_r)\) of \(U\) and extend it to
+\((u_1,\ldots,u_r,v_1,\ldots,v_s)\) of \(V\).
+\item Choose any \(w_1,\ldots,w_s\in W\), and define
+\[
+T\left(\sum_{i=1}^r a_iu_i+\sum_{j=1}^s b_jv_j\right)
+=\sum_{i=1}^r a_iS(u_i)+\sum_{j=1}^s b_jw_j.
+\]
+Unique basis coefficients make this well-defined; addition and scalar
+multiplication of the coefficients prove linearity.
+\item For \(u\in U\), all \(b_j=0\), so \(T(u)=S(u)\).
+If \(U=V\) there are no new images to choose; if \(U=\{0\}\), the
+first sum is empty. The new images \(w_j\) can be chosen freely.
+\end{itemize}
+\end{solution}
+
+% Harville 22.3(a,b); retain the original direct spanning proof.
+\begin{problem}[A subspace avoiding the kernel]\label{ex:04:kernel-complement}
+Let \(T:V\to W\) be linear and \(U\subseteq V\) a subspace satisfying
+\(U\cap\ker T=\{0\}\). Let \(u_1,\ldots,u_r\in U\) be independent.
+\begin{enumerate}
+\item Prove that \(T(u_1),\ldots,T(u_r)\) are independent.
+\item If also \(r=\dim U\) and \(U\oplus\ker T=V\), prove that these
+images form a basis of \(\operatorname{im}T\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+\begin{enumerate}
+\item A relation \(\sum_i a_iT(u_i)=0\) gives
+\[
+\sum_i a_iu_i\in U\cap\ker T=\{0\}.
+\]
+Independence of the \(u_i\) forces every \(a_i=0\).
+\item The \(u_i\) form a basis of \(U\).
+For \(v\in V\), write \(v=u+z\) with \(u\in U\), \(z\in\ker T\),
+and then \(u=\sum_i c_iu_i\).
+Thus \(T(v)=T(u)=\sum_i c_iT(u_i)\), proving spanning.
+Part (a) proves independence, including the empty list if \(T=0\).
+\end{enumerate}
+\end{solution}
+
+% Harville 22.6.
+\begin{problem}[Factoring through another map]\label{ex:04:factor-map}
+Let \(T:V\to W\) and \(R:U\to W\) be linear.
+If \(\operatorname{im}T\subseteq\operatorname{im}R\), prove that
+there is a linear \(S:V\to U\) such that \(T=RS\).
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item Choose a basis \((v_1,\ldots,v_n)\) of \(V\).
+For each \(i\), choose \(u_i\in U\) with \(R(u_i)=T(v_i)\),
+which is possible by the inclusion of images.
+\item Define \(S(\sum_i a_iv_i)=\sum_i a_iu_i\).
+Unique coefficients make \(S\) well-defined; their addition and scaling
+give linearity. For every \(v=\sum_i a_iv_i\),
+\[
+RS(v)=\sum_i a_iR(u_i)=\sum_i a_iT(v_i)=T(v).
+\]
+Thus \(T=RS\). If \(V=\{0\}\), the zero map \(S\) gives the same conclusion.
+\end{itemize}
+\end{solution}
+
+% Lang LA III.4.8(a,b); original answer is only a kernel assertion.
+\begin{problem}[Two invertible maps]\label{ex:04:invertible-maps}
+Show that each of the following maps \(L:\R^3\to\R^3\) is invertible.
+\begin{enumerate}
+\item \(L(x,y,z)=(x-2y,x+z,x+y+2z)^\top\).
+\item \(L(x,y,z)=(2x-y+z,x+y,3x+y+z)^\top\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Both maps are linear by their coordinate formulas.
+Solve \(L(x,y,z)=(u,v,w)^\top\) for arbitrary \(u,v,w\).
+\begin{enumerate}
+\item From \(x=u+2y\) and \(z=v-x\), the last equation becomes
+\[
+w=x+y+2(v-x)=2v-u-y.
+\]
+Hence
+\[
+y=2v-u-w,\qquad x=4v-u-2w,\qquad z=u-3v+2w.
+\]
+These equations determine the only possible preimage. Substitution into
+the three coordinates gives \(u,v,w\), so it exists for every output.
+\item The second equation gives \(y=v-x\), and the first gives
+\(z=u+v-3x\). The last equation is then \(w=u+2v-x\).
+Thus the unique candidate is
+\[
+x=u+2v-w,\qquad y=-u-v+w,\qquad z=-2u-5v+3w.
+\]
+Substitution gives \(2x-y+z=u\), \(x+y=v\), and \(3x+y+z=w\).
+Again every output has exactly one preimage.
+\end{enumerate}
+\end{solution}
+
+% Lang LA III.4.1; ordered basis retained.
+\begin{problem}[A nonzero map whose square is zero]\label{ex:04:square-zero-map}
+Let \(L:\R^2\to\R^2\) be linear, \(L\ne0\), and \(L^2=L\circ L=0\).
+Show that there is a basis \((a,b)\) of \(\R^2\) such that
+\(L(a)=b\) and \(L(b)=0\).
+\end{problem}
+\begin{solution}
+Since \(L\ne0\), choose \(a\) with \(b=L(a)\ne0\).
+Then \(L(b)=L^2(a)=0\).
+If \(sa+tb=0\), applying \(L\) gives \(sb=0\), hence \(s=0\).
+The original relation becomes \(tb=0\), so \(t=0\).
+These two independent columns form the required basis of \(\R^2\).
+\end{solution}
+
+% Lang LA III.4.10; direct decomposition, without orthogonality.
+\begin{problem}[An idempotent map]\label{ex:04:idempotent}
+Let \(P:V\to V\) be linear and satisfy \(P^2=P\).
+Prove
+\[
+V=\ker P+\operatorname{im}P,\qquad
+\ker P\cap\operatorname{im}P=\{0\}.
+\]
+\end{problem}
+\begin{solution}
+For \(v\in V\),
+\[
+v=(v-Pv)+Pv,\qquad P(v-Pv)=Pv-P^2v=0.
+\]
+The first term lies in \(\ker P\), the second in \(\operatorname{im}P\);
+therefore their sum is all of \(V\).
+If \(w\) belongs to the intersection, write \(w=Pv\). Then
+\[
+w=Pv=P^2v=P(w)=0.
+\]
+This proves that the sum is direct.
+\end{solution}
+
+% Harville 22.7(a,b), including its general (not necessarily linear) maps.
+\begin{problem}[A left inverse and a right inverse]\label{ex:04:two-inverses}
+Let \(T:V\to W\), \(R:W\to V\), and \(S:W\to V\) be maps satisfying
+\(RT=I_V\) and \(TS=I_W\).
+\begin{enumerate}
+\item Show that \(T\) is invertible.
+\item Show that \(R=S=T^{-1}\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+\begin{enumerate}
+\item If \(T(v)=T(v')\), applying \(R\) gives \(v=v'\).
+For \(w\in W\), the element \(S(w)\) satisfies \(T(S(w))=w\).
+Thus \(T\) is both injective and surjective.
+\item For every \(w\in W\),
+\[
+R(w)=R(T(S(w)))=S(w).
+\]
+The identities \(RT=I_V\), \(TS=I_W\) therefore make this common map
+the inverse of \(T\).
+\end{enumerate}
+The proof requires no linearity assumption on these maps.
+\end{solution}
+
+\subsection*{Coordinates and matrix representations}
+
+% Lang LA IV.2.1(a,f), and IV.3.2; geometric terminology omitted.
+\begin{problem}[Reading a representation from basis images]\label{ex:04:representation-columns}
+Find the indicated representation matrices.
+\begin{enumerate}
+\item \(F:\R^4\to\R^2\), \(F(x_1,x_2,x_3,x_4)=(x_1,x_2)^\top\),
+using standard bases.
+\item \(F:\R^4\to\R^4\), \(F(x_1,x_2,x_3,x_4)=(x_1,x_2,0,0)^\top\),
+using standard bases.
+\item A linear map \(L:V\to V\), with a basis \(B=(v_1,\ldots,v_n)\) and
+\(L(v_i)=c_iv_i\), using \(B\) for both domain and codomain.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Column \(j\) is the coordinate column of the image of input basis vector \(j\).
+Thus the matrices are respectively
+\[
+\begin{pmatrix}1&0&0&0\\0&1&0&0\end{pmatrix},\qquad
+\begin{pmatrix}1&0&0&0\\0&1&0&0\\0&0&0&0\\0&0&0&0\end{pmatrix},\qquad
+\operatorname{diag}(c_1,\ldots,c_n).
+\]
+For (c), \([L(v_j)]_B=c_je_j\), which checks every diagonal and off-diagonal entry.
+The first two maps have different codomains and hence different numbers of matrix rows.
+\end{solution}
+
+% Lang LA IV.3.1(b), full original data; (a) is a classroom example.
+\begin{problem}[Changing coordinates]\label{ex:04:change-coordinates}
+In \(\R^3\), let
+\[
+B=\bigl((3,2,1)^\top,(0,-2,5)^\top,(1,1,2)^\top\bigr),
+\quad
+C=\bigl((1,1,0)^\top,(-1,2,4)^\top,(2,-1,1)^\top\bigr).
+\]
+Find \([I]_{C\leftarrow B}\), the matrix converting \(B\)-coordinates
+to \(C\)-coordinates.
+\end{problem}
+\begin{solution}
+Let \(U,V\) have the columns of \(B,C\), respectively:
+\[
+U=\begin{pmatrix}3&0&1\\2&-2&1\\1&5&2\end{pmatrix},\qquad
+V=\begin{pmatrix}1&-1&2\\1&2&-1\\0&4&1\end{pmatrix}.
+\]
+If \(U(a,b,c)^\top=0\), the first two rows give \(c=-3a\) and \(b=-a/2\);
+the third then gives \(-15a/2=0\). Thus all three coefficients vanish,
+so \(B\) is a basis.
+To express \((r,s,t)^\top\) in \(C\), solve
+\[
+a-b+2c=r,\qquad a+2b-c=s,\qquad4b+c=t.
+\]
+Subtracting the first equation from the second and using the third gives
+\[
+b=\frac{s-r+3t}{15},\qquad
+c=\frac{4r-4s+3t}{15},\qquad
+a=\frac{2r+3s-t}{5}.
+\]
+The unique solution for every \((r,s,t)\) also proves that \(C\) is a basis.
+Apply this formula to the three columns of \(U\):
+\[
+[I]_{C\leftarrow B}
+=P=\begin{pmatrix}
+11/5&-11/5&3/5\\
+2/15&13/15&2/5\\
+7/15&23/15&2/5
 \end{pmatrix}.
 \]
+The product \(VP=U\) verifies all three coordinate expansions.
+For example its first column is
+\((11/5)(1,1,0)^\top+(2/15)(-1,2,4)^\top
++(7/15)(2,-1,1)^\top=(3,2,1)^\top\).
+\end{solution}
+
+% Harville 22.12.
+\begin{problem}[Constructing a desired coordinate change]\label{ex:04:prescribed-change}
+Let \(B=(v_1,\ldots,v_n)\) be a basis of \(V\), and let
+\(A\in\R^{n\times n}\) be invertible. Write \(A^{-1}=(f_{ij})\) and set
+\[
+w_j=\sum_{i=1}^n f_{ij}v_i\qquad(1\leqslant j\leqslant n).
+\]
+Prove that \(C=(w_1,\ldots,w_n)\) is a basis of \(V\) and
+\([I]_{C\leftarrow B}=A\).
 \end{problem}
 \begin{solution}
-Clear column one by replacing rows two through five by
-$R_2-\tfrac32R_1$, $R_3-\tfrac72R_1$, $R_4+\tfrac92R_1$, and $R_5-2R_1$.
-Then replace the current $R_3$ by $R_3-R_2$ and the current $R_4$ by $R_4+R_2$. These operations give
+A relation \(\sum_j c_jw_j=0\) has \(B\)-coordinate column \(A^{-1}c\).
+Thus \(A^{-1}c=0\), so \(c=0\).
+The \(n\) independent vectors form a basis of the \(n\)-dimensional space.
+For any \(v\in V\), expanding its \(C\)-coordinates in the \(v_i\) gives
 \[
- \begin{pmatrix}
-2&1&4&0&6&7&10\\
-0&7/2&3&1&-9&-13/2&-12\\
-0&0&-14&1&-4&-17&-22\\
-0&0&28&-2&8&34&44\\
-0&0&-28&2&-8&-34&-44
-\end{pmatrix}.
+[v]_B=A^{-1}[v]_C,\qquad [v]_C=A[v]_B.
 \]
-Finally $R_4\leftarrow R_4+2R_3$ and $R_5\leftarrow R_5-2R_3$ make the last two rows zero. The remaining three rows have pivots in columns $1,2,3$, so they are independent and the rank is three. The repeated multiples of row three show why the original five rows need not have rank five.
+This is exactly the claimed representation of the identity.
+\end{solution}
+
+% Harville 22.13(a-d), all demands, including both methods in (c).
+\begin{problem}[Changing both bases]\label{ex:04:both-bases}
+Let \(T:\R^4\to\R^3\) be
+\[
+T(x)=(x_1+x_2,\ x_2+x_3-x_4,\ x_1-x_3+x_4)^\top.
+\]
+Let \(B,C\) be the standard bases of \(\R^4,\R^3\), and let the ordered bases \(E,F\) be
+\[
+\begin{split}
+E={}&\bigl((1,-1,0,-1)^\top,(0,0,1,1)^\top,
+             (0,0,0,1)^\top,(1,1,0,0)^\top\bigr),\\
+F={}&\bigl((1,0,1)^\top,(1,1,0)^\top,(-1,0,0)^\top\bigr).
+\end{split}
+\]
+\begin{enumerate}
+\item Find \([T]_{C\leftarrow B}\).
+\item Find both \([I]_{B\leftarrow E}\) and \([I]_{F\leftarrow C}\).
+\item Find \([T]_{F\leftarrow E}\) by each of two methods:
+directly express the images of the \(E\) basis in \(F\);
+then use the change-of-basis formula with the matrices in (a) and (b).
+\item Find \(\rank T\) and \(\dim\ker T\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Write \(F=(f_1,f_2,f_3)\).
+\begin{enumerate}
+\item The images of the four standard columns give
+\[
+A=[T]_{C\leftarrow B}
+=\begin{pmatrix}1&1&0&0\\0&1&1&-1\\1&0&-1&1\end{pmatrix}.
+\]
+\item The first matrix has the columns of \(E\):
+\[
+R=[I]_{B\leftarrow E}
+=\begin{pmatrix}1&0&0&1\\-1&0&0&1\\0&1&0&0\\-1&1&1&0\end{pmatrix}.
+\]
+Its columns are independent: \(Rc=0\) gives
+\(c_1+c_4=-c_1+c_4=0\), so \(c_1=c_4=0\);
+rows 3 and 4 then give \(c_2=c_3=0\).
+For \(y=(y_1,y_2,y_3)^\top\), writing \(y=af_1+bf_2+cf_3\) gives
+\[
+(a+b-c,b,a)^\top=y,\qquad (a,b,c)=(y_3,y_2,-y_1+y_2+y_3).
+\]
+Consequently
+\[
+Q=\begin{pmatrix}1&1&-1\\0&1&0\\1&0&0\end{pmatrix},\qquad
+[I]_{F\leftarrow C}=Q^{-1}
+=\begin{pmatrix}0&0&1\\0&1&0\\-1&1&1\end{pmatrix}.
+\]
+These coordinate equations check \(Q^{-1}Q=QQ^{-1}=I_3\).
+\item Denote the four members of \(E\) by \(u_1,\ldots,u_4\).
+Directly, their images are
+\[
+T(u_1)=0,\quad T(u_2)=0,\quad
+T(u_3)=(0,-1,1)^\top=f_1-f_2,\quad
+T(u_4)=(2,1,1)^\top=f_1+f_2,
+\]
+Thus
+\[
+H=[T]_{F\leftarrow E}=
+\begin{pmatrix}0&0&1&1\\0&0&-1&1\\0&0&0&0\end{pmatrix}.
+\]
+For the second method, multiplication gives
+\[
+AR=\begin{pmatrix}0&0&0&2\\0&0&-1&1\\0&0&1&1\end{pmatrix},
+\qquad Q^{-1}AR=
+\begin{pmatrix}0&0&1&1\\0&0&-1&1\\0&0&0&0\end{pmatrix}=H.
+\]
+This also verifies \(QH=AR\), the four direct coordinate expansions.
+\item In \(H\), columns 3 and 4 are independent:
+\(a+b=0\), \(-a+b=0\) imply \(a=b=0\).
+All other columns are zero. By the coordinate rank identity following
+Theorem~\ref{thm:04:representation},
+\(\rank T=\rank H=2\), and Theorem~\ref{thm:04:nullity} gives
+\(\dim\ker T=4-2=2\).
+\end{enumerate}
+\end{solution}
+
+% Harville 22.14; basis extension replaces the cited canonical-form theorem.
+\begin{problem}[Bases adapted to a map]\label{ex:04:canonical-map}
+Let \(T:V\to W\) be linear of rank \(k>0\), with \(\dim V=n\) and \(\dim W=m\).
+Find bases \(E,F\) for which
+\[
+[T]_{F\leftarrow E}=\begin{pmatrix}I_k&0\\0&0\end{pmatrix}.
+\]
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item Choose a basis \(z_1,\ldots,z_{n-k}\) of \(\ker T\) and extend it to a
+basis \(E=(x_1,\ldots,x_k,z_1,\ldots,z_{n-k})\) of \(V\).
+\item The proof of Theorem~\ref{thm:04:nullity} shows that \(T(x_1),\ldots,T(x_k)\)
+form a basis of \(\operatorname{im}T\):
+every image is a combination of them, and a zero combination lifts to a
+relation between the \(x_i\) and the kernel basis, forcing all coefficients zero.
+\item Extend this image basis to a basis \(F\) of \(W\).
+The first \(k\) input basis vectors have output coordinate columns
+\(e_1,\ldots,e_k\); all remaining input basis vectors map to zero.
+These columns give the displayed matrix, of size \(m\times n\).
+\end{itemize}
+\end{solution}
+
+% Harville 22.16(a,b), following the main textbook's dim(U) in (b).
+\begin{problem}[Subspaces preserved by a map]\label{ex:04:invariant-blocks}
+Let \(T:V\to V\) be linear, \(\dim V=n\).
+A subspace \(U\) is \emph{invariant under \(T\)} when \(T(U)\subseteq U\).
+\begin{enumerate}
+\item If \(U\) is invariant and \(\dim U=r\), show that there is a basis \(B\) with
+\[
+[T]_{B\leftarrow B}=\begin{pmatrix}G&H\\0&K\end{pmatrix},
+\qquad G\in\R^{r\times r}.
+\]
+\item If \(U\oplus W=V\) and both subspaces are invariant, find a basis \(B\) with
+\[
+[T]_{B\leftarrow B}=\operatorname{diag}(G,K),
+\qquad G\in\R^{r\times r},\quad r=\dim U.
+\]
+\end{enumerate}
+\end{problem}
+\begin{solution}
+\begin{enumerate}
+\item Extend a basis \(u_1,\ldots,u_r\) of \(U\) to a basis \(B\) of \(V\).
+For \(j\leqslant r\), the image \(T(u_j)\) is in \(U\), so its last \(n-r\)
+coordinates in \(B\) vanish. These are precisely the lower left block entries.
+The remaining entries form the unrestricted blocks \(G,H,K\).
+\item Take a basis of \(U\) followed by a basis of \(W\).
+The combined list spans \(V\). A zero combination gives an element in
+\(U\cap W=\{0\}\), so both separate combinations are zero;
+their basis independence proves that the combined list is a basis.
+Images of the \(U\) vectors have zero \(W\)-coordinates, and images of
+the \(W\) vectors have zero \(U\)-coordinates. Both off-diagonal blocks vanish.
+If a subspace is zero, its basis and corresponding blocks are empty,
+and the same argument applies.
+\end{enumerate}
+\end{solution}
+
+\subsection*{Ranks of products and matrix equations}
+
+% MA 4.25(c,d), with proofs avoiding Gram matrices.
+\begin{problem}[Multiplication by a full-rank matrix]\label{ex:04:full-rank-products}
+For all compatible real matrices, prove
+\begin{enumerate}
+\item \(\rank(BA)=\rank A\) if \(B\) has full column rank.
+\item \(\rank(AC)=\rank A\) if \(C\) has full row rank.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+\begin{enumerate}
+\item Write \(B:p\times m\), \(A:m\times n\).
+The equation \(By=0\) has only \(y=0\), since the columns of \(B\) are independent.
+If \(u_1,\ldots,u_r\) is a basis of \(\mathcal C(A)\), then
+\(Bu_1,\ldots,Bu_r\) span \(\mathcal C(BA)\).
+Moreover, \(\sum_i a_iBu_i=0\) implies \(B(\sum_i a_iu_i)=0\),
+then \(\sum_i a_iu_i=0\), and finally all \(a_i=0\).
+Thus the two column spaces have equal dimensions.
+\item Write \(A:m\times n\), \(C:n\times q\).
+Full row rank gives \(\mathcal C(C)=\R^n\).
+Every column \(Ax\) in \(\mathcal C(A)\) therefore has
+\(x=Cy\) for some \(y\), so \(Ax=ACy\in\mathcal C(AC)\).
+The reverse inclusion follows from \(ACy=A(Cy)\).
+The column spaces are equal, so their dimensions are equal.
+\end{enumerate}
+\end{solution}
+
+% Bapat 2.5; no supplied answer. Explicit counterexample supplied here.
+\begin{problem}[Removing a middle factor]\label{ex:04:middle-factor}
+For \(n\times n\) matrices \(A,B,C\), is it always true that
+\(\rank(ABC)\leqslant\rank(AC)\)?
+\end{problem}
+\begin{solution}
+No. Set
+\[
+A=\begin{pmatrix}1&0\\0&0\end{pmatrix},\quad
+B=\begin{pmatrix}0&1\\1&0\end{pmatrix},\quad
+C=\begin{pmatrix}0&0\\0&1\end{pmatrix}.
+\]
+Then \(AC=0\), whereas
+\[
+BC=\begin{pmatrix}0&1\\0&0\end{pmatrix},\qquad
+ABC=\begin{pmatrix}0&1\\0&0\end{pmatrix}.
+\]
+Thus \(\rank(AC)=0\) and \(\rank(ABC)=1\), disproving the assertion.
+\end{solution}
+
+% MA 5.46(c), both original block forms.
+\begin{problem}[A zero corner block]\label{ex:04:zero-corner}
+Let \(A:m\times n\), \(B:m\times p\), \(C:q\times n\), and \(D:q\times p\).
+Prove both inequalities
+\[
+\rank\begin{pmatrix}A&B\\C&0\end{pmatrix}\geqslant\rank B+\rank C,
+\qquad
+\rank\begin{pmatrix}0&B\\C&D\end{pmatrix}\geqslant\rank B+\rank C.
+\]
+\end{problem}
+\begin{solution}
+Choose independent columns \(b_{j_1},\ldots,b_{j_s}\) forming a basis of
+\(\mathcal C(B)\), and columns \(c_{i_1},\ldots,c_{i_r}\) forming a
+basis of \(\mathcal C(C)\).
+In the first block matrix, select the columns
+\[
+\begin{pmatrix}b_{j_\ell}\\0\end{pmatrix}\ (1\leqslant\ell\leqslant s),
+\qquad
+\begin{pmatrix}a_{i_h}\\c_{i_h}\end{pmatrix}\ (1\leqslant h\leqslant r).
+\]
+In a zero combination, the lower block forces all coefficients of the
+second list to vanish. The upper block then forces the coefficients of
+the first list to vanish. Thus there are \(r+s\) independent columns.
+
+For the second block matrix, use
+\[
+\begin{pmatrix}0\\c_{i_h}\end{pmatrix}\ (1\leqslant h\leqslant r),
+\qquad
+\begin{pmatrix}b_{j_\ell}\\d_{j_\ell}\end{pmatrix}\ (1\leqslant\ell\leqslant s).
+\]
+Now the upper block first forces the second list's coefficients to vanish;
+the lower block then deals with the first list. Again there are \(r+s\)
+independent columns. The argument includes empty lists when either rank is zero.
+\end{solution}
+
+% MA 5.47(a-c), preserving the specified block argument.
+\begin{problem}[A block proof of the product inequalities]\label{ex:04:block-frobenius}
+\begin{enumerate}
+\item Using Exercise~\ref{ex:04:zero-corner}, prove for
+\(A:m\times n\), \(B:n\times p\), \(C:p\times q\) that
+\[
+\rank(AB)+\rank(BC)\leqslant\rank B+\rank(ABC).
+\]
+\item Deduce that for \(A:m\times p\), \(B:p\times n\),
+\(\rank(AB)\geqslant\rank A+\rank B-p\).
+\item With the sizes in (b), deduce that \(AB=0\) implies
+\(\rank A\leqslant p-\rank B\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+\begin{enumerate}
+\item Put
+\[
+Z=\begin{pmatrix}0&AB\\BC&B\end{pmatrix},\quad
+P=\begin{pmatrix}I_m&-A\\0&I_n\end{pmatrix},\quad
+Q=\begin{pmatrix}I_q&0\\-C&I_p\end{pmatrix}.
+\]
+The matrices obtained from \(P,Q\) by replacing \(-A,-C\) with \(A,C\)
+are their inverses: in either multiplication order the off-diagonal
+blocks cancel and the diagonal blocks remain identities.
+Block multiplication gives
+\[
+PZ=\begin{pmatrix}-ABC&0\\BC&B\end{pmatrix},\qquad
+PZQ=\begin{pmatrix}-ABC&0\\0&B\end{pmatrix}.
+\]
+For any block diagonal matrix \(\operatorname{diag}(H,K)\),
+a basis of its column space is obtained by embedding a basis of
+\(\mathcal C(H)\) in the upper coordinates and a basis of
+\(\mathcal C(K)\) in the lower coordinates.
+These columns span; a zero combination, read in the two blocks separately,
+has every coefficient zero. Therefore its rank is \(\rank H+\rank K\).
+Invertible multiplication preserves rank, and multiplication by \(-1\)
+preserves a column space. Hence
+\[
+\rank Z=\rank(ABC)+\rank B.
+\]
+Exercise~\ref{ex:04:zero-corner} also gives
+\(\rank Z\geqslant\rank(AB)+\rank(BC)\), proving (a).
+\item Apply (a) to the three factors \(A,I_p,B\):
+\[
+\rank A+\rank B\leqslant p+\rank(AB).
+\]
+\item In (b), substitute \(\rank(AB)=0\) and rearrange.
+\end{enumerate}
+\end{solution}
+
+% Bapat 2.17; expand the rank-factorization hint.
+\begin{problem}[Using the rank of the middle factor]\label{ex:04:factor-frobenius}
+Let \(A,X,B\in\R^{n\times n}\). Prove
+\[
+\rank(AXB)\geqslant\rank(AX)+\rank(XB)-\rank X
+\]
+by using a rank factorization of \(X\).
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item If \(X=0\), every term is zero. Otherwise let \(r=\rank X>0\)
+and choose \(X=UV\), with \(U:n\times r\) of full column rank
+and \(V:r\times n\) of full row rank.
+\item Exercise~\ref{ex:04:full-rank-products} gives
+\[
+\rank(AX)=\rank(AUV)=\rank(AU),\qquad
+\rank(XB)=\rank(UVB)=\rank(VB).
+\]
+\item The factors \(AU:n\times r\) and \(VB:r\times n\) have inner size \(r\).
+Applying Proposition~\ref{prop:04:bounds} to them gives
+\[
+\rank(AXB)=\rank((AU)(VB))
+\geqslant\rank(AU)+\rank(VB)-r,
+\]
+which is the required inequality.
+\end{itemize}
+\end{solution}
+
+% Harville 7.1(a,b), all four assertions.
+\begin{problem}[When cancellation is valid]\label{ex:04:cancellation}
+\begin{enumerate}
+\item Let \(A:m\times n\), \(C:n\times q\), and \(B:q\times p\).
+Prove both statements:
+\[
+\begin{split}
+\rank(AC)=\rank C&\ \Longrightarrow\
+\mathcal R(ACB)=\mathcal R(CB),\quad \rank(ACB)=\rank(CB),\\
+\rank(CB)=\rank C&\ \Longrightarrow\
+\mathcal C(ACB)=\mathcal C(AC),\quad \rank(ACB)=\rank(AC).
+\end{split}
+\]
+\item Let \(A,B:m\times n\).
+Prove that
+\[
+\begin{split}
+C:r\times q,\ D:q\times m,\ \rank(CD)=\rank D,\ CDA=CDB
+&\ \Longrightarrow\ DA=DB,\\
+C:n\times q,\ D:q\times p,\ \rank(CD)=\rank C,\ ACD=BCD
+&\ \Longrightarrow\ AC=BC.
+\end{split}
+\]
+\end{enumerate}
+\end{problem}
+\begin{solution}
+\begin{enumerate}
+\item Rows of a product are combinations of the rows of its right factor.
+Thus \(\mathcal R(AC)\subseteq\mathcal R(C)\).
+Under the first rank hypothesis these spaces have equal dimensions, hence are equal.
+Each row of \(C\) can therefore be expressed using the rows of \(AC\);
+collecting those coefficients gives a matrix \(L:n\times m\) with \(C=LAC\).
+Now
+\[
+CB=LACB,\qquad ACB=A(CB),
+\]
+so each of \(\mathcal R(CB)\) and \(\mathcal R(ACB)\) is contained in the other.
+Their equality gives equality of ranks.
+
+Under the second hypothesis, \(\mathcal C(CB)\subseteq\mathcal C(C)\)
+and equal dimensions give equality.
+Express the columns of \(C\) using the columns of \(CB\):
+\(C=CBR\) for some \(R:p\times q\).
+The identities
+\[
+AC=ACBR,\qquad ACB=(AC)B
+\]
+give both inclusions of column spaces and hence both claimed equalities.
+\item Put \(F=A-B\).
+For the first assertion, the first rank statement in (a), applied
+to the factors \(C,D,F\), gives
+\[
+\rank(DF)=\rank(CDF)=0,
+\]
+since \(CDF=CDA-CDB=0\). Therefore \(DF=0\), or \(DA=DB\).
+For the second assertion, use the second rank statement in (a)
+with factors \(F,C,D\):
+\[
+\rank(FC)=\rank(FCD)=0.
+\]
+Thus \(FC=0\), giving \(AC=BC\).
+\end{enumerate}
+\end{solution}
+
+% MA 6.47, original two-parameter system; no determinant argument.
+\begin{problem}[Parameters and consistency]\label{ex:04:parameters}
+For real \(\alpha,\beta\), consider
+\[
+\begin{aligned}
+\alpha x_1+\beta x_2+2x_3&=1,\\
+\alpha x_1+(2\beta-1)x_2+3x_3&=1,\\
+\alpha x_1+\beta x_2+(\beta+3)x_3&=2\beta-1.
+\end{aligned}
+\]
+When is the system consistent? When is its solution unique?
+\end{problem}
+\begin{solution}
+Subtract the first equation from the second and from the third.
+Then replace the first by its difference with the new second equation.
+These reversible operations give
+\[
+\begin{aligned}
+\alpha x_1+x_2+x_3&=1,\\
+(\beta-1)x_2+x_3&=0,\\
+(\beta+1)x_3&=2(\beta-1).
+\end{aligned}
+\]
+No parameter has been divided out.
+\begin{itemize}
+\item If \(\beta=-1\), the last equation is \(0=-4\), so there is no solution.
+\item If \(\beta=1\), the last two equations give \(x_3=0\), and the first gives
+\(x_2=1-\alpha x_1\). Thus
+\[
+(x_1,x_2,x_3)=(t,1-\alpha t,0)\qquad(t\in\R),
+\]
+so there are infinitely many solutions for every \(\alpha\).
+\item Suppose \(\beta\ne-1,1\). Back substitution gives
+\[
+x_3=\frac{2(\beta-1)}{\beta+1},\qquad
+x_2=-\frac{2}{\beta+1},\qquad
+\alpha x_1=\frac{5-\beta}{\beta+1}.
+\]
+If \(\alpha\ne0\), this determines the unique solution
+\[
+(x_1,x_2,x_3)=
+\left(\frac{5-\beta}{\alpha(\beta+1)},
+      -\frac{2}{\beta+1},\frac{2(\beta-1)}{\beta+1}\right).
+\]
+If \(\alpha=0\), consistency requires \(\beta=5\).
+For \(\alpha=0,\beta=5\), all solutions are
+\((t,-1/3,4/3)\), \(t\in\R\); for the other values in this case there is no solution.
+\end{itemize}
+The displayed families satisfy the transformed equations, so reversing
+the row operations verifies them in the original system.
+Thus uniqueness holds exactly when \(\alpha\ne0\) and \(\beta\ne-1,1\).
 \end{solution}

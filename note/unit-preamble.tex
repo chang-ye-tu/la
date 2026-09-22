@@ -6,7 +6,12 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta}
 \usepackage{fancyhdr}
+\usepackage{xr-hyper}
 \usepackage[hidelinks]{hyperref}
+% A paragraph destination must sit above its first line, not at the baseline.
+\makeatletter
+\newcommand{\notetarget}[1]{\Hy@raisedlink{\hypertarget{#1}{}}}
+\makeatother
 \hypersetup{pdftitle={\pdftitle},pdfauthor={Chang-Ye Tu}}
 \pagestyle{fancy}
 \fancyhf{}

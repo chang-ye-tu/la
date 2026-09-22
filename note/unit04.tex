@@ -1,15 +1,24 @@
 \documentclass[12pt]{article}
 \def\unitnumber{4}
-\def\pdftitle{Unit 4: Rank and Linear Mappings}
+\def\pdftitle{Unit 4: Linear Maps and Matrix Representations}
 \def\runningtitle{Unit 4}
 \input{unit-preamble.tex}
+\externaldocument[one-]{.build/unit01/unit01}[unit01.pdf]
+\externaldocument[two-]{.build/unit02/unit02}[unit02.pdf]
+\externaldocument[three-]{.build/unit03/unit03}[unit03.pdf]
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\im}{im}
 \AddToHook{env/problem/before}{\needspace{8\baselineskip}}
 \AddToHook{env/problem/after}{\nopagebreak[4]}
 \begin{document}
-{\Large\bfseries Unit 4. Rank and Linear Mappings}\par
+{\Large\bfseries Unit 4. Linear Maps and Matrix Representations}\par
 \input{unit04-content.tex}
-\needspace{12\baselineskip}
+\clearpage
 \section*{Exercises and solutions}
-Suggested practice: \ref{ex:04:rank-one}, \ref{ex:04:sum-rank}, \ref{ex:04:full-rank-factors}, \ref{ex:04:geometric-images}, \ref{ex:04:affine-images}, \ref{ex:04:functional-decomposition}, \ref{ex:04:sum-trace}, \ref{ex:04:symmetric-map}, \ref{ex:04:sum-dimension}.
+Suggested practice: Exercises~\ref{ex:04:two-values},
+\ref{ex:04:scalar-kernel}, \ref{ex:04:factor-map},
+\ref{ex:04:both-bases}, \ref{ex:04:zero-corner}, and
+\ref{ex:04:parameters}.
 \input{unit04-exercises.tex}
 \end{document}

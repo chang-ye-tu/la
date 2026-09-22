@@ -1,18 +1,20 @@
-# Publish the course page and the self-contained lecture notes only.
-# Local authoring records, exams, attic files, agent data and editor state
-# remain on disk but are outside this allowlist.
+# GitHub: course README and student notes only.
+# Teacher boards/print layouts, authoring records, exams and agent/editor
+# data stay local. Ignore everything unless explicitly allowed below.
 /*
 !/.gitignore
 !/README.md
 !/note/
 
-# Keep PDFs and every LaTeX dependency, including the shared preamble and
-# Unit 12's supplementary exercise source. Build output stays ignored.
+# Rebuildable student notes: PDF, main file, content, exercises and preamble.
+# Other files and subdirectories in note/ (including .build/) stay ignored.
 /note/*
 !/note/Makefile
-!/note/*.tex
+!/note/unit-preamble.tex
+!/note/unit[0-9][0-9].tex
+!/note/unit[0-9][0-9]-content.tex
+!/note/unit[0-9][0-9]-exercises.tex
 !/note/unit[0-9][0-9].pdf
-!/note/unit01-2up.pdf
 
 # Editor lock/backup files can resemble source filenames.
 **/.#*
@@ -20,3 +22,6 @@
 **/*~
 **/*.swp
 **/*.swo
+
+# Files already tracked by Git are not affected by ignore rules.
+# Stage the existing deletions when publishing to remove obsolete notes.
