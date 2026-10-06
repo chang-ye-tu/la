@@ -6,15 +6,12 @@
 !/README.md
 !/note/
 
-# Rebuildable student notes: PDF, main file, content, exercises and preamble.
-# Other files and subdirectories in note/ (including .build/) stay ignored.
+# Student notes: the lecture notes before the midterm are one self-contained file
+# (source and PDF). Other files and subdirectories in note/ (including .build/) stay ignored.
 /note/*
 !/note/Makefile
-!/note/unit-preamble.tex
-!/note/unit[0-9][0-9].tex
-!/note/unit[0-9][0-9]-content.tex
-!/note/unit[0-9][0-9]-exercises.tex
-!/note/unit[0-9][0-9].pdf
+!/note/lecture.tex
+!/note/lecture.pdf
 
 # Editor lock/backup files can resemble source filenames.
 **/.#*
