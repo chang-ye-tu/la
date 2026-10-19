@@ -1,0 +1,28 @@
+# GitHub: course README and student notes only.
+# Teacher boards/print layouts, authoring records, exams and agent/editor
+# data stay local. Ignore everything unless explicitly allowed below.
+/*
+!/.gitignore
+!/README.md
+!/note/
+
+# Authoring materials (chapter sources, plans, audit reports, verification scripts,
+# snapshots, test builds) stay local, even if the allow-list above is widened.
+/authoring/
+
+# Student notes: the lecture notes are one self-contained file
+# (source and PDF). Other files and subdirectories in note/ (including .build/) stay ignored.
+/note/*
+!/note/Makefile
+!/note/lecture.tex
+!/note/lecture.pdf
+
+# Editor lock/backup files can resemble source filenames.
+**/.#*
+**/#*#
+**/*~
+**/*.swp
+**/*.swo
+
+# Files already tracked by Git are not affected by ignore rules.
+# Stage the existing deletions when publishing to remove obsolete notes.
