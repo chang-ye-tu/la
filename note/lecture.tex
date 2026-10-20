@@ -5276,8 +5276,7 @@ The cases \(r=t=1,\ s=2\); \(r=t=2,\ s=1\); and \(r=s=1,\ t=2\) read
 A[B_1\ B_2]=[AB_1\ \ AB_2]
 \]
 \begin{proof}
-Let \(M_i\) and \(N_j\) be as in Definition~\ref{r5b-def-partition}, and \(P_0=0\),
-\(P_k=p_1+\dots+p_k\). Each row index \(u\) of \(A\) lies in exactly one row group \(i\), and then
+Let \(M_i\) and \(N_j\) be as in Definition~\ref{r5b-def-partition}. Each row index \(u\) of \(A\) lies in exactly one row group \(i\), and then
 \(u=M_{i-1}+x\) with \(1\leqslant x\leqslant m_i\); likewise for columns.
 
 (a) Fix \(i,j\) and \(1\leqslant x\leqslant m_i\), \(1\leqslant y\leqslant n_j\), and put
@@ -5296,35 +5295,51 @@ the columns \(M_{i-1}+1,\dots,M_i\). By Definition~\ref{r1-def-transpose}, entry
 (A')_{N_{j-1}+y,\,M_{i-1}+x}=a_{M_{i-1}+x,\,N_{j-1}+y}=(A_{ij})_{xy}=(A_{ij}')_{yx}
 \]
 
-(c)
+(c) For a row group \(i\) of \(A\) and a column group \(k\) of \(B\), let \(A_{i\ast}\in\R^{m_i\times n}\) consist of
+the rows of \(A\) in row group \(i\), and \(B_{\ast k}\in\R^{n\times p_k}\) of the columns of \(B\) in column group
+\(k\). By Definition~\ref{r5b-def-partition}, the columns of \(A_{i\ast}\) in column group \(j\) are, in order, the
+columns of \(A_{ij}\); since the row groups of \(B\) are \(n_1,\dots,n_s\) (conformality), the rows of \(B_{\ast k}\)
+in row group \(j\) are, in order, the rows of \(B_{jk}\). In blocks,
+\[
+A_{i\ast}=[A_{i1}\ \cdots\ A_{is}],\qquad
+B_{\ast k}=\begin{pmatrix}B_{1k}\\\vdots\\B_{sk}\end{pmatrix}
+\]
 \begin{itemize}
-\item Fix \(i\leqslant r\), \(k\leqslant t\), and an entry \((x,z)\) of the block \((AB)_{ik}\),
-\(1\leqslant x\leqslant m_i\), \(1\leqslant z\leqslant p_k\). It is the entry of \(AB\) in row
-\(u=M_{i-1}+x\) and column \(v=P_{k-1}+z\), and by Definition~\ref{r1-def-product}
+\item Columns. By Theorem~\ref{r1-thm-views}(a), each column of \(AB\) is \(A\) times the column of \(B\) with the
+same index. The columns of \(B\) in column group \(k\) are, in order, the columns of \(B_{\ast k}\), so the columns of
+\(AB\) in column group \(k\) are, in order, \(A\) times the columns of \(B_{\ast k}\), that is, the columns of the
+product \(AB_{\ast k}\) (again Theorem~\ref{r1-thm-views}(a)).
+\item Rows. By Theorem~\ref{r1-thm-views}(c), each row of \(AB_{\ast k}\) is the row of \(A\) with the same index
+times \(B_{\ast k}\). The rows of \(A\) in row group \(i\) are, in order, the rows of \(A_{i\ast}\), so the rows of
+\(AB_{\ast k}\) in row group \(i\) are, in order, the rows of \(A_{i\ast}B_{\ast k}\) (again
+Theorem~\ref{r1-thm-views}(c)). These are the entries of \(AB\) in row group \(i\) and column group \(k\), that is,
+the block \((AB)_{ik}\) (Definition~\ref{r5b-def-partition}): \((AB)_{ik}=A_{i\ast}B_{\ast k}\in\R^{m_i\times p_k}\).
+\item Inner sum. By the outer product expansion (Theorem~\ref{r1-thm-views}(d)),
 \[
-(AB)_{uv}=\sum_{l=1}^na_{ul}b_{lv}
+A_{i\ast}B_{\ast k}=\sum_{l=1}^n\col_l(A_{i\ast})\row_l(B_{\ast k})
 \]
-\item The column groups of \(A\) cut \(1,\dots,n\) into the consecutive stretches
-\(N_{j-1}+1,\dots,N_j\) (\(j=1,\dots,s\)). Split the sum along these stretches and write
-\(l=N_{j-1}+y\) in stretch \(j\):
+The column groups of \(A\) cut \(l=1,\dots,n\) into \(s\) consecutive stretches of \(n_1,\dots,n_s\) indices. In
+stretch \(j\), the columns \(\col_l(A_{i\ast})\) are \(\col_1(A_{ij}),\dots,\col_{n_j}(A_{ij})\) and the rows
+\(\row_l(B_{\ast k})\) are \(\row_1(B_{jk}),\dots,\row_{n_j}(B_{jk})\), in this order (see above). So the terms of
+stretch \(j\) add up to
 \[
-\sum_{l=1}^na_{ul}b_{lv}=\sum_{j=1}^s\ \sum_{l=N_{j-1}+1}^{N_j}a_{ul}b_{lv}
-=\sum_{j=1}^s\ \sum_{y=1}^{n_j}a_{M_{i-1}+x,\,N_{j-1}+y}\;b_{N_{j-1}+y,\,P_{k-1}+z}
+\sum_{y=1}^{n_j}\col_y(A_{ij})\row_y(B_{jk})=A_{ij}B_{jk},
 \]
-\item By definition of the blocks of \(A\), \(a_{M_{i-1}+x,\,N_{j-1}+y}=(A_{ij})_{xy}\). Because the
-row groups of \(B\) are \(n_1,\dots,n_s\) (conformality), row \(N_{j-1}+y\) of \(B\) is row \(y\) of
-row group \(j\), so \(b_{N_{j-1}+y,\,P_{k-1}+z}=(B_{jk})_{yz}\). Hence, by
-Definition~\ref{r1-def-product} for \(A_{ij}\in\R^{m_i\times n_j}\) and
-\(B_{jk}\in\R^{n_j\times p_k}\), the inner sum is
+the outer product expansion of the product of \(A_{ij}\in\R^{m_i\times n_j}\) and \(B_{jk}\in\R^{n_j\times p_k}\)
+(Theorem~\ref{r1-thm-views}(d)). Adding the \(s\) stretches,
 \[
-\sum_{y=1}^{n_j}(A_{ij})_{xy}(B_{jk})_{yz}=(A_{ij}B_{jk})_{xz}
+(AB)_{ik}=A_{i\ast}B_{\ast k}=\sum_{j=1}^sA_{ij}B_{jk}\qedhere
 \]
-\item Summing over \(j\),
-\((AB)_{uv}=\sum_{j=1}^s(A_{ij}B_{jk})_{xz}=\bigl(\sum_{j=1}^sA_{ij}B_{jk}\bigr)_{xz}\). Both
-\((AB)_{ik}\) and \(\sum_jA_{ij}B_{jk}\) are \(m_i\times p_k\), and they agree in every entry
-\((x,z)\).\qedhere
 \end{itemize}
 \end{proof}
+In entries: let \(u=M_{i-1}+x\) (row \(x\) of row group \(i\)) and let column \(v\) be the \(z\)th column of
+column group \(k\) of \(B\). By Definition~\ref{r1-def-product}, \((AB)_{uv}=\sum_{l=1}^na_{ul}b_{lv}\). Split the
+sum into the stretches of the column groups of \(A\) and write \(l=N_{j-1}+y\) in stretch \(j\); by
+Definition~\ref{r5b-def-partition} (for \(A\), and for \(B\) with row groups \(n_1,\dots,n_s\)),
+\[
+\sum_{l=N_{j-1}+1}^{N_j}a_{ul}b_{lv}=\sum_{y=1}^{n_j}(A_{ij})_{xy}(B_{jk})_{yz}=(A_{ij}B_{jk})_{xz},
+\]
+so the part of stretch \(j\) is the entry \((x,z)\) of \(A_{ij}B_{jk}\): this is (c), entry by entry.
 
 \begin{example}\label{r5b-exm-block}
 Partition \(A\in\R^{5\times6}\) with row groups \((2,3)\) and column groups \((4,2)\), and
@@ -5379,7 +5394,7 @@ so
 AB=\left(\begin{array}{ccc|cc}3&2&1&3&2\\0&-1&-1&2&-1\\\hline4&2&0&4&2\\2&3&1&2&3\\3&3&0&3&3\end{array}\right)
 \]
 \item Check of one entry. Entry \((4,2)\) of \(AB\) lies in row group \(2\) (row \(u=4=M_1+2\),
-so \(x=2\)) and column group \(1\) (\(z=2\)). As in the proof of Theorem~\ref{r5b-thm-block}(c),
+so \(x=2\)) and column group \(1\) (\(z=2\)). As in the paragraph after the proof of Theorem~\ref{r5b-thm-block},
 the sum over \(l=1,\dots,6\) splits at \(N_1=4\):
 \[
 (AB)_{42}=\underbrace{1\cdot0+1\cdot1+1\cdot0+1\cdot1}_{l=1,\dots,4}+\underbrace{0\cdot0+1\cdot1}_{l=5,6}=2+1=3
