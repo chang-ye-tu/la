@@ -5931,12 +5931,15 @@ where \(A_j\) is \(A\) with column \(j\) replaced by \(b\).
 \begin{proof}
 \begin{itemize}
 \item By Theorem~\ref{r5d-thm-adjugate}, \(A\) is invertible with \(A^{-1}=\frac1{\det A}\operatorname{adj}A\).
-If \(Ax=b\), then \(x=A^{-1}(Ax)=A^{-1}b\); and \(A(A^{-1}b)=b\). So the only solution is
-\(x=\frac1{\det A}(\operatorname{adj}A)b\).
-\item Entry \(j\) of \((\operatorname{adj}A)b\) is \(\sum_{i=1}^n(\operatorname{adj}A)_{ji}b_i=\sum_{i=1}^nc_{ij}b_i\).
+If \(Ax=b\), then \(x=A^{-1}(Ax)=A^{-1}b\), so there is at most one solution; and \(A(A^{-1}b)=b\), so
+\(A^{-1}b\) is a solution. Hence the only solution is \(x=\frac1{\det A}(\operatorname{adj}A)b\).
+\item Let \(c_{ij}\) be the cofactors of \(A\). Entry \(j\) of \((\operatorname{adj}A)b\) is \(\sum_{i=1}^n(\operatorname{adj}A)_{ji}b_i=\sum_{i=1}^nc_{ij}b_i\).
 \item \(A_j\) differs from \(A\) only in column \(j\), so \(A_j(i|j)=A(i|j)\), and the \((i,j)\) entry
 of \(A_j\) is \(b_i\). Expanding \(\det A_j\) along column \(j\) (Theorem~\ref{r5d-thm-expansion}) gives
-\(\det A_j=\sum_{i=1}^nb_i(-1)^{i+j}\det A(i|j)=\sum_{i=1}^nc_{ij}b_i\). Hence \(x_j=\det A_j/\det A\).\qedhere
+\[
+\det A_j=\sum_{i=1}^nb_i(-1)^{i+j}\det A_j(i|j)=\sum_{i=1}^nb_i(-1)^{i+j}\det A(i|j)=\sum_{i=1}^nc_{ij}b_i
+\]
+Hence \(x_j=\det A_j/\det A\).\qedhere
 \end{itemize}
 \end{proof}
 
@@ -5987,15 +5990,19 @@ the last row of \(2I_4\).
 For the matrix \(A\) of Example~\ref{r5d-exm-adjugate} and \(b=(3,1,0,0)'\), find \(x_3\) in \(Ax=b\) by
 Cramer's rule, and check it against \(x=A^{-1}b\) computed with that example.
 
-\textit{Solution.} Here \(\det A=2\). Row \(3\) of \(A_3\) has the single nonzero entry \(1\), at position
-\((3,4)\); expanding along it and then along the last row of the \(3\times3\) minor,
+\textit{Solution.} Here \(\det A=2\), and \(A_3\) is \(A\) with column \(3\) replaced by \(b\). Row \(3\) of \(A_3\)
+has the single nonzero entry \(1\), at position \((3,4)\); expanding along it and then along the last row of the
+\(3\times3\) minor (Theorem~\ref{r5d-thm-expansion}),
 \[
 \det A_3=\det\begin{pmatrix}1&1&3&0\\0&1&1&0\\0&0&0&1\\-1&0&0&1\end{pmatrix}
 =(-1)^{3+4}\det\begin{pmatrix}1&1&3\\0&1&1\\-1&0&0\end{pmatrix}
 =-(-1)(-1)^{3+1}\det\begin{pmatrix}1&3\\1&1\end{pmatrix}=-2
 \]
 So \(x_3=-2/2=-1\) by Theorem~\ref{r5d-thm-cramer}. With \(\operatorname{adj}A\) of
-Example~\ref{r5d-exm-adjugate}, \(x=\frac12(\operatorname{adj}A)b=\frac12(3-1,\ 3+1,\ -3+1,\ 3-1)'=(1,2,-1,1)'\),
+Example~\ref{r5d-exm-adjugate} and \(b=3e_1+e_2\), \((\operatorname{adj}A)b=3\col_1(\operatorname{adj}A)+\col_2(\operatorname{adj}A)\), so
+\[
+x=\frac12(\operatorname{adj}A)b=\frac12\bigl(3(1,1,-1,1)'+(-1,1,1,-1)'\bigr)=\frac12(2,4,-2,2)'=(1,2,-1,1)',
+\]
 whose third entry is \(-1\); indeed \(Ax=(1+2,\ 2-1,\ -1+1,\ -1+1)'=b\).
 \end{example}
 
@@ -6415,6 +6422,7 @@ Let \(T=\begin{pmatrix}2&-1&0&0\\-1&2&-1&0\\0&-1&2&-1\\0&0&-1&1\end{pmatrix}\).
 fourth column.
 \item Use Theorem~\ref{r5d-thm-adjugate} to show that \(T^{-1}\) is the matrix \(K\) with entries
 \(k_{ij}=\min(i,j)\).
+\item For \(b=(1,2,3,4)'\), find \(x_2\) in \(Tx=b\) by Cramer's rule, and check it with \(x=Kb\).
 \end{enumerate}
 \end{exercise}
 \begin{solution}
@@ -6447,6 +6455,15 @@ T^{-1}=\begin{pmatrix}1&1&1&1\\1&2&2&2\\1&2&3&3\\1&2&3&4\end{pmatrix}
 \]
 Check: \(\row_4(T)K=-(1,2,3,3)+(1,2,3,4)=(0,0,0,1)\) and
 \(\row_2(T)K=-(1,1,1,1)+2(1,2,2,2)-(1,2,3,3)=(0,1,0,0)\).
+
+(d) \(T_2\) is \(T\) with column \(2\) replaced by \(b\). Expanding along column \(1\) (Theorem~\ref{r5d-thm-expansion}),
+\[
+\det T_2=\det\begin{pmatrix}2&1&0&0\\-1&2&-1&0\\0&3&2&-1\\0&4&-1&1\end{pmatrix}
+=2\det\begin{pmatrix}2&-1&0\\3&2&-1\\4&-1&1\end{pmatrix}+\det\begin{pmatrix}1&0&0\\3&2&-1\\4&-1&1\end{pmatrix}
+=2\cdot9+1=19
+\]
+and \(\det T=1\) by (b), so \(x_2=19\) (Theorem~\ref{r5d-thm-cramer}). Check: \(x_2=\row_2(K)b=1+4+6+8=19\);
+indeed \(x=Kb=(10,19,26,30)'\).
 \end{solution}
 
 \begin{exercise}\label{r5d-ex-det-rules}
