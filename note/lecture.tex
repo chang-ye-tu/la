@@ -5687,9 +5687,60 @@ row \(i\) and every column \(j\),
 \]
 (\textbf{expansion along row \(i\)} and \textbf{along column \(j\)}).
 \end{theorem}
-We omit the proof: it is an induction on \(n\) in which the minors are expanded once more, and its only
-difficulty is the bookkeeping of the signs \((-1)^{i+j}\). In practice one expands along a row or
-column with many zeros.
+\begin{proof}
+Induction on \(n\). For \(n=2\), \(A(2|1)=(a_{12})\) and \(A(2|2)=(a_{11})\), so \(c_{11}=a_{22}\), \(c_{12}=-a_{21}\), \(c_{21}=-a_{12}\), \(c_{22}=a_{11}\), and the
+expansions along row \(1\), row \(2\), column \(1\) and column \(2\) are
+\[
+a_{11}a_{22}-a_{12}a_{21},\qquad -a_{21}a_{12}+a_{22}a_{11},\qquad a_{11}a_{22}-a_{21}a_{12},\qquad -a_{12}a_{21}+a_{22}a_{11},
+\]
+all equal to \(\det A\). Let \(n\geqslant3\), and assume the theorem for all \((n-1)\times(n-1)\) matrices.
+For \(i\geqslant2\) and \(j\ne k\), let \(A(1,i|j,k)\in\R^{(n-2)\times(n-2)}\) be \(A\) with rows \(1,i\) and
+columns \(j,k\) deleted.
+\begin{itemize}
+\item Positions in the minors. Let \(i\geqslant2\) and \(j\ne k\). Deleting column \(j\) of \(A\) moves column \(k\)
+to position \(\bar k\), where \(\bar k=k\) if \(k<j\) and \(\bar k=k-1\) if \(k>j\); deleting column \(k\) moves
+column \(j\) to position \(\bar j\), where \(\bar j=j\) if \(j<k\) and \(\bar j=j-1\) if \(j>k\). Deleting row \(1\)
+moves row \(i\) to position \(i-1\); deleting row \(i\) leaves row \(1\) in position \(1\). So \(a_{ik}\) stands in
+row \(i-1\) and column \(\bar k\) of \(A(1|j)\); \(a_{ij}\) in row \(i-1\) and column \(\bar j\) of \(A(1|k)\);
+\(a_{1j}\) in row \(1\) and column \(\bar j\) of \(A(i|k)\); and \(a_{1k}\) in row \(1\) and column \(\bar k\) of
+\(A(i|j)\). Deleting the row and the column of that entry from the minor leaves, in all four cases, the rows of
+\(A\) other than \(1,i\) and the columns other than \(j,k\) in their original order, that is, \(A(1,i|j,k)\).
+\item Row \(i\geqslant2\) (row \(1\) is the definition). Expand \(\det A\) by Definition~\ref{r5d-def-det}, and
+each \(\det A(1|j)\) along its row \(i-1\), whose entries are the \(a_{ik}\) with \(k\ne j\) (induction hypothesis):
+\[
+\det A=\sum_{j=1}^n(-1)^{1+j}a_{1j}\det A(1|j)
+=\sum_{j=1}^n\sum_{k\ne j}(-1)^{1+j}(-1)^{(i-1)+\bar k}a_{1j}a_{ik}\det A(1,i|j,k)
+\]
+In the expansion along row \(i\), expand each \(\det A(i|k)\) along its first row (Definition~\ref{r5d-def-det}),
+whose entries are the \(a_{1j}\) with \(j\ne k\), in columns \(\bar j\):
+\[
+\sum_{k=1}^n(-1)^{i+k}a_{ik}\det A(i|k)
+=\sum_{k=1}^n\sum_{j\ne k}(-1)^{i+k}(-1)^{1+\bar j}a_{ik}a_{1j}\det A(1,i|j,k)
+\]
+Both double sums run over all pairs \(j\ne k\), and the term of the pair \((j,k)\) has the factor
+\(a_{1j}a_{ik}\det A(1,i|j,k)\) in both; only the signs remain to be compared. If \(k<j\), then \(\bar k=k\),
+\(\bar j=j-1\), and both signs are \((-1)^{i+j+k}\). If \(k>j\), then \(\bar k=k-1\), \(\bar j=j\), and both signs
+are \((-1)^{i+j+k+1}\). So the two sums are equal, and the expansion along row \(i\) equals \(\det A\).
+\item Column \(j\). With \(k\) as summation index, Definition~\ref{r5d-def-det} reads
+\(\det A=\sum_{k=1}^n(-1)^{1+k}a_{1k}\det A(1|k)\), and its term \(k=j\) is \((-1)^{1+j}a_{1j}\det A(1|j)\), the
+term \(i=1\) of the expansion along column \(j\). In the terms \(i\geqslant2\) of the expansion along column
+\(j\), expand \(\det A(i|j)\) along its first row (Definition~\ref{r5d-def-det}), whose entries are the
+\(a_{1k}\) with \(k\ne j\), in columns \(\bar k\); in the terms \(k\ne j\) of the definition, expand
+\(\det A(1|k)\) along its column \(\bar j\), which comes from column \(j\) of \(A\) and whose entries are the
+\(a_{ij}\) with \(i\geqslant2\), in rows \(i-1\) (induction hypothesis). The minors are \(A(1,i|j,k)\) in both
+cases (first bullet), so these two groups of terms become
+\[
+\sum_{i=2}^n\sum_{k\ne j}(-1)^{i+j}(-1)^{1+\bar k}a_{ij}a_{1k}\det A(1,i|j,k)
+\quad\text{and}\quad
+\sum_{k\ne j}\sum_{i=2}^n(-1)^{1+k}(-1)^{(i-1)+\bar j}a_{1k}a_{ij}\det A(1,i|j,k)
+\]
+Both run over all pairs \((i,k)\) with \(i\geqslant2\) and \(k\ne j\), with the factor
+\(a_{ij}a_{1k}\det A(1,i|j,k)\) in both. If \(k<j\), then \(\bar k=k\), \(\bar j=j-1\), and both signs are
+\((-1)^{i+j+k+1}\). If \(k>j\), then \(\bar k=k-1\), \(\bar j=j\), and both signs are \((-1)^{i+j+k}\). So the
+two groups are equal, and the expansion along column \(j\) equals \(\det A\).\qedhere
+\end{itemize}
+\end{proof}
+In practice one expands along a row or column with many zeros.
 
 \begin{example}\label{r5d-exm-expansion}
 Compute \(\det A\) for
