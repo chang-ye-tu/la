@@ -5600,29 +5600,84 @@ identity of Proposition~\ref{r5b-prop-block-elementary} with \(C\) replaced by \
 =\left(\begin{smallmatrix}A&B-AA^{-1}B\\0&S-0\cdot A^{-1}B\end{smallmatrix}\right)=\left(\begin{smallmatrix}A&0\\0&S\end{smallmatrix}\right)\).\qedhere
 \end{itemize}
 \end{proof}
-This is Gaussian elimination done one block at a time. When \(D\) is invertible, the matrix
-\(A-BD^{-1}C\) is likewise called the \textbf{Schur complement} of \(D\) in \(M\).
+In Theorem~\ref{r5b-thm-schur} the left factor adds \(-CA^{-1}\) times the first block row of \(M\) to
+the second, and the right factor adds the first block column times \(-A^{-1}B\) to the second
+(Proposition~\ref{r5b-prop-block-elementary}). When \(D\) is invertible, the matrix \(A-BD^{-1}C\) is
+likewise called the \textbf{Schur complement} of \(D\) in \(M\).
 
-\begin{corollary}\label{r5b-cor-schur-inverse}
-Let \(M=\begin{pmatrix}A&B\\C&D\end{pmatrix}\) with \(A\in\R^{p\times p}\) invertible,
-\(B\in\R^{p\times q}\), \(C\in\R^{q\times p}\), \(D\in\R^{q\times q}\), and let the Schur complement
-\(S=D-CA^{-1}B\) be invertible. Then \(M\) is invertible and
+Let \(R_1,R_2\) be the block rows of a matrix with row groups \((p,q)\). The \textbf{block row
+operations} are \(R_1\leftarrow XR_1\) and \(R_2\leftarrow YR_2\) with \(X\in\R^{p\times p}\) and
+\(Y\in\R^{q\times q}\) invertible, \(R_2\leftarrow R_2+VR_1\) with \(V\in\R^{q\times p}\), and
+\(R_1\leftarrow R_1+WR_2\) with \(W\in\R^{p\times q}\). They are the left multiplications by
+\(\diag(X,I_q)\), \(\diag(I_p,Y)\), \(\left(\begin{smallmatrix}I_p&0\\V&I_q\end{smallmatrix}\right)\) and
+\(\left(\begin{smallmatrix}I_p&W\\0&I_q\end{smallmatrix}\right)\) (Theorem~\ref{r5b-thm-block}(c) and
+Proposition~\ref{r5b-prop-block-elementary}), and these matrices are invertible
+(Propositions~\ref{r5b-prop-block-tri}(b) and~\ref{r5b-prop-block-elementary}). \textbf{Block
+elimination} applies the steps of Gauss--Jordan elimination (Definition~\ref{r2-def-gauss-jordan}) to
+the block rows of \([M\mid I]\), with the inverse of a pivot block in place of the reciprocal of a pivot
+entry: the first pivot is a diagonal block of \(M\), the second its Schur complement, and the result is
+\([I\mid M^{-1}]\), as in the computation of \(A^{-1}\) after Theorem~\ref{r2-thm-invertible}.
+
+\begin{corollary}[Block elimination]\label{r5b-cor-schur-inverse}
+Let \(M=\begin{pmatrix}A&B\\C&D\end{pmatrix}\) with \(A\in\R^{p\times p}\), \(B\in\R^{p\times q}\),
+\(C\in\R^{q\times p}\) and \(D\in\R^{q\times q}\).
+\begin{enumerate}
+\item If \(A\) and its Schur complement \(S=D-CA^{-1}B\) are invertible, then \(M\) is invertible, the block
+row operations \(R_2\leftarrow R_2-CA^{-1}R_1\), then \(R_1\leftarrow A^{-1}R_1\) and \(R_2\leftarrow S^{-1}R_2\),
+then \(R_1\leftarrow R_1-A^{-1}BR_2\) take \([M\mid I_{p+q}]\) to \([I_{p+q}\mid M^{-1}]\),
 \[
 M^{-1}=\begin{pmatrix}I_p&-A^{-1}B\\0&I_q\end{pmatrix}\begin{pmatrix}A^{-1}&0\\0&S^{-1}\end{pmatrix}
-\begin{pmatrix}I_p&0\\-CA^{-1}&I_q\end{pmatrix}
+\begin{pmatrix}I_p&0\\-CA^{-1}&I_q\end{pmatrix},
 \]
+and \(M=\left(\begin{smallmatrix}I_p&0\\CA^{-1}&I_q\end{smallmatrix}\right)\diag(A,S)
+\left(\begin{smallmatrix}I_p&A^{-1}B\\0&I_q\end{smallmatrix}\right)\).
+\item If \(D\) and its Schur complement \(F=A-BD^{-1}C\) are invertible, then \(M\) is invertible, the block
+row operations \(R_1\leftarrow R_1-BD^{-1}R_2\), then \(R_1\leftarrow F^{-1}R_1\) and \(R_2\leftarrow D^{-1}R_2\),
+then \(R_2\leftarrow R_2-D^{-1}CR_1\) take \([M\mid I_{p+q}]\) to \([I_{p+q}\mid M^{-1}]\),
+\[
+M^{-1}=\begin{pmatrix}I_p&0\\-D^{-1}C&I_q\end{pmatrix}\begin{pmatrix}F^{-1}&0\\0&D^{-1}\end{pmatrix}
+\begin{pmatrix}I_p&-BD^{-1}\\0&I_q\end{pmatrix},
+\]
+and \(M=\left(\begin{smallmatrix}I_p&BD^{-1}\\0&I_q\end{smallmatrix}\right)\diag(F,D)
+\left(\begin{smallmatrix}I_p&0\\D^{-1}C&I_q\end{smallmatrix}\right)\).
+\end{enumerate}
 \end{corollary}
 For \(p\ne q\) the blocks \(B\) and \(C\) are rectangular.
 \begin{proof}
+(a)
 \begin{itemize}
-\item Write \(L=\left(\begin{smallmatrix}I_p&0\\-CA^{-1}&I_q\end{smallmatrix}\right)\) and
-\(U=\left(\begin{smallmatrix}I_p&-A^{-1}B\\0&I_q\end{smallmatrix}\right)\). By
-Theorem~\ref{r5b-thm-schur} (with \(n=q\)), \(LMU=\diag(A,S)\), and \(L\), \(U\) are invertible
-(Proposition~\ref{r5b-prop-block-elementary}), so \(M=L^{-1}\diag(A,S)U^{-1}\).
-\item \(\diag(A,S)\) is invertible with inverse \(\diag(A^{-1},S^{-1})\)
-(Proposition~\ref{r5b-prop-block-tri}(b)). By Theorem~\ref{r2-thm-inverse-props}(a),(b), \(M\) is
-invertible and \(M^{-1}=(U^{-1})^{-1}\diag(A^{-1},S^{-1})(L^{-1})^{-1}=U\diag(A^{-1},S^{-1})L\).\qedhere
+\item The three steps are the left multiplications by
+\(E_1=\left(\begin{smallmatrix}I_p&0\\-CA^{-1}&I_q\end{smallmatrix}\right)\),
+\(E_2=\diag(I_p,S^{-1})\diag(A^{-1},I_q)=\diag(A^{-1},S^{-1})\) (Proposition~\ref{r5b-prop-block-tri}(b))
+and \(E_3=\left(\begin{smallmatrix}I_p&-A^{-1}B\\0&I_q\end{smallmatrix}\right)\).
+\item By Theorem~\ref{r5b-thm-schur} (with \(n=q\)),
+\(E_1M=\left(\begin{smallmatrix}A&B\\0&S\end{smallmatrix}\right)\). By the block product formula
+(Theorem~\ref{r5b-thm-block}(c)),
+\(E_2E_1M=\left(\begin{smallmatrix}A^{-1}A&A^{-1}B\\S^{-1}\cdot0&S^{-1}S\end{smallmatrix}\right)
+=\left(\begin{smallmatrix}I_p&A^{-1}B\\0&I_q\end{smallmatrix}\right)\). By
+Proposition~\ref{r5b-prop-block-elementary} (second identity, with upper right block \(-A^{-1}B\)),
+\(E_3E_2E_1M=\left(\begin{smallmatrix}I_p&A^{-1}B-A^{-1}B\\0&I_q\end{smallmatrix}\right)=I_{p+q}\).
+\item Put \(E=E_3E_2E_1\), the displayed product. Then \(EM=I_{p+q}\), so \(M\) is invertible with
+\(M^{-1}=E\) (Theorem~\ref{r2-thm-invertible}), and
+\(E[M\mid I_{p+q}]=[EM\mid E]=[I_{p+q}\mid M^{-1}]\) (Theorem~\ref{r1-thm-views}(a)).
+\item \(E_1^{-1}=\left(\begin{smallmatrix}I_p&0\\CA^{-1}&I_q\end{smallmatrix}\right)\) and
+\(E_3^{-1}=\left(\begin{smallmatrix}I_p&A^{-1}B\\0&I_q\end{smallmatrix}\right)\)
+(Proposition~\ref{r5b-prop-block-elementary}), and \(E_2^{-1}=\diag(A,S)\)
+(Proposition~\ref{r5b-prop-block-tri}(b)). So \(M=E^{-1}=E_1^{-1}E_2^{-1}E_3^{-1}\)
+(Theorem~\ref{r2-thm-inverse-props}(a),(b)).
 \end{itemize}
+(b) The three steps are the left multiplications by
+\(E_1'=\left(\begin{smallmatrix}I_p&-BD^{-1}\\0&I_q\end{smallmatrix}\right)\),
+\(E_2'=\diag(F^{-1},D^{-1})\) (as in (a)) and \(E_3'=\left(\begin{smallmatrix}I_p&0\\-D^{-1}C&I_q\end{smallmatrix}\right)\).
+By Proposition~\ref{r5b-prop-block-elementary} and Theorem~\ref{r5b-thm-block}(c),
+\[
+E_1'M=\begin{pmatrix}A-BD^{-1}C&B-BD^{-1}D\\C&D\end{pmatrix}=\begin{pmatrix}F&0\\C&D\end{pmatrix},\qquad
+E_2'E_1'M=\begin{pmatrix}I_p&0\\D^{-1}C&I_q\end{pmatrix}
+\]
+and \(E_3'E_2'E_1'M=I_{p+q}\). The last two bullets of (a) apply to \(E'=E_3'E_2'E_1'\), the displayed
+product, with \(E_1'^{-1}=\left(\begin{smallmatrix}I_p&BD^{-1}\\0&I_q\end{smallmatrix}\right)\),
+\(E_2'^{-1}=\diag(F,D)\) and \(E_3'^{-1}=\left(\begin{smallmatrix}I_p&0\\D^{-1}C&I_q\end{smallmatrix}\right)\)
+(Propositions~\ref{r5b-prop-block-elementary} and~\ref{r5b-prop-block-tri}(b)).
 \end{proof}
 
 \begin{example}\label{r5b-exm-schur}
@@ -6343,7 +6398,7 @@ M=\left(\begin{array}{ccc|cc}1&1&0&1&0\\0&1&1&0&1\\0&0&1&1&1\\\hline1&1&1&4&2\\0
 \]
 with \(A\in\R^{3\times3}\), \(B\in\R^{3\times2}\), \(C\in\R^{2\times3}\), \(D\in\R^{2\times2}\).
 Find the Schur complement \(E\) of \(A\) and \(\det M\). Then compute \(M^{-1}\) with
-Corollary~\ref{r5b-cor-schur-inverse}.
+Corollary~\ref{r5b-cor-schur-inverse}(a).
 \end{exercise}
 \begin{solution}
 Here \(A=\left(\begin{smallmatrix}1&1&0\\0&1&1\\0&0&1\end{smallmatrix}\right)\) is the block
@@ -6367,7 +6422,7 @@ Proposition~\ref{r2-prop-inverse-2x2}.
 \begin{itemize}
 \item With \(L=\left(\begin{smallmatrix}I_3&0\\-CA^{-1}&I_2\end{smallmatrix}\right)\) and
 \(U=\left(\begin{smallmatrix}I_3&-A^{-1}B\\0&I_2\end{smallmatrix}\right)\),
-Corollary~\ref{r5b-cor-schur-inverse} gives \(M^{-1}=U\diag(A^{-1},E^{-1})L\).
+Corollary~\ref{r5b-cor-schur-inverse}(a) gives \(M^{-1}=U\diag(A^{-1},E^{-1})L\).
 \item By the block product formula,
 \[
 U\diag(A^{-1},E^{-1})=\begin{pmatrix}A^{-1}&-A^{-1}BE^{-1}\\0&E^{-1}\end{pmatrix}
@@ -6575,7 +6630,7 @@ M=\begin{pmatrix}I_3&B\\C&I_2\end{pmatrix}\in\R^{5\times5}
 \begin{enumerate}
 \item Compute \(\det M\) with the Schur complement of \(I_3\), and again with the Schur complement of
 \(I_2\).
-\item Compute \(M^{-1}\) with Corollary~\ref{r5b-cor-schur-inverse}.
+\item Compute \(M^{-1}\) with Corollary~\ref{r5b-cor-schur-inverse}(a).
 \end{enumerate}
 \end{exercise}
 \begin{solution}
@@ -6593,7 +6648,7 @@ Theorem~\ref{r5d-thm-schur-det}(b) gives again \(\det M=\det I_2\cdot\det(I_3-BC
 
 (b) The Schur complement \(S=I_2-CB\) of \(I_3\) is invertible (\(\det S=-1\)), with
 \(S^{-1}=\left(\begin{smallmatrix}1&-1\\-1&0\end{smallmatrix}\right)\) by the \(2\times2\) formula of
-Proposition~\ref{r2-prop-inverse-2x2}. Corollary~\ref{r5b-cor-schur-inverse} with \(A=I_3\) gives
+Proposition~\ref{r2-prop-inverse-2x2}. Corollary~\ref{r5b-cor-schur-inverse}(a) with \(A=I_3\) gives
 \(M^{-1}=\left(\begin{smallmatrix}I_3&-B\\0&I_2\end{smallmatrix}\right)
 \diag(I_3,S^{-1})\left(\begin{smallmatrix}I_3&0\\-C&I_2\end{smallmatrix}\right)\).
 By the block product formula,
@@ -6757,7 +6812,8 @@ M^{-1}=\begin{pmatrix}F^{-1}&-F^{-1}BD^{-1}\\-D^{-1}CF^{-1}&D^{-1}+D^{-1}CF^{-1}
 \end{enumerate}
 \end{problem}
 \begin{solution}
-(a) By Corollary~\ref{r5b-cor-schur-inverse}, \(M\) is invertible, and two applications of the
+(a) By Corollary~\ref{r5b-cor-schur-inverse}(a) (with \(E\) in place of \(S\)), \(M\) is invertible, and two
+applications of the
 block product formula (Theorem~\ref{r5b-thm-block}(c)) give
 \[
 \begin{aligned}
@@ -6769,24 +6825,16 @@ M^{-1}&=\begin{pmatrix}I_p&-A^{-1}B\\0&I_q\end{pmatrix}\begin{pmatrix}A^{-1}&0\\
 \end{aligned}
 \]
 
-(b) Look for \(X=\left(\begin{smallmatrix}P&Q\\R&T\end{smallmatrix}\right)\) with
-\(MX=I_{p+q}\); by the block product formula this means
+(b) By Corollary~\ref{r5b-cor-schur-inverse}(b), \(M\) is invertible, and two applications of the block
+product formula give
 \[
-AP+BR=I_p,\qquad CP+DR=0,\qquad AQ+BT=0,\qquad CQ+DT=I_q
+\begin{aligned}
+M^{-1}&=\begin{pmatrix}I_p&0\\-D^{-1}C&I_q\end{pmatrix}\begin{pmatrix}F^{-1}&0\\0&D^{-1}\end{pmatrix}
+\begin{pmatrix}I_p&-BD^{-1}\\0&I_q\end{pmatrix}
+=\begin{pmatrix}F^{-1}&0\\-D^{-1}CF^{-1}&D^{-1}\end{pmatrix}\begin{pmatrix}I_p&-BD^{-1}\\0&I_q\end{pmatrix}\\
+&=\begin{pmatrix}F^{-1}&-F^{-1}BD^{-1}\\-D^{-1}CF^{-1}&D^{-1}+D^{-1}CF^{-1}BD^{-1}\end{pmatrix}
+\end{aligned}
 \]
-\begin{itemize}
-\item The second equation gives \(R=-D^{-1}CP\); then the first becomes
-\((A-BD^{-1}C)P=FP=I_p\), so \(P=F^{-1}\) and \(R=-D^{-1}CF^{-1}\).
-\item The fourth equation gives \(T=D^{-1}-D^{-1}CQ\); then the third becomes
-\(AQ+BD^{-1}-BD^{-1}CQ=FQ+BD^{-1}=0\), so \(Q=-F^{-1}BD^{-1}\) and
-\(T=D^{-1}+D^{-1}CF^{-1}BD^{-1}\).
-\item Conversely, these blocks satisfy the four equations:
-\(AP+BR=(A-BD^{-1}C)F^{-1}=I_p\), \(CP+DR=CF^{-1}-CF^{-1}=0\),
-\(AQ+BT=-(A-BD^{-1}C)F^{-1}BD^{-1}+BD^{-1}=0\) and
-\(CQ+DT=-CF^{-1}BD^{-1}+I_q+CF^{-1}BD^{-1}=I_q\).
-\item So \(MX=I_{p+q}\), and since \(M\) is square, \(M\) is invertible with \(M^{-1}=X\)
-(Theorem~\ref{r2-thm-invertible}).
-\end{itemize}
 \end{solution}
 
 \begin{problem}\label{r5d-pr-k-power}
