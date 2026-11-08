@@ -46,7 +46,7 @@
 | 10/21 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture.pdf">Chapter 6: Orthogonality and Projections</a> |
 | 10/28 | 停課 |
 | 11/04 | **期中考** |
-| 11/11 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture.pdf">Chapter 7: Eigenvalues and Diagonalization</a> |
+| 11/11 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture.pdf">Chapter 7: Eigenvalues and Diagonalization</a> · <a href="https://github.com/chang-ye-tu/la/blob/master/handout/1111.pdf">本週講義</a> |
 | 11/18 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture.pdf">Chapter 8: The Spectral Theorem and Quadratic Forms</a> |
 | 11/25 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture.pdf">Chapter 9: Matrix Differentiation and Variational Principles</a> |
 | 12/02 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture.pdf">Chapter 10: Singular Value Decomposition, Generalized Inverses, and Principal Components</a> |

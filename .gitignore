@@ -5,6 +5,7 @@
 !/.gitignore
 !/README.md
 !/note/
+!/handout/
 
 # Authoring materials (chapter sources, plans, audit reports, verification scripts,
 # snapshots, test builds) stay local, even if the allow-list above is widened.
@@ -16,6 +17,10 @@
 !/note/Makefile
 !/note/lecture.tex
 !/note/lecture.pdf
+
+# Per-session handouts: the PDFs only.
+/handout/*
+!/handout/*.pdf
 
 # Editor lock/backup files can resemble source filenames.
 **/.#*
