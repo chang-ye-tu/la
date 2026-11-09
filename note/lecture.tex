@@ -72,20 +72,32 @@
 \begin{document}
 \pagenumbering{alph}
 \begin{titlepage}
-\definecolor{coveraccent}{RGB}{28,55,92}
-\begin{tikzpicture}[remember picture,overlay]
-\fill[coveraccent] ([xshift=15mm]current page.north west) rectangle ([xshift=18mm]current page.south west);
-\end{tikzpicture}\par
-\vspace*{0.27\textheight}
-\hspace*{12mm}%
-\begin{minipage}[t]{0.8\textwidth}
-{\color{coveraccent}\rule{28mm}{1.6pt}}\par
+\definecolor{coveraccent}{RGB}{31,73,125}
+\centering
+\vspace*{24mm}
+{\color{coveraccent}\rule{\linewidth}{1.6pt}\par}
+\vspace{10mm}
+{\fontsize{46}{54}\selectfont\bfseries Linear Algebra\par}
+\vspace{7mm}
+{\LARGE\scshape\textls[120]{Lecture Notes}\par}
 \vspace{9mm}
-{\fontsize{44}{50}\selectfont\sffamily\bfseries Linear Algebra\par}
-\vspace{6mm}
-{\fontsize{22}{27}\selectfont\sffamily\color{coveraccent}Lecture Notes\par}
-\end{minipage}
-\vfill
+{\color{coveraccent}\rule{\linewidth}{0.6pt}\par}
+\vspace{\stretch{1}}
+\begin{tikzpicture}[x={(1.05cm,0cm)},y={(0.6cm,0.36cm)},z={(0cm,1.1cm)},
+  >={Stealth[length=3.6mm,width=2.5mm]},font=\LARGE]
+  \coordinate (O) at (0,0,0);
+  \coordinate (P) at (6,4,0);
+  \coordinate (Y) at (6,4,5);
+  \filldraw[fill=coveraccent!7,draw=coveraccent!45,line width=0.7pt]
+    (-1.5,-2,0) -- (9,-2,0) -- (9,6.5,0) -- (-1.5,6.5,0) -- cycle;
+  \node[coveraccent] at (8,4.3,0) {\(W\)};
+  \draw[line width=0.6pt] (5.626,3.75,0) -- (5.626,3.75,0.45) -- (6,4,0.45);
+  \draw[->,line width=1.3pt] (O) -- (Y) node[pos=0.55,above left] {\(y\)};
+  \draw[->,line width=1.3pt,coveraccent] (O) -- (P) node[pos=0.55,below right] {\(P_Wy\)};
+  \draw[->,line width=1.3pt,densely dashed] (P) -- (Y) node[pos=0.5,right] {\(y-P_Wy\)};
+  \fill (O) circle (1.6pt) node[below left] {\(0\)};
+\end{tikzpicture}
+\vspace{\stretch{1.4}}
 \end{titlepage}
 \pagenumbering{arabic}
 
@@ -13627,6 +13639,3113 @@ so \(Q_2\) is orthogonal too.
 \(i\) of this equation reads \(Ux_i=y_i\) (Theorem~\ref{r1-thm-views}(a)).
 \end{itemize}
 In fact \(U=BR^{-1}Q_1'=B(Q_1R)^{-1}=BA^{-1}\) (Theorem~\ref{r2-thm-inverse-props}(b)).
+\end{solution}
+
+\clearpage
+\def\unitnumber{7}
+\setcounter{theorem}{0}\setcounter{problem}{0}
+\section*{Chapter 7. Eigenvalues and diagonalization}
+
+\subsection*{Eigenvalues and eigenvectors}
+
+\begin{definition}\label{r7-def-eigen}
+Let \(A\in\R^{n\times n}\). A real number \(\lambda\) is an \textbf{eigenvalue} of \(A\) if \(Ax=\lambda x\) for some
+\(x\in\R^n\) with \(x\ne0\); such a vector \(x\) is an \textbf{eigenvector} of \(A\) \textbf{belonging to}
+\(\lambda\). Since \(Ax=\lambda x\) if and only if \((A-\lambda I)x=0\), the set
+\[
+\mathcal N(A-\lambda I)=\{x\in\R^n:Ax=\lambda x\}
+\]
+is called the \textbf{eigenspace} of \(A\) for \(\lambda\).
+\end{definition}
+The eigenspace \(\mathcal N(A-\lambda I)\) is a subspace of \(\R^n\) (Example~\ref{r3-exm-subspaces}(e)), and its
+nonzero vectors are exactly the eigenvectors belonging to \(\lambda\). So a nonzero multiple of an eigenvector, and a
+nonzero sum of eigenvectors belonging to the same \(\lambda\), are again eigenvectors belonging to \(\lambda\). An
+eigenvector belongs to only one eigenvalue: if \(Ax=\lambda_1x\) and \(Ax=\lambda_2x\), then
+\((\lambda_1-\lambda_2)x=0\) with \(x\ne0\), so \(\lambda_1=\lambda_2\) (Proposition~\ref{r3-prop-dependence}(a)).
+
+\begin{example}\label{r7-exm-two}
+Let
+\[
+A=\begin{pmatrix}1&2&-2&-2\\-1&0&-2&2\\0&-1&-1&1\\-1&2&-2&0\end{pmatrix},\qquad
+v_1=\begin{pmatrix}1\\1\\0\\1\end{pmatrix},\qquad v_2=\begin{pmatrix}1\\1\\1\\1\end{pmatrix},\qquad
+v_3=\begin{pmatrix}0\\1\\0\\1\end{pmatrix},\qquad v_4=\begin{pmatrix}0\\1\\1\\0\end{pmatrix}
+\]
+Multiplying out,
+\[
+Av_1=\begin{pmatrix}1\\1\\0\\1\end{pmatrix},\qquad Av_2=\begin{pmatrix}-1\\-1\\-1\\-1\end{pmatrix},\qquad
+Av_3=\begin{pmatrix}0\\2\\0\\2\end{pmatrix},\qquad Av_4=\begin{pmatrix}0\\-2\\-2\\0\end{pmatrix}
+\]
+So \(Av_1=v_1\), \(Av_2=-v_2\), \(Av_3=2v_3\) and \(Av_4=-2v_4\): the numbers \(1\), \(-1\), \(2\) and \(-2\) are
+eigenvalues of \(A\), and \(v_1\), \(v_2\), \(v_3\), \(v_4\) are eigenvectors belonging to them
+(Definition~\ref{r7-def-eigen}). The vector \(e_1\) is not an eigenvector: \(Ae_1=(1,-1,0,-1)'\) is not a multiple of
+\(e_1\).
+\end{example}
+
+\begin{theorem}\label{r7-thm-eig-singular}
+Let \(A\in\R^{n\times n}\) and \(\lambda\in\R\). The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\item \(\lambda\) is an eigenvalue of \(A\);
+\item \(A-\lambda I\) is not invertible;
+\item \(\det(\lambda I-A)=0\);
+\item \(\rank(A-\lambda I)<n\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+\item (i)\(\Leftrightarrow\)(ii): \(\lambda\) is an eigenvalue if and only if \((A-\lambda I)x=0\) has a solution
+\(x\ne0\), that is, if and only if \(A-\lambda I\) is not invertible (Theorem~\ref{r2-thm-invertible},
+(i)\(\Leftrightarrow\)(iii)).
+\item (ii)\(\Leftrightarrow\)(iii): \(\det(\lambda I-A)=\det\bigl((-1)(A-\lambda I)\bigr)=(-1)^n\det(A-\lambda I)\)
+(Theorem~\ref{r5d-thm-product}(c)), and \(A-\lambda I\) is invertible if and only if \(\det(A-\lambda I)\ne0\)
+(Theorem~\ref{r5d-thm-product}(a)).
+\item (ii)\(\Leftrightarrow\)(iv): Theorem~\ref{thm:r4-rank-rules}(d).\qedhere
+\end{itemize}
+\end{proof}
+So the eigenvalues of \(A\) are the real solutions \(\lambda\) of \(\det(\lambda I-A)=0\), and the eigenvectors
+belonging to \(\lambda\) are the nonzero solutions of \((A-\lambda I)x=0\), found by row reduction.
+
+\subsection*{Polynomials}
+
+\textbf{Complex numbers.} A \textbf{complex number} is \(z=a+bi\) with \(a,b\in\R\), where \(i^2=-1\); \(\mathbb C\) is
+the set of complex numbers, and a real number \(a\) is the complex number \(a+0i\). Sums and products are
+\((a+bi)+(c+di)=(a+c)+(b+d)i\) and \((a+bi)(c+di)=(ac-bd)+(ad+bc)i\); they obey the rules of arithmetic of real
+numbers (commutative, associative and distributive laws), as one checks by multiplying out both sides. The
+\textbf{conjugate} of \(z=a+bi\) is \(\bar z=a-bi\); multiplying out likewise gives: \(\bar z=z\) if and only if \(z\) is
+real, \(\overline{z+w}=\bar z+\bar w\), \(\overline{zw}=\bar z\,\bar w\), and \(z\bar z=a^2+b^2>0\) for \(z\ne0\). Hence every \(z\ne0\) has the inverse \(z^{-1}=\bar z/(a^2+b^2)\), and \(zw=0\)
+only if \(z=0\) or \(w=0\) (if \(z\ne0\), then \(w=z^{-1}zw=0\)).
+
+\begin{definition}\label{r7-def-polynomial}
+A \textbf{polynomial} (in the variable \(t\)) is an expression \(f=c_0+c_1t+\dots+c_mt^m\) with \textbf{coefficients}
+\(c_0,\dots,c_m\in\mathbb C\); we put \(c_k=0\) for \(k>m\), and \(f\) equals \(g=d_0+d_1t+\cdots\) if \(c_k=d_k\) for every
+\(k\geqslant0\). We write \(f(t)\) for \(f\) when the variable is to be shown.
+\begin{itemize}
+\item \(f\) is \textbf{real} if every \(c_k\in\R\); the \textbf{zero polynomial} \(0\) has all coefficients \(0\). For
+\(f\ne0\), the \textbf{degree} \(\deg f\) is the largest \(k\) with \(c_k\ne0\), and \(c_{\deg f}\) is the
+\textbf{leading coefficient}; \(f\) is \textbf{monic} if its leading coefficient is \(1\). \(c_0\) is the
+\textbf{constant term}, and a polynomial with \(c_k=0\) for all \(k\geqslant1\) is written as the number \(c_0\).
+\item The sum \(f+g\), the multiple \(af\) (\(a\in\mathbb C\)) and the product \(fg\) have the coefficients \(c_k+d_k\),
+\(ac_k\) and \(\sum_{i+j=k}c_id_j=c_0d_k+c_1d_{k-1}+\dots+c_kd_0\); thus \((ct^i)(dt^j)=cd\,t^{i+j}\). These operations
+obey the rules of arithmetic of numbers (\(fg=gf\), \((fg)h=f(gh)\), \(f(g+h)=fg+fh\), and so on), because these hold
+coefficient by coefficient; for instance, with \(h=\sum_lh_lt^l\), the coefficient of \(t^k\) in \((fg)h\) and in
+\(f(gh)\) is \(\sum_{i+j+l=k}c_id_jh_l\).
+\item The \textbf{value} of \(f\) at \(z\in\mathbb C\) is \(f(z)=c_0+c_1z+\dots+c_mz^m\), and \(z\) is a \textbf{root} of \(f\)
+if \(f(z)=0\). For a real polynomial \(f\) and \(A\in\R^{n\times n}\), \(f(A)=c_0I_n+c_1A+\dots+c_mA^m\) (with
+\(A^0=I_n\); Definition~\ref{r1-def-poly}); for instance, for \(f=t-c\), \(f(A)=A-cI\).
+\end{itemize}
+\end{definition}
+
+\begin{proposition}\label{r7-prop-poly}
+Let \(f\), \(g\), \(h\) be polynomials.
+\begin{enumerate}
+\item If \(f\ne0\) and \(g\ne0\), then \(fg\ne0\), \(\deg(fg)=\deg f+\deg g\), and the leading coefficient of \(fg\) is the
+product of those of \(f\) and \(g\). If \(f\ne0\) and \(fg=fh\), then \(g=h\).
+\item \((af+g)(z)=af(z)+g(z)\) and \((fg)(z)=f(z)g(z)\) for \(a,z\in\mathbb C\); the same holds for real \(f\), \(g\),
+\(a\in\R\) and \(z=A\in\R^{n\times n}\).
+\item (\textbf{Factor theorem}) For \(c\in\mathbb C\), \(f(c)=0\) if and only if \(f=(t-c)q\) for some polynomial \(q\).
+\item A nonzero polynomial of degree \(m\) has at most \(m\) roots. Consequently, if \(f(z)=g(z)\) for infinitely many
+\(z\) (for instance, for all real \(z\), or for all real \(z\ne0\)), then \(f=g\).
+\item For \(\mu_1,\dots,\mu_n\in\mathbb C\) (\(n\geqslant1\)),
+\((t-\mu_1)\cdots(t-\mu_n)=t^n-(\mu_1+\dots+\mu_n)t^{n-1}+r\), where \(r=0\) or \(\deg r\leqslant n-2\); and the constant
+term of this product is \((-1)^n\mu_1\cdots\mu_n\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Write \(f=\sum_kc_kt^k\) and \(g=\sum_kd_kt^k\).
+
+(a)
+\begin{itemize}
+\item Let \(\deg f=m\) and \(\deg g=l\). A term \(c_id_{m+l+j-i}\) (\(j\geqslant0\)) of the coefficient of \(t^{m+l+j}\) in
+\(fg\) can be nonzero only if \(i\leqslant m\) and \(m+l+j-i\leqslant l\), that is, \(m+j\leqslant i\leqslant m\); so
+\(j=0\) and \(i=m\). Hence the coefficient of \(t^{m+l}\) is \(c_md_l\ne0\), and all higher coefficients are \(0\).
+\item If \(fg=fh\), then \(f(g-h)=0\); if \(g\ne h\), the first item would give \(f(g-h)\ne0\) \(\contradiction\) So
+\(g=h\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item \(af+g\) has the coefficients \(ac_k+d_k\), so \((af+g)(z)=\sum_k(ac_k+d_k)z^k=af(z)+g(z)\).
+\item By the product rule of Definition~\ref{r7-def-polynomial} and the distributive laws,
+\((fg)(z)=\sum_k\sum_{i+j=k}c_id_jz^{i+j}=\sum_{i,j}(c_iz^i)(d_jz^j)=f(z)g(z)\).
+\item For real \(f\), \(g\), \(a\) and a matrix \(z=A\), both rules are Proposition~\ref{r1-prop-poly}(a),(b).
+\end{itemize}
+(c)
+\begin{itemize}
+\item First, \(f=(t-c)q+r\) for a polynomial \(q\) and a number \(r\), by induction on the degree: if \(f=0\) or
+\(\deg f=0\), take \(q=0\) and \(r=f\); if \(\deg f=m\geqslant1\) and \(a\) is the leading coefficient, then
+\(f-at^{m-1}(t-c)\) has coefficient \(0\) at \(t^m\), so it is \(0\) or of degree less than \(m\); by the induction
+hypothesis it equals \((t-c)q_1+r\), and \(f=(t-c)(q_1+at^{m-1})+r\).
+\item By (b), \(f(c)=(c-c)q(c)+r=r\). So if \(f(c)=0\), then \(r=0\) and \(f=(t-c)q\). Conversely, if \(f=(t-c)q\), then
+\(f(c)=(c-c)q(c)=0\) by (b).
+\end{itemize}
+(d)
+\begin{itemize}
+\item Induction on \(m\). If \(m=0\), \(f\) is a nonzero number and has no root. Let \(m\geqslant1\), and let \(f\) have a
+root \(a\) (otherwise there is nothing to prove). By (c), \(f=(t-a)q\); here \(q\ne0\), as \(f\ne0\), so \(\deg q=m-1\)
+by (a).
+\item If \(f(b)=0\), then \((b-a)q(b)=0\) by (b), so \(b=a\) or \(q(b)=0\). By the induction hypothesis \(q\) has at most
+\(m-1\) roots, so \(f\) has at most \(m\).
+\item If \(f\ne g\), then \(f-g\) is a nonzero polynomial, and every \(z\) with \(f(z)=g(z)\) is a root of it (by (b)); so
+there are only finitely many such \(z\).
+\end{itemize}
+(e)
+\begin{itemize}
+\item Induction on \(n\); for \(n=1\), \(t-\mu_1\) has this form with \(r=0\).
+\item If \((t-\mu_1)\cdots(t-\mu_n)=t^n-s_nt^{n-1}+r_n\) with \(s_n=\mu_1+\dots+\mu_n\), then multiplying by \(t-\mu_{n+1}\)
+gives \(t^{n+1}-(s_n+\mu_{n+1})t^n+r_{n+1}\) with \(r_{n+1}=s_n\mu_{n+1}t^{n-1}+r_n(t-\mu_{n+1})\), which is \(0\) or of
+degree at most \(n-1\) by (a).
+\item The constant term of a polynomial is its value at \(0\), here \((0-\mu_1)\cdots(0-\mu_n)=(-1)^n\mu_1\cdots\mu_n\) by
+(b).\qedhere
+\end{itemize}
+\end{proof}
+
+\subsection*{The characteristic polynomial}
+
+\begin{lemma}\label{r7-lem-degree}
+For every \(t\in\R\) let \(M(t)\in\R^{m\times m}\) have entries of the form \(\alpha+\beta t\), where the numbers
+\(\alpha,\beta\in\R\) do not depend on \(t\). If at most \(d\) rows of \(M(t)\) contain an entry with \(\beta\ne0\), then
+there is a real polynomial \(q\), which is \(0\) or of degree at most \(d\), such that \(\det M(t)=q(t)\) for every
+\(t\in\R\).
+\end{lemma}
+\begin{proof}
+Induction on \(m\). For \(m=1\), \(\det M(t)=\alpha+\beta t\) (Definition~\ref{r5d-def-det}(a),(d)), and \(q=\alpha+\beta t\)
+has the required form, since \(\beta=0\) if \(d=0\). Let \(m\geqslant2\).
+\begin{itemize}
+\item If no entry has \(\beta\ne0\), then \(M(t)=M(0)\) for every \(t\), and \(q=\det M(0)\), a number, will do.
+\item Otherwise \(d\geqslant1\); let row \(i\) contain an entry with \(\beta\ne0\), write
+\(m_{ij}(t)=\alpha_{ij}+\beta_{ij}t\) for its entries, and expand along row \(i\) (Theorem~\ref{r5d-thm-expansion}):
+\[
+\det M(t)=\sum_{j=1}^m(-1)^{i+j}m_{ij}(t)\det\bigl(M(t)(i|j)\bigr)
+\]
+\item Each \(M(t)(i|j)\in\R^{(m-1)\times(m-1)}\) has entries of the same form, and its rows are the rows of \(M(t)\)
+other than row \(i\), each shortened by one entry; so at most \(d-1\) of them contain an entry with \(\beta\ne0\). By the
+induction hypothesis, \(\det\bigl(M(t)(i|j)\bigr)=q_j(t)\) for a real polynomial \(q_j\) that is \(0\) or of degree at
+most \(d-1\).
+\item By Proposition~\ref{r7-prop-poly}(b), \(\det M(t)\) is the value at \(t\) of
+\(q=\sum_j(-1)^{i+j}(\alpha_{ij}+\beta_{ij}t)q_j\). Each term is \(0\) or of degree at most \(1+(d-1)=d\)
+(Proposition~\ref{r7-prop-poly}(a)), so its coefficients of \(t^k\), \(k>d\), are \(0\), and so are those of \(q\)
+(Definition~\ref{r7-def-polynomial}).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{definition}\label{r7-def-charpoly}
+Let \(A=(a_{ij})\in\R^{n\times n}\). For \(t\in\R\), the \((i,j)\) entry of \(tI-A\) is \(\delta_{ij}t-a_{ij}\). By
+Lemma~\ref{r7-lem-degree} (with \(m=d=n\)) there is a real polynomial whose value at every \(c\in\R\) is
+\(\det(cI-A)\), and by Proposition~\ref{r7-prop-poly}(d) there is only one. It is the \textbf{characteristic
+polynomial} of \(A\), written
+\[
+p_A(t)=\det(tI-A)
+\]
+The equation \(p_A(t)=0\) is the \textbf{characteristic equation} of \(A\). Moreover:
+\begin{enumerate}
+\item \(p_A(c)=\det(cI-A)\) for every \(c\in\R\); so the eigenvalues of \(A\) are the real roots of \(p_A\)
+(Theorem~\ref{r7-thm-eig-singular});
+\item \(p_A\) is monic of degree \(n\), its coefficient of \(t^{n-1}\) is \(-\tr A\), and its constant term is
+\((-1)^n\det A\) (for \(n=1\) both say \(p_A(t)=t-a_{11}\)). For \(n=2\), \(p_A(t)=t^2-(\tr A)t+\det A\).
+\end{enumerate}
+\end{definition}
+\begin{proof}
+(a) By the choice of \(p_A\), \(p_A(c)=\det(cI-A)\) for every real \(c\). By Theorem~\ref{r7-thm-eig-singular}, a real
+\(\lambda\) is an eigenvalue of \(A\) if and only if \(\det(\lambda I-A)=0\), that is, \(p_A(\lambda)=0\).
+
+(b) Induction on \(n\). For \(n=1\), \(\det(cI_1-A)=c-a_{11}\) for every real \(c\)
+(Definition~\ref{r5d-def-det}(a),(d)), so \(p_A=t-a_{11}\)
+(Proposition~\ref{r7-prop-poly}(d)), and \(-a_{11}=-\tr A=(-1)^1\det A\). Let \(n\geqslant2\).
+\begin{itemize}
+\item For \(c\in\R\), expand \(\det(cI-A)\) along row \(1\), whose entries are \(c-a_{11},-a_{12},\dots,-a_{1n}\)
+(Theorem~\ref{r5d-thm-expansion}); as \((cI-A)(1|1)=cI_{n-1}-A(1|1)\),
+\[
+\det(cI-A)=(c-a_{11})\,p_{A(1|1)}(c)+\sum_{j=2}^n(-1)^{1+j}(-a_{1j})\det\bigl((cI-A)(1|j)\bigr)
+\]
+\item For \(j\geqslant2\), the rows of \((cI-A)(1|j)\) are rows \(2,\dots,n\) of \(cI-A\) without their \(j\)th entry.
+Row \(i\) of \(cI-A\) contains \(c\) only in column \(i\), so the row that comes from row \(j\) does not contain \(c\),
+and at most \(n-2\) rows contain \(c\). By Lemma~\ref{r7-lem-degree}, \(\det\bigl((cI-A)(1|j)\bigr)=q_j(c)\) for a real
+polynomial \(q_j\) that is \(0\) or of degree at most \(n-2\).
+\item By the induction hypothesis, \(p_{A(1|1)}=t^{n-1}-st^{n-2}+r\) with \(s=\tr A(1|1)=a_{22}+\dots+a_{nn}\) and
+\(r=0\) or \(\deg r\leqslant n-3\) (\(r=0\) if \(n=2\)). Multiplying out,
+\((t-a_{11})p_{A(1|1)}=t^n-(a_{11}+s)t^{n-1}+r_1\) with \(r_1=a_{11}st^{n-2}+(t-a_{11})r\), which is \(0\) or of degree
+at most \(n-2\) (Proposition~\ref{r7-prop-poly}(a)); and \(a_{11}+s=\tr A\) (Definition~\ref{r1-def-trace}).
+\item By Proposition~\ref{r7-prop-poly}(b), \(\det(cI-A)\) is the value at \(c\) of
+\(q=(t-a_{11})p_{A(1|1)}+\sum_{j=2}^n(-1)^{1+j}(-a_{1j})q_j\), so \(p_A=q\) (Proposition~\ref{r7-prop-poly}(d)). The
+coefficients of \(t^k\), \(k\geqslant n-1\), of \(r_1\) and of every \(q_j\) are \(0\); so \(p_A\) has the coefficient
+\(1\) at \(t^n\), the coefficient \(-\tr A\) at \(t^{n-1}\), and \(0\) above \(t^n\).
+\item The constant term is the value at \(0\): by (a), \(p_A(0)=\det(-A)=(-1)^n\det A\)
+(Theorem~\ref{r5d-thm-product}(c)).\qedhere
+\end{itemize}
+\end{proof}
+In examples, \(\det(tI-A)\) is computed for each real \(t\) by row and column operations and cofactor expansion
+(Definition~\ref{r5d-def-det}, Theorems~\ref{r5d-thm-transpose} and~\ref{r5d-thm-expansion}). If this gives
+\(\det(tI-A)=q(t)\) for a polynomial \(q\) and every real \(t\), then \(p_A=q\), by (a) and
+Proposition~\ref{r7-prop-poly}(d). Many books call \(\det(A-tI)=(-1)^np_A(t)\) the characteristic polynomial; it has
+the same roots. By (a), (b) and Proposition~\ref{r7-prop-poly}(d), a matrix \(A\in\R^{n\times n}\) has at most \(n\)
+eigenvalues; so the four eigenvalues \(1\), \(-1\), \(2\), \(-2\) of the \(4\times4\) matrix of
+Example~\ref{r7-exm-two} are all its eigenvalues.
+
+\needspace{10\baselineskip}
+\begin{example}\label{r7-exm-charpoly}
+Find the eigenvalues of
+\[
+A=\begin{pmatrix}1&2&1\\2&0&-2\\-1&2&3\end{pmatrix}
+\]
+and a basis of each eigenspace.
+
+\textit{Solution.}
+\begin{itemize}
+\item For \(t\in\R\), expanding along row \(1\) (Theorem~\ref{r5d-thm-expansion}),
+\[
+\begin{aligned}
+\det(tI-A)&=\det\begin{pmatrix}t-1&-2&-1\\-2&t&2\\1&-2&t-3\end{pmatrix}
+=(t-1)\bigl(t(t-3)+4\bigr)+2\bigl(-2(t-3)-2\bigr)-(4-t)\\
+&=(t^3-4t^2+7t-4)+(-4t+8)+(t-4)=t^3-4t^2+4t=t(t-2)^2
+\end{aligned}
+\]
+So \(p_A(t)=t(t-2)^2\), and the eigenvalues are \(0\) and \(2\) (Definition~\ref{r7-def-charpoly}).
+\item \(\lambda=0\): row-reduce \(A-0I=A\).
+\[
+\begin{gathered}
+A\xrightarrow[R_3\leftarrow R_3+R_1]{R_2\leftarrow R_2-2R_1}
+\begin{pmatrix}1&2&1\\0&-4&-4\\0&4&4\end{pmatrix}
+\xrightarrow{R_3\leftarrow R_3+R_2}
+\begin{pmatrix}1&2&1\\0&-4&-4\\0&0&0\end{pmatrix}
+\\
+\xrightarrow{R_2\leftarrow-\frac14R_2}
+\begin{pmatrix}1&2&1\\0&1&1\\0&0&0\end{pmatrix}
+\xrightarrow{R_1\leftarrow R_1-2R_2}
+\begin{pmatrix}1&0&-1\\0&1&1\\0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The free unknown is \(x_3\); the special solution \((1,-1,1)'\) is a basis of \(\mathcal N(A)\)
+(Theorem~\ref{thm:r4-four-bases}(c)).
+\item \(\lambda=2\): row-reduce \(A-2I\).
+\[
+\begin{pmatrix}-1&2&1\\2&-2&-2\\-1&2&1\end{pmatrix}
+\xrightarrow[R_3\leftarrow R_3-R_1]{R_2\leftarrow R_2+2R_1}
+\begin{pmatrix}-1&2&1\\0&2&0\\0&0&0\end{pmatrix}
+\xrightarrow[R_2\leftarrow\frac12R_2]{R_1\leftarrow-R_1}
+\begin{pmatrix}1&-2&-1\\0&1&0\\0&0&0\end{pmatrix}
+\xrightarrow{R_1\leftarrow R_1+2R_2}
+\begin{pmatrix}1&0&-1\\0&1&0\\0&0&0\end{pmatrix}
+\]
+The special solution \((1,0,1)'\) is a basis of \(\mathcal N(A-2I)\).
+\end{itemize}
+Both eigenspaces are lines, although \(p_A\) has the factor \((t-2)^2\).
+\end{example}
+
+\begin{theorem}\label{r7-thm-factor}
+\begin{enumerate}
+\item (\textbf{Fundamental theorem of algebra}; not proved here.) Every polynomial of degree at least \(1\) has a root
+in \(\mathbb C\).
+\item Every monic polynomial \(f\) of degree \(n\geqslant1\) is a product
+\[
+f=(t-\lambda_1)(t-\lambda_2)\cdots(t-\lambda_n)\qquad(\lambda_1,\dots,\lambda_n\in\mathbb C)
+\]
+and the list \(\lambda_1,\dots,\lambda_n\) is unique up to order: if also \(f=(t-\mu_1)\cdots(t-\mu_n)\), then
+\(\mu_1,\dots,\mu_n\) are \(\lambda_1,\dots,\lambda_n\) in some order.
+\item In (b), the roots of \(f\) are exactly \(\lambda_1,\dots,\lambda_n\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(b)
+\begin{itemize}
+\item Existence, by induction on \(n\). For \(n=1\), \(f=t+c_0=t-(-c_0)\). Let \(n\geqslant2\). By (a), \(f\) has a root
+\(\lambda_n\), so \(f=(t-\lambda_n)g\) (Proposition~\ref{r7-prop-poly}(c)); here \(g\ne0\), as \(f\ne0\), so \(g\) is monic of
+degree \(n-1\) (Proposition~\ref{r7-prop-poly}(a)). By the induction hypothesis, \(g=(t-\lambda_1)\cdots(t-\lambda_{n-1})\).
+\item Uniqueness, by induction on \(n\). For \(n=1\), \(t-\lambda_1=t-\mu_1\) gives \(\lambda_1=\mu_1\) (constant terms).
+Let \(n\geqslant2\). The value of both products at \(\lambda_n\) (Proposition~\ref{r7-prop-poly}(b)) gives
+\(0=(\lambda_n-\mu_1)\cdots(\lambda_n-\mu_n)\), so \(\lambda_n=\mu_k\) for some \(k\).
+\item Renumber the \(\mu_i\) so that \(k=n\), and cancel the factor \(t-\lambda_n\ne0\) (Proposition~\ref{r7-prop-poly}(a)):
+\((t-\lambda_1)\cdots(t-\lambda_{n-1})=(t-\mu_1)\cdots(t-\mu_{n-1})\). By the induction hypothesis,
+\(\mu_1,\dots,\mu_{n-1}\) are \(\lambda_1,\dots,\lambda_{n-1}\) in some order, and \(\mu_n=\lambda_n\).
+\end{itemize}
+(c) By Proposition~\ref{r7-prop-poly}(b), \(f(z)=(z-\lambda_1)\cdots(z-\lambda_n)\), which is \(0\) if and only if
+\(z=\lambda_i\) for some \(i\).
+\end{proof}
+
+\begin{definition}\label{r7-def-eigenvalues}
+Let \(A\in\R^{n\times n}\). By Definition~\ref{r7-def-charpoly}(b) and Theorem~\ref{r7-thm-factor}(b),
+\[
+p_A(t)=(t-\lambda_1)(t-\lambda_2)\cdots(t-\lambda_n)
+\]
+for complex numbers \(\lambda_1,\dots,\lambda_n\), unique up to order. These \(n\) numbers are the \textbf{eigenvalues}
+of \(A\), listed \textbf{with multiplicity}; by Theorem~\ref{r7-thm-factor}(c) they are the roots of \(p_A\). For
+\(c\in\mathbb C\), the \textbf{algebraic multiplicity} \(a_A(c)\) is the number of indices \(i\) with \(\lambda_i=c\)
+(\(a_A(c)=0\) if \(c\) is not an eigenvalue); so if \(c_1,\dots,c_k\) are the distinct eigenvalues, then
+\(p_A=(t-c_1)^{a_A(c_1)}\cdots(t-c_k)^{a_A(c_k)}\) and \(a_A(c_1)+\dots+a_A(c_k)=n\). An eigenvalue \(c\) is
+\textbf{simple} if \(a_A(c)=1\) and \textbf{multiple} if \(a_A(c)\geqslant2\). A real number is an eigenvalue in this
+sense if and only if it is one in the sense of Definition~\ref{r7-def-eigen}, since both mean that it is a real root
+of \(p_A\) (Definition~\ref{r7-def-charpoly}(a)); these are the \textbf{real eigenvalues}. Eigenvectors and
+eigenspaces belong to real eigenvalues only.
+\end{definition}
+
+\begin{proposition}\label{r7-prop-conjugate}
+Let \(A\in\R^{n\times n}\).
+\begin{enumerate}
+\item If \(z\) is a non-real eigenvalue of \(A\), then so is \(\bar z\), and \(a_A(\bar z)=a_A(z)\): the non-real
+eigenvalues come in conjugate pairs.
+\item If \(n\) is odd, then \(A\) has a real eigenvalue.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a)
+\begin{itemize}
+\item For a polynomial \(f=\sum_kc_kt^k\) put \(\bar f=\sum_k\bar c_kt^k\). Conjugation respects sums and products of
+numbers, so the coefficient \(\overline{\sum_{i+j=k}c_id_j}\) of \(\overline{fg}\) is \(\sum_{i+j=k}\bar c_i\bar d_j\):
+\(\overline{fg}=\bar f\,\bar g\). Hence
+\(\overline{(t-\lambda_1)\cdots(t-\lambda_n)}=(t-\bar\lambda_1)\cdots(t-\bar\lambda_n)\).
+\item \(p_A\) is real, so \(p_A=\overline{p_A}\), that is,
+\((t-\lambda_1)\cdots(t-\lambda_n)=(t-\bar\lambda_1)\cdots(t-\bar\lambda_n)\) (Definition~\ref{r7-def-eigenvalues}). By
+Theorem~\ref{r7-thm-factor}(b), \(\bar\lambda_1,\dots,\bar\lambda_n\) are \(\lambda_1,\dots,\lambda_n\) in some order.
+\item So the number of indices \(i\) with \(\lambda_i=\bar z\) equals the number of \(i\) with \(\bar\lambda_i=\bar z\),
+that is, with \(\lambda_i=z\): \(a_A(\bar z)=a_A(z)\geqslant1\).
+\end{itemize}
+(b) By (a), the non-real numbers in the list \(\lambda_1,\dots,\lambda_n\) fall into pairs \(z\ne\bar z\) that occur
+equally often, so there is an even number of them. If \(n\) is odd, some \(\lambda_i\) is real: a real eigenvalue.
+\end{proof}
+
+\begin{example}\label{r7-exm-complex}
+Find the eigenvalues of
+\[
+A=\begin{pmatrix}2&-1&0\\1&2&0\\1&1&1\end{pmatrix}
+\]
+and the eigenspace of each real eigenvalue.
+
+\textit{Solution.}
+\begin{itemize}
+\item For \(t\in\R\), column \(3\) of \(tI-A\) has the entry \(t-1\) in position \((3,3)\) and \(0\) elsewhere; expanding
+along it (Theorem~\ref{r5d-thm-expansion}),
+\[
+\det(tI-A)=\det\begin{pmatrix}t-2&1&0\\-1&t-2&0\\-1&-1&t-1\end{pmatrix}
+=(t-1)\det\begin{pmatrix}t-2&1\\-1&t-2\end{pmatrix}=(t-1)\bigl((t-2)^2+1\bigr)
+\]
+\item Since \((t-2-i)(t-2+i)=(t-2)^2-i^2=(t-2)^2+1\), \(p_A(t)=(t-1)\bigl(t-(2+i)\bigr)\bigl(t-(2-i)\bigr)\): the
+eigenvalues are \(1\), \(2+i\) and \(2-i\), each simple, and \(2\pm i\) is a conjugate pair
+(Proposition~\ref{r7-prop-conjugate}(a)). The only real eigenvalue is \(1\).
+\item Row-reduce \(A-I\):
+\[
+\begin{gathered}
+\begin{pmatrix}1&-1&0\\1&1&0\\1&1&0\end{pmatrix}
+\xrightarrow[R_3\leftarrow R_3-R_1]{R_2\leftarrow R_2-R_1}
+\begin{pmatrix}1&-1&0\\0&2&0\\0&2&0\end{pmatrix}
+\xrightarrow{R_3\leftarrow R_3-R_2}
+\begin{pmatrix}1&-1&0\\0&2&0\\0&0&0\end{pmatrix}
+\\
+\xrightarrow{R_2\leftarrow\frac12R_2}
+\begin{pmatrix}1&-1&0\\0&1&0\\0&0&0\end{pmatrix}
+\xrightarrow{R_1\leftarrow R_1+R_2}
+\begin{pmatrix}1&0&0\\0&1&0\\0&0&0\end{pmatrix}
+\end{gathered}
+\]
+So \(x_1=x_2=0\) and \(x_3\) is free: \(\mathcal N(A-I)=\Span\{e_3\}\). The eigenvalues \(2\pm i\) have no eigenvectors in
+\(\R^3\) (Definition~\ref{r7-def-eigenvalues}).
+\end{itemize}
+\end{example}
+
+\begin{remark}[Stationary autoregressions]\label{r7-rem-ar}
+In time series, the \textbf{autoregressive model} of order \(p\) is
+\(y_k=\beta_0+\beta_1y_{k-1}+\dots+\beta_py_{k-p}+\varepsilon_k\). It describes a stationary process when every root
+\(z\) of the real polynomial \(\Phi(t)=1-\beta_1t-\dots-\beta_pt^p\) lies outside the unit circle, that is,
+\(\lvert z\rvert>1\), where \(\lvert a+bi\rvert=\sqrt{a^2+b^2}\) (not proved
+here). The recursion \(y_k=\beta_0+\beta_1y_{k-1}+\dots+\beta_py_{k-p}\), written for the vector
+\((y_{k-p+1},\dots,y_k)'\), uses the \(p\times p\) \textbf{companion matrix}
+\[
+C=\begin{pmatrix}0&1&0&\cdots&0\\0&0&1&\cdots&0\\\vdots&\vdots&&\ddots&\vdots\\0&0&0&\cdots&1\\
+\beta_p&\beta_{p-1}&\beta_{p-2}&\cdots&\beta_1\end{pmatrix}
+\]
+whose eigenvalues are the roots of \(f=t^p-\beta_1t^{p-1}-\dots-\beta_p\) (Abadir and Magnus, Appendix~A.4.1). As
+\(\Phi(0)=1\) and \(z^p\Phi(1/z)=f(z)\) for \(z\ne0\), the nonzero roots of \(f\) are the numbers \(1/z\) for the roots
+\(z\) of \(\Phi\), and \(\lvert1/z\rvert=1/\lvert z\rvert\) (as \(1/z=\bar z/(a^2+b^2)\) for \(z=a+bi\ne0\)); so the condition says that every eigenvalue \(\lambda\) of \(C\), real or not, has
+\(\lvert\lambda\rvert<1\).
+\end{remark}
+
+\subsection*{Similar and triangular matrices}
+
+\begin{definition}\label{r7-def-similar}
+A matrix \(B\in\R^{n\times n}\) is \textbf{similar} to \(A\in\R^{n\times n}\) if \(B=P^{-1}AP\) for some invertible
+\(P\in\R^{n\times n}\). Then \(A=PBP^{-1}=(P^{-1})^{-1}BP^{-1}\), so \(A\) is similar to \(B\).
+\end{definition}
+
+\begin{theorem}\label{r7-thm-similar}
+Let \(A,P\in\R^{n\times n}\) with \(P\) invertible, and let \(B=P^{-1}AP\).
+\begin{enumerate}
+\item \(p_B=p_A\). Hence \(A\) and \(B\) have the same eigenvalues with the same algebraic multiplicities, \(\tr B=\tr A\)
+and \(\det B=\det A\).
+\item For every \(c\in\R\), \(x\mapsto P^{-1}x\) maps \(\mathcal N(A-cI)\) onto \(\mathcal N(B-cI)\), with inverse
+\(y\mapsto Py\); so \(x\) is an eigenvector of \(A\) belonging to \(c\) if and only if \(P^{-1}x\) is an eigenvector of \(B\)
+belonging to \(c\). Moreover \(\dim\mathcal N(B-cI)=\dim\mathcal N(A-cI)\), and \(\rank B=\rank A\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item For \(c\in\R\), \(cI-B=P^{-1}(cI)P-P^{-1}AP=P^{-1}(cI-A)P\) (Theorem~\ref{r1-thm-rules}), so
+\(\det(cI-B)=\det P^{-1}\cdot\det(cI-A)\cdot\det P=\det(cI-A)\) (Theorem~\ref{r5d-thm-product}(b),(c)).
+\item So \(p_B(c)=p_A(c)\) for every real \(c\) (Definition~\ref{r7-def-charpoly}(a)), and \(p_B=p_A\)
+(Proposition~\ref{r7-prop-poly}(d)).
+\item The eigenvalues of \(A\) and \(B\) come from the same factorization (Definition~\ref{r7-def-eigenvalues}); \(-\tr B\)
+and \(-\tr A\) are the same coefficient of \(t^{n-1}\), and \((-1)^n\det B\), \((-1)^n\det A\) the same constant term
+(Definition~\ref{r7-def-charpoly}(b)).
+\end{itemize}
+(b)
+\begin{itemize}
+\item \(B-cI=P^{-1}(A-cI)P\) and \(A-cI=P(B-cI)P^{-1}\). If \((A-cI)x=0\), then \((B-cI)P^{-1}x=P^{-1}(A-cI)x=0\); if
+\((B-cI)y=0\), then \((A-cI)Py=P(B-cI)y=0\).
+\item The two maps are inverse to each other (\(PP^{-1}x=x\), \(P^{-1}Py=y\)), and \(P^{-1}x\ne0\) if and only if \(x\ne0\).
+\item \(\rank(B-cI)=\rank\bigl(P^{-1}(A-cI)P\bigr)=\rank(A-cI)\) (Theorem~\ref{thm:r4-rank-product}(d)), so the two null
+spaces have the same dimension (Theorem~\ref{thm:r4-rank-nullity}). In the same way,
+\(\rank B=\rank(P^{-1}AP)=\rank A\).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{proposition}\label{r7-prop-block-triangular}
+\begin{enumerate}
+\item Let \(A=\begin{pmatrix}B&C\\0&D\end{pmatrix}\) or \(A=\begin{pmatrix}B&0\\C&D\end{pmatrix}\) with \(B\in\R^{p\times p}\)
+and \(D\in\R^{q\times q}\). Then \(p_A=p_Bp_D\): the eigenvalues of \(A\), listed with multiplicity, are those of \(B\)
+together with those of \(D\).
+\item If \(A\in\R^{n\times n}\) is upper or lower triangular, then \(p_A=(t-a_{11})\cdots(t-a_{nn})\): the eigenvalues of
+\(A\), listed with multiplicity, are \(a_{11},\dots,a_{nn}\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a)
+\begin{itemize}
+\item For \(c\in\R\), \(cI-A\) is block triangular of the same kind, with diagonal blocks \(cI_p-B\) and \(cI_q-D\)
+(Theorem~\ref{r5b-thm-block}(a)). By Theorem~\ref{r5d-thm-block-tri},
+\(\det(cI-A)=\det(cI_p-B)\det(cI_q-D)=p_B(c)p_D(c)\), the value of \(p_Bp_D\) at \(c\)
+(Proposition~\ref{r7-prop-poly}(b)). So \(p_A=p_Bp_D\) (Proposition~\ref{r7-prop-poly}(d)).
+\item If \(p_B=(t-\beta_1)\cdots(t-\beta_p)\) and \(p_D=(t-\delta_1)\cdots(t-\delta_q)\) (Definition~\ref{r7-def-eigenvalues}),
+then \(p_A\) is the product of these \(p+q\) linear factors, and by Theorem~\ref{r7-thm-factor}(b) the eigenvalues of
+\(A\) are \(\beta_1,\dots,\beta_p,\delta_1,\dots,\delta_q\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item For \(c\in\R\), \(cI-A\) is triangular of the same kind with diagonal entries \(c-a_{ii}\), so
+\(\det(cI-A)=(c-a_{11})\cdots(c-a_{nn})\) (Theorem~\ref{r5d-thm-basic}(c) for upper, Theorem~\ref{r5d-thm-transpose}
+for lower triangular matrices), the value of \((t-a_{11})\cdots(t-a_{nn})\) at \(c\).
+\item As in (a), \(p_A=(t-a_{11})\cdots(t-a_{nn})\), and Definition~\ref{r7-def-eigenvalues} gives the
+eigenvalues.\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{example}\label{r7-exm-three}
+Find the eigenvalues of
+\[
+A=\begin{pmatrix}-1&2&3&-1\\2&-1&1&1\\0&0&1&2\\0&0&2&1\end{pmatrix}=\begin{pmatrix}B&F\\0&D\end{pmatrix},\qquad
+B=\begin{pmatrix}-1&2\\2&-1\end{pmatrix},\qquad D=\begin{pmatrix}1&2\\2&1\end{pmatrix}
+\]
+and a basis of each eigenspace.
+
+\textit{Solution.}
+\begin{itemize}
+\item By Proposition~\ref{r7-prop-block-triangular}(a) and the formula for \(n=2\) in
+Definition~\ref{r7-def-charpoly}(b), with \(\tr B=-2\), \(\det B=-3\), \(\tr D=2\) and \(\det D=-3\),
+\[
+p_A=p_Bp_D=(t^2+2t-3)(t^2-2t-3)=(t+3)(t-1)(t-3)(t+1)
+\]
+So the eigenvalues are \(-3\), \(-1\), \(1\) and \(3\), each simple (Definition~\ref{r7-def-eigenvalues}). Check:
+\(p_A=(t^2-9)(t^2-1)=t^4-10t^2+9\); the coefficient \(0\) of \(t^3\) is \(-\tr A=-(-1-1+1+1)\), and the constant term
+\(9\) is \((-1)^4\det A\), as \(\det A=\det B\det D=(-3)(-3)=9\) (Theorem~\ref{r5d-thm-block-tri},
+Definition~\ref{r7-def-charpoly}(b)).
+\item \(\lambda=-3\):
+\[
+\begin{gathered}
+A+3I=\begin{pmatrix}2&2&3&-1\\2&2&1&1\\0&0&4&2\\0&0&2&4\end{pmatrix}
+\xrightarrow{R_2\leftarrow R_2-R_1}
+\begin{pmatrix}2&2&3&-1\\0&0&-2&2\\0&0&4&2\\0&0&2&4\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+R_2]{R_3\leftarrow R_3+2R_2}
+\begin{pmatrix}2&2&3&-1\\0&0&-2&2\\0&0&0&6\\0&0&0&6\end{pmatrix}
+\\
+\xrightarrow{R_4\leftarrow R_4-R_3}
+\begin{pmatrix}2&2&3&-1\\0&0&-2&2\\0&0&0&6\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+An echelon form with three nonzero rows: \(\rank(A+3I)=3\) (Definition~\ref{def:r4-rank}), so
+\(\dim\mathcal N(A+3I)=4-3=1\) (Theorem~\ref{thm:r4-rank-nullity}). Back substitution gives \(x_4=0\), \(x_3=0\) and
+\(x_1=-x_2\); so \((-1,1,0,0)'\) is a basis of \(\mathcal N(A+3I)\) (Theorem~\ref{thm:r4-counting}(d)).
+\item \(\lambda=-1\):
+\[
+A+I=\begin{pmatrix}0&2&3&-1\\2&0&1&1\\0&0&2&2\\0&0&2&2\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4-R_3]{R_1\leftrightarrow R_2}
+\begin{pmatrix}2&0&1&1\\0&2&3&-1\\0&0&2&2\\0&0&0&0\end{pmatrix}
+\]
+Again \(\rank(A+I)=3\) and \(\dim\mathcal N(A+I)=1\). With \(x_4=1\), back substitution gives \(x_3=-1\), \(x_2=2\)
+and \(x_1=0\); so \((0,2,-1,1)'\) is a basis of \(\mathcal N(A+I)\).
+\item \(\lambda=1\):
+\[
+\begin{gathered}
+A-I=\begin{pmatrix}-2&2&3&-1\\2&-2&1&1\\0&0&0&2\\0&0&2&0\end{pmatrix}
+\xrightarrow{R_2\leftarrow R_2+R_1}
+\begin{pmatrix}-2&2&3&-1\\0&0&4&0\\0&0&0&2\\0&0&2&0\end{pmatrix}
+\xrightarrow{R_2\leftrightarrow R_4}
+\begin{pmatrix}-2&2&3&-1\\0&0&2&0\\0&0&0&2\\0&0&4&0\end{pmatrix}
+\\
+\xrightarrow{R_4\leftarrow R_4-2R_2}
+\begin{pmatrix}-2&2&3&-1\\0&0&2&0\\0&0&0&2\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+So \(\rank(A-I)=3\), \(\dim\mathcal N(A-I)=1\), and back substitution gives \(x_3=x_4=0\) and \(x_1=x_2\): the vector
+\((1,1,0,0)'\) is a basis of \(\mathcal N(A-I)\).
+\item \(\lambda=3\):
+\[
+A-3I=\begin{pmatrix}-4&2&3&-1\\2&-4&1&1\\0&0&-2&2\\0&0&2&-2\end{pmatrix}
+\xrightarrow{R_1\leftrightarrow R_2}
+\begin{pmatrix}2&-4&1&1\\-4&2&3&-1\\0&0&-2&2\\0&0&2&-2\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+R_3]{R_2\leftarrow R_2+2R_1}
+\begin{pmatrix}2&-4&1&1\\0&-6&5&1\\0&0&-2&2\\0&0&0&0\end{pmatrix}
+\]
+So \(\rank(A-3I)=3\), \(\dim\mathcal N(A-3I)=1\), and back substitution gives \(x_3=x_4\), \(x_2=x_4\) and
+\(x_1=x_4\): the vector \(\one_4\) is a basis of \(\mathcal N(A-3I)\). Indeed every row of \(A\) adds up to \(3\).
+\end{itemize}
+Check: \(A(-1,1,0,0)'=(3,-3,0,0)'\) and \(A(0,2,-1,1)'=(0,-2,1,-1)'\).
+\end{example}
+
+\subsection*{Eigenvalues of related matrices; trace and determinant}
+
+\begin{proposition}\label{r7-prop-eig-poly}
+Let \(A\in\R^{n\times n}\).
+\begin{enumerate}
+\item If \(Ax=\lambda x\) with \(\lambda\in\R\) and \(x\ne0\), then \(A^kx=\lambda^kx\) (\(k=0,1,2,\dots\)) and
+\(f(A)x=f(\lambda)x\) for every real polynomial \(f\); in particular \((cA)x=(c\lambda)x\) and \((A+cI)x=(\lambda+c)x\)
+(\(c\in\R\)). So \(x\) is an eigenvector of \(A^k\), \(f(A)\), \(cA\) and \(A+cI\), belonging to \(\lambda^k\),
+\(f(\lambda)\), \(c\lambda\) and \(\lambda+c\).
+\item If, moreover, \(A\) is invertible, then \(\lambda\ne0\) and \(A^{-1}x=\lambda^{-1}x\).
+\item If \(A\) has the eigenvalues \(\lambda_1,\dots,\lambda_n\) (with multiplicity) and \(c\in\R\), then \(A+cI\) has the
+eigenvalues \(\lambda_1+c,\dots,\lambda_n+c\), and, if \(c\ne0\), \(cA\) has the eigenvalues \(c\lambda_1,\dots,c\lambda_n\).
+\item \(p_{A'}=p_A\): \(A'\) and \(A\) have the same eigenvalues with the same algebraic multiplicities.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a)
+\begin{itemize}
+\item By induction on \(k\): \(A^0x=x=\lambda^0x\), and if \(A^kx=\lambda^kx\), then
+\(A^{k+1}x=A^k(Ax)=A^k(\lambda x)=\lambda A^kx=\lambda^{k+1}x\) (Theorem~\ref{r1-thm-rules}).
+\item If \(f=\sum_kc_kt^k\), then \(f(A)x=\sum_kc_kA^kx=\sum_kc_k\lambda^kx=f(\lambda)x\). For \(f=ct\) and \(f=t+c\) this
+gives \((cA)x=c\lambda x\) and \((A+cI)x=(\lambda+c)x\). In each case \(x\ne0\).
+\end{itemize}
+(b) If \(\lambda=0\), then \(Ax=0\) with \(x\ne0\), and \(A\) would not be invertible (Theorem~\ref{r2-thm-invertible})
+\(\contradiction\) So \(\lambda\ne0\), and \(x=A^{-1}(Ax)=A^{-1}(\lambda x)=\lambda A^{-1}x\), that is,
+\(A^{-1}x=\lambda^{-1}x\).
+
+(c)
+\begin{itemize}
+\item For \(s\in\R\), \(\det\bigl(sI-(A+cI)\bigr)=\det\bigl((s-c)I-A\bigr)=p_A(s-c)=(s-c-\lambda_1)\cdots(s-c-\lambda_n)\)
+(Definition~\ref{r7-def-charpoly}(a), Proposition~\ref{r7-prop-poly}(b)), the value at \(s\) of
+\(\bigl(t-(\lambda_1+c)\bigr)\cdots\bigl(t-(\lambda_n+c)\bigr)\). By Proposition~\ref{r7-prop-poly}(d) this product is
+\(p_{A+cI}\), and Definition~\ref{r7-def-eigenvalues} gives the eigenvalues.
+\item Let \(c\ne0\). For \(s\in\R\), \(\det(sI-cA)=\det\bigl(c(\tfrac scI-A)\bigr)=c^np_A(\tfrac sc)
+=c^n(\tfrac sc-\lambda_1)\cdots(\tfrac sc-\lambda_n)=(s-c\lambda_1)\cdots(s-c\lambda_n)\)
+(Theorem~\ref{r5d-thm-product}(c)); conclude as before.
+\end{itemize}
+(d) For \(c\in\R\), \((cI-A)'=cI-A'\) (Theorem~\ref{r1-thm-transpose}), so \(\det(cI-A')=\det(cI-A)\)
+(Theorem~\ref{r5d-thm-transpose}). By Definition~\ref{r7-def-charpoly}(a) and Proposition~\ref{r7-prop-poly}(d),
+\(p_{A'}=p_A\).
+\end{proof}
+In Example~\ref{r7-exm-two}, by (a), \(v_1\) and \(v_2\) are eigenvectors of \(A^2\) belonging to \(1\), \(v_3\) and
+\(v_4\) eigenvectors of \(A^2\) belonging to \(4\), and \(v_1,\dots,v_4\) eigenvectors of \(A-2I\) belonging to \(-1\),
+\(-3\), \(0\), \(-4\). The eigenvalues of that \(A\) are \(1\), \(-1\), \(2\), \(-2\) (the remark after
+Definition~\ref{r7-def-charpoly}), so \(A\) is invertible (Theorem~\ref{r7-thm-eig-singular} with \(\lambda=0\)), and
+by (b), \(v_1,\dots,v_4\) are eigenvectors of \(A^{-1}\) belonging to \(1\), \(-1\), \(\frac12\), \(-\frac12\).
+
+\begin{theorem}\label{r7-thm-trace-det}
+Let \(A\in\R^{n\times n}\) have the eigenvalues \(\lambda_1,\dots,\lambda_n\), listed with multiplicity. Then
+\[
+\tr A=\lambda_1+\lambda_2+\dots+\lambda_n,\qquad\det A=\lambda_1\lambda_2\cdots\lambda_n
+\]
+Hence \(A\) is invertible if and only if \(0\) is not an eigenvalue of \(A\).
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+\item \(p_A=(t-\lambda_1)\cdots(t-\lambda_n)\) (Definition~\ref{r7-def-eigenvalues}). By Proposition~\ref{r7-prop-poly}(e),
+its coefficient of \(t^{n-1}\) is \(-(\lambda_1+\dots+\lambda_n)\) and its constant term is \((-1)^n\lambda_1\cdots\lambda_n\).
+\item By Definition~\ref{r7-def-charpoly}(b), the same two coefficients are \(-\tr A\) and \((-1)^n\det A\).
+\item \(A\) is invertible if and only if \(\det A\ne0\) (Theorem~\ref{r5d-thm-product}(a)), that is, if and only if no
+\(\lambda_i\) is \(0\).\qedhere
+\end{itemize}
+\end{proof}
+For the matrix of Example~\ref{r7-exm-charpoly}, \(\tr A=4=0+2+2\) and \(\det A=0=0\cdot2\cdot2\), so \(A\) is not
+invertible; for that of Example~\ref{r7-exm-complex}, \(\tr A=5=1+(2+i)+(2-i)\) and \(\det A=5=1\cdot(2+i)(2-i)\).
+
+\needspace{12\baselineskip}
+\subsection*{Eigenvectors of distinct eigenvalues; multiplicities}
+
+\begin{theorem}\label{r7-thm-indep}
+Let \(v_1,\dots,v_m\) be eigenvectors of \(A\in\R^{n\times n}\) belonging to real eigenvalues
+\(\lambda_1,\dots,\lambda_m\) that are pairwise distinct (\(\lambda_i\ne\lambda_j\) for \(i\ne j\)). Then
+\(v_1,\dots,v_m\) are linearly independent. In particular, if \(A\) has \(n\) distinct real eigenvalues, then
+eigenvectors belonging to them form a basis of \(\R^n\).
+\end{theorem}
+\begin{proof}
+Induction on \(m\). For \(m=0\) the empty list is independent (Definition~\ref{r3-def-independence}). Let
+\(m\geqslant1\), assume the statement for \(m-1\) eigenvectors, and let \(c_1v_1+\dots+c_mv_m=0\).
+\begin{itemize}
+\item Multiplying by \(\lambda_m\) gives \(\sum_ic_i\lambda_mv_i=0\); multiplying by \(A\) gives \(\sum_ic_i\lambda_iv_i=0\),
+since \(Av_i=\lambda_iv_i\) (Theorem~\ref{r1-thm-rules}).
+\item Subtracting, the \(v_m\) term vanishes:
+\(c_1(\lambda_m-\lambda_1)v_1+\dots+c_{m-1}(\lambda_m-\lambda_{m-1})v_{m-1}=0\).
+\item By the induction hypothesis, \(c_i(\lambda_m-\lambda_i)=0\) for \(i<m\), and \(c_i=0\) since \(\lambda_m\ne\lambda_i\).
+\item Then \(c_mv_m=0\) with \(v_m\ne0\), so \(c_m=0\) (Proposition~\ref{r3-prop-dependence}(a)).
+\end{itemize}
+If \(A\) has \(n\) distinct real eigenvalues, eigenvectors belonging to them are \(n\) independent vectors of \(\R^n\),
+which has dimension \(n\) (Theorem~\ref{thm:r4-dimension}); so they form a basis (Theorem~\ref{thm:r4-counting}(d)).
+\end{proof}
+
+\begin{definition}\label{r7-def-multiplicity}
+Let \(A\in\R^{n\times n}\) and \(c\in\R\). The \textbf{geometric multiplicity} of \(c\) is
+\[
+g_A(c)=\dim\mathcal N(A-cI)=n-\rank(A-cI)
+\]
+(Theorem~\ref{thm:r4-rank-nullity}). So \(g_A(c)\geqslant1\) if \(c\) is a real eigenvalue of \(A\), and \(g_A(c)=0\)
+otherwise (Definition~\ref{r7-def-eigen}, Theorem~\ref{thm:r4-dimension}).
+\end{definition}
+By Theorem~\ref{r7-thm-similar}(a),(b), similar matrices have the same algebraic and geometric multiplicities. In
+Example~\ref{r7-exm-charpoly}, \(g_A(0)=a_A(0)=1\), but \(g_A(2)=1<2=a_A(2)\).
+
+\begin{theorem}\label{r7-thm-geo-alg}
+If \(c\) is a real eigenvalue of \(A\in\R^{n\times n}\), then \(1\leqslant g_A(c)\leqslant a_A(c)\). In particular, if
+\(c\) is simple, then \(g_A(c)=1\), that is, \(\rank(A-cI)=n-1\).
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+\item \(g=g_A(c)\geqslant1\) (Definition~\ref{r7-def-multiplicity}). Extend a basis \(x_1,\dots,x_g\) of \(\mathcal N(A-cI)\)
+to a basis \(x_1,\dots,x_n\) of \(\R^n\) (Theorem~\ref{thm:r4-counting}(b)). Then \(P=[x_1\ \cdots\ x_n]\) has
+independent columns, so it is invertible (Theorem~\ref{thm:r4-rank-rules}(b),(d)).
+\item For \(j\leqslant g\), \(Ax_j=cx_j\); put \(m_{ij}=c\delta_{ij}\). For \(j>g\), write \(Ax_j=\sum_{i=1}^nm_{ij}x_i\), as
+\(x_1,\dots,x_n\) span \(\R^n\). With \(M=(m_{ij})\), \(\col_j(AP)=Ax_j=\sum_im_{ij}x_i=P\col_j(M)\) for every \(j\)
+(Theorem~\ref{r1-thm-views}(a),(b)); so \(AP=PM\) and \(M=P^{-1}AP\).
+\item The first \(g\) columns of \(M\) are \(ce_1,\dots,ce_g\): \(M=cI_n\) if \(g=n\), and
+\(M=\left(\begin{smallmatrix}cI_g&C\\0&D\end{smallmatrix}\right)\) with \(D\in\R^{(n-g)\times(n-g)}\) if \(g<n\). By
+Theorem~\ref{r7-thm-similar}(a) and Proposition~\ref{r7-prop-block-triangular}(a),(b), the eigenvalues of \(A\) are those of
+\(M\): \(c\) (\(g\) times), together with those of \(D\) if \(g<n\). Hence \(a_A(c)\geqslant g\).
+\item If \(c\) is simple, then \(1\leqslant g_A(c)\leqslant a_A(c)=1\), and \(\rank(A-cI)=n-g_A(c)=n-1\).\qedhere
+\end{itemize}
+\end{proof}
+
+\needspace{16\baselineskip}
+\subsection*{Diagonalization}
+
+\begin{definition}\label{r7-def-diagonalizable}
+A matrix \(A\in\R^{n\times n}\) is \textbf{diagonalizable} if \(P^{-1}AP\) is diagonal for some invertible
+\(P\in\R^{n\times n}\), that is, if \(A\) is similar to a diagonal matrix; \(P\) is then said to \textbf{diagonalize}
+\(A\). Let \(P=[p_1\ \cdots\ p_n]\in\R^{n\times n}\) be invertible and \(\Lambda=\diag(\lambda_1,\dots,\lambda_n)\) with
+\(\lambda_j\in\R\). Then
+\[
+P^{-1}AP=\Lambda\iff AP=P\Lambda\iff A=P\Lambda P^{-1}\iff Ap_j=\lambda_jp_j\quad(1\leqslant j\leqslant n)
+\]
+Consequently \(A\) is diagonalizable if and only if \(\R^n\) has a basis consisting of eigenvectors of \(A\). If
+\(P^{-1}AP=\Lambda\), then \(p_j\) is an eigenvector belonging to \(\lambda_j\), and \(\lambda_1,\dots,\lambda_n\) are the
+eigenvalues of \(A\), listed with multiplicity; in particular all eigenvalues of a diagonalizable matrix are real.
+\end{definition}
+\begin{proof}
+\begin{itemize}
+\item If \(P^{-1}AP=\Lambda\), then \(AP=P(P^{-1}AP)=P\Lambda\) and \(A=P\Lambda P^{-1}\); if \(AP=P\Lambda\) or
+\(A=P\Lambda P^{-1}\), then \(P^{-1}AP=\Lambda\).
+\item \(\col_j(AP)=Ap_j\) and \(\col_j(P\Lambda)=P(\lambda_je_j)=\lambda_jp_j\) (Theorem~\ref{r1-thm-views}(a),(b)); two
+matrices are equal if and only if their columns are.
+\item If \(P^{-1}AP=\Lambda\), the columns of \(P\) form a basis of \(\R^n\) (Example~\ref{r3-exm-invertible-basis}), so they
+are nonzero (Proposition~\ref{r3-prop-dependence}(a)) and, as \(Ap_j=\lambda_jp_j\), eigenvectors. Conversely, if
+eigenvectors \(p_1,\dots,p_n\) with \(Ap_j=\lambda_jp_j\) form a basis of \(\R^n\), then \(P=[p_1\ \cdots\ p_n]\) is invertible
+(Theorem~\ref{thm:r4-rank-rules}(b),(d)) and \(P^{-1}AP=\Lambda\).
+\item By Theorem~\ref{r7-thm-similar}(a) and Proposition~\ref{r7-prop-block-triangular}(b),
+\(p_A=p_\Lambda=(t-\lambda_1)\cdots(t-\lambda_n)\); so \(\lambda_1,\dots,\lambda_n\) are the eigenvalues of \(A\)
+(Definition~\ref{r7-def-eigenvalues}).\qedhere
+\end{itemize}
+\end{proof}
+If \(P^{-1}AP=\Lambda\) and \(c=P^{-1}x\) is the vector of coordinates of \(x\in\R^n\) in the basis \(p_1,\dots,p_n\)
+(Example~\ref{r3-exm-invertible-basis}), then the coordinates of \(Ax\) are
+\(P^{-1}Ax=\Lambda P^{-1}x=\Lambda c=(\lambda_1c_1,\dots,\lambda_nc_n)'\) (as \(P^{-1}A=\Lambda P^{-1}\); Proposition~\ref{r1-prop-diag}(a)):
+in a basis of eigenvectors, \(A\) multiplies the \(j\)th coordinate by \(\lambda_j\).
+
+\begin{lemma}\label{r7-lem-eigenspaces}
+Let \(c_1,\dots,c_k\) (\(k\geqslant1\)) be distinct real eigenvalues of \(A\in\R^{n\times n}\), and
+\(W_i=\mathcal N(A-c_iI)\).
+\begin{enumerate}
+\item If \(w_i\in W_i\) (\(1\leqslant i\leqslant k\)) and \(w_1+\dots+w_k=0\), then \(w_i=0\) for every \(i\).
+\item If \(v_{i1},\dots,v_{id_i}\) is a basis of \(W_i\) for each \(i\), then the \(d_1+\dots+d_k\) vectors
+\(v_{11},\dots,v_{1d_1},\dots,v_{k1},\dots,v_{kd_k}\) are linearly independent.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(a)
+\begin{itemize}
+\item For a real polynomial \(f\) and \(w\in W_i\), \(f(A)w=f(c_i)w\) (Proposition~\ref{r7-prop-eig-poly}(a) if \(w\ne0\);
+both sides are \(0\) if \(w=0\)). Applying \(f(A)\) to \(w_1+\dots+w_k=0\) gives \(f(c_1)w_1+\dots+f(c_k)w_k=0\)
+(Theorem~\ref{r1-thm-rules}).
+\item For a fixed \(i\), let \(f_i=\prod_{j\ne i}\frac{t-c_j}{c_i-c_j}\), the product over \(j\in\{1,\dots,k\}\), \(j\ne i\)
+(\(f_1=1\) if \(k=1\)). By Proposition~\ref{r7-prop-poly}(b), \(f_i(c_l)=\prod_{j\ne i}\frac{c_l-c_j}{c_i-c_j}\), which is
+\(1\) for \(l=i\) and \(0\) for \(l\ne i\) (the factor \(j=l\) vanishes).
+\item With \(f=f_i\), the relation of the first item reads \(w_i=0\).
+\end{itemize}
+(b) A linear relation among these vectors has the form \(w_1+\dots+w_k=0\) with \(w_i=\sum_la_{il}v_{il}\in W_i\). By (a),
+every \(w_i=0\), and then every \(a_{il}=0\), since \(v_{i1},\dots,v_{id_i}\) are independent.
+\end{proof}
+
+\needspace{15\baselineskip}
+\begin{theorem}\label{r7-thm-diag-criterion}
+Let \(A\in\R^{n\times n}\), let \(c_1,\dots,c_k\) be the distinct real eigenvalues of \(A\) (\(k\geqslant0\); an empty sum
+is \(0\), an empty product \(1\)), and let \(W_i=\mathcal N(A-c_iI)\). The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\item \(A\) is diagonalizable;
+\item \(p_A=(t-c_1)^{d_1}\cdots(t-c_k)^{d_k}\) for some positive integers \(d_1,\dots,d_k\), and \(\dim W_i=d_i\) for each
+\(i\);
+\item \(\dim W_1+\dots+\dim W_k=n\).
+\end{enumerate}
+In other words, \(A\) is diagonalizable if and only if all its eigenvalues are real and \(g_A(c)=a_A(c)\) for each of
+them, that is, \(\rank(A-c_iI)=n-a_A(c_i)\) for each \(i\). In particular, an \(n\times n\) matrix with \(n\) distinct real
+eigenvalues is diagonalizable.
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+\item (i)\(\Rightarrow\)(ii): let \(P^{-1}AP=\Lambda=\diag(\lambda_1,\dots,\lambda_n)\). By
+Definition~\ref{r7-def-diagonalizable}, \(\lambda_1,\dots,\lambda_n\) are the eigenvalues of \(A\); they are real, so each is
+one of \(c_1,\dots,c_k\). Let \(d_i\) be the number of \(j\) with \(\lambda_j=c_i\); \(d_i\geqslant1\), as \(c_i\) is an
+eigenvalue. Then \(p_A=(t-\lambda_1)\cdots(t-\lambda_n)=(t-c_1)^{d_1}\cdots(t-c_k)^{d_k}\).
+\item Still (i)\(\Rightarrow\)(ii): \(\dim W_i=\dim\mathcal N(\Lambda-c_iI)\) (Theorem~\ref{r7-thm-similar}(b)). The \(j\)th entry
+of \((\Lambda-c_iI)x\) is \((\lambda_j-c_i)x_j\), so \(\mathcal N(\Lambda-c_iI)\) consists of the \(x\) with \(x_j=0\) whenever
+\(\lambda_j\ne c_i\); it has the basis \(\{e_j:\lambda_j=c_i\}\) of \(d_i\) vectors (Definition~\ref{r3-def-basis},
+Proposition~\ref{r3-prop-dependence}(b)).
+\item (ii)\(\Rightarrow\)(iii): \(\dim W_1+\dots+\dim W_k=d_1+\dots+d_k=\deg p_A=n\) (Proposition~\ref{r7-prop-poly}(a),
+Definition~\ref{r7-def-charpoly}(b)).
+\item (iii)\(\Rightarrow\)(i): as \(n\geqslant1\), \(k\geqslant1\). By Lemma~\ref{r7-lem-eigenspaces}(b), bases of
+\(W_1,\dots,W_k\) together give \(n\) independent eigenvectors of \(A\); they form a basis of \(\R^n\)
+(Theorem~\ref{thm:r4-counting}(d)), and \(A\) is diagonalizable (Definition~\ref{r7-def-diagonalizable}).
+\item In (ii), \(d_i=a_A(c_i)\) (Theorem~\ref{r7-thm-factor}(b)), and \(p_A\) has no other roots (Theorem~\ref{r7-thm-factor}(c)); so (ii) says that all
+eigenvalues are real and \(g_A(c_i)=a_A(c_i)\). Conversely, if all eigenvalues are real, then
+\(p_A=(t-c_1)^{a_A(c_1)}\cdots(t-c_k)^{a_A(c_k)}\) (Definition~\ref{r7-def-eigenvalues}), and (ii) holds when
+\(g_A(c_i)=a_A(c_i)\) for each \(i\). By Definition~\ref{r7-def-multiplicity}, \(g_A(c_i)=a_A(c_i)\) means
+\(\rank(A-c_iI)=n-a_A(c_i)\).
+\item If \(A\) has \(n\) distinct real eigenvalues, eigenvectors belonging to them form a basis of \(\R^n\)
+(Theorem~\ref{r7-thm-indep}), so \(A\) is diagonalizable (Definition~\ref{r7-def-diagonalizable}).\qedhere
+\end{itemize}
+\end{proof}
+For example, the matrix of Example~\ref{r7-exm-charpoly} is not diagonalizable: its eigenvalues \(0\), \(2\), \(2\) are
+real, but \(g_A(2)=1<2=a_A(2)\). Nor is the matrix of Example~\ref{r7-exm-complex}, which has non-real eigenvalues.
+The matrix \(A\) of Example~\ref{r7-exm-three} has the four distinct real eigenvalues \(-3\), \(-1\), \(1\), \(3\), so it is
+diagonalizable. The eigenvectors found there are independent (Theorem~\ref{r7-thm-indep}), so
+\[
+P=\begin{pmatrix}-1&0&1&1\\1&2&1&1\\0&-1&0&1\\0&1&0&1\end{pmatrix}
+\]
+is invertible (Theorem~\ref{thm:r4-rank-rules}(b),(d)), and \(P^{-1}AP=\Lambda=\diag(-3,-1,1,3)\)
+(Definition~\ref{r7-def-diagonalizable}).
+
+To diagonalize \(A\in\R^{n\times n}\): find the eigenvalues, the roots of \(p_A\); if one of them is not real, \(A\) is not
+diagonalizable (Definition~\ref{r7-def-diagonalizable}). For each real eigenvalue \(c\), the special solutions of \((A-cI)x=0\) form a basis of
+\(\mathcal N(A-cI)\) (Theorem~\ref{thm:r4-four-bases}(c)), and \(g_A(c)\) is their number, the number of free unknowns.
+If \(g_A(c)=a_A(c)\) for every eigenvalue \(c\), put these bases into the columns of \(P\) and the corresponding
+eigenvalues, in the same order, on the diagonal of \(\Lambda\); then \(P^{-1}AP=\Lambda\)
+(Lemma~\ref{r7-lem-eigenspaces}(b), Theorem~\ref{thm:r4-counting}(d), Definition~\ref{r7-def-diagonalizable}). By
+Theorem~\ref{r7-thm-geo-alg}, only the eigenvalues with \(a_A(c)\geqslant2\) need to be checked.
+
+\begin{example}\label{r7-exm-diagonalize}
+Show that
+\[
+A=\begin{pmatrix}5&-6&-6\\-1&4&2\\3&-6&-4\end{pmatrix}
+\]
+is diagonalizable, and find an invertible \(P\) and a diagonal \(\Lambda\) with \(P^{-1}AP=\Lambda\).
+
+\textit{Solution.}
+\begin{itemize}
+\item For \(t\in\R\), subtract column \(3\) from column \(2\) and take the factor \(t-2\) out of column \(2\)
+(Definition~\ref{r5d-def-det}(b),(a) for columns, Theorem~\ref{r5d-thm-transpose}):
+\[
+\begin{aligned}
+\det(tI-A)&=\det\begin{pmatrix}t-5&6&6\\1&t-4&-2\\-3&6&t+4\end{pmatrix}
+=\det\begin{pmatrix}t-5&0&6\\1&t-2&-2\\-3&2-t&t+4\end{pmatrix}\\
+&=(t-2)\det\begin{pmatrix}t-5&0&6\\1&1&-2\\-3&-1&t+4\end{pmatrix}
+\end{aligned}
+\]
+Add row \(2\) to row \(3\) (Definition~\ref{r5d-def-det}(b)) and expand along column \(2\), whose only nonzero entry is
+the \((2,2)\) entry \(1\) (Theorem~\ref{r5d-thm-expansion}):
+\[
+\det(tI-A)=(t-2)\det\begin{pmatrix}t-5&0&6\\1&1&-2\\-2&0&t+2\end{pmatrix}
+=(t-2)\det\begin{pmatrix}t-5&6\\-2&t+2\end{pmatrix}=(t-2)(t^2-3t+2)
+\]
+As \(t^2-3t+2=(t-1)(t-2)\), \(p_A=(t-1)(t-2)^2\): the eigenvalues are \(1\), \(2\), \(2\), with \(a_A(1)=1\) and
+\(a_A(2)=2\).
+\item \(\lambda=1\):
+\[
+\begin{gathered}
+A-I=\begin{pmatrix}4&-6&-6\\-1&3&2\\3&-6&-5\end{pmatrix}
+\xrightarrow{R_1\leftrightarrow R_2}
+\begin{pmatrix}-1&3&2\\4&-6&-6\\3&-6&-5\end{pmatrix}
+\xrightarrow[R_3\leftarrow R_3+3R_1]{R_2\leftarrow R_2+4R_1}
+\begin{pmatrix}-1&3&2\\0&6&2\\0&3&1\end{pmatrix}
+\\
+\xrightarrow{R_2\leftrightarrow R_3}
+\begin{pmatrix}-1&3&2\\0&3&1\\0&6&2\end{pmatrix}
+\xrightarrow{R_3\leftarrow R_3-2R_2}
+\begin{pmatrix}-1&3&2\\0&3&1\\0&0&0\end{pmatrix}
+\end{gathered}
+\]
+So \(\rank(A-I)=2\) (Definition~\ref{def:r4-rank}) and \(g_A(1)=1\) (Definition~\ref{r7-def-multiplicity}). The
+equations \(-x_1+3x_2+2x_3=0\),
+\(3x_2+x_3=0\) with \(x_3=3\) give \(x_2=-1\) and \(x_1=3\): \(\alpha_1=(3,-1,3)'\) is a basis of \(\mathcal N(A-I)\)
+(Theorem~\ref{thm:r4-counting}(d)).
+\item \(\lambda=2\):
+\[
+\begin{gathered}
+A-2I=\begin{pmatrix}3&-6&-6\\-1&2&2\\3&-6&-6\end{pmatrix}
+\xrightarrow{R_1\leftrightarrow R_2}
+\begin{pmatrix}-1&2&2\\3&-6&-6\\3&-6&-6\end{pmatrix}
+\xrightarrow[R_3\leftarrow R_3+3R_1]{R_2\leftarrow R_2+3R_1}
+\begin{pmatrix}-1&2&2\\0&0&0\\0&0&0\end{pmatrix}
+\\
+\xrightarrow{R_1\leftarrow-R_1}
+\begin{pmatrix}1&-2&-2\\0&0&0\\0&0&0\end{pmatrix}
+\end{gathered}
+\]
+So \(g_A(2)=3-1=2\), and the special solutions \(\alpha_2=(2,1,0)'\), \(\alpha_3=(2,0,1)'\) form a basis of
+\(\mathcal N(A-2I)\) (Theorem~\ref{thm:r4-four-bases}(c)).
+\item \(g_A(1)+g_A(2)=3\), so \(A\) is diagonalizable (Theorem~\ref{r7-thm-diag-criterion}), and
+\(\alpha_1,\alpha_2,\alpha_3\) form a basis of \(\R^3\) (Lemma~\ref{r7-lem-eigenspaces}(b),
+Theorem~\ref{thm:r4-counting}(d)). With
+\[
+P=[\alpha_1\ \alpha_2\ \alpha_3]=\begin{pmatrix}3&2&2\\-1&1&0\\3&0&1\end{pmatrix},\qquad\Lambda=\diag(1,2,2),\qquad
+AP=\begin{pmatrix}3&4&4\\-1&2&0\\3&0&2\end{pmatrix}=P\Lambda
+\]
+we have \(P^{-1}AP=\Lambda\) (Definition~\ref{r7-def-diagonalizable}).
+\end{itemize}
+\end{example}
+
+\subsection*{Powers and rank of a diagonalizable matrix}
+
+\begin{proposition}\label{r7-prop-diag-powers}
+Let \(A=P\Lambda P^{-1}\) with \(P=[p_1\ \cdots\ p_n]\in\R^{n\times n}\) invertible and
+\(\Lambda=\diag(\lambda_1,\dots,\lambda_n)\), \(\lambda_i\in\R\).
+\begin{enumerate}
+\item \(A^k=P\Lambda^kP^{-1}=P\diag(\lambda_1^k,\dots,\lambda_n^k)P^{-1}\) for \(k=0,1,2,\dots\); hence, for \(x\in\R^n\)
+and \(c=P^{-1}x\),
+\[
+A^kx=c_1\lambda_1^kp_1+c_2\lambda_2^kp_2+\dots+c_n\lambda_n^kp_n
+\]
+\item \(f(A)=Pf(\Lambda)P^{-1}=P\diag\bigl(f(\lambda_1),\dots,f(\lambda_n)\bigr)P^{-1}\) for every real polynomial \(f\).
+\item \(A\) is invertible if and only if every \(\lambda_i\ne0\). Then \(A^{-1}=P\Lambda^{-1}P^{-1}\), and for \(k\geqslant1\) the
+power \(A^{-k}=(A^{-1})^k\) equals \(P\diag(\lambda_1^{-k},\dots,\lambda_n^{-k})P^{-1}\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a)
+\begin{itemize}
+\item By induction on \(k\): \(A^0=I=P\Lambda^0P^{-1}\), and if \(A^k=P\Lambda^kP^{-1}\), then
+\(A^{k+1}=A^kA=P\Lambda^kP^{-1}P\Lambda P^{-1}=P\Lambda^{k+1}P^{-1}\) (Theorem~\ref{r1-thm-rules}).
+\item \(\Lambda^k=\diag(\lambda_1^k,\dots,\lambda_n^k)\) (Proposition~\ref{r1-prop-powers}(d)).
+\item \(A^kx=P\Lambda^kP^{-1}x=P\Lambda^kc\), and \(\Lambda^kc=(\lambda_1^kc_1,\dots,\lambda_n^kc_n)'\)
+(Proposition~\ref{r1-prop-diag}(a)); so \(A^kx=\sum_j\lambda_j^kc_jp_j\) (Theorem~\ref{r1-thm-views}(b)).
+\end{itemize}
+(b) If \(f=\sum_kd_kt^k\), then by (a) and Theorem~\ref{r1-thm-rules}, \(f(A)=\sum_kd_kP\Lambda^kP^{-1}=Pf(\Lambda)P^{-1}\);
+and \(f(\Lambda)=\sum_kd_k\diag(\lambda_1^k,\dots,\lambda_n^k)=\diag\bigl(f(\lambda_1),\dots,f(\lambda_n)\bigr)\), entry by
+entry.
+
+\needspace{3\baselineskip}
+(c)
+\begin{itemize}
+\item The eigenvalues of \(A\) are \(\lambda_1,\dots,\lambda_n\) (Definition~\ref{r7-def-diagonalizable}), so \(A\) is
+invertible if and only if every \(\lambda_i\ne0\) (Theorem~\ref{r7-thm-trace-det}).
+\item Then \(\Lambda^{-1}=\diag(\lambda_1^{-1},\dots,\lambda_n^{-1})\) (Definition~\ref{r2-def-inverse}), and
+\(A^{-1}=(P^{-1})^{-1}\Lambda^{-1}P^{-1}=P\Lambda^{-1}P^{-1}\) (Theorem~\ref{r2-thm-inverse-props}(a),(b)). Applying (a) to
+\(A^{-1}=P\Lambda^{-1}P^{-1}\) gives \(A^{-k}=P(\Lambda^{-1})^kP^{-1}=P\diag(\lambda_1^{-k},\dots,\lambda_n^{-k})P^{-1}\).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{example}\label{r7-exm-diag-powers}
+Let
+\[
+B=\begin{pmatrix}1&2&-2&2\\-2&3&-2&0\\0&-2&3&-2\\2&-2&2&1\end{pmatrix}
+\]
+Show that \(3\) and \(1\) are eigenvalues of \(B\), diagonalize \(B\), and find \(B^k\) for \(k=0,1,2,\dots\)
+
+\textit{Solution.}
+\begin{itemize}
+\item \(\lambda=3\):
+\[
+\begin{gathered}
+B-3I=\begin{pmatrix}-2&2&-2&2\\-2&0&-2&0\\0&-2&0&-2\\2&-2&2&-2\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+R_1]{R_2\leftarrow R_2-R_1}
+\begin{pmatrix}-2&2&-2&2\\0&-2&0&-2\\0&-2&0&-2\\0&0&0&0\end{pmatrix}
+\xrightarrow{R_3\leftarrow R_3-R_2}
+\begin{pmatrix}-2&2&-2&2\\0&-2&0&-2\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\\
+\xrightarrow[R_2\leftarrow-\frac12R_2]{R_1\leftarrow-\frac12R_1}
+\begin{pmatrix}1&-1&1&-1\\0&1&0&1\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\xrightarrow{R_1\leftarrow R_1+R_2}
+\begin{pmatrix}1&0&1&0\\0&1&0&1\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+So \(\rank(B-3I)=2<4\) (Definition~\ref{def:r4-rank}): \(3\) is an eigenvalue (Theorem~\ref{r7-thm-eig-singular}), with
+\(g_B(3)=4-2=2\) (Definition~\ref{r7-def-multiplicity}). The special solutions \(p_1=(-1,0,1,0)'\) and
+\(p_2=(0,-1,0,1)'\) form a basis of \(\mathcal N(B-3I)\) (Theorem~\ref{thm:r4-four-bases}(c)).
+\item \(\lambda=1\):
+\[
+\begin{gathered}
+B-I=\begin{pmatrix}0&2&-2&2\\-2&2&-2&0\\0&-2&2&-2\\2&-2&2&0\end{pmatrix}
+\xrightarrow{R_1\leftrightarrow R_2}
+\begin{pmatrix}-2&2&-2&0\\0&2&-2&2\\0&-2&2&-2\\2&-2&2&0\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+R_1]{R_3\leftarrow R_3+R_2}
+\begin{pmatrix}-2&2&-2&0\\0&2&-2&2\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\\
+\xrightarrow[R_2\leftarrow\frac12R_2]{R_1\leftarrow-\frac12R_1}
+\begin{pmatrix}1&-1&1&0\\0&1&-1&1\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\xrightarrow{R_1\leftarrow R_1+R_2}
+\begin{pmatrix}1&0&0&1\\0&1&-1&1\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+So \(\rank(B-I)=2\): \(1\) is an eigenvalue with \(g_B(1)=2\), and the special solutions \(p_3=(0,1,1,0)'\) and
+\(p_4=(-1,-1,0,1)'\) form a basis of \(\mathcal N(B-I)\).
+\item By Lemma~\ref{r7-lem-eigenspaces}(b), \(p_1,\dots,p_4\) are four independent eigenvectors, a basis of \(\R^4\)
+(Theorem~\ref{thm:r4-counting}(d)). So \(P^{-1}BP=\Lambda\) (Definition~\ref{r7-def-diagonalizable}) with
+\[
+P=[p_1\ p_2\ p_3\ p_4]=\begin{pmatrix}-1&0&0&-1\\0&-1&1&-1\\1&0&1&0\\0&1&0&1\end{pmatrix},\qquad
+\Lambda=\diag(3,3,1,1),\qquad
+P^{-1}=\begin{pmatrix}0&-1&1&-1\\1&-1&1&0\\0&1&0&1\\-1&1&-1&1\end{pmatrix}
+\]
+Check: \(P^{-1}P=I_4\), so this is the inverse (Theorem~\ref{r2-thm-invertible}); for instance, row \(1\) of \(P^{-1}\)
+times \(p_4\) is \(0+1+0-1=0\). The eigenvalues of \(B\), listed with multiplicity, are \(3\), \(3\), \(1\), \(1\)
+(Definition~\ref{r7-def-diagonalizable}), so \(a_B(3)=g_B(3)=2\) and \(a_B(1)=g_B(1)=2\).
+\item By Proposition~\ref{r7-prop-diag-powers}(a), \(B^k=P\diag(3^k,3^k,1,1)P^{-1}\). As
+\(\diag(3^k,3^k,1,1)=3^k\diag(1,1,0,0)+\bigl(I_4-\diag(1,1,0,0)\bigr)\) and \(PP^{-1}=I_4\),
+\[
+B^k=3^kE+(I_4-E),\qquad E=P\diag(1,1,0,0)P^{-1}
+\]
+For \(k=1\), \(B=3E+I_4-E=I_4+2E\), so \(E=\frac12(B-I_4)\) and
+\[
+B^k=I_4+\tfrac12(3^k-1)(B-I_4),\qquad
+B^2=I_4+4(B-I_4)=\begin{pmatrix}1&8&-8&8\\-8&9&-8&0\\0&-8&9&-8\\8&-8&8&1\end{pmatrix}
+\]
+\end{itemize}
+\end{example}
+
+\needspace{14\baselineskip}
+\begin{proposition}\label{r7-prop-diag-rank}
+Let \(A=P\Lambda P^{-1}\) with \(P=[p_1\ \cdots\ p_n]\in\R^{n\times n}\) invertible and
+\(\Lambda=\diag(\lambda_1,\dots,\lambda_n)\), \(\lambda_i\in\R\).
+\begin{enumerate}
+\item \(\rank A\) is the number of indices \(i\) with \(\lambda_i\ne0\), and the columns \(p_i\) with \(\lambda_i\ne0\) form a
+basis of \(\mathcal C(A)\). So \(\rank A\) is the number of nonzero eigenvalues of \(A\), listed with multiplicity.
+\item For every real polynomial \(f\), \(f(A)\) is diagonalizable, and its eigenvalues, listed with multiplicity, are
+\(f(\lambda_1),\dots,f(\lambda_n)\); hence \(\tr f(A)=f(\lambda_1)+\dots+f(\lambda_n)\) and
+\(\det f(A)=f(\lambda_1)\cdots f(\lambda_n)\). In particular, \(A^k\) has the eigenvalues \(\lambda_1^k,\dots,\lambda_n^k\)
+(\(k=0,1,2,\dots\)), and, if \(A\) is invertible, \(A^{-1}\) has the eigenvalues \(\lambda_1^{-1},\dots,\lambda_n^{-1}\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a) Let \(S\) be the set of indices \(i\) with \(\lambda_i\ne0\), and \(r\) the number of its elements.
+\begin{itemize}
+\item \(\rank A=\rank(P\Lambda P^{-1})=\rank\Lambda\) (Theorem~\ref{thm:r4-rank-product}(d)).
+\item Column \(i\) of \(\Lambda\) is \(\lambda_ie_i\) (Definition~\ref{r1-def-diag}), which is \(0\) for \(i\notin S\); so the \(r\)
+columns \(\lambda_ie_i\), \(i\in S\), span \(\mathcal C(\Lambda)\) (Definition~\ref{def:r4-spaces}). They are independent: if
+\(\sum_{i\in S}c_i\lambda_ie_i=0\), then every \(c_i\lambda_i=0\), as \(e_1,\dots,e_n\) are independent
+(Definition~\ref{r3-def-basis}), and so \(c_i=0\). Hence \(\rank\Lambda=\dim\mathcal C(\Lambda)=r\)
+(Definition~\ref{def:r4-rank}).
+\item If \(r=0\), then \(\Lambda=0\), so \(A=0\) and \(\mathcal C(A)=\{0\}\), with the empty basis. Let \(r\geqslant1\), let \(X\in\R^{n\times r}\)
+consist of the columns \(p_i\), \(i\in S\), and let \(\Delta\) be the \(r\times r\) diagonal matrix of the corresponding
+\(\lambda_i\). As \(Ap_i=\lambda_ip_i\) (Definition~\ref{r7-def-diagonalizable}), \(AX=X\Delta\)
+(Theorem~\ref{r1-thm-views}(a),(b)). \(\Delta\) is invertible (Definition~\ref{r2-def-inverse}), so
+\(X=AX\Delta^{-1}=A(X\Delta^{-1})\), and \(\mathcal C(X)\subseteq\mathcal C(A)\) (Theorem~\ref{thm:r4-rank-product}(a)).
+\item The columns of \(X\) are columns of the invertible \(P\), hence independent (Example~\ref{r3-exm-invertible-basis},
+Proposition~\ref{r3-prop-dependence}(b)). So \(\dim\mathcal C(X)=r=\rank A=\dim\mathcal C(A)\), and
+\(\mathcal C(X)=\mathcal C(A)\) (Theorem~\ref{thm:r4-counting}(a)): the columns of \(X\) form a basis of \(\mathcal C(A)\).
+\item The eigenvalues of \(A\), listed with multiplicity, are \(\lambda_1,\dots,\lambda_n\)
+(Definition~\ref{r7-def-diagonalizable}).
+\end{itemize}
+(b)
+\begin{itemize}
+\item By Proposition~\ref{r7-prop-diag-powers}(b), \(f(A)=Pf(\Lambda)P^{-1}\), that is, \(P^{-1}f(A)P=f(\Lambda)\), with
+\(f(\Lambda)=\diag\bigl(f(\lambda_1),\dots,f(\lambda_n)\bigr)\). So \(f(A)\) is diagonalizable, and its eigenvalues, listed
+with multiplicity, are \(f(\lambda_1),\dots,f(\lambda_n)\) (Definition~\ref{r7-def-diagonalizable}).
+\item Theorem~\ref{r7-thm-trace-det} gives the trace and the determinant; \(f=t^k\) gives the statement on \(A^k\).
+\item If \(A\) is invertible, then \(P^{-1}A^{-1}P=\Lambda^{-1}=\diag(\lambda_1^{-1},\dots,\lambda_n^{-1})\)
+(Proposition~\ref{r7-prop-diag-powers}(c)), and Definition~\ref{r7-def-diagonalizable} gives the eigenvalues of
+\(A^{-1}\).\qedhere
+\end{itemize}
+\end{proof}
+
+\needspace{14\baselineskip}
+\subsection*{Orthogonal triangularization}
+
+\begin{theorem}[Schur triangularization]\label{r7-thm-schur}
+Let \(A\in\R^{n\times n}\), and let all eigenvalues of \(A\) be real, listed with multiplicity in any order as
+\(\lambda_1,\dots,\lambda_n\). Then \(A=QTQ'\), where \(Q\in\R^{n\times n}\) is orthogonal and \(T\in\R^{n\times n}\) is
+upper triangular with the diagonal entries \(\lambda_1,\dots,\lambda_n\), in this order.
+\end{theorem}
+\begin{proof}
+Induction on \(n\); for \(n=1\), \(A=(\lambda_1)=I_1(\lambda_1)I_1'\). Let \(n\geqslant2\).
+\begin{itemize}
+\item \(\lambda_1\) is a real eigenvalue, so \(Ax=\lambda_1x\) for some \(x\ne0\) (Definition~\ref{r7-def-eigenvalues}).
+Then \(u=x/\lVert x\rVert\) has \(u'u=1\) and \(Au=\lambda_1u\). By Corollary~\ref{r6-cor-onb}(c) (with \(p=1\)), there is
+\(V\in\R^{n\times(n-1)}\) such that \(Q_1=[u\ V]\) is orthogonal; comparing blocks in \(Q_1'Q_1=I_n\)
+(Theorem~\ref{r5b-thm-block}(b),(c)) gives \(V'u=0\).
+\item By Theorem~\ref{r5b-thm-block}(b),(c) and \(Au=\lambda_1u\),
+\[
+Q_1'AQ_1=\begin{pmatrix}u'Au&u'AV\\V'Au&V'AV\end{pmatrix}=\begin{pmatrix}\lambda_1&b'\\0&A_1\end{pmatrix},\qquad
+b'=u'AV,\qquad A_1=V'AV\in\R^{(n-1)\times(n-1)}
+\]
+\item \(Q_1'=Q_1^{-1}\) (Proposition~\ref{r6-prop-orthonormal}(b)), so \(A\) and \(Q_1'AQ_1\) have the same eigenvalues
+(Theorem~\ref{r7-thm-similar}(a)); by Proposition~\ref{r7-prop-block-triangular}(a) these are \(\lambda_1\) together with
+the eigenvalues of \(A_1\). By Theorem~\ref{r7-thm-factor}(b), the eigenvalues of \(A_1\), listed with multiplicity, are
+\(\lambda_2,\dots,\lambda_n\), all real.
+\item By the induction hypothesis, \(A_1=Q_2T_2Q_2'\) with \(Q_2\in\R^{(n-1)\times(n-1)}\) orthogonal and \(T_2\) upper
+triangular with the diagonal entries \(\lambda_2,\dots,\lambda_n\); so \(Q_2'A_1Q_2=T_2\). Let \(S=\diag(1,Q_2)\). Then
+\(S'S=\diag(1,Q_2'Q_2)=I_n\) (Theorem~\ref{r5b-thm-block}(b), Proposition~\ref{r5b-prop-block-tri}(b)), so \(S\) is
+orthogonal, and so is \(Q=Q_1S\) (Theorem~\ref{r6-thm-orthogonal}(b)). As \(Q'=S'Q_1'\)
+(Theorem~\ref{r1-thm-transpose}), Theorem~\ref{r5b-thm-block}(c) gives
+\[
+Q'AQ=S'(Q_1'AQ_1)S=\begin{pmatrix}1&0\\0&Q_2'\end{pmatrix}\begin{pmatrix}\lambda_1&b'\\0&A_1\end{pmatrix}
+\begin{pmatrix}1&0\\0&Q_2\end{pmatrix}=\begin{pmatrix}\lambda_1&b'Q_2\\0&T_2\end{pmatrix}
+\]
+an upper triangular matrix \(T\) with the diagonal entries \(\lambda_1,\dots,\lambda_n\). As \(QQ'=I_n\),
+\(A=Q(Q'AQ)Q'=QTQ'\).\qedhere
+\end{itemize}
+\end{proof}
+Conversely, if \(A=QTQ'\) with \(Q\) orthogonal and \(T\) upper triangular, then \(A\) is similar to \(T\), as
+\(Q'=Q^{-1}\), and its eigenvalues are the diagonal entries of \(T\) (Theorem~\ref{r7-thm-similar}(a),
+Proposition~\ref{r7-prop-block-triangular}(b)), which are real. So such a factorization exists exactly when all
+eigenvalues of \(A\) are real; the matrix of Example~\ref{r7-exm-complex} has none.
+
+\begin{example}\label{r7-exm-schur}
+Let
+\[
+A=\begin{pmatrix}1&2&1&0\\1&2&0&1\\1&0&1&2\\0&1&1&2\end{pmatrix},\qquad
+G=\begin{pmatrix}1&1&1&1\\1&1&-1&-1\\1&-1&1&-1\\1&-1&-1&1\end{pmatrix},\qquad Q=\tfrac12G
+\]
+Every row of \(A\) adds up to \(4\), so \(A\one_4=4\one_4\), and \(u=\frac12\one_4\), the first column of \(Q\), has
+\(u'u=1\) and \(Au=4u\). The columns of \(G\) are orthogonal and have squared length \(4\) (for instance, columns \(2\)
+and \(3\) give \(1-1-1+1=0\)), so \(G'G=4I_4\) and \(Q'Q=I_4\): \(Q=[u\ V]\) is an orthogonal matrix as in the first
+step of the proof of Theorem~\ref{r7-thm-schur}. As \(G'=G\),
+\[
+AG=\begin{pmatrix}4&2&0&-2\\4&2&-2&0\\4&-2&0&2\\4&-2&-2&0\end{pmatrix},\qquad
+Q'AQ=\tfrac14G(AG)=\begin{pmatrix}4&0&-1&0\\0&2&0&-1\\0&0&1&0\\0&0&0&-1\end{pmatrix}=T
+\]
+In the notation of that proof, \(\lambda_1=4\), \(b'=(0,-1,0)\), and \(A_1=V'AV\) is already upper triangular, so the
+induction stops after one step. Hence \(A=QTQ'\), and the eigenvalues of \(A\) are \(4\), \(2\), \(1\), \(-1\)
+(Theorem~\ref{r7-thm-similar}(a), Proposition~\ref{r7-prop-block-triangular}(b)); \(\tr T=6=\tr A\) and
+\(\det T=-8=\det A\). As these four eigenvalues are real and distinct, \(A\) is diagonalizable
+(Theorem~\ref{r7-thm-diag-criterion}); but no orthogonal \(Q_0\) makes \(Q_0'AQ_0\) diagonal: if \(Q_0'AQ_0=\Lambda\),
+then \(A=Q_0\Lambda Q_0'\) (as \(Q_0Q_0'=I\), Proposition~\ref{r6-prop-orthonormal}(b)) and \((Q_0\Lambda Q_0')'=Q_0\Lambda'Q_0'=Q_0\Lambda Q_0'\) (Theorem~\ref{r1-thm-transpose}), while
+\(A\) is not symmetric (\(a_{12}=2\ne1=a_{21}\)).
+\end{example}
+
+\begin{corollary}\label{r7-cor-schur}
+Let \(A\in\R^{n\times n}\), and let all eigenvalues \(\lambda_1,\dots,\lambda_n\) of \(A\), listed with multiplicity, be
+real.
+\begin{enumerate}
+\item For every real polynomial \(f\), the eigenvalues of \(f(A)\), listed with multiplicity, are
+\(f(\lambda_1),\dots,f(\lambda_n)\). In particular \(\tr A^k=\lambda_1^k+\dots+\lambda_n^k\) for \(k=0,1,2,\dots\)
+\item If \(A\) is invertible, the eigenvalues of \(A^{-1}\), listed with multiplicity, are
+\(\lambda_1^{-1},\dots,\lambda_n^{-1}\).
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+Let \(A=QTQ'\) as in Theorem~\ref{r7-thm-schur}: \(Q'=Q^{-1}\) (Proposition~\ref{r6-prop-orthonormal}(b)), and \(T\) is
+upper triangular with the diagonal entries \(\lambda_1,\dots,\lambda_n\).
+
+(a)
+\begin{itemize}
+\item \(A^k=QT^kQ'\) for \(k=0,1,2,\dots\), by induction: \(A^0=I=QQ'\), and \(A^{k+1}=A^kA=QT^kQ'QTQ'=QT^{k+1}Q'\)
+(Theorem~\ref{r1-thm-rules}). So, for \(f=\sum_kc_kt^k\), \(f(A)=\sum_kc_kQT^kQ'=Qf(T)Q'\).
+\item \(T^k\) is upper triangular with the diagonal entries \(\lambda_1^k,\dots,\lambda_n^k\)
+(Proposition~\ref{r1-prop-powers}(e)); adding multiples of these matrices entry by entry, \(f(T)\) is upper triangular
+with the diagonal entries \(f(\lambda_1),\dots,f(\lambda_n)\).
+\item \(f(A)\) is similar to \(f(T)\), so by Theorem~\ref{r7-thm-similar}(a) and
+Proposition~\ref{r7-prop-block-triangular}(b) its eigenvalues are \(f(\lambda_1),\dots,f(\lambda_n)\). For \(f=t^k\),
+Theorem~\ref{r7-thm-trace-det} gives \(\tr A^k=\lambda_1^k+\dots+\lambda_n^k\).
+\end{itemize}
+(b) \(0\) is not an eigenvalue of \(A\) (Theorem~\ref{r7-thm-trace-det}), so every \(\lambda_i\ne0\); hence \(T\) is
+invertible, and \(T^{-1}\) is upper triangular with the diagonal entries \(\lambda_1^{-1},\dots,\lambda_n^{-1}\)
+(Theorem~\ref{r2-thm-triangular}). Then \(A^{-1}=(Q')^{-1}T^{-1}Q^{-1}=QT^{-1}Q'\)
+(Theorem~\ref{r2-thm-inverse-props}(a),(b)), so \(A^{-1}\) is similar to \(T^{-1}\); conclude as in (a).
+\end{proof}
+Proposition~\ref{r7-prop-diag-rank}(b) gives (a) for a diagonalizable \(A\); here \(A\) need not be diagonalizable.
+For the matrix \(A\) of Example~\ref{r7-exm-three}, with the eigenvalues \(-3\), \(-1\), \(1\), \(3\),
+\[
+A^2=\begin{pmatrix}5&-4&0&8\\-4&5&8&0\\0&0&5&4\\0&0&4&5\end{pmatrix},\qquad\tr A^2=20=(-3)^2+(-1)^2+1^2+3^2
+\]
+and, as \(\det A=9\ne0\) (Example~\ref{r7-exm-three}), \(A^{-1}\) has the eigenvalues \(-\frac13\), \(-1\), \(1\), \(\frac13\) (part (b)).
+
+\needspace{14\baselineskip}
+\subsection*{The products \(AB\) and \(BA\)}
+
+\begin{theorem}\label{r7-thm-AB-BA}
+Let \(A\in\R^{m\times n}\) and \(B\in\R^{n\times m}\) with \(m\leqslant n\).
+\begin{enumerate}
+\item \(p_{BA}(t)=t^{n-m}p_{AB}(t)\); in particular \(p_{BA}=p_{AB}\) if \(m=n\).
+\item The eigenvalues of \(BA\), listed with multiplicity, are those of \(AB\) together with \(n-m\) zeros. So \(AB\) and
+\(BA\) have the same nonzero eigenvalues, with the same algebraic multiplicities.
+\item \(g_{AB}(c)=g_{BA}(c)\) for every real \(c\ne0\). More precisely, if \(c\ne0\) is a real eigenvalue of \(AB\) and
+the columns of \(X\in\R^{m\times g}\) form a basis of \(\mathcal N(AB-cI_m)\), then the \(g\) columns of \(BX\) are linearly
+independent eigenvectors of \(BA\) belonging to \(c\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item Let \(t\in\R\), \(t\ne0\). Theorem~\ref{r5d-thm-woodbury}(a), with \(I_n\), \(I_m\), \(-t^{-1}B\) and \(A\) in
+place of its \(A\), \(T\), \(U\) and \(V\), gives
+\[
+\det(I_n-t^{-1}BA)=\det I_n\cdot\det I_m\cdot\det(I_m-t^{-1}AB)=\det(I_m-t^{-1}AB)
+\]
+\item By Theorem~\ref{r5d-thm-product}(c), \(\det(tI_n-BA)=t^n\det(I_n-t^{-1}BA)\) and
+\(\det(tI_m-AB)=t^m\det(I_m-t^{-1}AB)\). Hence \(\det(tI_n-BA)=t^{n-m}\det(tI_m-AB)\).
+\item So \(p_{BA}\) and \(t^{n-m}p_{AB}\) have the same value at every real \(t\ne0\) (Definition~\ref{r7-def-charpoly}(a),
+Proposition~\ref{r7-prop-poly}(b)), and they are equal (Proposition~\ref{r7-prop-poly}(d)).
+\end{itemize}
+(b) If \(p_{AB}=(t-\mu_1)\cdots(t-\mu_m)\) (Definition~\ref{r7-def-eigenvalues}), then by (a)
+\(p_{BA}=(t-0)^{n-m}(t-\mu_1)\cdots(t-\mu_m)\), a product of \(n\) linear factors. By Theorem~\ref{r7-thm-factor}(b), the
+eigenvalues of \(BA\) are \(\mu_1,\dots,\mu_m\) and \(n-m\) zeros; so \(a_{BA}(c)=a_{AB}(c)\) for every \(c\ne0\).
+
+(c)
+\begin{itemize}
+\item If \(c\) is not an eigenvalue of \(AB\), then by (b) it is not one of \(BA\), and both geometric multiplicities are
+\(0\) (Definition~\ref{r7-def-multiplicity}).
+\item Let \(c\ne0\) be a real eigenvalue of \(AB\), \(g=g_{AB}(c)\), and let \(X\in\R^{m\times g}\) have a basis of
+\(\mathcal N(AB-cI_m)\) as its columns. Then \(\rank X=g\) (Theorem~\ref{thm:r4-rank-rules}(b)) and \(ABX=cX\)
+(Theorem~\ref{r1-thm-views}(a)).
+\item By Theorem~\ref{thm:r4-rank-product}(a),(d), \(g=\rank X\geqslant\rank(BX)\geqslant\rank(ABX)=\rank(cX)=g\), as
+\(cX=X(cI_g)\) with \(cI_g\) invertible. So the \(g\) columns of \(BX\) are independent
+(Theorem~\ref{thm:r4-rank-rules}(b)).
+\item \(BA(BX)=B(ABX)=cBX\): the columns of \(BX\) lie in \(\mathcal N(BA-cI_n)\). Being independent, they are
+nonzero (Proposition~\ref{r3-prop-dependence}(a)), so they are eigenvectors of \(BA\) belonging to \(c\), and
+\(g_{BA}(c)\geqslant g\) (Theorem~\ref{thm:r4-counting}(c)).
+\item The argument does not use \(m\leqslant n\); with the roles of \(A\) and \(B\) exchanged it gives
+\(g_{AB}(c)\geqslant g_{BA}(c)\).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{example}\label{r7-exm-ones}
+For \(n\geqslant2\), take \(A=\one_n'\in\R^{1\times n}\) and \(B=\one_n\in\R^{n\times1}\) in Theorem~\ref{r7-thm-AB-BA}
+(\(m=1\)): \(AB=\one'\one=n\) and \(BA=\one\one'=J_n\) (Definition~\ref{r1-def-ones}, Proposition~\ref{r1-prop-centering}).
+So \(p_{J_n}(t)=t^{n-1}(t-n)\): the eigenvalues of \(J_n\) are \(n\) (simple) and \(0\) (\(n-1\) times). Indeed
+\(J_n\one=\one(\one'\one)=n\one\), and \(J_nx=\one(\one'x)=0\) for every centered \(x\), that is, \(\one'x=0\)
+(Example~\ref{r3-exm-subspaces}(f)).
+\end{example}
+
+\begin{example}\label{r7-exm-ata}
+Let
+\[
+A=\begin{pmatrix}1&1&0\\1&0&1\\0&1&1\\-1&0&1\end{pmatrix},\qquad
+A'A=\begin{pmatrix}3&1&0\\1&2&1\\0&1&3\end{pmatrix},\qquad
+AA'=\begin{pmatrix}2&1&1&-1\\1&2&1&0\\1&1&2&1\\-1&0&1&2\end{pmatrix}
+\]
+Find the eigenvalues of \(A'A\) and \(AA'\), and an eigenvector for each.
+
+\textit{Solution.}
+\begin{itemize}
+\item For \(t\in\R\), expanding along row \(1\) (Theorem~\ref{r5d-thm-expansion}),
+\[
+\det(tI_3-A'A)=\det\begin{pmatrix}t-3&-1&0\\-1&t-2&-1\\0&-1&t-3\end{pmatrix}=(t-3)\bigl((t-2)(t-3)-1\bigr)-(t-3)
+=(t-3)(t^2-5t+4)
+\]
+So \(p_{A'A}=(t-1)(t-3)(t-4)\) (Definition~\ref{r7-def-charpoly}(a), Proposition~\ref{r7-prop-poly}(d)).
+Theorem~\ref{r7-thm-AB-BA}(a), with \(A'\in\R^{3\times4}\) and \(A\in\R^{4\times3}\) in place of \(A\) and \(B\) (\(m=3\),
+\(n=4\)), gives \(p_{AA'}=t^{4-3}p_{A'A}=t(t-1)(t-3)(t-4)\).
+\item Multiplying out, \(A'A(1,1,1)'=(4,4,4)'\), \(A'A(-1,0,1)'=(-3,0,3)'\) and \(A'A(1,-2,1)'=(1,-2,1)'\): these are
+eigenvectors of \(A'A\) belonging to \(4\), \(3\) and \(1\). Each of these eigenvalues is simple, so its eigenspace has
+dimension \(1\) (Theorem~\ref{r7-thm-geo-alg}), and the vector found is a basis of it (Theorem~\ref{thm:r4-counting}(d)).
+By Theorem~\ref{r7-thm-AB-BA}(c), the vectors
+\[
+A\begin{pmatrix}1\\1\\1\end{pmatrix}=\begin{pmatrix}2\\2\\2\\0\end{pmatrix},\qquad
+A\begin{pmatrix}-1\\0\\1\end{pmatrix}=\begin{pmatrix}-1\\0\\1\\2\end{pmatrix},\qquad
+A\begin{pmatrix}1\\-2\\1\end{pmatrix}=\begin{pmatrix}-1\\2\\-1\\0\end{pmatrix}
+\]
+are eigenvectors of \(AA'\) belonging to \(4\), \(3\) and \(1\); for instance \(AA'(-1,0,1,2)'=(-3,0,3,6)'\).
+\item The eigenvalue \(0\) of \(AA'\) has the eigenspace \(\mathcal N(AA')=\mathcal N(A')\)
+(Theorem~\ref{thm:r4-rank-ata}(a), applied to \(A'\)). Row-reduce \(A'\):
+\[
+A'=\begin{pmatrix}1&1&0&-1\\1&0&1&0\\0&1&1&1\end{pmatrix}
+\xrightarrow{R_2\leftarrow R_2-R_1}
+\begin{pmatrix}1&1&0&-1\\0&-1&1&1\\0&1&1&1\end{pmatrix}
+\xrightarrow{R_3\leftarrow R_3+R_2}
+\begin{pmatrix}1&1&0&-1\\0&-1&1&1\\0&0&2&2\end{pmatrix}
+\]
+So \(\rank A'=3\) and \(\dim\mathcal N(A')=1\) (Definition~\ref{def:r4-rank}, Theorem~\ref{thm:r4-rank-nullity}). With
+\(x_4=1\), back substitution gives \(x_3=-1\), \(x_2=0\) and \(x_1=1\); so \((1,0,-1,1)'\) is a basis of
+\(\mathcal N(AA')\) (Theorem~\ref{thm:r4-counting}(d)).
+\end{itemize}
+\end{example}
+
+\needspace{6\baselineskip}
+\begin{corollary}\label{r7-cor-rank-eigen}
+Let \(A\in\R^{n\times n}\) have rank \(r\). Then \(a_A(0)\geqslant n-r\): at most \(r\) of the eigenvalues of \(A\), listed
+with multiplicity, are nonzero. If \(A\) is diagonalizable, exactly \(r\) of them are nonzero.
+\end{corollary}
+\begin{proof}
+\begin{itemize}
+\item If \(r=0\), then \(A=0\) and \(p_A=t^n\) (Proposition~\ref{r7-prop-block-triangular}(b)), so \(a_A(0)=n\).
+\item Let \(r\geqslant1\), and let \(A=BC\) be a full-rank factorization, with \(B\in\R^{n\times r}\) and \(C\in\R^{r\times n}\)
+(Theorem~\ref{thm:r4-full-rank-factorization}(a)); here \(r\leqslant n\) (Theorem~\ref{thm:r4-rank-rules}(a)).
+Theorem~\ref{r7-thm-AB-BA}(a), applied to \(C\in\R^{r\times n}\) and \(B\in\R^{n\times r}\) in place of \(A\) and \(B\), gives
+\(p_A=p_{BC}=t^{n-r}p_{CB}\).
+\item By Theorem~\ref{r7-thm-AB-BA}(b), the eigenvalues of \(A\), listed with multiplicity, are the \(r\) eigenvalues of
+the \(r\times r\) matrix \(CB\) together with \(n-r\) zeros. So at most \(r\) of them are nonzero, and \(a_A(0)\geqslant n-r\).
+\item If \(A\) is diagonalizable, exactly \(r\) of them are nonzero, by Proposition~\ref{r7-prop-diag-rank}(a).\qedhere
+\end{itemize}
+\end{proof}
+
+\needspace{14\baselineskip}
+\begin{example}\label{r7-exm-rank-eigen}
+Let
+\[
+A=\begin{pmatrix}-1&1&2\\2&2&0\\0&4&4\end{pmatrix}
+\]
+Find \(\rank A\), a full-rank factorization \(A=BC\), the eigenvalues of \(A\), and compare \(\rank A\) with the
+number of nonzero eigenvalues.
+
+\textit{Solution.}
+\begin{itemize}
+\item Row-reduce \(A\) to its RREF \(R\):
+\[
+\begin{gathered}
+\begin{pmatrix}-1&1&2\\2&2&0\\0&4&4\end{pmatrix}
+\xrightarrow{R_2\leftarrow R_2+2R_1}
+\begin{pmatrix}-1&1&2\\0&4&4\\0&4&4\end{pmatrix}
+\xrightarrow{R_3\leftarrow R_3-R_2}
+\begin{pmatrix}-1&1&2\\0&4&4\\0&0&0\end{pmatrix}
+\\
+\xrightarrow[R_2\leftarrow\frac14R_2]{R_1\leftarrow-R_1}
+\begin{pmatrix}1&-1&-2\\0&1&1\\0&0&0\end{pmatrix}
+\xrightarrow{R_1\leftarrow R_1+R_2}
+\begin{pmatrix}1&0&-1\\0&1&1\\0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The pivot columns are columns \(1\) and \(2\), so \(\rank A=2\) (Definition~\ref{def:r4-rank}). By
+Theorem~\ref{thm:r4-full-rank-factorization}(a), \(A=BC\) with
+\[
+B=\begin{pmatrix}-1&1\\2&2\\0&4\end{pmatrix},\qquad C=\begin{pmatrix}1&0&-1\\0&1&1\end{pmatrix},\qquad
+CB=\begin{pmatrix}-1&-3\\2&6\end{pmatrix}
+\]
+\item By Definition~\ref{r7-def-charpoly}(b), \(p_{CB}=t^2-5t+(-6+6)=t(t-5)\), and, as in the proof of
+Corollary~\ref{r7-cor-rank-eigen}, \(p_A=t^{3-2}p_{CB}=t^2(t-5)\). So the eigenvalues of \(A\) are \(0\), \(0\), \(5\):
+\(a_A(0)=2\), and only one eigenvalue is nonzero, although \(\rank A=2\).
+\item Hence \(A\) is not diagonalizable (Proposition~\ref{r7-prop-diag-rank}(a)). Indeed
+\(g_A(0)=3-\rank A=1<2=a_A(0)\) (Definition~\ref{r7-def-multiplicity}, Theorem~\ref{r7-thm-diag-criterion}).
+\item Check: \(\tr A=-1+2+4=5=0+0+5\) and \(\det A=0=0\cdot0\cdot5\) (Theorem~\ref{r7-thm-trace-det}), as \(\rank A<3\)
+(Theorem~\ref{r5d-thm-product}(a)).
+\end{itemize}
+\end{example}
+
+\subsection*{The Cayley--Hamilton theorem}
+
+\begin{theorem}[Cayley--Hamilton]\label{r7-thm-cayley-hamilton}
+Let \(A\in\R^{n\times n}\) and \(p_A(t)=c_0+c_1t+\dots+c_nt^n\) (so \(c_n=1\)). Then
+\[
+p_A(A)=c_0I+c_1A+\dots+c_nA^n=0
+\]
+\end{theorem}
+\begin{proof}
+For \(n=1\), \(A=(a)\), \(p_A=t-a\) and \(p_A(A)=A-aI_1=0\). Let \(n\geqslant2\).
+\begin{itemize}
+\item For \(t\in\R\), the \((i,j)\) entry of \(\operatorname{adj}(tI-A)\) is the cofactor
+\((-1)^{i+j}\det\bigl((tI-A)(j|i)\bigr)\) (Definition~\ref{r5d-def-cofactor}, Theorem~\ref{r5d-thm-adjugate}). Every entry
+of the \((n-1)\times(n-1)\) matrix \((tI-A)(j|i)\) is an entry \(\delta_{rs}t-a_{rs}\) of \(tI-A\); by
+Lemma~\ref{r7-lem-degree} (with \(m=d=n-1\)) and Proposition~\ref{r7-prop-poly}(b), the cofactor is the value at \(t\)
+of a real polynomial \(h_{ij}\) that is \(0\) or of degree at most \(n-1\). Writing
+\(h_{ij}=\sum_{s=0}^{n-1}k^{(s)}_{ij}t^s\) and \(K_s=(k^{(s)}_{ij})\in\R^{n\times n}\),
+\[
+\operatorname{adj}(tI-A)=K_0+tK_1+\dots+t^{n-1}K_{n-1}\qquad(t\in\R)
+\]
+\item By Theorem~\ref{r5d-thm-adjugate}, which holds for every matrix, and Definition~\ref{r7-def-charpoly}(a),
+\((tI-A)\operatorname{adj}(tI-A)=p_A(t)I\) for every real \(t\). By Theorem~\ref{r1-thm-rules} the left side is
+\[
+(tI-A)\sum_{s=0}^{n-1}t^sK_s=T_0+tT_1+\dots+t^nT_n
+\]
+with \(T_0=-AK_0\), \(T_s=K_{s-1}-AK_s\) (\(1\leqslant s\leqslant n-1\)) and \(T_n=K_{n-1}\). So for each \((i,j)\) the polynomials \(\sum_s(T_s)_{ij}t^s\) and \(\delta_{ij}p_A\) have the same value at every real
+\(t\); by Proposition~\ref{r7-prop-poly}(d), their coefficients agree: \(T_s=c_sI\) for \(0\leqslant s\leqslant n\).
+\item Hence
+\[
+\begin{aligned}
+p_A(A)&=\sum_{s=0}^nA^s(c_sI)=\sum_{s=0}^nA^sT_s=-AK_0+\sum_{s=1}^{n-1}\bigl(A^sK_{s-1}-A^{s+1}K_s\bigr)+A^nK_{n-1}\\
+&=\sum_{s=1}^nA^sK_{s-1}-\sum_{s=0}^{n-1}A^{s+1}K_s=0
+\end{aligned}
+\]
+since the two sums are the same (replace \(s\) by \(s-1\) in the second).\qedhere
+\end{itemize}
+\end{proof}
+
+\needspace{13\baselineskip}
+\begin{corollary}\label{r7-cor-cayley-hamilton}
+Let \(A\in\R^{n\times n}\) and \(p_A(t)=c_0+c_1t+\dots+c_nt^n\) (so \(c_n=1\)).
+\begin{enumerate}
+\item \(A^n=-(c_0I+c_1A+\dots+c_{n-1}A^{n-1})\), and every power \(A^k\) (\(k=0,1,2,\dots\)) is a linear combination of
+\(I,A,\dots,A^{n-1}\).
+\item If \(A\) is invertible, then \(c_0\ne0\) and
+\[
+A^{-1}=-\frac1{c_0}\bigl(c_1I+c_2A+\dots+c_nA^{n-1}\bigr)
+\]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(a)
+\begin{itemize}
+\item By Theorem~\ref{r7-thm-cayley-hamilton}, \(c_0I+c_1A+\dots+c_{n-1}A^{n-1}+A^n=0\), which is the formula for \(A^n\).
+\item For \(k\leqslant n-1\), \(A^k\) is one of \(I,A,\dots,A^{n-1}\). Let \(k\geqslant n-1\) and
+\(A^k=b_0I+b_1A+\dots+b_{n-1}A^{n-1}\). Then \(A^{k+1}=A^kA=b_0A+\dots+b_{n-2}A^{n-1}+b_{n-1}A^n\)
+(Theorem~\ref{r1-thm-rules}), and replacing \(A^n\) by the first item gives a linear combination of
+\(I,A,\dots,A^{n-1}\). By induction on \(k\), this holds for every \(k\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item \(c_0=(-1)^n\det A\) (Definition~\ref{r7-def-charpoly}(b)), which is nonzero, as \(A\) is invertible
+(Theorem~\ref{r5d-thm-product}(a)).
+\item Multiplying \(c_0I+c_1A+\dots+c_nA^n=0\) (Theorem~\ref{r7-thm-cayley-hamilton}) by \(A^{-1}\) gives
+\(c_0A^{-1}+c_1I+c_2A+\dots+c_nA^{n-1}=0\); dividing by \(c_0\) gives the formula.\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{example}\label{r7-exm-cayley-hamilton}
+Let \(A\) be the matrix of Example~\ref{r7-exm-two},
+\[
+A=\begin{pmatrix}1&2&-2&-2\\-1&0&-2&2\\0&-1&-1&1\\-1&2&-2&0\end{pmatrix}
+\]
+Find \(p_A\), check Theorem~\ref{r7-thm-cayley-hamilton}, and use Corollary~\ref{r7-cor-cayley-hamilton} to find
+\(A^{-1}\) and \(A^4\).
+
+\textit{Solution.}
+\begin{itemize}
+\item By Example~\ref{r7-exm-two}, \(1\), \(-1\), \(2\) and \(-2\) are eigenvalues of \(A\), that is, roots of \(p_A\)
+(Definition~\ref{r7-def-charpoly}(a)). The eigenvalues \(\lambda_1,\dots,\lambda_4\) of \(A\), listed with multiplicity,
+are the roots of \(p_A\) (Definition~\ref{r7-def-eigenvalues}, Theorem~\ref{r7-thm-factor}(c)), so each of the four
+distinct numbers \(1\), \(-1\), \(2\), \(-2\) occurs among them, and there is no room for more. Hence
+\[
+p_A=(t-1)(t+1)(t-2)(t+2)=(t^2-1)(t^2-4)=t^4-5t^2+4
+\]
+and \(c_0=4\), \(c_1=0\), \(c_2=-5\), \(c_3=0\), \(c_4=1\).
+\item Multiplying out,
+\[
+A^2=\begin{pmatrix}1&0&0&0\\-3&4&0&0\\0&3&1&-3\\-3&0&0&4\end{pmatrix},\qquad
+A^4=(A^2)^2=\begin{pmatrix}1&0&0&0\\-15&16&0&0\\0&15&1&-15\\-15&0&0&16\end{pmatrix}
+\]
+and entry by entry, \(p_A(A)=A^4-5A^2+4I=0\).
+\item As \(c_0=(-1)^4\det A\) (Definition~\ref{r7-def-charpoly}(b)), \(\det A=4\ne0\), and \(A\) is invertible
+(Theorem~\ref{r5d-thm-product}(a)). With
+\[
+A^3=A^2A=\begin{pmatrix}1&2&-2&-2\\-7&-6&-2&14\\0&-7&-1&7\\-7&2&-2&6\end{pmatrix}
+\]
+Corollary~\ref{r7-cor-cayley-hamilton}(b) gives
+\[
+A^{-1}=-\frac14\bigl(c_1I+c_2A+c_3A^2+c_4A^3\bigr)=\frac14(5A-A^3)
+=\frac12\begin{pmatrix}2&4&-4&-4\\1&3&-4&-2\\0&1&-2&-1\\1&4&-4&-3\end{pmatrix}
+\]
+Check: row \(1\) of \(AA^{-1}\) is \(\frac12(2+2+0-2,\ 4+6-2-8,\ -4-8+4+8,\ -4-4+2+6)=(1,0,0,0)\), and likewise rows
+\(2\), \(3\), \(4\) are \(e_2'\), \(e_3'\), \(e_4'\).
+\item By Corollary~\ref{r7-cor-cayley-hamilton}(a), \(A^4=-(c_0I+c_1A+c_2A^2+c_3A^3)=5A^2-4I\), as found above; then
+\(A^5=5A^3-4A\), and every power of \(A\) is a linear combination of \(I\), \(A\), \(A^2\), \(A^3\).
+\end{itemize}
+\end{example}
+
+\needspace{14\baselineskip}
+\subsection*{Exercises}
+
+\begin{exercise}\label{r7-dr-charpoly}
+Find the characteristic polynomial and the eigenvalues of each matrix, and check the trace and the determinant against
+the eigenvalues (Theorem~\ref{r7-thm-trace-det}).
+\[
+\text{(a)}\ \ A=\begin{pmatrix}1&-2&-3&-1\\0&-1&-3&-1\\0&0&2&1\\2&-2&0&3\end{pmatrix},\qquad
+\text{(b)}\ \ B=\begin{pmatrix}0&1&0&1\\-1&1&1&1\\-1&3&-1&1\\-1&2&-3&4\end{pmatrix},\qquad
+\text{(c)}\ \ M=\begin{pmatrix}2&1&1&-1\\4&-1&2&0\\0&0&0&1\\0&0&-2&3\end{pmatrix}
+\]
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item For \(t\in\R\), row \(3\) of \(tI-A\) is \((0,\ 0,\ t-2,\ -1)\); expanding along it (Theorem~\ref{r5d-thm-expansion}),
+\[
+\begin{aligned}
+\det(tI-A)&=\det\begin{pmatrix}t-1&2&3&1\\0&t+1&3&1\\0&0&t-2&-1\\-2&2&0&t-3\end{pmatrix}\\
+&=(t-2)\det\begin{pmatrix}t-1&2&1\\0&t+1&1\\-2&2&t-3\end{pmatrix}+\det\begin{pmatrix}t-1&2&3\\0&t+1&3\\-2&2&0\end{pmatrix}
+\end{aligned}
+\]
+\item Expanding the first \(3\times3\) determinant along column \(1\) and the second along row \(3\),
+\[
+\begin{aligned}
+\det\begin{pmatrix}t-1&2&1\\0&t+1&1\\-2&2&t-3\end{pmatrix}&=(t-1)\bigl((t+1)(t-3)-2\bigr)-2\bigl(2-(t+1)\bigr)\\
+&=(t-1)(t^2-2t-5)+2(t-1)\\
+&=(t-1)(t^2-2t-3)=(t-1)(t+1)(t-3)\\
+\det\begin{pmatrix}t-1&2&3\\0&t+1&3\\-2&2&0\end{pmatrix}&=-2\bigl(6-3(t+1)\bigr)-2\cdot3(t-1)=(6t-6)-(6t-6)=0
+\end{aligned}
+\]
+So \(\det(tI-A)=(t-2)(t-1)(t+1)(t-3)\), and \(p_A=(t+1)(t-1)(t-2)(t-3)\) (Definition~\ref{r7-def-charpoly}(a),
+Proposition~\ref{r7-prop-poly}(d)): the eigenvalues are \(-1\), \(1\), \(2\), \(3\).
+\item \(\tr A=1-1+2+3=5=-1+1+2+3\). Expanding \(\det A\) along row \(3\) in the same way, and the two \(3\times3\)
+determinants along column \(1\),
+\[
+\det A=2\det\begin{pmatrix}1&-2&-1\\0&-1&-1\\2&-2&3\end{pmatrix}-\det\begin{pmatrix}1&-2&-3\\0&-1&-3\\2&-2&0\end{pmatrix}
+=2\bigl((-3-2)+2(2-1)\bigr)-\bigl((0-6)+2(6-3)\bigr)=-6
+\]
+and \(-6=(-1)\cdot1\cdot2\cdot3\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item Every row of \(B\) has the sum \(2\). For \(t\in\R\), add columns \(2\), \(3\) and \(4\) of \(tI-B\) to column \(1\),
+and take the factor \(t-2\) out of column \(1\) (Definition~\ref{r5d-def-det}(b),(a) for columns,
+Theorem~\ref{r5d-thm-transpose}):
+\[
+\begin{aligned}
+\det(tI-B)&=\det\begin{pmatrix}t&-1&0&-1\\1&t-1&-1&-1\\1&-3&t+1&-1\\1&-2&3&t-4\end{pmatrix}
+=\det\begin{pmatrix}t-2&-1&0&-1\\t-2&t-1&-1&-1\\t-2&-3&t+1&-1\\t-2&-2&3&t-4\end{pmatrix}\\
+&=(t-2)\det\begin{pmatrix}1&-1&0&-1\\1&t-1&-1&-1\\1&-3&t+1&-1\\1&-2&3&t-4\end{pmatrix}
+\end{aligned}
+\]
+\item Subtract row \(1\) from rows \(2\), \(3\) and \(4\) (Definition~\ref{r5d-def-det}(b)), expand along column \(1\),
+and then along column \(3\) (Theorem~\ref{r5d-thm-expansion}):
+\[
+\begin{aligned}
+\det(tI-B)&=(t-2)\det\begin{pmatrix}1&-1&0&-1\\0&t&-1&0\\0&-2&t+1&0\\0&-1&3&t-3\end{pmatrix}
+=(t-2)\det\begin{pmatrix}t&-1&0\\-2&t+1&0\\-1&3&t-3\end{pmatrix}\\
+&=(t-2)(t-3)(t^2+t-2)
+\end{aligned}
+\]
+So \(p_B=(t-2)(t-3)(t+2)(t-1)\), and the eigenvalues are \(-2\), \(1\), \(2\), \(3\).
+\item \(\tr B=0+1-1+4=4=-2+1+2+3\). Expanding \(\det B\) along row \(1\), and the two \(3\times3\) determinants along
+column \(1\),
+\[
+\det B=-\det\begin{pmatrix}-1&1&1\\-1&-1&1\\-1&-3&4\end{pmatrix}-\det\begin{pmatrix}-1&1&1\\-1&3&-1\\-1&2&-3\end{pmatrix}
+=-(1+7-2)-(7-5+4)=-12
+\]
+and \(-12=(-2)\cdot1\cdot2\cdot3\).
+\end{itemize}
+(c)
+\begin{itemize}
+\item \(M=\left(\begin{smallmatrix}M_1&M_2\\0&M_3\end{smallmatrix}\right)\) is block upper triangular, with
+\(M_1=\left(\begin{smallmatrix}2&1\\4&-1\end{smallmatrix}\right)\) and \(M_3=\left(\begin{smallmatrix}0&1\\-2&3\end{smallmatrix}\right)\).
+By Definition~\ref{r7-def-charpoly}(b) (\(n=2\)), \(p_{M_1}=t^2-t-6=(t-3)(t+2)\) and \(p_{M_3}=t^2-3t+2=(t-1)(t-2)\).
+\item By Proposition~\ref{r7-prop-block-triangular}(a), \(p_M=p_{M_1}p_{M_3}=(t-3)(t+2)(t-1)(t-2)\): the eigenvalues are
+\(-2\), \(1\), \(2\), \(3\).
+\item \(\tr M=2-1+0+3=4=-2+1+2+3\), and \(\det M=\det M_1\det M_3=(-6)\cdot2=-12=(-2)\cdot1\cdot2\cdot3\)
+(Theorem~\ref{r5d-thm-block-tri}).
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r7-ex-eigenpairs}
+Find the eigenvalues of
+\[
+B=\begin{pmatrix}3&1&0&-1\\0&1&0&0\\0&1&3&0\\-1&0&1&3\end{pmatrix}
+\]
+and a basis of each eigenspace. Check that the coefficient of \(t^3\) in \(p_B(t)\) is \(-\tr B\) and that the constant
+term is \(\det B\).
+\end{exercise}
+\begin{solution}
+For \(t\in\R\), row \(2\) of \(tI_4-B\) is \((0,\ t-1,\ 0,\ 0)\). Expanding along it, and then the remaining
+\(3\times3\) determinant (rows and columns \(1\), \(3\), \(4\)) along its second row \((0,\ t-3,\ 0)\)
+(Theorem~\ref{r5d-thm-expansion}),
+\[
+\begin{aligned}
+\det(tI_4-B)&=(t-1)\det\begin{pmatrix}t-3&0&1\\0&t-3&0\\1&-1&t-3\end{pmatrix}
+=(t-1)(t-3)\det\begin{pmatrix}t-3&1\\1&t-3\end{pmatrix}\\
+&=(t-1)(t-3)(t-2)(t-4)
+\end{aligned}
+\]
+So \(p_B=(t-1)(t-2)(t-3)(t-4)\) (Definition~\ref{r7-def-charpoly}(a), Proposition~\ref{r7-prop-poly}(d)), and
+multiplying out, \(p_B=t^4-10t^3+35t^2-50t+24\). Here \(\tr B=3+1+3+3=10\), and expanding \(\det B\) in the same
+way, \(\det B=1\cdot3\cdot(9-1)=24\); so the coefficient of \(t^3\) is \(-\tr B\) and the constant term is
+\((-1)^4\det B\), as Definition~\ref{r7-def-charpoly}(b) says. The eigenvalues are \(1\), \(2\), \(3\), \(4\)
+(Definition~\ref{r7-def-charpoly}(a)).
+\begin{itemize}
+\item \(\lambda=1\):
+\[
+\begin{gathered}
+B-I_4=\begin{pmatrix}2&1&0&-1\\0&0&0&0\\0&1&2&0\\-1&0&1&2\end{pmatrix}
+\xrightarrow{R_1\leftrightarrow R_4}
+\begin{pmatrix}-1&0&1&2\\0&0&0&0\\0&1&2&0\\2&1&0&-1\end{pmatrix}
+\xrightarrow{R_1\leftarrow-R_1}
+\begin{pmatrix}1&0&-1&-2\\0&0&0&0\\0&1&2&0\\2&1&0&-1\end{pmatrix}
+\\
+\xrightarrow{R_4\leftarrow R_4-2R_1}
+\begin{pmatrix}1&0&-1&-2\\0&0&0&0\\0&1&2&0\\0&1&2&3\end{pmatrix}
+\xrightarrow{R_2\leftrightarrow R_4}
+\begin{pmatrix}1&0&-1&-2\\0&1&2&3\\0&1&2&0\\0&0&0&0\end{pmatrix}
+\\
+\xrightarrow{R_3\leftarrow R_3-R_2}
+\begin{pmatrix}1&0&-1&-2\\0&1&2&3\\0&0&0&-3\\0&0&0&0\end{pmatrix}
+\xrightarrow{R_3\leftarrow-\frac13R_3}
+\begin{pmatrix}1&0&-1&-2\\0&1&2&3\\0&0&0&1\\0&0&0&0\end{pmatrix}
+\\
+\xrightarrow[R_2\leftarrow R_2-3R_3]{R_1\leftarrow R_1+2R_3}
+\begin{pmatrix}1&0&-1&0\\0&1&2&0\\0&0&0&1\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The special solution \((1,-2,1,0)'\) is a basis of \(\mathcal N(B-I_4)\) (Theorem~\ref{thm:r4-four-bases}(c)).
+\item \(\lambda=2\):
+\[
+\begin{gathered}
+B-2I_4=\begin{pmatrix}1&1&0&-1\\0&-1&0&0\\0&1&1&0\\-1&0&1&1\end{pmatrix}
+\xrightarrow{R_4\leftarrow R_4+R_1}
+\begin{pmatrix}1&1&0&-1\\0&-1&0&0\\0&1&1&0\\0&1&1&0\end{pmatrix}
+\\
+\xrightarrow[R_4\leftarrow R_4+R_2]{R_1\leftarrow R_1+R_2,\ R_3\leftarrow R_3+R_2}
+\begin{pmatrix}1&0&0&-1\\0&-1&0&0\\0&0&1&0\\0&0&1&0\end{pmatrix}
+\xrightarrow{R_4\leftarrow R_4-R_3}
+\begin{pmatrix}1&0&0&-1\\0&-1&0&0\\0&0&1&0\\0&0&0&0\end{pmatrix}
+\\
+\xrightarrow{R_2\leftarrow-R_2}
+\begin{pmatrix}1&0&0&-1\\0&1&0&0\\0&0&1&0\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The special solution \((1,0,0,1)'\) is a basis of \(\mathcal N(B-2I_4)\).
+\item \(\lambda=3\):
+\[
+\begin{gathered}
+B-3I_4=\begin{pmatrix}0&1&0&-1\\0&-2&0&0\\0&1&0&0\\-1&0&1&0\end{pmatrix}
+\xrightarrow[R_2\leftrightarrow R_3]{R_1\leftrightarrow R_4}
+\begin{pmatrix}-1&0&1&0\\0&1&0&0\\0&-2&0&0\\0&1&0&-1\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4-R_2]{R_3\leftarrow R_3+2R_2}
+\begin{pmatrix}-1&0&1&0\\0&1&0&0\\0&0&0&0\\0&0&0&-1\end{pmatrix}
+\\
+\xrightarrow{R_3\leftrightarrow R_4}
+\begin{pmatrix}-1&0&1&0\\0&1&0&0\\0&0&0&-1\\0&0&0&0\end{pmatrix}
+\xrightarrow[R_3\leftarrow-R_3]{R_1\leftarrow-R_1}
+\begin{pmatrix}1&0&-1&0\\0&1&0&0\\0&0&0&1\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The special solution \((1,0,1,0)'\) is a basis of \(\mathcal N(B-3I_4)\).
+\item \(\lambda=4\):
+\[
+\begin{gathered}
+B-4I_4=\begin{pmatrix}-1&1&0&-1\\0&-3&0&0\\0&1&-1&0\\-1&0&1&-1\end{pmatrix}
+\xrightarrow{R_4\leftarrow R_4-R_1}
+\begin{pmatrix}-1&1&0&-1\\0&-3&0&0\\0&1&-1&0\\0&-1&1&0\end{pmatrix}
+\\
+\xrightarrow{R_2\leftarrow-\frac13R_2}
+\begin{pmatrix}-1&1&0&-1\\0&1&0&0\\0&1&-1&0\\0&-1&1&0\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+R_2]{R_1\leftarrow R_1-R_2,\ R_3\leftarrow R_3-R_2}
+\begin{pmatrix}-1&0&0&-1\\0&1&0&0\\0&0&-1&0\\0&0&1&0\end{pmatrix}
+\\
+\xrightarrow{R_4\leftarrow R_4+R_3}
+\begin{pmatrix}-1&0&0&-1\\0&1&0&0\\0&0&-1&0\\0&0&0&0\end{pmatrix}
+\xrightarrow[R_3\leftarrow-R_3]{R_1\leftarrow-R_1}
+\begin{pmatrix}1&0&0&1\\0&1&0&0\\0&0&1&0\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The special solution \((-1,0,0,1)'\) is a basis of \(\mathcal N(B-4I_4)\).
+\end{itemize}
+Check: \(B(1,-2,1,0)'=(1,-2,1,0)'\) and \(B(-1,0,0,1)'=(-4,0,0,4)'\). Also \(1+2+3+4=10=\tr B\) and
+\(1\cdot2\cdot3\cdot4=24=\det B\) (Theorem~\ref{r7-thm-trace-det}).
+\end{solution}
+
+\begin{exercise}\label{r7-dr-eigenspaces}
+Let
+\[
+A=\begin{pmatrix}0&0&2&-1\\0&3&0&0\\1&0&1&-1\\-2&-2&2&1\end{pmatrix},\qquad
+B=\begin{pmatrix}1&-2&-2&-2\\2&1&2&2\\0&0&1&0\\-2&2&0&1\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find the eigenvalues of \(A\) and a basis of each eigenspace.
+\item Do the same for \(B\).
+\item Find an invertible \(P\) and a diagonal \(\Lambda\) with \(AP=P\Lambda\), and an invertible \(Q\) and a diagonal \(\Delta\)
+with \(BQ=Q\Delta\); check both equations by multiplying out.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item For \(t\in\R\), row \(2\) of \(tI-A\) is \((0,\ t-3,\ 0,\ 0)\); expanding along it, and then along row \(1\)
+(Theorem~\ref{r5d-thm-expansion}),
+\[
+\begin{aligned}
+\det(tI-A)&=\det\begin{pmatrix}t&0&-2&1\\0&t-3&0&0\\-1&0&t-1&1\\2&2&-2&t-1\end{pmatrix}
+=(t-3)\det\begin{pmatrix}t&-2&1\\-1&t-1&1\\2&-2&t-1\end{pmatrix}\\
+&=(t-3)\Bigl(t\bigl((t-1)^2+2\bigr)+2\bigl(-(t-1)-2\bigr)+\bigl(2-2(t-1)\bigr)\Bigr)\\
+&=(t-3)\bigl(t^3-2t^2+3t-2t-2+4-2t\bigr)\\
+&=(t-3)(t^3-2t^2-t+2)=(t-3)(t-2)(t^2-1)
+\end{aligned}
+\]
+So \(p_A=(t+1)(t-1)(t-2)(t-3)\): the eigenvalues are \(-1\), \(1\), \(2\), \(3\).
+\item \(\lambda=-1\):
+\[
+\begin{gathered}
+A+I=\begin{pmatrix}1&0&2&-1\\0&4&0&0\\1&0&2&-1\\-2&-2&2&2\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+2R_1]{R_3\leftarrow R_3-R_1}
+\begin{pmatrix}1&0&2&-1\\0&4&0&0\\0&0&0&0\\0&-2&6&0\end{pmatrix}
+\xrightarrow{R_2\leftarrow\frac14R_2}
+\begin{pmatrix}1&0&2&-1\\0&1&0&0\\0&0&0&0\\0&-2&6&0\end{pmatrix}
+\\
+\xrightarrow{R_4\leftarrow R_4+2R_2}
+\begin{pmatrix}1&0&2&-1\\0&1&0&0\\0&0&0&0\\0&0&6&0\end{pmatrix}
+\xrightarrow{R_3\leftrightarrow R_4}
+\begin{pmatrix}1&0&2&-1\\0&1&0&0\\0&0&6&0\\0&0&0&0\end{pmatrix}
+\\
+\xrightarrow{R_3\leftarrow\frac16R_3}
+\begin{pmatrix}1&0&2&-1\\0&1&0&0\\0&0&1&0\\0&0&0&0\end{pmatrix}
+\xrightarrow{R_1\leftarrow R_1-2R_3}
+\begin{pmatrix}1&0&0&-1\\0&1&0&0\\0&0&1&0\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The special solution \((1,0,0,1)'\) is a basis of \(\mathcal N(A+I)\) (Theorem~\ref{thm:r4-four-bases}(c)).
+\item \(\lambda=1\):
+\[
+\begin{gathered}
+A-I=\begin{pmatrix}-1&0&2&-1\\0&2&0&0\\1&0&0&-1\\-2&-2&2&0\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4-2R_1]{R_3\leftarrow R_3+R_1}
+\begin{pmatrix}-1&0&2&-1\\0&2&0&0\\0&0&2&-2\\0&-2&-2&2\end{pmatrix}
+\xrightarrow{R_4\leftarrow R_4+R_2}
+\begin{pmatrix}-1&0&2&-1\\0&2&0&0\\0&0&2&-2\\0&0&-2&2\end{pmatrix}
+\\
+\xrightarrow[R_4\leftarrow R_4+R_3]{R_1\leftarrow R_1-R_3}
+\begin{pmatrix}-1&0&0&1\\0&2&0&0\\0&0&2&-2\\0&0&0&0\end{pmatrix}
+\xrightarrow[R_3\leftarrow\frac12R_3]{R_1\leftarrow-R_1,\ R_2\leftarrow\frac12R_2}
+\begin{pmatrix}1&0&0&-1\\0&1&0&0\\0&0&1&-1\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The special solution \((1,0,1,1)'\) is a basis of \(\mathcal N(A-I)\).
+\item \(\lambda=2\):
+\[
+\begin{gathered}
+A-2I=\begin{pmatrix}-2&0&2&-1\\0&1&0&0\\1&0&-1&-1\\-2&-2&2&-1\end{pmatrix}
+\xrightarrow{R_1\leftrightarrow R_3}
+\begin{pmatrix}1&0&-1&-1\\0&1&0&0\\-2&0&2&-1\\-2&-2&2&-1\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+2R_1]{R_3\leftarrow R_3+2R_1}
+\begin{pmatrix}1&0&-1&-1\\0&1&0&0\\0&0&0&-3\\0&-2&0&-3\end{pmatrix}
+\\
+\xrightarrow{R_4\leftarrow R_4+2R_2}
+\begin{pmatrix}1&0&-1&-1\\0&1&0&0\\0&0&0&-3\\0&0&0&-3\end{pmatrix}
+\xrightarrow{R_3\leftarrow-\frac13R_3}
+\begin{pmatrix}1&0&-1&-1\\0&1&0&0\\0&0&0&1\\0&0&0&-3\end{pmatrix}
+\\
+\xrightarrow[R_4\leftarrow R_4+3R_3]{R_1\leftarrow R_1+R_3}
+\begin{pmatrix}1&0&-1&0\\0&1&0&0\\0&0&0&1\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The special solution \((1,0,1,0)'\) is a basis of \(\mathcal N(A-2I)\).
+\item \(\lambda=3\):
+\[
+\begin{gathered}
+A-3I=\begin{pmatrix}-3&0&2&-1\\0&0&0&0\\1&0&-2&-1\\-2&-2&2&-2\end{pmatrix}
+\xrightarrow{R_1\leftrightarrow R_3}
+\begin{pmatrix}1&0&-2&-1\\0&0&0&0\\-3&0&2&-1\\-2&-2&2&-2\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+2R_1]{R_3\leftarrow R_3+3R_1}
+\begin{pmatrix}1&0&-2&-1\\0&0&0&0\\0&0&-4&-4\\0&-2&-2&-4\end{pmatrix}
+\\
+\xrightarrow{R_2\leftrightarrow R_4}
+\begin{pmatrix}1&0&-2&-1\\0&-2&-2&-4\\0&0&-4&-4\\0&0&0&0\end{pmatrix}
+\xrightarrow[R_3\leftarrow-\frac14R_3]{R_2\leftarrow-\frac12R_2}
+\begin{pmatrix}1&0&-2&-1\\0&1&1&2\\0&0&1&1\\0&0&0&0\end{pmatrix}
+\\
+\xrightarrow[R_2\leftarrow R_2-R_3]{R_1\leftarrow R_1+2R_3}
+\begin{pmatrix}1&0&0&1\\0&1&0&1\\0&0&1&1\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The special solution \((-1,-1,-1,1)'\) is a basis of \(\mathcal N(A-3I)\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item For \(t\in\R\), row \(3\) of \(tI-B\) is \((0,\ 0,\ t-1,\ 0)\); expanding along it, and then along row \(1\),
+\[
+\begin{aligned}
+\det(tI-B)&=\det\begin{pmatrix}t-1&2&2&2\\-2&t-1&-2&-2\\0&0&t-1&0\\2&-2&0&t-1\end{pmatrix}
+=(t-1)\det\begin{pmatrix}t-1&2&2\\-2&t-1&-2\\2&-2&t-1\end{pmatrix}\\
+&=(t-1)\Bigl((t-1)\bigl((t-1)^2-4\bigr)-2\bigl(-2(t-1)+4\bigr)+2\bigl(4-2(t-1)\bigr)\Bigr)\\
+&=(t-1)\bigl((t-1)(t-3)(t+1)+4(t-1)-8+8-4(t-1)\bigr)\\
+&=(t-1)^2(t-3)(t+1)
+\end{aligned}
+\]
+So \(p_B=(t-1)^2(t-3)(t+1)\): the eigenvalues are \(1\), \(1\), \(3\), \(-1\), with \(a_B(1)=2\).
+\item \(\lambda=1\):
+\[
+\begin{gathered}
+B-I=\begin{pmatrix}0&-2&-2&-2\\2&0&2&2\\0&0&0&0\\-2&2&0&0\end{pmatrix}
+\xrightarrow{R_1\leftrightarrow R_2}
+\begin{pmatrix}2&0&2&2\\0&-2&-2&-2\\0&0&0&0\\-2&2&0&0\end{pmatrix}
+\xrightarrow{R_4\leftarrow R_4+R_1}
+\begin{pmatrix}2&0&2&2\\0&-2&-2&-2\\0&0&0&0\\0&2&2&2\end{pmatrix}
+\\
+\xrightarrow{R_4\leftarrow R_4+R_2}
+\begin{pmatrix}2&0&2&2\\0&-2&-2&-2\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\xrightarrow[R_2\leftarrow-\frac12R_2]{R_1\leftarrow\frac12R_1}
+\begin{pmatrix}1&0&1&1\\0&1&1&1\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The free unknowns are \(x_3\), \(x_4\); the special solutions \((-1,-1,1,0)'\), \((-1,-1,0,1)'\) form a basis of
+\(\mathcal N(B-I)\), and \(g_B(1)=2\).
+\item \(\lambda=3\):
+\[
+\begin{gathered}
+B-3I=\begin{pmatrix}-2&-2&-2&-2\\2&-2&2&2\\0&0&-2&0\\-2&2&0&-2\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4-R_1]{R_2\leftarrow R_2+R_1}
+\begin{pmatrix}-2&-2&-2&-2\\0&-4&0&0\\0&0&-2&0\\0&4&2&0\end{pmatrix}
+\\
+\xrightarrow{R_2\leftarrow-\frac14R_2}
+\begin{pmatrix}-2&-2&-2&-2\\0&1&0&0\\0&0&-2&0\\0&4&2&0\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4-4R_2]{R_1\leftarrow R_1+2R_2}
+\begin{pmatrix}-2&0&-2&-2\\0&1&0&0\\0&0&-2&0\\0&0&2&0\end{pmatrix}
+\\
+\xrightarrow[R_4\leftarrow R_4+R_3]{R_1\leftarrow R_1-R_3}
+\begin{pmatrix}-2&0&0&-2\\0&1&0&0\\0&0&-2&0\\0&0&0&0\end{pmatrix}
+\xrightarrow[R_3\leftarrow-\frac12R_3]{R_1\leftarrow-\frac12R_1}
+\begin{pmatrix}1&0&0&1\\0&1&0&0\\0&0&1&0\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The special solution \((-1,0,0,1)'\) is a basis of \(\mathcal N(B-3I)\).
+\item \(\lambda=-1\):
+\[
+\begin{gathered}
+B+I=\begin{pmatrix}2&-2&-2&-2\\2&2&2&2\\0&0&2&0\\-2&2&0&2\end{pmatrix}
+\xrightarrow{R_1\leftarrow\frac12R_1}
+\begin{pmatrix}1&-1&-1&-1\\2&2&2&2\\0&0&2&0\\-2&2&0&2\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+2R_1]{R_2\leftarrow R_2-2R_1}
+\begin{pmatrix}1&-1&-1&-1\\0&4&4&4\\0&0&2&0\\0&0&-2&0\end{pmatrix}
+\\
+\xrightarrow{R_2\leftarrow\frac14R_2}
+\begin{pmatrix}1&-1&-1&-1\\0&1&1&1\\0&0&2&0\\0&0&-2&0\end{pmatrix}
+\xrightarrow{R_1\leftarrow R_1+R_2}
+\begin{pmatrix}1&0&0&0\\0&1&1&1\\0&0&2&0\\0&0&-2&0\end{pmatrix}
+\\
+\xrightarrow{R_3\leftarrow\frac12R_3}
+\begin{pmatrix}1&0&0&0\\0&1&1&1\\0&0&1&0\\0&0&-2&0\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+2R_3]{R_2\leftarrow R_2-R_3}
+\begin{pmatrix}1&0&0&0\\0&1&0&1\\0&0&1&0\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The special solution \((0,-1,0,1)'\) is a basis of \(\mathcal N(B+I)\).
+\end{itemize}
+(c)
+\begin{itemize}
+\item The four eigenvectors of \(A\) belong to distinct eigenvalues, so they are independent
+(Theorem~\ref{r7-thm-indep}), and \(P\) below is invertible (Theorem~\ref{thm:r4-rank-rules}(b),(d)):
+\[
+P=\begin{pmatrix}1&1&1&-1\\0&0&0&-1\\0&1&1&-1\\1&1&0&1\end{pmatrix},\qquad\Lambda=\diag(-1,1,2,3),\qquad
+AP=\begin{pmatrix}-1&1&2&-3\\0&0&0&-3\\0&1&2&-3\\-1&1&0&3\end{pmatrix}=P\Lambda
+\]
+\item The bases of \(\mathcal N(B-I)\), \(\mathcal N(B-3I)\) and \(\mathcal N(B+I)\) together are independent
+(Lemma~\ref{r7-lem-eigenspaces}(b)), so \(Q\) below is invertible (Theorem~\ref{thm:r4-rank-rules}(b),(d)):
+\[
+Q=\begin{pmatrix}-1&-1&-1&0\\-1&-1&0&-1\\1&0&0&0\\0&1&1&1\end{pmatrix},\qquad\Delta=\diag(1,1,3,-1),\qquad
+BQ=\begin{pmatrix}-1&-1&-3&0\\-1&-1&0&1\\1&0&0&0\\0&1&3&-1\end{pmatrix}=Q\Delta
+\]
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r7-ex-lang-eigen}
+Find the characteristic polynomial, the eigenvalues, and a basis of each eigenspace of
+\[
+\text{(a)}\ \ A=\begin{pmatrix}4&0&1\\-2&1&0\\-2&0&1\end{pmatrix},\qquad
+\text{(b)}\ \ B=\begin{pmatrix}1&-3&3\\3&-5&3\\6&-6&4\end{pmatrix}
+\]
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item For \(t\in\R\), expanding along row \(1\) (Theorem~\ref{r5d-thm-expansion}),
+\[
+\det(tI-A)=\det\begin{pmatrix}t-4&0&-1\\2&t-1&0\\2&0&t-1\end{pmatrix}
+=(t-4)(t-1)^2-\det\begin{pmatrix}2&t-1\\2&0\end{pmatrix}=(t-4)(t-1)^2+2(t-1)
+\]
+So
+\(p_A=(t-1)\bigl((t-4)(t-1)+2\bigr)=(t-1)(t^2-5t+6)=(t-1)(t-2)(t-3)\): the eigenvalues are \(1\), \(2\), \(3\).
+\item \(Ax=\lambda x\) reads \(4x_1+x_3=\lambda x_1\), \(-2x_1+x_2=\lambda x_2\), \(-2x_1+x_3=\lambda x_3\).
+\item \(\lambda=1\): \(3x_1+x_3=0\) and \(-2x_1=0\); so \(x_1=x_3=0\), \(x_2\) is free, and \((0,1,0)'\) is a basis of
+\(\mathcal N(A-I)\).
+\item \(\lambda=2\): \(2x_1+x_3=0\), \(-2x_1-x_2=0\), \(-2x_1-x_3=0\); so \(x_3=-2x_1\) and \(x_2=-2x_1\), and \((1,-2,-2)'\) is a
+basis of \(\mathcal N(A-2I)\).
+\item \(\lambda=3\): \(x_1+x_3=0\), \(-2x_1-2x_2=0\), \(-2x_1-2x_3=0\); so \(x_3=-x_1\) and \(x_2=-x_1\), and \((1,-1,-1)'\) is a
+basis of \(\mathcal N(A-3I)\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item For \(t\in\R\), expanding along row \(1\),
+\[
+\begin{aligned}
+\det(tI-B)&=\det\begin{pmatrix}t-1&3&-3\\-3&t+5&-3\\-6&6&t-4\end{pmatrix}\\
+&=(t-1)\bigl((t+5)(t-4)+18\bigr)-3\bigl(-3(t-4)-18\bigr)-3\bigl(-18+6(t+5)\bigr)\\
+&=(t-1)(t^2+t-2)+9(t+2)-18(t+2)=(t+2)\bigl((t-1)^2-9\bigr)=(t+2)^2(t-4)
+\end{aligned}
+\]
+So \(p_B=t^3-12t-16=(t+2)^2(t-4)\): the eigenvalues are \(-2\), \(-2\), \(4\).
+\item \(\lambda=-2\): \(Bx=-2x\) reads \(3x_1-3x_2+3x_3=0\), \(3x_1-3x_2+3x_3=0\), \(6x_1-6x_2+6x_3=0\), that is,
+\(x_1-x_2+x_3=0\). Every row of \(B+2I\) is a multiple of \((1,-1,1)\), so the row space of \(B+2I\) is
+\(\Span\{(1,-1,1)\}\), \(\rank(B+2I)=1\) (Definition~\ref{def:r4-rank}) and \(\dim\mathcal N(B+2I)=2\)
+(Theorem~\ref{thm:r4-rank-nullity}). The solutions \((1,0,-1)'\) and \((0,1,1)'\) are not multiples
+of each other, so they are independent (Proposition~\ref{r3-prop-dependence}(c)) and form a basis of
+\(\mathcal N(B+2I)\) (Theorem~\ref{thm:r4-counting}(d)).
+\item \(\lambda=4\): \(-3x_1-3x_2+3x_3=0\), \(3x_1-9x_2+3x_3=0\), \(6x_1-6x_2=0\); so \(x_2=x_1\), then \(x_3=2x_1\) by the
+first equation, and the second holds: \((1,1,2)'\) is a basis of \(\mathcal N(B-4I)\).
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r7-ex-complex-drill}
+Let
+\[
+A=\begin{pmatrix}3&0&0&2\\-2&1&0&-2\\0&-3&2&1\\-2&2&0&-1\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find \(p_A\) and all eigenvalues of \(A\), and check Theorem~\ref{r7-thm-trace-det}.
+\item Find the eigenspace of each real eigenvalue. Is \(A\) diagonalizable?
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item For \(t\in\R\), column \(3\) of \(tI-A\) has the entry \(t-2\) in position \((3,3)\) and \(0\) elsewhere; expanding
+along it, and then along row \(1\) (Theorem~\ref{r5d-thm-expansion}),
+\[
+\begin{aligned}
+\det(tI-A)&=\det\begin{pmatrix}t-3&0&0&-2\\2&t-1&0&2\\0&3&t-2&-1\\2&-2&0&t+1\end{pmatrix}
+=(t-2)\det\begin{pmatrix}t-3&0&-2\\2&t-1&2\\2&-2&t+1\end{pmatrix}\\
+&=(t-2)\Bigl((t-3)\bigl((t-1)(t+1)+4\bigr)-2\bigl(-4-2(t-1)\bigr)\Bigr)\\
+&=(t-2)(t^3-3t^2+7t-5)
+\end{aligned}
+\]
+\item Let \(q=t^3-3t^2+7t-5\). Then \(q(1)=1-3+7-5=0\), so \(q=(t-1)h\) for a polynomial \(h\)
+(Proposition~\ref{r7-prop-poly}(c)). Multiplying out, \((t-1)(t^2-2t+5)=t^3-3t^2+7t-5=q\); so \(h=t^2-2t+5\)
+(Proposition~\ref{r7-prop-poly}(a)). Since \(t^2-2t+5=(t-1)^2+4=(t-1-2i)(t-1+2i)\),
+\(p_A=(t-2)(t-1)\bigl(t-(1+2i)\bigr)\bigl(t-(1-2i)\bigr)\) (Definition~\ref{r7-def-charpoly}(a),
+Proposition~\ref{r7-prop-poly}(d)): the eigenvalues are \(2\), \(1\), \(1+2i\), \(1-2i\).
+\item \(\tr A=3+1+2-1=5=2+1+(1+2i)+(1-2i)\). Expanding \(\det A\) along column \(3\), and then along row \(1\)
+(Theorem~\ref{r5d-thm-expansion}),
+\[
+\det A=2\det\begin{pmatrix}3&0&2\\-2&1&-2\\-2&2&-1\end{pmatrix}=2\bigl(3(-1+4)+2(-4+2)\bigr)=10
+\]
+and \(10=2\cdot1\cdot(1+2i)(1-2i)\) (Theorem~\ref{r7-thm-trace-det}).
+\end{itemize}
+(b) The real eigenvalues are \(1\) and \(2\). Row-reduce \(A-I\) and \(A-2I\):
+\[
+\begin{gathered}
+A-I=\begin{pmatrix}2&0&0&2\\-2&0&0&-2\\0&-3&1&1\\-2&2&0&-2\end{pmatrix}
+\xrightarrow{R_1\leftarrow\frac12R_1}
+\begin{pmatrix}1&0&0&1\\-2&0&0&-2\\0&-3&1&1\\-2&2&0&-2\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+2R_1]{R_2\leftarrow R_2+2R_1}
+\begin{pmatrix}1&0&0&1\\0&0&0&0\\0&-3&1&1\\0&2&0&0\end{pmatrix}
+\\
+\xrightarrow{R_2\leftrightarrow R_4}
+\begin{pmatrix}1&0&0&1\\0&2&0&0\\0&-3&1&1\\0&0&0&0\end{pmatrix}
+\xrightarrow{R_2\leftarrow\frac12R_2}
+\begin{pmatrix}1&0&0&1\\0&1&0&0\\0&-3&1&1\\0&0&0&0\end{pmatrix}
+\\
+\xrightarrow{R_3\leftarrow R_3+3R_2}
+\begin{pmatrix}1&0&0&1\\0&1&0&0\\0&0&1&1\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+\[
+\begin{gathered}
+A-2I=\begin{pmatrix}1&0&0&2\\-2&-1&0&-2\\0&-3&0&1\\-2&2&0&-3\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+2R_1]{R_2\leftarrow R_2+2R_1}
+\begin{pmatrix}1&0&0&2\\0&-1&0&2\\0&-3&0&1\\0&2&0&1\end{pmatrix}
+\xrightarrow{R_2\leftarrow-R_2}
+\begin{pmatrix}1&0&0&2\\0&1&0&-2\\0&-3&0&1\\0&2&0&1\end{pmatrix}
+\\
+\xrightarrow[R_4\leftarrow R_4-2R_2]{R_3\leftarrow R_3+3R_2}
+\begin{pmatrix}1&0&0&2\\0&1&0&-2\\0&0&0&-5\\0&0&0&5\end{pmatrix}
+\xrightarrow{R_3\leftarrow-\frac15R_3}
+\begin{pmatrix}1&0&0&2\\0&1&0&-2\\0&0&0&1\\0&0&0&5\end{pmatrix}
+\\
+\xrightarrow[R_4\leftarrow R_4-5R_3]{R_1\leftarrow R_1-2R_3,\ R_2\leftarrow R_2+2R_3}
+\begin{pmatrix}1&0&0&0\\0&1&0&0\\0&0&0&1\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The special solutions give \(\mathcal N(A-I)=\Span\{(-1,0,-1,1)'\}\) and \(\mathcal N(A-2I)=\Span\{e_3\}\)
+(Theorem~\ref{thm:r4-four-bases}(c)). \(A\) is not diagonalizable, since it has non-real eigenvalues
+(Definition~\ref{r7-def-diagonalizable}).
+\end{solution}
+
+\begin{exercise}\label{r7-dr-similar}
+Let
+\[
+A=\begin{pmatrix}1&1&0&-1\\0&2&0&1\\0&0&3&0\\0&0&0&4\end{pmatrix},\qquad
+P=\begin{pmatrix}1&0&0&0\\-1&1&0&0\\0&1&1&0\\-1&1&0&1\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find \(P^{-1}\) by Gauss--Jordan elimination, and compute \(B=P^{-1}AP\).
+\item Find \(p_B\), and check that \(p_B=p_A\), \(\tr B=\tr A\) and \(\det B=\det A\).
+\item The vector \(x=(1,1,0,0)'\) is an eigenvector of \(A\) belonging to \(2\). Find an eigenvector of \(B\) belonging
+to \(2\).
+\item Show that
+\[
+F=\begin{pmatrix}1&1&1&1\\0&1&1&1\\0&0&1&1\\0&0&0&2\end{pmatrix},\qquad
+G=\begin{pmatrix}1&0&1&1\\0&1&1&1\\0&0&1&1\\0&0&0&2\end{pmatrix}
+\]
+have the same characteristic polynomial, but are not similar.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) Row-reduce \([P\mid I_4]\) (Corollary~\ref{r2-cor-computing-inverse}(a)):
+\[
+\begin{gathered}
+\left(\begin{array}{cccc|cccc}1&0&0&0&1&0&0&0\\-1&1&0&0&0&1&0&0\\0&1&1&0&0&0&1&0\\-1&1&0&1&0&0&0&1\end{array}\right)
+\xrightarrow[R_4\leftarrow R_4+R_1]{R_2\leftarrow R_2+R_1}
+\left(\begin{array}{cccc|cccc}1&0&0&0&1&0&0&0\\0&1&0&0&1&1&0&0\\0&1&1&0&0&0&1&0\\0&1&0&1&1&0&0&1\end{array}\right)
+\\
+\xrightarrow[R_4\leftarrow R_4-R_2]{R_3\leftarrow R_3-R_2}
+\left(\begin{array}{cccc|cccc}1&0&0&0&1&0&0&0\\0&1&0&0&1&1&0&0\\0&0&1&0&-1&-1&1&0\\0&0&0&1&0&-1&0&1\end{array}\right)
+\end{gathered}
+\]
+So
+\[
+P^{-1}=\begin{pmatrix}1&0&0&0\\1&1&0&0\\-1&-1&1&0\\0&-1&0&1\end{pmatrix},\qquad
+AP=\begin{pmatrix}1&0&0&-1\\-3&3&0&1\\0&3&3&0\\-4&4&0&4\end{pmatrix},\qquad
+B=P^{-1}(AP)=\begin{pmatrix}1&0&0&-1\\-2&3&0&0\\2&0&3&0\\-1&1&0&3\end{pmatrix}
+\]
+(b)
+\begin{itemize}
+\item \(A\) is upper triangular, so \(p_A=(t-1)(t-2)(t-3)(t-4)\) (Proposition~\ref{r7-prop-block-triangular}(b)).
+\item For \(t\in\R\), column \(3\) of \(tI-B\) has the entry \(t-3\) in position \((3,3)\) and \(0\) elsewhere; expanding
+along it, and then along row \(1\),
+\[
+\begin{aligned}
+\det(tI-B)&=\det\begin{pmatrix}t-1&0&0&1\\2&t-3&0&0\\-2&0&t-3&0\\1&-1&0&t-3\end{pmatrix}
+=(t-3)\det\begin{pmatrix}t-1&0&1\\2&t-3&0\\1&-1&t-3\end{pmatrix}\\
+&=(t-3)\bigl((t-1)(t-3)^2+(-2-(t-3))\bigr)=(t-3)\bigl((t-1)(t-3)^2-(t-1)\bigr)
+\end{aligned}
+\]
+So \(p_B=(t-3)(t-1)\bigl((t-3)^2-1\bigr)=(t-1)(t-2)(t-3)(t-4)=p_A\), as Theorem~\ref{r7-thm-similar}(a) asserts.
+\item \(\tr B=1+3+3+3=10=\tr A\). Expanding \(\det B\) along column \(3\) and then along row \(1\),
+\[
+\det B=3\det\begin{pmatrix}1&0&-1\\-2&3&0\\-1&1&3\end{pmatrix}=3\bigl(9-(-2+3)\bigr)=24
+\]
+and \(24=1\cdot2\cdot3\cdot4=\det A\) (Theorem~\ref{r5d-thm-basic}(c)).
+\end{itemize}
+(c) By Theorem~\ref{r7-thm-similar}(b), \(P^{-1}x=(1,2,-2,-1)'\) is an eigenvector of \(B\) belonging to \(2\). Check:
+\(B(1,2,-2,-1)'=(2,4,-4,-2)'=2(1,2,-2,-1)'\).
+
+(d)
+\begin{itemize}
+\item \(F\) and \(G\) are upper triangular with the diagonal entries \(1\), \(1\), \(1\), \(2\), so
+\(p_F=p_G=(t-1)^3(t-2)\) (Proposition~\ref{r7-prop-block-triangular}(b)).
+\item Row-reduce \(F-I\) and \(G-I\):
+\[
+F-I=\begin{pmatrix}0&1&1&1\\0&0&1&1\\0&0&0&1\\0&0&0&1\end{pmatrix}
+\xrightarrow{R_4\leftarrow R_4-R_3}
+\begin{pmatrix}0&1&1&1\\0&0&1&1\\0&0&0&1\\0&0&0&0\end{pmatrix}
+\]
+\[
+G-I=\begin{pmatrix}0&0&1&1\\0&0&1&1\\0&0&0&1\\0&0&0&1\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4-R_3]{R_2\leftarrow R_2-R_1}
+\begin{pmatrix}0&0&1&1\\0&0&0&0\\0&0&0&1\\0&0&0&0\end{pmatrix}
+\xrightarrow{R_2\leftrightarrow R_3}
+\begin{pmatrix}0&0&1&1\\0&0&0&1\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\]
+So \(\rank(F-I)=3\) and \(\rank(G-I)=2\) (Definition~\ref{def:r4-rank}), that is, \(\dim\mathcal N(F-I)=1\) and
+\(\dim\mathcal N(G-I)=2\) (Theorem~\ref{thm:r4-rank-nullity}).
+\item Similar matrices have eigenspaces of equal dimension (Theorem~\ref{r7-thm-similar}(b)), so \(F\) and \(G\) are not
+similar.
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r7-ex-similar}
+Let \(B\) be the matrix of Example~\ref{r7-exm-diag-powers}, and
+\[
+F=\begin{pmatrix}3&0&0&0\\0&3&2&-2\\0&0&1&0\\0&0&0&1\end{pmatrix},\qquad
+G=\begin{pmatrix}3&0&0&0\\0&3&2&-2\\0&0&1&1\\0&0&0&1\end{pmatrix}
+\]
+\begin{enumerate}
+\item Show that \(p_B=p_F=p_G\).
+\item Diagonalize \(F\), and find an invertible \(S\) with \(F=S^{-1}BS\).
+\item Show that \(G\) is not similar to \(B\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) By Example~\ref{r7-exm-diag-powers}, the eigenvalues of \(B\), listed with multiplicity, are \(3\), \(3\), \(1\),
+\(1\), so \(p_B=(t-3)^2(t-1)^2\) (Definition~\ref{r7-def-eigenvalues}). \(F\) and \(G\) are upper triangular with the
+diagonal entries \(3\), \(3\), \(1\), \(1\), so \(p_F=p_G=(t-3)^2(t-1)^2\) (Proposition~\ref{r7-prop-block-triangular}(b)).
+
+(b)
+\begin{itemize}
+\item \(\lambda=3\):
+\[
+\begin{gathered}
+F-3I_4=\begin{pmatrix}0&0&0&0\\0&0&2&-2\\0&0&-2&0\\0&0&0&-2\end{pmatrix}
+\xrightarrow{R_1\leftrightarrow R_3}
+\begin{pmatrix}0&0&-2&0\\0&0&2&-2\\0&0&0&0\\0&0&0&-2\end{pmatrix}
+\xrightarrow{R_2\leftarrow R_2+R_1}
+\begin{pmatrix}0&0&-2&0\\0&0&0&-2\\0&0&0&0\\0&0&0&-2\end{pmatrix}
+\\
+\xrightarrow{R_4\leftarrow R_4-R_2}
+\begin{pmatrix}0&0&-2&0\\0&0&0&-2\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\xrightarrow[R_2\leftarrow-\frac12R_2]{R_1\leftarrow-\frac12R_1}
+\begin{pmatrix}0&0&1&0\\0&0&0&1\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The free unknowns are \(x_1\), \(x_2\); the special solutions \(e_1\), \(e_2\) form a basis of \(\mathcal N(F-3I_4)\)
+(Theorem~\ref{thm:r4-four-bases}(c)).
+\item \(\lambda=1\):
+\[
+F-I_4=\begin{pmatrix}2&0&0&0\\0&2&2&-2\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\xrightarrow[R_2\leftarrow\frac12R_2]{R_1\leftarrow\frac12R_1}
+\begin{pmatrix}1&0&0&0\\0&1&1&-1\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\]
+The free unknowns are \(x_3\), \(x_4\); the special solutions \((0,-1,1,0)'\) and \((0,1,0,1)'\) form a basis of
+\(\mathcal N(F-I_4)\).
+\item So \(g_F(3)=a_F(3)=2\) and \(g_F(1)=a_F(1)=2\), and \(P_F^{-1}FP_F=\Lambda=\diag(3,3,1,1)\) (the paragraph after
+Theorem~\ref{r7-thm-diag-criterion}), where
+\[
+P_F=\begin{pmatrix}1&0&0&0\\0&1&-1&1\\0&0&1&0\\0&0&0&1\end{pmatrix},\qquad
+P_F^{-1}=\begin{pmatrix}1&0&0&0\\0&1&1&-1\\0&0&1&0\\0&0&0&1\end{pmatrix}
+\]
+Check: row \(2\) of the second matrix times columns \(1\), \(2\), \(3\), \(4\) of \(P_F\) gives \(0\), \(1\), \(-1+1=0\),
+\(1-1=0\), and the other rows are rows of \(I_4\) times \(P_F\); so the product is \(I_4\), and the second matrix is
+\(P_F^{-1}\) (Theorem~\ref{r2-thm-invertible}).
+\item With \(P\) of Example~\ref{r7-exm-diag-powers}, \(P^{-1}BP=\Lambda\) with the same \(\Lambda\), so
+\(F=P_F\Lambda P_F^{-1}=P_FP^{-1}BPP_F^{-1}=S^{-1}BS\) for \(S=PP_F^{-1}\) (Theorem~\ref{r2-thm-inverse-props}(a),(b)):
+\[
+S=PP_F^{-1}=\begin{pmatrix}-1&0&0&-1\\0&-1&0&0\\1&0&1&0\\0&1&1&0\end{pmatrix},\qquad
+BS=SF=\begin{pmatrix}-3&0&0&-1\\0&-3&-2&2\\3&0&1&0\\0&3&3&-2\end{pmatrix}
+\]
+The equality \(BS=SF\) confirms \(F=S^{-1}BS\).
+\end{itemize}
+(c) Scaling rows \(1\) and \(2\) of
+\[
+G-I_4=\begin{pmatrix}2&0&0&0\\0&2&2&-2\\0&0&0&1\\0&0&0&0\end{pmatrix}
+\]
+by \(\frac12\) gives an echelon form with three nonzero rows, so \(\rank(G-I_4)=3\) (Remark~\ref{rem:r4-echelon},
+Definition~\ref{def:r4-rank}) and \(g_G(1)=4-3=1\) (Definition~\ref{r7-def-multiplicity}). As \(g_B(1)=2\)
+(Example~\ref{r7-exm-diag-powers}), Theorem~\ref{r7-thm-similar}(b) shows that \(G\) is not similar to \(B\); by (a), the
+characteristic polynomial does not detect this.
+\end{solution}
+
+\begin{exercise}\label{r7-dr-multiplicities}
+For each matrix, find the eigenvalues with their algebraic and geometric multiplicities, decide whether the matrix is
+diagonalizable, and compare its rank with the number of its nonzero eigenvalues, listed with multiplicity.
+\[
+\text{(a)}\ \ A=\begin{pmatrix}2&1&-1&0\\0&2&3&1\\0&0&-1&-1\\0&0&0&3\end{pmatrix},\qquad
+\text{(b)}\ \ B=\begin{pmatrix}-1&0&-1&-2\\1&3&-2&-1\\1&0&1&2\\-1&0&-1&-1\end{pmatrix}
+\]
+\[
+\text{(c)}\ \ M=\begin{pmatrix}3&1&1&2\\0&2&0&0\\-1&-1&1&-2\\0&0&0&2\end{pmatrix}
+\]
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item \(A\) is upper triangular, so \(p_A=(t-2)^2(t+1)(t-3)\) (Proposition~\ref{r7-prop-block-triangular}(b)):
+\(a_A(2)=2\) and \(a_A(-1)=a_A(3)=1\). As \(-1\) and \(3\) are simple, \(g_A(-1)=g_A(3)=1\)
+(Theorem~\ref{r7-thm-geo-alg}).
+\item Row-reduce \(A-2I\):
+\[
+A-2I=\begin{pmatrix}0&1&-1&0\\0&0&3&1\\0&0&-3&-1\\0&0&0&1\end{pmatrix}
+\xrightarrow{R_3\leftarrow R_3+R_2}
+\begin{pmatrix}0&1&-1&0\\0&0&3&1\\0&0&0&0\\0&0&0&1\end{pmatrix}
+\xrightarrow{R_3\leftrightarrow R_4}
+\begin{pmatrix}0&1&-1&0\\0&0&3&1\\0&0&0&1\\0&0&0&0\end{pmatrix}
+\]
+Scaling row \(2\) by \(\frac13\) gives an echelon form with three nonzero rows, so \(\rank(A-2I)=3\)
+(Remark~\ref{rem:r4-echelon}, Definition~\ref{def:r4-rank}) and \(g_A(2)=4-3=1<2=a_A(2)\)
+(Definition~\ref{r7-def-multiplicity}): \(A\) is not diagonalizable (Theorem~\ref{r7-thm-diag-criterion}).
+\item \(\det A=2\cdot2\cdot(-1)\cdot3=-12\ne0\) (Theorem~\ref{r5d-thm-basic}(c)), so \(\rank A=4\)
+(Theorem~\ref{r5d-thm-product}(a), Theorem~\ref{thm:r4-rank-rules}(d)): all four eigenvalues \(2\), \(2\), \(-1\), \(3\)
+are nonzero, and their number is \(\rank A\), although \(A\) is not diagonalizable.
+\end{itemize}
+(b)
+\begin{itemize}
+\item For \(t\in\R\), column \(2\) of \(tI-B\) has the entry \(t-3\) in position \((2,2)\) and \(0\) elsewhere; expanding
+along it, and then along row \(1\),
+\[
+\begin{aligned}
+\det(tI-B)&=\det\begin{pmatrix}t+1&0&1&2\\-1&t-3&2&1\\-1&0&t-1&-2\\1&0&1&t+1\end{pmatrix}
+=(t-3)\det\begin{pmatrix}t+1&1&2\\-1&t-1&-2\\1&1&t+1\end{pmatrix}\\
+&=(t-3)\Bigl((t+1)\bigl((t-1)(t+1)+2\bigr)-\bigl(-(t+1)+2\bigr)+2\bigl(-1-(t-1)\bigr)\Bigr)\\
+&=(t-3)\bigl(t^3+t^2+t+1-1+t-2t\bigr)=(t-3)(t^3+t^2)=(t-3)t^2(t+1)
+\end{aligned}
+\]
+So \(a_B(0)=2\) and \(a_B(3)=a_B(-1)=1\), and \(g_B(3)=g_B(-1)=1\) (Theorem~\ref{r7-thm-geo-alg}).
+\item Row-reduce \(B-0I=B\):
+\[
+\begin{gathered}
+B=\begin{pmatrix}-1&0&-1&-2\\1&3&-2&-1\\1&0&1&2\\-1&0&-1&-1\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4-R_1]{R_2\leftarrow R_2+R_1,\ R_3\leftarrow R_3+R_1}
+\begin{pmatrix}-1&0&-1&-2\\0&3&-3&-3\\0&0&0&0\\0&0&0&1\end{pmatrix}
+\\
+\xrightarrow{R_3\leftrightarrow R_4}
+\begin{pmatrix}-1&0&-1&-2\\0&3&-3&-3\\0&0&0&1\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+Scaling rows \(1\) and \(2\) by \(-1\) and \(\frac13\) gives an echelon form with three nonzero rows, so \(\rank B=3\)
+and \(g_B(0)=4-3=1<2=a_B(0)\): \(B\) is not diagonalizable.
+\item \(\rank B=3\), but only two eigenvalues, \(3\) and \(-1\), are nonzero: the inequality of
+Corollary~\ref{r7-cor-rank-eigen} is strict.
+\end{itemize}
+(c)
+\begin{itemize}
+\item For \(t\in\R\), rows \(2\) and \(4\) of \(tI-M\) have the entry \(t-2\) on the diagonal and \(0\) elsewhere;
+expanding along row \(2\), and then along the last row,
+\[
+\begin{aligned}
+\det(tI-M)&=\det\begin{pmatrix}t-3&-1&-1&-2\\0&t-2&0&0\\1&1&t-1&2\\0&0&0&t-2\end{pmatrix}
+=(t-2)\det\begin{pmatrix}t-3&-1&-2\\1&t-1&2\\0&0&t-2\end{pmatrix}\\
+&=(t-2)^2\det\begin{pmatrix}t-3&-1\\1&t-1\end{pmatrix}=(t-2)^2(t^2-4t+4)=(t-2)^4
+\end{aligned}
+\]
+So \(2\) is the only eigenvalue, with \(a_M(2)=4\).
+\item Row-reduce \(M-2I\):
+\[
+M-2I=\begin{pmatrix}1&1&1&2\\0&0&0&0\\-1&-1&-1&-2\\0&0&0&0\end{pmatrix}
+\xrightarrow{R_3\leftarrow R_3+R_1}
+\begin{pmatrix}1&1&1&2\\0&0&0&0\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\]
+So \(\rank(M-2I)=1\) and \(g_M(2)=3<4=a_M(2)\): \(M\) is not diagonalizable.
+\item \(\det M=(-1)^4p_M(0)=16\ne0\), so \(\rank M=4\), the number of the nonzero eigenvalues \(2\), \(2\), \(2\), \(2\).
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r7-ex-am-eigen}
+Let
+\[
+A=\begin{pmatrix}1&3&0\\0&1&0\\2&1&5\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find the characteristic equation and the eigenvalues of \(A\).
+\item What is the rank of \(A\)?
+\item What are the eigenvectors of \(A\)? Are they linearly independent? Are they orthogonal?
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) For \(t\in\R\), column \(3\) of \(tI-A\) has the entry \(t-5\) at \((3,3)\) and \(0\) elsewhere; expanding along
+it (Theorem~\ref{r5d-thm-expansion}),
+\[
+\det(tI-A)=\det\begin{pmatrix}t-1&-3&0\\0&t-1&0\\-2&-1&t-5\end{pmatrix}
+=(t-5)\det\begin{pmatrix}t-1&-3\\0&t-1\end{pmatrix}=(t-1)^2(t-5)
+\]
+The characteristic equation is \((t-1)^2(t-5)=0\), and the eigenvalues are \(1\) (twice) and \(5\).
+
+(b) The constant term of \(p_A\) is \((0-1)^2(0-5)=-5=(-1)^3\det A\) (Definition~\ref{r7-def-charpoly}(b)), so
+\(\det A=5\ne0\): \(A\) is invertible and \(\rank A=3\) (Theorem~\ref{r5d-thm-product}(a)).
+
+(c)
+\begin{itemize}
+\item \(\lambda=1\): \(Ax=x\) reads \(x_1+3x_2=x_1\), \(x_2=x_2\), \(2x_1+x_2+5x_3=x_3\); so \(x_2=0\) and \(x_1+2x_3=0\): the
+eigenvectors are the nonzero multiples of \((2,0,-1)'\).
+\item \(\lambda=5\): \(Ax=5x\) reads \(x_1+3x_2=5x_1\), \(x_2=5x_2\), \(2x_1+x_2+5x_3=5x_3\); so \(x_2=0\), then \(x_1=0\), and
+\(x_3\) is free: the eigenvectors are the nonzero multiples of \((0,0,1)'\).
+\item \((2,0,-1)'\) and \((0,0,1)'\) are independent (Theorem~\ref{r7-thm-indep}) but not orthogonal: their inner product
+(Definition~\ref{r6-def-inner}) is \(2\cdot0+0\cdot0+(-1)\cdot1=-1\). The double eigenvalue \(1\) has only one independent eigenvector: \(g_A(1)=1<2=a_A(1)\)
+(Definitions~\ref{r7-def-eigenvalues} and~\ref{r7-def-multiplicity}), as Theorem~\ref{r7-thm-geo-alg} allows.
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r7-ex-which-diagonalizable}
+Which of the following matrices are diagonalizable?
+\[
+A_1=\begin{pmatrix}3&1&0&-1\\0&3&0&0\\0&1&3&0\\-1&0&1&3\end{pmatrix},\qquad
+A_2=\begin{pmatrix}1&-2\\1&-1\end{pmatrix},\qquad
+A_3=\begin{pmatrix}1&1&1&0\\0&2&1&1\\0&0&1&-1\\0&0&0&2\end{pmatrix}
+\]
+\end{exercise}
+\begin{solution}
+(\(A_1\)) \(A_1\) differs from the matrix \(B\) of Exercise~\ref{r7-ex-eigenpairs} only in the \((2,2)\) entry. The same
+two expansions give \(p_{A_1}=(t-3)\cdot(t-3)(t-2)(t-4)=(t-3)^2(t-2)(t-4)\), so \(a_{A_1}(3)=2\). But
+\[
+\begin{gathered}
+A_1-3I_4=\begin{pmatrix}0&1&0&-1\\0&0&0&0\\0&1&0&0\\-1&0&1&0\end{pmatrix}
+\xrightarrow{R_1\leftrightarrow R_4}
+\begin{pmatrix}-1&0&1&0\\0&0&0&0\\0&1&0&0\\0&1&0&-1\end{pmatrix}
+\xrightarrow{R_2\leftrightarrow R_4}
+\begin{pmatrix}-1&0&1&0\\0&1&0&-1\\0&1&0&0\\0&0&0&0\end{pmatrix}
+\\
+\xrightarrow{R_3\leftarrow R_3-R_2}
+\begin{pmatrix}-1&0&1&0\\0&1&0&-1\\0&0&0&1\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+and scaling row \(1\) by \(-1\) gives an echelon form with three nonzero rows; so \(\rank(A_1-3I_4)=3\)
+(Remark~\ref{rem:r4-echelon}, Definition~\ref{def:r4-rank}), \(g_{A_1}(3)=1<2\) (Definition~\ref{r7-def-multiplicity}),
+and \(A_1\) is not diagonalizable (Theorem~\ref{r7-thm-diag-criterion}). The matrix \(B\) has four distinct real
+eigenvalues, so it is diagonalizable (Theorem~\ref{r7-thm-diag-criterion}); changing one entry has destroyed
+diagonalizability.
+
+(\(A_2\)) \(p_{A_2}=t^2-0\cdot t+(-1+2)=t^2+1=(t-i)(t+i)\) (Definition~\ref{r7-def-charpoly}(b)). So the eigenvalues
+\(i\) and \(-i\) of \(A_2\) are not real, and \(A_2\) is not diagonalizable (Definition~\ref{r7-def-diagonalizable}).
+
+(\(A_3\)) \(A_3\) is upper triangular, so \(p_{A_3}=(t-1)^2(t-2)^2\) (Proposition~\ref{r7-prop-block-triangular}(b)).
+\[
+A_3-I_4=\begin{pmatrix}0&1&1&0\\0&1&1&1\\0&0&0&-1\\0&0&0&1\end{pmatrix}
+\xrightarrow{R_2\leftarrow R_2-R_1}
+\begin{pmatrix}0&1&1&0\\0&0&0&1\\0&0&0&-1\\0&0&0&1\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4-R_2]{R_3\leftarrow R_3+R_2}
+\begin{pmatrix}0&1&1&0\\0&0&0&1\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\]
+The free unknowns are \(x_1\), \(x_3\); the special solutions \((1,0,0,0)'\), \((0,-1,1,0)'\) form a basis of
+\(\mathcal N(A_3-I_4)\) (Theorem~\ref{thm:r4-four-bases}(c)), and \(g_{A_3}(1)=2\).
+\[
+A_3-2I_4=\begin{pmatrix}-1&1&1&0\\0&0&1&1\\0&0&-1&-1\\0&0&0&0\end{pmatrix}
+\xrightarrow[R_3\leftarrow R_3+R_2]{R_1\leftarrow R_1-R_2}
+\begin{pmatrix}-1&1&0&-1\\0&0&1&1\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\xrightarrow{R_1\leftarrow-R_1}
+\begin{pmatrix}1&-1&0&1\\0&0&1&1\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\]
+The free unknowns are \(x_2\), \(x_4\); the special solutions \((1,1,0,0)'\), \((-1,0,-1,1)'\) form a basis of
+\(\mathcal N(A_3-2I_4)\), and \(g_{A_3}(2)=2\). All eigenvalues of \(A_3\) are real and both geometric multiplicities
+equal the algebraic ones, so \(A_3\) is diagonalizable (Theorem~\ref{r7-thm-diag-criterion}).
+\end{solution}
+
+\begin{exercise}\label{r7-ex-diag-drill}
+Let
+\[
+A=\begin{pmatrix}2&0&-1&-1\\0&3&-2&-2\\2&0&2&-2\\-2&0&-1&3\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find the eigenvalues of \(A\), a basis of each eigenspace, and an invertible \(P\) with \(P^{-1}AP\) diagonal.
+\item Find \(P^{-1}\) by Gauss--Jordan elimination.
+\item Find \(A^k\) for \(k\geqslant1\), and check the result for \(k=1\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item For \(t\in\R\), column \(2\) of \(tI-A\) has the entry \(t-3\) in position \((2,2)\) and \(0\) elsewhere; expanding
+along it, and then along row \(1\),
+\[
+\begin{aligned}
+\det(tI-A)&=\det\begin{pmatrix}t-2&0&1&1\\0&t-3&2&2\\-2&0&t-2&2\\2&0&1&t-3\end{pmatrix}
+=(t-3)\det\begin{pmatrix}t-2&1&1\\-2&t-2&2\\2&1&t-3\end{pmatrix}\\
+&=(t-3)\Bigl((t-2)\bigl((t-2)(t-3)-2\bigr)-\bigl(-2(t-3)-4\bigr)+\bigl(-2-2(t-2)\bigr)\Bigr)\\
+&=(t-3)\bigl((t-2)(t^2-5t+4)+(2t-2)+(2-2t)\bigr)\\
+&=(t-3)(t-2)(t-1)(t-4)
+\end{aligned}
+\]
+So \(p_A=(t-1)(t-2)(t-3)(t-4)\): the eigenvalues \(1\), \(2\), \(3\), \(4\) are distinct, and \(A\) is diagonalizable
+(Theorem~\ref{r7-thm-diag-criterion}).
+\item \(\lambda=1\):
+\[
+\begin{gathered}
+A-I=\begin{pmatrix}1&0&-1&-1\\0&2&-2&-2\\2&0&1&-2\\-2&0&-1&2\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+2R_1]{R_3\leftarrow R_3-2R_1}
+\begin{pmatrix}1&0&-1&-1\\0&2&-2&-2\\0&0&3&0\\0&0&-3&0\end{pmatrix}
+\xrightarrow[R_3\leftarrow\frac13R_3]{R_2\leftarrow\frac12R_2}
+\begin{pmatrix}1&0&-1&-1\\0&1&-1&-1\\0&0&1&0\\0&0&-3&0\end{pmatrix}
+\\
+\xrightarrow[R_4\leftarrow R_4+3R_3]{R_1\leftarrow R_1+R_3,\ R_2\leftarrow R_2+R_3}
+\begin{pmatrix}1&0&0&-1\\0&1&0&-1\\0&0&1&0\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The special solution \(p_1=(1,1,0,1)'\) is a basis of \(\mathcal N(A-I)\) (Theorem~\ref{thm:r4-four-bases}(c)).
+\item \(\lambda=2\):
+\[
+\begin{gathered}
+A-2I=\begin{pmatrix}0&0&-1&-1\\0&1&-2&-2\\2&0&0&-2\\-2&0&-1&1\end{pmatrix}
+\xrightarrow{R_1\leftrightarrow R_3}
+\begin{pmatrix}2&0&0&-2\\0&1&-2&-2\\0&0&-1&-1\\-2&0&-1&1\end{pmatrix}
+\xrightarrow{R_4\leftarrow R_4+R_1}
+\begin{pmatrix}2&0&0&-2\\0&1&-2&-2\\0&0&-1&-1\\0&0&-1&-1\end{pmatrix}
+\\
+\xrightarrow[R_4\leftarrow R_4-R_3]{R_2\leftarrow R_2-2R_3}
+\begin{pmatrix}2&0&0&-2\\0&1&0&0\\0&0&-1&-1\\0&0&0&0\end{pmatrix}
+\xrightarrow[R_3\leftarrow-R_3]{R_1\leftarrow\frac12R_1}
+\begin{pmatrix}1&0&0&-1\\0&1&0&0\\0&0&1&1\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The special solution \(p_2=(1,0,-1,1)'\) is a basis of \(\mathcal N(A-2I)\).
+\item \(\lambda=3\):
+\[
+\begin{gathered}
+A-3I=\begin{pmatrix}-1&0&-1&-1\\0&0&-2&-2\\2&0&-1&-2\\-2&0&-1&0\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4-2R_1]{R_3\leftarrow R_3+2R_1}
+\begin{pmatrix}-1&0&-1&-1\\0&0&-2&-2\\0&0&-3&-4\\0&0&1&2\end{pmatrix}
+\xrightarrow{R_2\leftarrow-\frac12R_2}
+\begin{pmatrix}-1&0&-1&-1\\0&0&1&1\\0&0&-3&-4\\0&0&1&2\end{pmatrix}
+\\
+\xrightarrow[R_4\leftarrow R_4-R_2]{R_1\leftarrow R_1+R_2,\ R_3\leftarrow R_3+3R_2}
+\begin{pmatrix}-1&0&0&0\\0&0&1&1\\0&0&0&-1\\0&0&0&1\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+R_3]{R_2\leftarrow R_2+R_3}
+\begin{pmatrix}-1&0&0&0\\0&0&1&0\\0&0&0&-1\\0&0&0&0\end{pmatrix}
+\\
+\xrightarrow[R_3\leftarrow-R_3]{R_1\leftarrow-R_1}
+\begin{pmatrix}1&0&0&0\\0&0&1&0\\0&0&0&1\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The free unknown is \(x_2\); the special solution \(p_3=e_2\) is a basis of \(\mathcal N(A-3I)\).
+\item \(\lambda=4\):
+\[
+\begin{gathered}
+A-4I=\begin{pmatrix}-2&0&-1&-1\\0&-1&-2&-2\\2&0&-2&-2\\-2&0&-1&-1\end{pmatrix}
+\xrightarrow{R_1\leftrightarrow R_3}
+\begin{pmatrix}2&0&-2&-2\\0&-1&-2&-2\\-2&0&-1&-1\\-2&0&-1&-1\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+R_1]{R_3\leftarrow R_3+R_1}
+\begin{pmatrix}2&0&-2&-2\\0&-1&-2&-2\\0&0&-3&-3\\0&0&-3&-3\end{pmatrix}
+\\
+\xrightarrow[R_3\leftarrow-\frac13R_3]{R_2\leftarrow-R_2}
+\begin{pmatrix}2&0&-2&-2\\0&1&2&2\\0&0&1&1\\0&0&-3&-3\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+3R_3]{R_1\leftarrow R_1+2R_3,\ R_2\leftarrow R_2-2R_3}
+\begin{pmatrix}2&0&0&0\\0&1&0&0\\0&0&1&1\\0&0&0&0\end{pmatrix}
+\\
+\xrightarrow{R_1\leftarrow\frac12R_1}
+\begin{pmatrix}1&0&0&0\\0&1&0&0\\0&0&1&1\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+The special solution \(p_4=(0,0,-1,1)'\) is a basis of \(\mathcal N(A-4I)\).
+\item The eigenvectors \(p_1,\dots,p_4\) are independent (Theorem~\ref{r7-thm-indep}). With
+\[
+P=[p_1\ p_2\ p_3\ p_4]=\begin{pmatrix}1&1&0&0\\1&0&1&0\\0&-1&0&-1\\1&1&0&1\end{pmatrix}
+\]
+\(P^{-1}AP=\diag(1,2,3,4)\) (Definition~\ref{r7-def-diagonalizable}).
+\end{itemize}
+(b) Row-reduce \([P\mid I_4]\) (Corollary~\ref{r2-cor-computing-inverse}(a)):
+\[
+\begin{gathered}
+\left(\begin{array}{cccc|cccc}1&1&0&0&1&0&0&0\\1&0&1&0&0&1&0&0\\0&-1&0&-1&0&0&1&0\\1&1&0&1&0&0&0&1\end{array}\right)
+\xrightarrow[R_4\leftarrow R_4-R_1]{R_2\leftarrow R_2-R_1}
+\left(\begin{array}{cccc|cccc}1&1&0&0&1&0&0&0\\0&-1&1&0&-1&1&0&0\\0&-1&0&-1&0&0&1&0\\0&0&0&1&-1&0&0&1\end{array}\right)
+\\
+\xrightarrow{R_2\leftrightarrow R_3}
+\left(\begin{array}{cccc|cccc}1&1&0&0&1&0&0&0\\0&-1&0&-1&0&0&1&0\\0&-1&1&0&-1&1&0&0\\0&0&0&1&-1&0&0&1\end{array}\right)
+\\
+\xrightarrow[R_3\leftarrow R_3-R_2]{R_1\leftarrow R_1+R_2}
+\left(\begin{array}{cccc|cccc}1&0&0&-1&1&0&1&0\\0&-1&0&-1&0&0&1&0\\0&0&1&1&-1&1&-1&0\\0&0&0&1&-1&0&0&1\end{array}\right)
+\\
+\xrightarrow[R_3\leftarrow R_3-R_4]{R_1\leftarrow R_1+R_4,\ R_2\leftarrow R_2+R_4}
+\left(\begin{array}{cccc|cccc}1&0&0&0&0&0&1&1\\0&-1&0&0&-1&0&1&1\\0&0&1&0&0&1&-1&-1\\0&0&0&1&-1&0&0&1\end{array}\right)
+\\
+\xrightarrow{R_2\leftarrow-R_2}
+\left(\begin{array}{cccc|cccc}1&0&0&0&0&0&1&1\\0&1&0&0&1&0&-1&-1\\0&0&1&0&0&1&-1&-1\\0&0&0&1&-1&0&0&1\end{array}\right)
+\end{gathered}
+\]
+So
+\[
+P^{-1}=\begin{pmatrix}0&0&1&1\\1&0&-1&-1\\0&1&-1&-1\\-1&0&0&1\end{pmatrix}
+\]
+(c) By Proposition~\ref{r7-prop-diag-powers}(a), \(A^k=P\diag(1,2^k,3^k,4^k)P^{-1}\). With \(r_i'\) the \(i\)th row of
+\(P^{-1}\), the outer product expansion (Theorem~\ref{r1-thm-views}(d)) gives
+\(A^k=p_1r_1'+2^kp_2r_2'+3^kp_3r_3'+4^kp_4r_4'\), where
+\[
+\begin{gathered}
+p_1r_1'=\begin{pmatrix}0&0&1&1\\0&0&1&1\\0&0&0&0\\0&0&1&1\end{pmatrix},\qquad
+p_2r_2'=\begin{pmatrix}1&0&-1&-1\\0&0&0&0\\-1&0&1&1\\1&0&-1&-1\end{pmatrix}\\
+p_3r_3'=\begin{pmatrix}0&0&0&0\\0&1&-1&-1\\0&0&0&0\\0&0&0&0\end{pmatrix},\qquad
+p_4r_4'=\begin{pmatrix}0&0&0&0\\0&0&0&0\\1&0&0&-1\\-1&0&0&1\end{pmatrix}
+\end{gathered}
+\]
+So
+\[
+A^k=\begin{pmatrix}2^k&0&1-2^k&1-2^k\\0&3^k&1-3^k&1-3^k\\4^k-2^k&0&2^k&2^k-4^k\\2^k-4^k&0&1-2^k&1-2^k+4^k\end{pmatrix}
+\qquad(k\geqslant1)
+\]
+For \(k=1\) this is
+\[
+\begin{pmatrix}2&0&-1&-1\\0&3&-2&-2\\2&0&2&-2\\-2&0&-1&3\end{pmatrix}=A
+\]
+\end{solution}
+
+\begin{exercise}\label{r7-ex-diagonalize}
+Let
+\[
+A=\begin{pmatrix}2&-2&1&-1\\-1&1&1&-1\\0&0&3&0\\-1&-2&1&2\end{pmatrix}
+\]
+Show that \(\rank(A-3I_4)=1\), diagonalize \(A\), find a formula for \(A^k\) (\(k\geqslant0\)), and compute \(A^3\).
+\end{exercise}
+\begin{solution}
+\begin{itemize}
+\item Subtracting \(3\) from the diagonal entries of \(A\),
+\[
+A-3I_4=\begin{pmatrix}-1&-2&1&-1\\-1&-2&1&-1\\0&0&0&0\\-1&-2&1&-1\end{pmatrix}=uv'
+\]
+with \(u=(1,1,0,1)'\) and \(v'=(-1,-2,1,-1)\): rows \(1\), \(2\) and \(4\) equal \(v'\), and row
+\(3\) is \(0\). So the row space of \(A-3I_4\) is \(\Span\{v'\}\), of dimension \(1\) as \(v'\ne0\)
+(Proposition~\ref{r3-prop-dependence}(a)), and \(\rank(A-3I_4)=1\) (Definition~\ref{def:r4-rank}). Hence
+\(g_A(3)=4-1=3\) (Definition~\ref{r7-def-multiplicity}) and \(a_A(3)\geqslant3\) (Theorem~\ref{r7-thm-geo-alg}).
+\item So at least three of the four eigenvalues of \(A\), listed with multiplicity, are \(3\)
+(Definition~\ref{r7-def-eigenvalues}); let \(\mu\) be the fourth. By Theorem~\ref{r7-thm-trace-det},
+\(3+3+3+\mu=\tr A=2+1+3+2=8\), so \(\mu=-1\) and \(p_A=(t-3)^3(t+1)\).
+\item \(\mathcal N(A-3I_4)=\mathcal N(uv')=\mathcal N(v')\), as \(uv'x=(v'x)u\) and \(u\ne0\). The equation \(v'x=0\), that
+is, \(x_1+2x_2-x_3+x_4=0\), with \(x_2,x_3,x_4\) free, has the special solutions \(p_1=(-2,1,0,0)'\),
+\(p_2=(1,0,1,0)'\) and \(p_3=(-1,0,0,1)'\), a basis of \(\mathcal N(A-3I_4)\) (Theorem~\ref{thm:r4-four-bases}(c)).
+Next \(Au=3u+u(v'u)=3u-4u=-u\), so \(p_4=u\) spans \(\mathcal N(A+I_4)\) (Theorem~\ref{r7-thm-geo-alg}:
+\(g_A(-1)\leqslant a_A(-1)=1\)).
+\item By Lemma~\ref{r7-lem-eigenspaces}(b) and Theorem~\ref{thm:r4-counting}(d), \(p_1,\dots,p_4\) form a basis of
+\(\R^4\), so \(P^{-1}AP=\Lambda\) with \(P=[p_1\ p_2\ p_3\ p_4]\) and \(\Lambda=\diag(3,3,3,-1)\)
+(Definition~\ref{r7-def-diagonalizable}). The row \(w'=-\frac14v'=\frac14(1,2,-1,1)\) satisfies \(w'p_j=0\) for
+\(j\leqslant3\) (as \(v'p_j=0\)) and \(w'p_4=-\frac14v'u=1\); so \(w'P=e_4'\), and \(w'=e_4'P^{-1}=\row_4(P^{-1})\).
+\end{itemize}
+By Proposition~\ref{r7-prop-diag-powers}(a),
+\[
+A^k=P\diag\bigl(3^k,3^k,3^k,(-1)^k\bigr)P^{-1}=3^kM_1+(-1)^kM_2
+\]
+with \(M_1=P\diag(1,1,1,0)P^{-1}\) and \(M_2=P\diag(0,0,0,1)P^{-1}\). By the outer product expansion
+(Theorem~\ref{r1-thm-views}(d)), \(M_2=p_4\row_4(P^{-1})=-\frac14uv'\), and \(M_1=I_4-M_2\), as \(M_1+M_2=PP^{-1}\). So
+\[
+A^k=3^kI_4+\tfrac14\bigl(3^k-(-1)^k\bigr)uv'\qquad(k\geqslant0)
+\]
+For \(k=1\) this gives back \(A=3I_4+uv'\), and
+\[
+A^3=27I_4+7uv'=\begin{pmatrix}20&-14&7&-7\\-7&13&7&-7\\0&0&27&0\\-7&-14&7&20\end{pmatrix}
+\]
+\end{solution}
+
+\begin{exercise}\label{r7-ex-powers}
+Let
+\[
+A=\begin{pmatrix}0&2&-1&0\\1&1&-1&0\\-2&2&1&0\\1&-1&0&-2\end{pmatrix},\qquad
+p_1=\begin{pmatrix}1\\1\\0\\0\end{pmatrix},\quad p_2=\begin{pmatrix}1\\1\\1\\0\end{pmatrix},\quad
+p_3=\begin{pmatrix}1\\0\\1\\1\end{pmatrix},\quad p_4=\begin{pmatrix}0\\0\\0\\1\end{pmatrix}
+\]
+\begin{enumerate}
+\item Show that \(p_1,\dots,p_4\) are eigenvectors of \(A\), and find \(p_A\), \(\tr A\) and \(\det A\).
+\item Diagonalize \(A\) and compute \(A^{-1}\).
+\item For \(x_0=(3,2,2,1)'\), find \(A^kx_0\) (\(k\geqslant0\)), and check \(A^3x_0\) by computing \(Ax_0\), \(A^2x_0\),
+\(A^3x_0\) in turn.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) Multiplying out, \(Ap_1=(2,2,0,0)'=2p_1\), \(Ap_2=(1,1,1,0)'=p_2\), \(Ap_3=(-1,0,-1,-1)'=-p_3\) and
+\(Ap_4=\col_4(A)=(0,0,0,-2)'=-2p_4\). The eigenvalues \(2\), \(1\), \(-1\), \(-2\) are distinct, so \(p_1,\dots,p_4\)
+form a basis of \(\R^4\) (Theorem~\ref{r7-thm-indep}), and \(P^{-1}AP=\Lambda\) with \(P=[p_1\ p_2\ p_3\ p_4]\) and
+\(\Lambda=\diag(2,1,-1,-2)\) (Definition~\ref{r7-def-diagonalizable}). By the same definition, \(2\), \(1\), \(-1\), \(-2\)
+are the eigenvalues of \(A\), listed with multiplicity; so \(p_A=(t-2)(t-1)(t+1)(t+2)\)
+(Definition~\ref{r7-def-eigenvalues}), \(\tr A=2+1-1-2=0\) and \(\det A=2\cdot1\cdot(-1)\cdot(-2)=4\)
+(Theorem~\ref{r7-thm-trace-det}). Directly, \(\tr A=0+1+1-2=0\).
+
+(b)
+\[
+P^{-1}=\begin{pmatrix}1&0&-1&0\\-1&1&1&0\\1&-1&0&0\\-1&1&0&1\end{pmatrix}
+\]
+Check: by Theorem~\ref{r1-thm-views}(d), the \((i,j)\) entry of the product of this matrix and \(P\) is its row \(i\) times
+\(p_j\). For row \(1\), \((1,0,-1,0)p_j\) is \(1\), \(1-1=0\), \(1-1=0\), \(0\) (\(j=1,2,3,4\)); for row \(2\),
+\((-1,1,1,0)p_j\) is \(-1+1=0\), \(-1+1+1=1\), \(-1+1=0\), \(0\); for row \(3\), \((1,-1,0,0)p_j\) is \(1-1=0\),
+\(1-1=0\), \(1\), \(0\); for row \(4\), \((-1,1,0,1)p_j\) is \(-1+1=0\), \(-1+1=0\), \(-1+1=0\), \(1\). So the product
+is \(I_4\), and the matrix is \(P^{-1}\) (Theorem~\ref{r2-thm-invertible}). By
+Proposition~\ref{r7-prop-diag-powers}(c), \(A^{-1}=P\Lambda^{-1}P^{-1}=(P\Lambda^{-1})P^{-1}\) with
+\(\Lambda^{-1}=\diag(\frac12,1,-1,-\frac12)\); the columns of \(P\Lambda^{-1}\) are those of \(P\) times \(\frac12\), \(1\), \(-1\),
+\(-\frac12\) (Proposition~\ref{r1-prop-diag}(a)):
+\[
+P\Lambda^{-1}=\frac12\begin{pmatrix}1&2&-2&0\\1&2&0&0\\0&2&-2&0\\0&0&-2&-1\end{pmatrix},\qquad
+A^{-1}=\frac12\begin{pmatrix}-3&4&1&0\\-1&2&1&0\\-4&4&2&0\\-1&1&0&-1\end{pmatrix}
+\]
+Check: \(\row_1(A)\col_1(A^{-1})=\frac12(-2+4)=1\) and \(\row_1(A)\col_2(A^{-1})=\frac12(4-4)=0\).
+
+(c) \(c=P^{-1}x_0=(1,1,1,0)'\), that is, \(x_0=p_1+p_2+p_3\). By Proposition~\ref{r7-prop-diag-powers}(a),
+\[
+A^kx_0=2^kp_1+p_2+(-1)^kp_3=\bigl(2^k+1+(-1)^k,\ 2^k+1,\ 1+(-1)^k,\ (-1)^k\bigr)'
+\]
+For \(k=3\) this is \((8,9,0,-1)'\). Directly, \(Ax_0=(2,3,0,-1)'\), \(A^2x_0=A(2,3,0,-1)'=(6,5,2,1)'\) and
+\(A^3x_0=A(6,5,2,1)'=(8,9,0,-1)'\).
+\end{solution}
+
+\begin{exercise}\label{r7-dr-related}
+The matrix \(A\) of Exercise~\ref{r7-dr-eigenspaces} has the eigenvalues \(-1\), \(1\), \(2\), \(3\), with the eigenvectors
+\((1,0,0,1)'\), \((1,0,1,1)'\), \((1,0,1,0)'\), \((-1,-1,-1,1)'\). Without computing the matrices, find the eigenvalues, the
+trace and the determinant of
+\begin{enumerate}
+\item \(A-2I\) and \(-3A\);
+\item \(A^2\), \(A^{-1}\) and \(A^3-4A\);
+\item \(A'\).
+\item Give an eigenvector of \(A^3-4A\) for each of its eigenvalues, and check \(\tr(A^2)\) by computing the diagonal
+entries of \(A^2\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) By Proposition~\ref{r7-prop-eig-poly}(c), \(A-2I\) has the eigenvalues \(-3\), \(-1\), \(0\), \(1\), so
+\(\tr(A-2I)=-3\) and \(\det(A-2I)=0\) (Theorem~\ref{r7-thm-trace-det}); and \(-3A\) has the eigenvalues \(3\), \(-3\),
+\(-6\), \(-9\), so \(\tr(-3A)=-15\) and \(\det(-3A)=-486\).
+
+(b) \(A=P\Lambda P^{-1}\) with \(\Lambda=\diag(-1,1,2,3)\) (Exercise~\ref{r7-dr-eigenspaces}(c)), so by
+Proposition~\ref{r7-prop-diag-rank}(b):
+\begin{itemize}
+\item \(A^2\) has the eigenvalues \(1\), \(1\), \(4\), \(9\); \(\tr(A^2)=15\), \(\det(A^2)=36\).
+\item \(0\) is not an eigenvalue, so \(A\) is invertible (Theorem~\ref{r7-thm-trace-det}), and \(A^{-1}\) has the
+eigenvalues \(-1\), \(1\), \(\frac12\), \(\frac13\); \(\tr(A^{-1})=-1+1+\frac12+\frac13=\frac56\), and
+\(\det(A^{-1})=-\frac16\).
+\item For \(f(t)=t^3-4t\), \(f(-1)=3\), \(f(1)=-3\), \(f(2)=0\), \(f(3)=15\): \(A^3-4A\) has the eigenvalues \(3\),
+\(-3\), \(0\), \(15\); \(\tr(A^3-4A)=15\), \(\det(A^3-4A)=0\).
+\end{itemize}
+(c) By Proposition~\ref{r7-prop-eig-poly}(d), \(A'\) has the eigenvalues \(-1\), \(1\), \(2\), \(3\); \(\tr A'=5\),
+\(\det A'=-6\).
+
+(d)
+\begin{itemize}
+\item By Proposition~\ref{r7-prop-eig-poly}(a), \(f(A)x=f(\lambda)x\): \((1,0,0,1)'\) belongs to \(3\), \((1,0,1,1)'\) to
+\(-3\), \((1,0,1,0)'\) to \(0\), and \((-1,-1,-1,1)'\) to \(15\).
+\item By Theorem~\ref{r1-thm-views}(d), the \(i\)th diagonal entry of \(A^2\) is \(\row_i(A)\col_i(A)\):
+\(0\cdot0+0\cdot0+2\cdot1+(-1)(-2)=4\), \(0\cdot0+3\cdot3+0\cdot0+0\cdot(-2)=9\), \(1\cdot2+0\cdot0+1\cdot1+(-1)\cdot2=1\)
+and \((-2)(-1)+(-2)\cdot0+2\cdot(-1)+1\cdot1=1\); so \(\tr(A^2)=4+9+1+1=15\).
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r7-ex-functions}
+Let \(B\) be the matrix of Example~\ref{r7-exm-diag-powers}.
+\begin{enumerate}
+\item Without computing these matrices, find the eigenvalues and eigenvectors of \(B^3\), \(B^{-1}\), \(B+cI_4\)
+(\(c\in\R\)) and \(q(B)=B^2-4B+3I_4\), and the numbers \(\tr B^3\), \(\det B^3\), \(\tr B^{-1}\), \(\det B^{-1}\).
+\item Show that \(q(B)=0\). Deduce \(B^{-1}=\frac13(4I_4-B)\) and \(B^3=13B-12I_4\), and check the values of
+\(\tr B^{-1}\) and \(\tr B^3\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) By Example~\ref{r7-exm-diag-powers}, \(B\) has the eigenvalue \(3\), with the eigenvectors \(p_1,p_2\), and the
+eigenvalue \(1\), with the eigenvectors \(p_3,p_4\), and \(B=P\Lambda P^{-1}\) with \(\Lambda=\diag(3,3,1,1)\); so \(B\)
+is invertible (Proposition~\ref{r7-prop-diag-powers}(c)). By Proposition~\ref{r7-prop-eig-poly}(a),(b), \(p_1,p_2\) and
+\(p_3,p_4\) are eigenvectors of \(B^3\) belonging to \(27\) and \(1\), of \(B^{-1}\) belonging to \(\frac13\) and \(1\), of
+\(B+cI_4\) belonging to \(3+c\) and \(1+c\), and of \(q(B)\) belonging to \(q(3)=9-12+3=0\) and \(q(1)=0\). By
+Proposition~\ref{r7-prop-diag-rank}(b), these are the eigenvalues, listed with multiplicity (each twice), and
+\(\tr B^3=56\), \(\det B^3=729\), \(\tr B^{-1}=\frac83\), \(\det B^{-1}=\frac19\). For \(B^3\), \(B^{-1}\) and \(B+cI_4\),
+each of the two eigenvalues has algebraic multiplicity \(2\), so its eigenspace has dimension at most \(2\)
+(Theorem~\ref{r7-thm-geo-alg}); it contains the independent \(p_1,p_2\), respectively \(p_3,p_4\), so it is spanned by them
+(Theorem~\ref{thm:r4-counting}(d)). For \(q(B)\), the eigenspace for \(0\) contains \(p_1,\dots,p_4\), so it is \(\R^4\).
+
+(b) \(q(B)\) maps the basis \(p_1,\dots,p_4\) of \(\R^4\) to \(0\), so \(q(B)x=0\) for every \(x\in\R^4\); with
+\(x=e_j\), every column of \(q(B)\) is \(0\) (Theorem~\ref{r1-thm-views}(b)), and \(q(B)=0\) (multiplying out
+\((B-I_4)(B-3I_4)=q(B)\) gives \(0\) as well). Hence \(B(4I_4-B)=4B-B^2=3I_4\), and \(B^{-1}=\frac13(4I_4-B)\)
+(Theorem~\ref{r2-thm-invertible}):
+\[
+B^{-1}=\frac13\begin{pmatrix}3&-2&2&-2\\2&1&2&0\\0&2&1&2\\-2&2&-2&3\end{pmatrix}
+\]
+Also \(B^2=4B-3I_4\), so \(B^3=4B^2-3B=4(4B-3I_4)-3B=13B-12I_4\). With \(\tr B=8\): \(\tr B^{-1}=\frac13(16-8)=\frac83\)
+and \(\tr B^3=104-48=56\).
+\end{solution}
+
+\begin{exercise}\label{r7-ex-schur-drill}
+Let
+\[
+A=\begin{pmatrix}1&1&1&0\\1&1&0&1\\1&-1&1&2\\-1&1&2&1\end{pmatrix}
+\]
+and let \(Q=\frac12G\) be the orthogonal matrix of Example~\ref{r7-exm-schur}.
+\begin{enumerate}
+\item Show that \(\frac12\one_4\) is an eigenvector of \(A\) of length \(1\), and that \(T=Q'AQ\) is upper triangular. Read
+off the eigenvalues of \(A\).
+\item Use (a) to find \(\tr(A^2+I_4)\) and \(\det(A^2+I_4)\), and check the trace directly.
+\item Is \(A\) diagonalizable? Is there an orthogonal \(U\) with \(U'AU\) diagonal?
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) Every row of \(A\) adds up to \(3\), so \(A\one_4=3\one_4\), and \(\lVert\frac12\one_4\rVert=1\). As \(G'=G\),
+\[
+AG=\begin{pmatrix}3&1&1&-1\\3&1&-1&1\\3&-3&1&3\\3&-3&-1&-3\end{pmatrix},\qquad
+T=Q'AQ=\tfrac14G(AG)=\begin{pmatrix}3&-1&0&0\\0&2&0&0\\0&0&1&1\\0&0&0&-2\end{pmatrix}
+\]
+As \(Q'=Q^{-1}\) (Proposition~\ref{r6-prop-orthonormal}(b)), \(T\) is similar to \(A\), and by
+Theorem~\ref{r7-thm-similar}(a) and Proposition~\ref{r7-prop-block-triangular}(b) the eigenvalues of \(A\) are \(3\),
+\(2\), \(1\), \(-2\).
+
+(b) As \(Q'Q=QQ'=I_4\), \(A=QTQ'\) and \(A^2+I_4=Q(T^2+I_4)Q'\), with
+\[
+T^2+I_4=\begin{pmatrix}10&-5&0&0\\0&5&0&0\\0&0&2&-1\\0&0&0&5\end{pmatrix}
+\]
+By Theorem~\ref{r7-thm-similar}(a), Proposition~\ref{r7-prop-block-triangular}(b) and Theorem~\ref{r7-thm-trace-det}, \(\tr(A^2+I_4)=10+5+2+5=22\) and
+\(\det(A^2+I_4)=10\cdot5\cdot2\cdot5=500\), as Corollary~\ref{r7-cor-schur}(a) predicts (\(q(t)=t^2+1\) has
+\(q(3)=10\), \(q(2)=5\), \(q(1)=2\), \(q(-2)=5\)). Directly,
+\[
+A^2+I_4=\begin{pmatrix}4&1&2&3\\1&4&3&2\\-1&1&7&3\\1&-1&3&7\end{pmatrix}
+\]
+with trace \(22\).
+
+(c) \(A\) has four distinct real eigenvalues, so it is diagonalizable (Theorem~\ref{r7-thm-diag-criterion}). If
+\(U'AU=\Lambda\) with \(U\) orthogonal and \(\Lambda\) diagonal, then \(A=U\Lambda U'\) would be symmetric
+(Theorem~\ref{r1-thm-transpose}); but \(a_{14}=0\ne-1=a_{41}\). So no such \(U\) exists.
+\end{solution}
+
+\begin{exercise}\label{r7-dr-ab-ba}
+Let
+\[
+A=\begin{pmatrix}0&1&0\\1&1&2\end{pmatrix}\in\R^{2\times3},\qquad B=\begin{pmatrix}-1&1\\1&1\\1&-1\end{pmatrix}\in\R^{3\times2}
+\]
+\begin{enumerate}
+\item Compute \(AB\) and \(BA\). Find \(p_{AB}\), the eigenvalues of \(AB\), and an eigenvector for each.
+\item Use Theorem~\ref{r7-thm-AB-BA} to find \(p_{BA}\) and the eigenvalues of \(BA\), and check \(p_{BA}\) by expanding
+\(\det(tI-BA)\).
+\item For each eigenvector \(x\) of \(AB\) from (a), check that \(Bx\) is an eigenvector of \(BA\). Find a basis of
+\(\mathcal N(BA)\), and compare \(\rank(BA)\) with the number of nonzero eigenvalues of \(BA\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item Multiplying out,
+\[
+AB=\begin{pmatrix}1&1\\2&0\end{pmatrix},\qquad BA=\begin{pmatrix}1&0&2\\1&2&2\\-1&0&-2\end{pmatrix}
+\]
+\item By Definition~\ref{r7-def-charpoly}(b) (\(n=2\)), \(p_{AB}=t^2-t-2=(t-2)(t+1)\): the eigenvalues of \(AB\) are \(2\) and
+\(-1\).
+\item \((AB-2I)x=0\) reads \(-x_1+x_2=0\) and \(2x_1-2x_2=0\), so \(x=(1,1)'\); \((AB+I)x=0\) reads \(2x_1+x_2=0\) (twice), so
+\(x=(-1,2)'\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item By Theorem~\ref{r7-thm-AB-BA}(a) (\(m=2\), \(n=3\)), \(p_{BA}=t\,p_{AB}=t(t-2)(t+1)\), and by (b) of that theorem the
+eigenvalues of \(BA\) are \(0\), \(2\), \(-1\).
+\item Check: for \(t\in\R\), column \(2\) of \(tI-BA\) has the entry \(t-2\) in position \((2,2)\) and \(0\) elsewhere, so
+\[
+\begin{aligned}
+\det(tI-BA)&=\det\begin{pmatrix}t-1&0&-2\\-1&t-2&-2\\1&0&t+2\end{pmatrix}=(t-2)\det\begin{pmatrix}t-1&-2\\1&t+2\end{pmatrix}\\
+&=(t-2)(t^2+t)=t(t-2)(t+1)
+\end{aligned}
+\]
+\end{itemize}
+(c)
+\begin{itemize}
+\item \(B(1,1)'=(0,2,0)'\) and \(BA(0,2,0)'=(0,4,0)'=2(0,2,0)'\); \(B(-1,2)'=(3,1,-3)'\) and
+\(BA(3,1,-3)'=(-3,-1,3)'=-(3,1,-3)'\).
+\item Row-reduce \(BA\):
+\[
+\begin{pmatrix}1&0&2\\1&2&2\\-1&0&-2\end{pmatrix}
+\xrightarrow[R_3\leftarrow R_3+R_1]{R_2\leftarrow R_2-R_1}
+\begin{pmatrix}1&0&2\\0&2&0\\0&0&0\end{pmatrix}
+\xrightarrow{R_2\leftarrow\frac12R_2}
+\begin{pmatrix}1&0&2\\0&1&0\\0&0&0\end{pmatrix}
+\]
+The special solution \((-2,0,1)'\) is a basis of \(\mathcal N(BA)\), and \(\rank(BA)=2\).
+\item \(BA\) has the two nonzero eigenvalues \(2\), \(-1\), as many as its rank: \(BA\) has three distinct eigenvalues, so it
+is diagonalizable (Theorem~\ref{r7-thm-diag-criterion}), and Proposition~\ref{r7-prop-diag-rank}(a) applies.
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r7-ex-ab-ba}
+Let
+\[
+A=\begin{pmatrix}1&0\\1&1\\0&1\\1&-1\end{pmatrix},\qquad B=\begin{pmatrix}1&0&1&0\\0&1&0&1\end{pmatrix}
+\]
+\begin{enumerate}
+\item Compute \(BA\) and \(AB\), find \(p_{BA}\), and deduce \(p_{AB}\).
+\item Find eigenvectors of \(AB\) for its nonzero eigenvalues from those of \(BA\), and a basis of \(\mathcal N(AB)\).
+Diagonalize \(AB\).
+\item Show that \(\tr(AB)^k=2^k+(-1)^k\) for \(k\geqslant1\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\[
+BA=\begin{pmatrix}1&1\\2&0\end{pmatrix},\qquad
+AB=\begin{pmatrix}1&0&1&0\\1&1&1&1\\0&1&0&1\\1&-1&1&-1\end{pmatrix}
+\]
+By Definition~\ref{r7-def-charpoly}(b) (\(n=2\)), \(p_{BA}=t^2-t-2=(t-2)(t+1)\). By Theorem~\ref{r7-thm-AB-BA}(a),
+applied with \(B\) and \(A\) in place of its \(A\) and \(B\) (\(m=2\), \(n=4\)), \(p_{AB}=t^2p_{BA}=t^2(t-2)(t+1)\).
+
+(b)
+\begin{itemize}
+\item \(BA(1,1)'=(2,2)'\) and \(BA(1,-2)'=(-1,2)'\): \((1,1)'\) and \((1,-2)'\) are eigenvectors of \(BA\) belonging to
+the simple eigenvalues \(2\) and \(-1\), so each is a basis of its eigenspace (Theorem~\ref{r7-thm-geo-alg}). By
+Theorem~\ref{r7-thm-AB-BA}(c), applied as in (a),
+\[
+v_1=A(1,1)'=(1,2,1,0)',\qquad v_2=A(1,-2)'=(1,-1,-2,3)'
+\]
+are eigenvectors of \(AB\) belonging to \(2\) and \(-1\); indeed \(ABv_1=(2,4,2,0)'=2v_1\) and
+\(ABv_2=(-1,1,2,-3)'=-v_2\).
+\item \(B\) is in RREF, and \(Bx=0\) reads \(x_1+x_3=0\), \(x_2+x_4=0\), with the special solutions
+\(n_1=(-1,0,1,0)'\) and \(n_2=(0,-1,0,1)'\) (Theorem~\ref{thm:r4-four-bases}(c)). As \(ABx=A(Bx)\),
+\(\mathcal N(B)\subseteq\mathcal N(AB)\), so \(g_{AB}(0)\geqslant2\) (Theorem~\ref{thm:r4-counting}(a)); and
+\(g_{AB}(0)\leqslant a_{AB}(0)=2\) (Theorem~\ref{r7-thm-geo-alg}). So \(\mathcal N(B)=\mathcal N(AB)\)
+(Theorem~\ref{thm:r4-counting}(a)), with the basis \(n_1,n_2\).
+\item All eigenvalues \(2\), \(-1\), \(0\), \(0\) of \(AB\) are real, and \(g_{AB}=a_{AB}\) for each of them; so \(AB\) is
+diagonalizable (Theorem~\ref{r7-thm-diag-criterion}), and by the paragraph after that theorem, \(Q^{-1}(AB)Q=\Lambda\)
+with \(Q=[v_1\ v_2\ n_1\ n_2]\) and \(\Lambda=\diag(2,-1,0,0)\).
+\end{itemize}
+(c) By (b), \(AB=Q\Lambda Q^{-1}\), so by Proposition~\ref{r7-prop-diag-rank}(b) (with \(f=t^k\)),
+\(\tr(AB)^k=2^k+(-1)^k+0^k+0^k=2^k+(-1)^k\) for \(k\geqslant1\). For \(k=1\), \(\tr AB=1+1+0-1=1\).
+\end{solution}
+
+\begin{exercise}\label{r7-dr-cayley-hamilton}
+Let
+\[
+A=\begin{pmatrix}0&-1&0&-1\\2&-1&0&-2\\-1&0&1&1\\-1&-1&0&0\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find \(p_A\).
+\item Compute \(A^2\), \(A^3\) and \(A^4\), and check that \(p_A(A)=0\).
+\item Use Corollary~\ref{r7-cor-cayley-hamilton}(b) to find \(A^{-1}\), and check that \(AA^{-1}=I\).
+\item Use Corollary~\ref{r7-cor-cayley-hamilton}(a) to write \(A^5\) as a linear combination of \(I\), \(A\), \(A^2\),
+\(A^3\), and compute \(A^5\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) For \(t\in\R\), column \(3\) of \(tI-A\) has the entry \(t-1\) in position \((3,3)\) and \(0\) elsewhere; expanding
+along it, and then along row \(1\),
+\[
+\begin{aligned}
+\det(tI-A)&=\det\begin{pmatrix}t&1&0&1\\-2&t+1&0&2\\1&0&t-1&-1\\1&1&0&t\end{pmatrix}
+=(t-1)\det\begin{pmatrix}t&1&1\\-2&t+1&2\\1&1&t\end{pmatrix}\\
+&=(t-1)\Bigl(t\bigl((t+1)t-2\bigr)-(-2t-2)+\bigl(-2-(t+1)\bigr)\Bigr)=(t-1)(t^3+t^2-t-1)
+\end{aligned}
+\]
+So \(p_A=(t-1)(t^3+t^2-t-1)=t^4-2t^2+1\): \(c_0=1\), \(c_1=0\), \(c_2=-2\), \(c_3=0\), \(c_4=1\).
+
+(b) Multiplying out,
+\[
+A^2=\begin{pmatrix}-1&2&0&2\\0&1&0&0\\-2&0&1&2\\-2&2&0&3\end{pmatrix},\qquad
+A^3=A^2A=\begin{pmatrix}2&-3&0&-3\\2&-1&0&-2\\-3&0&1&3\\1&-3&0&-2\end{pmatrix},\qquad
+A^4=A^3A=\begin{pmatrix}-3&4&0&4\\0&1&0&0\\-4&0&1&4\\-4&4&0&5\end{pmatrix}
+\]
+Adding entry by entry, \(p_A(A)=A^4-2A^2+I=0\), as Theorem~\ref{r7-thm-cayley-hamilton} asserts.
+
+(c) As \(c_0=(-1)^4\det A\) (Definition~\ref{r7-def-charpoly}(b)), \(\det A=1\ne0\), and \(A\) is invertible
+(Theorem~\ref{r5d-thm-product}(a)). By Corollary~\ref{r7-cor-cayley-hamilton}(b),
+\(A^{-1}=-\frac1{c_0}(c_1I+c_2A+c_3A^2+c_4A^3)=2A-A^3\), that is,
+\[
+A^{-1}=\begin{pmatrix}-2&1&0&1\\2&-1&0&-2\\1&0&1&-1\\-3&1&0&2\end{pmatrix},\qquad
+AA^{-1}=\begin{pmatrix}1&0&0&0\\0&1&0&0\\0&0&1&0\\0&0&0&1\end{pmatrix}
+\]
+
+(d)
+\begin{itemize}
+\item By Corollary~\ref{r7-cor-cayley-hamilton}(a), \(A^4=-(c_0I+c_1A+c_2A^2+c_3A^3)=2A^2-I\), as found in (b). Then
+\(A^5=A^4A=2A^3-A\).
+\item So
+\[
+A^5=2\begin{pmatrix}2&-3&0&-3\\2&-1&0&-2\\-3&0&1&3\\1&-3&0&-2\end{pmatrix}-\begin{pmatrix}0&-1&0&-1\\2&-1&0&-2\\-1&0&1&1\\-1&-1&0&0\end{pmatrix}
+=\begin{pmatrix}4&-5&0&-5\\2&-1&0&-2\\-5&0&1&5\\3&-5&0&-4\end{pmatrix}
+\]
+\end{itemize}
+\end{solution}
+
+\needspace{14\baselineskip}
+\subsection*{Problems}
+
+\begin{problem}\label{r7-ex-companion}
+Let \(n\geqslant2\) and \(a_0,\dots,a_{n-1}\in\R\). Show that the companion matrix
+\[
+C=\begin{pmatrix}0&1&0&\cdots&0\\0&0&1&\cdots&0\\\vdots&&&\ddots&\vdots\\0&0&0&\cdots&1\\-a_0&-a_1&-a_2&\cdots&-a_{n-1}\end{pmatrix}
+\in\R^{n\times n}
+\]
+whose entries are \(c_{i,i+1}=1\) (\(i<n\)), the last row \((-a_0,\dots,-a_{n-1})\) and \(0\) elsewhere, has the
+characteristic polynomial \(p_C(t)=t^n+a_{n-1}t^{n-1}+\dots+a_1t+a_0\).
+\end{problem}
+\begin{solution}
+Fix \(t\in\R\). For \(2\leqslant j\leqslant n\) and \(x\in\R\), let \(A_j(x)\in\R^{j\times j}\) have the entries \(t\) in
+positions \((i,i)\) and \(-1\) in positions \((i,i+1)\) for \(i<j\), the last row \((a_0,a_1,\dots,a_{j-2},x)\), and \(0\)
+elsewhere. Then \(tI-C=A_n(t+a_{n-1})\).
+\begin{itemize}
+\item Let \(j\geqslant3\). The last column of \(A_j(x)\) has the entries \(-1\) at \((j-1,j)\) and \(x\) at \((j,j)\), and \(0\)
+elsewhere.
+Deleting row \(j\) and column \(j\) leaves an upper triangular matrix with diagonal entries \(t\), of determinant
+\(t^{j-1}\) (Theorem~\ref{r5d-thm-basic}(c)). Deleting row \(j-1\) and column \(j\) leaves \(A_{j-1}(a_{j-2})\). Expanding
+along the last column (Theorem~\ref{r5d-thm-expansion}),
+\[
+\det A_j(x)=x\,t^{j-1}+(-1)\cdot(-1)^{(j-1)+j}\det A_{j-1}(a_{j-2})=x\,t^{j-1}+\det A_{j-1}(a_{j-2})
+\]
+\item For \(j=2\), \(\det A_2(x)=\det\left(\begin{smallmatrix}t&-1\\a_0&x\end{smallmatrix}\right)=tx+a_0\).
+\item Hence
+\[
+\begin{aligned}
+\det(tI-C)&=(t+a_{n-1})t^{n-1}+\det A_{n-1}(a_{n-2})=t^n+a_{n-1}t^{n-1}+a_{n-2}t^{n-2}+\det A_{n-2}(a_{n-3})\\
+&=\cdots=t^n+a_{n-1}t^{n-1}+\dots+a_2t^2+\det A_2(a_1)=t^n+a_{n-1}t^{n-1}+\dots+a_1t+a_0
+\end{aligned}
+\]
+(for \(n=2\), directly \(\det A_2(t+a_1)=t(t+a_1)+a_0\)). This holds for every real \(t\), so \(p_C\) is this polynomial
+(Definition~\ref{r7-def-charpoly}(a), Proposition~\ref{r7-prop-poly}(d)).
+\end{itemize}
+\end{solution}
+
+\begin{problem}\label{r7-ex-not-similar}
+Let \(n\geqslant2\). Show that for \(B\in\R^{n\times n}\) to be similar to \(A\in\R^{n\times n}\) it is not sufficient that
+\(B\) have the same rank, determinant, trace and characteristic polynomial as \(A\).
+\end{problem}
+\begin{solution}
+Take \(A=I_n\) and an upper triangular \(B\ne I_n\) with all diagonal entries \(1\), for instance \(B=I_n+E_{12}\)
+(Definition~\ref{r3-def-basis}).
+\begin{itemize}
+\item \(\det B=1=\det I_n\) (Theorem~\ref{r5d-thm-basic}(c)), so \(B\) is invertible and \(\rank B=n=\rank I_n\)
+(Theorem~\ref{r5d-thm-product}(a)); \(\tr B=n=\tr I_n\); and \(p_B=(t-1)^n=p_{I_n}\)
+(Proposition~\ref{r7-prop-block-triangular}(b)).
+\item If \(B\) were similar to \(I_n\), there would be an invertible \(C\) with \(B=C^{-1}I_nC=C^{-1}C=I_n\) \(\contradiction\)
+\end{itemize}
+\end{solution}
+
+\begin{problem}\label{r7-ex-sum-eigenvectors}
+Let \(x_1\) and \(x_2\) be eigenvectors of \(A\in\R^{n\times n}\) belonging to \(\lambda_1\) and \(\lambda_2\), and let
+\(c_1\), \(c_2\) be nonzero numbers. When is \(x=c_1x_1+c_2x_2\) an eigenvector of \(A\)?
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item \(Ax=c_1\lambda_1x_1+c_2\lambda_2x_2=\lambda_1x+(\lambda_2-\lambda_1)c_2x_2\).
+\item If \(\lambda_1=\lambda_2\), then \(Ax=\lambda_1x\): \(x\) is an eigenvector unless \(x=0\), that is, unless
+\(x_2=-(c_1/c_2)x_1\).
+\item If \(\lambda_1\ne\lambda_2\), then \(x_1\) and \(x_2\) are independent (Theorem~\ref{r7-thm-indep}), and so are \(x\) and
+\(x_2\): if \(ax+bx_2=0\), then \(ac_1x_1+(ac_2+b)x_2=0\), so \(ac_1=0\), \(a=0\), and then \(b=0\). If \(Ax=cx\) for some
+\(c\), then \((\lambda_1-c)x+(\lambda_2-\lambda_1)c_2x_2=0\), so \((\lambda_2-\lambda_1)c_2=0\) \(\contradiction\) Hence \(x\)
+is not an eigenvector.
+\end{itemize}
+So \(x\) is an eigenvector of \(A\) if and only if \(\lambda_1=\lambda_2\) and \(x\ne0\).
+\end{solution}
+
+\begin{problem}\label{r7-ex-invariant}
+Let \(A\in\R^{n\times n}\), \(B\in\R^{k\times k}\) and \(X\in\R^{n\times k}\) satisfy \(AX=XB\). A subspace \(U\) of \(\R^n\) is
+\textbf{invariant} relative to \(A\) if \(Au\in U\) for every \(u\in U\).
+\begin{enumerate}
+\item Show that \(\mathcal C(X)\) is invariant relative to \(A\).
+\item Show that if \(X\) has full column rank, then every real eigenvalue of \(B\) is an eigenvalue of \(A\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) Every \(u\in\mathcal C(X)\) is \(u=Xr\) for some \(r\in\R^k\) (Definition~\ref{def:r4-spaces}), so
+\(Au=AXr=XBr=X(Br)\in\mathcal C(X)\).
+
+(b) Let \(By=\lambda y\) with \(\lambda\in\R\) and \(y\ne0\). Then \(A(Xy)=XBy=X(\lambda y)=\lambda(Xy)\). If \(X\) has full
+column rank, then \(\mathcal N(X)=\{0\}\) (Theorem~\ref{thm:r4-rank-rules}(b)), so \(Xy\ne0\): \(\lambda\) is an eigenvalue of
+\(A\), and \(Xy\) is an eigenvector belonging to it.
+\end{solution}
+
+\begin{problem}\label{r7-ex-left-eigenvectors}
+Let \(A\in\R^{n\times n}\), and let \(Q\in\R^{n\times n}\) be invertible with \(Q^{-1}AQ=D=\diag(d_1,\dots,d_n)\). Let \(r_i'\) be
+row \(i\) of \(Q^{-1}\) (\(1\leqslant i\leqslant n\)). Show:
+\begin{enumerate}
+\item \((Q^{-1})'\) diagonalizes \(A'\).
+\item \(d_1,\dots,d_n\) are the eigenvalues of \(A'\).
+\item \(r_i\) is an eigenvector of \(A'\) belonging to \(d_i\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) By Theorem~\ref{r2-thm-inverse-props}(c),(a), \((Q^{-1})'=(Q')^{-1}\), so \(\bigl((Q^{-1})'\bigr)^{-1}=Q'\). By
+Theorem~\ref{r1-thm-transpose},
+\(D=D'=(Q^{-1}AQ)'=Q'A'(Q^{-1})'=\bigl((Q^{-1})'\bigr)^{-1}A'(Q^{-1})'\).
+
+(b) By (a), \(\bigl((Q^{-1})'\bigr)^{-1}A'(Q^{-1})'=D\); so by Definition~\ref{r7-def-diagonalizable}, applied to \(A'\) and
+\((Q^{-1})'\), \(d_1,\dots,d_n\) are the eigenvalues of \(A'\).
+
+(c) Column \(i\) of \((Q^{-1})'\) is the transposed row \(i\) of \(Q^{-1}\), that is, \(r_i\)
+(Definition~\ref{r1-def-transpose}). By Definition~\ref{r7-def-diagonalizable}, applied as in (b), the columns of
+\((Q^{-1})'\) are eigenvectors of \(A'\): \(A'r_i=d_ir_i\) with \(r_i\ne0\).
+\end{solution}
+
+\begin{problem}\label{r7-pr-left}
+Let \(A\in\R^{n\times n}\), and let \(\lambda\) be a real eigenvalue of \(A\). A vector \(w\in\R^n\), \(w\ne0\), with
+\(w'A=\lambda w'\) is a \textbf{left eigenvector} of \(A\) belonging to \(\lambda\).
+\begin{enumerate}
+\item Show that a left eigenvector of \(A\) belonging to \(\lambda\) is an eigenvector of \(A'\) belonging to \(\lambda\).
+\item Let \(\lambda\ne\mu\) be real eigenvalues of \(A\). Show that every left eigenvector of \(A\) belonging to \(\mu\) is
+orthogonal to every eigenvector of \(A\) belonging to \(\lambda\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) Let \(w'A=\lambda w'\) with \(w\ne0\). By Theorem~\ref{r1-thm-transpose}, \(A'w=(w'A)'=(\lambda w')'=\lambda w\); so
+\(w\) is an eigenvector of \(A'\) belonging to \(\lambda\) (Definition~\ref{r7-def-eigen}).
+
+(b) Let \(Ax=\lambda x\) with \(x\ne0\), and \(w'A=\mu w'\) with \(w\ne0\). By Theorem~\ref{r1-thm-rules},
+\[
+w'Ax=w'(\lambda x)=\lambda(w'x),\qquad w'Ax=(\mu w')x=\mu(w'x)
+\]
+So \((\lambda-\mu)\,w'x=0\), and as \(\lambda\ne\mu\), \(w'x=0\): \(w\) and \(x\) are orthogonal
+(Definition~\ref{r6-def-inner}).
+\end{solution}
+
+\begin{problem}\label{r7-ex-nilpotent}
+\begin{enumerate}
+\item Let \(A\in\R^{n\times n}\), \(A\ne0\), satisfy \(A^n=0\). Show that \(A\) is not diagonalizable.
+\item Find a \(2\times2\) matrix that is not diagonalizable.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) Suppose \(P^{-1}AP=D=\diag(d_1,\dots,d_n)\) with \(P\) invertible. Then \(A=PDP^{-1}\), and by
+Proposition~\ref{r7-prop-diag-powers}(a), \(0=A^n=P\diag(d_1^n,\dots,d_n^n)P^{-1}\). Multiplying by \(P^{-1}\) on the left and
+by \(P\) on the right gives \(\diag(d_1^n,\dots,d_n^n)=0\); so every \(d_i=0\), \(D=0\) and \(A=PDP^{-1}=0\)
+\(\contradiction\)
+
+(b) Let \(N=\begin{pmatrix}0&0\\1&0\end{pmatrix}\). Multiplying out, \(N^2=0\), while \(N\ne0\). By (a) (with \(n=2\)),
+\(N\) is not diagonalizable.
+\end{solution}
+
+\begin{problem}\label{r7-pr-rank-one}
+Let \(x,y\in\R^n\).
+\begin{enumerate}
+\item Show that \(xy'\) has \(n-1\) zero eigenvalues and one eigenvalue \(y'x\).
+\item Show that \(\det(I_n+xy')=1+y'x\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) For \(n=1\), \(xy'=(x_1y_1)=(y'x)\), and its only eigenvalue is \(y'x\) (Definition~\ref{r7-def-charpoly}(b)). Let
+\(n\geqslant2\), and let \(\lambda_1,\dots,\lambda_n\) be the eigenvalues of \(xy'\), listed with multiplicity
+(Definition~\ref{r7-def-eigenvalues}).
+\begin{itemize}
+\item If \(y=0\), then \(xy'=0\), \(p_{xy'}=t^n\) (Proposition~\ref{r7-prop-block-triangular}(b)), and all \(n\) eigenvalues
+are \(0=y'x\).
+\item Let \(y\ne0\). The only row \(y'\) of the \(1\times n\) matrix \(y'\) is nonzero, so \(\rank y'=1\)
+(Proposition~\ref{r3-prop-dependence}(a), Definition~\ref{def:r4-rank}), and \(\dim\mathcal N(y')=n-1\geqslant1\)
+(Theorem~\ref{thm:r4-rank-nullity}): there are \(n-1\) linearly independent vectors \(u_1,\dots,u_{n-1}\) with
+\(y'u_i=0\). Each of them satisfies \(xy'u_i=x(y'u_i)=0\) (Theorem~\ref{r1-thm-rules}); so
+\(\mathcal N(y')\subseteq\mathcal N(xy')\), \(g_{xy'}(0)\geqslant n-1\geqslant1\) (Theorem~\ref{thm:r4-counting}(a)),
+\(0\) is an eigenvalue of \(xy'\), and \(a_{xy'}(0)\geqslant n-1\) (Theorem~\ref{r7-thm-geo-alg}).
+\item So we may number the eigenvalues so that \(\lambda_1=\dots=\lambda_{n-1}=0\). By Theorem~\ref{r7-thm-trace-det}
+and Theorem~\ref{r1-thm-trace}(b),
+\[
+\lambda_n=\lambda_1+\dots+\lambda_n=\tr(xy')=\tr(y'x)=y'x
+\]
+\end{itemize}
+(b) By (a) and Proposition~\ref{r7-prop-eig-poly}(c) (with \(c=1\)), the eigenvalues of \(I_n+xy'\) are \(1\)
+(\(n-1\) times) and \(1+y'x\). The determinant is the product of the eigenvalues (Theorem~\ref{r7-thm-trace-det}), so
+\(\det(I_n+xy')=1^{n-1}(1+y'x)=1+y'x\). (This is also the case \(u=x\), \(v=y\) of Theorem~\ref{r5d-thm-det-lemma}.)
+\end{solution}
+
+\begin{problem}\label{r7-pr-cayley-hamilton}
+\begin{enumerate}
+\item Let \(A=(a_{ij})\) and \(B=(b_{ij})\) be upper triangular \(n\times n\) matrices, and let \(1\leqslant k<n\), such that
+\(a_{ij}=0\) for \(1\leqslant i\leqslant k\) and \(1\leqslant j\leqslant k\), and \(b_{k+1,k+1}=0\). Show that the matrix
+\(C=AB\) is upper triangular with \(c_{ij}=0\) for \(1\leqslant i\leqslant k+1\) and \(1\leqslant j\leqslant k+1\).
+\item Let \(A\in\R^{n\times n}\), and let all eigenvalues \(\lambda_1,\dots,\lambda_n\) of \(A\), listed with multiplicity,
+be real. Show that
+\[
+(\lambda_1I_n-A)(\lambda_2I_n-A)\cdots(\lambda_nI_n-A)=0
+\]
+and deduce that \(p_A(A)=0\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) Partition \(A\), \(B\) and \(C\) with diagonal blocks of sizes \(k\) and \(n-k\) (Definition~\ref{r5b-def-partition}).
+The blocks below the diagonal blocks of \(A\) and \(B\) are \(0\), as \(A\) and \(B\) are upper triangular
+(Definition~\ref{r1-def-diag}), and the upper left \(k\times k\) block of \(A\) is \(0\) by assumption. By
+Theorem~\ref{r5b-thm-block}(c),
+\[
+A=\begin{pmatrix}0&A_{12}\\0&A_{22}\end{pmatrix},\qquad B=\begin{pmatrix}B_{11}&B_{12}\\0&B_{22}\end{pmatrix},\qquad
+C=AB=\begin{pmatrix}0&A_{12}B_{22}\\0&A_{22}B_{22}\end{pmatrix}
+\]
+\begin{itemize}
+\item \(C\) is upper triangular (Proposition~\ref{r1-prop-diag}(c)), and its first \(k\) columns are \(0\). It remains to
+show that column \(k+1\) of \(C\), which consists of the first columns of \(A_{12}B_{22}\) and of \(A_{22}B_{22}\), is
+\(0\).
+\item \(B_{22}\) is upper triangular, and its first diagonal entry is \(b_{k+1,k+1}=0\); so its first column is \(0\).
+Hence for every matrix \(E\) with \(n-k\) columns, the first column of \(EB_{22}\) is \(E\cdot0=0\)
+(Theorem~\ref{r1-thm-views}(a)); in particular the first columns of \(A_{12}B_{22}\) and \(A_{22}B_{22}\) are \(0\).
+\end{itemize}
+So the first \(k+1\) columns of \(C\) are \(0\); in particular \(c_{ij}=0\) for \(1\leqslant i\leqslant k+1\) and
+\(1\leqslant j\leqslant k+1\).
+
+(b) For \(n=1\), \(A=(a_{11})\) with \(\lambda_1=a_{11}\) (Definition~\ref{r7-def-charpoly}(b)), so
+\(\lambda_1I_1-A=0\) and \(p_A(A)=A-\lambda_1I_1=0\). Let \(n\geqslant2\).
+\begin{itemize}
+\item By Theorem~\ref{r7-thm-schur}, \(A=QTQ'\), where \(Q\) is orthogonal and \(T\) is upper triangular with the
+diagonal entries \(\lambda_1,\dots,\lambda_n\), in this order. Let \(B_i=\lambda_iI_n-T\) (\(1\leqslant i\leqslant n\)): it
+is upper triangular, and its \(i\)th diagonal entry is \(0\).
+\item As \(QQ'=Q'Q=I_n\) (Proposition~\ref{r6-prop-orthonormal}(b)), \(\lambda_iI_n-A=Q(\lambda_iI_n)Q'-QTQ'=QB_iQ'\)
+(Theorem~\ref{r1-thm-rules}), and
+\[
+(\lambda_1I_n-A)\cdots(\lambda_nI_n-A)=QB_1Q'QB_2Q'\cdots QB_nQ'=Q(B_1B_2\cdots B_n)Q'
+\]
+\item By induction on \(j\), \(B_1\cdots B_j\) is upper triangular, and its upper left \(j\times j\) block is \(0\)
+(\(1\leqslant j\leqslant n\)). For \(j=1\), the \((1,1)\) entry of \(B_1\) is \(0\). If this holds for some \(j<n\), then
+(a), with \(B_1\cdots B_j\), \(B_{j+1}\) and \(j\) in place of \(A\), \(B\) and \(k\), gives it for \(j+1\), as the
+\((j+1)\)th diagonal entry of \(B_{j+1}\) is \(0\). For \(j=n\), \(B_1\cdots B_n=0\); so
+\((\lambda_1I_n-A)\cdots(\lambda_nI_n-A)=0\).
+\item \(p_A=(t-\lambda_1)\cdots(t-\lambda_n)\) (Definition~\ref{r7-def-eigenvalues}) is a product of the real polynomials
+\(t-\lambda_i\), whose values at \(A\) are \(A-\lambda_iI_n\) (Definition~\ref{r7-def-polynomial}). By
+Proposition~\ref{r7-prop-poly}(b), applied \(n-1\) times, and Theorem~\ref{r1-thm-rules},
+\[
+p_A(A)=(A-\lambda_1I_n)\cdots(A-\lambda_nI_n)=(-1)^n(\lambda_1I_n-A)\cdots(\lambda_nI_n-A)=0
+\]
+\end{itemize}
+\end{solution}
+
+\begin{problem}\label{r7-ex-pr-two-invertible}
+Show that every \(A\in\R^{n\times n}\) is the sum of two invertible matrices.
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item \(p_A\) has degree \(n\) (Definition~\ref{r7-def-charpoly}(b)), so it has at most \(n\) roots
+(Proposition~\ref{r7-prop-poly}(d)), and the real eigenvalues of \(A\) are among them
+(Definition~\ref{r7-def-charpoly}(a)). Let \(c_1,\dots,c_k\) (\(0\leqslant k\leqslant n\)) be the distinct real
+eigenvalues of \(A\), and put \(c=1+\lvert c_1\rvert+\dots+\lvert c_k\rvert\) (\(c=1\) if \(k=0\)).
+\item Then \(c>\lvert c_i\rvert\) for every \(i\), so neither \(c\) nor \(-c\) is an eigenvalue of \(A\). By
+Theorem~\ref{r7-thm-eig-singular}, (i)\(\Leftrightarrow\)(ii), with \(\lambda=c\) and with \(\lambda=-c\), the matrices
+\(A-cI\) and \(A-(-c)I=A+cI\) are invertible.
+\item Hence \(\frac12(A+cI)\) and \(\frac12(A-cI)\) are invertible, as
+\(\frac12(A\pm cI)\cdot2(A\pm cI)^{-1}=I\) (Theorem~\ref{r2-thm-invertible}), and
+\[
+A=\tfrac12(A+cI)+\tfrac12(A-cI)
+\]
+\end{itemize}
+\end{solution}
+
+\begin{problem}\label{r7-ex-pr-orthogonal-charpoly}
+Let \(Q\in\R^{n\times n}\) be orthogonal, with \(p_Q(t)=c_0+c_1t+\dots+c_nt^n\), and let
+\(\tilde p(t)=c_n+c_{n-1}t+\dots+c_0t^n\) be the polynomial with the coefficients of \(p_Q\) in reverse order, so that
+\(\tilde p(t)=t^np_Q(1/t)\) for real \(t\ne0\). Show that \(\tilde p=p_Q\) or \(\tilde p=-p_Q\).
+\end{problem}
+\begin{solution}
+Fix a real \(t\ne0\).
+\begin{itemize}
+\item \(t^np_Q(1/t)=t^n\sum_{k=0}^nc_kt^{-k}=\sum_{k=0}^nc_kt^{n-k}=\tilde p(t)\) (Definition~\ref{r7-def-polynomial}).
+\item By Definition~\ref{r7-def-charpoly}(a) and Theorem~\ref{r5d-thm-product}(c),
+\(t^np_Q(1/t)=t^n\det(t^{-1}I-Q)=\det\bigl(t(t^{-1}I-Q)\bigr)=\det(I-tQ)\).
+\item As \(Q'Q=I\), \(I-tQ=Q'Q-tQ=(Q'-tI)Q\) (Theorem~\ref{r1-thm-rules}), so \(\det(I-tQ)=\det(Q'-tI)\cdot\det Q\)
+(Theorem~\ref{r5d-thm-product}(b)).
+\item By Theorem~\ref{r5d-thm-product}(c), Definition~\ref{r7-def-charpoly}(a) and
+Proposition~\ref{r7-prop-eig-poly}(d),
+\[
+\det(Q'-tI)=\det\bigl((-1)(tI-Q')\bigr)=(-1)^n\det(tI-Q')=(-1)^np_{Q'}(t)=(-1)^np_Q(t)
+\]
+\end{itemize}
+So \(\tilde p(t)=\varepsilon\,p_Q(t)\) for every real \(t\ne0\), where \(\varepsilon=(-1)^n\det Q\); and
+\(\varepsilon=1\) or \(\varepsilon=-1\), as \(\det Q=\pm1\) (Theorem~\ref{r6-thm-orthogonal}(c)). The polynomials
+\(\tilde p\) and \(\varepsilon p_Q\) have the same value at infinitely many \(t\) (Proposition~\ref{r7-prop-poly}(b)), so
+\(\tilde p=\varepsilon p_Q\) (Proposition~\ref{r7-prop-poly}(d)), that is, \(c_{n-k}=\varepsilon c_k\) for
+\(k=0,\dots,n\).
+\end{solution}
+
+\begin{problem}\label{r7-ex-pr-ratio-matrix}
+Let \(n\geqslant2\), let \(d_1,\dots,d_n\) be nonzero real numbers, and let \(A=(a_{ij})\in\R^{n\times n}\) with
+\(a_{ij}=d_i/d_j\). Find the eigenvalues of \(A\) and the eigenvectors belonging to each of them.
+\end{problem}
+\begin{solution}
+Let \(D=\diag(d_1,\dots,d_n)\) and \(d=(d_1,\dots,d_n)'\).
+\begin{itemize}
+\item \(D\) is invertible, with \(D^{-1}=\diag(d_1^{-1},\dots,d_n^{-1})\) (Definition~\ref{r2-def-inverse}). Left
+multiplication by \(D\) multiplies row \(i\) by \(d_i\), and right multiplication by \(D^{-1}\) multiplies column \(j\) by
+\(d_j^{-1}\) (Proposition~\ref{r1-prop-diag}(a)); as every entry of \(J_n\) is \(1\),
+the \((i,j)\) entry of \(DJ_nD^{-1}\) is \(d_i\cdot1\cdot d_j^{-1}=a_{ij}\). So \(A=DJ_nD^{-1}\), that is,
+\(J_n=D^{-1}AD\): \(J_n\) is similar to \(A\) (Definition~\ref{r7-def-similar}).
+\item By Theorem~\ref{r7-thm-similar}(a) and Example~\ref{r7-exm-ones}, \(p_A=p_{J_n}=t^{n-1}(t-n)\): the eigenvalues of
+\(A\) are \(n\), simple, and \(0\), of algebraic multiplicity \(n-1\).
+\item Eigenvectors of \(J_n=\one\one'\): \(J_ny=\one(\one'y)\) (Theorem~\ref{r1-thm-rules}), a multiple of \(\one\). So
+\(J_ny=0\) if and only if \(\one'y=0\), as \(\one\ne0\) (Proposition~\ref{r3-prop-dependence}(a)); and if \(J_ny=ny\),
+then \(y=\frac1n(\one'y)\one\). Hence
+\(\mathcal N(J_n)=\{y:\one'y=0\}\), and \(\mathcal N(J_n-nI)=\Span\{\one\}\), as \(J_n\one=n\one\).
+\item By Theorem~\ref{r7-thm-similar}(b), with \(P=D\) and \(J_n=D^{-1}AD\), \(x\) is an eigenvector of \(A\) belonging
+to \(c\) if and only if \(D^{-1}x\) is an eigenvector of \(J_n\) belonging to \(c\). For \(c=n\): \(D^{-1}x=s\one\) with
+\(s\ne0\), that is, \(x=sD\one=sd\). For \(c=0\): \(x\ne0\) and \(\one'D^{-1}x=0\), that is,
+\[
+\frac{x_1}{d_1}+\frac{x_2}{d_2}+\dots+\frac{x_n}{d_n}=0
+\]
+\item So the eigenvectors belonging to \(n\) are the nonzero multiples of \(d\), and those belonging to \(0\) are the
+nonzero vectors of \(\mathcal N(A)=\{x:x_1/d_1+\dots+x_n/d_n=0\}\). Here \(\dim\mathcal N(A)=\dim\mathcal N(J_n)=n-1\)
+(Theorem~\ref{r7-thm-similar}(b); \(\mathcal N(J_n)=\mathcal N(\one')\), \(\rank\one'=1\) as its only row is nonzero, and
+Theorem~\ref{thm:r4-rank-nullity}), and the
+\(n-1\) vectors \(d_1e_1-d_je_j\) (\(j=2,\dots,n\)) of \(\mathcal N(A)\) are linearly independent, as only the \(j\)th of
+them has a nonzero entry in position \(j\); so they form a basis of \(\mathcal N(A)\)
+(Theorem~\ref{thm:r4-counting}(d)).
+\end{itemize}
+Check: entry \(i\) of \(Ad\) is \(\sum_j(d_i/d_j)d_j=nd_i\), and entry \(i\) of \(Ax\) is \(d_i\sum_jx_j/d_j\).
+\end{solution}
+
+\begin{problem}\label{r7-ex-pr-idempotent-2x2}
+Find all idempotent matrices \(P\in\R^{2\times2}\).
+\end{problem}
+\begin{solution}
+Let \(P\in\R^{2\times2}\). First, \(P\) is idempotent if and only if \(P=0\), or \(P=I_2\), or \(\tr P=1\) and
+\(\det P=0\).
+\begin{itemize}
+\item Let \(P^2=P\). Then \(\rank P\in\{0,1,2\}\) (Theorem~\ref{thm:r4-rank-rules}(a)). If \(\rank P=0\), then
+\(\mathcal C(P)=\{0\}\) (Definition~\ref{def:r4-rank}, Theorem~\ref{thm:r4-dimension}), so every column of \(P\) is \(0\) (Definition~\ref{def:r4-spaces})
+and \(P=0\). If \(\rank P=2\), then \(P\) is invertible (Theorem~\ref{thm:r4-rank-rules}(d)), and multiplying \(P^2=P\)
+on the left by \(P^{-1}\) gives \(P=I_2\). If \(\rank P=1\), then \(\tr P=\rank P=1\) (Theorem~\ref{r6-thm-idempotent}(c)),
+and \(\det P=0\), as \(P\) is not invertible (Theorem~\ref{r5d-thm-product}(a)).
+\item Conversely, \(0\) and \(I_2\) are idempotent. If \(\tr P=1\) and \(\det P=0\), then
+\(p_P(t)=t^2-(\tr P)t+\det P=t^2-t\) (Definition~\ref{r7-def-charpoly}(b)), and the Cayley--Hamilton theorem
+(Theorem~\ref{r7-thm-cayley-hamilton}) gives \(P^2-P=0\).
+\end{itemize}
+Next, the matrices with \(\tr P=1\) and \(\det P=0\).
+\begin{itemize}
+\item Write \(P=\left(\begin{smallmatrix}\alpha&\beta\\\gamma&\delta\end{smallmatrix}\right)\). If \(\tr P=1\), then
+\(\delta=1-\alpha\); with \(a=2\alpha-1\), \(b=2\beta\) and \(c=2\gamma\),
+\[
+P=\frac12\begin{pmatrix}1+a&b\\c&1-a\end{pmatrix},\qquad
+\det P=\tfrac14(1+a)(1-a)-\tfrac14bc=\tfrac14\bigl(1-a^2-bc\bigr)
+\]
+\item So \(\det P=0\) if and only if \(a^2+bc=1\). Conversely, every matrix of this form with \(a,b,c\in\R\) has trace
+\(\frac12(1+a)+\frac12(1-a)=1\).
+\end{itemize}
+Hence the idempotent \(2\times2\) matrices are \(0\), \(I_2\), and the matrices
+\[
+P=\frac12\begin{pmatrix}1+a&b\\c&1-a\end{pmatrix}\qquad(a,b,c\in\R,\ a^2+bc=1)
+\]
+\end{solution}
+
+\begin{problem}\label{r7-pr-involution}
+Let \(A\in\R^{n\times n}\) satisfy \(A^2=I_n\).
+\begin{enumerate}
+\item Show that \(E=\frac12(I_n+A)\) is idempotent and that \(A=2E-I_n\).
+\item Show that \(A\) is diagonalizable, that its eigenvalues lie in \(\{1,-1\}\), that \(\mathcal N(A-I_n)=\mathcal C(I_n+A)\)
+and \(\mathcal N(A+I_n)=\mathcal C(I_n-A)\), and that \(g_A(1)+g_A(-1)=n\). Compare with
+Problem~\ref{ex:r4-involutory-rank}.
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) By Theorem~\ref{r1-thm-rules} and \(A^2=I_n\), \(E^2=\frac14(I_n+2A+A^2)=\frac14(2I_n+2A)=E\), and
+\(2E-I_n=I_n+A-I_n=A\).
+
+(b)
+\begin{itemize}
+\item \((A-I_n)(I_n+A)=A^2-I_n=0\) and \((A+I_n)(I_n-A)=I_n-A^2=0\) (Theorem~\ref{r1-thm-rules}). So for every
+\(y\in\R^n\), \((I_n+A)y\in\mathcal N(A-I_n)\) and \((I_n-A)y\in\mathcal N(A+I_n)\): \(\mathcal C(I_n+A)\subseteq\mathcal N(A-I_n)\)
+and \(\mathcal C(I_n-A)\subseteq\mathcal N(A+I_n)\) (Definition~\ref{def:r4-spaces}).
+\item Conversely, if \(Ax=x\), then \(x=\frac12(x+Ax)=(I_n+A)(\frac12x)\in\mathcal C(I_n+A)\); and if \(Ax=-x\), then
+\(x=\frac12(x-Ax)=(I_n-A)(\frac12x)\in\mathcal C(I_n-A)\). Hence \(\mathcal N(A-I_n)=\mathcal C(I_n+A)\) and
+\(\mathcal N(A+I_n)=\mathcal C(I_n-A)\).
+\item Every \(x\in\R^n\) is \(x=\frac12(x+Ax)+\frac12(x-Ax)\), where \(\frac12(x+Ax)=(I_n+A)(\frac12x)\) lies in
+\(\mathcal N(A-I_n)\) and \(\frac12(x-Ax)=(I_n-A)(\frac12x)\) in \(\mathcal N(A+I_n)\), by the first item. So
+\(\R^n=\mathcal N(A-I_n)+\mathcal N(A+I_n)\) (Definition~\ref{r3-def-sum}). If \(x\) lies in both null spaces, then
+\(x=Ax=-x\), so \(x=0\). By Theorems~\ref{thm:r4-dim-sum} and~\ref{thm:r4-dimension} and
+Definition~\ref{r7-def-multiplicity}, \(g_A(1)+g_A(-1)=\dim\mathcal N(A-I_n)+\dim\mathcal N(A+I_n)=\dim\R^n=n\).
+\item If \(Ax=\lambda x\) with \(\lambda\in\R\) and \(x\ne0\), then \(x=A^2x=\lambda^2x\)
+(Proposition~\ref{r7-prop-eig-poly}(a)), so \(\lambda^2=1\) (Proposition~\ref{r3-prop-dependence}(a)): the real
+eigenvalues of \(A\) are among \(1\) and \(-1\). So the dimensions of the eigenspaces of the distinct real eigenvalues of
+\(A\) add up to \(g_A(1)+g_A(-1)=n\) (a null space \(\mathcal N(A\mp I_n)=\{0\}\) adds \(0\)), and \(A\) is diagonalizable
+(Theorem~\ref{r7-thm-diag-criterion}, (iii)\(\Rightarrow\)(i)). By Definition~\ref{r7-def-diagonalizable}, all
+eigenvalues of \(A\) are then real; so they lie in \(\{1,-1\}\).
+\end{itemize}
+In terms of ranks, \(g_A(1)=\dim\mathcal C(I_n+A)=\rank(I_n+A)\) and \(g_A(-1)=\rank(I_n-A)\)
+(Definition~\ref{def:r4-rank}), so \(\rank(I_n+A)+\rank(I_n-A)=n\), the identity of Problem~\ref{ex:r4-involutory-rank}.
 \end{solution}
 
 \end{document}
