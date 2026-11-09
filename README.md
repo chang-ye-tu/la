@@ -7,15 +7,15 @@
 ## 參考書
 
 - [Harville, D. A., 1997. Matrix Algebra From a Statistician's Perspective. Springer.](https://link.springer.com/book/10.1007/b98818)
+- [Harville, D. A., 2001. Matrix Algebra: Exercises and Solutions. Springer.](https://link.springer.com/book/10.1007/978-1-4613-0181-3)
 - Hoffman, K., Kunze, R., 1971. Linear Algebra. 2nd ed., Prentice-Hall.
 - Abadir, K., Magnus, J. R., 2005. Matrix Algebra. Cambridge University Press.
 - Searle, S. R., Khuri, A. I., 2017. Matrix Algebra Useful for Statistics. 2nd ed., John Wiley & Sons.
 - [Lang, S., 1987. Linear Algebra. 3rd ed., Springer.](https://link.springer.com/book/10.1007/978-1-4757-1949-9)
+- [Shakarchi, R., 1996. Solutions Manual for Lang's Linear Algebra.](https://link.springer.com/book/10.1007/978-1-4612-0755-9)
 - [Bapat, R. B., 2012. Linear Algebra and Linear Models. 3rd ed., Springer.](https://link.springer.com/book/10.1007/978-1-4471-2739-0)
-- [Harville, D. A., 2001. Matrix Algebra: Exercises and Solutions. Springer.](https://link.springer.com/book/10.1007/978-1-4613-0181-3)
 - Prasolov, V. V., 1994. Problems and Theorems in Linear Algebra. American Mathematical Society.
 - [Hefferon, J., 2021. Linear Algebra. 4th ed.](https://hefferon.net/linearalgebra)
-- [Shakarchi, R., 1996. Solutions Manual for Lang's Linear Algebra.](https://link.springer.com/book/10.1007/978-1-4612-0755-9)
 
 <!--
 - [Lang, S., 1986. Introduction to Linear Algebra. 2nd ed., Springer.](https://link.springer.com/book/10.1007/978-1-4612-1070-2)
@@ -36,8 +36,6 @@
 - 平時成績（20%）
 
 ## 授課時程
-
-<a href="https://github.com/chang-ye-tu/la/blob/master/note/concordance-1021.pdf">編號對照表（10/21 版 → 新版，第 1–8 章）</a>
 
 | 日期 | 課程進度 |
 |---|---|
