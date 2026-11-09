@@ -10,17 +10,19 @@
 - Searle, S. R., Khuri, A. I., 2017. Matrix Algebra Useful for Statistics. 2nd ed., John Wiley & Sons.
 - [Harville, D. A., 1997. Matrix Algebra From a Statistician's Perspective. Springer.](https://link.springer.com/book/10.1007/b98818)
 - [Harville, D. A., 2001. Matrix Algebra: Exercises and Solutions. Springer.](https://link.springer.com/book/10.1007/978-1-4613-0181-3)
+- Hoffman, K., Kunze, R., 1971. Linear Algebra. 2nd ed., Prentice-Hall.
+- Abadir, K., Magnus, J. R., 2005. Matrix Algebra. Cambridge University Press.
+- Prasolov, V. V., 1994. Problems and Theorems in Linear Algebra. American Mathematical Society.
+- [Lang, S., 1987. Linear Algebra. 3rd ed., Springer.](https://link.springer.com/book/10.1007/978-1-4757-1949-9)
+- [Shakarchi, R., 1996. Solutions Manual for Lang's Linear Algebra.](https://link.springer.com/book/10.1007/978-1-4612-0755-9)
+- [Hefferon, J., 2021. Linear Algebra. 4th ed.](https://hefferon.net/linearalgebra)
 
 <!--
 - [Lang, S., 1986. Introduction to Linear Algebra. 2nd ed., Springer.](https://link.springer.com/book/10.1007/978-1-4612-1070-2)
-- [Lang, S., 1987. Linear Algebra. 3rd ed., Springer.](https://link.springer.com/book/10.1007/978-1-4757-1949-9)
-- [Shakarchi, R., 1996. Solutions Manual for Lang's Linear Algebra.](https://link.springer.com/book/10.1007/978-1-4612-0755-9)
 - [Serre, D., 2010. Matrices: Theory and Applications. 2nd ed., Springer.](https://link.springer.com/book/10.1007/978-1-4419-7683-3)
 - [Said-Houari, B., 2017. Linear Algebra. Springer.]( https://link.springer.com/book/10.1007/978-3-319-63793-8 )
 - [Blyth, T. S., Robertson, E. F., 2002. Basic Linear Algebra. Springer.](https://link.springer.com/book/10.1007/978-1-4471-0681-4)
 - [Blyth, T. S., Robertson, E. F., 2002. Further Linear Algebra. Springer.](https://link.springer.com/book/10.1007/978-1-4471-0661-6)
-- Hoffman, K., Kunze, R., 1971. Linear Algebra. 2nd ed., Prentice-Hall.
-- Abadir, K., Magnus, J. R., 2005. Matrix Algebra. Cambridge University Press.
 - Magnus, J. R., Neudecker, H., 2019. Matrix Differential Calculus with Applications in Statistics and Econometrics. 3rd ed., John Wiley & Sons.
 - 教師講義
   - [Notes on the Classical Theory of Linear Models](https://github.com/chang-ye-tu/mva/blob/master/note/clm.pdf)
