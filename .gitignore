@@ -21,9 +21,10 @@
 !/note/lecture-1021.pdf
 !/note/concordance-1021.pdf
 
-# Per-session handouts: the PDFs only.
+# Per-session lectures: each PDF and its single-file source.
 /handout/*
 !/handout/*.pdf
+!/handout/*.tex
 
 # Editor lock/backup files can resemble source filenames.
 **/.#*

@@ -40,20 +40,20 @@
 | 日期 | 課程進度 |
 |---|---|
 | 09/09 | Course overview |
-| 09/16 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/book.pdf">Chapter 1: Matrices</a> |
-| 09/23 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/book.pdf">Chapter 2: Gauss Elimination, RREF, and Inverses</a> |
-| 09/30 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/book.pdf">Chapter 3: Vector Spaces, Subspaces, Span, and Bases</a> |
-| 10/07 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/book.pdf">Chapter 4: Bases, Dimension, and Rank</a> |
-| 10/14 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/book.pdf">Chapter 5: Block Matrices and Determinants</a> |
-| 10/21 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/book.pdf">Chapter 6: Orthogonality and Projections</a> |
+| 09/16 | Lecture 1: Matrices |
+| 09/23 | Lecture 2: Gauss Elimination, RREF, and Inverses |
+| 09/30 | Lecture 3: Vector Spaces, Subspaces, Span, and Bases |
+| 10/07 | Lecture 4: Bases, Dimension, and Rank |
+| 10/14 | Lecture 5: Block Matrices and Determinants |
+| 10/21 | Lecture 6: Orthogonality and Projections |
 | 10/28 | 停課 |
 | 11/04 | **期中考** |
-| 11/11 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/book.pdf">Chapter 7: Eigenvalues and Diagonalization</a> · <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture07.pdf">本週講義</a> |
-| 11/18 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/book.pdf">Chapter 8: The Spectral Theorem and Quadratic Forms</a> |
-| 11/25 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture-1021.pdf">Chapter 9: Matrix Differentiation and Variational Principles</a> |
-| 12/02 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture-1021.pdf">Chapter 10: Singular Value Decomposition, Generalized Inverses, and Principal Components</a> |
-| 12/09 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture-1021.pdf">Chapter 11: Random Vectors and the Multivariate Normal Distribution</a> |
-| 12/16 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture-1021.pdf">Chapter 12: Linear Models and Generalized Linear Models</a> |
+| 11/11 | <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture07.pdf">Lecture 7: Eigenvalues and Diagonalization</a> |
+| 11/18 | Lecture 8: The Spectral Theorem and Quadratic Forms |
+| 11/25 | Lecture 9: Matrix Differentiation and Variational Principles |
+| 12/02 | Lecture 10: Singular Value Decomposition, Generalized Inverses, and Principal Components |
+| 12/09 | Lecture 11: Random Vectors and the Multivariate Normal Distribution |
+| 12/16 | Lecture 12: Linear Models and Generalized Linear Models |
 | 12/23 | **期末考** |
 
 ## 授課教師
