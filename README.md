@@ -2,20 +2,20 @@
 
 ## 教科書
 
-教師編纂講義。
+教師編纂：[Linear Algebra and Its Statistical Applications](https://github.com/chang-ye-tu/la/blob/master/note/book.pdf)
 
 ## 參考書
 
-- [Bapat, R. B., 2012. Linear Algebra and Linear Models. 3rd ed., Springer.](https://link.springer.com/book/10.1007/978-1-4471-2739-0)
-- Searle, S. R., Khuri, A. I., 2017. Matrix Algebra Useful for Statistics. 2nd ed., John Wiley & Sons.
 - [Harville, D. A., 1997. Matrix Algebra From a Statistician's Perspective. Springer.](https://link.springer.com/book/10.1007/b98818)
-- [Harville, D. A., 2001. Matrix Algebra: Exercises and Solutions. Springer.](https://link.springer.com/book/10.1007/978-1-4613-0181-3)
 - Hoffman, K., Kunze, R., 1971. Linear Algebra. 2nd ed., Prentice-Hall.
 - Abadir, K., Magnus, J. R., 2005. Matrix Algebra. Cambridge University Press.
-- Prasolov, V. V., 1994. Problems and Theorems in Linear Algebra. American Mathematical Society.
+- Searle, S. R., Khuri, A. I., 2017. Matrix Algebra Useful for Statistics. 2nd ed., John Wiley & Sons.
 - [Lang, S., 1987. Linear Algebra. 3rd ed., Springer.](https://link.springer.com/book/10.1007/978-1-4757-1949-9)
-- [Shakarchi, R., 1996. Solutions Manual for Lang's Linear Algebra.](https://link.springer.com/book/10.1007/978-1-4612-0755-9)
+- [Bapat, R. B., 2012. Linear Algebra and Linear Models. 3rd ed., Springer.](https://link.springer.com/book/10.1007/978-1-4471-2739-0)
+- [Harville, D. A., 2001. Matrix Algebra: Exercises and Solutions. Springer.](https://link.springer.com/book/10.1007/978-1-4613-0181-3)
+- Prasolov, V. V., 1994. Problems and Theorems in Linear Algebra. American Mathematical Society.
 - [Hefferon, J., 2021. Linear Algebra. 4th ed.](https://hefferon.net/linearalgebra)
+- [Shakarchi, R., 1996. Solutions Manual for Lang's Linear Algebra.](https://link.springer.com/book/10.1007/978-1-4612-0755-9)
 
 <!--
 - [Lang, S., 1986. Introduction to Linear Algebra. 2nd ed., Springer.](https://link.springer.com/book/10.1007/978-1-4612-1070-2)
@@ -37,21 +37,21 @@
 
 ## 授課時程
 
-<a href="https://github.com/chang-ye-tu/la/blob/master/note/concordance-1021.pdf">編號對照表（10/21 版 → 新版，第 1–7 章）</a>
+<a href="https://github.com/chang-ye-tu/la/blob/master/note/concordance-1021.pdf">編號對照表（10/21 版 → 新版，第 1–8 章）</a>
 
 | 日期 | 課程進度 |
 |---|---|
 | 09/09 | Course overview |
-| 09/16 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture.pdf">Chapter 1: Matrices</a> |
-| 09/23 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture.pdf">Chapter 2: Gauss Elimination, RREF, and Inverses</a> |
-| 09/30 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture.pdf">Chapter 3: Vector Spaces, Subspaces, Span, and Bases</a> |
-| 10/07 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture.pdf">Chapter 4: Bases, Dimension, and Rank</a> |
-| 10/14 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture.pdf">Chapter 5: Block Matrices and Determinants</a> |
-| 10/21 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture.pdf">Chapter 6: Orthogonality and Projections</a> |
+| 09/16 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/book.pdf">Chapter 1: Matrices</a> |
+| 09/23 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/book.pdf">Chapter 2: Gauss Elimination, RREF, and Inverses</a> |
+| 09/30 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/book.pdf">Chapter 3: Vector Spaces, Subspaces, Span, and Bases</a> |
+| 10/07 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/book.pdf">Chapter 4: Bases, Dimension, and Rank</a> |
+| 10/14 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/book.pdf">Chapter 5: Block Matrices and Determinants</a> |
+| 10/21 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/book.pdf">Chapter 6: Orthogonality and Projections</a> |
 | 10/28 | 停課 |
 | 11/04 | **期中考** |
-| 11/11 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture.pdf">Chapter 7: Eigenvalues and Diagonalization</a> · <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture07.pdf">本週講義</a> |
-| 11/18 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture-1021.pdf">Chapter 8: The Spectral Theorem and Quadratic Forms</a> |
+| 11/11 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/book.pdf">Chapter 7: Eigenvalues and Diagonalization</a> · <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture07.pdf">本週講義</a> |
+| 11/18 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/book.pdf">Chapter 8: The Spectral Theorem and Quadratic Forms</a> |
 | 11/25 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture-1021.pdf">Chapter 9: Matrix Differentiation and Variational Principles</a> |
 | 12/02 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture-1021.pdf">Chapter 10: Singular Value Decomposition, Generalized Inverses, and Principal Components</a> |
 | 12/09 | <a href="https://github.com/chang-ye-tu/la/blob/master/note/lecture-1021.pdf">Chapter 11: Random Vectors and the Multivariate Normal Distribution</a> |

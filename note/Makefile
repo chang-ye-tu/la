@@ -2,16 +2,16 @@ LATEXMK ?= latexmk
 LATEXFLAGS = -silent -pdf -interaction=nonstopmode -halt-on-error
 
 .PHONY: all
-all: lecture.pdf
+all: book.pdf
 
-# The lecture notes are one self-contained file.
-lecture.pdf: lecture.tex
-	$(LATEXMK) $(LATEXFLAGS) -outdir=.build/lecture $<
-	cp .build/lecture/lecture.pdf lecture.pdf
+# The textbook is one self-contained file.
+book.pdf: book.tex
+	$(LATEXMK) $(LATEXFLAGS) -outdir=.build/book $<
+	cp .build/book/book.pdf book.pdf
 
-# When the commented source lecture-src.tex is present, lecture.tex is generated from it
+# When the commented source book-src.tex is present, book.tex is generated from it
 # without the comment lines.
-ifneq ($(wildcard lecture-src.tex),)
-lecture.tex: lecture-src.tex
+ifneq ($(wildcard book-src.tex),)
+book.tex: book-src.tex
 	sed '/^[[:space:]]*%/d' $< | cat -s > $@
 endif
