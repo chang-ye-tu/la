@@ -321,9 +321,9 @@ Let \(A,P\in\R^{n\times n}\), \(P\) invertible, and \(B=P^{-1}AP\) (\(B\) is \te
 \begin{board}[\(\det(cI-B)=\det(cI-A)\) for \(c\in\R\):]
 \boardtop
 \begin{align*}
+\det P^{-1}\det P&=\det(P^{-1}P)=\det I=1&&\text{(\ref{f-det})}\\
 cI-B&=P^{-1}(cI)P-P^{-1}AP=P^{-1}(cI-A)P&&\text{(\ref{f-rules})}\\
-\det(cI-B)&=\det P^{-1}\det(cI-A)\det P=\det(cI-A)&&\text{(\ref{f-det})}\\
-\det P^{-1}\det P&=\det(P^{-1}P)=\det I=1&&\text{(\ref{f-det})}
+\det(cI-B)&=\det P^{-1}\det(cI-A)\det P=\det(cI-A)&&\text{(\ref{f-det})}
 \end{align*}
 So \(p_B=p_A\) (\ref{f-roots}); eigenvalues, \(\tr\), \(\det\) are read off \(p_A\)
 (Definition~\ref{h-def-eigenvalues}, Theorem~\ref{h-thm-charpoly}(a)).
@@ -343,12 +343,17 @@ real polynomial \(f\), and \((A+cI)x=(\lambda+c)x\).
 \end{enumerate}
 \end{theorem}
 \begin{proof}
-\begin{board}[(a) by induction on \(k\), then \(f(A)x\) and \((A+cI)x\); (b) \(\lambda\ne0\), then \(A^{-1}x\):]
+\begin{board}[(a) by induction on \(k\), then \(f(A)x\) and \((A+cI)x\):]
 \boardtop
 \begin{align*}
 A^0x&=x,\qquad A^{k+1}x=A^k(Ax)=\lambda A^kx=\lambda^{k+1}x&&\text{(induction, \ref{f-rules})}\\
 f(A)x&=\textstyle\sum_kc_kA^kx=\sum_kc_k\lambda^kx=f(\lambda)x&&(f=\textstyle\sum_kc_kt^k)\\
-(A+cI)x&=Ax+cx=(\lambda+c)x&&\text{(\ref{f-rules})}\\
+(A+cI)x&=Ax+cx=(\lambda+c)x&&\text{(\ref{f-rules})}
+\end{align*}
+\end{board}
+\begin{board}[(b) \(\lambda\ne0\), then \(A^{-1}x\):]
+\boardtop
+\begin{align*}
 \lambda=0&\implies Ax=0,\ x\ne0\implies A\text{ not invertible }\contradiction&&\text{((b); \ref{f-invertible})}\\
 x&=A^{-1}(Ax)=\lambda A^{-1}x\implies A^{-1}x=\lambda^{-1}x&&\text{(\ref{f-rules})}
 \end{align*}
