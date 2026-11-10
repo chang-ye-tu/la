@@ -13665,6 +13665,10 @@ Let \(A\in\R^{n\times n}\). A real number \(\lambda\) is an \textbf{eigenvalue} 
 \]
 is called the \textbf{eigenspace} of \(A\) for \(\lambda\).
 \end{definition}
+Eigenvalues need not be real numbers: once the characteristic polynomial of \(A\) is defined below, the eigenvalues of
+\(A\) are defined as the \(n\) complex roots of that polynomial, listed with multiplicity, and the eigenvalues of this
+definition are exactly the real ones among them.
+
 The eigenspace \(\mathcal N(A-\lambda I)\) is a subspace of \(\R^n\) (Example~\ref{r3-exm-subspaces}(e)), and its
 nonzero vectors are exactly the eigenvectors belonging to \(\lambda\). So a nonzero multiple of an eigenvector, and a
 nonzero sum of eigenvectors belonging to the same \(\lambda\), are again eigenvectors belonging to \(\lambda\). An
@@ -13979,8 +13983,8 @@ of \(A\), listed \textbf{with multiplicity}; by Theorem~\ref{r7-thm-factor}(c) t
 \(p_A=(t-c_1)^{a_A(c_1)}\cdots(t-c_k)^{a_A(c_k)}\) and \(a_A(c_1)+\dots+a_A(c_k)=n\). An eigenvalue \(c\) is
 \textbf{simple} if \(a_A(c)=1\) and \textbf{multiple} if \(a_A(c)\geqslant2\). A real number is an eigenvalue in this
 sense if and only if it is one in the sense of Definition~\ref{r7-def-eigen}, since both mean that it is a real root
-of \(p_A\) (Definition~\ref{r7-def-charpoly}(a)); these are the \textbf{real eigenvalues}. Eigenvectors and
-eigenspaces belong to real eigenvalues only.
+of \(p_A\) (Definition~\ref{r7-def-charpoly}(a)); these are the \textbf{real eigenvalues}. From now on
+``eigenvalue'' has this meaning; eigenvectors and eigenspaces belong to real eigenvalues only.
 \end{definition}
 
 \begin{proposition}[\citeat{hoffman-kunze}{\S4.5}, \citeat{abadir-magnus}{Exercise~7.17(b)}]\label{r7-prop-conjugate}
