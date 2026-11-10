@@ -49,11 +49,11 @@
 | 10/28 | 停課 |
 | 11/04 | **期中考** |
 | 11/11 | <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture07.pdf">Lecture 7: Eigenvalues and Diagonalization</a> |
-| 11/18 | Lecture 8: The Spectral Theorem and Quadratic Forms |
-| 11/25 | Lecture 9: Matrix Differentiation and Variational Principles |
-| 12/02 | Lecture 10: Singular Value Decomposition, Generalized Inverses, and Principal Components |
-| 12/09 | Lecture 11: Random Vectors and the Multivariate Normal Distribution |
-| 12/16 | Lecture 12: Linear Models and Generalized Linear Models |
+| 11/18 | <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture08.pdf">Lecture 8: Projections, Symmetric Matrices, and Quadratic Forms</a> |
+| 11/25 | Lecture 9: Covariance Matrices and Principal Components |
+| 12/02 | Lecture 10: Normal Vectors and Quadratic Forms |
+| 12/09 | Lecture 11: Linear Models I |
+| 12/16 | Lecture 12: Linear Models II |
 | 12/23 | **期末考** |
 
 ## 授課教師

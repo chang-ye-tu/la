@@ -1,0 +1,722 @@
+\def\handoutsay{false}\def\handoutfill{false}
+\documentclass[12pt]{article}
+\newcommand{\handoutrunning}{Lecture 8: Projections, symmetric matrices and quadratic forms}
+\providecommand{\handoutsay}{true}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[a4paper,margin=15mm,headheight=14pt,headsep=5mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,booktabs,needspace}
+\usepackage{pifont}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{fancyhdr}
+\usepackage{ifthen}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdfauthor={Chang-Ye Tu}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Linear Algebra}
+\fancyhead[R]{\small\handoutrunning}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt plus 1pt minus 1pt}
+\setlength{\emergencystretch}{1.5em}
+\usepackage{etoolbox}
+\newcommand{\handoutdisplayskips}{\setlength{\abovedisplayskip}{7pt plus 2pt minus 2pt}%
+  \setlength{\belowdisplayskip}{7pt plus 2pt minus 2pt}}
+\apptocmd{\normalsize}{\handoutdisplayskips}{}{\PackageWarning{handout}{could not patch normalsize}}
+\handoutdisplayskips
+\setlist[enumerate]{label=(\alph*),leftmargin=*,itemsep=2pt,topsep=3pt}
+\setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\iu}{\mathrm{i}}
+\newcommand{\contradiction}{\mathord{\text{\large\ding{56}}}}
+\newcommand{\one}{\mathbf 1}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\col}{col}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Span}{span}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{fact}{Fact}
+\renewcommand{\thefact}{F\arabic{fact}}
+\AddToHook{cmd/subsection/before}{\par\Needspace{9\baselineskip}}
+\AddToHook{env/theorem/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/proposition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/lemma/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/definition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/example/before}{\par\Needspace{4\baselineskip}}
+\definecolor{saybg}{gray}{0.86}
+\NewDocumentEnvironment{say}{+b}
+  {\ifthenelse{\equal{\handoutsay}{true}}{\par\Needspace{2\baselineskip}\noindent\colorbox{saybg}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}%
+   {\small\sffamily\ding{43}\enspace\textbf{Say.}\enspace#1}}\par}{}}
+  {}
+\providecommand{\handoutfill}{false}
+\newsavebox{\boardbox}
+\newlength{\boardht}
+\definecolor{boardrule}{gray}{0.55}
+\makeatletter
+\newcommand{\boardstart}{\par\if@inlabel\leavevmode\par\fi}
+\makeatother
+\NewDocumentEnvironment{board}{o +b}
+  {\boardstart\IfValueT{#1}{\noindent#1\par\nopagebreak}%
+   \noindent\begin{lrbox}{\boardbox}\begin{minipage}{\linewidth}#2\end{minipage}\end{lrbox}%
+   \setlength{\boardht}{\dimexpr\ht\boardbox+\dp\boardbox\relax}%
+   \ifthenelse{\equal{\handoutfill}{true}}%
+     {\setlength{\boardht}{1.4\boardht}%
+      {\setlength{\fboxsep}{0pt}\setlength{\fboxrule}{0.4pt}\color{boardrule}%
+       \framebox[\dimexpr\linewidth-2\fboxrule\relax]{\rule{0pt}{\boardht}}}}%
+     {\ifthenelse{\equal{\handoutsay}{true}}%
+        {\llap{\color{boardrule}\rule[-\dp\boardbox]{1.5pt}{\boardht}\hspace{4pt}}}{}%
+      \usebox{\boardbox}}%
+   \par}
+  {}
+\newcommand{\blank}[1]{\ifthenelse{\equal{\handoutfill}{true}}{\underline{\phantom{#1}}}{#1}}
+\newcommand{\lec}[1]{Lecture~#1}
+\newcommand{\handouttitle}[2]{%
+  \begin{center}
+  {\LARGE\sffamily\bfseries #2\par}\vspace{3pt}
+  {\sffamily Linear Algebra \textperiodcentered\ \lec{#1}\par}
+  \ifthenelse{\equal{\handoutsay}{true}}{\vspace{3pt}{\small\sffamily\colorbox{saybg}{\ding{43}\enspace\textbf{Say.}}\enspace
+    teacher's copy: the shaded boxes are not in the students' copy.\par}}{}
+  \ifthenelse{\equal{\handoutfill}{true}}{\vspace{3pt}{\small\sffamily Fill-in copy: complete the framed spaces in
+    class.\par}}{}
+  \end{center}}
+
+\hypersetup{pdftitle={Linear Algebra, Lecture 8: Projections, symmetric matrices and quadratic forms}}
+\newcommand{\boardtop}{\vspace*{-\abovedisplayskip}}
+\DeclareMathOperator{\adj}{adj}
+\begin{document}
+\handouttitle{8}{Projections, symmetric matrices and quadratic forms}
+
+\textbf{Last time} (\lec{7}): the eigenvalues of \(A\in\R^{n\times n}\) are the \(n\) complex roots of \(p_A\)
+(\lec{7}, Example~6: \(1\), \(2\pm i\)); \(A\) is diagonalizable \(\iff\) \(\R^n\) has a basis of eigenvectors of
+\(A\). F1--F11 are proved in Chapters 1--6 of the textbook. \(I=I_n\), and \(e_j\) is column \(j\) of \(I\).
+
+\subsection*{Facts}
+
+\begin{enumerate}[label=\textbf{F\arabic*.},ref=F\arabic*,leftmargin=*,itemsep=0pt,parsep=0pt,topsep=2pt]
+\item\label{f-rules} \((AB)C=A(BC)\), \(A(B+C)=AB+AC\), \((A+B)C=AC+BC\), \(c(AB)=(cA)B=A(cB)\), \(I_mA=A=AI_n\)
+(\(A\in\R^{m\times n}\)); \((A+B)'=A'+B'\), \((cA)'=cA'\), \((AB)'=B'A'\), \((A')'=A\); \(x'Ay=y'A'x\) (a \(1\times1\)
+matrix equals its transpose); \(I'=I\). \(A\) is \textbf{symmetric} if \(A'=A\).
+\item\label{f-views} \(A=[a_1\ \cdots\ a_p]\): \(Ax=x_1a_1+\dots+x_pa_p\), \(Ae_j=a_j\), \(\col_j(AB)=A\col_j(B)\); equal
+columns \(\Rightarrow\) equal matrices; \((A'G)_{ij}=a_i'\col_j(G)\); \(AB=a_1b_1'+\dots+a_pb_p'\) (\(b_i'\) = row \(i\)
+of \(B\)); \(\col_j(A\diag(d_1,\dots,d_p))=d_ja_j\);
+\(\diag(\alpha_1,\dots,\alpha_n)\diag(\beta_1,\dots,\beta_n)=\diag(\alpha_1\beta_1,\dots,\alpha_n\beta_n)\); block matrices
+multiply, and are transposed, block by block (when the blocks fit).
+\item\label{f-invertible} \(A\in\R^{n\times n}\) is invertible \(\iff\) (\(Ax=0\Rightarrow x=0\)) \(\iff\) \(\rank A=n\)
+\(\iff\) \(\det A\ne0\); \(BA=I\) \(\Rightarrow\) \(A\), \(B\) invertible, \(B=A^{-1}\), \(A=B^{-1}\);
+\((A')^{-1}=(A^{-1})'\) for invertible \(A\).
+\item\label{f-basis} \(\mathcal C(A)=\{Ax:x\in\R^p\}\), the span of the columns of \(A\in\R^{n\times p}\). A subspace
+\(W\ne\{0\}\) has a basis; every basis of \(W\) has \(\dim W\) vectors (\(\dim\{0\}=0\), \(\dim\R^n=n\)); \(\dim W\) independent vectors of
+\(W\) form a basis of \(W\). One nonzero vector is independent; the columns of \(A\in\R^{n\times p}\) are independent
+\(\iff\) \(\rank A=p\).
+\item\label{f-rank} \(A\in\R^{m\times n}\): \(\mathcal N(A)=\{x:Ax=0\}\) is a subspace, \(\dim\mathcal N(A)=n-\rank A\);
+\(\rank A=\dim\mathcal C(A)=\rank(A'A)=\rank(PAQ)\) (\(P\), \(Q\) invertible); \(\mathcal C(AB)\subseteq\mathcal C(A)\);
+row operations keep \(\mathcal N(A)\), and the special solutions of the reduced echelon form are a basis of it.
+\item\label{f-trace} \(\tr A=\sum_ia_{ii}\); \(\tr(A+B)=\tr A+\tr B\), \(\tr(cA)=c\tr A\), \(\tr(AB)=\tr(BA)\) (\(A\in\R^{m\times n}\),
+\(B\in\R^{n\times m}\)).
+\item\label{f-det} \(A,B\in\R^{n\times n}\): \(\det(AB)=\det A\det B\), \(\det(cA)=c^n\det A\); adding a multiple of
+a row (column) to another keeps \(\det A\);
+scaling a row (column) by \(c\) scales \(\det A\) by \(c\). For \(n\geqslant2\), with \(A(i|j)\) = \(A\) without row \(i\)
+and column \(j\) and the cofactors \(c_{ij}=(-1)^{i+j}\det A(i|j)\): \(\det A=\sum_ja_{ij}c_{ij}\) (each \(i\))
+\(=\sum_ia_{ij}c_{ij}\) (each \(j\)); if \(\det A\ne0\), \(A^{-1}=\frac1{\det A}\adj A\), where \(\adj A\) has the
+\((i,j)\) entry \(c_{ji}\); \(c_{ji}=c_{ij}\) if \(A\) is symmetric.
+\item\label{f-dot} \(x,y\in\R^n\): \(x'y=y'x\); \(\lVert x\rVert^2=x'x=x_1^2+\dots+x_n^2>0\) if \(x\ne0\); \(x\perp y\)
+(orthogonal) means \(x'y=0\), and then \(\lVert x+y\rVert^2=\lVert x\rVert^2+\lVert y\rVert^2\); nonzero pairwise
+orthogonal vectors are independent.
+\item\label{f-orthonormal} \(Q\in\R^{n\times p}\) has \textbf{orthonormal} columns (\(q_i'q_j=0\) for \(i\ne j\),
+\(\lVert q_j\rVert=1\)) \(\iff\) \(Q'Q=I_p\). If \(p=n\) (\(Q\) is \textbf{orthogonal}): \(Q^{-1}=Q'\), \(QQ'=I_n\).
+\item\label{f-gram-schmidt} (Gram--Schmidt) Independent \(a_1,\dots,a_p\in\R^n\) give orthonormal \(q_1,\dots,q_p\),
+\(q_1=a_1/\lVert a_1\rVert\), with \(\Span\{q_1,\dots,q_j\}=\Span\{a_1,\dots,a_j\}\) (each \(j\)). So a subspace
+\(W\ne\{0\}\) has an orthonormal basis. If \(Q\in\R^{n\times p}\) has orthonormal columns and \(p<n\), then \([Q\ T]\)
+is orthogonal for some \(T\in\R^{n\times(n-p)}\).
+\item\label{f-centering} \(\one=\one_n=(1,\dots,1)'\in\R^n\), \(\bar y=\frac1n\one'y\), \(\bar J_n=\frac1n\one\one'\),
+\(C_n=I_n-\bar J_n\): \(\bar J_ny=\bar y\one\), \(C_ny=y-\bar y\one\).
+\end{enumerate}
+
+\textbf{From \lec{7}} (restated; \(A\in\R^{n\times n}\)).
+\begin{itemize}[itemsep=0pt,parsep=0pt,topsep=2pt]
+\item \lec{7}, Definitions~1 and~5: \(p_A=(t-\lambda_1)\cdots(t-\lambda_n)\), \(\lambda_i\in\C\) unique up to order: the
+\textbf{eigenvalues} of \(A\), listed with multiplicity (the roots of \(p_A\)); \(a_A(c)=\#\{i:\lambda_i=c\}\).
+Eigenvectors (\(x\in\R^n\), \(x\ne0\), \(Ax=\lambda x\)) and eigenspaces \(\mathcal N(A-\lambda I)\) belong to real
+\(\lambda\) only.
+\item \lec{7}, Theorem~2: for \(\lambda\in\R\), \(Ax=\lambda x\) for some \(x\in\R^n\), \(x\ne0\) \(\iff\)
+\(\det(\lambda I-A)=0\).
+\item \lec{7}, Theorem~3(a): exactly one polynomial \(p_A\) has \(p_A(c)=\det(cI-A)\) for all \(c\in\R\), and \(p_A\) is
+real; so \(\det(tI-A)=q(t)\) for all \(t\in\R\) \(\Rightarrow\) \(p_A=q\).
+\item \lec{7}, F10 and F12: \((f+g)(z)=f(z)+g(z)\), \((fg)(z)=f(z)g(z)\) (\(z\in\C\)); \(f(z)=g(z)\) for infinitely
+many \(z\) \(\Rightarrow\) \(f=g\).
+\item \lec{7}, Theorem~9: \(\tr A=\lambda_1+\dots+\lambda_n\) and \(\det A=\lambda_1\cdots\lambda_n\).
+\item \lec{7}, Theorem~14(a): for invertible \(P=[p_1\ \cdots\ p_n]\) and \(\Lambda=\diag(\lambda_1,\dots,\lambda_n)\),
+\(P^{-1}AP=\Lambda\iff Ap_j=\lambda_jp_j\) (all \(j\)); then \(\lambda_1,\dots,\lambda_n\) are the eigenvalues of \(A\).
+\end{itemize}
+
+\subsection*{1. Orthogonal projections}
+
+\begin{definition}\label{h-def-projection}
+Let \(W\) be a subspace of \(\R^n\) and \(y\in\R^n\). \(y\perp W\) (\(y\) is \textbf{orthogonal to} \(W\)) if \(y'w=0\)
+for every \(w\in W\); \(W^\perp=\{y\in\R^n:y\perp W\}\) is the \textbf{orthogonal complement} of \(W\). A vector
+\(\hat w\in W\) with \(y-\hat w\perp W\) is an \textbf{orthogonal projection} of \(y\) onto \(W\).
+\end{definition}
+
+\Needspace{18\baselineskip}
+\begin{theorem}\label{h-thm-complement}
+Let \(W\) be a subspace of \(\R^n\) and \(y\in\R^n\).
+\begin{enumerate}
+\item If \(W=\Span\{w_1,\dots,w_k\}\) and \(A=[w_1\ \cdots\ w_k]\in\R^{n\times k}\): \(y\perp W\iff A'y=0\). So
+\(W^\perp=\mathcal N(A')\), a subspace of \(\R^n\).
+\item \(W\cap W^\perp=\{0\}\). So \(y\) has at most one orthogonal projection \(\hat w\) onto \(W\) (\textbf{the}
+orthogonal projection).
+\item If \(\hat w\) is the orthogonal projection of \(y\) onto \(W\):
+\(\lVert y-w\rVert^2=\lVert y-\hat w\rVert^2+\lVert\hat w-w\rVert^2\) (\(w\in W\)). So
+\(\lVert y-w\rVert>\lVert y-\hat w\rVert\) for \(w\in W\), \(w\ne\hat w\): \(\hat w\) is the vector of \(W\) closest to
+\(y\), and \(\lVert y-\hat w\rVert\) is the \textbf{distance} from \(y\) to \(W\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) \(A'y\) has the entries \(w_j'y\); every \(w\in W\) is \(w=c_1w_1+\dots+c_kw_k=Ac\) (\ref{f-views}):]
+\boardtop
+\begin{align*}
+y\perp W&\implies w_j'y=y'w_j=0\ (j=1,\dots,k)\iff A'y=0&&\text{(\ref{f-dot}, \ref{f-views})}\\
+A'y=0,\ w=Ac&\implies y'w=y'Ac=(A'y)'c=0&&\text{(\ref{f-rules})}
+\end{align*}
+So \(W^\perp=\mathcal N(A')\), a subspace (\ref{f-rank}).
+\end{board}
+\begin{board}[(b) \(v\in W\cap W^\perp\); two projections \(\hat w_1\), \(\hat w_2\) of \(y\), and \(w\in W\):]
+\boardtop
+\begin{align*}
+v\in W\cap W^\perp&\implies v'v=0\implies v=0&&\text{(\ref{f-dot})}\\
+(\hat w_1-\hat w_2)'w&=(y-\hat w_2)'w-(y-\hat w_1)'w=0-0&&\text{(Definition~\ref{h-def-projection})}\\
+\hat w_1-\hat w_2&\in W\cap W^\perp=\{0\}&&(W\text{ a subspace})
+\end{align*}
+\end{board}
+\begin{board}[(c) For \(w\in W\): \(\hat w-w\in W\) and \(y-\hat w\perp W\):]
+\boardtop
+\begin{align*}
+\lVert y-w\rVert^2&=\lVert(y-\hat w)+(\hat w-w)\rVert^2=\lVert y-\hat w\rVert^2+\lVert\hat w-w\rVert^2
+&&\text{(\ref{f-dot})}\\
+w\ne\hat w&\implies\lVert\hat w-w\rVert^2>0\implies\lVert y-w\rVert^2>\lVert y-\hat w\rVert^2&&\text{(\ref{f-dot})}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{13\baselineskip}
+\begin{theorem}\label{h-thm-hat}
+Let \(A\in\R^{n\times p}\) with \(\rank A=p\). Then \(A'A\) is invertible. Let \(P=A(A'A)^{-1}A'\in\R^{n\times n}\).
+\begin{enumerate}
+\item For every \(y\in\R^n\), \(Py\) is the orthogonal projection of \(y\) onto \(\mathcal C(A)\).
+\item \(P'=P=P^2\) and \((I-P)'=I-P=(I-P)^2\): \(P\) and \(I-P\) are symmetric and \textbf{idempotent}.
+\item \(PA=A\) and \((I-P)A=0\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[\(A'A\) is invertible; (a) \(Py\in\mathcal C(A)\), \(y-Py\perp\mathcal C(A)\) (Theorem~\ref{h-thm-complement}(a)):]
+\boardtop
+\begin{align*}
+\rank(A'A)&=\rank A=p,\ A'A\in\R^{p\times p}&&\text{(\ref{f-rank}, \ref{f-invertible})}\\
+Py&=A\bigl((A'A)^{-1}A'y\bigr)\in\mathcal C(A),\qquad A'(y-Py)=A'y-A'A(A'A)^{-1}A'y=0
+&&\text{(\ref{f-basis}, \ref{f-rules})}
+\end{align*}
+\end{board}
+\begin{board}[(b), (c):]
+\boardtop
+\begin{align*}
+\bigl((A'A)^{-1}\bigr)'&=\bigl((A'A)'\bigr)^{-1}=(A'A)^{-1}&&\text{(\ref{f-invertible}, \ref{f-rules})}\\
+P'&=A\bigl((A'A)^{-1}\bigr)'A'=P,\qquad(I-P)'=I-P'=I-P&&\text{(\ref{f-rules})}\\
+P^2&=A(A'A)^{-1}(A'A)(A'A)^{-1}A'=P,\qquad(I-P)^2=I-2P+P^2=I-P&&\text{(\ref{f-rules})}\\
+PA&=A(A'A)^{-1}A'A=A,\qquad(I-P)A=A-PA=0&&\text{(\ref{f-rules})}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{14\baselineskip}
+\begin{theorem}\label{h-thm-projection-matrix}
+Let \(W\) be a subspace of \(\R^n\).
+\begin{enumerate}
+\item There is exactly one \(P_W\in\R^{n\times n}\) such that \(P_Wy\) is the orthogonal projection of \(y\) onto \(W\)
+for every \(y\in\R^n\): the \textbf{projection matrix} for \(W\). \(P_{\{0\}}=0\). If \(W\ne\{0\}\):
+\(P_W=A(A'A)^{-1}A'\) for every \(A\in\R^{n\times p}\) with \(\rank A=p\) and \(\mathcal C(A)=W\), and \(P_W=QQ'\) if
+the columns of \(Q\) form an orthonormal basis of \(W\).
+\item \(P_W'=P_W=P_W^2\); \(\mathcal C(P_W)=W\); \(\rank P_W=\tr P_W=\dim W\); \(\lVert P_Wy\rVert^2=y'P_Wy\)
+(\(y\in\R^n\)); \(P_{W^\perp}=I-P_W\).
+\item If \(P\in\R^{n\times n}\) and \(P'=P=P^2\), then \(P=P_{\mathcal C(P)}\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item At most one: if \(Py=\tilde Py\) (the projection, Theorem~\ref{h-thm-complement}(b)) for all \(y\), then
+\(Pe_j=\tilde Pe_j\) for all \(j\), and \(P=\tilde P\) (\ref{f-views}). \(W=\{0\}\): \(y-0\perp\{0\}\), so \(0y=0\) is the
+projection.
+\item \(W\ne\{0\}\): a basis \(a_1,\dots,a_p\) of \(W\) gives \(A=[a_1\ \cdots\ a_p]\), \(\rank A=p\), \(\mathcal C(A)=W\)
+(\ref{f-basis}). For every such \(A\), \(A(A'A)^{-1}A'y\) is the projection of \(y\) onto \(W\)
+(Theorem~\ref{h-thm-hat}(a)): \(P_W\) exists and equals \(A(A'A)^{-1}A'\).
+\item The orthonormal columns of \(Q\in\R^{n\times p}\) are independent (\ref{f-dot}): \(\rank Q=p\),
+\(\mathcal C(Q)=W\) (\ref{f-basis}), \(Q'Q=I_p\) (\ref{f-orthonormal}); so \(P_W=Q(Q'Q)^{-1}Q'=QQ'\).
+\end{itemize}
+\begin{board}[(b) \(W=\{0\}\): \(P_W=0\), \(\mathcal C(0)=\{0\}\), \(\rank0=\tr0=0\). \(W\ne\{0\}\): \(A\) as in (a), \(p=\dim W\):]
+\boardtop
+\begin{align*}
+P_W'&=P_W=P_W^2&&\text{(Theorem~\ref{h-thm-hat}(b))}\\
+\mathcal C(P_W)&=\mathcal C\bigl(A(A'A)^{-1}A'\bigr)\subseteq\mathcal C(A)=W=\mathcal C(P_WA)\subseteq\mathcal C(P_W)
+&&\text{(\ref{f-rank}; Theorem~\ref{h-thm-hat}(c))}\\
+\rank P_W&=\dim\mathcal C(P_W)=p=\tr I_p=\tr\bigl((A'A)^{-1}A'A\bigr)=\tr P_W&&\text{(\ref{f-rank}, \ref{f-trace})}\\
+\lVert P_Wy\rVert^2&=(P_Wy)'P_Wy=y'P_W'P_Wy=y'P_Wy&&\text{(\ref{f-dot}, \ref{f-rules})}
+\end{align*}
+\end{board}
+\begin{board}[(b) \(P_{W^\perp}\), every \(W\) (\(W^\perp\) is a subspace, Theorem~\ref{h-thm-complement}(a): \(W\) is
+spanned by a basis, or by \(0\)):]
+\boardtop
+\begin{align*}
+(I-P_W)y&=y-P_Wy\in W^\perp,\qquad y-(I-P_W)y=P_Wy\in W&&\text{(Definition~\ref{h-def-projection})}\\
+w\in W,\ v\in W^\perp&\implies w'v=v'w=0,\text{ so }P_Wy\perp W^\perp&&\text{(\ref{f-dot})}
+\end{align*}
+So \((I-P_W)y\) is the projection of \(y\) onto \(W^\perp\) (Definition~\ref{h-def-projection}): \(P_{W^\perp}=I-P_W\)
+by (a).
+\end{board}
+\begin{board}[(c) For \(v\in\R^n\) and every vector \(Pz\) of \(\mathcal C(P)\) (\ref{f-basis}):]
+\boardtop
+\begin{align*}
+Pv\in\mathcal C(P),\qquad(Pz)'(v-Pv)&=z'P'(v-Pv)=z'(P-P^2)v=0&&\text{(\ref{f-rules}; \(P'=P=P^2\))}
+\end{align*}
+So \(Pv\) is the projection of \(v\) onto \(\mathcal C(P)\) (Definition~\ref{h-def-projection}): \(P=P_{\mathcal C(P)}\)
+by (a).
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{5\baselineskip}
+\begin{example}\label{h-exm-centering}
+Let \(W_0=\{x\in\R^n:\one'x=0\}\). Find \(P_{\Span\{\one\}}\), \(P_{W_0}\) and \(\rank P_{W_0}\), and the constant
+vector \(c\one\) closest to \(y\in\R^n\).
+\end{example}
+\textit{Solution.} \(A=\one_n\) has \(\rank A=1\) (\ref{f-basis}) and \(A'A=\one'\one=n\); so
+\(P_{\Span\{\one\}}=\one\,n^{-1}\one'=\bar J_n\) (Theorem~\ref{h-thm-projection-matrix}(a)). By
+Theorem~\ref{h-thm-complement}(a) with \(w_1=\one\), \(W_0=\Span\{\one\}^\perp\); so \(P_{W_0}=I_n-\bar J_n=C_n\), and
+\(\rank C_n=\tr C_n=n-n\cdot\frac1n=n-1\) (Theorem~\ref{h-thm-projection-matrix}(b), \ref{f-trace}). The projection of
+\(y\) onto the constant vectors \(\Span\{\one\}\) is \(\bar J_ny=\bar y\one\) (\ref{f-centering}); so
+(Theorem~\ref{h-thm-complement}(c))
+\(\sum_i(y_i-c)^2=\lVert y-c\one\rVert^2>\lVert y-\bar y\one\rVert^2=\sum_i(y_i-\bar y)^2\) for \(c\ne\bar y\).
+For \(y=(9,3,5,3)'\): \(\bar y=5\), \(C_4y=(4,-2,0,-2)'\), \(y=5\,\one_4+(4,-2,0,-2)'\) with
+\(\one_4'(4,-2,0,-2)'=0\).
+
+\Needspace{17\baselineskip}
+\begin{example}\label{h-exm-projection}
+Let \(a_1=\one_4\), \(a_2=(2,0,2,0)'\), \(a_3=(3,3,1,1)'\), \(A=[a_1\ a_2\ a_3]\in\R^{4\times3}\),
+\(W=\mathcal C(A)\) and \(y=(9,3,5,3)'\). Find \((A'A)^{-1}\) by cofactors, \(P=A(A'A)^{-1}A'\), the vector of \(W\)
+closest to \(y\), and the distance from \(y\) to \(W\).
+\end{example}
+\textit{Solution.}
+\begin{board}[\(A'A\) (entries \(a_j'a_l\), \ref{f-views}), its cofactors and \((A'A)^{-1}\) (\ref{f-det}):]
+\[
+A'A=\begin{pmatrix}4&4&8\\4&8&8\\8&8&20\end{pmatrix},\qquad
+\begin{aligned}
+c_{11}&=\det\left(\begin{smallmatrix}8&8\\8&20\end{smallmatrix}\right)=96,&
+c_{12}&=-\det\left(\begin{smallmatrix}4&8\\8&20\end{smallmatrix}\right)=-16,&
+c_{13}&=\det\left(\begin{smallmatrix}4&8\\8&8\end{smallmatrix}\right)=-32\\
+c_{22}&=\det\left(\begin{smallmatrix}4&8\\8&20\end{smallmatrix}\right)=16,&
+c_{23}&=-\det\left(\begin{smallmatrix}4&4\\8&8\end{smallmatrix}\right)=0,&
+c_{33}&=\det\left(\begin{smallmatrix}4&4\\4&8\end{smallmatrix}\right)=16
+\end{aligned}
+\]
+\(c_{ji}=c_{ij}\) (\(A'A\) symmetric). Along row \(1\), \(\det(A'A)=4\cdot96+4\cdot(-16)+8\cdot(-32)=64\):
+\[
+(A'A)^{-1}=\frac1{64}\begin{pmatrix}96&-16&-32\\-16&16&0\\-32&0&16\end{pmatrix}
+=\frac14\begin{pmatrix}6&-1&-2\\-1&1&0\\-2&0&1\end{pmatrix}
+\]
+So \(\rank A=\rank(A'A)=3\) (\ref{f-invertible}, \ref{f-rank}): Theorem~\ref{h-thm-hat} applies.
+\end{board}
+\begin{board}[\((A'A)^{-1}A'\) and \(P\):]
+\[
+(A'A)^{-1}A'=\frac14\begin{pmatrix}6&-1&-2\\-1&1&0\\-2&0&1\end{pmatrix}\begin{pmatrix}1&1&1&1\\2&0&2&0\\3&3&1&1\end{pmatrix}
+=\frac14\begin{pmatrix}-2&0&2&4\\1&-1&1&-1\\1&1&-1&-1\end{pmatrix}
+\]
+\[
+P=A(A'A)^{-1}A'=\begin{pmatrix}1&2&3\\1&0&3\\1&2&1\\1&0&1\end{pmatrix}
+\frac14\begin{pmatrix}-2&0&2&4\\1&-1&1&-1\\1&1&-1&-1\end{pmatrix}
+=\frac14\begin{pmatrix}3&1&1&-1\\1&3&-1&1\\1&-1&3&1\\-1&1&1&3\end{pmatrix}
+\]
+\end{board}
+\begin{board}[\(Py\), \((I-P)y\), the distance (Theorems~\ref{h-thm-hat}(a) and~\ref{h-thm-complement}(c)), a check:]
+\[
+Py=\frac14\begin{pmatrix}27+3+5-3\\9+9-5+3\\9-3+15+3\\-9+3+5+9\end{pmatrix}=\begin{pmatrix}8\\4\\6\\2\end{pmatrix},\qquad
+(I-P)y=y-Py=\begin{pmatrix}1\\-1\\-1\\1\end{pmatrix}
+\]
+The vector of \(W\) closest to \(y\) is \(Py=(8,4,6,2)'\); the distance is
+\(\lVert y-Py\rVert=\sqrt{1+1+1+1}=2\). Check: \(A'(I-P)y=(1-1-1+1,\ 2-2,\ 3-3-1+1)'=0\).
+\end{board}
+
+\Needspace{14\baselineskip}
+\subsection*{2. Symmetric matrices and the spectral theorem}
+
+\Needspace{12\baselineskip}
+\begin{theorem}\label{h-thm-sym-real}
+Let \(A\in\R^{n\times n}\) be symmetric. Then every eigenvalue of \(A\) (every complex root of \(p_A\), \lec{7},
+Definition~5) is real, and for each eigenvalue \(\lambda\) there is \(x\in\R^n\), \(x\ne0\), with \(Ax=\lambda x\).
+\end{theorem}
+\begin{proof}
+Let \(\mu=\alpha+i\beta\) (\(\alpha,\beta\in\R\)) be a root of \(p_A\), and \(Y=(A-\alpha I)^2\in\R^{n\times n}\).
+\begin{board}[Three identities, for \(s\in\R\) and \(x\in\R^n\):]
+\boardtop
+\begin{align*}
+\bigl((\alpha+s)I-A\bigr)\bigl((\alpha-s)I-A\bigr)&=(\alpha I-A)^2-s^2I=Y-s^2I&&\text{(\ref{f-rules})}\\
+p_A(\alpha+s)\,p_A(\alpha-s)&=\det(Y-s^2I)&&\text{(\lec{7}, Theorem~3(a); \ref{f-det})}\\
+x'(Y+\beta^2I)x&=\bigl((A-\alpha I)x\bigr)'(A-\alpha I)x+\beta^2x'x&&\text{(\(A'=A\); \ref{f-rules})}\\
+&=\lVert(A-\alpha I)x\rVert^2+\beta^2\lVert x\rVert^2&&\text{(\ref{f-dot})}
+\end{align*}
+\end{board}
+\begin{itemize}
+\item As \(\det(Y-s^2I)=(-1)^n\det(s^2I-Y)\) (\ref{f-det}; \lec{7}, Theorem~3(a)), the second identity says that the polynomials
+\(p_A(\alpha+t)\,p_A(\alpha-t)\) (expand the powers of \(\alpha\pm t\)) and \((-1)^np_Y(t^2)\) agree at every
+\(t=s\in\R\). So they are equal, and at \(t=i\beta\) (\lec{7}, F12, F10):
+\(p_A(\mu)\,p_A(\alpha-i\beta)=(-1)^np_Y(-\beta^2)=\det(Y+\beta^2I)\); and \(p_A(\mu)=0\).
+\item If \(\beta\ne0\), the third identity gives \(x'(Y+\beta^2I)x>0\), so \((Y+\beta^2I)x\ne0\), for every \(x\ne0\):
+\(\det(Y+\beta^2I)\ne0\) (\ref{f-invertible}) \(\contradiction\) Hence \(\beta=0\).
+\item \(\lambda=\mu=\alpha\in\R\) and \(\det(\lambda I-A)=p_A(\lambda)=0\): \(Ax=\lambda x\) for some \(x\ne0\) in \(\R^n\)
+(\lec{7}, Theorem~2).\qedhere
+\end{itemize}
+\end{proof}
+\lec{7}, Example~6 (eigenvalues \(1\), \(2\pm i\)) is not symmetric. Most matrices of statistics here whose eigenvalues
+we use are symmetric, so their eigenvalues are real (Theorem~\ref{h-thm-sym-real}): \(A'A\), projection matrices
+(\(\bar J_n\), \(C_n\)), covariance and correlation matrices. The others, \(A^{-1}B\) (\(A\), \(B\) symmetric, \(x'Ax>0\) for \(x\ne0\)), need not be symmetric
+but have real eigenvalues too (end of Section~3).
+
+\Needspace{7\baselineskip}
+\begin{theorem}\label{h-thm-sym-orth}
+Let \(A\in\R^{n\times n}\) be symmetric, \(Ax=\lambda x\) and \(Ay=\mu y\) (\(x,y\in\R^n\)), \(\lambda\ne\mu\). Then
+\(x'y=0\).
+\end{theorem}
+\begin{proof}
+\begin{board}[One line (\ref{f-rules}; \(\lambda\ne\mu\)):]
+\[
+\lambda x'y=(Ax)'y=x'A'y=x'Ay=\mu x'y\implies(\lambda-\mu)x'y=0\implies x'y=0
+\]
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{20\baselineskip}
+\begin{theorem}[Spectral theorem]\label{h-thm-spectral}
+Let \(A\in\R^{n\times n}\) be symmetric.
+\begin{enumerate}
+\item \(\R^n\) has an orthonormal basis \(q_1,\dots,q_n\) of eigenvectors of \(A\).
+\item If \(q_1,\dots,q_n\in\R^n\) are orthonormal, \(Aq_i=\lambda_iq_i\), \(Q=[q_1\ \cdots\ q_n]\) and
+\(\Lambda=\diag(\lambda_1,\dots,\lambda_n)\): \(Q\) is orthogonal and \(Q'AQ=\Lambda\), \(A=Q\Lambda Q'\);
+\(\lambda_1,\dots,\lambda_n\) are the eigenvalues of \(A\); \(\rank A=\#\{i:\lambda_i\ne0\}\); and
+\(\dim\mathcal N(A-cI)=a_A(c)\) for \(c\in\R\).
+\item Orthonormal bases of the eigenspaces of \(A\), put side by side in any order, are such \(q_1,\dots,q_n\).
+\item For such \(Q\), \(\Lambda\), with the distinct eigenvalues \(c_1,\dots,c_k\), \(W_j=\mathcal N(A-c_jI)\) and
+\(E_j=P_{W_j}\): \(E_j=\sum_{i:\lambda_i=c_j}q_iq_i'\) and \(A=\lambda_1q_1q_1'+\dots+\lambda_nq_nq_n'=c_1E_1+\dots+c_kE_k\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) By induction on \(n\): \(Q'AQ\) is diagonal for an orthogonal \(Q\). \(n=1\): \(Q=(1)\). Let \(n\geqslant2\).
+\begin{board}[(a), step 1: \(p_A\) has a root \(\lambda\) (\lec{7}, Definition~5), real, with \(Ax=\lambda x\), \(x\ne0\)
+(Theorem~\ref{h-thm-sym-real}); \(u=x/\lVert x\rVert\); \([u\ V]\) orthogonal (\ref{f-gram-schmidt}, \(p=1\)):]
+\boardtop
+\begin{align*}
+Au&=\lambda u,\ u'u=1;\quad[u\ V]'[u\ V]=I\implies V'u=0,\ V'V=I_{n-1}&&\text{(\ref{f-orthonormal}; \ref{f-views}: blocks)}\\
+V'Au&=\lambda V'u=0,\quad u'AV=(V'A'u)'=(V'Au)'=0,\quad u'Au=\lambda&&\text{(\(A'=A\); \ref{f-rules})}\\
+[u\ V]'A[u\ V]&=\begin{pmatrix}u'Au&u'AV\\V'Au&V'AV\end{pmatrix}=\begin{pmatrix}\lambda&0\\0&B\end{pmatrix},\quad
+B=V'AV=B'&&\text{(\ref{f-views}, \ref{f-rules})}
+\end{align*}
+\end{board}
+\begin{board}[(a), step 2: induction, \(R'BR=\Lambda_2\) diagonal with \(R\) orthogonal; \(S=\left(\begin{smallmatrix}1&0\\0&R\end{smallmatrix}\right)\), \(Q=[u\ V]S\):]
+\boardtop
+\begin{align*}
+Q'Q&=S'[u\ V]'[u\ V]S=S'S=\begin{pmatrix}1&0\\0&R'R\end{pmatrix}=I&&\text{(\ref{f-rules}, \ref{f-views})}\\
+Q'AQ&=S'\begin{pmatrix}\lambda&0\\0&B\end{pmatrix}S=\begin{pmatrix}\lambda&0\\0&R'BR\end{pmatrix}
+=\begin{pmatrix}\lambda&0\\0&\Lambda_2\end{pmatrix}&&\text{(\ref{f-views})}
+\end{align*}
+\end{board}
+With \(\Lambda=Q'AQ\) and the columns \(q_i\) of \(Q\): \(AQ=QQ'AQ=Q\Lambda\), so \(Aq_i=\lambda_iq_i\)
+(\ref{f-orthonormal}, \ref{f-views}); \(Q'Q=I\): \(q_1,\dots,q_n\) are orthonormal, independent (\ref{f-dot}), a basis
+of \(\R^n\) (\ref{f-basis}).
+\begin{board}[(b) \((Q'Q)_{ij}=q_i'q_j\) (\ref{f-views}), \(Aq_j=\lambda_jq_j\); then \(A-cI=Q(\Lambda-cI)Q'\) (\(c\in\R\)):]
+\boardtop
+\begin{align*}
+Q'Q&=I,\quad Q^{-1}=Q',\quad QQ'=I&&\text{(\ref{f-orthonormal})}\\
+Q'AQ&=Q^{-1}AQ=\Lambda,\quad A=Q\Lambda Q'&&\text{(\lec{7}, Theorem~14(a); \ref{f-orthonormal})}\\
+\rank(A-cI)&=\rank(\Lambda-cI)=\#\{i:\lambda_i\ne c\}&&\text{(\ref{f-rank}; below)}\\
+\dim\mathcal N(A-cI)&=n-\rank(A-cI)=\#\{i:\lambda_i=c\}=a_A(c)&&\text{(\ref{f-rank}; \lec{7}, Definition~5)}
+\end{align*}
+\(\lambda_1,\dots,\lambda_n\) are the eigenvalues (\lec{7}, Theorem~14(a)). The nonzero columns \((\lambda_i-c)e_i\) of
+\(\Lambda-cI\) are orthogonal, so independent (\ref{f-dot}), and span \(\mathcal C(\Lambda-cI)\) (\ref{f-basis}). For
+\(c=0\): \(\rank A=\#\{i:\lambda_i\ne0\}\).
+\end{board}
+(c) The distinct eigenvalues \(c_1,\dots,c_k\) are real (Theorem~\ref{h-thm-sym-real}), and
+\(\dim\mathcal N(A-c_jI)=a_A(c_j)\geqslant1\) by (a), (b); orthonormal bases of the \(\mathcal N(A-c_jI)\), of
+\(a_A(c_j)\) vectors (\ref{f-gram-schmidt}, \ref{f-basis}), orthogonal to each other (Theorem~\ref{h-thm-sym-orth}),
+give \(a_A(c_1)+\dots+a_A(c_k)=n\) orthonormal eigenvectors (\lec{7}, Definition~5).
+\begin{board}[(d) \(Q_j\): the columns \(q_i\) with \(\lambda_i=c_j\); outer products (\ref{f-views}):]
+\boardtop
+\begin{align*}
+&Q_j'Q_j=I,\ \mathcal C(Q_j)\subseteq W_j,\ a_A(c_j)=\dim W_j\text{ columns}&&\text{(\ref{f-orthonormal}; (b))}\\
+E_j&=Q_jQ_j'=\textstyle\sum_{i:\lambda_i=c_j}q_iq_i'
+&&\text{(\ref{f-dot}, \ref{f-basis}; Theorem~\ref{h-thm-projection-matrix}(a))}\\
+A&=(Q\Lambda)Q'=\lambda_1q_1q_1'+\dots+\lambda_nq_nq_n'&&(\col_i(Q\Lambda)=\lambda_iq_i;\ \text{\ref{f-views}})
+\end{align*}
+Grouping the terms by the value \(c_j\) of \(\lambda_i\): \(A=c_1E_1+\dots+c_kE_k\).
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{15\baselineskip}
+\begin{example}\label{h-exm-spectral}
+Find an orthogonal \(Q\) and a diagonal \(\Lambda\) with \(Q'AQ=\Lambda\), and the matrices \(E_j\) of
+Theorem~\ref{h-thm-spectral}(d), for
+\[
+A=\begin{pmatrix}11&2&6&6\\2&11&6&6\\6&6&11&2\\6&6&2&11\end{pmatrix}
+\]
+\end{example}
+\textit{Solution.}
+\begin{board}[\(p_A\): \(R_1\leftarrow R_1-R_2\), \(R_3\leftarrow R_3-R_4\); take \(t-9\) out of rows \(1\), \(3\)
+(\ref{f-det}):]
+\[
+\det(tI-A)=\det\begin{pmatrix}t-11&-2&-6&-6\\-2&t-11&-6&-6\\-6&-6&t-11&-2\\-6&-6&-2&t-11\end{pmatrix}
+=(t-9)^2\det\begin{pmatrix}1&-1&0&0\\-2&t-11&-6&-6\\0&0&1&-1\\-6&-6&-2&t-11\end{pmatrix}
+\]
+\end{board}
+\begin{board}[\(p_A\), continued: \(\col_2\leftarrow\col_2+\col_1\), \(\col_4\leftarrow\col_4+\col_3\) (\ref{f-det});
+expand along row \(1\), then along row \(2\) (\ref{f-det}):]
+\[
+\begin{aligned}
+\det(tI-A)&=(t-9)^2\det\begin{pmatrix}1&0&0&0\\-2&t-13&-6&-12\\0&0&1&0\\-6&-12&-2&t-13\end{pmatrix}
+=(t-9)^2\det\begin{pmatrix}t-13&-6&-12\\0&1&0\\-12&-2&t-13\end{pmatrix}\\
+&=(t-9)^2\bigl((t-13)^2-144\bigr)=(t-9)^2(t-25)(t-1)
+\end{aligned}
+\]
+So \(p_A=(t-25)(t-9)^2(t-1)\) (\lec{7}, Theorem~3(a), Definition~5): \(c_1=25\), \(c_2=9\) (twice), \(c_3=1\).
+\end{board}
+\begin{board}[\(\lambda=25\), \(1\): \(\dim\mathcal N(A-25I)=\dim\mathcal N(A-I)=1\) (Theorem~\ref{h-thm-spectral}(b)); row
+sums \(25\):]
+\boardtop
+\begin{align*}
+A\one_4&=25\,\one_4,\qquad v=(1,1,-1,-1)'\\
+Av&=(11+2-12,\ 2+11-12,\ 12-11-2,\ 12-2-11)'=v
+\end{align*}
+So \(q_1=\frac12\one_4\) and \(q_4=\frac12v\) are orthonormal bases of \(\mathcal N(A-25I)\) and \(\mathcal N(A-I)\)
+(\ref{f-basis}).
+\end{board}
+\begin{board}[\(\lambda=9\): reduce \(A-9I\); special solutions (\ref{f-rank}):]
+\[
+\begin{gathered}
+A-9I=\begin{pmatrix}2&2&6&6\\2&2&6&6\\6&6&2&2\\6&6&2&2\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4-R_3]{R_2\leftarrow R_2-R_1}
+\begin{pmatrix}2&2&6&6\\0&0&0&0\\6&6&2&2\\0&0&0&0\end{pmatrix}
+\xrightarrow{R_3\leftarrow R_3-3R_1}
+\begin{pmatrix}2&2&6&6\\0&0&0&0\\0&0&-16&-16\\0&0&0&0\end{pmatrix}
+\\
+\xrightarrow{R_2\leftrightarrow R_3}
+\begin{pmatrix}2&2&6&6\\0&0&-16&-16\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\xrightarrow[R_2\leftarrow-\frac1{16}R_2]{R_1\leftarrow\frac12R_1}
+\begin{pmatrix}1&1&3&3\\0&0&1&1\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\xrightarrow{R_1\leftarrow R_1-3R_2}
+\begin{pmatrix}1&1&0&0\\0&0&1&1\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+Free unknowns \(x_2\), \(x_4\); special solutions \(u_2=(-1,1,0,0)'\), \(u_3=(0,0,-1,1)'\), orthogonal: so
+\(q_2=\frac1{\sqrt2}u_2\), \(q_3=\frac1{\sqrt2}u_3\) form an orthonormal basis of \(\mathcal N(A-9I)\).
+\end{board}
+\begin{board}[\(q_1,q_4\perp q_2,q_3\) (Theorem~\ref{h-thm-sym-orth}), \(q_1'q_4=0\): \(Q\), \(\Lambda\)
+(Theorem~\ref{h-thm-spectral}(b)); \(E_1,E_2,E_3\) (Theorem~\ref{h-thm-spectral}(d)):]
+\[
+Q=\begin{pmatrix}1/2&-1/\sqrt2&0&1/2\\1/2&1/\sqrt2&0&1/2\\1/2&0&-1/\sqrt2&-1/2\\1/2&0&1/\sqrt2&-1/2\end{pmatrix},\qquad
+\Lambda=\diag(25,9,9,1)
+\]
+\[
+E_1=q_1q_1'=\tfrac14\one_4\one_4'=\bar J_4,\qquad
+E_2=q_2q_2'+q_3q_3'=\frac12\begin{pmatrix}1&-1&0&0\\-1&1&0&0\\0&0&1&-1\\0&0&-1&1\end{pmatrix},\qquad
+E_3=q_4q_4'=\tfrac14vv'
+\]
+\(E_1+E_2+E_3=QQ'=I\), \(A=25E_1+9E_2+E_3\); entries \((1,1)\), \((1,2)\), \((1,3)\): \(\frac{25}4+\frac92+\frac14=11\),
+\(\frac{25}4-\frac92+\frac14=2\), \(\frac{25}4-\frac14=6\).
+\end{board}
+
+\Needspace{12\baselineskip}
+\begin{theorem}\label{h-thm-idempotent-eigen}
+Let \(A\in\R^{n\times n}\) be symmetric. Then \(A^2=A\iff\) every eigenvalue of \(A\) is \(0\) or \(1\). In that case
+\(a_A(1)=\rank A=\tr A\).
+\end{theorem}
+\begin{proof}
+\begin{board}[An eigenvalue \(\lambda\) has \(Ax=\lambda x\), \(x\in\R^n\), \(x\ne0\) (Theorem~\ref{h-thm-sym-real});
+\(A=Q\Lambda Q'\) as in Theorem~\ref{h-thm-spectral}(a),(b):]
+\boardtop
+\begin{align*}
+A^2=A&\implies\lambda x=Ax=A^2x=\lambda Ax=\lambda^2x\implies\lambda\in\{0,1\}&&\text{(\ref{f-rules}; \ref{f-basis})}\\
+\lambda_i\in\{0,1\}&\implies\Lambda^2=\Lambda\implies A^2=Q\Lambda Q'Q\Lambda Q'=Q\Lambda^2Q'=A
+&&\text{(\ref{f-views}; \ref{f-orthonormal})}\\
+\rank A&=\#\{i:\lambda_i\ne0\}=\#\{i:\lambda_i=1\}=a_A(1)&&\text{(Theorem~\ref{h-thm-spectral}(b))}\\
+&=\lambda_1+\dots+\lambda_n=\tr A&&\text{(\lec{7}, Theorem~9)}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+So a projection matrix \(P_W\) (symmetric and idempotent, Theorem~\ref{h-thm-projection-matrix}(b)) has the
+eigenvalues \(1\) (\(\dim W\) times) and \(0\) (\(n-\dim W\) times): \(C_n\) has \(1\) (\(n-1\) times) and \(0\) (once)
+by Example~\ref{h-exm-centering}, and \(P\) of Example~\ref{h-exm-projection} has \(1,1,1,0\), as
+\(\tr P=\frac14(3+3+3+3)=3\).
+
+\subsection*{3. Quadratic forms}
+
+\begin{definition}\label{h-def-quadratic-form}
+The \textbf{quadratic form} of \(A\in\R^{n\times n}\) is \(q_A(x)=x'Ax=\sum_i\sum_ja_{ij}x_ix_j\) (\(x\in\R^n\)); that is,
+\(x'Ax=\sum_ia_{ii}x_i^2+\sum_{i<j}(a_{ij}+a_{ji})x_ix_j\).
+\end{definition}
+As \(x'Ax=(x'Ax)'=x'A'x\) (\ref{f-rules}), \(x'Ax=x'Bx\) for the symmetric \(B=\frac12(A+A')\): quadratic forms are
+written with symmetric matrices. For symmetric \(A\), \(a_{ii}\) is the coefficient of \(x_i^2\), and \(a_{ij}=a_{ji}\) is
+half the coefficient of \(x_ix_j\) (\(i\ne j\)).
+
+\begin{definition}\label{h-def-definite}
+A symmetric \(A\in\R^{n\times n}\), and \(q_A\), is \textbf{positive definite} (PD) if \(x'Ax>0\) for all \(x\ne0\);
+\textbf{positive semidefinite} (PSD) if \(x'Ax\geqslant0\) for all \(x\); \textbf{negative definite} (ND) or
+\textbf{negative semidefinite} (NSD) if \(-A\) is PD or PSD; \textbf{indefinite} if \(x'Ax\) takes both positive and
+negative values. A PD matrix is PSD.
+\end{definition}
+
+\Needspace{14\baselineskip}
+\begin{theorem}\label{h-thm-eigen-criterion}
+Let \(A\in\R^{n\times n}\) be symmetric, and \(Q\), \(\Lambda=\diag(\lambda_1,\dots,\lambda_n)\) as in
+Theorem~\ref{h-thm-spectral}(b) (\(Q'AQ=\Lambda\); the \(\lambda_i\) are the eigenvalues). For \(x\in\R^n\) and
+\(y=Q'x\): \(x'Ax=\lambda_1y_1^2+\dots+\lambda_ny_n^2\), and \(y=0\iff x=0\).
+\begin{enumerate}
+\item \(A\) is PD \(\iff\) every \(\lambda_i>0\); \(A\) is PSD \(\iff\) every \(\lambda_i\geqslant0\).
+\item \(A\) is ND \(\iff\) every \(\lambda_i<0\); NSD \(\iff\) every \(\lambda_i\leqslant0\); indefinite \(\iff\)
+\(\lambda_i>0>\lambda_j\) for some \(i\), \(j\).
+\item If \(A\) is PD, then \(\det A>0\), and \(A\) is invertible.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[The identity (\(QQ'=I\), \ref{f-orthonormal}; \ref{f-rules}, \ref{f-views}):]
+\boardtop
+\begin{align*}
+x&=QQ'x=Qy,\qquad y=Q'x\qquad(\text{so }y=0\iff x=0)\\
+x'Ax&=x'QQ'AQQ'x=(Q'x)'(Q'AQ)(Q'x)=y'\Lambda y=\lambda_1y_1^2+\dots+\lambda_ny_n^2
+\end{align*}
+\end{board}
+(a), (b)
+\begin{itemize}
+\item If every \(\lambda_i>0\) and \(x\ne0\): \(y\ne0\), some \(y_i^2>0\), so \(x'Ax>0\). Conversely, \(x=q_i\) (column
+\(i\) of \(Q\)) gives \(y=Q'Qe_i=e_i\) (\ref{f-orthonormal}, \ref{f-views}) and \(q_i'Aq_i=\lambda_i\); so PD \(\Rightarrow\)
+\(\lambda_i>0\). PSD: the same with \(\geqslant\).
+\item \((-A)q_i=-\lambda_iq_i\): (a) for \(-A\) gives ND and NSD. If \(\lambda_i>0>\lambda_j\), then
+\(q_i'Aq_i=\lambda_i>0>\lambda_j=q_j'Aq_j\): indefinite. If no \(\lambda_i<0\) (no \(\lambda_i>0\)), \(A\) is PSD (NSD),
+not indefinite.
+\end{itemize}
+\begin{board}[(c):]
+\[
+\det A=\lambda_1\cdots\lambda_n>0\implies A\text{ invertible}\qquad(\text{\lec{7}, Theorem~9; (a); \ref{f-invertible}})
+\]
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{10\baselineskip}
+\begin{theorem}\label{h-thm-congruence}
+\begin{enumerate}
+\item Let \(B\in\R^{n\times n}\) be symmetric and \(K\in\R^{n\times k}\). If \(B\) is PSD, then \(K'BK\) is PSD. If \(B\)
+is PD and \(\rank K=k\), then \(K'BK\) is PD.
+\item For \(A\in\R^{n\times p}\), \(A'A\) is PSD, and \(A'A\) is PD \(\iff\) \(\rank A=p\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) For \(x\in\R^k\):]
+\boardtop
+\begin{align*}
+(K'BK)'&=K'B'K=K'BK,\qquad x'(K'BK)x=(Kx)'B(Kx)\geqslant0&&\text{(\ref{f-rules}; \(B\) PSD)}\\
+\rank K=k,\ x\ne0&\implies Kx\ne0\implies(Kx)'B(Kx)>0&&\text{(\ref{f-basis}, \ref{f-views}; \(B\) PD)}
+\end{align*}
+\end{board}
+\begin{board}[(b) \(I_n\) is PD (\(x'x>0\) for \(x\ne0\), \ref{f-dot}):]
+\boardtop
+\begin{align*}
+A'A&=A'I_nA\text{ is PSD, and PD if }\rank A=p&&\text{((a) with \(I_n\), \(A\) for \(B\), \(K\))}\\
+A'A\text{ PD}&\implies A'A\text{ invertible}\implies\rank A=\rank(A'A)=p
+&&\text{(Theorem~\ref{h-thm-eigen-criterion}(c); \ref{f-invertible}, \ref{f-rank})}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+In \lec{7}, Example~19 (\(A\in\R^{4\times3}\)), \(A'A\) has the eigenvalues \(1,3,4\) and \(AA'\) the eigenvalues
+\(0,1,3,4\): by Theorem~\ref{h-thm-eigen-criterion}(a), \(A'A\) is PD, and \(AA'\) is PSD but not PD.
+
+\Needspace{9\baselineskip}
+\begin{example}\label{h-exm-classify}
+Classify (a) \(q_A\) for \(A\) of Example~\ref{h-exm-spectral}; (b) \(C_n\) (\(n\geqslant2\)); (c) for each \(a\in\R\),
+\[
+q(x)=x_1^2+x_2^2+x_3^2+x_4^2+2a(x_1x_2+x_1x_3+x_2x_4+x_3x_4)
+\]
+\end{example}
+\textit{Solution.} (a) \(A\) of Example~\ref{h-exm-spectral} has the eigenvalues \(25,9,9,1\), all \(>0\): PD
+(Theorem~\ref{h-thm-eigen-criterion}(a)); with \(y=Q'x\), \(q_A(x)=25y_1^2+9y_2^2+9y_3^2+y_4^2\).
+
+(b) \(C_n\) has the eigenvalues \(1\) (\(n-1\) times) and \(0\) (after Theorem~\ref{h-thm-idempotent-eigen}): PSD, not
+PD (Theorem~\ref{h-thm-eigen-criterion}(a)). By Theorem~\ref{h-thm-projection-matrix}(b) (\(C_n=P_{W_0}\),
+Example~\ref{h-exm-centering}) and \ref{f-centering},
+\(\sum_i(y_i-\bar y)^2=\lVert C_ny\rVert^2=y'C_ny\geqslant0\), with \(0\) only for constant \(y=\bar y\one\).
+
+\begin{board}[(c) The matrix of \(q\) (Definition~\ref{h-def-quadratic-form}); four vectors \(h_i\), \(Ah_i\) row by row:]
+\[
+A=\begin{pmatrix}1&a&a&0\\a&1&0&a\\a&0&1&a\\0&a&a&1\end{pmatrix},\qquad
+h_1=\one_4,\quad h_2=\begin{pmatrix}1\\1\\-1\\-1\end{pmatrix},\quad h_3=\begin{pmatrix}1\\-1\\1\\-1\end{pmatrix},\quad
+h_4=\begin{pmatrix}1\\-1\\-1\\1\end{pmatrix}
+\]
+\begin{align*}
+Ah_1&=(1+a+a,\ a+1+a,\ a+1+a,\ a+a+1)'=(1+2a)h_1\\
+Ah_2&=(1+a-a,\ a+1-a,\ a-1-a,\ a-a-1)'=h_2\\
+Ah_3&=(1-a+a,\ a-1-a,\ a+1-a,\ -a+a-1)'=h_3\\
+Ah_4&=(1-a-a,\ a-1+a,\ a-1+a,\ -a-a+1)'=(1-2a)h_4
+\end{align*}
+\end{board}
+\begin{board}[\(Q=\frac12[h_1\ h_2\ h_3\ h_4]\), \(\Lambda\) (Theorem~\ref{h-thm-spectral}(b)), and the classification
+(Theorem~\ref{h-thm-eigen-criterion}):]
+\boardtop
+\begin{align*}
+h_i'h_j=0\ (i\ne j),\ h_i'h_i=4&\implies\tfrac12h_1,\dots,\tfrac12h_4\text{ orthonormal}&&\text{(\ref{f-dot})}\\
+Q'AQ&=\Lambda=\diag(1+2a,1,1,1-2a)&&\text{(Theorem~\ref{h-thm-spectral}(b))}
+\end{align*}
+\begin{itemize}
+\item \(\lvert a\rvert<\frac12\): all four are \(>0\): PD.
+\item \(a=\pm\frac12\): the eigenvalues are \(2,1,1,0\) (in some order): PSD, not PD.
+\item \(\lvert a\rvert>\frac12\): \(1+2a\) and \(1-2a\) have opposite signs: indefinite.
+\end{itemize}
+\end{board}
+
+\Needspace{8\baselineskip}
+\begin{theorem}\label{h-thm-pd-simdiag}
+Let \(A,B\in\R^{n\times n}\) be symmetric, \(A\) PD. Then \(E'AE=I\) and \(E'BE=\Lambda=\diag(\lambda_1,\dots,\lambda_n)\)
+for some invertible \(E=[f_1\ \cdots\ f_n]\in\R^{n\times n}\); and \(A^{-1}BE=E\Lambda\): \(A^{-1}Bf_i=\lambda_if_i\), and
+\(\lambda_1,\dots,\lambda_n\) are the eigenvalues of \(A^{-1}B\), all real.
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+\item \(Q'AQ=D=\diag(d_1,\dots,d_n)\), \(Q\) orthogonal (Theorem~\ref{h-thm-spectral}(a),(b)), every \(d_i>0\)
+(Theorem~\ref{h-thm-eigen-criterion}(a)); \(D^{-1/2}=\diag(d_1^{-1/2},\dots,d_n^{-1/2})\):
+\(D^{-1/2}Q'AQD^{-1/2}=D^{-1/2}DD^{-1/2}=I\) (\ref{f-views}).
+\item \(M=D^{-1/2}Q'BQD^{-1/2}\) is symmetric (\ref{f-rules}): \(R'MR=\Lambda\) is diagonal for an orthogonal \(R\)
+(Theorem~\ref{h-thm-spectral}(a),(b)).
+\item \(E=QD^{-1/2}R\): \(E'AE=R'(D^{-1/2}Q'AQD^{-1/2})R=R'R=I\), \(E'BE=R'MR=\Lambda\). From \(E'(AE)=I\):
+\(AE=(E')^{-1}\), and \(E=(E')'\) is invertible (\ref{f-invertible}).
+\item \(BE=(E')^{-1}\Lambda=AE\Lambda\); \(A\) is invertible (Theorem~\ref{h-thm-eigen-criterion}(c)): \(A^{-1}BE=E\Lambda\),
+\(E^{-1}(A^{-1}B)E=\Lambda\). By \lec{7}, Theorem~14(a) with \(A^{-1}B\), \(E\) for \(A\), \(P\), \(A^{-1}Bf_i=\lambda_if_i\), and
+\(\lambda_1,\dots,\lambda_n\) are the eigenvalues of \(A^{-1}B\).\qedhere
+\end{itemize}
+\end{proof}
+
+\bigskip
+\textbf{Practice.} The Exercises and Problems of the textbook: Chapter~6 on orthogonal projections and projection
+matrices, Chapter~8 on orthogonal diagonalization and on classifying quadratic forms.
+
+\end{document}
