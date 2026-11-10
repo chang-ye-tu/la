@@ -38,6 +38,13 @@
 \DeclareMathOperator{\col}{col}
 \DeclareMathOperator{\diag}{diag}
 \DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator\prb{\mathsf{P}}
+\DeclareMathOperator\expc{\mathsf{E}}
+\DeclareMathOperator\var{var}
+\DeclareMathOperator\cov{cov}
+\DeclareMathOperator\cor{cor}
+\DeclareMathOperator\argmin{argmin}
+\DeclareMathOperator\argmax{argmax}
 \DeclareMathOperator{\Span}{span}
 \theoremstyle{definition}
 \newtheorem{theorem}{Theorem}
@@ -152,8 +159,8 @@ Eigenvectors (\(x\in\R^n\), \(x\ne0\), \(Ax=\lambda x\)) and eigenspaces \(\math
 \(\lambda\) only.
 \item \lec{7}, Theorem~2: for \(\lambda\in\R\), \(Ax=\lambda x\) for some \(x\in\R^n\), \(x\ne0\) \(\iff\)
 \(\det(\lambda I-A)=0\).
-\item \lec{7}, Theorem~3(a): exactly one polynomial \(p_A\) has \(p_A(c)=\det(cI-A)\) for all \(c\in\R\), and \(p_A\) is
-real; so \(\det(tI-A)=q(t)\) for all \(t\in\R\) \(\Rightarrow\) \(p_A=q\).
+\item \lec{7}, Section~2: \(p_A(t)=\det(tI-A)\), computed with \(t\) as a number, is a real polynomial;
+\(p_A(c)=\det(cI-A)\) for \(c\in\R\).
 \item \lec{7}, F10 and F12: \((f+g)(z)=f(z)+g(z)\), \((fg)(z)=f(z)g(z)\) (\(z\in\C\)); \(f(z)=g(z)\) for infinitely
 many \(z\) \(\Rightarrow\) \(f=g\).
 \item \lec{7}, Theorem~9: \(\tr A=\lambda_1+\dots+\lambda_n\) and \(\det A=\lambda_1\cdots\lambda_n\).
@@ -372,13 +379,13 @@ Let \(\mu=\alpha+i\beta\) (\(\alpha,\beta\in\R\)) be a root of \(p_A\), and \(Y=
 \boardtop
 \begin{align*}
 \bigl((\alpha+s)I-A\bigr)\bigl((\alpha-s)I-A\bigr)&=(\alpha I-A)^2-s^2I=Y-s^2I&&\text{(\ref{f-rules})}\\
-p_A(\alpha+s)\,p_A(\alpha-s)&=\det(Y-s^2I)&&\text{(\lec{7}, Theorem~3(a); \ref{f-det})}\\
+p_A(\alpha+s)\,p_A(\alpha-s)&=\det(Y-s^2I)&&\text{(\lec{7}, Section~2; \ref{f-det})}\\
 x'(Y+\beta^2I)x&=\bigl((A-\alpha I)x\bigr)'(A-\alpha I)x+\beta^2x'x&&\text{(\(A'=A\); \ref{f-rules})}\\
 &=\lVert(A-\alpha I)x\rVert^2+\beta^2\lVert x\rVert^2&&\text{(\ref{f-dot})}
 \end{align*}
 \end{board}
 \begin{itemize}
-\item As \(\det(Y-s^2I)=(-1)^n\det(s^2I-Y)\) (\ref{f-det}; \lec{7}, Theorem~3(a)), the second identity says that the polynomials
+\item As \(\det(Y-s^2I)=(-1)^n\det(s^2I-Y)\) (\ref{f-det}; \lec{7}, Section~2), the second identity says that the polynomials
 \(p_A(\alpha+t)\,p_A(\alpha-t)\) (expand the powers of \(\alpha\pm t\)) and \((-1)^np_Y(t^2)\) agree at every
 \(t=s\in\R\). So they are equal, and at \(t=i\beta\) (\lec{7}, F12, F10):
 \(p_A(\mu)\,p_A(\alpha-i\beta)=(-1)^np_Y(-\beta^2)=\det(Y+\beta^2I)\); and \(p_A(\mu)=0\).
@@ -498,7 +505,7 @@ expand along row \(1\), then along row \(2\) (\ref{f-det}):]
 &=(t-9)^2\bigl((t-13)^2-144\bigr)=(t-9)^2(t-25)(t-1)
 \end{aligned}
 \]
-So \(p_A=(t-25)(t-9)^2(t-1)\) (\lec{7}, Theorem~3(a), Definition~5): \(c_1=25\), \(c_2=9\) (twice), \(c_3=1\).
+So \(p_A=(t-25)(t-9)^2(t-1)\) (\lec{7}, Definition~5): \(c_1=25\), \(c_2=9\) (twice), \(c_3=1\).
 \end{board}
 \begin{board}[\(\lambda=25\), \(1\): \(\dim\mathcal N(A-25I)=\dim\mathcal N(A-I)=1\) (Theorem~\ref{h-thm-spectral}(b)); row
 sums \(25\):]

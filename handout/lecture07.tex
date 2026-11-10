@@ -185,12 +185,13 @@ Let \(A\in\R^{n\times n}\), \(\lambda\in\R\). Then \(\lambda\) is an eigenvalue 
 
 \subsection*{2. The characteristic polynomial}
 
+\textbf{Characteristic polynomial.} For \(A\in\R^{n\times n}\), \(\det(tI-A)\), computed by \ref{f-det} and
+\ref{f-expansion} with \(t\) as a number, is a real polynomial: the \textbf{characteristic polynomial}
+\(p_A(t)=\det(tI-A)\) of \(A\). So \(p_A(c)=\det(cI-A)\) for \(c\in\R\).
+
 \begin{theorem}\label{h-thm-charpoly}
 Let \(A=(a_{ij})\in\R^{n\times n}\) and \(\tr A=a_{11}+\dots+a_{nn}\).
 \begin{enumerate}
-\item There is exactly one polynomial \(p_A\) with \(p_A(c)=\det(cI-A)\) for all \(c\in\R\), and \(p_A\) is real: the
-\textbf{characteristic polynomial} \(p_A(t)=\det(tI-A)\). So \(\det(tI-A)=q(t)\) for all \(t\in\R\) \(\Rightarrow\)
-\(p_A=q\).
 \item \(p_A\) is monic of degree \(n\); its coefficient of \(t^{n-1}\) is \(-\tr A\); its constant term is
 \((-1)^n\det A\).
 \item \(\lambda\in\R\) is an eigenvalue of \(A\) (Definition~\ref{h-def-eigen}) \(\iff\) \(p_A(\lambda)=0\). So \(A\)
@@ -200,32 +201,30 @@ has at most \(n\) such eigenvalues.
 \begin{proof}
 (a)
 \begin{itemize}
-\item Claim: if \(M(t)\in\R^{m\times m}\) has entries \(\alpha_{ij}+\beta_{ij}t\) (\(\alpha_{ij},\beta_{ij}\in\R\)) and
-\(\beta_{ij}\ne0\) occurs in at most \(d\) rows, then \(\det M(t)=q(t)\) (\(t\in\R\)) for a real polynomial \(q\), \(q=0\)
-or \(\deg q\leqslant d\).
-\item Induction on \(m\). \(m=1\): \(q=\alpha_{11}+\beta_{11}t\) (\ref{f-det}). No \(\beta_{ij}\ne0\) (e.g.\ \(d=0\)):
-\(q=\det M(0)\). Otherwise expand along a row \(i\) with some \(\beta_{ij}\ne0\) (\ref{f-expansion}); each
-\(M(t)(i|j)\) has \(\beta\ne0\) in at most \(d-1\) rows, so \(q=\sum_j(-1)^{i+j}(\alpha_{ij}+\beta_{ij}t)q_j\) with \(q_j=0\)
-or \(\deg q_j\leqslant d-1\) (induction, \ref{f-degree}, \ref{f-values}).
-\item The claim for \(tI-A\) (\(d=n\)) gives a real \(p_A\). Two such polynomials agree on \(\R\), so they are equal
-(\ref{f-roots}).
+\item Claim: if \(M\in\R^{m\times m}\) has entries \(\alpha_{ij}+\beta_{ij}t\) (\(\alpha_{ij},\beta_{ij}\in\R\)) and
+\(\beta_{ij}\ne0\) occurs in at most \(d\) rows, then \(\det M\) is \(0\) or of degree \(\leqslant d\).
+\item Induction on \(m\). \(m=1\): \(\det M=\alpha_{11}+\beta_{11}t\) (\ref{f-det}).
+No \(\beta_{ij}\ne0\) (e.g.\ \(d=0\)): \(\det M\) is a number. Otherwise expand along a row \(i\) with some
+\(\beta_{ij}\ne0\) (\ref{f-expansion}); each \(M(i|j)\) has \(\beta\ne0\) in at most \(d-1\) rows, so
+\(\det M=\sum_j(-1)^{i+j}(\alpha_{ij}+\beta_{ij}t)\det M(i|j)\) is \(0\) or of degree \(\leqslant d\) (induction,
+\ref{f-degree}).
 \end{itemize}
-(b) Induction on \(n\); \(n=1\): \(p_A=t-a_{11}\) (\ref{f-det}, (a)). For \(n\geqslant2\) and \(c\in\R\), as
-\((cI-A)(1|1)=cI_{n-1}-A(1|1)\), expanding along row \(1\) (\ref{f-expansion}) gives
+Induction on \(n\); \(n=1\): \(p_A=t-a_{11}\) (\ref{f-det}). For \(n\geqslant2\), as \((tI-A)(1|1)=tI_{n-1}-A(1|1)\),
+expanding along row \(1\) (\ref{f-expansion}) gives
 \[
-\det(cI-A)=(c-a_{11})\,p_{A(1|1)}(c)+\sum_{j=2}^n(-1)^{1+j}(-a_{1j})\det\bigl((cI-A)(1|j)\bigr)
+p_A=(t-a_{11})\,p_{A(1|1)}+\sum_{j=2}^n(-1)^{1+j}(-a_{1j})\det\bigl((tI-A)(1|j)\bigr)
 \]
 \begin{itemize}
-\item \(j\geqslant2\): row \(j\) of \(cI-A\) loses its only \(c\), so \((cI-A)(1|j)\) has \(c\) in at most \(n-2\) rows;
-its determinant is \(q_j(c)\), \(q_j=0\) or of degree \(\leqslant n-2\) (claim).
+\item \(j\geqslant2\): row \(j\) of \(tI-A\) loses its only \(t\), so \((tI-A)(1|j)\) has \(t\) in at most \(n-2\) rows;
+its determinant is \(0\) or of degree \(\leqslant n-2\) (claim).
 \item Induction: \((t-a_{11})\bigl(t^{n-1}-\tr A(1|1)\,t^{n-2}+r\bigr)=t^n-\bigl(a_{11}+\tr A(1|1)\bigr)t^{n-1}+s\), where
 \(r\), \(s\) are \(0\) or of degree \(\leqslant n-3\), \(\leqslant n-2\) (\ref{f-degree}); \(a_{11}+\tr A(1|1)=\tr A\).
-\item So \(p_A=(t-a_{11})p_{A(1|1)}+\sum_{j=2}^n(-1)^{1+j}(-a_{1j})q_j=t^n-(\tr A)\,t^{n-1}+(0\text{ or degree}\leqslant n-2)\),
-by (a) and \ref{f-values}.
+\item So \(p_A=t^n-(\tr A)\,t^{n-1}+(0\text{ or degree}\leqslant n-2)\).
 \end{itemize}
 Constant term (every \(n\)): \(p_A(0)=\det(-A)=(-1)^n\det A\) (\ref{f-det}).
 
-(c) Theorem~\ref{h-thm-eig-singular} and (a); at most \(n\) roots by (b) and \ref{f-roots}.
+(b) \(p_A(\lambda)=\det(\lambda I-A)\) and Theorem~\ref{h-thm-eig-singular}; at most \(n\) roots by (a) and
+\ref{f-roots}.
 \end{proof}
 
 \Needspace{16\baselineskip}
@@ -244,7 +243,7 @@ A=\begin{pmatrix}1&2&1\\2&0&-2\\-1&2&3\end{pmatrix}
 &=(t^3-4t^2+7t-4)+(-4t+8)+(t-4)=t^3-4t^2+4t=t(t-2)^2
 \end{aligned}
 \]
-Eigenvalues \(0\), \(2\) (Theorem~\ref{h-thm-charpoly}(c)).
+Eigenvalues \(0\), \(2\) (Theorem~\ref{h-thm-charpoly}(b)).
 \end{board}
 \begin{board}[\(\lambda=0\): reduce \(A-0I=A\); a basis of \(\mathcal N(A)\):]
 \[
@@ -276,11 +275,11 @@ Special solution \((1,0,1)'\), a basis of \(\mathcal N(A-2I)\) (\ref{f-rank}).
 \end{board}
 
 \begin{definition}\label{h-def-eigenvalues}
-Let \(A\in\R^{n\times n}\). By Theorem~\ref{h-thm-charpoly}(b) and \ref{f-complex-roots},
+Let \(A\in\R^{n\times n}\). By Theorem~\ref{h-thm-charpoly}(a) and \ref{f-complex-roots},
 \(p_A=(t-\lambda_1)\cdots(t-\lambda_n)\) with \(\lambda_1,\dots,\lambda_n\in\C\), unique up to order: the
 \textbf{eigenvalues} of \(A\), listed with multiplicity; they are the roots of \(p_A\). The \textbf{algebraic
 multiplicity} of \(c\in\C\) is \(a_A(c)=\#\{i:\lambda_i=c\}\); \(c\) is \textbf{simple} if \(a_A(c)=1\). The real
-\(\lambda_i\) are the eigenvalues of Definition~\ref{h-def-eigen} (Theorem~\ref{h-thm-charpoly}(c)). From now on
+\(\lambda_i\) are the eigenvalues of Definition~\ref{h-def-eigen} (Theorem~\ref{h-thm-charpoly}(b)). From now on
 ``eigenvalue'' has this meaning; eigenvectors and eigenspaces belong to real eigenvalues only.
 \end{definition}
 In Example~\ref{h-exm-charpoly}: eigenvalues \(0\), \(2\), \(2\); \(a_A(0)=1\), \(a_A(2)=2\).
@@ -298,7 +297,7 @@ and the eigenspace of each real eigenvalue.
 \det(tI-A)=\det\begin{pmatrix}t-2&1&0\\-1&t-2&0\\-1&-1&t-1\end{pmatrix}=(t-1)\bigl((t-2)^2+1\bigr)
 =(t-1)\bigl(t-(2+i)\bigr)\bigl(t-(2-i)\bigr)
 \]
-Eigenvalues \(1\), \(2+i\), \(2-i\) (Theorem~\ref{h-thm-charpoly}(a), Definition~\ref{h-def-eigenvalues}); only \(1\)
+Eigenvalues \(1\), \(2+i\), \(2-i\) (Definition~\ref{h-def-eigenvalues}); only \(1\)
 is real. For \(\lambda=1\):
 \[
 A-I=\begin{pmatrix}1&-1&0\\1&1&0\\1&1&0\end{pmatrix}
@@ -326,8 +325,8 @@ cI-B&=P^{-1}(cI)P-P^{-1}AP=P^{-1}(cI-A)P&&\text{(\ref{f-rules})}\\
 \det(cI-B)&=\det P^{-1}\det(cI-A)\det P=\det(cI-A)&&\text{(\ref{f-det})}\\
 \det P^{-1}\det P&=\det(P^{-1}P)=\det I=1&&\text{(\ref{f-det})}
 \end{align*}
-So \(p_B=p_A\) (Theorem~\ref{h-thm-charpoly}(a)); eigenvalues, \(\tr\), \(\det\) are read off \(p_A\)
-(Definition~\ref{h-def-eigenvalues}, Theorem~\ref{h-thm-charpoly}(b)).
+So \(p_B=p_A\) (\ref{f-roots}); eigenvalues, \(\tr\), \(\det\) are read off \(p_A\)
+(Definition~\ref{h-def-eigenvalues}, Theorem~\ref{h-thm-charpoly}(a)).
 \end{board}
 \nopagebreak
 \end{proof}
@@ -357,10 +356,10 @@ x&=A^{-1}(Ax)=\lambda A^{-1}x\implies A^{-1}x=\lambda^{-1}x&&\text{(\ref{f-rules
 \begin{board}[(c) For \(s\in\R\), with \(p_A=(t-\lambda_1)\cdots(t-\lambda_n)\) (Definition~\ref{h-def-eigenvalues}):]
 \boardtop
 \begin{align*}
-\det\bigl(sI-(A+cI)\bigr)&=\det\bigl((s-c)I-A\bigr)=p_A(s-c)&&\text{(\ref{f-rules}, Theorem~\ref{h-thm-charpoly}(a))}\\
+\det\bigl(sI-(A+cI)\bigr)&=\det\bigl((s-c)I-A\bigr)=p_A(s-c)&&\text{(\ref{f-rules})}\\
 &=\bigl(s-(\lambda_1+c)\bigr)\cdots\bigl(s-(\lambda_n+c)\bigr)&&\text{(\ref{f-values})}
 \end{align*}
-So \(p_{A+cI}=\bigl(t-(\lambda_1+c)\bigr)\cdots\bigl(t-(\lambda_n+c)\bigr)\) (Theorem~\ref{h-thm-charpoly}(a)): the
+So \(p_{A+cI}=\bigl(t-(\lambda_1+c)\bigr)\cdots\bigl(t-(\lambda_n+c)\bigr)\) (\ref{f-roots}): the
 eigenvalues of \(A+cI\), listed with multiplicity, are \(\lambda_1+c,\dots,\lambda_n+c\)
 (Definition~\ref{h-def-eigenvalues}, \ref{f-complex-roots}).
 \end{board}
@@ -377,9 +376,9 @@ and \(\det A=\lambda_1\cdots\lambda_n\). So \(A\) is invertible \(\iff\) \(0\) i
 \boardtop
 \begin{align*}
 t^{n-1}&:\quad-\tr A=-(\lambda_1+\dots+\lambda_n)
-&&\text{(Theorem~\ref{h-thm-charpoly}(b), \ref{f-complex-roots})}\\
+&&\text{(Theorem~\ref{h-thm-charpoly}(a), \ref{f-complex-roots})}\\
 t^0&:\quad(-1)^n\det A=(-1)^n\lambda_1\cdots\lambda_n
-&&\text{(Theorem~\ref{h-thm-charpoly}(b), \ref{f-complex-roots})}\\
+&&\text{(Theorem~\ref{h-thm-charpoly}(a), \ref{f-complex-roots})}\\
 &\quad A\text{ invertible}\iff\det A\ne0\iff\lambda_i\ne0\text{ for all }i
 &&\text{(\ref{f-invertible}; \(zw=0\Rightarrow z=0\) or \(w=0\))}
 \end{align*}
@@ -425,17 +424,17 @@ simple, \(g_A(c)=1\).
 (\ref{f-invertible}).
 \item \(Ax_j=cx_j=P(ce_j)\) for \(j\leqslant g\); \(Ax_j=Pm_j\) for some \(m_j\in\R^n\) for \(j>g\), as
 \(x_1,\dots,x_n\) span \(\R^n\) (\ref{f-views}). So \(AP=PM\) for \(M=[ce_1\ \cdots\ ce_g\ m_{g+1}\ \cdots\ m_n]\)
-(\ref{f-views}), and \(M=P^{-1}AP\). If \(g=n\): \(M=cI\), \(p_A=p_M=(t-c)^n\) (Theorems~\ref{h-thm-similar}, \ref{h-thm-charpoly}(a);
-\ref{f-det}, \ref{f-values}), and \(a_A(c)=n\).
+(\ref{f-views}), and \(M=P^{-1}AP\). If \(g=n\): \(M=cI\), \(p_A=p_M=(t-c)^n\) (Theorem~\ref{h-thm-similar};
+\ref{f-det}, \ref{f-values}, \ref{f-roots}), and \(a_A(c)=n\).
 \item If \(g<n\), \(M=\left(\begin{smallmatrix}cI_g&K\\0&D\end{smallmatrix}\right)\) with
 \(D\in\R^{(n-g)\times(n-g)}\), and for \(s\in\R\)
 \begin{align*}
 sI-M&=\begin{pmatrix}(s-c)I_g&-K\\0&sI_{n-g}-D\end{pmatrix}&&\text{(\ref{f-rules})}\\
 \det(sI-M)&=\det\bigl((s-c)I_g\bigr)\det(sI_{n-g}-D)=(s-c)^gp_D(s)
-&&\text{(\ref{f-block}, \ref{f-det}, Theorem~\ref{h-thm-charpoly}(a))}
+&&\text{(\ref{f-block}, \ref{f-det})}
 \end{align*}
-So \(p_A=p_M=(t-c)^gp_D\) (Theorems~\ref{h-thm-similar} and~\ref{h-thm-charpoly}(a); \ref{f-values}).
-\item With \(p_D=(t-\delta_1)\cdots(t-\delta_{n-g})\) (Theorem~\ref{h-thm-charpoly}(b), \ref{f-complex-roots}), the
+So \(p_A=p_M=(t-c)^gp_D\) (Theorem~\ref{h-thm-similar}; \ref{f-values}, \ref{f-roots}).
+\item With \(p_D=(t-\delta_1)\cdots(t-\delta_{n-g})\) (Theorem~\ref{h-thm-charpoly}(a), \ref{f-complex-roots}), the
 eigenvalues of \(A\) are \(c\) (\(g\) times) and \(\delta_1,\dots,\delta_{n-g}\) (Definition~\ref{h-def-eigenvalues},
 \ref{f-complex-roots}); so \(a_A(c)\geqslant g\).
 \item \(c\) simple: \(1\leqslant g_A(c)\leqslant a_A(c)=1\).\qedhere
@@ -468,7 +467,7 @@ Let \(A\in\R^{n\times n}\) have the distinct real eigenvalues \(c_1,\dots,c_k\),
 P^{-1}AP=\Lambda&\iff AP=P\Lambda&&\text{(\ref{f-rules})}\\
 &\iff Ap_j=\col_j(AP)=\col_j(P\Lambda)=\lambda_jp_j\text{ for all }j&&\text{(\ref{f-views})}\\
 P^{-1}AP=\Lambda&\implies p_A=p_\Lambda=(t-\lambda_1)\cdots(t-\lambda_n)
-&&\text{(Theorems~\ref{h-thm-similar}, \ref{h-thm-charpoly}(a); \ref{f-det}, \ref{f-values})}
+&&\text{(Theorem~\ref{h-thm-similar}; \ref{f-det}, \ref{f-values}, \ref{f-roots})}
 \end{align*}
 So \(\lambda_1,\dots,\lambda_n\) are the eigenvalues of \(A\) (Definition~\ref{h-def-eigenvalues}).
 
@@ -519,7 +518,7 @@ A=\begin{pmatrix}5&-6&-6\\-1&4&2\\3&-6&-4\end{pmatrix}
 &=(t-2)(t^2-3t+2)=(t-1)(t-2)^2
 \end{aligned}
 \]
-Eigenvalues \(1,2,2\); \(a_A(1)=1\), \(a_A(2)=2\) (Theorem~\ref{h-thm-charpoly}(a), Definition~\ref{h-def-eigenvalues}).
+Eigenvalues \(1,2,2\); \(a_A(1)=1\), \(a_A(2)=2\) (Definition~\ref{h-def-eigenvalues}).
 \end{board}
 \begin{board}[\(\lambda=1\): echelon form of \(A-I\), then back substitution:]
 \[
@@ -625,8 +624,7 @@ So \(g_{AB}(c)=g_{BA}(c)\).
 \det M&=\det I_m\det(I_n-t^{-1}BI_m^{-1}A)=\det(I_n-t^{-1}BA)&&\text{(\ref{f-block}, \ref{f-det})}\\
 \det(tI_n-BA)&=t^n\det(I_n-t^{-1}BA)=t^n\det(I_m-t^{-1}AB)=t^{n-m}\det(tI_m-AB)&&\text{(\ref{f-det})}
 \end{align*}
-So \(p_{BA}\) and \(t^{n-m}p_{AB}\) have the same value at every real \(t\ne0\) (Theorem~\ref{h-thm-charpoly}(a),
-\ref{f-values}), and \(p_{BA}=t^{n-m}p_{AB}\) (\ref{f-roots}). With \(p_{AB}=(t-\mu_1)\cdots(t-\mu_m)\)
+So \(p_{BA}\) and \(t^{n-m}p_{AB}\) have the same value at every real \(t\ne0\) (\ref{f-values}), and \(p_{BA}=t^{n-m}p_{AB}\) (\ref{f-roots}). With \(p_{AB}=(t-\mu_1)\cdots(t-\mu_m)\)
 (Definition~\ref{h-def-eigenvalues}), \(p_{BA}=(t-0)^{n-m}(t-\mu_1)\cdots(t-\mu_m)\): the eigenvalues of \(BA\) are
 \(\mu_1,\dots,\mu_m\) and \(n-m\) zeros (\ref{f-complex-roots}), and \(a_{BA}(c)=a_{AB}(c)\) for \(c\ne0\)
 (Definition~\ref{h-def-eigenvalues}).
