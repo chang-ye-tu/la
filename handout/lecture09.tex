@@ -38,6 +38,13 @@
 \DeclareMathOperator{\col}{col}
 \DeclareMathOperator{\diag}{diag}
 \DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator\prb{\mathsf{P}}
+\DeclareMathOperator\expc{\mathsf{E}}
+\DeclareMathOperator\var{var}
+\DeclareMathOperator\cov{cov}
+\DeclareMathOperator\cor{cor}
+\DeclareMathOperator\argmin{argmin}
+\DeclareMathOperator\argmax{argmax}
 \DeclareMathOperator{\Span}{span}
 \theoremstyle{definition}
 \newtheorem{theorem}{Theorem}
@@ -127,11 +134,11 @@ has \textbf{orthonormal} columns (\(q_i'q_j=0\) for \(i\ne j\), \(\lVert q_j\rVe
 \([Q\ T]\) is orthogonal for some \(T\in\R^{n\times(n-p)}\).
 \item\label{f-prob} (Probability.) A random variable is a number whose value depends on chance; each one here has
 a finite variance. For random variables \(u\), \(v\)
-and numbers \(a\), \(b\), \(c\): \(\operatorname{E}(au+bv+c)=a\operatorname{E}(u)+b\operatorname{E}(v)+c\) (also for
+and numbers \(a\), \(b\), \(c\): \(\expc(au+bv+c)=a\expc(u)+b\expc(v)+c\) (also for
 finite sums);
-\(\operatorname{var}(u)=\operatorname{E}\bigl((u-\operatorname{E}(u))^2\bigr)\geqslant0\);
-\(\operatorname{cov}(u,v)=\operatorname{E}\bigl((u-\operatorname{E}(u))(v-\operatorname{E}(v))\bigr)=\operatorname{cov}(v,u)\);
-\(\operatorname{var}(u)=\operatorname{cov}(u,u)\).
+\(\var(u)=\expc\bigl((u-\expc(u))^2\bigr)\geqslant0\);
+\(\cov(u,v)=\expc\bigl((u-\expc(u))(v-\expc(v))\bigr)=\cov(v,u)\);
+\(\var(u)=\cov(u,u)\).
 \end{enumerate}
 
 \textbf{From \lec{7} and \lec{8}} (restated; \(A\in\R^{n\times n}\)).
@@ -156,46 +163,46 @@ symmetric \(A\) is \textbf{positive semidefinite} (PSD) if \(x'Ax\geqslant0\) fo
 
 \begin{definition}\label{h-def-random}
 A \textbf{random vector} \(z=(z_1,\dots,z_n)'\) or \textbf{random matrix} \(Z=(z_{ij})\) has random variables as
-entries; \(\operatorname{E}(Z)=(\operatorname{E}(z_{ij}))\). The \textbf{mean vector} of \(z\) is
-\(\mu=\operatorname{E}(z)\), and its \textbf{covariance matrix} is
+entries; \(\expc(Z)=(\expc(z_{ij}))\). The \textbf{mean vector} of \(z\) is
+\(\mu=\expc(z)\), and its \textbf{covariance matrix} is
 \[
-\Sigma=\operatorname{var}(z)=\operatorname{E}\bigl((z-\mu)(z-\mu)'\bigr)\in\R^{n\times n}
+\Sigma=\var(z)=\expc\bigl((z-\mu)(z-\mu)'\bigr)\in\R^{n\times n}
 \]
-By \ref{f-views} and \ref{f-prob}, \(\sigma_{ij}=\operatorname{E}\bigl((z_i-\mu_i)(z_j-\mu_j)\bigr)=\operatorname{cov}(z_i,z_j)\),
-\(\sigma_{ii}=\operatorname{var}(z_i)\), and \(\Sigma\) is symmetric.
+By \ref{f-views} and \ref{f-prob}, \(\sigma_{ij}=\expc\bigl((z_i-\mu_i)(z_j-\mu_j)\bigr)=\cov(z_i,z_j)\),
+\(\sigma_{ii}=\var(z_i)\), and \(\Sigma\) is symmetric.
 \end{definition}
 
 \begin{definition}\label{h-def-cov}
-For random vectors \(u\in\R^p\), \(v\in\R^q\) with \(\mu_u=\operatorname{E}(u)\), \(\mu_v=\operatorname{E}(v)\), the
+For random vectors \(u\in\R^p\), \(v\in\R^q\) with \(\mu_u=\expc(u)\), \(\mu_v=\expc(v)\), the
 \textbf{covariance matrix of \(u\) and \(v\)} is
 \[
-\operatorname{cov}(u,v)=\operatorname{E}\bigl((u-\mu_u)(v-\mu_v)'\bigr)\in\R^{p\times q}
+\cov(u,v)=\expc\bigl((u-\mu_u)(v-\mu_v)'\bigr)\in\R^{p\times q}
 \]
-Its \((i,j)\) entry is \(\operatorname{cov}(u_i,v_j)\). So \(\operatorname{cov}(u,u)=\operatorname{var}(u)\) and
-\(\operatorname{cov}(v,u)=\operatorname{cov}(u,v)'\) (\ref{f-rules}). \(u\) and \(v\) are \textbf{uncorrelated} if
-\(\operatorname{cov}(u,v)=0\).
+Its \((i,j)\) entry is \(\cov(u_i,v_j)\). So \(\cov(u,u)=\var(u)\) and
+\(\cov(v,u)=\cov(u,v)'\) (\ref{f-rules}). \(u\) and \(v\) are \textbf{uncorrelated} if
+\(\cov(u,v)=0\).
 \end{definition}
 
 \Needspace{17\baselineskip}
 \begin{theorem}\label{h-thm-linear}
-Let \(z\in\R^n\) be a random vector, \(\operatorname{E}(z)=\mu\), \(\operatorname{var}(z)=\Sigma\).
+Let \(z\in\R^n\) be a random vector, \(\expc(z)=\mu\), \(\var(z)=\Sigma\).
 \begin{enumerate}
-\item \(\operatorname{E}(AZB+D)=A\operatorname{E}(Z)B+D\) for a random \(Z\in\R^{m\times p}\) and constant
+\item \(\expc(AZB+D)=A\expc(Z)B+D\) for a random \(Z\in\R^{m\times p}\) and constant
 \(A\in\R^{q\times m}\), \(B\in\R^{p\times l}\), \(D\in\R^{q\times l}\).
-\item \(\operatorname{E}(Az+b)=A\mu+b\) and \(\operatorname{var}(Az+b)=A\Sigma A'\) for constant \(A\in\R^{m\times n}\),
+\item \(\expc(Az+b)=A\mu+b\) and \(\var(Az+b)=A\Sigma A'\) for constant \(A\in\R^{m\times n}\),
 \(b\in\R^m\).
-\item \(a'\Sigma a=\operatorname{var}(a'z)\geqslant0\) for \(a\in\R^n\): \(\Sigma\) is PSD.
+\item \(a'\Sigma a=\var(a'z)\geqslant0\) for \(a\in\R^n\): \(\Sigma\) is PSD.
 \end{enumerate}
 \end{theorem}
 \begin{proof}
 (a) Entry \((i,j)\) of \(AZB+D\) is \(\sum_r\sum_sa_{ir}z_{rs}b_{sj}+d_{ij}\) (\ref{f-views}); its expectation is
-\(\sum_r\sum_sa_{ir}\operatorname{E}(z_{rs})b_{sj}+d_{ij}\) (\ref{f-prob}), entry \((i,j)\) of \(A\operatorname{E}(Z)B+D\).
+\(\sum_r\sum_sa_{ir}\expc(z_{rs})b_{sj}+d_{ij}\) (\ref{f-prob}), entry \((i,j)\) of \(A\expc(Z)B+D\).
 \begin{board}[(b), (c):]
 \boardtop
 \begin{align*}
-\operatorname{E}(Az+b)&=A\mu+b,\qquad Az+b-\operatorname{E}(Az+b)=A(z-\mu)&&\text{((a): \(Z=z\), \(B=1\), \(D=b\))}\\
-\operatorname{var}(Az+b)&=\operatorname{E}\bigl(A(z-\mu)(z-\mu)'A'\bigr)=A\Sigma A'&&\text{(\ref{f-rules}; (a))}\\
-\operatorname{var}(a'z)&=a'\Sigma a\geqslant0&&\text{((b) with \(a'\), \(b=0\); \ref{f-prob})}
+\expc(Az+b)&=A\mu+b,\qquad Az+b-\expc(Az+b)=A(z-\mu)&&\text{((a): \(Z=z\), \(B=1\), \(D=b\))}\\
+\var(Az+b)&=\expc\bigl(A(z-\mu)(z-\mu)'A'\bigr)=A\Sigma A'&&\text{(\ref{f-rules}; (a))}\\
+\var(a'z)&=a'\Sigma a\geqslant0&&\text{((b) with \(a'\), \(b=0\); \ref{f-prob})}
 \end{align*}
 \(\Sigma\) is symmetric (Definition~\ref{h-def-random}): PSD (\lec{8}, Definition~13).
 \end{board}
@@ -204,86 +211,86 @@ Let \(z\in\R^n\) be a random vector, \(\operatorname{E}(z)=\mu\), \(\operatornam
 
 \Needspace{15\baselineskip}
 \begin{theorem}\label{h-thm-cov}
-Let \(u\in\R^p\), \(v\in\R^q\) be random vectors, \(\mu_u=\operatorname{E}(u)\), \(\mu_v=\operatorname{E}(v)\).
+Let \(u\in\R^p\), \(v\in\R^q\) be random vectors, \(\mu_u=\expc(u)\), \(\mu_v=\expc(v)\).
 \begin{enumerate}
-\item \(\operatorname{cov}(Au+b,Bv+d)=A\operatorname{cov}(u,v)B'\) for constant \(A\in\R^{k\times p}\), \(b\in\R^k\),
-\(B\in\R^{l\times q}\), \(d\in\R^l\). So \(\operatorname{cov}(Az,Bz)=A\Sigma B'\) if \(\operatorname{var}(z)=\Sigma\).
-\item \(\operatorname{cov}(u_1+u_2,v)=\operatorname{cov}(u_1,v)+\operatorname{cov}(u_2,v)\) and
-\(\operatorname{cov}(v,u_1+u_2)=\operatorname{cov}(v,u_1)+\operatorname{cov}(v,u_2)\) (\(u_1,u_2\in\R^p\)).
-\item If \(x_1,\dots,x_m\in\R^p\) and \(\operatorname{cov}(x_i,x_j)=0\) for \(i\ne j\), then
-\(\operatorname{var}(x_1+\dots+x_m)=\operatorname{var}(x_1)+\dots+\operatorname{var}(x_m)\).
-\item \(\operatorname{E}(uu')=\operatorname{var}(u)+\mu_u\mu_u'\).
+\item \(\cov(Au+b,Bv+d)=A\cov(u,v)B'\) for constant \(A\in\R^{k\times p}\), \(b\in\R^k\),
+\(B\in\R^{l\times q}\), \(d\in\R^l\). So \(\cov(Az,Bz)=A\Sigma B'\) if \(\var(z)=\Sigma\).
+\item \(\cov(u_1+u_2,v)=\cov(u_1,v)+\cov(u_2,v)\) and
+\(\cov(v,u_1+u_2)=\cov(v,u_1)+\cov(v,u_2)\) (\(u_1,u_2\in\R^p\)).
+\item If \(x_1,\dots,x_m\in\R^p\) and \(\cov(x_i,x_j)=0\) for \(i\ne j\), then
+\(\var(x_1+\dots+x_m)=\var(x_1)+\dots+\var(x_m)\).
+\item \(\expc(uu')=\var(u)+\mu_u\mu_u'\).
 \end{enumerate}
 \end{theorem}
 \begin{proof}
-\begin{board}[(a) By Theorem~\ref{h-thm-linear}(b): \(Au+b-\operatorname{E}(Au+b)=A(u-\mu_u)\), \(Bv+d-\operatorname{E}(Bv+d)=B(v-\mu_v)\):]
+\begin{board}[(a) By Theorem~\ref{h-thm-linear}(b): \(Au+b-\expc(Au+b)=A(u-\mu_u)\), \(Bv+d-\expc(Bv+d)=B(v-\mu_v)\):]
 \boardtop
 \begin{align*}
-\operatorname{cov}(Au+b,Bv+d)&=\operatorname{E}\bigl(A(u-\mu_u)(v-\mu_v)'B'\bigr)=A\operatorname{cov}(u,v)B'
+\cov(Au+b,Bv+d)&=\expc\bigl(A(u-\mu_u)(v-\mu_v)'B'\bigr)=A\cov(u,v)B'
 &&\text{(\ref{f-rules}; Theorem~\ref{h-thm-linear}(a))}
 \end{align*}
-\(u=v=z\): \(\operatorname{cov}(Az,Bz)=A\operatorname{var}(z)B'\).
+\(u=v=z\): \(\cov(Az,Bz)=A\var(z)B'\).
 \end{board}
-(b) \(\operatorname{E}(u_1+u_2)=\operatorname{E}(u_1)+\operatorname{E}(u_2)\), so
-\((u_1+u_2-\operatorname{E}(u_1+u_2))(v-\mu_v)'=(u_1-\operatorname{E}(u_1))(v-\mu_v)'+(u_2-\operatorname{E}(u_2))(v-\mu_v)'\)
+(b) \(\expc(u_1+u_2)=\expc(u_1)+\expc(u_2)\), so
+\((u_1+u_2-\expc(u_1+u_2))(v-\mu_v)'=(u_1-\expc(u_1))(v-\mu_v)'+(u_2-\expc(u_2))(v-\mu_v)'\)
 (\ref{f-rules}); take expectations entry by entry (\ref{f-prob}). Transpose for the second identity
 (Definition~\ref{h-def-cov}).
 
 (c) By (b) in both arguments,
-\(\operatorname{var}(\sum_ix_i)=\operatorname{cov}(\sum_ix_i,\sum_jx_j)=\sum_i\sum_j\operatorname{cov}(x_i,x_j)\); only the
+\(\var(\sum_ix_i)=\cov(\sum_ix_i,\sum_jx_j)=\sum_i\sum_j\cov(x_i,x_j)\); only the
 \(m\) terms with \(i=j\) remain.
 
 (d) \((u-\mu_u)(u-\mu_u)'=uu'-u\mu_u'-\mu_uu'+\mu_u\mu_u'\) (\ref{f-rules}); take expectations entry by entry, with
-\(\operatorname{E}(u\mu_u')=\mu_u\mu_u'=\operatorname{E}(\mu_uu')\) (Theorem~\ref{h-thm-linear}(a)):
-\(\operatorname{var}(u)=\operatorname{E}(uu')-\mu_u\mu_u'\).
+\(\expc(u\mu_u')=\mu_u\mu_u'=\expc(\mu_uu')\) (Theorem~\ref{h-thm-linear}(a)):
+\(\var(u)=\expc(uu')-\mu_u\mu_u'\).
 \end{proof}
 
 \Needspace{18\baselineskip}
 \begin{example}\label{h-exm-cov}
 Let \(z\in\R^4\) be a random vector with
 \[
-\operatorname{var}(z)=\Sigma=\begin{pmatrix}4&0&4&0\\0&1&2&2\\4&2&9&6\\0&2&6&9\end{pmatrix}
+\var(z)=\Sigma=\begin{pmatrix}4&0&4&0\\0&1&2&2\\4&2&9&6\\0&2&6&9\end{pmatrix}
 \]
-Find \(\operatorname{cov}(z,e)\) and \(\operatorname{var}(e)\) for \(e=z_3-z_1-2z_2\) and for \(f=z_4+2z_1+2z_2-2z_3\);
-\(\operatorname{var}(z_1+z_2+z_3+z_4)\); the variances and the covariance of \(z_1+z_2\) and \(z_1-z_2\).
+Find \(\cov(z,e)\) and \(\var(e)\) for \(e=z_3-z_1-2z_2\) and for \(f=z_4+2z_1+2z_2-2z_3\);
+\(\var(z_1+z_2+z_3+z_4)\); the variances and the covariance of \(z_1+z_2\) and \(z_1-z_2\).
 \end{example}
 \textit{Solution.}
 \begin{board}[\(e=a'z\), \(a=(-1,-2,1,0)'\); \(f=b'z\), \(b=(2,2,-2,1)'\); by Theorem~\ref{h-thm-cov}(a),
-\(\operatorname{cov}(z,a'z)=\Sigma a\), \(\operatorname{var}(a'z)=a'\Sigma a\):]
+\(\cov(z,a'z)=\Sigma a\), \(\var(a'z)=a'\Sigma a\):]
 \boardtop
 \begin{align*}
 \Sigma a&=(-4+0+4+0,\ 0-2+2+0,\ -4-4+9+0,\ 0-4+6+0)'=(0,0,1,2)'\\
 \Sigma b&=(8+0-8+0,\ 0+2-4+2,\ 8+4-18+6,\ 0+4-12+9)'=(0,0,0,1)'
 \end{align*}
-So \(\operatorname{cov}(z,e)=(0,0,1,2)'\) and \(\operatorname{var}(e)=a'\Sigma a=0+0+1+0=1\): \(e\) is uncorrelated with
-\(z_1\), \(z_2\); \(\operatorname{cov}(z,f)=(0,0,0,1)'\) and \(\operatorname{var}(f)=b'\Sigma b=1\): \(f\) is uncorrelated
+So \(\cov(z,e)=(0,0,1,2)'\) and \(\var(e)=a'\Sigma a=0+0+1+0=1\): \(e\) is uncorrelated with
+\(z_1\), \(z_2\); \(\cov(z,f)=(0,0,0,1)'\) and \(\var(f)=b'\Sigma b=1\): \(f\) is uncorrelated
 with \(z_1\), \(z_2\), \(z_3\).
 \end{board}
 \begin{board}[\(z_1+z_2+z_3+z_4=\one'z\), \(z_1+z_2\), \(z_1-z_2\) (Theorem~\ref{h-thm-cov}(a)):]
 \boardtop
 \begin{align*}
-\operatorname{var}(\one'z)&=\one'\Sigma\one=51\qquad(\text{the sum of all entries of }\Sigma)\\
+\var(\one'z)&=\one'\Sigma\one=51\qquad(\text{the sum of all entries of }\Sigma)\\
 (1,1,0,0)\Sigma&=(4,1,6,2),\qquad(1,-1,0,0)\Sigma=(4,-1,2,-2)
 \end{align*}
-So \(\operatorname{var}(z_1+z_2)=4+1=5\), \(\operatorname{var}(z_1-z_2)=4+1=5\), and
-\(\operatorname{cov}(z_1+z_2,z_1-z_2)=(4,1,6,2)(1,-1,0,0)'=4-1=3\).
+So \(\var(z_1+z_2)=4+1=5\), \(\var(z_1-z_2)=4+1=5\), and
+\(\cov(z_1+z_2,z_1-z_2)=(4,1,6,2)(1,-1,0,0)'=4-1=3\).
 \end{board}
 
 \Needspace{11\baselineskip}
 \begin{theorem}\label{h-thm-quadratic}
-Let \(z\in\R^n\) be a random vector, \(\operatorname{E}(z)=\mu\), \(\operatorname{var}(z)=\Sigma\), and
-\(A\in\R^{n\times n}\) constant. Then \(\operatorname{E}(z'Az)=\tr(A\Sigma)+\mu'A\mu\); so
-\(\operatorname{E}(z'Az)=\tr(A\Sigma)\) if \(\mu=0\).
+Let \(z\in\R^n\) be a random vector, \(\expc(z)=\mu\), \(\var(z)=\Sigma\), and
+\(A\in\R^{n\times n}\) constant. Then \(\expc(z'Az)=\tr(A\Sigma)+\mu'A\mu\); so
+\(\expc(z'Az)=\tr(A\Sigma)\) if \(\mu=0\).
 \end{theorem}
 \begin{proof}
 \begin{board}[\(x'Ax=\sum_i\sum_ja_{ij}x_ix_j\) for \(x=z\) and \(x=\mu\) (\lec{8}, Definition~12); \(\Sigma\) is symmetric
 (Definition~\ref{h-def-random}):]
 \boardtop
 \begin{align*}
-\operatorname{E}(z'Az)&=\textstyle\sum_i\sum_ja_{ij}\operatorname{E}(z_iz_j)&&\text{(\ref{f-prob})}\\
-\sigma_{ij}&=\operatorname{E}\bigl((z_i-\mu_i)(z_j-\mu_j)\bigr)=\operatorname{E}(z_iz_j)-\mu_i\mu_j-\mu_j\mu_i+\mu_i\mu_j
+\expc(z'Az)&=\textstyle\sum_i\sum_ja_{ij}\expc(z_iz_j)&&\text{(\ref{f-prob})}\\
+\sigma_{ij}&=\expc\bigl((z_i-\mu_i)(z_j-\mu_j)\bigr)=\expc(z_iz_j)-\mu_i\mu_j-\mu_j\mu_i+\mu_i\mu_j
 &&\text{(\ref{f-prob})}\\
-\operatorname{E}(z'Az)&=\textstyle\sum_i\sum_ja_{ij}\sigma_{ij}+\sum_i\sum_ja_{ij}\mu_i\mu_j=\tr(A\Sigma)+\mu'A\mu
+\expc(z'Az)&=\textstyle\sum_i\sum_ja_{ij}\sigma_{ij}+\sum_i\sum_ja_{ij}\mu_i\mu_j=\tr(A\Sigma)+\mu'A\mu
 &&\text{(\ref{f-views}, \ref{f-trace}; \(\sigma_{ji}=\sigma_{ij}\))}
 \end{align*}
 \end{board}
@@ -293,25 +300,25 @@ Let \(z\in\R^n\) be a random vector, \(\operatorname{E}(z)=\mu\), \(\operatornam
 \begin{definition}\label{h-def-estimator}
 Let observations be modeled as a random vector \(y\) whose distribution depends on unknown parameters. An
 \textbf{estimator} of a parameter \(\theta\) is a random variable \(T=g(y)\), where the function \(g\) does not involve
-unknown parameters; \(T\) is \textbf{unbiased} if \(\operatorname{E}(T)=\theta\) for all values of the parameters.
+unknown parameters; \(T\) is \textbf{unbiased} if \(\expc(T)=\theta\) for all values of the parameters.
 \end{definition}
 
 \Needspace{6\baselineskip}
 \begin{example}\label{h-exm-quadratic}
-Let \(y\in\R^n\), \(\operatorname{E}(y)=\mu\), \(\operatorname{var}(y)=\sigma^2I_n\), and \(P\in\R^{n\times n}\) with
-\(P'=P=P^2\) and \(\rank P=r\). Find \(\operatorname{E}(y'Py)\), and the expectation of \(s^2=\frac1{n-1}\sum_i(y_i-\bar y)^2\).
+Let \(y\in\R^n\), \(\expc(y)=\mu\), \(\var(y)=\sigma^2I_n\), and \(P\in\R^{n\times n}\) with
+\(P'=P=P^2\) and \(\rank P=r\). Find \(\expc(y'Py)\), and the expectation of \(s^2=\frac1{n-1}\sum_i(y_i-\bar y)^2\).
 \end{example}
 \textit{Solution.} \(\tr P=\rank P=r\) (\lec{8}, Theorem~11), and by Theorem~\ref{h-thm-quadratic} and \ref{f-trace},
-\(\operatorname{E}(y'Py)=\tr(P\sigma^2I_n)+\mu'P\mu=\sigma^2r+\mu'P\mu\).
+\(\expc(y'Py)=\tr(P\sigma^2I_n)+\mu'P\mu=\sigma^2r+\mu'P\mu\).
 \begin{itemize}
 \item \(P=C_n\) (\(n\geqslant2\)): \(C_n'=C_n=C_n^2\) (\ref{f-centering}), \(\rank C_n=n-1\) (\lec{8}, Example~5);
 \(y'C_ny=\sum_i(y_i-\bar y)^2\) and \(\mu'C_n\mu=\sum_i(\mu_i-\bar\mu)^2\) (\ref{f-centering}). So
-\(\operatorname{E}\bigl(\sum_i(y_i-\bar y)^2\bigr)=(n-1)\sigma^2+\sum_i(\mu_i-\bar\mu)^2\).
-\item Common mean, \(\mu=\mu_0\one\): \(C_n\mu=0\), and \(\operatorname{E}(s^2)=\sigma^2\) for all \(\mu_0\), \(\sigma^2\):
+\(\expc\bigl(\sum_i(y_i-\bar y)^2\bigr)=(n-1)\sigma^2+\sum_i(\mu_i-\bar\mu)^2\).
+\item Common mean, \(\mu=\mu_0\one\): \(C_n\mu=0\), and \(\expc(s^2)=\sigma^2\) for all \(\mu_0\), \(\sigma^2\):
 \(s^2\) is an unbiased estimator of \(\sigma^2\) (Definition~\ref{h-def-estimator}). The estimator
 \(\frac1n\sum_i(y_i-\bar y)^2\) has the expectation \(\frac{n-1}n\sigma^2<\sigma^2\) (\(\sigma^2>0\)): not unbiased.
 \item Drifting means: for \(n=4\) and \(\mu=(1,3,5,7)'\), \(\bar\mu=4\) and \(\sum_i(\mu_i-\bar\mu)^2=9+1+1+9=20\), so
-\(\operatorname{E}(s^2)=\sigma^2+\frac{20}3\): \(s^2\) overestimates \(\sigma^2\) on average.
+\(\expc(s^2)=\sigma^2+\frac{20}3\): \(s^2\) overestimates \(\sigma^2\) on average.
 \end{itemize}
 
 \subsection*{2. Data matrices and the sample covariance matrix}
@@ -387,23 +394,23 @@ sample variance \(10\); the pairs \(\{1,2\}\), \(\{3,4\}\) have the sample covar
 
 \Needspace{9\baselineskip}
 \begin{theorem}\label{h-thm-sample}
-Let \(x_1,\dots,x_n\in\R^p\) (\(n\geqslant2\)) be random vectors with \(\operatorname{E}(x_i)=\mu\),
-\(\operatorname{var}(x_i)=\Sigma\) and \(\operatorname{cov}(x_i,x_j)=0\) for \(i\ne j\); \(X\) the random data matrix with
+Let \(x_1,\dots,x_n\in\R^p\) (\(n\geqslant2\)) be random vectors with \(\expc(x_i)=\mu\),
+\(\var(x_i)=\Sigma\) and \(\cov(x_i,x_j)=0\) for \(i\ne j\); \(X\) the random data matrix with
 rows \(x_1',\dots,x_n'\), \(\bar x=\frac1nX'\one\) and \(S=\frac1{n-1}X'C_nX\).
 \begin{enumerate}
-\item \(\operatorname{E}(\bar x)=\mu\) and \(\operatorname{var}(\bar x)=\frac1n\Sigma\).
-\item \(\operatorname{E}(S)=\Sigma\).
+\item \(\expc(\bar x)=\mu\) and \(\var(\bar x)=\frac1n\Sigma\).
+\item \(\expc(S)=\Sigma\).
 \end{enumerate}
 \end{theorem}
 \begin{proof}
-(a) \(X'\one=x_1+\dots+x_n\) (\ref{f-views}), so \(\operatorname{E}(\bar x)=\frac1n(\mu+\dots+\mu)=\mu\)
-(Theorem~\ref{h-thm-linear}(a)), and \(\operatorname{var}(\bar x)=\frac1{n^2}\operatorname{var}(x_1+\dots+x_n)
+(a) \(X'\one=x_1+\dots+x_n\) (\ref{f-views}), so \(\expc(\bar x)=\frac1n(\mu+\dots+\mu)=\mu\)
+(Theorem~\ref{h-thm-linear}(a)), and \(\var(\bar x)=\frac1{n^2}\var(x_1+\dots+x_n)
 =\frac1{n^2}n\Sigma=\frac1n\Sigma\) (Theorem~\ref{h-thm-linear}(b) with \(A=\frac1nI_p\), Theorem~\ref{h-thm-cov}(c)).
 
-(b) \(\operatorname{E}(x_ix_i')=\Sigma+\mu\mu'\) and \(\operatorname{E}(\bar x\bar x')=\frac1n\Sigma+\mu\mu'\)
+(b) \(\expc(x_ix_i')=\Sigma+\mu\mu'\) and \(\expc(\bar x\bar x')=\frac1n\Sigma+\mu\mu'\)
 (Theorem~\ref{h-thm-cov}(d); (a)). By Proposition~\ref{h-prop-data}(a) and \ref{f-views},
 \(X'C_nX=X'X-n\bar x\bar x'\) with \(X'X=x_1x_1'+\dots+x_nx_n'\); so
-\(\operatorname{E}(X'C_nX)=n(\Sigma+\mu\mu')-n(\frac1n\Sigma+\mu\mu')=(n-1)\Sigma\), and \(\operatorname{E}(S)=\Sigma\).
+\(\expc(X'C_nX)=n(\Sigma+\mu\mu')-n(\frac1n\Sigma+\mu\mu')=(n-1)\Sigma\), and \(\expc(S)=\Sigma\).
 \end{proof}
 With the divisor \(n\) in place of \(n-1\), the expectation would be \(\frac{n-1}n\Sigma\), not \(\Sigma\) (if
 \(\Sigma\ne0\)); this is why \(S\) has the divisor \(n-1\).
@@ -614,10 +621,10 @@ the plot after the \(M\)th component). There is no objective rule; the choice de
 \subsection*{5. Principal components of a random vector}
 
 \begin{definition}\label{h-def-pop-pc}
-Let \(x=(x_1,\dots,x_p)'\) be a random vector with \(\Sigma=\operatorname{var}(x)\ne0\). A \textbf{first principal
-component} of \(x\) is \(a_1'x\), where the unit vector \(a_1\in\R^p\) maximizes \(\operatorname{var}(a'x)\) over all unit
+Let \(x=(x_1,\dots,x_p)'\) be a random vector with \(\Sigma=\var(x)\ne0\). A \textbf{first principal
+component} of \(x\) is \(a_1'x\), where the unit vector \(a_1\in\R^p\) maximizes \(\var(a'x)\) over all unit
 vectors \(a\in\R^p\). For \(m\geqslant2\), once \(a_1,\dots,a_{m-1}\) are chosen, an \textbf{\(m\)th principal
-component} is \(a_m'x\), where the unit vector \(a_m\) maximizes \(\operatorname{var}(a'x)\) over the unit vectors
+component} is \(a_m'x\), where the unit vector \(a_m\) maximizes \(\var(a'x)\) over the unit vectors
 \(a\) for which \(a'x\) is uncorrelated with each of \(a_1'x,\dots,a_{m-1}'x\).
 \end{definition}
 
@@ -627,21 +634,21 @@ Let \(x\) and \(\Sigma\) be as in Definition~\ref{h-def-pop-pc}, and \(\Sigma=V\
 \(V=[v_1\ \cdots\ v_p]\) orthogonal, \(\Lambda=\diag(\lambda_1,\dots,\lambda_p)\),
 \(\lambda_1\geqslant\dots\geqslant\lambda_p\) (as in Theorem~\ref{h-thm-rayleigh}).
 \begin{enumerate}
-\item \(\operatorname{var}(a'x)=a'\Sigma a\) and \(\operatorname{cov}(a'x,b'x)=a'\Sigma b\) for \(a,b\in\R^p\); and
+\item \(\var(a'x)=a'\Sigma a\) and \(\cov(a'x,b'x)=a'\Sigma b\) for \(a,b\in\R^p\); and
 \(\lambda_p\geqslant0\).
 \item \(v_1'x\) is a first principal component, with variance \(\lambda_1\). Let \(m\geqslant2\) and \(\lambda_{m-1}>0\).
 If \(v_1'x,\dots,v_{m-1}'x\) are the first \(m-1\) principal components, then \(v_m'x\) is an \(m\)th principal
 component, with variance \(\lambda_m\).
 \item \(v_1'x,\dots,v_p'x\) are pairwise uncorrelated, and the \textbf{total variance}
-\(\operatorname{var}(x_1)+\dots+\operatorname{var}(x_p)=\tr\Sigma=\lambda_1+\dots+\lambda_p\) is positive. So the first
+\(\var(x_1)+\dots+\var(x_p)=\tr\Sigma=\lambda_1+\dots+\lambda_p\) is positive. So the first
 \(M\) principal components account for the proportion \((\lambda_1+\dots+\lambda_M)/\tr\Sigma\) of the total variance.
 \end{enumerate}
 \end{theorem}
 \begin{proof}
 (a) Let \(T\in\R^{2\times p}\) have the rows \(a'\), \(b'\), so \(Tx=(a'x,b'x)'\) (\ref{f-views}).
-\(\operatorname{var}(Tx)=T\Sigma T'\) (Theorem~\ref{h-thm-linear}(b)) has the entries \(a'\Sigma a\), \(a'\Sigma b\);
+\(\var(Tx)=T\Sigma T'\) (Theorem~\ref{h-thm-linear}(b)) has the entries \(a'\Sigma a\), \(a'\Sigma b\);
 \(b'\Sigma a\), \(b'\Sigma b\) (\ref{f-views}); by Definition~\ref{h-def-random}, its diagonal entries are
-\(\operatorname{var}(a'x)\), \(\operatorname{var}(b'x)\) and its \((1,2)\) entry is \(\operatorname{cov}(a'x,b'x)\).
+\(\var(a'x)\), \(\var(b'x)\) and its \((1,2)\) entry is \(\cov(a'x,b'x)\).
 \(\Sigma\) is PSD (Theorem~\ref{h-thm-linear}(c)), so \(\lambda_p\geqslant0\) (\lec{8}, Theorem~14(a)).
 
 \Needspace{4\baselineskip}
@@ -651,13 +658,13 @@ component, with variance \(\lambda_m\).
 value at the unit vector \(a/\lVert a\rVert\). By Theorem~\ref{h-thm-rayleigh}(a) the maximum is \(\lambda_1\), at
 \(a=v_1\).
 \item Let \(m\geqslant2\) and \(\lambda_{m-1}>0\); then \(\lambda_l>0\) for \(l<m\). By (a) and
-\(\Sigma v_l=\lambda_lv_l\), \(\operatorname{cov}(a'x,v_l'x)=a'\Sigma v_l=\lambda_la'v_l\), which is \(0\iff a\perp v_l\).
+\(\Sigma v_l=\lambda_lv_l\), \(\cov(a'x,v_l'x)=a'\Sigma v_l=\lambda_la'v_l\), which is \(0\iff a\perp v_l\).
 So the \(m\)th problem maximizes \(a'\Sigma a\) over the unit \(a\perp v_1,\dots,v_{m-1}\).
 \item By Theorem~\ref{h-thm-constrained}, the maximum is \(\lambda_m\), at \(a=v_m\), and
-\(\operatorname{var}(v_m'x)=v_m'\Sigma v_m=\lambda_m\).
+\(\var(v_m'x)=v_m'\Sigma v_m=\lambda_m\).
 \end{itemize}
-(c) By (a), \(\operatorname{cov}(v_m'x,v_l'x)=v_m'\Sigma v_l=\lambda_lv_m'v_l=0\) for \(l\ne m\).
-\(\operatorname{var}(x_j)=\sigma_{jj}\) (Definition~\ref{h-def-random}), so the total variance is
+(c) By (a), \(\cov(v_m'x,v_l'x)=v_m'\Sigma v_l=\lambda_lv_m'v_l=0\) for \(l\ne m\).
+\(\var(x_j)=\sigma_{jj}\) (Definition~\ref{h-def-random}), so the total variance is
 \(\tr\Sigma=\tr(V\Lambda V')=\tr(\Lambda V'V)=\tr\Lambda\) (\ref{f-trace}), which is positive: every \(\lambda_m\geqslant0\)
 by (a), and \(\Lambda\ne0\), as \(\Sigma=V\Lambda V'\ne0\).
 \end{proof}
@@ -667,8 +674,8 @@ components of the data (Definition~\ref{h-def-pc}), computed from \(S\), take th
 
 \Needspace{14\baselineskip}
 \begin{example}\label{h-exm-equicorrelation}
-Let \(x=(x_1,\dots,x_p)'\) (\(p\geqslant2\)) have \(\operatorname{var}(x_i)=\sigma^2>0\) and
-\(\operatorname{cov}(x_i,x_j)=\rho\sigma^2\) for \(i\ne j\), where \(0<\rho<1\):
+Let \(x=(x_1,\dots,x_p)'\) (\(p\geqslant2\)) have \(\var(x_i)=\sigma^2>0\) and
+\(\cov(x_i,x_j)=\rho\sigma^2\) for \(i\ne j\), where \(0<\rho<1\):
 \(\Sigma=\sigma^2\bigl((1-\rho)I_p+\rho J_p\bigr)\). Find the principal components of \(x\).
 \end{example}
 \textit{Solution.}
@@ -688,8 +695,8 @@ eigenvalues are \(\lambda_1\) and \(\lambda_2\) (\(p-1\) times) (\lec{8}, Theore
 \begin{itemize}
 \item First: \(v_1'x=\frac1{\sqrt p}(x_1+\dots+x_p)\), with variance \(\lambda_1\). Unique up to sign: a unit \(a\) with
 \(a'\Sigma a=\lambda_1\) has \(\Sigma a=\lambda_1a\) (Theorem~\ref{h-thm-rayleigh}(b)), so \(a=\bar a\one=\pm v_1\).
-\item Second: \(\operatorname{cov}(a'x,v_1'x)=\lambda_1a'v_1\), so the constraint is \(\one'a=0\); every such unit \(a\)
-has \(\Sigma a=\lambda_2a\) and \(\operatorname{var}(a'x)=\lambda_2\). Every \(a'x\) with \(\one'a=0\), \(\lVert a\rVert=1\)
+\item Second: \(\cov(a'x,v_1'x)=\lambda_1a'v_1\), so the constraint is \(\one'a=0\); every such unit \(a\)
+has \(\Sigma a=\lambda_2a\) and \(\var(a'x)=\lambda_2\). Every \(a'x\) with \(\one'a=0\), \(\lVert a\rVert=1\)
 is a second principal component: for \(p\geqslant3\) not unique, even up to sign (for \(p=2\) it is
 \(\pm(x_1-x_2)/\sqrt2\)).
 \item The first accounts for \(\lambda_1/\tr\Sigma=\bigl(1+(p-1)\rho\bigr)/p\) of \(\tr\Sigma=p\sigma^2\); for

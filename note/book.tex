@@ -40,6 +40,13 @@
 \DeclareMathOperator{\col}{col}
 \DeclareMathOperator{\diag}{diag}
 \DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator\prb{\mathsf{P}}
+\DeclareMathOperator\expc{\mathsf{E}}
+\DeclareMathOperator\var{var}
+\DeclareMathOperator\cov{cov}
+\DeclareMathOperator\cor{cor}
+\DeclareMathOperator\argmin{argmin}
+\DeclareMathOperator\argmax{argmax}
 \DeclareMathOperator{\Span}{span}
 \DeclareMathOperator{\nullity}{nullity}
 \DeclareMathOperator{\im}{im}
@@ -20133,77 +20140,77 @@ as \(\delta\det A=1\) and every \(\mu_i\geqslant0\); dividing by \(\delta>0\) gi
 A \textbf{random variable} is a number whose value depends on chance; every random variable in this book is assumed to
 have a finite variance. We use the following facts from probability without proof. For random variables
 \(u,v\) and numbers \(a,b,c\), the \textbf{expectation} satisfies
-\(\operatorname{E}(au+bv+c)=a\operatorname{E}(u)+b\operatorname{E}(v)+c\); so the expectation of a sum of finitely many
+\(\expc(au+bv+c)=a\expc(u)+b\expc(v)+c\); so the expectation of a sum of finitely many
 terms is the sum of their expectations. The \textbf{variance}
-\(\operatorname{var}(u)=\operatorname{E}\bigl((u-\operatorname{E}(u))^2\bigr)\) is \(\geqslant0\), with
-\(\operatorname{var}(u)=0\) if and only if \(u=\operatorname{E}(u)\) with probability \(1\); and the \textbf{covariance} is
-\(\operatorname{cov}(u,v)=\operatorname{E}\bigl((u-\operatorname{E}(u))(v-\operatorname{E}(v))\bigr)=\operatorname{cov}(v,u)\);
-thus \(\operatorname{var}(u)=\operatorname{cov}(u,u)\)~\citeat{searle-khuri}{\S10.1}, \citeat{tu-clm}{Lemma~3.2}.
+\(\var(u)=\expc\bigl((u-\expc(u))^2\bigr)\) is \(\geqslant0\), with
+\(\var(u)=0\) if and only if \(u=\expc(u)\) with probability \(1\); and the \textbf{covariance} is
+\(\cov(u,v)=\expc\bigl((u-\expc(u))(v-\expc(v))\bigr)=\cov(v,u)\);
+thus \(\var(u)=\cov(u,u)\)~\citeat{searle-khuri}{\S10.1}, \citeat{tu-clm}{Lemma~3.2}.
 
 \begin{definition}[\citeat{bapat}{\S7.1}, \citeat{searle-khuri}{Ch.~10, introduction, \S10.1}, \citeat{tu-clm}{Lemma~3.2}]\label{r11-def-random}
 A \textbf{random vector} \(z=(z_1,\dots,z_n)'\) and a \textbf{random matrix} \(Z=(z_{ij})\) have random variables as
-entries, and their expectations are taken entry by entry: \(\operatorname{E}(Z)=(\operatorname{E}(z_{ij}))\). In
-particular \(\mu=\operatorname{E}(z)=(\operatorname{E}(z_1),\dots,\operatorname{E}(z_n))'\) is the \textbf{mean vector} of
+entries, and their expectations are taken entry by entry: \(\expc(Z)=(\expc(z_{ij}))\). In
+particular \(\mu=\expc(z)=(\expc(z_1),\dots,\expc(z_n))'\) is the \textbf{mean vector} of
 \(z\), and
 \[
-\Sigma=\operatorname{var}(z)=\operatorname{E}\bigl((z-\mu)(z-\mu)'\bigr)\in\R^{n\times n}
+\Sigma=\var(z)=\expc\bigl((z-\mu)(z-\mu)'\bigr)\in\R^{n\times n}
 \]
 is its \textbf{covariance matrix}. The \((i,j)\) entry of \((z-\mu)(z-\mu)'\) is \((z_i-\mu_i)(z_j-\mu_j)\), so the
-\((i,j)\) entry of \(\Sigma\) is \(\sigma_{ij}=\operatorname{cov}(z_i,z_j)\): the diagonal entries are the variances
-\(\sigma_{ii}=\operatorname{var}(z_i)\), and \(\Sigma\) is symmetric.
+\((i,j)\) entry of \(\Sigma\) is \(\sigma_{ij}=\cov(z_i,z_j)\): the diagonal entries are the variances
+\(\sigma_{ii}=\var(z_i)\), and \(\Sigma\) is symmetric.
 \end{definition}
 
 \begin{definition}[\citeat{tu-clm}{Lemma~3.2}, \citeat{searle-khuri}{\S10.1}, \citeat{casella-berger}{Definition~4.5.1}]\label{r14-def-cov}
-Let \(u\in\R^p\) and \(v\in\R^q\) be random vectors with means \(\mu_u=\operatorname{E}(u)\) and \(\mu_v=\operatorname{E}(v)\)
+Let \(u\in\R^p\) and \(v\in\R^q\) be random vectors with means \(\mu_u=\expc(u)\) and \(\mu_v=\expc(v)\)
 (Definition~\ref{r11-def-random}). The \textbf{covariance matrix of \(u\) and \(v\)} is
 \[
-\operatorname{cov}(u,v)=\operatorname{E}\bigl((u-\mu_u)(v-\mu_v)'\bigr)\in\R^{p\times q}
+\cov(u,v)=\expc\bigl((u-\mu_u)(v-\mu_v)'\bigr)\in\R^{p\times q}
 \]
-Its \((i,j)\) entry is \(\operatorname{E}\bigl((u_i-\operatorname{E}(u_i))(v_j-\operatorname{E}(v_j))\bigr)=\operatorname{cov}(u_i,v_j)\).
-So \(\operatorname{cov}(u,u)=\operatorname{var}(u)\), and \(\operatorname{cov}(v,u)=\operatorname{cov}(u,v)'\), since
+Its \((i,j)\) entry is \(\expc\bigl((u_i-\expc(u_i))(v_j-\expc(v_j))\bigr)=\cov(u_i,v_j)\).
+So \(\cov(u,u)=\var(u)\), and \(\cov(v,u)=\cov(u,v)'\), since
 \((v-\mu_v)(u-\mu_u)'=\bigl((u-\mu_u)(v-\mu_v)'\bigr)'\) (Theorem~\ref{r1-thm-transpose}). The vectors \(u\) and \(v\) are
-\textbf{uncorrelated} if \(\operatorname{cov}(u,v)=0\).
+\textbf{uncorrelated} if \(\cov(u,v)=0\).
 \end{definition}
 
 For the stacked vector \(z=(u',v')'\in\R^{p+q}\), whose mean is \((\mu_u',\mu_v')'\), the block product
 (Theorem~\ref{r5b-thm-block}(b),(c)) gives
 \[
-(z-\operatorname{E}(z))(z-\operatorname{E}(z))'=\begin{pmatrix}u-\mu_u\\v-\mu_v\end{pmatrix}\bigl((u-\mu_u)'\ \ (v-\mu_v)'\bigr)
+(z-\expc(z))(z-\expc(z))'=\begin{pmatrix}u-\mu_u\\v-\mu_v\end{pmatrix}\bigl((u-\mu_u)'\ \ (v-\mu_v)'\bigr)
 =\begin{pmatrix}(u-\mu_u)(u-\mu_u)'&(u-\mu_u)(v-\mu_v)'\\(v-\mu_v)(u-\mu_u)'&(v-\mu_v)(v-\mu_v)'\end{pmatrix}
 \]
 and, as expectations are taken entry by entry,
 \[
-\operatorname{var}(z)=\begin{pmatrix}\operatorname{var}(u)&\operatorname{cov}(u,v)\\\operatorname{cov}(v,u)&\operatorname{var}(v)\end{pmatrix}
+\var(z)=\begin{pmatrix}\var(u)&\cov(u,v)\\\cov(v,u)&\var(v)\end{pmatrix}
 \]
 
 \begin{theorem}[\citeat{bapat}{\S7.1}, \citeat{tu-clm}{Lemma~3.2}, \citeat{searle-khuri}{\S10.1}]\label{r11-thm-linear}
-Let \(z\in\R^n\) be a random vector with \(\operatorname{E}(z)=\mu\) and \(\operatorname{var}(z)=\Sigma\).
+Let \(z\in\R^n\) be a random vector with \(\expc(z)=\mu\) and \(\var(z)=\Sigma\).
 \begin{enumerate}
 \item For a random matrix \(Z\in\R^{m\times p}\) and constant matrices \(A\in\R^{q\times m}\), \(B\in\R^{p\times l}\) and
-\(C\in\R^{q\times l}\), \(\operatorname{E}(AZB+C)=A\operatorname{E}(Z)B+C\).
+\(C\in\R^{q\times l}\), \(\expc(AZB+C)=A\expc(Z)B+C\).
 \item For a constant matrix \(A\in\R^{m\times n}\) and a constant vector \(b\in\R^m\),
 \[
-\operatorname{E}(Az+b)=A\mu+b,\qquad\operatorname{var}(Az+b)=A\Sigma A'
+\expc(Az+b)=A\mu+b,\qquad\var(Az+b)=A\Sigma A'
 \]
-\item \(\Sigma\) is positive semidefinite: \(a'\Sigma a=\operatorname{var}(a'z)\geqslant0\) for every \(a\in\R^n\).
+\item \(\Sigma\) is positive semidefinite: \(a'\Sigma a=\var(a'z)\geqslant0\) for every \(a\in\R^n\).
 \end{enumerate}
 \end{theorem}
 \begin{proof}
 (a) By Definition~\ref{r1-def-product}, applied twice, the \((i,j)\) entry of \(AZB+C\) is
 \(\sum_{r=1}^m\sum_{s=1}^pa_{ir}z_{rs}b_{sj}+c_{ij}\), a sum of the random variables \(z_{rs}\) times numbers, plus a
-number. Its expectation is \(\sum_r\sum_sa_{ir}\operatorname{E}(z_{rs})b_{sj}+c_{ij}\), the \((i,j)\) entry of
-\(A\operatorname{E}(Z)B+C\).
+number. Its expectation is \(\sum_r\sum_sa_{ir}\expc(z_{rs})b_{sj}+c_{ij}\), the \((i,j)\) entry of
+\(A\expc(Z)B+C\).
 
 \needspace{4\baselineskip}
 (b)
 \begin{itemize}
-\item (a) with \(Z=z\), \(B=1\) and \(C=b\) gives \(\operatorname{E}(Az+b)=A\mu+b\).
-\item Hence \(Az+b-\operatorname{E}(Az+b)=A(z-\mu)\), whose transpose is \((z-\mu)'A'\) (Theorem~\ref{r1-thm-transpose}).
+\item (a) with \(Z=z\), \(B=1\) and \(C=b\) gives \(\expc(Az+b)=A\mu+b\).
+\item Hence \(Az+b-\expc(Az+b)=A(z-\mu)\), whose transpose is \((z-\mu)'A'\) (Theorem~\ref{r1-thm-transpose}).
 By Definition~\ref{r11-def-random} and (a),
-\(\operatorname{var}(Az+b)=\operatorname{E}\bigl(A(z-\mu)(z-\mu)'A'\bigr)=A\operatorname{E}\bigl((z-\mu)(z-\mu)'\bigr)A'=A\Sigma A'\).
+\(\var(Az+b)=\expc\bigl(A(z-\mu)(z-\mu)'A'\bigr)=A\expc\bigl((z-\mu)(z-\mu)'\bigr)A'=A\Sigma A'\).
 \end{itemize}
 (c) \(\Sigma\) is symmetric (Definition~\ref{r11-def-random}). For \(a\in\R^n\), (b) with the \(1\times n\) matrix \(a'\)
-and \(b=0\) gives \(\operatorname{var}(a'z)=a'\Sigma a\), and a variance is \(\geqslant0\). So \(\Sigma\) is positive
+and \(b=0\) gives \(\var(a'z)=a'\Sigma a\), and a variance is \(\geqslant0\). So \(\Sigma\) is positive
 semidefinite (Definition~\ref{r8-def-definite}).
 \end{proof}
 
@@ -20211,45 +20218,45 @@ semidefinite (Definition~\ref{r8-def-definite}).
 Let \(u\in\R^p\) and \(v\in\R^q\) be random vectors.
 \begin{enumerate}
 \item For constant \(A\in\R^{k\times p}\), \(b\in\R^k\), \(C\in\R^{l\times q}\) and \(d\in\R^l\),
-\(\operatorname{cov}(Au+b,\,Cv+d)=A\operatorname{cov}(u,v)C'\). In particular, if \(z\in\R^n\) is a random vector with
-\(\operatorname{var}(z)=\Sigma\), and \(A\in\R^{k\times n}\) and \(B\in\R^{l\times n}\) are constant, then
-\(\operatorname{cov}(Az,Bz)=A\Sigma B'\).
-\item If \(u_1,u_2\in\R^p\) are random vectors, then \(\operatorname{cov}(u_1+u_2,v)=\operatorname{cov}(u_1,v)+\operatorname{cov}(u_2,v)\),
-and likewise \(\operatorname{cov}(v,u_1+u_2)=\operatorname{cov}(v,u_1)+\operatorname{cov}(v,u_2)\).
-\item If \(q=p\), then \(\operatorname{var}(u+v)=\operatorname{var}(u)+\operatorname{cov}(u,v)+\operatorname{cov}(v,u)+\operatorname{var}(v)\).
-\item If \(x_1,\dots,x_m\in\R^p\) are random vectors with \(\operatorname{cov}(x_i,x_j)=0\) for \(i\ne j\), then
-\(\operatorname{var}(x_1+\dots+x_m)=\operatorname{var}(x_1)+\dots+\operatorname{var}(x_m)\).
-\item \(\operatorname{var}(u)=\operatorname{E}(uu')-\mu_u\mu_u'\), that is,
-\(\operatorname{E}(uu')=\operatorname{var}(u)+\mu_u\mu_u'\), where \(\mu_u=\operatorname{E}(u)\).
+\(\cov(Au+b,\,Cv+d)=A\cov(u,v)C'\). In particular, if \(z\in\R^n\) is a random vector with
+\(\var(z)=\Sigma\), and \(A\in\R^{k\times n}\) and \(B\in\R^{l\times n}\) are constant, then
+\(\cov(Az,Bz)=A\Sigma B'\).
+\item If \(u_1,u_2\in\R^p\) are random vectors, then \(\cov(u_1+u_2,v)=\cov(u_1,v)+\cov(u_2,v)\),
+and likewise \(\cov(v,u_1+u_2)=\cov(v,u_1)+\cov(v,u_2)\).
+\item If \(q=p\), then \(\var(u+v)=\var(u)+\cov(u,v)+\cov(v,u)+\var(v)\).
+\item If \(x_1,\dots,x_m\in\R^p\) are random vectors with \(\cov(x_i,x_j)=0\) for \(i\ne j\), then
+\(\var(x_1+\dots+x_m)=\var(x_1)+\dots+\var(x_m)\).
+\item \(\var(u)=\expc(uu')-\mu_u\mu_u'\), that is,
+\(\expc(uu')=\var(u)+\mu_u\mu_u'\), where \(\mu_u=\expc(u)\).
 \end{enumerate}
 \end{theorem}
 \begin{proof}
 (a)
 \begin{itemize}
-\item By Theorem~\ref{r11-thm-linear}(b), \(Au+b-\operatorname{E}(Au+b)=A(u-\mu_u)\) and \(Cv+d-\operatorname{E}(Cv+d)=C(v-\mu_v)\), whose
+\item By Theorem~\ref{r11-thm-linear}(b), \(Au+b-\expc(Au+b)=A(u-\mu_u)\) and \(Cv+d-\expc(Cv+d)=C(v-\mu_v)\), whose
 transpose is \((v-\mu_v)'C'\) (Theorem~\ref{r1-thm-transpose}).
 \item By Theorem~\ref{r11-thm-linear}(a),
-\(\operatorname{cov}(Au+b,Cv+d)=\operatorname{E}\bigl(A(u-\mu_u)(v-\mu_v)'C'\bigr)=A\operatorname{cov}(u,v)C'\). For \(u=v=z\) this reads
-\(\operatorname{cov}(Az,Bz)=A\operatorname{var}(z)B'\).
+\(\cov(Au+b,Cv+d)=\expc\bigl(A(u-\mu_u)(v-\mu_v)'C'\bigr)=A\cov(u,v)C'\). For \(u=v=z\) this reads
+\(\cov(Az,Bz)=A\var(z)B'\).
 \end{itemize}
-(b) The mean of \(u_1+u_2\) is \(\operatorname{E}(u_1)+\operatorname{E}(u_2)\), so
-\((u_1+u_2-\operatorname{E}(u_1+u_2))(v-\mu_v)'=(u_1-\operatorname{E}(u_1))(v-\mu_v)'+(u_2-\operatorname{E}(u_2))(v-\mu_v)'\); take
+(b) The mean of \(u_1+u_2\) is \(\expc(u_1)+\expc(u_2)\), so
+\((u_1+u_2-\expc(u_1+u_2))(v-\mu_v)'=(u_1-\expc(u_1))(v-\mu_v)'+(u_2-\expc(u_2))(v-\mu_v)'\); take
 expectations entry by entry. The second identity follows by transposing (Definition~\ref{r14-def-cov}).
 
 (c) By (b), applied in both arguments,
-\(\operatorname{var}(u+v)=\operatorname{cov}(u+v,u+v)=\operatorname{cov}(u,u)+\operatorname{cov}(u,v)+\operatorname{cov}(v,u)+\operatorname{cov}(v,v)\).
+\(\var(u+v)=\cov(u+v,u+v)=\cov(u,u)+\cov(u,v)+\cov(v,u)+\cov(v,v)\).
 
-(d) In the same way, \(\operatorname{var}\bigl(\sum_ix_i\bigr)=\operatorname{cov}\bigl(\sum_ix_i,\sum_jx_j\bigr)=\sum_i\sum_j\operatorname{cov}(x_i,x_j)\),
+(d) In the same way, \(\var\bigl(\sum_ix_i\bigr)=\cov\bigl(\sum_ix_i,\sum_jx_j\bigr)=\sum_i\sum_j\cov(x_i,x_j)\),
 and only the \(m\) terms with \(i=j\) remain.
 
 (e) \((u-\mu_u)(u-\mu_u)'=uu'-u\mu_u'-\mu_uu'+\mu_u\mu_u'\) (Theorems~\ref{r1-thm-rules} and~\ref{r1-thm-transpose});
-taking expectations entry by entry, with \(\operatorname{E}(u\mu_u')=\mu_u\mu_u'=\operatorname{E}(\mu_uu')\)
+taking expectations entry by entry, with \(\expc(u\mu_u')=\mu_u\mu_u'=\expc(\mu_uu')\)
 (Theorem~\ref{r11-thm-linear}(a)),
-\(\operatorname{var}(u)=\operatorname{E}(uu')-\mu_u\mu_u'-\mu_u\mu_u'+\mu_u\mu_u'=\operatorname{E}(uu')-\mu_u\mu_u'\).
+\(\var(u)=\expc(uu')-\mu_u\mu_u'-\mu_u\mu_u'+\mu_u\mu_u'=\expc(uu')-\mu_u\mu_u'\).
 \end{proof}
 
 \begin{theorem}[\citeat{bapat}{\S7.1}]\label{r11-thm-cov-psd}
-Let \(x\in\R^n\) be a random vector with \(\operatorname{E}(x)=\mu\) and \(\operatorname{var}(x)=\Sigma\). Then \(\Sigma\) is
+Let \(x\in\R^n\) be a random vector with \(\expc(x)=\mu\) and \(\var(x)=\Sigma\). Then \(\Sigma\) is
 singular (not invertible) if and only if \(a'x=a'\mu\) with probability \(1\) for some nonzero \(a\in\R^n\).
 \end{theorem}
 \begin{proof}
@@ -20257,33 +20264,33 @@ singular (not invertible) if and only if \(a'x=a'\mu\) with probability \(1\) fo
 \item \(\Sigma\) is singular if and only if \(\Sigma a=0\) for some \(a\ne0\) (Theorem~\ref{r2-thm-invertible}).
 \item \(\Sigma\) is PSD (Theorem~\ref{r11-thm-linear}(c)), so \(\Sigma a=0\) if and only if \(a'\Sigma a=0\)
 (Corollary~\ref{r8-cor-psd-null}).
-\item By Theorem~\ref{r11-thm-linear}(b), \(a'\Sigma a=\operatorname{var}(a'x)\) and \(\operatorname{E}(a'x)=a'\mu\); and a
+\item By Theorem~\ref{r11-thm-linear}(b), \(a'\Sigma a=\var(a'x)\) and \(\expc(a'x)=a'\mu\); and a
 random variable has variance \(0\) if and only if it equals its expectation with probability \(1\).\qedhere
 \end{itemize}
 \end{proof}
 
 \begin{example}\label{r11-exm-singular}
 Let \(u_1,u_2,u_3\) be pairwise uncorrelated random variables with variance \(1\), and
-\(x=(u_1,\ u_2,\ u_3,\ u_1+u_2+u_3)'\). Then \(x=Bu\) with \(u=(u_1,u_2,u_3)'\), \(\operatorname{var}(u)=I_3\)
+\(x=(u_1,\ u_2,\ u_3,\ u_1+u_2+u_3)'\). Then \(x=Bu\) with \(u=(u_1,u_2,u_3)'\), \(\var(u)=I_3\)
 (Definition~\ref{r11-def-random}) and
 \[
 B=\begin{pmatrix}1&0&0\\0&1&0\\0&0&1\\1&1&1\end{pmatrix},\qquad
-\operatorname{var}(x)=BB'=\begin{pmatrix}1&0&0&1\\0&1&0&1\\0&0&1&1\\1&1&1&3\end{pmatrix}
+\var(x)=BB'=\begin{pmatrix}1&0&0&1\\0&1&0&1\\0&0&1&1\\1&1&1&3\end{pmatrix}
 \]
-by Theorem~\ref{r11-thm-linear}(b). This matrix is singular: \(\operatorname{var}(x)a=0\) for \(a=(1,1,1,-1)'\).
+by Theorem~\ref{r11-thm-linear}(b). This matrix is singular: \(\var(x)a=0\) for \(a=(1,1,1,-1)'\).
 Correspondingly \(a'x=u_1+u_2+u_3-(u_1+u_2+u_3)=0\), as Theorem~\ref{r11-thm-cov-psd} says. Likewise, the shares of a
 budget spent on \(p\) items add up to \(1\), so their covariance matrix is singular.
 \end{example}
 
 \begin{definition}[\citeat{casella-berger}{Definitions~2.3.2, 4.5.2}, \citeat{searle-khuri}{\S10.2}]\label{r14-def-corr}
 The \textbf{correlation} of random variables \(u\) and \(v\) with positive variances is
-\(\rho_{uv}=\operatorname{cov}(u,v)/\sqrt{\operatorname{var}(u)\operatorname{var}(v)}\). Let \(z\in\R^n\) be a random vector with
-\(\operatorname{E}(z)=\mu\), \(\operatorname{var}(z)=\Sigma=(\sigma_{ij})\) and \(\sigma_{ii}>0\) for every \(i\); \(\sqrt{\sigma_{ii}}\)
+\(\rho_{uv}=\cov(u,v)/\sqrt{\var(u)\var(v)}\). Let \(z\in\R^n\) be a random vector with
+\(\expc(z)=\mu\), \(\var(z)=\Sigma=(\sigma_{ij})\) and \(\sigma_{ii}>0\) for every \(i\); \(\sqrt{\sigma_{ii}}\)
 is the \textbf{standard deviation} of \(z_i\). The correlation of \(z_i\) and \(z_j\) is
 \(\rho_{ij}=\sigma_{ij}/\sqrt{\sigma_{ii}\sigma_{jj}}\), and with
 \(D^{-1/2}=\diag\bigl(\sigma_{11}^{-1/2},\dots,\sigma_{nn}^{-1/2}\bigr)\), the \textbf{correlation matrix} of \(z\) is
 \[
-\operatorname{corr}(z)=(\rho_{ij})=D^{-1/2}\Sigma D^{-1/2}\in\R^{n\times n}
+\cor(z)=(\rho_{ij})=D^{-1/2}\Sigma D^{-1/2}\in\R^{n\times n}
 \]
 by Definition~\ref{r1-def-product}: the \((i,j)\) entry of \(D^{-1/2}\Sigma D^{-1/2}\) is
 \(\sigma_{ii}^{-1/2}\sigma_{ij}\sigma_{jj}^{-1/2}\).
@@ -20293,9 +20300,9 @@ by Definition~\ref{r1-def-product}: the \((i,j)\) entry of \(D^{-1/2}\Sigma D^{-
 In Definition~\ref{r14-def-corr}:
 \begin{enumerate}
 \item \(-1\leqslant\rho_{ij}\leqslant1\) for all \(i,j\);
-\item \(\operatorname{corr}(z)=\operatorname{var}\bigl(D^{-1/2}(z-\mu)\bigr)\) is the covariance matrix of the
+\item \(\cor(z)=\var\bigl(D^{-1/2}(z-\mu)\bigr)\) is the covariance matrix of the
 \textbf{standardized variables} \((z_i-\mu_i)/\sqrt{\sigma_{ii}}\) (\(i=1,\dots,n\)), which have mean \(0\) and variance
-\(1\); so \(\operatorname{corr}(z)\) is symmetric and PSD, with diagonal entries \(1\).
+\(1\); so \(\cor(z)\) is symmetric and PSD, with diagonal entries \(1\).
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -20303,7 +20310,7 @@ In Definition~\ref{r14-def-corr}:
 \begin{itemize}
 \item For \(t\in\R\), Theorem~\ref{r11-thm-linear}(b) for \((z_i,z_j)'\), whose covariance matrix has the entries
 \(\sigma_{ii},\sigma_{ij},\sigma_{ij},\sigma_{jj}\), and the \(1\times2\) matrix \((t,1)\) gives
-\(h(t)=\operatorname{var}(tz_i+z_j)=\sigma_{ii}t^2+2\sigma_{ij}t+\sigma_{jj}\geqslant0\).
+\(h(t)=\var(tz_i+z_j)=\sigma_{ii}t^2+2\sigma_{ij}t+\sigma_{jj}\geqslant0\).
 \item A quadratic polynomial with leading coefficient \(\sigma_{ii}>0\) and two different real roots \(t_1<t_2\) equals
 \(\sigma_{ii}(t-t_1)(t-t_2)<0\) for \(t_1<t<t_2\). So \(h\) has no two different real roots, and its discriminant is
 \((2\sigma_{ij})^2-4\sigma_{ii}\sigma_{jj}\leqslant0\).
@@ -20311,7 +20318,7 @@ In Definition~\ref{r14-def-corr}:
 \end{itemize}
 (b) \(D^{-1/2}\) is diagonal, hence symmetric. By Theorem~\ref{r11-thm-linear}(b) with \(A=D^{-1/2}\) and
 \(b=-D^{-1/2}\mu\), \(D^{-1/2}(z-\mu)\) has the mean \(D^{-1/2}\mu-D^{-1/2}\mu=0\) and
-\(\operatorname{var}\bigl(D^{-1/2}(z-\mu)\bigr)=D^{-1/2}\Sigma D^{-1/2}=\operatorname{corr}(z)\). This is symmetric and PSD
+\(\var\bigl(D^{-1/2}(z-\mu)\bigr)=D^{-1/2}\Sigma D^{-1/2}=\cor(z)\). This is symmetric and PSD
 (Theorem~\ref{r11-thm-linear}(c)), and its \((i,i)\) entry, the variance of \((z_i-\mu_i)/\sqrt{\sigma_{ii}}\), is
 \(\sigma_{ii}/\sigma_{ii}=1\).
 \end{proof}
@@ -20319,22 +20326,22 @@ In Definition~\ref{r14-def-corr}:
 \begin{example}\label{r14-exm-cov}
 Let \(z\in\R^4\) be a random vector with
 \[
-\operatorname{var}(z)=\Sigma=\begin{pmatrix}4&0&4&0\\0&1&2&2\\4&2&9&6\\0&2&6&9\end{pmatrix}
+\var(z)=\Sigma=\begin{pmatrix}4&0&4&0\\0&1&2&2\\4&2&9&6\\0&2&6&9\end{pmatrix}
 \]
 \begin{itemize}
 \item The standard deviations are \(\sqrt{\sigma_{11}}=2\), \(\sqrt{\sigma_{22}}=1\), \(\sqrt{\sigma_{33}}=3\) and
 \(\sqrt{\sigma_{44}}=3\), so \(\rho_{12}=\rho_{14}=0\), \(\rho_{13}=\frac4{2\cdot3}=\frac23\), \(\rho_{23}=\frac2{1\cdot3}=\frac23\),
 \(\rho_{24}=\frac2{1\cdot3}=\frac23\), \(\rho_{34}=\frac6{3\cdot3}=\frac23\), and
 \[
-\operatorname{corr}(z)=\begin{pmatrix}1&0&\frac23&0\\[2pt]0&1&\frac23&\frac23\\[2pt]\frac23&\frac23&1&\frac23\\[2pt]0&\frac23&\frac23&1\end{pmatrix}
+\cor(z)=\begin{pmatrix}1&0&\frac23&0\\[2pt]0&1&\frac23&\frac23\\[2pt]\frac23&\frac23&1&\frac23\\[2pt]0&\frac23&\frac23&1\end{pmatrix}
 \]
 So \(z_1\) is uncorrelated with \(z_2\) and with \(z_4\), and the other four pairs have the correlation \(\frac23\).
 \item Let \(e=z_3-z_1-2z_2=a'z\) with \(a=(-1,-2,1,0)'\). Then
 \(\Sigma a=(-4+0+4+0,\ 0-2+2+0,\ -4-4+9+0,\ 0-4+6+0)'=(0,0,1,2)'\), so by Theorem~\ref{r14-thm-cov}(a),
-\(\operatorname{cov}(z,e)=\Sigma a=(0,0,1,2)'\): \(e\) is uncorrelated with \(z_1\) and with \(z_2\), and
-\(\operatorname{var}(e)=a'\Sigma a=0+0+1+0=1\). Likewise \(f=z_4+2z_1+2z_2-2z_3=b'z\) with \(b=(2,2,-2,1)'\) has
+\(\cov(z,e)=\Sigma a=(0,0,1,2)'\): \(e\) is uncorrelated with \(z_1\) and with \(z_2\), and
+\(\var(e)=a'\Sigma a=0+0+1+0=1\). Likewise \(f=z_4+2z_1+2z_2-2z_3=b'z\) with \(b=(2,2,-2,1)'\) has
 \(\Sigma b=(8+0-8+0,\ 0+2-4+2,\ 8+4-18+6,\ 0+4-12+9)'=(0,0,0,1)'\): \(f\) is uncorrelated with \(z_1\), \(z_2\) and
-\(z_3\), and \(\operatorname{var}(f)=b'\Sigma b=1\).
+\(z_3\), and \(\var(f)=b'\Sigma b=1\).
 \item By Theorem~\ref{r14-thm-cov}(a), \(z_1+z_2+z_3+z_4=\one'z\) has the variance \(\one'\Sigma\one=51\), the sum of all
 entries of \(\Sigma\). Likewise, as \((1,1,0,0)\Sigma=(4,1,6,2)\) and \((1,-1,0,0)\Sigma=(4,-1,2,-2)\), the variables
 \(z_1+z_2\) and \(z_1-z_2\) have the variances \(4+1=5\) and \(4+1=5\), and the covariance \((4,1,6,2)(1,-1,0,0)'=4-1=3\).
@@ -20342,21 +20349,21 @@ entries of \(\Sigma\). Likewise, as \((1,1,0,0)\Sigma=(4,1,6,2)\) and \((1,-1,0,
 \end{example}
 
 \begin{theorem}[\citeat{tu-clm}{Lemma~3.6}, \citeat{searle-khuri}{(10.34)}]\label{r11-thm-quadratic}
-Let \(z\in\R^n\) be a random vector with \(\operatorname{E}(z)=\mu\) and \(\operatorname{var}(z)=\Sigma\), and let
+Let \(z\in\R^n\) be a random vector with \(\expc(z)=\mu\) and \(\var(z)=\Sigma\), and let
 \(A\in\R^{n\times n}\) be constant. Then
 \[
-\operatorname{E}(z'Az)=\tr(A\Sigma)+\mu'A\mu
+\expc(z'Az)=\tr(A\Sigma)+\mu'A\mu
 \]
-In particular \(\operatorname{E}(z'Az)=\tr(A\Sigma)\) if \(\mu=0\).
+In particular \(\expc(z'Az)=\tr(A\Sigma)\) if \(\mu=0\).
 \end{theorem}
 \begin{proof}
 \begin{itemize}
 \item \(z'Az=\sum_{i=1}^n\sum_{j=1}^na_{ij}z_iz_j\) (Definition~\ref{r8-def-quadratic-form}), so
-\(\operatorname{E}(z'Az)=\sum_i\sum_ja_{ij}\operatorname{E}(z_iz_j)\).
+\(\expc(z'Az)=\sum_i\sum_ja_{ij}\expc(z_iz_j)\).
 \item Expanding the product,
-\(\sigma_{ij}=\operatorname{E}\bigl((z_i-\mu_i)(z_j-\mu_j)\bigr)=\operatorname{E}(z_iz_j)-\mu_i\mu_j-\mu_j\mu_i+\mu_i\mu_j\); so
-\(\operatorname{E}(z_iz_j)=\sigma_{ij}+\mu_i\mu_j\), and
-\(\operatorname{E}(z'Az)=\sum_i\sum_ja_{ij}\sigma_{ij}+\sum_i\sum_ja_{ij}\mu_i\mu_j\).
+\(\sigma_{ij}=\expc\bigl((z_i-\mu_i)(z_j-\mu_j)\bigr)=\expc(z_iz_j)-\mu_i\mu_j-\mu_j\mu_i+\mu_i\mu_j\); so
+\(\expc(z_iz_j)=\sigma_{ij}+\mu_i\mu_j\), and
+\(\expc(z'Az)=\sum_i\sum_ja_{ij}\sigma_{ij}+\sum_i\sum_ja_{ij}\mu_i\mu_j\).
 \item \(\tr(A\Sigma)=\sum_i(A\Sigma)_{ii}=\sum_i\sum_ja_{ij}\sigma_{ji}=\sum_i\sum_ja_{ij}\sigma_{ij}\), as \(\Sigma\) is
 symmetric; and \(\mu'A\mu=\sum_i\sum_ja_{ij}\mu_i\mu_j\) (Definition~\ref{r8-def-quadratic-form}).\qedhere
 \end{itemize}
@@ -20366,30 +20373,30 @@ symmetric; and \(\mu'A\mu=\sum_i\sum_ja_{ij}\mu_i\mu_j\) (Definition~\ref{r8-def
 Let observations be modeled as a random vector \(y\) whose distribution depends on unknown parameters. An
 \textbf{estimator} of a parameter \(\theta\) is a random variable \(T=g(y)\), where the function \(g\) does not involve
 unknown parameters; its value at the observed \(y\) is an \textbf{estimate} of \(\theta\). The estimator \(T\) is
-\textbf{unbiased} if \(\operatorname{E}(T)=\theta\) for all values of the parameters.
+\textbf{unbiased} if \(\expc(T)=\theta\) for all values of the parameters.
 \end{definition}
 
 \begin{example}[cf.\ \citeat{casella-berger}{Theorem~5.2.6(c)}]\label{r11-exm-quadratic-projection}
-Let \(y\in\R^n\) have \(\operatorname{E}(y)=\mu\) and \(\operatorname{var}(y)=\sigma^2I_n\), and let \(P\in\R^{n\times n}\) be
+Let \(y\in\R^n\) have \(\expc(y)=\mu\) and \(\var(y)=\sigma^2I_n\), and let \(P\in\R^{n\times n}\) be
 symmetric and idempotent of rank \(r\). Then \(\tr P=\rank P=r\) (Theorem~\ref{r6-thm-idempotent}(c)), and
 Theorem~\ref{r11-thm-quadratic}, with \(\tr(P\sigma^2I_n)=\sigma^2\tr P\) (Theorem~\ref{r1-thm-trace}(a)), gives
 \[
-\operatorname{E}(y'Py)=\tr(P\sigma^2I_n)+\mu'P\mu=\sigma^2r+\mu'P\mu
+\expc(y'Py)=\tr(P\sigma^2I_n)+\mu'P\mu=\sigma^2r+\mu'P\mu
 \]
 \begin{itemize}
 \item Let \(n\geqslant2\) and \(P=C_n\), which is symmetric and idempotent of rank \(n-1\)
 (Proposition~\ref{r1-prop-centering}, Corollary~\ref{r6-cor-centering}(b)). By Example~\ref{r1-exm-centering},
 \(y'C_ny=\sum_i(y_i-\bar y)^2\) and \(\mu'C_n\mu=\sum_i(\mu_i-\bar\mu)^2\), where \(\bar\mu=\frac1n\one'\mu\). So
 \[
-\operatorname{E}\Bigl(\sum_{i=1}^n(y_i-\bar y)^2\Bigr)=(n-1)\sigma^2+\sum_{i=1}^n(\mu_i-\bar\mu)^2
+\expc\Bigl(\sum_{i=1}^n(y_i-\bar y)^2\Bigr)=(n-1)\sigma^2+\sum_{i=1}^n(\mu_i-\bar\mu)^2
 \]
 \item If the observations have a common mean, \(\mu=\mu_0\one\), then \(C_n\mu=0\) and the last sum is \(0\). So
 \(s^2=\frac1{n-1}\sum_i(y_i-\bar y)^2\) is an unbiased estimator of \(\sigma^2\) (Definition~\ref{r11-def-estimator}):
-\(\operatorname{E}(s^2)=\sigma^2\) for all values of \(\mu_0\) and \(\sigma^2\). The estimator
+\(\expc(s^2)=\sigma^2\) for all values of \(\mu_0\) and \(\sigma^2\). The estimator
 \(\frac1n\sum_i(y_i-\bar y)^2\) has the expectation \(\frac{n-1}n\sigma^2\), which is smaller than \(\sigma^2\) when
 \(\sigma^2>0\); so it is not unbiased.
 \item If the means drift, \(s^2\) overestimates \(\sigma^2\) on average. For \(n=4\) and \(\mu=(1,3,5,7)'\),
-\(\bar\mu=4\) and \(\sum_i(\mu_i-\bar\mu)^2=9+1+1+9=20\), so \(\operatorname{E}(s^2)=\sigma^2+\frac{20}3\).
+\(\bar\mu=4\) and \(\sum_i(\mu_i-\bar\mu)^2=9+1+1+9=20\), so \(\expc(s^2)=\sigma^2+\frac{20}3\).
 \end{itemize}
 \end{example}
 
@@ -20482,13 +20489,13 @@ inner product of columns \(1\) and \(2\). So every variable has the sample varia
 \end{example}
 
 \begin{theorem}[\citeat{casella-berger}{Theorem~5.2.6, Lemma~5.2.5}, \citeat{searle-khuri}{\S10.3}]\label{r14-thm-sample}
-Let \(x_1,\dots,x_n\in\R^p\) (\(n\geqslant2\)) be random vectors with \(\operatorname{E}(x_i)=\mu\) and \(\operatorname{var}(x_i)=\Sigma\)
-for every \(i\), and \(\operatorname{cov}(x_i,x_j)=0\) for \(i\ne j\). Let \(X\in\R^{n\times p}\) be the random data matrix with
+Let \(x_1,\dots,x_n\in\R^p\) (\(n\geqslant2\)) be random vectors with \(\expc(x_i)=\mu\) and \(\var(x_i)=\Sigma\)
+for every \(i\), and \(\cov(x_i,x_j)=0\) for \(i\ne j\). Let \(X\in\R^{n\times p}\) be the random data matrix with
 rows \(x_1',\dots,x_n'\), with mean vector \(\bar x=\frac1nX'\one=\frac1n(x_1+\dots+x_n)\) and sample covariance matrix
 \(S=\frac1{n-1}X'C_nX\) (Definition~\ref{r12-def-data}). Then
 \begin{enumerate}
-\item \(\operatorname{E}(\bar x)=\mu\) and \(\operatorname{var}(\bar x)=\frac1n\Sigma\);
-\item \(\operatorname{E}(S)=\Sigma\): each sample variance \(s_{jj}\) and each sample covariance \(s_{jl}\) has the expectation
+\item \(\expc(\bar x)=\mu\) and \(\var(\bar x)=\frac1n\Sigma\);
+\item \(\expc(S)=\Sigma\): each sample variance \(s_{jj}\) and each sample covariance \(s_{jl}\) has the expectation
 \(\sigma_{jj}\), respectively \(\sigma_{jl}\).
 \end{enumerate}
 \end{theorem}
@@ -20496,18 +20503,18 @@ rows \(x_1',\dots,x_n'\), with mean vector \(\bar x=\frac1nX'\one=\frac1n(x_1+\d
 (a)
 \begin{itemize}
 \item The columns of \(X'\) are \(x_1,\dots,x_n\), so \(X'\one=x_1+\dots+x_n\) (Theorem~\ref{r1-thm-views}(b)), and
-\(\operatorname{E}(\bar x)=\frac1n(\mu+\dots+\mu)=\mu\).
+\(\expc(\bar x)=\frac1n(\mu+\dots+\mu)=\mu\).
 \item By Theorem~\ref{r11-thm-linear}(b) with \(A=\frac1nI_p\) and Theorem~\ref{r14-thm-cov}(d),
-\(\operatorname{var}(\bar x)=\frac1{n^2}\operatorname{var}(x_1+\dots+x_n)=\frac1{n^2}\,n\Sigma=\frac1n\Sigma\).
+\(\var(\bar x)=\frac1{n^2}\var(x_1+\dots+x_n)=\frac1{n^2}\,n\Sigma=\frac1n\Sigma\).
 \end{itemize}
 (b)
 \begin{itemize}
-\item By Theorem~\ref{r14-thm-cov}(e), \(\operatorname{E}(x_ix_i')=\Sigma+\mu\mu'\) and, by (a),
-\(\operatorname{E}(\bar x\bar x')=\frac1n\Sigma+\mu\mu'\).
+\item By Theorem~\ref{r14-thm-cov}(e), \(\expc(x_ix_i')=\Sigma+\mu\mu'\) and, by (a),
+\(\expc(\bar x\bar x')=\frac1n\Sigma+\mu\mu'\).
 \item By Proposition~\ref{r12-prop-data}(a), \(X'C_nX=X'X-n\bar x\bar x'\), and \(X'X=x_1x_1'+\dots+x_nx_n'\) by the outer
 product expansion (Theorem~\ref{r1-thm-views}(d)).
-\item Hence \(\operatorname{E}(X'C_nX)=n(\Sigma+\mu\mu')-n\bigl(\frac1n\Sigma+\mu\mu'\bigr)=(n-1)\Sigma\), and
-\(\operatorname{E}(S)=\Sigma\).\qedhere
+\item Hence \(\expc(X'C_nX)=n(\Sigma+\mu\mu')-n\bigl(\frac1n\Sigma+\mu\mu'\bigr)=(n-1)\Sigma\), and
+\(\expc(S)=\Sigma\).\qedhere
 \end{itemize}
 \end{proof}
 
@@ -20525,7 +20532,7 @@ S_{uv}=\sum_{i=1}^n(u_i-\bar u)(v_i-\bar v)=(C_nu)'(C_nv),\qquad S_{uu}=\sum_{i=
 \(u\) is \textbf{constant} if \(u=\bar u\one_n\), that is, if \(C_nu=0\), or \(S_{uu}=0\). If \(u\) and \(v\) are not
 constant, their \textbf{sample correlation} is
 \[
-\operatorname{corr}(u,v)=\frac{S_{uv}}{\sqrt{S_{uu}S_{vv}}}
+\cor(u,v)=\frac{S_{uv}}{\sqrt{S_{uu}S_{vv}}}
 \]
 (for random variables, the correlation is \(\rho_{uv}\) of Definition~\ref{r14-def-corr}). Now let \(X\in\R^{n\times p}\) be
 a data matrix whose variables all have positive sample variance, \(s_{jj}>0\) (Definition~\ref{r12-def-data}), and put
@@ -20536,14 +20543,14 @@ D_s^{-1/2}=\diag\Bigl(\frac1{\sqrt{s_{11}}},\dots,\frac1{\sqrt{s_{pp}}}\Bigr)
 The number \(\sqrt{s_{jj}}\) is the \textbf{sample standard deviation} of variable \(j\).
 \begin{itemize}
 \item The number \(r_{jl}=s_{jl}/\sqrt{s_{jj}s_{ll}}\) is the sample correlation of variables \(j\) and \(l\), that is,
-\(\operatorname{corr}\) of the columns \(j\) and \(l\) of \(X\) (the divisors \(n-1\) cancel), and
+\(\cor\) of the columns \(j\) and \(l\) of \(X\) (the divisors \(n-1\) cancel), and
 \(R=(r_{jl})=D_s^{-1/2}SD_s^{-1/2}\in\R^{p\times p}\) is the \textbf{sample correlation matrix} (by
 Theorem~\ref{r1-thm-views}(a),(c), the diagonal factors scale the rows and the columns of \(S\)).
 \item The \textbf{standardized data matrix} is \(X_s=C_nXD_s^{-1/2}\), with the entries \((x_{ij}-\bar x_j)/\sqrt{s_{jj}}\):
 each variable is centered and measured in units of its sample standard deviation.
 \end{itemize}
-Thus \(\operatorname{corr}(u,v)\) is the sample covariance of \(u\) and \(v\) (Definition~\ref{r12-def-data}) divided by the
-product of the square roots of their sample variances. The numbers \(\rho_{ij}\) and the matrix \(\operatorname{corr}(z)\) of
+Thus \(\cor(u,v)\) is the sample covariance of \(u\) and \(v\) (Definition~\ref{r12-def-data}) divided by the
+product of the square roots of their sample variances. The numbers \(\rho_{ij}\) and the matrix \(\cor(z)\) of
 Definition~\ref{r14-def-corr} are the population counterparts of the \(r_{jl}\) and of \(R\).
 \end{definition}
 
@@ -21399,11 +21406,11 @@ the nearest point \((5,5,5,5)\), at squared distance \(16\); units \(2\)--\(5\) 
 \subsection*{Principal components of a random vector}
 
 \begin{definition}[\citeat{bapat}{\S10.1}]\label{r12-def-pop-pc}
-Let \(x=(x_1,\dots,x_p)'\) be a random vector with covariance matrix \(\Sigma=\operatorname{var}(x)\ne0\)
+Let \(x=(x_1,\dots,x_p)'\) be a random vector with covariance matrix \(\Sigma=\var(x)\ne0\)
 (Definition~\ref{r11-def-random}). A \textbf{first principal component} of \(x\) is a random variable \(a_1'x\), where the
-unit vector \(a_1\in\R^p\) maximizes \(\operatorname{var}(a'x)\) over all unit vectors \(a\in\R^p\). For \(m\geqslant2\),
+unit vector \(a_1\in\R^p\) maximizes \(\var(a'x)\) over all unit vectors \(a\in\R^p\). For \(m\geqslant2\),
 once \(a_1,\dots,a_{m-1}\) are chosen, an \textbf{\(m\)th principal component} is \(a_m'x\), where the unit vector \(a_m\)
-maximizes \(\operatorname{var}(a'x)\) over the unit vectors \(a\) for which \(a'x\) is uncorrelated with (has covariance
+maximizes \(\var(a'x)\) over the unit vectors \(a\) for which \(a'x\) is uncorrelated with (has covariance
 \(0\) with) each of \(a_1'x,\dots,a_{m-1}'x\).
 \end{definition}
 
@@ -21412,13 +21419,13 @@ Let \(x\) and \(\Sigma\) be as in Definition~\ref{r12-def-pop-pc}, and let \(\Si
 \(V=[v_1\ \cdots\ v_p]\) is orthogonal and \(\Lambda=\diag(\lambda_1,\dots,\lambda_p)\) with
 \(\lambda_1\geqslant\dots\geqslant\lambda_p\) (Lemma~\ref{r9-lem-eig-order}(a)).
 \begin{enumerate}
-\item For \(a,b\in\R^p\), \(\operatorname{var}(a'x)=a'\Sigma a\) and \(\operatorname{cov}(a'x,b'x)=a'\Sigma b\); and
+\item For \(a,b\in\R^p\), \(\var(a'x)=a'\Sigma a\) and \(\cov(a'x,b'x)=a'\Sigma b\); and
 \(\lambda_p\geqslant0\).
 \item \(v_1'x\) is a first principal component, with variance \(\lambda_1\). Let \(m\geqslant2\) and \(\lambda_{m-1}>0\). If
 \(v_1'x,\dots,v_{m-1}'x\) are taken as the first \(m-1\) principal components, then \(v_m'x\) is an \(m\)th principal
 component, with variance \(\lambda_m\).
 \item The principal components \(v_1'x,\dots,v_p'x\) are pairwise uncorrelated, and the \textbf{total variance} of \(x\) is
-\(\operatorname{var}(x_1)+\dots+\operatorname{var}(x_p)=\tr\Sigma=\lambda_1+\dots+\lambda_p\). So the first \(M\) principal
+\(\var(x_1)+\dots+\var(x_p)=\tr\Sigma=\lambda_1+\dots+\lambda_p\). So the first \(M\) principal
 components account for the proportion \((\lambda_1+\dots+\lambda_M)/\tr\Sigma\) of the total variance.
 \end{enumerate}
 \end{theorem}
@@ -21427,10 +21434,10 @@ components account for the proportion \((\lambda_1+\dots+\lambda_M)/\tr\Sigma\) 
 (a)
 \begin{itemize}
 \item Let \(T\in\R^{2\times p}\) have the rows \(a'\) and \(b'\), so that \(Tx=(a'x,b'x)'\) (Theorem~\ref{r1-thm-views}(c)).
-By Theorem~\ref{r11-thm-linear}(b), \(\operatorname{var}(Tx)=T\Sigma T'\), whose entries are \(a'\Sigma a\), \(a'\Sigma b\) in
+By Theorem~\ref{r11-thm-linear}(b), \(\var(Tx)=T\Sigma T'\), whose entries are \(a'\Sigma a\), \(a'\Sigma b\) in
 the first row and \(b'\Sigma a\), \(b'\Sigma b\) in the second (Theorem~\ref{r1-thm-views}(d)).
-\item By Definition~\ref{r11-def-random}, the diagonal entries of \(\operatorname{var}(Tx)\) are \(\operatorname{var}(a'x)\) and
-\(\operatorname{var}(b'x)\), and its \((1,2)\) entry is \(\operatorname{cov}(a'x,b'x)\). (This is also
+\item By Definition~\ref{r11-def-random}, the diagonal entries of \(\var(Tx)\) are \(\var(a'x)\) and
+\(\var(b'x)\), and its \((1,2)\) entry is \(\cov(a'x,b'x)\). (This is also
 Theorem~\ref{r14-thm-cov}(a) for \(u=v=x\) with the rows \(A=a'\) and \(C=b'\).)
 \item \(\Sigma\) is PSD (Theorem~\ref{r11-thm-linear}(c)), so \(\lambda_p\geqslant0\) (Theorem~\ref{r8-thm-eigen-criterion}(a)).
 \end{itemize}
@@ -21440,17 +21447,17 @@ Theorem~\ref{r14-thm-cov}(a) for \(u=v=x\) with the rows \(A=a'\) and \(C=b'\).)
 quotient \(a'\Sigma a/a'a\) is the value at the unit vector \(a/\lVert a\rVert\). By Theorem~\ref{r9-thm-rayleigh}(a) the
 maximum is \(\lambda_1\), attained at \(a=v_1\).
 \item Let \(m\geqslant2\) and \(\lambda_{m-1}>0\); then \(\lambda_l>0\) for every \(l<m\). By (a) and \(\Sigma v_l=\lambda_lv_l\),
-\(\operatorname{cov}(a'x,v_l'x)=a'\Sigma v_l=\lambda_la'v_l\), which is \(0\) if and only if \(a\perp v_l\). So the \(m\)th
+\(\cov(a'x,v_l'x)=a'\Sigma v_l=\lambda_la'v_l\), which is \(0\) if and only if \(a\perp v_l\). So the \(m\)th
 problem is to maximize \(a'\Sigma a\) over the unit vectors \(a\perp v_1,\dots,v_{m-1}\).
 \item By Theorem~\ref{r9-thm-constrained}, the largest value of \(a'\Sigma a/a'a\) over the nonzero
 \(a\perp v_1,\dots,v_{m-1}\) is \(\lambda_m\), attained at \(a=v_m\); so \(v_m\) solves the \(m\)th problem, and
-\(\operatorname{var}(v_m'x)=v_m'\Sigma v_m=\lambda_m\).
+\(\var(v_m'x)=v_m'\Sigma v_m=\lambda_m\).
 \end{itemize}
 \needspace{4\baselineskip}
 (c)
 \begin{itemize}
-\item By (a), \(\operatorname{cov}(v_m'x,v_l'x)=v_m'\Sigma v_l=\lambda_lv_m'v_l=0\) for \(l\ne m\).
-\item \(\operatorname{var}(x_j)=\sigma_{jj}\) (Definition~\ref{r11-def-random}), so the total variance is
+\item By (a), \(\cov(v_m'x,v_l'x)=v_m'\Sigma v_l=\lambda_lv_m'v_l=0\) for \(l\ne m\).
+\item \(\var(x_j)=\sigma_{jj}\) (Definition~\ref{r11-def-random}), so the total variance is
 \(\tr\Sigma=\tr(V\Lambda V')=\tr(\Lambda V'V)=\tr\Lambda=\lambda_1+\dots+\lambda_p\) (Theorem~\ref{r1-thm-trace}(b)). It is
 positive, so the proportions are defined: every \(\lambda_m\geqslant0\) by (a), and \(\Lambda\ne0\), as
 \(\Sigma=V\Lambda V'\ne0\).\qedhere
@@ -21462,9 +21469,9 @@ Parts (b) and (c) are Theorem~\ref{r12-thm-pca}(c),(d) and Proposition~\ref{r12-
 components of the data (Definition~\ref{r12-def-pc}), computed from \(S\), take the place of those of \(x\)~cf.\ \citeat{bapat}{\S10.1}, \citeat{searle-khuri}{\S10.3}.
 
 \begin{example}[cf.\ \citeat{searle-khuri}{Example~10.1}]\label{r12-exm-equicorrelation}
-Let \(x=(x_1,\dots,x_p)'\) (\(p\geqslant2\)) have \(\operatorname{var}(x_i)=\sigma^2>0\) and
-\(\operatorname{cov}(x_i,x_j)=\rho\sigma^2\) for \(i\ne j\), where \(0<\rho<1\): \(\Sigma=\sigma^2\bigl((1-\rho)I_p+\rho J_p\bigr)\),
-and \(\operatorname{corr}(x)\) is the equicorrelation matrix of Example~\ref{r5d-exm-equicorrelation}. Find the principal
+Let \(x=(x_1,\dots,x_p)'\) (\(p\geqslant2\)) have \(\var(x_i)=\sigma^2>0\) and
+\(\cov(x_i,x_j)=\rho\sigma^2\) for \(i\ne j\), where \(0<\rho<1\): \(\Sigma=\sigma^2\bigl((1-\rho)I_p+\rho J_p\bigr)\),
+and \(\cor(x)\) is the equicorrelation matrix of Example~\ref{r5d-exm-equicorrelation}. Find the principal
 components of \(x\).
 
 \textit{Solution.}
@@ -21477,9 +21484,9 @@ Example~\ref{r8-exm-patterned}(b) its eigenvalues are \(\lambda_1=\sigma^2\bigl(
 of the \(p\) variables, with variance \(\sigma^2\bigl(1+(p-1)\rho\bigr)\) (Theorem~\ref{r12-thm-pop-pca}(b)). It is unique up
 to sign: a unit vector \(a\) with \(a'\Sigma a=\lambda_1\) is an eigenvector for \(\lambda_1\)
 (Theorem~\ref{r9-thm-rayleigh}(b)), hence \(a=\pm v_1\).
-\item Second component. \(\operatorname{cov}(a'x,v_1'x)=\lambda_1a'v_1\) (Theorem~\ref{r12-thm-pop-pca}(a)), so the
+\item Second component. \(\cov(a'x,v_1'x)=\lambda_1a'v_1\) (Theorem~\ref{r12-thm-pop-pca}(a)), so the
 constraint of the second problem is \(\one_p'a=0\); and for every such unit vector \(a\), \(\Sigma a=\lambda_2a\) and
-\(\operatorname{var}(a'x)=\lambda_2\). So every \(a'x\) with \(\one_p'a=0\) and \(\lVert a\rVert=1\) is a second principal
+\(\var(a'x)=\lambda_2\). So every \(a'x\) with \(\one_p'a=0\) and \(\lVert a\rVert=1\) is a second principal
 component: for \(p\geqslant3\) the second component is not unique, even up to sign (for \(p=2\) it is
 \(\pm(x_1-x_2)/\sqrt2\)).
 \item The first component accounts for the proportion \(\lambda_1/\tr\Sigma=\bigl(1+(p-1)\rho\bigr)/p\) of the total variance
@@ -21493,37 +21500,37 @@ component: for \(p\geqslant3\) the second component is not unique, even up to si
 \begin{exercise}\label{r11-dr-random}
 Let \(z=(z_1,z_2,z_3,z_4)'\) be a random vector, and let
 \[
-\mu=\operatorname{E}(z)=\begin{pmatrix}1\\-1\\2\\1\end{pmatrix},\qquad
-\Sigma=\operatorname{var}(z)=\begin{pmatrix}2&1&0&0\\1&2&1&0\\0&1&2&1\\0&0&1&2\end{pmatrix},\qquad
+\mu=\expc(z)=\begin{pmatrix}1\\-1\\2\\1\end{pmatrix},\qquad
+\Sigma=\var(z)=\begin{pmatrix}2&1&0&0\\1&2&1&0\\0&1&2&1\\0&0&1&2\end{pmatrix},\qquad
 A=\begin{pmatrix}1&1&0&0\\0&0&1&-1\end{pmatrix},\qquad b=\begin{pmatrix}-1\\3\end{pmatrix}
 \]
 \begin{enumerate}
-\item Find \(\operatorname{E}(Az+b)\) and \(\operatorname{var}(Az+b)\), and \(\operatorname{cov}(z_1+z_2,\ z_3-z_4)\).
-\item Find \(\operatorname{var}(z_1+z_2+z_3+z_4)\) and \(\operatorname{var}(z_1-z_4)\).
-\item Find \(\operatorname{E}(z'z)\) and \(\operatorname{E}(2z_1z_2+z_3^2+2z_3z_4)\).
+\item Find \(\expc(Az+b)\) and \(\var(Az+b)\), and \(\cov(z_1+z_2,\ z_3-z_4)\).
+\item Find \(\var(z_1+z_2+z_3+z_4)\) and \(\var(z_1-z_4)\).
+\item Find \(\expc(z'z)\) and \(\expc(2z_1z_2+z_3^2+2z_3z_4)\).
 \end{enumerate}
 \end{exercise}
 \begin{solution}
 (a) By Theorem~\ref{r11-thm-linear}(b),
 \[
-\operatorname{E}(Az+b)=A\mu+b=\begin{pmatrix}1-1\\2-1\end{pmatrix}+\begin{pmatrix}-1\\3\end{pmatrix}=\begin{pmatrix}-1\\4\end{pmatrix}
+\expc(Az+b)=A\mu+b=\begin{pmatrix}1-1\\2-1\end{pmatrix}+\begin{pmatrix}-1\\3\end{pmatrix}=\begin{pmatrix}-1\\4\end{pmatrix}
 \]
 and, with \(A\Sigma\) computed row by row (its rows are \(\row_1(\Sigma)+\row_2(\Sigma)\) and \(\row_3(\Sigma)-\row_4(\Sigma)\),
 Theorem~\ref{r1-thm-views}(c)),
 \[
 A\Sigma=\begin{pmatrix}3&3&1&0\\0&1&1&-1\end{pmatrix},\qquad
-\operatorname{var}(Az+b)=A\Sigma A'=\begin{pmatrix}6&1\\1&2\end{pmatrix}
+\var(Az+b)=A\Sigma A'=\begin{pmatrix}6&1\\1&2\end{pmatrix}
 \]
-With \(b=0\), Theorem~\ref{r11-thm-linear}(b) gives \(\operatorname{var}(Az)=A\Sigma A'\) as well. The entries of \(Az\) are
+With \(b=0\), Theorem~\ref{r11-thm-linear}(b) gives \(\var(Az)=A\Sigma A'\) as well. The entries of \(Az\) are
 \(z_1+z_2\) and \(z_3-z_4\), so their covariance is the \((1,2)\) entry of \(A\Sigma A'\) (Definition~\ref{r11-def-random}):
-\(\operatorname{cov}(z_1+z_2,\ z_3-z_4)=1\).
+\(\cov(z_1+z_2,\ z_3-z_4)=1\).
 
-(b) By Theorem~\ref{r11-thm-linear}(b) with the \(1\times4\) matrix \(a'\), \(\operatorname{var}(a'z)=a'\Sigma a\). For
-\(a=\one_4\) this is the sum of all entries of \(\Sigma\): \(\operatorname{var}(z_1+z_2+z_3+z_4)=3+4+4+3=14\), the row sums
+(b) By Theorem~\ref{r11-thm-linear}(b) with the \(1\times4\) matrix \(a'\), \(\var(a'z)=a'\Sigma a\). For
+\(a=\one_4\) this is the sum of all entries of \(\Sigma\): \(\var(z_1+z_2+z_3+z_4)=3+4+4+3=14\), the row sums
 of \(\Sigma\) being \(3,4,4,3\). For \(a=(1,0,0,-1)'\),
-\(\operatorname{var}(z_1-z_4)=\sigma_{11}-2\sigma_{14}+\sigma_{44}=2-0+2=4\).
+\(\var(z_1-z_4)=\sigma_{11}-2\sigma_{14}+\sigma_{44}=2-0+2=4\).
 
-(c) By Theorem~\ref{r11-thm-quadratic} with \(A=I_4\), \(\operatorname{E}(z'z)=\tr\Sigma+\mu'\mu=(2+2+2+2)+(1+1+4+1)=15\).
+(c) By Theorem~\ref{r11-thm-quadratic} with \(A=I_4\), \(\expc(z'z)=\tr\Sigma+\mu'\mu=(2+2+2+2)+(1+1+4+1)=15\).
 Next, \(2z_1z_2+z_3^2+2z_3z_4=z'Bz\) for the symmetric \(B\) below (Definition~\ref{r8-def-quadratic-form}), and
 \[
 \begin{gathered}
@@ -21533,21 +21540,21 @@ B=\begin{pmatrix}0&1&0&0\\1&0&0&0\\0&0&1&1\\0&0&1&0\end{pmatrix}
 \mu'B\mu=2\mu_1\mu_2+\mu_3^2+2\mu_3\mu_4=-2+4+4=6
 \end{gathered}
 \]
-so \(\operatorname{E}(2z_1z_2+z_3^2+2z_3z_4)=\tr(B\Sigma)+\mu'B\mu=12\). Check: by Theorem~\ref{r14-thm-cov}(e), whose
-\((i,j)\) entry reads \(\operatorname{E}(z_iz_j)=\sigma_{ij}+\mu_i\mu_j\), \(\operatorname{E}(z_1z_2)=1-1=0\),
-\(\operatorname{E}(z_3^2)=2+4=6\) and \(\operatorname{E}(z_3z_4)=1+2=3\), and \(2\cdot0+6+2\cdot3=12\).
+so \(\expc(2z_1z_2+z_3^2+2z_3z_4)=\tr(B\Sigma)+\mu'B\mu=12\). Check: by Theorem~\ref{r14-thm-cov}(e), whose
+\((i,j)\) entry reads \(\expc(z_iz_j)=\sigma_{ij}+\mu_i\mu_j\), \(\expc(z_1z_2)=1-1=0\),
+\(\expc(z_3^2)=2+4=6\) and \(\expc(z_3z_4)=1+2=3\), and \(2\cdot0+6+2\cdot3=12\).
 \end{solution}
 
 \begin{exercise}\label{r11-ex-moments-drill}
-Let \(x\in\R^4\) be a random vector with \(\operatorname{E}(x)=\mu=(1,0,2,-1)'\) and
+Let \(x\in\R^4\) be a random vector with \(\expc(x)=\mu=(1,0,2,-1)'\) and
 \[
-\operatorname{var}(x)=\Sigma=\begin{pmatrix}9&0&3&3\\0&1&2&1\\3&2&9&5\\3&1&5&4\end{pmatrix},\qquad
+\var(x)=\Sigma=\begin{pmatrix}9&0&3&3\\0&1&2&1\\3&2&9&5\\3&1&5&4\end{pmatrix},\qquad
 L=\begin{pmatrix}3&0&0&0\\0&1&0&0\\1&2&2&0\\1&1&1&1\end{pmatrix}
 \]
 \begin{enumerate}
 \item Show that \(\Sigma=LL'\), and deduce that there is no nonzero \(a\in\R^4\) with \(a'x=a'\mu\) with probability \(1\).
-\item Find \(\operatorname{E}(y)\) and \(\operatorname{var}(y)\) for \(y=(x_1-x_2,\ x_3-x_4-3)'\).
-\item Find \(\operatorname{cov}(x_1+x_3,\ x_2-x_4)\) and \(\operatorname{corr}(x)\).
+\item Find \(\expc(y)\) and \(\var(y)\) for \(y=(x_1-x_2,\ x_3-x_4-3)'\).
+\item Find \(\cov(x_1+x_3,\ x_2-x_4)\) and \(\cor(x)\).
 \end{enumerate}
 \end{exercise}
 \begin{solution}
@@ -21560,30 +21567,30 @@ and \(1+1+1+1=4\) at \((4,4)\). So \(LL'=\Sigma\). As \(L\) is lower triangular,
 Theorem~\ref{r11-thm-cov-psd}, there is no nonzero \(a\) with \(a'x=a'\mu\) with probability \(1\).
 
 (b) \(y=Ax+b\) with \(A=\left(\begin{smallmatrix}1&-1&0&0\\0&0&1&-1\end{smallmatrix}\right)\) and \(b=(0,-3)'\). By
-Theorem~\ref{r11-thm-linear}(b), \(\operatorname{E}(y)=A\mu+b=(1-0,\ 2+1-3)'=(1,0)'\), and the rows of \(A\Sigma\) are
+Theorem~\ref{r11-thm-linear}(b), \(\expc(y)=A\mu+b=(1-0,\ 2+1-3)'=(1,0)'\), and the rows of \(A\Sigma\) are
 \(\row_1(\Sigma)-\row_2(\Sigma)\) and \(\row_3(\Sigma)-\row_4(\Sigma)\):
 \[
 A\Sigma=\begin{pmatrix}9&-1&1&2\\0&1&4&1\end{pmatrix},\qquad
-\operatorname{var}(y)=A\Sigma A'=\begin{pmatrix}10&-1\\-1&3\end{pmatrix}
+\var(y)=A\Sigma A'=\begin{pmatrix}10&-1\\-1&3\end{pmatrix}
 \]
 (c) \(\Sigma(0,1,0,-1)'=\col_2(\Sigma)-\col_4(\Sigma)=(-3,0,-3,-3)'\), so by Theorem~\ref{r14-thm-cov}(a)
-\(\operatorname{cov}(x_1+x_3,\ x_2-x_4)=(1,0,1,0)(-3,0,-3,-3)'=-6\). The standard deviations are \(3,1,3,2\), so
+\(\cov(x_1+x_3,\ x_2-x_4)=(1,0,1,0)(-3,0,-3,-3)'=-6\). The standard deviations are \(3,1,3,2\), so
 \(D^{-1/2}=\diag(\frac13,1,\frac13,\frac12)\) and (Definition~\ref{r14-def-corr})
 \[
-\operatorname{corr}(x)=D^{-1/2}\Sigma D^{-1/2}=\begin{pmatrix}1&0&\frac13&\frac12\\[2pt]0&1&\frac23&\frac12\\[2pt]\frac13&\frac23&1&\frac56\\[2pt]\frac12&\frac12&\frac56&1\end{pmatrix}
+\cor(x)=D^{-1/2}\Sigma D^{-1/2}=\begin{pmatrix}1&0&\frac13&\frac12\\[2pt]0&1&\frac23&\frac12\\[2pt]\frac13&\frac23&1&\frac56\\[2pt]\frac12&\frac12&\frac56&1\end{pmatrix}
 \]
 \end{solution}
 
 \begin{exercise}\label{r14-dr-cross}
 Let \(z\in\R^4\) be a random vector, and let \(u=Az\) and \(v=\one'z=z_1+z_2+z_3+z_4\), where
 \[
-\operatorname{var}(z)=\Sigma=\begin{pmatrix}4&-1&-1&-1\\-1&4&-1&-1\\-1&-1&4&-1\\-1&-1&-1&4\end{pmatrix},\qquad
+\var(z)=\Sigma=\begin{pmatrix}4&-1&-1&-1\\-1&4&-1&-1\\-1&-1&4&-1\\-1&-1&-1&4\end{pmatrix},\qquad
 A=\begin{pmatrix}1&-1&0&0\\1&1&1&2\end{pmatrix}
 \]
 so that \(u=(z_1-z_2,\ z_1+z_2+z_3+2z_4)'\).
 \begin{enumerate}
-\item Find \(\operatorname{cov}(u,z)\) and \(\operatorname{cov}(u,v)\).
-\item Find \(\operatorname{var}(u)\), \(\operatorname{var}(v)\) and the covariance matrix of \((u',v)'\in\R^3\).
+\item Find \(\cov(u,z)\) and \(\cov(u,v)\).
+\item Find \(\var(u)\), \(\var(v)\) and the covariance matrix of \((u',v)'\in\R^3\).
 \item Find the correlation matrix of \(z\), and the correlation of \(u_2\) and \(v\).
 \end{enumerate}
 \end{exercise}
@@ -21591,36 +21598,36 @@ so that \(u=(z_1-z_2,\ z_1+z_2+z_3+2z_4)'\).
 (a) By Theorem~\ref{r14-thm-cov}(a) with \(B=I_4\), computing \(A\Sigma\) row by row,
 \[
 \begin{aligned}
-\operatorname{cov}(u,z)=A\Sigma&=\begin{pmatrix}4+1&-1-4&-1+1&-1+1\\4-1-1-2&-1+4-1-2&-1-1+4-2&-1-1-1+8\end{pmatrix}\\
+\cov(u,z)=A\Sigma&=\begin{pmatrix}4+1&-1-4&-1+1&-1+1\\4-1-1-2&-1+4-1-2&-1-1+4-2&-1-1-1+8\end{pmatrix}\\
 &=\begin{pmatrix}5&-5&0&0\\0&0&0&5\end{pmatrix}
 \end{aligned}
 \]
-and, with \(B=\one'\), \(\operatorname{cov}(u,v)=A\Sigma\one=(5-5+0+0,\ 0+0+0+5)'=(0,5)'\). So \(z_1-z_2\) and \(v\) are
+and, with \(B=\one'\), \(\cov(u,v)=A\Sigma\one=(5-5+0+0,\ 0+0+0+5)'=(0,5)'\). So \(z_1-z_2\) and \(v\) are
 uncorrelated.
 
-(b) By Theorem~\ref{r11-thm-linear}(b), \(\operatorname{var}(u)=A\Sigma A'=(A\Sigma)A'\), and
-\(\operatorname{var}(v)=\one'\Sigma\one\), the sum of all entries of \(\Sigma\):
+(b) By Theorem~\ref{r11-thm-linear}(b), \(\var(u)=A\Sigma A'=(A\Sigma)A'\), and
+\(\var(v)=\one'\Sigma\one\), the sum of all entries of \(\Sigma\):
 \[
-\operatorname{var}(u)=\begin{pmatrix}5+5+0+0&5-5+0+0\\0+0+0+0&0+0+0+10\end{pmatrix}=\begin{pmatrix}10&0\\0&10\end{pmatrix},\qquad
-\operatorname{var}(v)=16-12=4
+\var(u)=\begin{pmatrix}5+5+0+0&5-5+0+0\\0+0+0+0&0+0+0+10\end{pmatrix}=\begin{pmatrix}10&0\\0&10\end{pmatrix},\qquad
+\var(v)=16-12=4
 \]
 By the block form of the covariance matrix of a stacked vector (after Definition~\ref{r14-def-cov}),
 \[
-\operatorname{var}\begin{pmatrix}u\\v\end{pmatrix}=\begin{pmatrix}\operatorname{var}(u)&\operatorname{cov}(u,v)\\\operatorname{cov}(v,u)&\operatorname{var}(v)\end{pmatrix}
+\var\begin{pmatrix}u\\v\end{pmatrix}=\begin{pmatrix}\var(u)&\cov(u,v)\\\cov(v,u)&\var(v)\end{pmatrix}
 =\begin{pmatrix}10&0&0\\0&10&5\\0&5&4\end{pmatrix}
 \]
 (c) Every \(\sigma_{ii}=4\), so \(D^{-1/2}=\frac12I_4\) and (Definition~\ref{r14-def-corr})
 \[
-\operatorname{corr}(z)=\frac14\Sigma=\begin{pmatrix}1&-\frac14&-\frac14&-\frac14\\[2pt]-\frac14&1&-\frac14&-\frac14\\[2pt]-\frac14&-\frac14&1&-\frac14\\[2pt]-\frac14&-\frac14&-\frac14&1\end{pmatrix}
+\cor(z)=\frac14\Sigma=\begin{pmatrix}1&-\frac14&-\frac14&-\frac14\\[2pt]-\frac14&1&-\frac14&-\frac14\\[2pt]-\frac14&-\frac14&1&-\frac14\\[2pt]-\frac14&-\frac14&-\frac14&1\end{pmatrix}
 \]
 The correlation of \(u_2\) and \(v\) is
-\(\operatorname{cov}(u_2,v)/\sqrt{\operatorname{var}(u_2)\operatorname{var}(v)}=5/\sqrt{10\cdot4}=5/(2\sqrt{10})=\sqrt{10}/4\).
+\(\cov(u_2,v)/\sqrt{\var(u_2)\var(v)}=5/\sqrt{10\cdot4}=5/(2\sqrt{10})=\sqrt{10}/4\).
 \end{solution}
 
 \begin{exercise}\label{r14-dr-corr}
 Find the correlation matrix of a random vector \(z\in\R^4\) with
 \[
-\operatorname{var}(z)=\begin{pmatrix}9&3&-6&9\\3&4&2&6\\-6&2&16&-12\\9&6&-12&36\end{pmatrix}
+\var(z)=\begin{pmatrix}9&3&-6&9\\3&4&2&6\\-6&2&16&-12\\9&6&-12&36\end{pmatrix}
 \]
 \end{exercise}
 \begin{solution}
@@ -21628,39 +21635,39 @@ The standard deviations are \(3\), \(2\), \(4\), \(6\), so \(\rho_{12}=\frac3{3\
 \(\rho_{13}=\frac{-6}{3\cdot4}=-\frac12\), \(\rho_{14}=\frac9{3\cdot6}=\frac12\), \(\rho_{23}=\frac2{2\cdot4}=\frac14\),
 \(\rho_{24}=\frac6{2\cdot6}=\frac12\), \(\rho_{34}=\frac{-12}{4\cdot6}=-\frac12\), and (Definition~\ref{r14-def-corr})
 \[
-\operatorname{corr}(z)=\begin{pmatrix}1&\frac12&-\frac12&\frac12\\[2pt]\frac12&1&\frac14&\frac12\\[2pt]-\frac12&\frac14&1&-\frac12\\[2pt]\frac12&\frac12&-\frac12&1\end{pmatrix}
+\cor(z)=\begin{pmatrix}1&\frac12&-\frac12&\frac12\\[2pt]\frac12&1&\frac14&\frac12\\[2pt]-\frac12&\frac14&1&-\frac12\\[2pt]\frac12&\frac12&-\frac12&1\end{pmatrix}
 \]
 \end{solution}
 
 \begin{exercise}[\citeat{searle-khuri}{Exercise~10.5(b)}]\label{r12-ex-variances}
 Let \(x=(x_1,x_2,x_3)'\) be a random vector with the covariance matrix
 \[
-\operatorname{var}(x)=V=\begin{pmatrix}8&-7&2\\-7&10&-3\\2&-3&1\end{pmatrix}
+\var(x)=V=\begin{pmatrix}8&-7&2\\-7&10&-3\\2&-3&1\end{pmatrix}
 \]
 Show that \(x_1+2x_2+3x_3\) and \(x_2+4x_3\) have the variances \(5\) and \(2\). Are they correlated?
 \end{exercise}
 \begin{solution}
-Let \(a=(1,2,3)'\) and \(b=(0,1,4)'\). By Theorem~\ref{r12-thm-pop-pca}(a), \(\operatorname{var}(a'x)=a'Va\),
-\(\operatorname{var}(b'x)=b'Vb\) and \(\operatorname{cov}(a'x,b'x)=a'Vb\). Here
+Let \(a=(1,2,3)'\) and \(b=(0,1,4)'\). By Theorem~\ref{r12-thm-pop-pca}(a), \(\var(a'x)=a'Va\),
+\(\var(b'x)=b'Vb\) and \(\cov(a'x,b'x)=a'Vb\). Here
 \(Va=(8-14+6,\ -7+20-9,\ 2-6+3)'=(0,4,-1)'\) and \(Vb=(0-7+8,\ 0+10-12,\ 0-3+4)'=(1,-2,1)'\), so
 \[
-\operatorname{var}(x_1+2x_2+3x_3)=a'Va=0+8-3=5,\qquad\operatorname{var}(x_2+4x_3)=b'Vb=0-2+4=2
+\var(x_1+2x_2+3x_3)=a'Va=0+8-3=5,\qquad\var(x_2+4x_3)=b'Vb=0-2+4=2
 \]
-and \(\operatorname{cov}(x_1+2x_2+3x_3,\ x_2+4x_3)=a'Vb=1-4+3=0\). So the two combinations are uncorrelated.
+and \(\cov(x_1+2x_2+3x_3,\ x_2+4x_3)=a'Vb=1-4+3=0\). So the two combinations are uncorrelated.
 \end{solution}
 
 \begin{exercise}\label{r11-ex-quadratic-blp}
 Let \(x\) be as in Exercise~\ref{r11-ex-moments-drill}. Use Theorem~\ref{r11-thm-quadratic} to find
-\(\operatorname{E}(x_1x_3+x_2^2)\) and \(\operatorname{E}(\lVert x\rVert^2)\), and check the first value directly from the means,
+\(\expc(x_1x_3+x_2^2)\) and \(\expc(\lVert x\rVert^2)\), and check the first value directly from the means,
 variances and covariances.
 \end{exercise}
 \begin{solution}
 \(x_1x_3+x_2^2=x'Ax\) with \(A=e_1e_3'+e_2e_2'\). The rows of \(A\Sigma\) are \(\row_3(\Sigma)\), \(\row_2(\Sigma)\), \(0\),
 \(0\) (Theorem~\ref{r1-thm-views}(c)), so \(\tr(A\Sigma)=\sigma_{31}+\sigma_{22}=3+1=4\); and \(\mu'A\mu=\mu_1\mu_3+\mu_2^2=2\).
-Hence \(\operatorname{E}(x_1x_3+x_2^2)=4+2=6\). Directly, by Theorem~\ref{r14-thm-cov}(e), whose \((i,j)\) entry reads
-\(\operatorname{E}(x_ix_j)=\sigma_{ij}+\mu_i\mu_j\), \(\operatorname{E}(x_1x_3)=\operatorname{cov}(x_1,x_3)+\mu_1\mu_3=3+2=5\) and
-\(\operatorname{E}(x_2^2)=\operatorname{var}(x_2)+\mu_2^2=1\), with sum \(6\). With \(A=I_4\),
-\(\operatorname{E}(\lVert x\rVert^2)=\tr\Sigma+\mu'\mu=23+6=29\).
+Hence \(\expc(x_1x_3+x_2^2)=4+2=6\). Directly, by Theorem~\ref{r14-thm-cov}(e), whose \((i,j)\) entry reads
+\(\expc(x_ix_j)=\sigma_{ij}+\mu_i\mu_j\), \(\expc(x_1x_3)=\cov(x_1,x_3)+\mu_1\mu_3=3+2=5\) and
+\(\expc(x_2^2)=\var(x_2)+\mu_2^2=1\), with sum \(6\). With \(A=I_4\),
+\(\expc(\lVert x\rVert^2)=\tr\Sigma+\mu'\mu=23+6=29\).
 \end{solution}
 
 \begin{exercise}\label{r8-ex-correlation-valid}
@@ -22297,7 +22304,7 @@ A random vector \(x=(x_1,x_2,x_3,x_4)'\) has the covariance matrix
 \item Find the principal components of \(x\), their variances and the proportions of the total variance. How many
 components account for at least \(80\%\) of the total variance?
 \item Check that the first two principal components are uncorrelated, and compare
-\(\operatorname{var}(x_1)+\operatorname{var}(x_2)\) with the sum of the variances of the first two principal components.
+\(\var(x_1)+\var(x_2)\) with the sum of the variances of the first two principal components.
 \end{enumerate}
 \end{exercise}
 \begin{solution}
@@ -22389,8 +22396,8 @@ cumulative proportions are \(\frac7{16}\), \(\frac{13}{16}\), \(\frac{15}{16}\) 
 \(\frac7{16}=\frac{35}{80}<\frac{64}{80}=\frac45\leqslant\frac{65}{80}=\frac{13}{16}\), two components account for at least
 \(80\%\), one does not.
 
-(c) \(\operatorname{cov}(v_1'x,v_2'x)=v_1'\Sigma v_2=\frac1{10}(1,-2,2,1)(12,6,6,-12)'=\frac1{10}(12-12+12-12)=0\)
-(Theorem~\ref{r12-thm-pop-pca}(a)). And \(\operatorname{var}(x_1)+\operatorname{var}(x_2)=4+4=8\leqslant7+6=13\), as
+(c) \(\cov(v_1'x,v_2'x)=v_1'\Sigma v_2=\frac1{10}(1,-2,2,1)(12,6,6,-12)'=\frac1{10}(12-12+12-12)=0\)
+(Theorem~\ref{r12-thm-pop-pca}(a)). And \(\var(x_1)+\var(x_2)=4+4=8\leqslant7+6=13\), as
 Corollary~\ref{r12-cor-diagonal} says (every pair of the variables has the variances \(4+4=8\)).
 \end{solution}
 
@@ -22399,17 +22406,17 @@ Corollary~\ref{r12-cor-diagonal} says (every pair of the variables has the varia
 
 \begin{problem}[\citeat{casella-berger}{Exercise~4.43}, \citeat{casella-berger-solutions}{Exercise~4.43}]\label{r14-ex-cov-sums}
 Let \(x_1,x_2,x_3\) be uncorrelated random variables, each with mean \(\mu\) and variance \(\sigma^2\). Find
-\(\operatorname{cov}(x_1+x_2,\ x_2+x_3)\) and \(\operatorname{cov}(x_1+x_2,\ x_1-x_2)\).
+\(\cov(x_1+x_2,\ x_2+x_3)\) and \(\cov(x_1+x_2,\ x_1-x_2)\).
 \end{problem}
 \begin{solution}
 The \((1,2)\) entry of Theorem~\ref{r14-thm-cov}(e) for the random vector \((u,v)'\) reads
-\(\operatorname{E}(uv)=\operatorname{cov}(u,v)+\operatorname{E}(u)\operatorname{E}(v)\), that is,
-\(\operatorname{cov}(u,v)=\operatorname{E}(uv)-\operatorname{E}(u)\operatorname{E}(v)\). So \(\operatorname{E}(x_ix_j)=\operatorname{cov}(x_i,x_j)+\mu^2=\mu^2\) for
-\(i\ne j\), as the \(x_i\) are uncorrelated, and \(\operatorname{E}(x_i^2)=\sigma^2+\mu^2\). Hence
+\(\expc(uv)=\cov(u,v)+\expc(u)\expc(v)\), that is,
+\(\cov(u,v)=\expc(uv)-\expc(u)\expc(v)\). So \(\expc(x_ix_j)=\cov(x_i,x_j)+\mu^2=\mu^2\) for
+\(i\ne j\), as the \(x_i\) are uncorrelated, and \(\expc(x_i^2)=\sigma^2+\mu^2\). Hence
 \[
-\operatorname{cov}(x_1+x_2,\ x_2+x_3)=\operatorname{E}(x_1x_2+x_1x_3+x_2^2+x_2x_3)-(2\mu)(2\mu)=(4\mu^2+\sigma^2)-4\mu^2=\sigma^2
+\cov(x_1+x_2,\ x_2+x_3)=\expc(x_1x_2+x_1x_3+x_2^2+x_2x_3)-(2\mu)(2\mu)=(4\mu^2+\sigma^2)-4\mu^2=\sigma^2
 \]
-and \(\operatorname{cov}(x_1+x_2,\ x_1-x_2)=\operatorname{E}(x_1^2-x_2^2)-(2\mu)\cdot0=(\sigma^2+\mu^2)-(\sigma^2+\mu^2)=0\).
+and \(\cov(x_1+x_2,\ x_1-x_2)=\expc(x_1^2-x_2^2)-(2\mu)\cdot0=(\sigma^2+\mu^2)-(\sigma^2+\mu^2)=0\).
 \end{solution}
 
 \begin{problem}[\citeat{searle-khuri}{Exercise~10.2}]\label{r14-ex-shift}
@@ -22527,6 +22534,1640 @@ of \(P\) are unit vectors (Theorem~\ref{r6-thm-orthogonal}(a)). In the proof of 
 \end{solution}
 
 \clearpage
+\def\unitnumber{10}
+\setcounter{theorem}{0}\setcounter{problem}{0}
+\section*{Chapter 10. The multivariate normal distribution}
+
+\subsection*{The multivariate normal distribution}
+
+We write \(\prb(z\in A)\) for the probability that a random vector \(z\in\R^n\) takes a value in a set
+\(A\subseteq\R^n\). Two random vectors \(y,z\in\R^n\) have the \textbf{same distribution} if
+\(\prb(y\in A)=\prb(z\in A)\) for every set \(A\); then also \(\expc g(y)=\expc g(z)\) for every
+function \(g\) for which these expectations exist. If a random variable \(u\) takes only the values
+\(a_1,\dots,a_m\), then \(\expc g(u)=g(a_1)\prb(u=a_1)+\dots+g(a_m)\prb(u=a_m)\) for every
+function \(g\). Random vectors \(u_1,\dots,u_m\) are \textbf{independent} if
+\(\prb(u_1\in A_1,\dots,u_m\in A_m)=\prb(u_1\in A_1)\cdots\prb(u_m\in A_m)\) for all sets
+\(A_1,\dots,A_m\). The \textbf{moment generating function} (MGF) of \(z\in\R^n\) is
+\[
+M_z(t)=\expc\bigl(\exp(t'z)\bigr)\qquad(t\in\R^n)
+\]
+defined wherever this expectation is finite~\citeat{tu-clm}{\S4.1}, \citeat{casella-berger}{Definitions~1.5.8, 2.2.1, Theorem~4.2.10(a)}. (Here and below, the sets and functions are those for which the
+probabilities and expectations are defined.)
+
+\begin{definition}[\citeat{tu-clm}{Definition~4.1}]\label{r14-def-mvn}
+Let \(\mu\in\R^n\), and let \(\Sigma\in\R^{n\times n}\) be symmetric and PSD. A random vector \(z\in\R^n\) has the
+\textbf{multivariate normal distribution} \(N_n(\mu,\Sigma)\), written \(z\sim N_n(\mu,\Sigma)\), if
+\[
+M_z(t)=\exp\bigl(t'\mu+\tfrac12t'\Sigma t\bigr)\qquad\text{for all }t\in\R^n
+\]
+Its mean vector is \(\mu\) and its covariance matrix is \(\Sigma\): \(\expc(z)=\mu\) and \(\var(z)=\Sigma\);
+and \(N_n(\mu,0)\) is the distribution of the constant vector \(\mu\) (both shown below). For \(n=1\) we write \(N(\mu,\sigma^2)\)
+(\(\sigma^2\geqslant0\)), with the MGF \(\exp(t\mu+\frac12\sigma^2t^2)\); \(N(0,1)\) is the \textbf{standard normal
+distribution}. Random vectors \(u\) and \(v\) are \textbf{jointly normal} if \((u',v')'\) has a multivariate normal distribution.
+\end{definition}
+
+\needspace{8\baselineskip}
+We use the following facts without proof~\citeat{tu-clm}{\S4.1}.
+\begin{enumerate}[label=(N\arabic*)]
+\item \emph{Uniqueness.} If two random vectors have MGFs that are finite and equal on an open neighborhood of \(0\),
+they have the same distribution.
+\item \emph{Independence and factorization.} Random vectors \(u_1\in\R^{n_1},\dots,u_m\in\R^{n_m}\) whose MGFs are finite
+near \(0\) are independent if and only if the MGF of \((u_1',\dots,u_m')'\) factors:
+\(M_{(u_1',\dots,u_m')'}(t_1,\dots,t_m)=M_{u_1}(t_1)\cdots M_{u_m}(t_m)\) for all \(t_k\in\R^{n_k}\) near \(0\).
+\item \emph{Functions of independent vectors.} If \(u_1,\dots,u_m\) are independent, then so are
+\(g_1(u_1),\dots,g_m(u_m)\), for any functions \(g_1,\dots,g_m\).
+\item \emph{Density in the nonsingular case.} This fact is not assumed here: the density of \(N_n(\mu,\Sigma)\) for PD
+\(\Sigma\) is derived below from the change-of-variables formula for integrals.
+\item \emph{Distributions derived from the normal.} The \textbf{chi-square distribution} \(\chi^2_r\) (\(r\geqslant1\)) is
+the distribution of \(w_1^2+\dots+w_r^2\) for independent \(w_1,\dots,w_r\sim N(0,1)\).
+\item \emph{Moments from the MGF.} If \(M_z\) is finite on an open neighborhood of \(0\), its partial derivatives of the first
+and second order exist there, and at \(t=0\), \(\partial M_z/\partial t_i=\expc(z_i)\) and
+\(\partial^2M_z/\partial t_i\partial t_j=\expc(z_iz_j)\).
+\item \emph{Independence implies uncorrelatedness.} If \(u\) and \(v\) are independent random vectors, then
+\(\expc(uv')=\expc(u)\expc(v)'\), that is, \(\cov(u,v)=0\) (Definition~\ref{r14-def-cov}). In
+particular \(\expc(uv)=\expc(u)\expc(v)\) for independent random variables \(u\) and \(v\).
+\end{enumerate}
+
+Let \(z\sim N_n(\mu,\Sigma)\). The exponent \(q(t)=t'\mu+\frac12t'\Sigma t=\sum_kt_k\mu_k+\frac12\sum_k\sum_l\sigma_{kl}t_kt_l\) has, as
+\(\sigma_{kl}=\sigma_{lk}\), the partial derivatives \(\partial q/\partial t_i=\mu_i+\sum_l\sigma_{il}t_l=\mu_i+(\Sigma t)_i\) and
+\(\partial^2q/\partial t_j\partial t_i=\sigma_{ij}\). By the chain rule and the product rule,
+\[
+\frac{\partial M_z}{\partial t_i}=\bigl(\mu_i+(\Sigma t)_i\bigr)M_z(t),\qquad
+\frac{\partial^2M_z}{\partial t_j\partial t_i}=\Bigl(\sigma_{ij}+\bigl(\mu_i+(\Sigma t)_i\bigr)\bigl(\mu_j+(\Sigma t)_j\bigr)\Bigr)M_z(t)
+\]
+At \(t=0\), \(M_z(0)=1\), so by (N6) \(\expc(z_i)=\mu_i\) and \(\expc(z_iz_j)=\sigma_{ij}+\mu_i\mu_j\). Hence
+\(\cov(z_i,z_j)=\expc(z_iz_j)-\mu_i\mu_j=\sigma_{ij}\) (the \((i,j)\) entry of
+Theorem~\ref{r14-thm-cov}(e)): \(\expc(z)=\mu\) and \(\var(z)=\Sigma\), as claimed in
+Definition~\ref{r14-def-mvn}~\citeat{tu-clm}{Definition~4.1}. If \(\Sigma=0\), the constant vector \(\mu\) has the MGF \(\expc(\exp(t'\mu))=\exp(t'\mu)\); so by
+(N1), \(z\sim N_n(\mu,0)\) has the distribution of the constant \(\mu\), and \(\prb(z=\mu)=1\).
+
+\subsection*{Linear transformations and marginal distributions}
+
+\begin{theorem}[\citeat{tu-clm}{Theorem~4.2}, \citeat{searle-khuri}{(10.28)--(10.32)}, \citeat{bapat}{\S8.1}]\label{r14-thm-mvn-linear}
+Let \(z\sim N_n(\mu,\Sigma)\), and let \(A\in\R^{m\times n}\) and \(b\in\R^m\) be constant. Then
+\[
+Az+b\sim N_m(A\mu+b,\ A\Sigma A')
+\]
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+\item \(A\Sigma A'=(A')'\Sigma(A')\) is symmetric and PSD (Theorem~\ref{r8-thm-congruence}(a)), so \(N_m(A\mu+b,A\Sigma A')\) is
+defined.
+\item For \(t\in\R^m\), \(t'(Az+b)=t'b+(A't)'z\), so \(\exp\bigl(t'(Az+b)\bigr)=\exp(t'b)\exp\bigl((A't)'z\bigr)\), and
+\(M_{Az+b}(t)=\exp(t'b)M_z(A't)\), as \(\exp(t'b)\) is a constant.
+\item By Definition~\ref{r14-def-mvn},
+\[
+M_{Az+b}(t)=\exp\bigl(t'b+(A't)'\mu+\tfrac12(A't)'\Sigma(A't)\bigr)=\exp\bigl(t'(A\mu+b)+\tfrac12t'(A\Sigma A')t\bigr)
+\]
+for every \(t\in\R^m\), which is the MGF of \(N_m(A\mu+b,A\Sigma A')\).\qedhere
+\end{itemize}
+\end{proof}
+
+\needspace{14\baselineskip}
+\begin{corollary}[\citeat{bapat}{\S8.1}, \citeat{casella-berger}{\S4.5}]\label{r14-cor-marginal}
+Let \(z\sim N_n(\mu,\Sigma)\).
+\begin{enumerate}
+\item Partition \(z=(z_1',z_2')'\) with \(z_1\in\R^p\), \(z_2\in\R^q\), and accordingly
+\[
+\mu=\begin{pmatrix}\mu_1\\\mu_2\end{pmatrix},\qquad\Sigma=\begin{pmatrix}\Sigma_{11}&\Sigma_{12}\\\Sigma_{21}&\Sigma_{22}\end{pmatrix}
+\qquad(\Sigma_{11}\in\R^{p\times p})
+\]
+Then \(z_1\sim N_p(\mu_1,\Sigma_{11})\) and \(z_2\sim N_q(\mu_2,\Sigma_{22})\).
+\item For \(1\leqslant i_1<\dots<i_k\leqslant n\), the subvector \((z_{i_1},\dots,z_{i_k})'\) is \(N_k\), with the mean
+\((\mu_{i_1},\dots,\mu_{i_k})'\) and as covariance matrix the principal submatrix of \(\Sigma\) in the rows and columns
+\(i_1,\dots,i_k\). In particular \(z_i\sim N(\mu_i,\sigma_{ii})\).
+\item For \(a\in\R^n\), \(a'z\sim N(a'\mu,\ a'\Sigma a)\).
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(a) For \(t_1\in\R^p\), \(t_1'z_1=(t_1',0')z\), so \(M_{z_1}(t_1)=M_z\bigl((t_1',0')'\bigr)\). By the block product
+(Theorem~\ref{r5b-thm-block}(c)), \((t_1',0')\mu=t_1'\mu_1\) and \((t_1',0')\Sigma(t_1',0')'=t_1'\Sigma_{11}t_1\); so
+\(M_{z_1}(t_1)=\exp(t_1'\mu_1+\frac12t_1'\Sigma_{11}t_1)\) for every \(t_1\), where \(\Sigma_{11}\) is symmetric and PSD
+(Theorem~\ref{r8-thm-principal-sub}). Likewise for \(z_2\), with \(t=(0',t_2')'\).
+
+(b) With \(T=[e_{i_1}\ \cdots\ e_{i_k}]\in\R^{n\times k}\) (the matrix \(S\) of Definition~\ref{r8-def-principal}), the subvector is
+\(T'z\) (Theorem~\ref{r1-thm-views}(d)), and \(T'\Sigma T\) is the principal submatrix; apply Theorem~\ref{r14-thm-mvn-linear}
+with \(A=T'\) and \(b=0\).
+
+(c) Theorem~\ref{r14-thm-mvn-linear} with \(A=a'\) and \(b=0\).
+\end{proof}
+
+\begin{example}\label{r14-exm-marginal}
+Let \(z\sim N_4(\mu,\Sigma)\) with \(\mu=(1,0,2,2)'\) and \(\Sigma\) of Example~\ref{r14-exm-cov}.
+\begin{itemize}
+\item By Corollary~\ref{r14-cor-marginal}(b), \(z_2\sim N(0,1)\) and
+\[
+\begin{pmatrix}z_1\\z_3\end{pmatrix}\sim N_2\left(\begin{pmatrix}1\\2\end{pmatrix},\begin{pmatrix}4&4\\4&9\end{pmatrix}\right)
+\]
+\item By Corollary~\ref{r14-cor-marginal}(c) and Example~\ref{r14-exm-cov}, \(z_1+z_2+z_3+z_4\sim N(5,51)\), as
+\(\one'\mu=1+0+2+2=5\); \(e=z_3-z_1-2z_2\sim N(1,1)\), as \(a'\mu=-1-0+2+0=1\) for \(a=(-1,-2,1,0)'\); and
+\(f=z_4+2z_1+2z_2-2z_3\sim N(0,1)\), as \(b'\mu=2+0-4+2=0\) for \(b=(2,2,-2,1)'\).
+\item With \(A=\left(\begin{smallmatrix}1&1&0&0\\1&-1&0&0\end{smallmatrix}\right)\), Theorem~\ref{r14-thm-mvn-linear} and
+Example~\ref{r14-exm-cov} give
+\[
+\begin{pmatrix}z_1+z_2\\z_1-z_2\end{pmatrix}=Az\sim N_2\left(\begin{pmatrix}1\\1\end{pmatrix},\begin{pmatrix}5&3\\3&5\end{pmatrix}\right)
+\]
+\end{itemize}
+\end{example}
+
+\subsection*{Independence}
+
+\begin{theorem}[\citeat{tu-clm}{Theorems~4.3, 4.5}, \citeat{bapat}{Results~8.1, 8.2}]\label{r14-thm-mvn-indep}
+\begin{enumerate}
+\item Let \(u\in\R^p\) and \(v\in\R^q\) be jointly normal, \(z=(u',v')'\sim N_{p+q}(\mu,\Sigma)\), with
+\[
+\Sigma=\begin{pmatrix}\Sigma_{uu}&\Sigma_{uv}\\\Sigma_{vu}&\Sigma_{vv}\end{pmatrix},\qquad\Sigma_{uu}\in\R^{p\times p}
+\]
+Then \(u\) and \(v\) are independent if and only if \(\Sigma_{uv}=0\), that is, if and only if \(u\) and \(v\) are
+uncorrelated.
+\item Let \(z=(z_1',\dots,z_m')'\sim N_n(\mu,\Sigma)\), with subvectors \(z_k\in\R^{n_k}\) and \(\Sigma=(\Sigma_{kl})\) partitioned
+accordingly. Then \(z_1,\dots,z_m\) are independent if and only if \(\Sigma_{kl}=0\) for all \(k\ne l\).
+\item Let \(z\sim N_n(\mu,\Sigma)\), and let \(A\in\R^{p\times n}\) and \(B\in\R^{q\times n}\) be constant. Then \(Az\) and \(Bz\) are
+independent if and only if \(A\Sigma B'=0\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) Partition \(\mu=(\mu_u',\mu_v')'\). By Definition~\ref{r14-def-mvn} and the block form of \(\var(z)\) after
+Definition~\ref{r14-def-cov}, \(\Sigma_{uv}=\cov(u,v)\).
+\begin{itemize}
+\item If \(u\) and \(v\) are independent, then \(\Sigma_{uv}=\cov(u,v)=0\) by (N7).
+\item Let \(\Sigma_{uv}=0\); then \(\Sigma_{vu}=\Sigma_{uv}'=0\). For \(s\in\R^p\) and \(t\in\R^q\), the block product
+(Theorem~\ref{r5b-thm-block}(c)) gives \((s',t')\mu=s'\mu_u+t'\mu_v\) and \((s',t')\Sigma(s',t')'=s'\Sigma_{uu}s+t'\Sigma_{vv}t\).
+So, by Corollary~\ref{r14-cor-marginal}(a),
+\[
+M_z(s,t)=\exp\bigl(s'\mu_u+\tfrac12s'\Sigma_{uu}s\bigr)\exp\bigl(t'\mu_v+\tfrac12t'\Sigma_{vv}t\bigr)=M_u(s)M_v(t)
+\]
+and \(u\) and \(v\) are independent by (N2).
+\end{itemize}
+(b)
+\begin{itemize}
+\item If \(\Sigma_{kl}=0\) for \(k\ne l\), then for \(t=(t_1',\dots,t_m')'\) the block product gives \(t'\Sigma t=\sum_kt_k'\Sigma_{kk}t_k\),
+so \(M_z(t)=\prod_k\exp(t_k'\mu_k+\frac12t_k'\Sigma_{kk}t_k)=\prod_kM_{z_k}(t_k)\), as \(z_k\sim N_{n_k}(\mu_k,\Sigma_{kk})\)
+(Corollary~\ref{r14-cor-marginal}(b)). By (N2), \(z_1,\dots,z_m\) are independent.
+\item Conversely, let \(z_1,\dots,z_m\) be independent, and \(k\ne l\). By (N2), \(M_z(t)=\prod_jM_{z_j}(t_j)\). Taking \(t_j=0\)
+for \(j\ne k,l\), and as \(M_{z_j}(0)=1\), the MGF of \((z_k',z_l')'\) is \(M_{z_k}(t_k)M_{z_l}(t_l)\). So \(z_k\) and \(z_l\) are
+independent (N2), and \(\Sigma_{kl}=\cov(z_k,z_l)=0\) by (N7).
+\end{itemize}
+(c)
+\begin{itemize}
+\item Let \(G=\left(\begin{smallmatrix}A\\B\end{smallmatrix}\right)\in\R^{(p+q)\times n}\). By Theorem~\ref{r14-thm-mvn-linear},
+\(Gz=\bigl((Az)',(Bz)'\bigr)'\sim N_{p+q}(G\mu,G\Sigma G')\), and by the block product
+\[
+G\Sigma G'=\begin{pmatrix}A\\B\end{pmatrix}\Sigma\,(A'\ \ B')=\begin{pmatrix}A\Sigma A'&A\Sigma B'\\B\Sigma A'&B\Sigma B'\end{pmatrix}
+\]
+\item By (a) for \(u=Az\) and \(v=Bz\), they are independent if and only if \(A\Sigma B'=0\).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{remark}[\citeat{tu-clm}{Remark~4.4}, \citeat{casella-berger}{\S4.5}]\label{r14-rem-uncorr}
+Joint normality is needed in Theorem~\ref{r14-thm-mvn-indep}: uncorrelated random variables need not be independent,
+even if each of them is normal.
+\begin{itemize}
+\item Let \(u\) take the values \(-1\), \(0\), \(1\), each with probability \(\frac13\), and let \(v=u^2\). Then
+\(\expc(u)=\expc(u^3)=0\), so \(\cov(u,v)=\expc(u^3)-\expc(u)\expc(u^2)=0\);
+but \(\prb(u=0,\ v=1)=0\ne\frac13\cdot\frac23=\prb(u=0)\prb(v=1)\).
+\item Let \(x\sim N(0,1)\), let \(s\) be independent of \(x\) with \(\prb(s=1)=\prb(s=-1)=\frac12\), and
+put \(y=sx\). Let \(\iota_+\) be \(1\) if \(s=1\) and \(0\) otherwise, and \(\iota_-=1-\iota_+\). Then
+\(\expc(\iota_+)=\expc(\iota_-)=\frac12\) and \(\expc(s)=0\), and \(\iota_+\), \(\iota_-\) and
+\(s\) are independent of every function of \(x\) (N3). As \(e^{ty}=\iota_+e^{tx}+\iota_-e^{-tx}\), (N7) and
+Definition~\ref{r14-def-mvn} give \(M_y(t)=\frac12e^{t^2/2}+\frac12e^{t^2/2}=e^{t^2/2}\) for every \(t\): \(y\sim N(0,1)\).
+Also \(\expc(x)=0\), so
+\(\cov(x,y)=\expc(xy)=\expc(sx^2)=\expc(s)\expc(x^2)=0\).
+\item But \(x\) and \(y\) are not independent. As \(x+y=(1+s)x\), \(e^{t(x+y)}=\iota_+e^{2tx}+\iota_-\), so
+\(\expc(e^{t(x+y)})=\frac12e^{2t^2}+\frac12\). If \(x\) and \(y\) were independent, then by (N3) and (N7),
+\(\expc(e^{t(x+y)})=\expc(e^{tx})\expc(e^{ty})=e^{t^2}\) for every \(t\); but at \(t=1\),
+\(\frac12e^2+\frac12-e=\frac12(e-1)^2>0\). Hence, by Theorem~\ref{r14-thm-mvn-indep}(a), \(x\) and \(y\) are not jointly
+normal either.
+\end{itemize}
+\end{remark}
+
+\begin{example}\label{r14-exm-indep}
+Let \(z\sim N_4(\mu,\Sigma)\) be as in Example~\ref{r14-exm-marginal}.
+\begin{itemize}
+\item By Corollary~\ref{r14-cor-marginal}(b),
+\[
+\begin{pmatrix}z_1\\z_2\\z_4\end{pmatrix}\sim
+N_3\left(\begin{pmatrix}1\\0\\2\end{pmatrix},\begin{pmatrix}4&0&0\\0&1&2\\0&2&9\end{pmatrix}\right)
+\]
+and \(\sigma_{12}=\sigma_{14}=0\); so \(z_1\) and \((z_2,z_4)'\) are independent (Theorem~\ref{r14-thm-mvn-indep}(a) with
+\(p=1\) and \(q=2\)).
+\item Let \(A=\left(\begin{smallmatrix}1&0&0&0\\0&1&0&0\end{smallmatrix}\right)\), so that \(Az=(z_1,z_2)'\), and
+\(e=a'z=z_3-z_1-2z_2\). As \(\Sigma a=(0,0,1,2)'\) (Example~\ref{r14-exm-cov}), \(A\Sigma a=(0,0)'\), and by
+Theorem~\ref{r14-thm-mvn-indep}(c), \(e\) is independent of \((z_1,z_2)'\). Thus \(z_3=z_1+2z_2+e\), where \(e\sim N(1,1)\) is
+independent of \(z_1\) and \(z_2\).
+\item Likewise, let \(G=[I_3\ \ 0]\in\R^{3\times4}\), so that \(Gz=(z_1,z_2,z_3)'\), and \(f=b'z=z_4+2z_1+2z_2-2z_3\). As
+\(\Sigma b=(0,0,0,1)'\) (Example~\ref{r14-exm-cov}), \(G\Sigma b=(0,0,0)'\), and \(f\) is independent of \((z_1,z_2,z_3)'\). Thus
+\(z_4=-2z_1-2z_2+2z_3+f\), where \(f\sim N(0,1)\) (Example~\ref{r14-exm-marginal}) is independent of \(z_1\), \(z_2\) and
+\(z_3\).
+\item \(z_1+z_2\) and \(z_1-z_2\) are not independent: their covariance is \(3\ne0\) (Example~\ref{r14-exm-marginal}), and independent vectors are uncorrelated (N7).
+\end{itemize}
+\end{example}
+
+\subsection*{The density of a normal vector}
+
+A random vector \(z\in\R^n\) has the \textbf{density} \(f\colon\R^n\to[0,\infty)\) if
+\(\prb(z\in A)=\int_Af(x)\,\mathrm{d}x\) for every set \(A\subseteq\R^n\); then \(\expc g(z)=\int_{\R^n}g(x)f(x)\,\mathrm{d}x\).
+Every function \(f\geqslant0\) with \(\int_{\R^n}f(x)\,\mathrm{d}x=1\) is the density of some random vector. Random vectors
+\(u_1,\dots,u_m\) with densities \(f_1,\dots,f_m\) are independent if and only if \((u_1',\dots,u_m')'\) has the density
+\(f_1(u_1)\cdots f_m(u_m)\)~\citeat{casella-berger}{(4.6.2), (4.6.3), Theorem~1.6.5, Definition~4.6.5}. We also use the following facts on integrals without proof:
+\begin{itemize}
+\item (change of variables) if \(B\in\R^{n\times n}\) is invertible and \(c\in\R^n\), then
+\(\int_{\R^n}g(x)\,\mathrm{d}x=\lvert\det B\rvert\int_{\R^n}g(c+Bu)\,\mathrm{d}u\);
+\item (products) \(\int_{\R^n}g_1(u_1)\cdots g_n(u_n)\,\mathrm{d}u=\int_{\R}g_1(s)\,\mathrm{d}s\cdots\int_{\R}g_n(s)\,\mathrm{d}s\) for functions
+\(g_1,\dots,g_n\geqslant0\);
+\item \(\int_{\R}e^{-s^2/2}\,\mathrm{d}s=\sqrt{2\pi}\).
+\end{itemize}
+
+\needspace{14\baselineskip}
+\begin{theorem}[\citeat{bapat}{\S8.1, (8.2)}, \citeat{tu-clm}{\S4.1}]\label{r14-thm-mvn-density}
+Let \(\mu\in\R^n\), let \(\Sigma\in\R^{n\times n}\) be PD, and let
+\[
+f(x)=\frac1{(2\pi)^{n/2}(\det\Sigma)^{1/2}}\exp\Bigl(-\frac12(x-\mu)'\Sigma^{-1}(x-\mu)\Bigr)\qquad(x\in\R^n)
+\]
+\begin{enumerate}
+\item \(f(x)>0\) for every \(x\), and \(\int_{\R^n}f(x)\,\mathrm{d}x=1\).
+\item A random vector with the density \(f\) has the distribution \(N_n(\mu,\Sigma)\); in particular, \(N_n(\mu,\Sigma)\) exists.
+\item Every \(z\sim N_n(\mu,\Sigma)\) has the density \(f\).
+\end{enumerate}
+For \(n=1\) and \(\sigma^2>0\), \(N(\mu,\sigma^2)\) has the density \((2\pi\sigma^2)^{-1/2}\exp\bigl(-(x-\mu)^2/(2\sigma^2)\bigr)\).
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item \(\det\Sigma>0\) (Theorem~\ref{r8-thm-eigen-criterion}(c)), so \(f\) is defined, and \(f(x)>0\).
+\item \(\Sigma^{1/2}\) is symmetric and PD, with \(\Sigma^{1/2}\Sigma^{1/2}=\Sigma\) (Theorem~\ref{r8-thm-sqrt}); so \(\det\Sigma^{1/2}>0\)
+and \((\det\Sigma^{1/2})^2=\det\Sigma\) (Theorem~\ref{r5d-thm-product}(b)), that is, \(\det\Sigma^{1/2}=(\det\Sigma)^{1/2}\).
+\item \(\Sigma^{-1}=(\Sigma^{1/2}\Sigma^{1/2})^{-1}=\Sigma^{-1/2}\Sigma^{-1/2}\) (Theorem~\ref{r2-thm-inverse-props}(b)), so
+\(\Sigma^{1/2}\Sigma^{-1}\Sigma^{1/2}=I_n\), and for \(x=\mu+\Sigma^{1/2}u\),
+\((x-\mu)'\Sigma^{-1}(x-\mu)=u'\Sigma^{1/2}\Sigma^{-1}\Sigma^{1/2}u=u'u=u_1^2+\dots+u_n^2\).
+\item By the change of variables with \(c=\mu\) and \(B=\Sigma^{1/2}\), and then the rule for products,
+\[
+\int_{\R^n}f(x)\,\mathrm{d}x=\frac{(\det\Sigma)^{1/2}}{(2\pi)^{n/2}(\det\Sigma)^{1/2}}\int_{\R^n}e^{-u_1^2/2}\cdots e^{-u_n^2/2}\,\mathrm{d}u
+=\frac{(\sqrt{2\pi})^n}{(2\pi)^{n/2}}=1
+\]
+\end{itemize}
+(b)
+\begin{itemize}
+\item For \(t,x\in\R^n\), expanding with \(\Sigma'=\Sigma\) and \(\Sigma^{-1}\Sigma=I_n\),
+\((x-\mu-\Sigma t)'\Sigma^{-1}(x-\mu-\Sigma t)=(x-\mu)'\Sigma^{-1}(x-\mu)-2t'(x-\mu)+t'\Sigma t\). Hence
+\[
+t'x-\tfrac12(x-\mu)'\Sigma^{-1}(x-\mu)=t'\mu+\tfrac12t'\Sigma t-\tfrac12(x-\mu-\Sigma t)'\Sigma^{-1}(x-\mu-\Sigma t)
+\]
+\item So \(e^{t'x}f(x)=\exp(t'\mu+\frac12t'\Sigma t)\,f_t(x)\), where \(f_t\) is the function \(f\) with \(\mu+\Sigma t\) in place of
+\(\mu\). If \(y\) has the density \(f\), then by (a) for \(\mu+\Sigma t\),
+\(M_y(t)=\int_{\R^n}e^{t'x}f(x)\,\mathrm{d}x=\exp(t'\mu+\frac12t'\Sigma t)\int_{\R^n}f_t(x)\,\mathrm{d}x=\exp(t'\mu+\frac12t'\Sigma t)\)
+for every \(t\): \(y\sim N_n(\mu,\Sigma)\).
+\item By (a), \(f\) is the density of some random vector, which has the distribution \(N_n(\mu,\Sigma)\).
+\end{itemize}
+(c) Let \(y\) be as in (b). Then \(M_z=M_y\), so \(z\) and \(y\) have the same distribution (N1), and
+\(\prb(z\in A)=\prb(y\in A)=\int_Af(x)\,\mathrm{d}x\) for every set \(A\): \(z\) has the density \(f\).
+
+For \(n=1\), \(\det(\sigma^2)=\sigma^2\) and the inverse of \((\sigma^2)\) is \((1/\sigma^2)\).
+\end{proof}
+The density \(f\) of Theorem~\ref{r14-thm-mvn-density} depends on \(x\) only through
+\((x-\mu)'\Sigma^{-1}(x-\mu)=d_\Sigma(x,\mu)^2\), the squared Mahalanobis distance of Definition~\ref{r8-def-mahalanobis} with
+\(\Sigma\) in place of \(S\). So \(f\) is constant on each \textbf{contour} \(\{x\in\R^n:d_\Sigma(x,\mu)=c\}\) (\(c>0\)). Let
+\(\Sigma=Q\Lambda Q'\) as in Theorem~\ref{r8-thm-spectral}(b), with \(Q=[q_1\ \cdots\ q_n]\), and put \(u=Q'(x-\mu)\). Then
+\(x-\mu=Qu=u_1q_1+\dots+u_nq_n\) (Proposition~\ref{r6-prop-orthonormal}(b)), every \(\lambda_j>0\)
+(Theorem~\ref{r8-thm-eigen-criterion}(a)), and \(\Sigma^{-1}=Q\Lambda^{-1}Q'\) (Proposition~\ref{r8-prop-function}(a),(b) with the
+function \(t\mapsto t\)), so
+\[
+d_\Sigma(x,\mu)^2=u'\Lambda^{-1}u=\frac{u_1^2}{\lambda_1}+\dots+\frac{u_n^2}{\lambda_n}
+\]
+In the coordinates \(u\), the contour is \(\bigl\{u:\sum_ju_j^2/(c\sqrt{\lambda_j})^2=1\bigr\}\). As \(x=\mu+u_1q_1+\dots+u_nq_n\),
+the contour is an ellipse for \(n=2\) and an ellipsoid for \(n\geqslant3\), with center \(\mu\), axes along \(q_1,\dots,q_n\) and semi-axes
+\(c\sqrt{\lambda_1},\dots,c\sqrt{\lambda_n}\)~\citeat{haerdle-simar}{\S4.4, (4.51), Example~4.14}.
+
+\needspace{20\baselineskip}
+\subsection*{Independent components and the existence of \(N_n(\mu,\Sigma)\)}
+
+\begin{theorem}[\citeat{tu-clm}{Theorem~4.5}, \citeat{tu-asm}{Definition~P.113}, \citeat{bapat}{\S8.1}]\label{r14-thm-mvn-iid}
+Let \(\mu\in\R^n\).
+\begin{enumerate}
+\item Let \(\sigma^2\geqslant0\). Then \(z\sim N_n(\mu,\sigma^2I_n)\) if and only if \(z_1,\dots,z_n\) are independent with
+\(z_i\sim N(\mu_i,\sigma^2)\). More generally, \(z\sim N_n\bigl(\mu,\diag(\sigma_1^2,\dots,\sigma_n^2)\bigr)\) if and only if
+\(z_1,\dots,z_n\) are independent with \(z_i\sim N(\mu_i,\sigma_i^2)\). Let \(n=n_1+\dots+n_m\) and
+\(\mu=(\mu_1',\dots,\mu_m')'\) with \(\mu_k\in\R^{n_k}\). If random vectors \(x_1\in\R^{n_1},\dots,x_m\in\R^{n_m}\) are
+independent, with \(x_k\sim N_{n_k}(\mu_k,\Sigma_k)\), then \((x_1',\dots,x_m')'\sim N_n\bigl(\mu,\diag(\Sigma_1,\dots,\Sigma_m)\bigr)\).
+\item Let \(\Sigma\in\R^{n\times n}\) be PSD, and let \(w\sim N_n(0,I_n)\), which exists by
+Theorem~\ref{r14-thm-mvn-density}(b). Then \(\mu+\Sigma^{1/2}w\sim N_n(\mu,\Sigma)\). So \(N_n(\mu,\Sigma)\) exists for every PSD
+\(\Sigma\).
+\item A random vector \(z\) has the distribution \(N_n(\mu,\Sigma)\) if and only if it has the distribution of \(\mu+Aw\) for some
+\(A\in\R^{n\times k}\) with \(AA'=\Sigma\) and some \(w\sim N_k(0,I_k)\), that is (by (a)), with \(w_1,\dots,w_k\) independent
+and \(N(0,1)\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item Let \(z\sim N_n(\mu,D)\) with \(D=\diag(\sigma_1^2,\dots,\sigma_n^2)\). The off-diagonal entries of \(D\) are \(0\), so
+\(z_1,\dots,z_n\) are independent by Theorem~\ref{r14-thm-mvn-indep}(b) (subvectors of length \(1\)), and
+\(z_i\sim N(\mu_i,\sigma_i^2)\) by Corollary~\ref{r14-cor-marginal}(b).
+\item Conversely, let \(x_1,\dots,x_m\) be independent with \(x_k\sim N_{n_k}(\mu_k,\Sigma_k)\), and let
+\(x=(x_1',\dots,x_m')'\) and \(D=\diag(\Sigma_1,\dots,\Sigma_m)\). For \(t=(t_1',\dots,t_m')'\) with \(t_k\in\R^{n_k}\), the
+block product (Theorem~\ref{r5b-thm-block}(c)) gives \(t'\mu=\sum_kt_k'\mu_k\) and \(t'Dt=\sum_kt_k'\Sigma_kt_k\geqslant0\); so
+\(D\), which is symmetric (Theorem~\ref{r5b-thm-block}(b)), is PSD. By (N2),
+\(M_x(t)=\prod_kM_{x_k}(t_k)=\prod_k\exp(t_k'\mu_k+\frac12t_k'\Sigma_kt_k)=\exp(t'\mu+\frac12t'Dt)\) for \(t\) near \(0\).
+\item With \(w\sim N_n(0,I_n)\) (Theorem~\ref{r14-thm-mvn-density}(b)) and the square root \(D^{1/2}\) of
+Theorem~\ref{r8-thm-sqrt}, the vector \(y=\mu+D^{1/2}w\) is \(N_n(\mu,D^{1/2}I_nD^{1/2})=N_n(\mu,D)\)
+(Theorem~\ref{r14-thm-mvn-linear}), so it has the same MGF as \(x\) near \(0\). Hence \(x\) and \(y\) have the same
+distribution (N1) and the same MGF \(\exp(t'\mu+\frac12t'Dt)\) for every \(t\): \(x\sim N_n(\mu,D)\)
+(Definition~\ref{r14-def-mvn}).
+\item With \(m=n\), \(n_k=1\), \(x_k=z_k\) and \(\Sigma_k=\sigma_k^2\), this is the converse in the second statement; and
+\(\sigma_1^2=\dots=\sigma_n^2=\sigma^2\) gives the first statement.
+\end{itemize}
+(b) \(\Sigma^{1/2}\) is symmetric and \(\Sigma^{1/2}\Sigma^{1/2}=\Sigma\) (Theorem~\ref{r8-thm-sqrt}). By
+Theorem~\ref{r14-thm-mvn-linear} with \(A=\Sigma^{1/2}\) and \(b=\mu\),
+\(\mu+\Sigma^{1/2}w\sim N_n(\mu,\Sigma^{1/2}I_n\Sigma^{1/2})=N_n(\mu,\Sigma)\).
+
+(c)
+\begin{itemize}
+\item If \(AA'=\Sigma\) and \(w\sim N_k(0,I_k)\), then \(\mu+Aw\sim N_n(\mu,AI_kA')=N_n(\mu,\Sigma)\)
+(Theorem~\ref{r14-thm-mvn-linear}). A random vector with the same distribution has the same MGF, so it is \(N_n(\mu,\Sigma)\).
+\item Conversely, let \(z\sim N_n(\mu,\Sigma)\). With \(k=n\), \(A=\Sigma^{1/2}\) and \(w\) as in (b), \(\mu+Aw\sim N_n(\mu,\Sigma)\) has the
+same MGF as \(z\), hence the same distribution (N1).\qedhere
+\end{itemize}
+\end{proof}
+The multivariate normal distribution is often defined as the distribution of \(\mu+Aw\) with \(w_1,\dots,w_k\) independent
+\(N(0,1)\)~\citeat{bapat}{\S8.1}, \citeat{tu-asm}{Definition~P.113}; by (c) this is the same as Definition~\ref{r14-def-mvn}. The matrix \(A\) is not unique: besides \(A=\Sigma^{1/2}\),
+for PD \(\Sigma\) one may take \(A=T'\), where \(\Sigma=T'T\) is the Cholesky decomposition of
+Theorem~\ref{r8-thm-cholesky}; \(T'\) is lower triangular with positive diagonal entries. For instance, for \(\Sigma\) of
+Example~\ref{r14-exm-cov},
+\[
+\Sigma=AA',\qquad A=\begin{pmatrix}2&0&0&0\\0&1&0&0\\2&2&1&0\\0&2&2&1\end{pmatrix}
+\]
+where \(A'\) is upper triangular with positive diagonal entries; \(A'\) is invertible (Theorem~\ref{r2-thm-triangular}(a)),
+so \(\Sigma=(A')'A'\) is PD (Theorems~\ref{r5d-thm-product}(a) and~\ref{r8-thm-XtX}), and \(A'\) is the Cholesky factor of \(\Sigma\)
+(Theorem~\ref{r8-thm-cholesky}), and \(z_1=1+2w_1\), \(z_2=w_2\), \(z_3=2+2w_1+2w_2+w_3\), \(z_4=2+2w_2+2w_3+w_4\)
+defines a vector \(z\sim N_4(\mu,\Sigma)\) as in Example~\ref{r14-exm-marginal}.
+
+\begin{example}[\citeat{casella-berger}{Theorem~5.3.1, Example~5.2.8, Lemma~5.3.3}]\label{r14-exm-sample}
+Let \(\mu\in\R\), \(\sigma^2>0\) and \(z\sim N_n(\mu\one_n,\sigma^2I_n)\) (\(n\geqslant2\)). By Theorem~\ref{r14-thm-mvn-iid}(a),
+\(z_1,\dots,z_n\) are independent, each \(N(\mu,\sigma^2)\): a \textbf{random sample} from \(N(\mu,\sigma^2)\).
+\begin{enumerate}
+\item The mean \(\bar z=\frac1n\one'z\) has the distribution \(N(\mu,\sigma^2/n)\), by Corollary~\ref{r14-cor-marginal}(c) with
+\(a=\frac1n\one\): \(a'\mu\one=\mu\) and \(a'(\sigma^2I_n)a=\sigma^2/n\).
+\item The deviations \(C_nz=(z_1-\bar z,\dots,z_n-\bar z)'\) (Example~\ref{r1-exm-centering}) are independent of \(\bar z\): with
+\(A=\frac1n\one'\) and \(B=C_n\), \(A(\sigma^2I_n)B'=\frac{\sigma^2}n(C_n\one)'=0\) (Proposition~\ref{r1-prop-centering}), and
+Theorem~\ref{r14-thm-mvn-indep}(c) applies. Hence, by (N3), \(\bar z\) is independent of every function of the deviations,
+such as the sample variance \(s^2=\frac1{n-1}(C_nz)'(C_nz)\).
+\item By Theorem~\ref{r14-thm-mvn-linear}, \(C_nz\sim N_n(0,\sigma^2C_n)\), as \(C_n\mu\one=0\) and
+\(C_n(\sigma^2I_n)C_n'=\sigma^2C_n^2=\sigma^2C_n\). This covariance matrix is singular, of rank \(n-1\)
+(Corollary~\ref{r6-cor-trace-hat}): the deviations always add up to \(0\).
+\end{enumerate}
+\end{example}
+
+\needspace{20\baselineskip}
+\subsection*{Standardization and singular covariance matrices}
+
+\begin{corollary}[\citeat{bapat}{\S8.1}, \citeat{tu-clm}{\S4.1}]\label{r14-cor-standard}
+Let \(z\sim N_n(\mu,\Sigma)\).
+\begin{enumerate}
+\item If \(\Sigma\) is PD, then \(w=\Sigma^{-1/2}(z-\mu)\sim N_n(0,I_n)\): the \(w_i\) are independent and \(N(0,1)\), and
+\(z=\mu+\Sigma^{1/2}w\). Moreover \((z-\mu)'\Sigma^{-1}(z-\mu)=w'w=w_1^2+\dots+w_n^2\) has the distribution \(\chi^2_n\).
+\item If \(\Sigma\ne0\), let the columns of \(K\in\R^{n\times r}\) form a basis of \(\mathcal C(\Sigma)\), so that \(r=\rank\Sigma\). Then
+\(\prb\bigl(z-\mu\in\mathcal C(\Sigma)\bigr)=1\): with probability \(1\), \(z\) lies in the set
+\(\mu+\mathcal C(\Sigma)=\{\mu+Kc:c\in\R^r\}\). If \(\Sigma=0\), then \(\prb(z=\mu)=1\).
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(a)
+\begin{itemize}
+\item \(\Sigma^{-1/2}\) is symmetric and \(\Sigma^{-1/2}\Sigma\Sigma^{-1/2}=I_n\) (Theorem~\ref{r8-thm-sqrt}). By
+Theorem~\ref{r14-thm-mvn-linear} with \(A=\Sigma^{-1/2}\) and \(b=-\Sigma^{-1/2}\mu\), \(w\sim N_n(0,I_n)\), and by
+Theorem~\ref{r14-thm-mvn-iid}(a) the \(w_i\) are independent and \(N(0,1)\).
+\item \(\Sigma^{1/2}w=\Sigma^{1/2}\Sigma^{-1/2}(z-\mu)=z-\mu\), and
+\(w'w=(z-\mu)'\Sigma^{-1/2}\Sigma^{-1/2}(z-\mu)=(z-\mu)'\Sigma^{-1}(z-\mu)\), as in the proof of
+Theorem~\ref{r14-thm-mvn-density}(a). By (N5), \(w_1^2+\dots+w_n^2\sim\chi^2_n\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item Let \(P=K(K'K)^{-1}K'\), the matrix \(P\) of Theorem~\ref{r6-thm-hat} with \(A=K\), which has full column rank
+\(r\). Every column of \(\Sigma\) lies in \(\mathcal C(K)\), so \(\Sigma=KT\) for some \(T\in\R^{r\times n}\)
+(Theorem~\ref{r1-thm-views}(a),(b)), and \((I_n-P)\Sigma=(I_n-P)KT=0\) (Theorem~\ref{r6-thm-hat}(c)).
+\item By Theorem~\ref{r14-thm-mvn-linear}, \((I_n-P)(z-\mu)\sim N_n\bigl(0,(I_n-P)\Sigma(I_n-P)'\bigr)=N_n(0,0)\), the
+distribution of the constant \(0\) (Definition~\ref{r14-def-mvn}); so \((I_n-P)(z-\mu)=0\) with probability \(1\).
+\item If \((I_n-P)(z-\mu)=0\), then \(z-\mu=P(z-\mu)=K\bigl((K'K)^{-1}K'(z-\mu)\bigr)\in\mathcal C(K)=\mathcal C(\Sigma)\).
+\item The case \(\Sigma=0\) is part of Definition~\ref{r14-def-mvn}.\qedhere
+\end{itemize}
+\end{proof}
+So a normal vector with a singular covariance matrix lies, with probability \(1\), in the affine subspace
+\(\mu+\mathcal C(\Sigma)\) of dimension \(\rank\Sigma<n\). Such vectors, like the deviations \(C_nz\) of
+Example~\ref{r14-exm-sample}(c), for which \(\mathcal C(\sigma^2C_n)=\Span\{\one\}^\perp\) (Example~\ref{r6-exm-centering}), are
+the reason why Definition~\ref{r14-def-mvn} uses the MGF and not a density~\citeat{tu-clm}{\S4.1}.
+
+\subsection*{Conditional distributions}
+
+\begin{definition}[\citeat{casella-berger}{Definition~4.2.3, (4.6.4), (4.6.6)}]\label{r14-def-conditional}
+Let \((u',v')'\), with \(u\in\R^p\) and \(v\in\R^q\), have the density \(f\). Then \(u\) has the density
+\(f_u(a)=\int_{\R^q}f(a,b)\,\mathrm{d}b\) (\(a\in\R^p\)), the \textbf{marginal density}. For \(a\in\R^p\) with \(f_u(a)>0\), the function
+\[
+f(b\mid a)=\frac{f(a,b)}{f_u(a)}\qquad(b\in\R^q)
+\]
+is a density on \(\R^q\) (it is \(\geqslant0\), with integral \(f_u(a)/f_u(a)=1\)), the \textbf{conditional density} of \(v\) given
+\(u=a\); the distribution with this density is the \textbf{conditional distribution} of \(v\) given \(u=a\).
+\end{definition}
+
+\needspace{18\baselineskip}
+\begin{theorem}[\citeat{bapat}{\S8.1; Ch.~8, Exercise~13}, \citeat{searle-khuri}{\S10.4}, \citeat{casella-berger}{Example~4.5.8}]\label{r14-thm-mvn-conditional}
+Let \(z\sim N_n(\mu,\Sigma)\) be partitioned as in Corollary~\ref{r14-cor-marginal}(a), with \(z_1\in\R^p\) and \(z_2\in\R^q\),
+and let \(\Sigma_{11}\) be PD. Put
+\[
+\Sigma_{22\cdot1}=\Sigma_{22}-\Sigma_{21}\Sigma_{11}^{-1}\Sigma_{12}
+\]
+the Schur complement of \(\Sigma_{11}\) in \(\Sigma\) (Theorem~\ref{r5b-thm-schur}). Then the \textbf{conditional distribution of
+\(z_2\) given \(z_1\)} is
+\[
+N_q\bigl(\mu_2+\Sigma_{21}\Sigma_{11}^{-1}(z_1-\mu_1),\ \Sigma_{22\cdot1}\bigr)
+\]
+in the following sense.
+\begin{enumerate}
+\item \(\Sigma_{22\cdot1}\) is PSD, and \(w=z_2-\mu_2-\Sigma_{21}\Sigma_{11}^{-1}(z_1-\mu_1)\) is independent of \(z_1\), with
+\(w\sim N_q(0,\Sigma_{22\cdot1})\). So \(z_2\) is the sum of \(\mu_2+\Sigma_{21}\Sigma_{11}^{-1}(z_1-\mu_1)\), which is known once
+\(z_1\) is known, and of \(w\), whose distribution does not depend on \(z_1\).
+\item If \(\Sigma\) is PD, then \(\Sigma_{22\cdot1}\) is PD and is the inverse of the lower right \(q\times q\) block of \(\Sigma^{-1}\);
+\(z_1\) has the density of \(N_p(\mu_1,\Sigma_{11})\); and for every \(a\in\R^p\), the conditional density of \(z_2\) given
+\(z_1=a\) (Definition~\ref{r14-def-conditional}) is the density of
+\(N_q\bigl(\mu_2+\Sigma_{21}\Sigma_{11}^{-1}(a-\mu_1),\Sigma_{22\cdot1}\bigr)\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Let
+\[
+L=\begin{pmatrix}I_p&0\\-\Sigma_{21}\Sigma_{11}^{-1}&I_q\end{pmatrix},\qquad\text{so that}\qquad
+L(z-\mu)=\begin{pmatrix}z_1-\mu_1\\w\end{pmatrix}
+\]
+by the block product. \(\Sigma_{11}^{-1}\) is symmetric (Theorem~\ref{r2-thm-inverse-props}(c)) and \(\Sigma_{21}'=\Sigma_{12}\), so
+\(L'=\left(\begin{smallmatrix}I_p&-\Sigma_{11}^{-1}\Sigma_{12}\\0&I_q\end{smallmatrix}\right)\) (Theorem~\ref{r5b-thm-block}(b)), and
+Theorem~\ref{r5b-thm-schur}, with \(A=\Sigma_{11}\), \(B=\Sigma_{12}\), \(C=\Sigma_{21}\) and \(D=\Sigma_{22}\), gives
+\[
+L\Sigma L'=\begin{pmatrix}\Sigma_{11}&0\\0&\Sigma_{22\cdot1}\end{pmatrix}
+\]
+(a)
+\begin{itemize}
+\item By Theorem~\ref{r14-thm-mvn-linear} with \(A=L\) and \(b=-L\mu\), \(L(z-\mu)\sim N_n(0,L\Sigma L')\). By
+Corollary~\ref{r14-cor-marginal}(a), \(w\sim N_q(0,\Sigma_{22\cdot1})\); so \(\Sigma_{22\cdot1}=\var(w)\) is PSD
+(Theorem~\ref{r11-thm-linear}(c)).
+\item The off-diagonal blocks of \(L\Sigma L'\) are \(0\), so \(z_1-\mu_1\) and \(w\) are independent
+(Theorem~\ref{r14-thm-mvn-indep}(a)), and so are \(z_1=(z_1-\mu_1)+\mu_1\) and \(w\) (N3).
+\end{itemize}
+(b)
+\begin{itemize}
+\item \(\Sigma_{11}\) and \(\Sigma_{22\cdot1}\) are PD (Theorem~\ref{r8-thm-schur-pd}). \(L\) is invertible
+(Proposition~\ref{r5b-prop-block-elementary}), so by Theorem~\ref{r2-thm-inverse-props}(a)--(c) and
+Proposition~\ref{r5b-prop-block-tri}(b),
+\[
+\Sigma=L^{-1}\begin{pmatrix}\Sigma_{11}&0\\0&\Sigma_{22\cdot1}\end{pmatrix}(L')^{-1},\qquad
+\Sigma^{-1}=L'\begin{pmatrix}\Sigma_{11}^{-1}&0\\0&\Sigma_{22\cdot1}^{-1}\end{pmatrix}L
+\]
+By Theorem~\ref{r5b-thm-partitioned-inverse}(a), the lower right block of \(\Sigma^{-1}\) is \(\Sigma_{22\cdot1}^{-1}\).
+\item For \(x=(a',b')'\) with \(a\in\R^p\) and \(b\in\R^q\), put \(m(a)=\mu_2+\Sigma_{21}\Sigma_{11}^{-1}(a-\mu_1)\); then
+\(L(x-\mu)=\bigl((a-\mu_1)',(b-m(a))'\bigr)'\), and
+\[
+\begin{aligned}
+(x-\mu)'\Sigma^{-1}(x-\mu)&=\bigl(L(x-\mu)\bigr)'\begin{pmatrix}\Sigma_{11}^{-1}&0\\0&\Sigma_{22\cdot1}^{-1}\end{pmatrix}L(x-\mu)\\
+&=(a-\mu_1)'\Sigma_{11}^{-1}(a-\mu_1)+(b-m(a))'\Sigma_{22\cdot1}^{-1}(b-m(a))
+\end{aligned}
+\]
+\item \(\det\Sigma=\det\Sigma_{11}\cdot\det\Sigma_{22\cdot1}\) (Theorem~\ref{r5d-thm-schur-det}(a)) and
+\((2\pi)^{n/2}=(2\pi)^{p/2}(2\pi)^{q/2}\). So the density \(f\) of \(z\) (Theorem~\ref{r14-thm-mvn-density}(c)) factors as
+\(f(a,b)=f_1(a)\,g_a(b)\), where \(f_1\) is the density of \(N_p(\mu_1,\Sigma_{11})\) and \(g_a\) that of \(N_q(m(a),\Sigma_{22\cdot1})\).
+\item By Theorem~\ref{r14-thm-mvn-density}(a), \(\int_{\R^q}g_a(b)\,\mathrm{d}b=1\); so the marginal density of \(z_1\) is
+\(\int_{\R^q}f(a,b)\,\mathrm{d}b=f_1(a)>0\), and the conditional density of \(z_2\) given \(z_1=a\) is \(f(a,b)/f_1(a)=g_a(b)\).\qedhere
+\end{itemize}
+\end{proof}
+The conditional mean \(\mu_2+\Sigma_{21}\Sigma_{11}^{-1}(z_1-\mu_1)\) is an affine function of \(z_1\), and the conditional covariance
+matrix \(\Sigma_{22\cdot1}\) does not depend on \(z_1\). It is never larger than \(\Sigma_{22}=\var(z_2)\): the matrix
+\(\Sigma_{11}^{-1}=(\Sigma_{11}^{-1/2})'\Sigma_{11}^{-1/2}\) is PSD (Theorems~\ref{r8-thm-sqrt} and~\ref{r8-thm-XtX}), so
+\(\Sigma_{22}-\Sigma_{22\cdot1}=\Sigma_{12}'\Sigma_{11}^{-1}\Sigma_{12}\) is PSD (Theorem~\ref{r8-thm-congruence}(a)), and for every
+\(c\in\R^q\), \(\var(c'w)=c'\Sigma_{22\cdot1}c\leqslant c'\Sigma_{22}c=\var(c'z_2)\): knowing \(z_1\) can only
+reduce the uncertainty about \(z_2\). If the diagonal entries of \(\Sigma_{22\cdot1}=\var(w)\) are
+positive, the correlations of the entries of \(w\) (Definition~\ref{r14-def-corr}), which are computed from the
+conditional covariance matrix \(\Sigma_{22\cdot1}\), are the \textbf{partial correlations} of the entries of
+\(z_2\) given \(z_1\)~\citeat{haerdle-simar}{\S5.1, Example~5.3}.
+
+\needspace{10\baselineskip}
+\begin{example}\label{r14-exm-conditional}
+Let \(z\sim N_4(\mu,\Sigma)\) be as in Example~\ref{r14-exm-marginal}, with \(\mu=(1,0,2,2)'\). For the lower triangular \(A\)
+with \(\Sigma=AA'\) of the paragraph after Theorem~\ref{r14-thm-mvn-iid},
+\[
+A^{-1}=\begin{pmatrix}\frac12&0&0&0\\0&1&0&0\\-1&-2&1&0\\2&2&-2&1\end{pmatrix},\qquad
+\Sigma^{-1}=(A^{-1})'A^{-1}=\begin{pmatrix}\frac{21}4&6&-5&2\\6&9&-6&2\\-5&-6&5&-2\\2&2&-2&1\end{pmatrix}
+\]
+as \(AA^{-1}=I_4\) (Theorem~\ref{r2-thm-invertible}) and \(\Sigma^{-1}=(A')^{-1}A^{-1}\) (Theorem~\ref{r2-thm-inverse-props}(b),(c)); the rows \(3\) and \(4\) of
+\(A^{-1}\) are \(a'\) and \(b'\) of Example~\ref{r14-exm-cov}. As \(\Sigma\) is PD (the paragraph after
+Theorem~\ref{r14-thm-mvn-iid}), \(\Sigma_{11}\) is PD in (a) and (b) (Theorem~\ref{r8-thm-principal-sub}).
+\begin{enumerate}
+\item Given \((z_1,z_2,z_3)'\): here \(p=3\), \(q=1\), \(\Sigma_{11}\) is the leading \(3\times3\) block of \(\Sigma\),
+\(\Sigma_{21}=(0,2,6)\) and \(\Sigma_{22}=9\). As
+\[
+(-2,-2,2)\,\Sigma_{11}=(-2,-2,2)\begin{pmatrix}4&0&4\\0&1&2\\4&2&9\end{pmatrix}=(-8+0+8,\ 0-2+4,\ -8-4+18)=(0,2,6)
+\]
+multiplying by \(\Sigma_{11}^{-1}\) on the right gives \(\Sigma_{21}\Sigma_{11}^{-1}=(-2,-2,2)\), and
+\(\Sigma_{22\cdot1}=9-(-2,-2,2)(0,2,6)'=9-8=1\). Given \(z_1=a_1\), \(z_2=a_2\) and \(z_3=a_3\), the conditional distribution of \(z_4\) is
+\[
+N\bigl(2-2(a_1-1)-2a_2+2(a_3-2),\ 1\bigr)=N(2a_3-2a_1-2a_2,\ 1)
+\]
+for instance \(N(4,1)\) for \(a_1=3\),
+\(a_2=1\), \(a_3=6\). This agrees with Example~\ref{r14-exm-indep}: \(z_4=-2z_1-2z_2+2z_3+f\), with \(f\sim N(0,1)\)
+independent of \((z_1,z_2,z_3)'\). The \((4,4)\) entry of \(\Sigma^{-1}\) is \(1=\Sigma_{22\cdot1}^{-1}\), as
+Theorem~\ref{r14-thm-mvn-conditional}(b) says.
+\item Given \((z_1,z_2)'\): here \(p=q=2\), \(\Sigma_{11}=\diag(4,1)\), \(\Sigma_{11}^{-1}=\diag(\frac14,1)\) and
+\(\Sigma_{21}=\left(\begin{smallmatrix}4&2\\0&2\end{smallmatrix}\right)\), so
+\(\Sigma_{21}\Sigma_{11}^{-1}=\left(\begin{smallmatrix}1&2\\0&2\end{smallmatrix}\right)\) and
+\[
+\Sigma_{22\cdot1}=\begin{pmatrix}9&6\\6&9\end{pmatrix}-\begin{pmatrix}1&2\\0&2\end{pmatrix}\begin{pmatrix}4&0\\2&2\end{pmatrix}
+=\begin{pmatrix}9&6\\6&9\end{pmatrix}-\begin{pmatrix}8&4\\4&4\end{pmatrix}=\begin{pmatrix}1&2\\2&5\end{pmatrix}
+\]
+As \((2,2)'+\left(\begin{smallmatrix}1&2\\0&2\end{smallmatrix}\right)(a_1-1,\ a_2)'=(a_1+2a_2+1,\ 2a_2+2)'\), given \(z_1=a_1\)
+and \(z_2=a_2\) the vector \((z_3,z_4)'\) has the distribution \(N_2\bigl((a_1+2a_2+1,\ 2a_2+2)',\Sigma_{22\cdot1}\bigr)\). Its
+first entry agrees with Example~\ref{r14-exm-indep}: \(z_3=z_1+2z_2+e\), with \(e\sim N(1,1)\) independent of
+\((z_1,z_2)'\). The lower right \(2\times2\) block of \(\Sigma^{-1}\) is
+\(\left(\begin{smallmatrix}5&-2\\-2&1\end{smallmatrix}\right)=\Sigma_{22\cdot1}^{-1}\), as
+Theorem~\ref{r14-thm-mvn-conditional}(b) says. Knowing \(z_1\) and \(z_2\) reduces the variances of \(z_3\) and \(z_4\) from
+\(9\) and \(9\) to \(1\) and \(5\).
+\end{enumerate}
+\end{example}
+
+\subsection*{The bivariate normal distribution}
+
+\begin{definition}[\citeat{casella-berger}{Definition~4.5.10}]\label{r14-def-bivariate}
+Let \(\mu_u,\mu_v\in\R\), \(\sigma_u,\sigma_v>0\) and \(-1\leqslant\rho\leqslant1\). A random vector \((u,v)'\) has the
+\textbf{bivariate normal distribution} with means \(\mu_u,\mu_v\), variances \(\sigma_u^2,\sigma_v^2\) and correlation \(\rho\) if
+\[
+\begin{pmatrix}u\\v\end{pmatrix}\sim N_2\left(\begin{pmatrix}\mu_u\\\mu_v\end{pmatrix},\
+\Sigma\right),\qquad
+\Sigma=\begin{pmatrix}\sigma_u^2&\rho\sigma_u\sigma_v\\\rho\sigma_u\sigma_v&\sigma_v^2\end{pmatrix}
+\]
+\end{definition}
+This \(\Sigma\) is PSD: for \(\lvert\rho\rvert<1\) its leading principal minors \(\sigma_u^2\) and \(\sigma_u^2\sigma_v^2(1-\rho^2)\) are
+positive, so it is PD (Theorem~\ref{r8-thm-leading-minors}); for \(\rho=\pm1\), \(\Sigma=cc'\) with \(c=(\sigma_u,\rho\sigma_v)'\), which is
+PSD (Theorem~\ref{r8-thm-XtX}). Conversely, by Definition~\ref{r14-def-corr} and Proposition~\ref{r14-prop-corr}(a), every
+\(N_2\) distribution whose covariance matrix has a positive diagonal is of this form, with \(\rho=\rho_{uv}\).
+
+\needspace{18\baselineskip}
+\begin{proposition}[\citeat{casella-berger}{\S4.5}]\label{r14-prop-bivariate}
+Let \((u,v)'\) have the bivariate normal distribution of Definition~\ref{r14-def-bivariate}.
+\begin{enumerate}
+\item \(u\sim N(\mu_u,\sigma_u^2)\), \(v\sim N(\mu_v,\sigma_v^2)\), \(\rho_{uv}=\rho\), and for constants \(\alpha\), \(\beta\),
+\(\alpha u+\beta v\sim N\bigl(\alpha\mu_u+\beta\mu_v,\ \alpha^2\sigma_u^2+2\alpha\beta\rho\sigma_u\sigma_v+\beta^2\sigma_v^2\bigr)\).
+\item \(u\) and \(v\) are independent if and only if \(\rho=0\).
+\item If \(\lvert\rho\rvert<1\), then \((u,v)'\) has the density
+\[
+f(s,t)=\frac1{2\pi\sigma_u\sigma_v\sqrt{1-\rho^2}}
+\exp\biggl(-\frac1{2(1-\rho^2)}\Bigl(\Bigl(\frac{s-\mu_u}{\sigma_u}\Bigr)^2-2\rho\,\frac{s-\mu_u}{\sigma_u}\cdot\frac{t-\mu_v}{\sigma_v}
++\Bigl(\frac{t-\mu_v}{\sigma_v}\Bigr)^2\Bigr)\biggr)
+\]
+\item The conditional distribution of \(v\) given \(u\) is
+\(N\bigl(\mu_v+\rho\frac{\sigma_v}{\sigma_u}(u-\mu_u),\ \sigma_v^2(1-\rho^2)\bigr)\). If \(\rho=\pm1\), then
+\(v=\mu_v+\rho\frac{\sigma_v}{\sigma_u}(u-\mu_u)\) with probability \(1\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a) The marginal distributions are given by Corollary~\ref{r14-cor-marginal}(b), and the distribution of \(\alpha u+\beta v\) by
+Corollary~\ref{r14-cor-marginal}(c) with the vector \((\alpha,\beta)'\), as
+\((\alpha,\beta)\Sigma(\alpha,\beta)'=\alpha^2\sigma_u^2+2\alpha\beta\rho\sigma_u\sigma_v+\beta^2\sigma_v^2\). By
+Definition~\ref{r14-def-mvn}, \(\cov(u,v)=\rho\sigma_u\sigma_v\), so \(\rho_{uv}=\rho\sigma_u\sigma_v/(\sigma_u\sigma_v)=\rho\)
+(Definition~\ref{r14-def-corr}).
+
+(b) By Theorem~\ref{r14-thm-mvn-indep}(a) with \(p=q=1\), \(u\) and \(v\) are independent if and only if
+\(\rho\sigma_u\sigma_v=0\), that is, \(\rho=0\).
+
+\needspace{8\baselineskip}
+(c)
+\begin{itemize}
+\item \(\det\Sigma=\sigma_u^2\sigma_v^2-\rho^2\sigma_u^2\sigma_v^2=\sigma_u^2\sigma_v^2(1-\rho^2)>0\), and by
+Theorem~\ref{r5d-thm-adjugate},
+\(\Sigma^{-1}=\frac1{\sigma_u^2\sigma_v^2(1-\rho^2)}\left(\begin{smallmatrix}\sigma_v^2&-\rho\sigma_u\sigma_v\\-\rho\sigma_u\sigma_v&\sigma_u^2\end{smallmatrix}\right)\).
+\item Hence, for \(x=(s,t)'\),
+\[
+(x-\mu)'\Sigma^{-1}(x-\mu)=\frac{\sigma_v^2(s-\mu_u)^2-2\rho\sigma_u\sigma_v(s-\mu_u)(t-\mu_v)+\sigma_u^2(t-\mu_v)^2}{\sigma_u^2\sigma_v^2(1-\rho^2)}
+\]
+which is the bracket in the exponent of \(f\) divided by \(1-\rho^2\); and \((2\pi)^{2/2}(\det\Sigma)^{1/2}=2\pi\sigma_u\sigma_v\sqrt{1-\rho^2}\).
+Theorem~\ref{r14-thm-mvn-density}(c) gives the claim.
+\end{itemize}
+(d) Theorem~\ref{r14-thm-mvn-conditional} with \(p=q=1\) and \(\Sigma_{11}=\sigma_u^2>0\): here
+\(\Sigma_{21}\Sigma_{11}^{-1}=\rho\sigma_u\sigma_v/\sigma_u^2=\rho\sigma_v/\sigma_u\) and
+\(\Sigma_{22\cdot1}=\sigma_v^2-\rho^2\sigma_u^2\sigma_v^2/\sigma_u^2=\sigma_v^2(1-\rho^2)\). If \(\rho=\pm1\), then
+\(w=v-\mu_v-\rho\frac{\sigma_v}{\sigma_u}(u-\mu_u)\sim N(0,0)\) in (a) of that theorem, so \(\prb(w=0)=1\)
+(Definition~\ref{r14-def-mvn}).
+\end{proof}
+
+\begin{example}\label{r14-exm-bivariate}
+Let \((u,v)'\) be bivariate normal with \(\mu_u=5\), \(\mu_v=6\), \(\sigma_u=2\), \(\sigma_v=4\) and \(\rho=\frac12\). Then
+\(\rho\sigma_u\sigma_v=4\), and
+\[
+\Sigma=\begin{pmatrix}4&4\\4&16\end{pmatrix},\qquad\det\Sigma=48,\qquad
+\Sigma^{-1}=\frac1{48}\begin{pmatrix}16&-4\\-4&4\end{pmatrix}=\frac1{12}\begin{pmatrix}4&-1\\-1&1\end{pmatrix}
+\]
+\begin{itemize}
+\item By Proposition~\ref{r14-prop-bivariate}(c), as \(2\pi\cdot2\cdot4\sqrt{1-\frac14}=8\sqrt3\,\pi\), the density is
+\[
+f(s,t)=\frac1{8\sqrt3\,\pi}\exp\Bigl(-\frac1{24}\bigl(4(s-5)^2-2(s-5)(t-6)+(t-6)^2\bigr)\Bigr)
+\]
+\item By Proposition~\ref{r14-prop-bivariate}(d), given \(u\) the variable \(v\) has the distribution
+\(N\bigl(6+\frac12\cdot\frac42(u-5),\ 16\cdot\frac34\bigr)=N(u+1,\ 12)\); for instance \(N(10,12)\) given \(u=9\), against
+\(v\sim N(6,16)\) without knowledge of \(u\). With the roles exchanged, given \(v\) the variable \(u\) has the distribution
+\(N\bigl(5+\frac12\cdot\frac24(v-6),\ 4\cdot\frac34\bigr)=N\bigl(5+\frac14(v-6),\ 3\bigr)\).
+\item \(v-u\) is independent of \(u\): \((1,0)\Sigma(-1,1)'=-4+4=0\) (Theorem~\ref{r14-thm-mvn-indep}(c)), and \(v-u\sim N(1,\ 4-8+16)=N(1,12)\)
+by (a). So \(v=u+(v-u)\) is \(u\) plus an independent \(N(1,12)\) variable, in accordance with the conditional distribution
+found above.
+\end{itemize}
+\end{example}
+
+\subsection*{Maximum likelihood estimates of \(\mu\) and \(\Sigma\)}
+
+\begin{lemma}[\citeat{abadir-magnus}{Exercise~12.20}]\label{r14-lem-logdet}
+Let \(A\in\R^{p\times p}\) be PD. Then \(\log\det A\leqslant\tr A-p\), with equality only if \(A=I_p\).
+\end{lemma}
+\begin{proof}
+\begin{itemize}
+\item Let \(\varphi(\lambda)=\lambda-1-\log\lambda\) for \(\lambda>0\). Its derivative \(\varphi'(\lambda)=1-1/\lambda\) is \(<0\) for
+\(\lambda<1\) and \(>0\) for \(\lambda>1\), so \(\varphi\) decreases on \((0,1]\) and increases on \([1,\infty)\), and
+\(\varphi(\lambda)>\varphi(1)=0\) for \(\lambda\ne1\): \(\log\lambda\leqslant\lambda-1\), with equality only for \(\lambda=1\).
+\item The eigenvalues \(\lambda_1,\dots,\lambda_p\) of \(A\) are \(>0\) (Theorem~\ref{r8-thm-eigen-criterion}(a)), and
+\(\det A=\lambda_1\cdots\lambda_p\), \(\tr A=\lambda_1+\dots+\lambda_p\) (Theorem~\ref{r7-thm-trace-det}). Hence
+\[
+\log\det A=\sum_{i=1}^p\log\lambda_i\leqslant\sum_{i=1}^p(\lambda_i-1)=\tr A-p
+\]
+\item Equality forces \(\lambda_i=1\) for every \(i\); then \(A=QI_pQ'=I_p\) for an orthogonal \(Q\) (Theorem~\ref{r8-thm-spectral}(b)).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{definition}[\citeat{casella-berger}{Definitions~5.1.1, 7.2.4, (7.2.3)}, \citeat{tu-mc}{\S13}]\label{r14-def-likelihood}
+Let \(x_1,\dots,x_n\in\R^p\) be independent random vectors, each \(N_p(\mu,\Sigma)\) with \(\Sigma\) PD: a \textbf{random sample} from
+\(N_p(\mu,\Sigma)\). Each \(x_i\) has the density \(f(\cdot\,;\mu,\Sigma)\) of Theorem~\ref{r14-thm-mvn-density}, and
+\((x_1',\dots,x_n')'\) has the density \(f(x_1;\mu,\Sigma)\cdots f(x_n;\mu,\Sigma)\). For observed values \(x_1,\dots,x_n\), the function
+\[
+L(\mu,\Sigma)=\prod_{i=1}^nf(x_i;\mu,\Sigma)\qquad(\mu\in\R^p,\ \Sigma\in\R^{p\times p}\text{ PD})
+\]
+is the \textbf{likelihood}, and values \(\hat\mu\), \(\hat\Sigma\) at which \(L\) is largest are \textbf{maximum likelihood estimates}
+of \(\mu\) and \(\Sigma\).
+\end{definition}
+
+\begin{theorem}[\citeat{abadir-magnus}{Exercises~13.61, 12.20}, \citeat{tu-mc}{\S13}, \citeat{casella-berger}{\S7.2.2, Example~7.2.11}]\label{r14-thm-mle}
+Let \(x_1,\dots,x_n\) (\(n\geqslant2\)) be a random sample from \(N_p(\mu,\Sigma)\) (Definition~\ref{r14-def-likelihood}), let \(X\) be the
+data matrix with rows \(x_1',\dots,x_n'\), and let \(\bar x\) and \(S\) be its mean vector and sample covariance matrix
+(Definition~\ref{r12-def-data}), so that \(A=X'C_nX=(n-1)S\). If \(A\) is PD, which requires \(n\geqslant p+1\), then the likelihood has
+exactly one maximizer,
+\[
+\hat\mu=\bar x,\qquad\hat\Sigma=\frac1nA=\frac1n\sum_{i=1}^n(x_i-\bar x)(x_i-\bar x)'=\frac{n-1}nS
+\]
+and the maximum is \(L(\bar x,\hat\Sigma)=(2\pi e)^{-np/2}(\det\hat\Sigma)^{-n/2}\). Moreover \(\expc(\bar x)=\mu\) and
+\(\expc(\hat\Sigma)=\frac{n-1}n\Sigma\).
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+\item The requirement: as \(A=(n-1)S\) with \(n-1>0\), \(A\) is PD if and only if \(S\) is; and \(S\) is PD if and only
+if \(\rank(C_nX)=p\), which requires \(n\geqslant p+1\) (Proposition~\ref{r12-prop-data}(a)).
+\item By Theorem~\ref{r14-thm-mvn-density},
+\[
+\log L(\mu,\Sigma)=-\frac{np}2\log(2\pi)-\frac n2\log\det\Sigma-\frac12\sum_{i=1}^n(x_i-\mu)'\Sigma^{-1}(x_i-\mu)
+\]
+As \(\log\) is strictly increasing, \(L\) and \(\log L\) have the same maximizers.
+\item The step for \(\mu\). Write \(x_i-\mu=(x_i-\bar x)+(\bar x-\mu)\). As \(\sum_i(x_i-\bar x)=X'\one-n\bar x=0\) and \(\Sigma^{-1}\) is
+symmetric, the cross terms add up to \(2(\bar x-\mu)'\Sigma^{-1}\sum_i(x_i-\bar x)=0\), and
+\[
+\sum_{i=1}^n(x_i-\mu)'\Sigma^{-1}(x_i-\mu)=\sum_{i=1}^n(x_i-\bar x)'\Sigma^{-1}(x_i-\bar x)+n(\bar x-\mu)'\Sigma^{-1}(\bar x-\mu)
+\]
+\(\Sigma^{-1}\) is PD: for \(y\ne0\), \(\Sigma^{-1}y\ne0\) and \(y'\Sigma^{-1}y=(\Sigma^{-1}y)'\Sigma(\Sigma^{-1}y)>0\). So the last term is
+\(>0\) unless \(\mu=\bar x\), and \(\log L(\mu,\Sigma)\leqslant\log L(\bar x,\Sigma)\), with equality only if \(\mu=\bar x\).
+\item The trace form. \((x_i-\bar x)'\Sigma^{-1}(x_i-\bar x)=\tr\bigl(\Sigma^{-1}(x_i-\bar x)(x_i-\bar x)'\bigr)\)
+(Theorem~\ref{r1-thm-trace}(b)), and \(\sum_i(x_i-\bar x)(x_i-\bar x)'=(C_nX)'(C_nX)=A\), as the rows of \(C_nX\) are the
+\((x_i-\bar x)'\) (Definition~\ref{r12-def-data}, Theorem~\ref{r1-thm-views}(d)). So
+\(-2\log L(\bar x,\Sigma)=np\log(2\pi)+g(\Sigma)\) with \(g(\Sigma)=n\log\det\Sigma+\tr(\Sigma^{-1}A)\).
+\item The step for \(\Sigma\). \(\hat\Sigma=\frac1nA\) is PD. Let \(B=\hat\Sigma^{1/2}\Sigma^{-1}\hat\Sigma^{1/2}\), which is PD
+(Theorems~\ref{r8-thm-sqrt} and~\ref{r8-thm-congruence}(c)). By Theorem~\ref{r1-thm-trace}(b),
+\(\tr B=\tr(\Sigma^{-1}\hat\Sigma^{1/2}\hat\Sigma^{1/2})=\tr(\Sigma^{-1}\hat\Sigma)\), and \(\det B=\det\hat\Sigma/\det\Sigma\)
+(Theorem~\ref{r5d-thm-product}(b),(c)). As \(A=n\hat\Sigma\) and \(\tr(\hat\Sigma^{-1}A)=np\),
+\[
+g(\Sigma)-g(\hat\Sigma)=n\log\frac{\det\Sigma}{\det\hat\Sigma}+n\tr(\Sigma^{-1}\hat\Sigma)-np=n\bigl(\tr B-\log\det B-p\bigr)\geqslant0
+\]
+by Lemma~\ref{r14-lem-logdet}, with equality only if \(B=I_p\), that is, \(\Sigma^{-1}=\hat\Sigma^{-1/2}\hat\Sigma^{-1/2}=\hat\Sigma^{-1}\), or
+\(\Sigma=\hat\Sigma\).
+\item Together, \(\log L(\mu,\Sigma)\leqslant\log L(\bar x,\Sigma)\leqslant\log L(\bar x,\hat\Sigma)\), with equality throughout only for
+\(\mu=\bar x\) and \(\Sigma=\hat\Sigma\). As \(g(\hat\Sigma)=n\log\det\hat\Sigma+np\),
+\(\log L(\bar x,\hat\Sigma)=-\frac{np}2\log(2\pi)-\frac n2\log\det\hat\Sigma-\frac{np}2\).
+\item Independent vectors are uncorrelated (N7), and \(\expc(x_i)=\mu\), \(\var(x_i)=\Sigma\)
+(Definition~\ref{r14-def-mvn}); so by Theorem~\ref{r14-thm-sample}, \(\expc(\bar x)=\mu\) and
+\(\expc(\hat\Sigma)=\frac{n-1}n\expc(S)=\frac{n-1}n\Sigma\).\qedhere
+\end{itemize}
+\end{proof}
+So the maximum likelihood estimator \(\hat\Sigma\) is not unbiased (Definition~\ref{r11-def-estimator}):
+\(\expc(\hat\Sigma)=\frac{n-1}n\Sigma\ne\Sigma\), while \(S\) is unbiased (Theorem~\ref{r14-thm-sample}). For \(p=1\),
+Theorem~\ref{r14-thm-mle} says that for a random sample from \(N(\mu,\sigma^2)\) whose observed values \(x_1,\dots,x_n\) are
+not all equal, the maximum likelihood estimates are \(\hat\mu=\bar x\) and
+\(\hat\sigma^2=\frac1n\sum_{i=1}^n(x_i-\bar x)^2=\frac{n-1}ns^2\), where \(s^2\) is the sample variance.
+
+\begin{example}\label{r14-exm-mle}
+Suppose that the five observations of Example~\ref{r12-exm-data} are a random sample from \(N_4(\mu,\Sigma)\). There
+\(A=(C_5X)'(C_5X)=4S\), and \(S\) has the eigenvalues \(25,9,5,1\) (Example~\ref{r12-exm-pca}), so \(A\) is PD (Theorem~\ref{r8-thm-eigen-criterion}(a)). By
+Theorem~\ref{r14-thm-mle}, the maximum likelihood estimates are
+\[
+\hat\mu=\bar x=\begin{pmatrix}5\\5\\5\\5\end{pmatrix},\qquad
+\hat\Sigma=\frac15\begin{pmatrix}40&28&20&12\\28&40&12&20\\20&12&40&28\\12&20&28&40\end{pmatrix}=\frac45S,\qquad
+S=\begin{pmatrix}10&7&5&3\\7&10&3&5\\5&3&10&7\\3&5&7&10\end{pmatrix}
+\]
+with \(\det\hat\Sigma=\bigl(\frac45\bigr)^4\det S=\frac{256}{625}\cdot25\cdot9\cdot5\cdot1=\frac{2304}5\)
+(Theorems~\ref{r5d-thm-product}(c) and~\ref{r7-thm-trace-det}). So the largest value of the likelihood is
+\((2\pi e)^{-10}\bigl(\frac{2304}5\bigr)^{-5/2}\). The unbiased estimator of \(\Sigma\) is \(S\) (Theorem~\ref{r14-thm-sample}).
+\end{example}
+
+\needspace{14\baselineskip}
+\subsection*{Exercises}
+
+\needspace{22\baselineskip}
+\begin{exercise}\label{r14-dr-marginal}
+Let \(z\sim N_4(\mu,\Sigma)\) with
+\[
+\mu=\begin{pmatrix}1\\-1\\2\\0\end{pmatrix},\qquad\Sigma=\begin{pmatrix}4&2&0&0\\2&3&1&1\\0&1&2&1\\0&1&1&2\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find the distribution of \((z_1,z_3,z_4)'\). Is \(z_1\) independent of \((z_3,z_4)'\)?
+\item Find the distribution of \(e=z_1-z_2+z_3\). Is \(e\) independent of \(z_2\)? Of \((z_2,z_4)'\)? Of \(z_1\)?
+\item Find the distribution of \((z_1+z_2,\ z_2+z_3,\ z_3+z_4)'\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) By Corollary~\ref{r14-cor-marginal}(b),
+\[
+\begin{pmatrix}z_1\\z_3\\z_4\end{pmatrix}\sim N_3\left(\begin{pmatrix}1\\2\\0\end{pmatrix},\begin{pmatrix}4&0&0\\0&2&1\\0&1&2\end{pmatrix}\right)
+\]
+As \(\sigma_{13}=\sigma_{14}=0\), \(z_1\) and \((z_3,z_4)'\) are independent (Theorem~\ref{r14-thm-mvn-indep}(a) for this vector,
+with \(p=1\) and \(q=2\)).
+
+(b) With \(a=(1,-1,1,0)'\), \(a'\mu=1+1+2+0=4\), \(\Sigma a=(4-2+0+0,\ 2-3+1+0,\ 0-1+2+0,\ 0-1+1+0)'=(2,0,1,0)'\) and
+\(a'\Sigma a=2+0+1+0=3\); so \(e\sim N(4,3)\) (Corollary~\ref{r14-cor-marginal}(c)). By Theorem~\ref{r14-thm-cov}(a),
+\(\cov(z,e)=\Sigma a=(2,0,1,0)'\). So \(\cov(z_2,e)=\cov(z_4,e)=0\), and \(e\) is independent of \(z_2\) and of
+\((z_2,z_4)'\) (Theorem~\ref{r14-thm-mvn-indep}(c) with \(B=a'\) and \(A=e_2'\), resp.\ the matrix \(A\) with the rows
+\(e_2'\) and \(e_4'\)); but \(\cov(z_1,e)=2\ne0\), so \(e\) is not independent of \(z_1\).
+
+(c) Let
+\[
+B=\begin{pmatrix}1&1&0&0\\0&1&1&0\\0&0&1&1\end{pmatrix},\qquad B\mu=\begin{pmatrix}0\\1\\2\end{pmatrix}
+\]
+The rows of \(B\Sigma\) are \(\row_1(\Sigma)+\row_2(\Sigma)\), \(\row_2(\Sigma)+\row_3(\Sigma)\) and \(\row_3(\Sigma)+\row_4(\Sigma)\)
+(Theorem~\ref{r1-thm-views}(c)), and the columns of \(B\Sigma B'\) are the same sums of the columns of \(B\Sigma\)
+(Theorem~\ref{r1-thm-views}(a),(b)):
+\[
+B\Sigma=\begin{pmatrix}6&5&1&1\\2&4&3&2\\0&2&3&3\end{pmatrix},\qquad
+B\Sigma B'=\begin{pmatrix}6+5&5+1&1+1\\2+4&4+3&3+2\\0+2&2+3&3+3\end{pmatrix}=\begin{pmatrix}11&6&2\\6&7&5\\2&5&6\end{pmatrix}
+\]
+so \((z_1+z_2,\ z_2+z_3,\ z_3+z_4)'=Bz\sim N_3(B\mu,B\Sigma B')\) (Theorem~\ref{r14-thm-mvn-linear}).
+\end{solution}
+
+\begin{exercise}[\citeat{searle-khuri}{Exercise~10.10}]\label{r14-ex-mgf-probability}
+The MGF of a random vector \(x=(x_1,x_2,x_3)'\) is
+\[
+M_x(t)=\exp\bigl(t_1-t_2+2t_3+t_1^2+\tfrac12t_2^2+2t_3^2-\tfrac12t_1t_2-t_1t_3\bigr)\qquad(t\in\R^3)
+\]
+Express \(\prb(x_1+x_2>x_3)\) through the distribution function \(\Phi\) of \(N(0,1)\), \(\Phi(c)=\prb(y\leqslant c)\) for
+\(y\sim N(0,1)\).
+\end{exercise}
+\begin{solution}
+\begin{itemize}
+\item The exponent is \(t'\mu+\frac12t'Vt\) with \(\mu=(1,-1,2)'\) and
+\[
+V=\begin{pmatrix}2&-\frac12&-1\\-\frac12&1&0\\-1&0&4\end{pmatrix}
+\]
+since \(t'Vt=2t_1^2+t_2^2+4t_3^2-t_1t_2-2t_1t_3\) (Definition~\ref{r8-def-quadratic-form}) is twice the quadratic part. The leading
+principal minors \(2\), \(2-\frac14=\frac74\) and \(\det V=6\) are positive, so \(V\) is PD (Theorem~\ref{r8-thm-leading-minors}), and
+\(x\sim N_3(\mu,V)\) by Definition~\ref{r14-def-mvn}.
+\item Let \(u=x_1+x_2-x_3=a'x\) with \(a=(1,1,-1)'\). By Corollary~\ref{r14-cor-marginal}(c), \(u\sim N(a'\mu,a'Va)\), with
+\(a'\mu=1-1-2=-2\) and \(a'Va=2+1+4+2\bigl(-\frac12\bigr)-2(-1)-2\cdot0=8\).
+\item \(z=(u+2)/\sqrt8\sim N(0,1)\) (Theorem~\ref{r14-thm-mvn-linear} with \(A=1/\sqrt8\), \(b=2/\sqrt8\)), so \(z\) has the
+distribution of \(y\), and \(\prb(z>c)=1-\prb(z\leqslant c)=1-\Phi(c)\) for every \(c\). As \(2/\sqrt8=\sqrt2/2\),
+\(\prb(x_1+x_2>x_3)=\prb(u>0)=\prb\bigl(z>\sqrt2/2\bigr)=1-\Phi\bigl(\sqrt2/2\bigr)\).
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r11-ex-normal-drill}
+Let \(x\sim N_4(\mu,\Sigma)\) with \(\mu=(1,2,0,-1)'\) and
+\[
+\Sigma=\begin{pmatrix}3&1&1&0\\1&3&1&1\\1&1&2&1\\0&1&1&1\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find the distributions of \(y=(x_1-x_2,\ x_3-x_4)'\) and of \((x_1,x_4)'\).
+\item Which of the six pairs \(\{x_i,x_j\}\) are independent? Is \(x_1\) independent of \((x_3,x_4)'\)?
+\item Find \(c\) such that \(x_1-cx_3\) and \(x_3\) are independent.
+\item Find the conditional distribution of \((x_1,x_2)'\) given \((x_3,x_4)'=(a_3,a_4)'\), and check that \(\det\Sigma\) is the
+product of the determinants of the covariance matrix of \((x_3,x_4)'\) and of this conditional covariance matrix.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(y=Ax\) with \(A=\left(\begin{smallmatrix}1&-1&0&0\\0&0&1&-1\end{smallmatrix}\right)\). The rows of \(A\Sigma\) are
+\(\row_1(\Sigma)-\row_2(\Sigma)=(2,-2,0,-1)\) and \(\row_3(\Sigma)-\row_4(\Sigma)=(1,0,1,0)\), so by
+Theorem~\ref{r14-thm-mvn-linear} and Corollary~\ref{r14-cor-marginal}(b)
+\[
+y\sim N_2\left(\begin{pmatrix}-1\\1\end{pmatrix},\begin{pmatrix}4&1\\1&1\end{pmatrix}\right),\qquad
+\begin{pmatrix}x_1\\x_4\end{pmatrix}\sim N_2\left(\begin{pmatrix}1\\-1\end{pmatrix},\begin{pmatrix}3&0\\0&1\end{pmatrix}\right)
+\]
+(b) Each pair forms a normal subvector of \(x\) (Corollary~\ref{r14-cor-marginal}(b)), so
+Theorem~\ref{r14-thm-mvn-indep}(a) applies to it: \(x_1\) and \(x_4\) are independent, as \(\sigma_{14}=0\), and the other five
+pairs are not independent, as their covariances are not \(0\). The vector \((x_1,x_3,x_4)'\) is normal, and the
+cross-covariance of \(x_1\) and \((x_3,x_4)'\) is \((\sigma_{13},\sigma_{14})=(1,0)\ne0\); so \(x_1\) is not independent
+of \((x_3,x_4)'\).
+
+(c) By Theorem~\ref{r14-thm-mvn-indep}(c) with \(A=(1,0,-c,0)\) and \(B=e_3'\),
+\(A\Sigma B'=\sigma_{13}-c\sigma_{33}=1-2c\), which is \(0\) exactly for \(c=\frac12\).
+
+(d) Apply Theorem~\ref{r14-thm-mvn-conditional} to the reordered vector \(Px=(x_3,x_4,x_1,x_2)'\), where \(P\) is the
+permutation matrix with the rows \(e_3',e_4',e_1',e_2'\); \(Px\sim N_4(P\mu,P\Sigma P')\) (Theorem~\ref{r14-thm-mvn-linear}),
+and \(P\Sigma P'\) has the rows and columns of \(\Sigma\) in the order \(3,4,1,2\). The first block is \((x_3,x_4)'\) and the
+second \((x_1,x_2)'\):
+\[
+\Sigma_{11}=\begin{pmatrix}2&1\\1&1\end{pmatrix},\quad\Sigma_{11}^{-1}=\begin{pmatrix}1&-1\\-1&2\end{pmatrix},\quad
+\Sigma_{21}=\begin{pmatrix}1&0\\1&1\end{pmatrix},\quad\Sigma_{21}\Sigma_{11}^{-1}=\begin{pmatrix}1&-1\\0&1\end{pmatrix}
+\]
+with \(\Sigma_{11}\) PD (its leading principal minors are \(2\) and \(1\); Theorem~\ref{r8-thm-leading-minors}) and
+\(\Sigma_{11}^{-1}\) from Proposition~\ref{r2-prop-inverse-2x2} (\(\det\Sigma_{11}=1\)), and
+\[
+\Sigma_{22\cdot1}=\Sigma_{22}-\Sigma_{21}\Sigma_{11}^{-1}\Sigma_{12}=\begin{pmatrix}3&1\\1&3\end{pmatrix}-\begin{pmatrix}1&-1\\0&1\end{pmatrix}
+\begin{pmatrix}1&1\\0&1\end{pmatrix}=\begin{pmatrix}2&1\\1&2\end{pmatrix}
+\]
+The conditional mean is \((1,2)'+\Sigma_{21}\Sigma_{11}^{-1}(a_3-0,\ a_4+1)'=(a_3-a_4,\ a_4+3)'\), so given
+\((x_3,x_4)'=(a_3,a_4)'\), the vector \((x_1,x_2)'\) has the distribution \(N_2\bigl((a_3-a_4,\ a_4+3)',\ \Sigma_{22\cdot1}\bigr)\).
+Check: subtracting row \(4\) of \(\Sigma\) from rows \(2\) and \(3\) (Definition~\ref{r5d-def-det}(b)) gives the rows \((1,2,0,0)\)
+and \((1,0,1,0)\), so that column \(4\) becomes \(e_4\); expanding along column \(4\) and then along row \(1\)
+(Theorem~\ref{r5d-thm-expansion}), \(\det\Sigma=3(2\cdot1-0)-1(1\cdot1-0)+1(0-2\cdot1)=3\); and by
+Theorem~\ref{r5d-thm-schur-det}(b), with \(\Sigma\) partitioned into the blocks of \((x_1,x_2)'\) and \((x_3,x_4)'\), whose
+lower right block \(\Sigma_{11}\) is invertible, \(\det\Sigma=\det\Sigma_{11}\det\Sigma_{22\cdot1}=1\cdot3\).
+\end{solution}
+
+\begin{exercise}\label{r14-dr-indep}
+Let \(z\sim N_4(0,\Sigma)\) with
+\[
+\Sigma=I_4+J_4=\begin{pmatrix}2&1&1&1\\1&2&1&1\\1&1&2&1\\1&1&1&2\end{pmatrix}
+\]
+\begin{enumerate}
+\item Show that \(z_1+z_2+z_3+z_4\) is independent of \((z_1-z_2,\ z_2-z_3,\ z_3-z_4)'\).
+\item Find all \(a\in\R^4\) for which \(a'z\) is independent of \(z_1-z_2\), of \(z_2-z_3\) and of \(z_3-z_4\).
+\item Find \(b\in\R^3\) for which \(z_4-b_1z_1-b_2z_2-b_3z_3\) is independent of \((z_1,z_2,z_3)'\), and the variance of this
+variable.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(\Sigma\one=(5,5,5,5)'\), so with \(A=\one'\) and
+\[
+B=\begin{pmatrix}1&-1&0&0\\0&1&-1&0\\0&0&1&-1\end{pmatrix}
+\]
+\(A\Sigma B'=(B\Sigma\one)'=(5-5,\ 5-5,\ 5-5)=(0,0,0)\). By Theorem~\ref{r14-thm-mvn-indep}(c), \(\one'z\) and \(Bz\) are
+independent.
+
+(b) \(\Sigma(1,-1,0,0)'=(2-1,\ 1-2,\ 1-1,\ 1-1)'=(1,-1,0,0)'\), and likewise \(\Sigma(0,1,-1,0)'=(0,1,-1,0)'\) and
+\(\Sigma(0,0,1,-1)'=(0,0,1,-1)'\), as \(J_4\) maps these vectors to \(0\). By Theorem~\ref{r14-thm-mvn-indep}(c), \(a'z\) is
+independent of \(z_1-z_2\) if and only if \(a'\Sigma(1,-1,0,0)'=a_1-a_2=0\), of \(z_2-z_3\) if and only if \(a_2-a_3=0\), and of
+\(z_3-z_4\) if and only if \(a_3-a_4=0\). So \(a=c\one\) (\(c\in\R\)): only the multiples of the total \(z_1+z_2+z_3+z_4\).
+
+(c) Let \(a=(-b_1,-b_2,-b_3,1)'\) and \(A=[I_3\ \ 0]\in\R^{3\times4}\). Then \(A\Sigma a=(1,1,1)'-\Sigma_{11}b\), where
+\(\Sigma_{11}=I_3+J_3\) is the leading \(3\times3\) block of \(\Sigma\). Its inverse is \(I_3-\frac14J_3\):
+\((I_3+J_3)(I_3-\frac14J_3)=I_3+\frac34J_3-\frac14J_3^2=I_3\), as \(J_3^2=3J_3\) (Proposition~\ref{r1-prop-centering}). By
+Theorem~\ref{r14-thm-mvn-indep}(c), independence holds exactly when
+\(b=\Sigma_{11}^{-1}(1,1,1)'=(1,1,1)'-\frac34(1,1,1)'=\frac14(1,1,1)'\). The variance is
+\(a'\Sigma a=\sigma_{44}-(1,1,1)\Sigma_{11}^{-1}(1,1,1)'=2-\frac34=\frac54\), as \(\Sigma a=(0,0,0,\ 2-\frac14-\frac14-\frac14)'\).
+\end{solution}
+
+\begin{exercise}[\citeat{searle-khuri}{Exercise~10.9}]\label{r14-ex-quadratic-form}
+Let \(x=(x_1,x_2,x_3)'\sim N_3(\mu,V)\) with \(V\) PD, and suppose that
+\[
+Q=(x-\mu)'V^{-1}(x-\mu)=2x_1^2+3x_2^2+4x_3^2+2x_1x_2-2x_1x_3-4x_2x_3-6x_1-6x_2+10x_3+8
+\]
+\begin{enumerate}
+\item Find \(\mu\) and \(V\).
+\item Find the MGF of \(x\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item For a symmetric \(B\in\R^{3\times3}\), the partial derivatives of
+\((x-\mu)'B(x-\mu)=\sum_k\sum_lb_{kl}(x_k-\mu_k)(x_l-\mu_l)\) are \(2\sum_lb_{il}(x_l-\mu_l)\), the entries of \(2B(x-\mu)\) (as in the
+paragraph after the facts (N1)--(N7)). So the vector of the partial derivatives of \(Q\) is \(2V^{-1}(x-\mu)\); from the given form
+of \(Q\) it is
+\[
+\bigl(4x_1+2x_2-2x_3-6,\ 2x_1+6x_2-4x_3-6,\ -2x_1-4x_2+8x_3+10\bigr)'
+\]
+\item Comparing the coefficients of \(x_1,x_2,x_3\), that is, the second partial derivatives,
+\[
+2V^{-1}=\begin{pmatrix}4&2&-2\\2&6&-4\\-2&-4&8\end{pmatrix},\qquad
+V^{-1}=\begin{pmatrix}2&1&-1\\1&3&-2\\-1&-2&4\end{pmatrix}
+\]
+The leading principal minors of \(V^{-1}\) are \(2\), \(5\) and \(13\), so \(V^{-1}\) is PD (Theorem~\ref{r8-thm-leading-minors}).
+\item \(\expc\bigl(V^{-1}(x-\mu)\bigr)=V^{-1}(\expc(x)-\mu)=0\) (Theorem~\ref{r11-thm-linear}(b),
+Definition~\ref{r14-def-mvn}). Taking expectations of the three entries above, with \(\expc(x)=\mu\),
+\[
+\begin{pmatrix}4&2&-2\\2&6&-4\\-2&-4&8\end{pmatrix}\mu=\begin{pmatrix}6\\6\\-10\end{pmatrix},\qquad\text{so}\qquad\mu=\begin{pmatrix}1\\0\\-1\end{pmatrix}
+\]
+since \((4-0+2,\ 2-0+4,\ -2-0-8)'=(6,6,-10)'\) and the coefficient matrix is invertible (its determinant is \(8\cdot13\)). Check: the
+constant term is \(\mu'V^{-1}\mu=(1,0,-1)(3,3,-5)'=8\).
+\item By Theorem~\ref{r5d-thm-adjugate}, with \(\det V^{-1}=13\),
+\[
+V=\frac1{13}\begin{pmatrix}8&-2&1\\-2&7&3\\1&3&5\end{pmatrix}
+\]
+\end{itemize}
+(b) By Definition~\ref{r14-def-mvn}, \(M_x(t)=\exp\bigl(t'\mu+\frac12t'Vt\bigr)\) with \(\mu\) and \(V\) of (a), that is,
+\(M_x(t)=\exp\bigl(t_1-t_3+\frac1{26}(8t_1^2+7t_2^2+5t_3^2-4t_1t_2+2t_1t_3+6t_2t_3)\bigr)\).
+\end{solution}
+
+\begin{exercise}\label{r11-ex-density-drill}
+A random vector \(x\in\R^4\) has the density \(f(u)=(2\pi)^{-2}\exp\bigl(-\frac12Q(u)\bigr)\), where
+\[
+Q(u)=3u_1^2+3u_2^2+2u_3^2+u_4^2+4u_1u_2-2u_1u_3-4u_2u_3+2u_2u_4-2u_3u_4-10u_1-8u_2+4u_3+9
+\]
+Show that \(x\) is normal, and find \(\mu\), \(\Sigma\), the correlation \(\rho_{12}\) of \(x_1\) and \(x_2\), and the conditional
+distribution of \((x_3,x_4)'\) given \((x_1,x_2)'=(a_1,a_2)'\).
+\end{exercise}
+\begin{solution}
+\begin{itemize}
+\item The quadratic part of \(Q\) is \(u'Pu\) for the symmetric matrix \(P\) below (Definition~\ref{r8-def-quadratic-form}), and
+the linear part is \(-2c'u\) with \(c=(5,4,-2,0)'\). Row reduction of \([P\mid I_4]\) (Corollary~\ref{r2-cor-computing-inverse}(a)), with the pivots taken from the last
+column back:
+\[
+\begin{gathered}
+\left(\begin{array}{cccc|cccc}3&2&-1&0&1&0&0&0\\2&3&-2&1&0&1&0&0\\-1&-2&2&-1&0&0&1&0\\0&1&-1&1&0&0&0&1\end{array}\right)
+\xrightarrow[R_3\leftarrow R_3+R_4]{R_2\leftarrow R_2-R_4}
+\left(\begin{array}{cccc|cccc}3&2&-1&0&1&0&0&0\\2&2&-1&0&0&1&0&-1\\-1&-1&1&0&0&0&1&1\\0&1&-1&1&0&0&0&1\end{array}\right)
+\\
+\xrightarrow[R_4\leftarrow R_4+R_3]{R_1\leftarrow R_1+R_3,\ R_2\leftarrow R_2+R_3}
+\left(\begin{array}{cccc|cccc}2&1&0&0&1&0&1&1\\1&1&0&0&0&1&1&0\\-1&-1&1&0&0&0&1&1\\-1&0&0&1&0&0&1&2\end{array}\right)
+\xrightarrow[R_3\leftarrow R_3+R_2]{R_1\leftarrow R_1-R_2}
+\left(\begin{array}{cccc|cccc}1&0&0&0&1&-1&0&1\\1&1&0&0&0&1&1&0\\0&0&1&0&0&1&2&1\\-1&0&0&1&0&0&1&2\end{array}\right)
+\\
+\xrightarrow[R_4\leftarrow R_4+R_1]{R_2\leftarrow R_2-R_1}
+\left(\begin{array}{cccc|cccc}1&0&0&0&1&-1&0&1\\0&1&0&0&-1&2&1&-1\\0&0&1&0&0&1&2&1\\0&0&0&1&1&-1&1&3\end{array}\right)
+\end{gathered}
+\]
+So \(P\) is invertible, with
+\[
+\Sigma=P^{-1}=\begin{pmatrix}1&-1&0&1\\-1&2&1&-1\\0&1&2&1\\1&-1&1&3\end{pmatrix}
+\]
+Every arrow added multiples of rows, which does not change the determinant (Definition~\ref{r5d-def-det}(b)), and the left
+half became \(I_4\); so \(\det P=1\) and \(\det\Sigma=1/\det P=1\) (Theorem~\ref{r5d-thm-product}(c)). The leading principal
+minors of \(\Sigma\) are \(1\), \(2-1=1\), \(1\) and \(\det\Sigma=1\), so \(\Sigma\) is PD (Theorem~\ref{r8-thm-leading-minors}); for
+the third, adding row \(1\) to row \(2\) of the leading \(3\times3\) block and then subtracting the new row \(2\) from row \(3\)
+gives an upper triangular matrix with the diagonal entries \(1,1,1\) (Definition~\ref{r5d-def-det}(b),
+Theorem~\ref{r5d-thm-basic}(c)).
+\item Let \(\mu=\Sigma c=(5-4+0+0,\ -5+8-2+0,\ 0+4-4+0,\ 5-4-2+0)'=(1,1,0,-1)'\), so that \(P\mu=c\). Then
+\((u-\mu)'P(u-\mu)=u'Pu-2c'u+\mu'c\), and \(\mu'c=5+4+0+0=9\) is the constant term of \(Q\); so
+\(Q(u)=(u-\mu)'\Sigma^{-1}(u-\mu)\) and \(f(u)=(2\pi)^{-2}(\det\Sigma)^{-1/2}\exp\bigl(-\frac12(u-\mu)'\Sigma^{-1}(u-\mu)\bigr)\). By
+Theorem~\ref{r14-thm-mvn-density}(b), \(x\sim N_4(\mu,\Sigma)\).
+\item \(\rho_{12}=\sigma_{12}/\sqrt{\sigma_{11}\sigma_{22}}=-1/\sqrt{1\cdot2}=-\sqrt2/2\) (Definition~\ref{r14-def-corr}).
+\item In Theorem~\ref{r14-thm-mvn-conditional}, the first block is \((x_1,x_2)'\):
+\(\Sigma_{11}=\left(\begin{smallmatrix}1&-1\\-1&2\end{smallmatrix}\right)\) is PD as a principal submatrix of \(\Sigma\)
+(Theorem~\ref{r8-thm-principal-sub}), with determinant \(1\) and the inverse
+\(\left(\begin{smallmatrix}2&1\\1&1\end{smallmatrix}\right)\) (Proposition~\ref{r2-prop-inverse-2x2}), and
+\(\Sigma_{21}=\left(\begin{smallmatrix}0&1\\1&-1\end{smallmatrix}\right)=\Sigma_{12}\). So
+\[
+\Sigma_{21}\Sigma_{11}^{-1}=\begin{pmatrix}1&1\\1&0\end{pmatrix},\qquad
+\Sigma_{22\cdot1}=\begin{pmatrix}2&1\\1&3\end{pmatrix}-\begin{pmatrix}1&1\\1&0\end{pmatrix}\begin{pmatrix}0&1\\1&-1\end{pmatrix}
+=\begin{pmatrix}2&1\\1&3\end{pmatrix}-\begin{pmatrix}1&0\\0&1\end{pmatrix}=\begin{pmatrix}1&1\\1&2\end{pmatrix}
+\]
+and the conditional mean is \((0,-1)'+\Sigma_{21}\Sigma_{11}^{-1}(a_1-1,\ a_2-1)'=(a_1+a_2-2,\ a_1-2)'\). Given
+\((x_1,x_2)'=(a_1,a_2)'\), the vector \((x_3,x_4)'\) has the distribution \(N_2\bigl((a_1+a_2-2,\ a_1-2)',\ \Sigma_{22\cdot1}\bigr)\).
+Check: the lower right \(2\times2\) block of \(P=\Sigma^{-1}\) is
+\(\left(\begin{smallmatrix}2&-1\\-1&1\end{smallmatrix}\right)=\Sigma_{22\cdot1}^{-1}\) (Proposition~\ref{r2-prop-inverse-2x2}), as
+Theorem~\ref{r14-thm-mvn-conditional}(b) says.
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r14-dr-cov-valid}
+Which of the following matrices can be the covariance matrix of a random vector?
+\[
+M_1=\begin{pmatrix}4&3&1&0\\3&1&0&1\\1&0&2&1\\0&1&1&3\end{pmatrix},\qquad
+M_2=\begin{pmatrix}1&-\frac25&-\frac25&-\frac25\\[2pt]-\frac25&1&-\frac25&-\frac25\\[2pt]-\frac25&-\frac25&1&-\frac25\\[2pt]-\frac25&-\frac25&-\frac25&1\end{pmatrix},\qquad
+M_3=\begin{pmatrix}3&-1&-1&-1\\-1&3&-1&-1\\-1&-1&3&-1\\-1&-1&-1&3\end{pmatrix}
+\]
+\end{exercise}
+\begin{solution}
+A covariance matrix is symmetric and PSD (Theorem~\ref{r11-thm-linear}(c)), and every symmetric PSD matrix is the covariance
+matrix of some normal vector (Theorem~\ref{r14-thm-mvn-iid}(b)).
+\begin{itemize}
+\item \(M_1\): for \(x=(1,-2,0,0)'\), \(x'M_1x=4-12+4=-4<0\), so \(M_1\) is not PSD and cannot be a covariance matrix. (Its
+entries would also give the correlation \(3/\sqrt{4\cdot1}=\frac32>1\), against Proposition~\ref{r14-prop-corr}(a).)
+\item \(M_2\): \(\one'M_2\one\), the sum of its entries, is \(4-12\cdot\frac25=-\frac45<0\); so \(M_2\) is not PSD and cannot be a
+covariance matrix.
+\item \(M_3=4I_4-J_4=4C_4\) (Definition~\ref{r1-def-ones}). As \(C_4\) is symmetric and idempotent
+(Proposition~\ref{r1-prop-centering}), \(x'M_3x=4x'C_4'C_4x=4\lVert C_4x\rVert^2\geqslant0\): \(M_3\) is PSD, so it is a covariance
+matrix, a singular one (\(M_3\one=0\)).
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r14-dr-random-walk}
+Let \(w_1,\dots,w_4\) be independent \(N(0,1)\) variables and \(z_k=w_1+\dots+w_k\) (\(k=1,\dots,4\)), the positions of a random
+walk.
+\begin{enumerate}
+\item Write \(z=Lw\) and find the distribution of \(z\).
+\item Find \(\Sigma^{-1}\) by row reduction of \([\Sigma\mid I_4]\), and \(\det\Sigma\).
+\item Write the density of \(z\), and show that \(x'\Sigma^{-1}x=x_1^2+(x_2-x_1)^2+(x_3-x_2)^2+(x_4-x_3)^2\).
+\item Show that \(L'\) is the Cholesky factor of \(\Sigma\). A program produces independent \(N(0,1)\) numbers; compute
+\(\mu+Lw\) for \(\mu=(1,0,-1,0)'\) and the four numbers \(w=(1,-2,2,1)'\). What is the distribution of \(\mu+Lw\) when \(w\)
+consists of four such numbers?
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) By Theorem~\ref{r14-thm-mvn-iid}(a), \(w\sim N_4(0,I_4)\), and \(z=Lw\) with
+\[
+L=\begin{pmatrix}1&0&0&0\\1&1&0&0\\1&1&1&0\\1&1&1&1\end{pmatrix},\qquad
+\Sigma=LL'=\begin{pmatrix}1&1&1&1\\1&2&2&2\\1&2&3&3\\1&2&3&4\end{pmatrix}
+\]
+So \(z\sim N_4(0,\Sigma)\) (Theorem~\ref{r14-thm-mvn-linear}). The \((i,j)\) entry of \(LL'\) is \(\row_i(L)\row_j(L)'\)
+(Theorem~\ref{r1-thm-views}(d)); \(\row_i(L)\) has ones in the positions \(1,\dots,i\), so this product counts the positions
+\(k\leqslant i\) with \(k\leqslant j\): \(\sigma_{ij}\) is the smaller of \(i\) and \(j\).
+
+(b) Row-reduce \([\Sigma\mid I_4]\) (Corollary~\ref{r2-cor-computing-inverse}(a)):
+\[
+\begin{gathered}
+\left(\begin{array}{cccc|cccc}1&1&1&1&1&0&0&0\\1&2&2&2&0&1&0&0\\1&2&3&3&0&0&1&0\\1&2&3&4&0&0&0&1\end{array}\right)
+\xrightarrow[R_4\leftarrow R_4-R_1]{R_2\leftarrow R_2-R_1,\ R_3\leftarrow R_3-R_1}
+\left(\begin{array}{cccc|cccc}1&1&1&1&1&0&0&0\\0&1&1&1&-1&1&0&0\\0&1&2&2&-1&0&1&0\\0&1&2&3&-1&0&0&1\end{array}\right)
+\\
+\xrightarrow[R_4\leftarrow R_4-R_2]{R_3\leftarrow R_3-R_2}
+\left(\begin{array}{cccc|cccc}1&1&1&1&1&0&0&0\\0&1&1&1&-1&1&0&0\\0&0&1&1&0&-1&1&0\\0&0&1&2&0&-1&0&1\end{array}\right)
+\xrightarrow{R_4\leftarrow R_4-R_3}
+\left(\begin{array}{cccc|cccc}1&1&1&1&1&0&0&0\\0&1&1&1&-1&1&0&0\\0&0&1&1&0&-1&1&0\\0&0&0&1&0&0&-1&1\end{array}\right)
+\\
+\xrightarrow[R_3\leftarrow R_3-R_4]{R_1\leftarrow R_1-R_4,\ R_2\leftarrow R_2-R_4}
+\left(\begin{array}{cccc|cccc}1&1&1&0&1&0&1&-1\\0&1&1&0&-1&1&1&-1\\0&0&1&0&0&-1&2&-1\\0&0&0&1&0&0&-1&1\end{array}\right)
+\\
+\xrightarrow[R_2\leftarrow R_2-R_3]{R_1\leftarrow R_1-R_3}
+\left(\begin{array}{cccc|cccc}1&1&0&0&1&1&-1&0\\0&1&0&0&-1&2&-1&0\\0&0&1&0&0&-1&2&-1\\0&0&0&1&0&0&-1&1\end{array}\right)
+\xrightarrow{R_1\leftarrow R_1-R_2}
+\left(\begin{array}{cccc|cccc}1&0&0&0&2&-1&0&0\\0&1&0&0&-1&2&-1&0\\0&0&1&0&0&-1&2&-1\\0&0&0&1&0&0&-1&1\end{array}\right)
+\end{gathered}
+\]
+So
+\[
+\Sigma^{-1}=\begin{pmatrix}2&-1&0&0\\-1&2&-1&0\\0&-1&2&-1\\0&0&-1&1\end{pmatrix}
+\]
+The first three arrows added multiples of rows, which does not change the determinant (Definition~\ref{r5d-def-det}(b)), and
+gave an upper triangular left half with diagonal entries \(1,1,1,1\); so \(\det\Sigma=1\) (Theorem~\ref{r5d-thm-basic}(c)). Also
+\(\det\Sigma=\det L\cdot\det L'=(\det L)^2=1\) (Theorems~\ref{r5d-thm-product}(b) and~\ref{r5d-thm-transpose}).
+
+(c) \(L'\) is upper triangular with the diagonal entries \(1\), so \(\det L'=1\) (Theorem~\ref{r5d-thm-basic}(c)) and \(L'\) is
+invertible (Theorem~\ref{r5d-thm-product}(a)); hence \(\Sigma=LL'=(L')'L'\) is PD (Theorem~\ref{r8-thm-psd-factor}(c)). By
+Theorem~\ref{r14-thm-mvn-density}, \(z\) has the density \(f(x)=(2\pi)^{-2}\exp\bigl(-\frac12x'\Sigma^{-1}x\bigr)\), and
+\[
+x'\Sigma^{-1}x=2x_1^2+2x_2^2+2x_3^2+x_4^2-2x_1x_2-2x_2x_3-2x_3x_4=x_1^2+(x_2-x_1)^2+(x_3-x_2)^2+(x_4-x_3)^2
+\]
+as expanding the right side gives \(x_1^2+x_2^2-2x_1x_2+x_1^2+x_3^2-2x_2x_3+x_2^2+x_4^2-2x_3x_4+x_3^2\). The four squares are the
+squared steps \(w_1=z_1\), \(w_2=z_2-z_1\), \(w_3=z_3-z_2\), \(w_4=z_4-z_3\), that is, \(L^{-1}x\).
+
+(d) \(L'\) is upper triangular with positive diagonal entries, and \((L')'L'=LL'=\Sigma\). As \(\Sigma\) is PD by (c), the
+uniqueness in Theorem~\ref{r8-thm-cholesky} shows that \(L'\) is the Cholesky factor of \(\Sigma\). If \(w\) consists of four independent \(N(0,1)\)
+numbers, then \(w\sim N_4(0,I_4)\) and \(\mu+Lw\sim N_4(\mu,LL')=N_4(\mu,\Sigma)\) (Theorem~\ref{r14-thm-mvn-iid}(a),(c)): the
+entries of \(Lw\) are the partial sums \(w_1+\dots+w_k\), a random walk with \(N(0,1)\) steps, shifted by \(\mu\). Here
+\(Lw=(1,\ 1-2,\ 1-2+2,\ 1-2+2+1)'=(1,-1,1,2)'\), so \(\mu+Lw=(2,-1,0,2)'\).
+\end{solution}
+
+\needspace{16\baselineskip}
+\begin{exercise}\label{r14-dr-triangular}
+Let \(z\sim N_4(\mu,\Sigma)\) with
+\[
+\mu=\begin{pmatrix}1\\0\\-1\\2\end{pmatrix},\qquad\Sigma=\begin{pmatrix}4&2&-2&2\\2&2&1&0\\-2&1&6&-2\\2&0&-2&4\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find the lower triangular \(A\) with positive diagonal entries and \(AA'=\Sigma\).
+\item Write \(z\) as \(\mu+Aw\) with \(w\sim N_4(0,I_4)\), and express \(w\) through \(z\).
+\item Write \((z-\mu)'\Sigma^{-1}(z-\mu)\) as a sum of four squares, and give its distribution.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) Comparing the entries of \(AA'\) and \(\Sigma\) column by column: \(a_{11}^2=4\), so \(a_{11}=2\); \(a_{21}a_{11}=2\),
+\(a_{31}a_{11}=-2\) and \(a_{41}a_{11}=2\), so \(a_{21}=1\), \(a_{31}=-1\), \(a_{41}=1\); \(a_{21}^2+a_{22}^2=2\), so \(a_{22}=1\);
+\(a_{31}a_{21}+a_{32}a_{22}=1\) and \(a_{41}a_{21}+a_{42}a_{22}=0\), so \(a_{32}=2\), \(a_{42}=-1\); \(a_{31}^2+a_{32}^2+a_{33}^2=6\), so
+\(a_{33}=1\); \(a_{41}a_{31}+a_{42}a_{32}+a_{43}a_{33}=-2\), so \(a_{43}=-2+1+2=1\); \(a_{41}^2+a_{42}^2+a_{43}^2+a_{44}^2=4\), so
+\(a_{44}=1\). Thus
+\[
+A=\begin{pmatrix}2&0&0&0\\1&1&0&0\\-1&2&1&0\\1&-1&1&1\end{pmatrix},\qquad
+AA'=\begin{pmatrix}4&2&-2&2\\2&1+1&-1+2&1-1\\-2&-1+2&1+4+1&-1-2+1\\2&1-1&-1-2+1&1+1+1+1\end{pmatrix}=\Sigma
+\]
+\(A'\) is upper triangular with positive diagonal entries, so it is invertible (\(\det A'=2\ne0\),
+Theorems~\ref{r5d-thm-basic}(c) and~\ref{r5d-thm-product}(a)),
+\(\Sigma=(A')'A'\) is PD (Theorem~\ref{r8-thm-psd-factor}(c)), and \(A'\) is the Cholesky factor of \(\Sigma\)
+(Theorem~\ref{r8-thm-cholesky}): \(A\) is the only such matrix.
+
+(b) By Theorem~\ref{r14-thm-mvn-iid}(c), \(z\) has the distribution of \(\mu+Aw\) with \(w\sim N_4(0,I_4)\):
+\(z_1=1+2w_1\), \(z_2=w_1+w_2\), \(z_3=-1-w_1+2w_2+w_3\), \(z_4=2+w_1-w_2+w_3+w_4\). Conversely,
+\(w=A^{-1}(z-\mu)\sim N_4(0,A^{-1}\Sigma(A^{-1})')=N_4(0,I_4)\) (Theorem~\ref{r14-thm-mvn-linear}), with
+\[
+A^{-1}=\begin{pmatrix}\frac12&0&0&0\\-\frac12&1&0&0\\\frac32&-2&1&0\\-\frac52&3&-1&1\end{pmatrix},\qquad
+AA^{-1}=\begin{pmatrix}1&0&0&0\\\frac12-\frac12&1&0&0\\-\frac12-1+\frac32&2-2&1&0\\\frac12+\frac12+\frac32-\frac52&-1-2+3&1-1&1\end{pmatrix}=I_4
+\]
+(Theorem~\ref{r2-thm-invertible}), that is, \(w_1=\frac12(z_1-1)\), \(w_2=z_2-\frac12(z_1-1)\), \(w_3=\frac32(z_1-1)-2z_2+(z_3+1)\) and
+\(w_4=-\frac52(z_1-1)+3z_2-(z_3+1)+(z_4-2)\).
+
+(c) \(\Sigma^{-1}=(AA')^{-1}=(A^{-1})'A^{-1}\) (Theorem~\ref{r2-thm-inverse-props}(b),(c)), so
+\((z-\mu)'\Sigma^{-1}(z-\mu)=\lVert A^{-1}(z-\mu)\rVert^2=w_1^2+w_2^2+w_3^2+w_4^2\), with \(w_1,\dots,w_4\) as in (b). They are
+independent \(N(0,1)\) (Theorem~\ref{r14-thm-mvn-iid}(a)), so the sum has the distribution \(\chi^2_4\) (N5).
+\end{solution}
+
+\begin{exercise}\label{r14-dr-sqrt}
+Let \(z\sim N_4(\mu,\Sigma)\) with
+\[
+\Sigma=\begin{pmatrix}25&16&-20&-20\\16&25&-20&-20\\-20&-20&25&16\\-20&-20&16&25\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find \(\Sigma^{1/2}\), \(\Sigma^{-1/2}\) and \(\Sigma^{-1}\).
+\item Find the standardized vector \(w=\Sigma^{-1/2}(z-\mu)\), and write \(z\) through \(w\).
+\item Give the distribution of \((z-\mu)'\Sigma^{-1}(z-\mu)\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) Let \(h=(1,1,-1,-1)'\), \(E_1=\bar J_4=\frac14J_4\), \(E_2=\frac14hh'\) and \(E_3=I_4-E_1-E_2\). Here \(\one'h=0\) and
+\(h'h=4\), so \(E_1E_2=\frac1{16}\one(\one'h)h'=0=E_2E_1\) and \(E_2^2=\frac1{16}h(h'h)h'=E_2\); also \(E_1^2=E_1\)
+(Proposition~\ref{r1-prop-centering}). Hence \(E_3^2=E_3\) and \(E_1E_3=E_2E_3=0\), and \(E_1\), \(E_2\), \(E_3\) are symmetric,
+idempotent and nonzero (the diagonal entries of \(E_3\) are \(1-\frac14-\frac14=\frac12\)), with \(E_1+E_2+E_3=I_4\). Comparing entries (the diagonal \(9-2+18\), the entries \((1,2)\) and
+\((3,4)\) \(-2+18\), the others \(-2-18\)),
+\[
+\Sigma=9I_4-2J_4+18hh'=E_1+81E_2+9E_3
+\]
+This is the spectral decomposition of \(\Sigma\) (Theorem~\ref{r8-thm-spectral-decomp}(d)), with the eigenvalues \(1\) (on
+\(\one_4\)), \(81\) (on \(h\)) and \(9\) (on the plane orthogonal to \(\one_4\) and \(h\)); they are positive, so \(\Sigma\) is PD
+(Theorem~\ref{r8-thm-eigen-criterion}(a)). By Theorem~\ref{r8-thm-sqrt}(a),(c),
+\[
+\Sigma^{1/2}=E_1+9E_2+3E_3=3I_4-\tfrac12J_4+\tfrac32hh'=\begin{pmatrix}4&1&-2&-2\\1&4&-2&-2\\-2&-2&4&1\\-2&-2&1&4\end{pmatrix}
+\]
+and
+\[
+\Sigma^{-1/2}=E_1+\tfrac19E_2+\tfrac13E_3=\tfrac13I_4+\tfrac16J_4-\tfrac1{18}hh'
+=\frac19\begin{pmatrix}4&1&2&2\\1&4&2&2\\2&2&4&1\\2&2&1&4\end{pmatrix}
+\]
+(the diagonal \(\frac13+\frac16-\frac1{18}=\frac49\), the entries \((1,2)\) and \((3,4)\) \(\frac16-\frac1{18}=\frac19\), the
+others \(\frac16+\frac1{18}=\frac29\)), and \(\Sigma^{-1}=E_1+\frac1{81}E_2+\frac19E_3\) (Theorem~\ref{r8-thm-spectral-decomp}(b)), that is,
+\[
+\Sigma^{-1}=\tfrac19I_4+\tfrac29J_4-\tfrac2{81}hh'
+=\frac1{81}\begin{pmatrix}25&16&20&20\\16&25&20&20\\20&20&25&16\\20&20&16&25\end{pmatrix}
+\]
+(the diagonal \(\frac19+\frac29-\frac2{81}=\frac{25}{81}\), the entries \((1,2)\) and \((3,4)\)
+\(\frac29-\frac2{81}=\frac{16}{81}\), the others \(\frac29+\frac2{81}=\frac{20}{81}\)). Check:
+\[
+\begin{pmatrix}4&1&-2&-2\\1&4&-2&-2\\-2&-2&4&1\\-2&-2&1&4\end{pmatrix}^2=\begin{pmatrix}25&16&-20&-20\\16&25&-20&-20\\-20&-20&25&16\\-20&-20&16&25\end{pmatrix},\qquad
+\begin{pmatrix}4&1&-2&-2\\1&4&-2&-2\\-2&-2&4&1\\-2&-2&1&4\end{pmatrix}\begin{pmatrix}4&1&2&2\\1&4&2&2\\2&2&4&1\\2&2&1&4\end{pmatrix}=9I_4
+\]
+and \(\Sigma\) times the integer matrix of \(\Sigma^{-1}\) is \(81I_4\); for instance \(25\cdot25+16\cdot16-20\cdot20-20\cdot20=81\) and
+\(25\cdot16+16\cdot25-20\cdot20-20\cdot20=0\).
+
+(b) By Corollary~\ref{r14-cor-standard}(a), \(w=\Sigma^{-1/2}(z-\mu)\sim N_4(0,I_4)\): with \(d=z-\mu\),
+\(w_1=\frac19(4d_1+d_2+2d_3+2d_4)\), \(w_2=\frac19(d_1+4d_2+2d_3+2d_4)\), \(w_3=\frac19(2d_1+2d_2+4d_3+d_4)\) and
+\(w_4=\frac19(2d_1+2d_2+d_3+4d_4)\), independent \(N(0,1)\); and \(z=\mu+\Sigma^{1/2}w\): \(z_1=\mu_1+4w_1+w_2-2w_3-2w_4\),
+\(z_2=\mu_2+w_1+4w_2-2w_3-2w_4\), \(z_3=\mu_3-2w_1-2w_2+4w_3+w_4\), \(z_4=\mu_4-2w_1-2w_2+w_3+4w_4\).
+
+(c) By Corollary~\ref{r14-cor-standard}(a), \((z-\mu)'\Sigma^{-1}(z-\mu)=w_1^2+w_2^2+w_3^2+w_4^2\sim\chi^2_4\).
+\end{solution}
+
+\needspace{16\baselineskip}
+\begin{exercise}\label{r14-dr-singular}
+Let \(z\sim N_4(\mu,\Sigma)\) with
+\[
+\mu=\begin{pmatrix}1\\2\\1\\0\end{pmatrix},\qquad\Sigma=\begin{pmatrix}1&1&0&1\\1&2&1&0\\0&1&1&-1\\1&0&-1&2\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find the RREF of \(\Sigma\), its rank, and bases of \(\mathcal N(\Sigma)\) and \(\mathcal C(\Sigma)\).
+\item Show that \(z_1-z_2+z_3=0\) and \(z_2+z_4=2z_1\) with probability \(1\).
+\item Find \(A\in\R^{4\times2}\) with \(AA'=\Sigma\), and check (b) on the representation \(z=\mu+Aw\), \(w\sim N_2(0,I_2)\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) Row reduction:
+\[
+\begin{gathered}
+\Sigma=\begin{pmatrix}1&1&0&1\\1&2&1&0\\0&1&1&-1\\1&0&-1&2\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4-R_1]{R_2\leftarrow R_2-R_1}
+\begin{pmatrix}1&1&0&1\\0&1&1&-1\\0&1&1&-1\\0&-1&-1&1\end{pmatrix}
+\\
+\xrightarrow[R_4\leftarrow R_4+R_2]{R_3\leftarrow R_3-R_2}
+\begin{pmatrix}1&1&0&1\\0&1&1&-1\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\xrightarrow{R_1\leftarrow R_1-R_2}
+\begin{pmatrix}1&0&-1&2\\0&1&1&-1\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\end{gathered}
+\]
+So \(\rank\Sigma=2\), and \(\Sigma x=0\) means \(x_1=x_3-2x_4\), \(x_2=-x_3+x_4\): \(\mathcal N(\Sigma)\) has the basis
+\(a=(1,-1,1,0)'\) (\(x_3=1\), \(x_4=0\)) and \(b=(-2,1,0,1)'\) (\(x_3=0\), \(x_4=1\)). The pivot columns \(1\) and \(2\) of
+\(\Sigma\), \((1,1,0,1)'\) and \((1,2,1,0)'\), form a basis of \(\mathcal C(\Sigma)\) (Theorem~\ref{thm:r4-pivot-columns}(b)). As
+\(\Sigma'=\Sigma\), \(\mathcal N(\Sigma)=\mathcal C(\Sigma)^\perp\) (Corollary~\ref{r6-cor-four-subspaces}): every vector \(x\) of
+\(\mathcal C(\Sigma)\) is orthogonal to \(a\) and \(b\), that is, \(x_1-x_2+x_3=0\) and \(-2x_1+x_2+x_4=0\); for the basis
+vectors, \(1-1+0=0\), \(1-2+1=0\), \(-2+1+1=0\) and \(-2+2+0=0\).
+
+(b) Let \(G\in\R^{2\times4}\) have the rows \(a'\) and \(b'\). Then \(G\Sigma=0\), as \(\Sigma a=\Sigma b=0\) and
+\(\Sigma'=\Sigma\), and \(G\mu=(1-2+1+0,\ -2+2+0+0)'=(0,0)'\). By Theorem~\ref{r14-thm-mvn-linear},
+\(Gz=(z_1-z_2+z_3,\ -2z_1+z_2+z_4)'\sim N_2(G\mu,G\Sigma G')=N_2(0,0)\), the distribution of the constant \(0\)
+(Definition~\ref{r14-def-mvn}). So both equations hold with probability \(1\), in accordance with
+Corollary~\ref{r14-cor-standard}(b): with probability \(1\), \(z-\mu\in\mathcal C(\Sigma)\), so \(G(z-\mu)=0\), and \(G\mu=0\).
+
+(c)
+\[
+A=\begin{pmatrix}1&0\\1&1\\0&1\\1&-1\end{pmatrix}\quad\text{gives}\quad AA'=\begin{pmatrix}1&1&0&1\\1&2&1&0\\0&1&1&-1\\1&0&-1&2\end{pmatrix}=\Sigma
+\]
+so \(z\) has the
+distribution of \(\mu+Aw\) (Theorem~\ref{r14-thm-mvn-iid}(c)): \(z_1=1+w_1\), \(z_2=2+w_1+w_2\), \(z_3=1+w_2\), \(z_4=w_1-w_2\);
+and \(z_1-z_2+z_3=(1-2+1)+(w_1-w_1-w_2+w_2)=0\) and \(-2z_1+z_2+z_4=(-2+2+0)+(-2w_1+w_1+w_2+w_1-w_2)=0\) for every \(w\).
+\end{solution}
+
+\begin{exercise}\label{r14-dr-conditional}
+Let \(z\sim N_4(\mu,\Sigma)\) with
+\[
+\mu=\begin{pmatrix}1\\0\\-1\\2\end{pmatrix},\qquad\Sigma=\begin{pmatrix}2&1&1&3\\1&1&2&1\\1&2&7&1\\3&1&1&8\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find the conditional distribution of \((z_3,z_4)'\) given \(z_1=a_1\) and \(z_2=a_2\), and for \(a_1=2\), \(a_2=1\).
+\item With
+\[
+L=\begin{pmatrix}1&0&0&0\\0&1&0&0\\1&-3&1&0\\-2&1&0&1\end{pmatrix}
+\]
+compute \(L\Sigma\) and \(L\Sigma L'\).
+\item Show that \((z_3+z_1-3z_2,\ z_4-2z_1+z_2)'\) is independent of \((z_1,z_2)'\), and find its distribution.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) Here \(\Sigma_{11}=\left(\begin{smallmatrix}2&1\\1&1\end{smallmatrix}\right)\), with determinant \(1\) and, by
+Theorem~\ref{r5d-thm-adjugate}, \(\Sigma_{11}^{-1}=\left(\begin{smallmatrix}1&-1\\-1&2\end{smallmatrix}\right)\); it is PD (its
+leading principal minors are \(2\) and \(1\); Theorem~\ref{r8-thm-leading-minors}). Also
+\(\Sigma_{21}=\left(\begin{smallmatrix}1&2\\3&1\end{smallmatrix}\right)\) and
+\(\Sigma_{22}=\left(\begin{smallmatrix}7&1\\1&8\end{smallmatrix}\right)\). So
+\[
+\begin{gathered}
+\Sigma_{21}\Sigma_{11}^{-1}=\begin{pmatrix}1-2&-1+4\\3-1&-3+2\end{pmatrix}=\begin{pmatrix}-1&3\\2&-1\end{pmatrix}
+\\
+\Sigma_{22\cdot1}=\begin{pmatrix}7&1\\1&8\end{pmatrix}-\begin{pmatrix}-1&3\\2&-1\end{pmatrix}\begin{pmatrix}1&3\\2&1\end{pmatrix}
+=\begin{pmatrix}7&1\\1&8\end{pmatrix}-\begin{pmatrix}5&0\\0&5\end{pmatrix}=\begin{pmatrix}2&1\\1&3\end{pmatrix}
+\end{gathered}
+\]
+By Theorem~\ref{r14-thm-mvn-conditional}, given \(z_1=a_1\), \(z_2=a_2\), the vector \((z_3,z_4)'\) has the distribution
+\[
+N_2\left(\begin{pmatrix}-1-(a_1-1)+3(a_2-0)\\2+2(a_1-1)-(a_2-0)\end{pmatrix},\ \Sigma_{22\cdot1}\right)
+=N_2\left(\begin{pmatrix}-a_1+3a_2\\2a_1-a_2\end{pmatrix},\ \begin{pmatrix}2&1\\1&3\end{pmatrix}\right)
+\]
+For \(a_1=2\), \(a_2=1\) the conditional distribution is \(N_2\bigl((1,3)',\Sigma_{22\cdot1}\bigr)\).
+
+(b) The rows \(3\) and \(4\) of \(L\Sigma\) are \(\row_1(\Sigma)-3\row_2(\Sigma)+\row_3(\Sigma)=(2-3+1,\ 1-3+2,\ 1-6+7,\ 3-3+1)\) and
+\(-2\row_1(\Sigma)+\row_2(\Sigma)+\row_4(\Sigma)=(-4+1+3,\ -2+1+1,\ -2+2+1,\ -6+1+8)\) (Theorem~\ref{r1-thm-views}(c)), and then
+the columns \(3\) and \(4\) of \(L\Sigma L'\) are \(\col_1(L\Sigma)-3\col_2(L\Sigma)+\col_3(L\Sigma)\) and
+\(-2\col_1(L\Sigma)+\col_2(L\Sigma)+\col_4(L\Sigma)\):
+\[
+L\Sigma=\begin{pmatrix}2&1&1&3\\1&1&2&1\\0&0&2&1\\0&0&1&3\end{pmatrix},\qquad
+L\Sigma L'=\begin{pmatrix}2&1&2-3+1&-4+1+3\\1&1&1-3+2&-2+1+1\\0&0&2&1\\0&0&1&3\end{pmatrix}=\begin{pmatrix}2&1&0&0\\1&1&0&0\\0&0&2&1\\0&0&1&3\end{pmatrix}
+\]
+as in Theorem~\ref{r5b-thm-schur}: the lower right block is the Schur complement \(\Sigma_{22\cdot1}\).
+
+(c) The entries \(3\) and \(4\) of \(Lz\) are \(z_1-3z_2+z_3\) and \(-2z_1+z_2+z_4\), and \(Lz\sim N_4(L\mu,L\Sigma L')\)
+(Theorem~\ref{r14-thm-mvn-linear}). The off-diagonal blocks of \(L\Sigma L'\) are \(0\), so
+\((z_3+z_1-3z_2,\ z_4-2z_1+z_2)'\) is independent of \((z_1,z_2)'\) (Theorem~\ref{r14-thm-mvn-indep}(a)), and it has the
+distribution \(N_2\bigl((1-0-1,\ -2+0+2)',\ \Sigma_{22\cdot1}\bigr)=N_2(0,\Sigma_{22\cdot1})\) (Corollary~\ref{r14-cor-marginal}(a)).
+So \((z_3,z_4)'=(-z_1+3z_2,\ 2z_1-z_2)'+(z_3+z_1-3z_2,\ z_4-2z_1+z_2)'\): the conditional mean of (a) plus an independent
+\(N_2(0,\Sigma_{22\cdot1})\) vector.
+\end{solution}
+
+\begin{exercise}\label{r14-dr-markov}
+Let \(z\) be the random walk of Exercise~\ref{r14-dr-random-walk}.
+\begin{enumerate}
+\item Find the conditional distribution of \(z_4\) given \(z_1=a_1\), \(z_2=a_2\) and \(z_3=a_3\).
+\item Find the conditional distribution of \(z_2\) given \(z_1=a_1\) and \(z_3=a_3\), and given \(z_1=a_1\), \(z_3=a_3\) and
+\(z_4=a_4\).
+\item Compare the conditional variance in (a) with the \((4,4)\) entry of \(\Sigma^{-1}\) found in Exercise~\ref{r14-dr-random-walk}.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) Here \(\Sigma_{11}\) is the leading \(3\times3\) block of \(\Sigma\), which is PD, as \(\Sigma\) is
+(Exercise~\ref{r14-dr-random-walk}(c), Theorem~\ref{r8-thm-principal-sub}), and
+\(\Sigma_{21}=(1,2,3)\). As
+\[
+(0,0,1)\,\Sigma_{11}=(0,0,1)\begin{pmatrix}1&1&1\\1&2&2\\1&2&3\end{pmatrix}=(1,2,3)
+\]
+multiplying by \(\Sigma_{11}^{-1}\) on the right gives \(\Sigma_{21}\Sigma_{11}^{-1}=(0,0,1)\), and
+\(\Sigma_{22\cdot1}=4-(0,0,1)(1,2,3)'=4-3=1\). By Theorem~\ref{r14-thm-mvn-conditional}, given \(z_1=a_1\), \(z_2=a_2\),
+\(z_3=a_3\), the variable \(z_4\) is \(N(a_3,1)\): the next position is the present one plus an independent \(N(0,1)\) step,
+whatever \(a_1\) and \(a_2\) are.
+
+(b) Reorder the coordinates: \(y=(z_1,z_3,z_2)'=Pz\) for the matrix \(P\in\R^{3\times4}\) with the rows \(e_1',e_3',e_2'\), and
+\(y\sim N_3(0,P\Sigma P')\) (Theorem~\ref{r14-thm-mvn-linear}), where \(P\Sigma P'\) has the rows and columns \(1,3,2\) of
+\(\Sigma\):
+\[
+P\Sigma P'=\begin{pmatrix}1&1&1\\1&3&2\\1&2&2\end{pmatrix},\qquad
+\Sigma_{11}=\begin{pmatrix}1&1\\1&3\end{pmatrix},\qquad\Sigma_{11}^{-1}=\frac12\begin{pmatrix}3&-1\\-1&1\end{pmatrix},\qquad\Sigma_{21}=(1,2)
+\]
+(Theorem~\ref{r5d-thm-adjugate}); this \(\Sigma_{11}\), and the one below, are principal submatrices of \(\Sigma\), hence PD, as
+in (a) (Theorem~\ref{r8-thm-principal-sub}). So \(\Sigma_{21}\Sigma_{11}^{-1}=\frac12(3-2,\ -1+2)=(\frac12,\frac12)\) and
+\(\Sigma_{22\cdot1}=2-(\frac12,\frac12)(1,2)'=2-\frac32=\frac12\). Given \(z_1=a_1\), \(z_3=a_3\), the variable \(z_2\) is
+\(N\bigl(\frac12(a_1+a_3),\ \frac12\bigr)\): it is centered at the midpoint of its neighbours. Given also \(z_4=a_4\), take
+\(y=(z_1,z_3,z_4,z_2)'\) with the rows \(e_1',e_3',e_4',e_2'\): now \(\Sigma_{21}=(1,2,2)\) and, as
+\[
+\bigl(\tfrac12,\tfrac12,0\bigr)\,\Sigma_{11}=\bigl(\tfrac12,\tfrac12,0\bigr)\begin{pmatrix}1&1&1\\1&3&3\\1&3&4\end{pmatrix}=(1,2,2)
+\]
+\(\Sigma_{21}\Sigma_{11}^{-1}=(\frac12,\frac12,0)\) and \(\Sigma_{22\cdot1}=2-\frac12-1=\frac12\): the same distribution
+\(N\bigl(\frac12(a_1+a_3),\ \frac12\bigr)\), whatever \(a_4\) is.
+
+(c) The \((4,4)\) entry of \(\Sigma^{-1}\) is \(1\), the inverse of the conditional variance \(1\) in (a), as
+Theorem~\ref{r14-thm-mvn-conditional}(b) says.
+\end{solution}
+
+\needspace{16\baselineskip}
+\begin{exercise}[cf.\ \citeat{haerdle-simar}{Example~5.3}]\label{r11-ex-partial-correlation}
+Let \(x\sim N_4(\mu,\Sigma)\) with
+\[
+\Sigma=\begin{pmatrix}4&1&2&1\\1&4&2&1\\2&2&2&1\\1&1&1&1\end{pmatrix}
+\]
+\begin{enumerate}
+\item Show that \(\Sigma\) is PD. Find the conditional distribution of \((x_1,x_2)'\) given \((x_3,x_4)'=(a_3,a_4)'\), and
+compare the partial correlation of \(x_1\) and \(x_2\) given \(x_3\) and \(x_4\) (the paragraph after
+Theorem~\ref{r14-thm-mvn-conditional}) with \(\rho_{12}\).
+\item Find the partial correlation of \(x_1\) and \(x_2\) given \(x_3\) alone, and given \(x_4\) alone.
+\item Let \(u=(x_1,x_2)'-B(x_3,x_4)'\), with \(B\) as in (a). Compute \(\var(u)\) from Theorem~\ref{r11-thm-linear}(b), and
+compare with (a).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) The leading principal minors of \(\Sigma\) are \(4\), \(15\), \(6\) and \(\det\Sigma=3\), all positive
+(Theorem~\ref{r8-thm-leading-minors}). Apply Theorem~\ref{r14-thm-mvn-conditional} to the reordered vector
+\((x_3,x_4,x_1,x_2)'\), which is normal (Theorem~\ref{r14-thm-mvn-linear} with the permutation matrix with the rows
+\(e_3',e_4',e_1',e_2'\)), with the first block \((x_3,x_4)'\): \(\Sigma_{11}=\left(\begin{smallmatrix}2&1\\1&1\end{smallmatrix}\right)\),
+which is PD as a principal submatrix of \(\Sigma\) (Theorem~\ref{r8-thm-principal-sub}),
+\(\Sigma_{11}^{-1}=\left(\begin{smallmatrix}1&-1\\-1&2\end{smallmatrix}\right)\) (Proposition~\ref{r2-prop-inverse-2x2}),
+\(\Sigma_{21}=\left(\begin{smallmatrix}2&1\\2&1\end{smallmatrix}\right)\) and
+\[
+B=\Sigma_{21}\Sigma_{11}^{-1}=\begin{pmatrix}1&0\\1&0\end{pmatrix},\qquad
+\Sigma_{22\cdot1}=\begin{pmatrix}4&1\\1&4\end{pmatrix}-\begin{pmatrix}1&0\\1&0\end{pmatrix}\begin{pmatrix}2&2\\1&1\end{pmatrix}
+=\begin{pmatrix}2&-1\\-1&2\end{pmatrix}
+\]
+So given \((x_3,x_4)'=(a_3,a_4)'\), the vector \((x_1,x_2)'\) has the distribution
+\(N_2\bigl((\mu_1,\mu_2)'+(a_3-\mu_3)(1,1)',\ \Sigma_{22\cdot1}\bigr)\). The partial correlation is \(-1/\sqrt{2\cdot2}=-\frac12\),
+while \(\rho_{12}=1/\sqrt{4\cdot4}=\frac14\): the sign changes.
+
+(b) Given \(x_3\) (the vector \((x_3,x_1,x_2)'\), \(\Sigma_{11}=(2)\)):
+\(\left(\begin{smallmatrix}4&1\\1&4\end{smallmatrix}\right)-\frac12(2,2)'(2,2)=\left(\begin{smallmatrix}4&1\\1&4\end{smallmatrix}\right)
+-\left(\begin{smallmatrix}2&2\\2&2\end{smallmatrix}\right)=\left(\begin{smallmatrix}2&-1\\-1&2\end{smallmatrix}\right)\), partial
+correlation \(-\frac12\). Given \(x_4\) (\(\Sigma_{11}=(1)\)):
+\(\left(\begin{smallmatrix}4&1\\1&4\end{smallmatrix}\right)-(1,1)'(1,1)=\left(\begin{smallmatrix}3&0\\0&3\end{smallmatrix}\right)\),
+partial correlation \(0\).
+
+(c) \(u=(x_1-x_3,\ x_2-x_3)'=Kx\) with \(K=\left(\begin{smallmatrix}1&0&-1&0\\0&1&-1&0\end{smallmatrix}\right)\). The rows
+of \(K\Sigma\) are \((2,-1,0,0)\) and \((-1,2,0,0)\), so
+\(\var(u)=K\Sigma K'=\left(\begin{smallmatrix}2&-1\\-1&2\end{smallmatrix}\right)=\Sigma_{22\cdot1}\). This agrees with
+Theorem~\ref{r14-thm-mvn-conditional}(a): \(u\) differs from the vector \(w\) of that theorem (for \((x_3,x_4,x_1,x_2)'\)) by the
+constant vector \((\mu_1,\mu_2)'-B(\mu_3,\mu_4)'\).
+\end{solution}
+
+\begin{exercise}\label{r14-dr-bivariate}
+Let \((u,v)'\) be bivariate normal with \(\mu_u=2\), \(\mu_v=3\), \(\sigma_u=2\), \(\sigma_v=5\) and \(\rho=\frac35\). Let \(\Phi\) be the
+distribution function of \(N(0,1)\): \(\Phi(c)=\prb(y\leqslant c)\) for \(y\sim N(0,1)\).
+\begin{enumerate}
+\item Find \(\Sigma\), \(\Sigma^{-1}\) and the density of \((u,v)'\).
+\item Find the conditional distributions of \(v\) given \(u\) and of \(u\) given \(v\).
+\item Express \(\prb(v>10)\) and the conditional probability \(\prb(v>10)\) given \(u=4\) through \(\Phi\). Which is larger?
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(\rho\sigma_u\sigma_v=\frac35\cdot10=6\), so
+\[
+\Sigma=\begin{pmatrix}4&6\\6&25\end{pmatrix},\qquad\det\Sigma=100-36=64,\qquad\Sigma^{-1}=\frac1{64}\begin{pmatrix}25&-6\\-6&4\end{pmatrix}
+\]
+(Theorem~\ref{r5d-thm-adjugate}). As \(2\pi\sigma_u\sigma_v\sqrt{1-\rho^2}=2\pi\cdot10\cdot\frac45=16\pi\), Proposition~\ref{r14-prop-bivariate}(c)
+gives
+\[
+f(s,t)=\frac1{16\pi}\exp\Bigl(-\frac1{128}\bigl(25(s-2)^2-12(s-2)(t-3)+4(t-3)^2\bigr)\Bigr)
+\]
+(b) By Proposition~\ref{r14-prop-bivariate}(d), given \(u\), \(v\sim N\bigl(3+\frac35\cdot\frac52(u-2),\ 25\cdot\frac{16}{25}\bigr)=N\bigl(3+\frac32(u-2),\ 16\bigr)\);
+with the roles exchanged, given \(v\), \(u\sim N\bigl(2+\frac35\cdot\frac25(v-3),\ 4\cdot\frac{16}{25}\bigr)=N\bigl(2+\frac6{25}(v-3),\ \frac{64}{25}\bigr)\).
+
+(c) If \(x\sim N(m,s^2)\) with \(s>0\), then \((x-m)/s\sim N(0,1)\) (Theorem~\ref{r14-thm-mvn-linear} with \(A=1/s\), \(b=-m/s\)), and
+\(\prb(x>c)=1-\Phi\bigl((c-m)/s\bigr)\). As \(v\sim N(3,25)\), \(\prb(v>10)=1-\Phi(\frac{10-3}5)=1-\Phi(\frac75)\). Given \(u=4\), \(v\) has
+the distribution \(N(3+3,16)=N(6,16)\), so the conditional probability is \(1-\Phi(\frac{10-6}4)=1-\Phi(1)\). It is the larger
+one: \(\Phi(\frac75)-\Phi(1)=\prb(1<y\leqslant\frac75)>0\), as \(N(0,1)\) has a positive density
+(Theorem~\ref{r14-thm-mvn-density}). Knowing that \(u=4\), one standard deviation of \(u\) above its mean, makes the probability
+larger.
+\end{solution}
+
+\begin{exercise}\label{r14-dr-mle}
+The rows of the data matrix
+\[
+X=\begin{pmatrix}6&3&4&1\\2&7&2&1\\4&5&5&4\\6&7&2&3\\2&3&2&1\end{pmatrix}
+\]
+are a random sample of size \(n=5\) from \(N_4(\mu,\Sigma)\).
+\begin{enumerate}
+\item Find \(\bar x\), \(C_5X\), \(A=(C_5X)'(C_5X)\) and \(S\).
+\item Find the maximum likelihood estimates \(\hat\mu\), \(\hat\Sigma\), and \(\det\hat\Sigma\).
+\item Using the proof of Theorem~\ref{r14-thm-mle}, compute \(\log L(\bar x,\hat\Sigma)-\log L(\bar x,S)\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(\one'X=(20,25,15,10)\), so \(\bar x=(4,5,3,2)'\), and, subtracting \((4,5,3,2)\) from every row,
+\[
+C_5X=\begin{pmatrix}2&-2&1&-1\\-2&2&-1&-1\\0&0&2&2\\2&2&-1&1\\-2&-2&-1&-1\end{pmatrix},\qquad
+A=\begin{pmatrix}16&0&4&4\\0&16&-4&4\\4&-4&8&4\\4&4&4&8\end{pmatrix},\qquad
+S=\frac14A=\begin{pmatrix}4&0&1&1\\0&4&-1&1\\1&-1&2&1\\1&1&1&2\end{pmatrix}
+\]
+(for instance \(16=4+4+0+4+4\), \(4=2+2+0-2+2\) and \(8=1+1+4+1+1\)).
+
+(b) By Theorem~\ref{r5d-thm-schur-det}(a) with \(S_{11}=4I_2\), \(S_{21}=\left(\begin{smallmatrix}1&-1\\1&1\end{smallmatrix}\right)=S_{12}'\)
+and \(S_{22}=\left(\begin{smallmatrix}2&1\\1&2\end{smallmatrix}\right)\),
+\[
+S_{22}-S_{21}S_{11}^{-1}S_{12}=\begin{pmatrix}2&1\\1&2\end{pmatrix}-\frac14\begin{pmatrix}2&0\\0&2\end{pmatrix}
+=\begin{pmatrix}\frac32&1\\1&\frac32\end{pmatrix},\qquad\det S=\det(4I_2)\cdot\Bigl(\frac94-1\Bigr)=16\cdot\frac54=20
+\]
+So \(S\), which is PSD (Proposition~\ref{r12-prop-data}(a)), is invertible (Theorem~\ref{r5d-thm-product}(a)) and hence PD
+(Theorem~\ref{r8-thm-eigen-criterion}(c)), and so is \(A=4S\). By Theorem~\ref{r14-thm-mle},
+\[
+\hat\mu=\bar x=\begin{pmatrix}4\\5\\3\\2\end{pmatrix},\qquad\hat\Sigma=\frac15A=\frac45S,
+\qquad\det\hat\Sigma=\Bigl(\frac45\Bigr)^4\det S=\frac{256}{625}\cdot20=\frac{1024}{125}
+\]
+(Theorem~\ref{r5d-thm-product}(c)).
+
+(c) In the proof of Theorem~\ref{r14-thm-mle}, \(\log L(\bar x,\hat\Sigma)-\log L(\bar x,S)=\frac12\bigl(g(S)-g(\hat\Sigma)\bigr)=\frac n2(\tr B-\log\det B-p)\)
+with \(B=\hat\Sigma^{1/2}S^{-1}\hat\Sigma^{1/2}\). As \(S=\frac54\hat\Sigma\), \(S^{-1}=\frac45\hat\Sigma^{-1}\), and
+\(\hat\Sigma^{-1}=\hat\Sigma^{-1/2}\hat\Sigma^{-1/2}\) (Theorem~\ref{r8-thm-sqrt}), so \(B=\frac45I_4\), with \(\tr B=\frac{16}5\) and
+\(\det B=\frac{256}{625}\). So the difference is
+\[
+\frac52\Bigl(\frac{16}5-\log\frac{256}{625}-4\Bigr)=10\log\frac54-2
+\]
+It is positive, as Lemma~\ref{r14-lem-logdet} requires: \(\bigl(\frac54\bigr)^5=\frac{3125}{1024}>3>e\), so \(5\log\frac54>1\).
+\end{solution}
+
+\begin{exercise}\label{r11-ex-mle-drill}
+The five observations \((2,4,1,1)\), \((2,2,3,1)\), \((2,6,5,3)\), \((5,4,3,4)\), \((4,4,3,1)\) are modeled as a random sample from
+\(N_4(\mu,\Sigma)\).
+\begin{enumerate}
+\item Find the maximum likelihood estimates \(\hat\mu\), \(\hat\Sigma\), the largest value of \(\log L\), and the correlation
+matrix computed from \(\hat\Sigma\).
+\item Compute \(\log L(\bar x,S)\) for the unbiased estimate \(S\), and check that it is smaller than \(\log L(\bar x,\hat\Sigma)\).
+\item Find the eigenvalues \(\theta_1,\dots,\theta_4\) of \(B=\hat\Sigma^{1/2}S^{-1}\hat\Sigma^{1/2}\), and check the identity
+\(g(S)-g(\hat\Sigma)=n(\tr B-\log\det B-p)\) of the proof of Theorem~\ref{r14-thm-mle}, that is,
+\(n\sum_j(\theta_j-1-\log\theta_j)\) (Theorem~\ref{r7-thm-trace-det}), where
+\(g(\Sigma)=n\log\det\Sigma+\tr(\Sigma^{-1}A)\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(\bar x=\frac15(15,20,15,10)'=(3,4,3,2)'\), and the deviations \(x_i-\bar x\) are \((-1,0,-2,-1)\), \((-1,-2,0,-1)\),
+\((-1,2,2,1)\), \((2,0,0,2)\), \((1,0,0,-1)\). So
+\[
+A=\sum_{i=1}^5(x_i-\bar x)(x_i-\bar x)'=\begin{pmatrix}8&0&0&4\\0&8&4&4\\0&4&8&4\\4&4&4&8\end{pmatrix},\qquad
+S=\frac14A=\begin{pmatrix}2&0&0&1\\0&2&1&1\\0&1&2&1\\1&1&1&2\end{pmatrix}
+\]
+(for instance \(8=1+1+1+4+1\) and \(4=1+1-1+4-1\)). By Theorem~\ref{r5d-thm-schur-det}(a) with \(S_{11}=2I_2\),
+\(S_{21}=\left(\begin{smallmatrix}0&1\\1&1\end{smallmatrix}\right)=S_{12}'\) and \(S_{22}=\left(\begin{smallmatrix}2&1\\1&2\end{smallmatrix}\right)\),
+\[
+S_{22}-S_{21}S_{11}^{-1}S_{12}=\begin{pmatrix}2&1\\1&2\end{pmatrix}-\frac12\begin{pmatrix}1&1\\1&2\end{pmatrix}
+=\begin{pmatrix}\frac32&\frac12\\\frac12&1\end{pmatrix},\qquad\det S=\det(2I_2)\cdot\Bigl(\frac32-\frac14\Bigr)=4\cdot\frac54=5
+\]
+so \(S\), which is PSD (Proposition~\ref{r12-prop-data}(a)), is invertible (Theorem~\ref{r5d-thm-product}(a)) and hence PD
+(Theorem~\ref{r8-thm-eigen-criterion}(c)), and so is \(A=4S\). By Theorem~\ref{r14-thm-mle}, \(\hat\mu=\bar x=(3,4,3,2)'\),
+\(\hat\Sigma=\frac15A=\frac45S\), \(\det\hat\Sigma=\bigl(\frac45\bigr)^4\cdot5=\frac{256}{125}\) (Theorem~\ref{r5d-thm-product}(c)), and the
+largest value of the log-likelihood is
+\[
+\log L(\bar x,\hat\Sigma)=-10\log(2\pi)-\frac52\log\frac{256}{125}-10
+\]
+All diagonal entries of \(\hat\Sigma\) are \(\frac85\), so the correlation matrix computed from \(\hat\Sigma\)
+(Definition~\ref{r14-def-corr}) is \(\frac58\hat\Sigma=\frac18A\):
+\[
+\frac18A=\begin{pmatrix}1&0&0&\frac12\\[2pt]0&1&\frac12&\frac12\\[2pt]0&\frac12&1&\frac12\\[2pt]\frac12&\frac12&\frac12&1\end{pmatrix}
+\]
+the sample correlation matrix of the data (Definition~\ref{r12-def-correlation}: the diagonal entries of \(S\) are \(2\),
+and \(\frac12S=\frac18A\)).
+
+(b) In the proof of Theorem~\ref{r14-thm-mle}, \(\log L(\bar x,\Sigma)=-10\log(2\pi)-\frac12g(\Sigma)\), with \(np=20\). Here
+\(g(S)=5\log\det S+\tr(S^{-1}A)=5\log5+\tr(4I_4)=5\log5+16\), so \(\log L(\bar x,S)=-10\log(2\pi)-\frac52\log5-8\). Hence
+\[
+\log L(\bar x,\hat\Sigma)-\log L(\bar x,S)=\frac52\Bigl(\log5-\log\frac{256}{125}\Bigr)-2=\frac52\log\frac{625}{256}-2=10\log\frac54-2
+\]
+This is positive: \(\bigl(\frac54\bigr)^5=\frac{3125}{1024}>3>e\), so \(5\log\frac54>1\).
+
+(c) \(S^{-1}=\frac45\hat\Sigma^{-1}\) and \(\hat\Sigma^{-1}=\hat\Sigma^{-1/2}\hat\Sigma^{-1/2}\) (Theorem~\ref{r8-thm-sqrt}), so
+\(B=\frac45\hat\Sigma^{1/2}\hat\Sigma^{-1}\hat\Sigma^{1/2}=\frac45I_4\) and \(\theta_1=\dots=\theta_4=\frac45\). Then
+\(n\sum_j(\theta_j-1-\log\theta_j)=5\cdot4\bigl(\frac45-1+\log\frac54\bigr)=20\log\frac54-4\), and
+\(g(S)-g(\hat\Sigma)=5\log5+16-\bigl(5\log\frac{256}{125}+20\bigr)=5\log\frac{625}{256}-4=20\log\frac54-4\), the same number, as
+\(g(\hat\Sigma)=5\log\det\hat\Sigma+\tr(5I_4)\); it is \(2\bigl(\log L(\bar x,\hat\Sigma)-\log L(\bar x,S)\bigr)\), as in the proof
+of Theorem~\ref{r14-thm-mle}. The difference of (b) is the number of Exercise~\ref{r14-dr-mle}(c), for other data: for all
+data, \(S=\frac n{n-1}\hat\Sigma\), so \(B=\frac{n-1}nI_p\), and the difference depends only on \(n=5\) and \(p=4\).
+\end{solution}
+
+\needspace{14\baselineskip}
+\subsection*{Problems}
+
+\begin{problem}[\citeat{casella-berger}{Exercise~4.42}, \citeat{casella-berger-solutions}{Exercise~4.42}]\label{r14-ex-corr-product}
+Let \(u\) and \(v\) be independent random variables with means \(\mu_u,\mu_v\) and positive variances \(\sigma_u^2,\sigma_v^2\). Find
+the correlation of \(uv\) and \(v\) in terms of these means and variances.
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item By (N3), \(u\) and \(v^2\) are independent, and so are \(u^2\) and \(v^2\); by (N7), \(\expc(uv^2)=\mu_u\expc(v^2)\),
+\(\expc(uv)=\mu_u\mu_v\) and \(\expc(u^2v^2)=\expc(u^2)\expc(v^2)\), where
+\(\expc(u^2)=\sigma_u^2+\mu_u^2\) and \(\expc(v^2)=\sigma_v^2+\mu_v^2\).
+\item The entries \((1,2)\) and \((1,1)\) of Theorem~\ref{r14-thm-cov}(e) for the random vector \((uv,v)'\) read
+\(\cov(uv,v)=\expc(uv^2)-\expc(uv)\expc(v)\) and \(\var(uv)=\expc(u^2v^2)-\bigl(\expc(uv)\bigr)^2\). So
+\(\cov(uv,v)=\mu_u(\sigma_v^2+\mu_v^2)-\mu_u\mu_v^2=\mu_u\sigma_v^2\).
+\item \(\var(uv)=(\sigma_u^2+\mu_u^2)(\sigma_v^2+\mu_v^2)-\mu_u^2\mu_v^2
+=\sigma_u^2\sigma_v^2+\sigma_u^2\mu_v^2+\sigma_v^2\mu_u^2>0\).
+\item Hence the correlation (Definition~\ref{r14-def-corr}) is
+\[
+\frac{\cov(uv,v)}{\sqrt{\var(uv)\var(v)}}
+=\frac{\mu_u\sigma_v^2}{\sigma_v\sqrt{\sigma_u^2\sigma_v^2+\sigma_u^2\mu_v^2+\sigma_v^2\mu_u^2}}
+=\frac{\mu_u\sigma_v}{\sqrt{\mu_u^2\sigma_v^2+\mu_v^2\sigma_u^2+\sigma_u^2\sigma_v^2}}
+\]
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{casella-berger}{Exercise~4.46(b),(d)}, \citeat{casella-berger-solutions}{Exercise~4.46}]\label{r14-ex-two-factors}
+Let \(w_1,w_2\) be independent \(N(0,1)\) variables, and for constants \(a_u,b_u,c_u,a_v,b_v,c_v\) let
+\(u=a_uw_1+b_uw_2+c_u\) and \(v=a_vw_1+b_vw_2+c_v\). Let \(\mu_u,\mu_v\in\R\), \(\sigma_u,\sigma_v>0\) and \(-1\leqslant\rho\leqslant1\).
+\begin{enumerate}
+\item Let \(a_u=\sqrt{\frac{1+\rho}2}\,\sigma_u\), \(b_u=\sqrt{\frac{1-\rho}2}\,\sigma_u\), \(c_u=\mu_u\), \(a_v=\sqrt{\frac{1+\rho}2}\,\sigma_v\),
+\(b_v=-\sqrt{\frac{1-\rho}2}\,\sigma_v\) and \(c_v=\mu_v\). Show that \(\expc(u)=\mu_u\), \(\var(u)=\sigma_u^2\),
+\(\expc(v)=\mu_v\), \(\var(v)=\sigma_v^2\), and that the correlation of \(u\) and \(v\) is \(\rho\).
+\item Show that the constants in (a) are not the only ones with these properties, by giving another choice. How many
+choices are there?
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Here \((u,v)'=Aw+c\) with \(A=\left(\begin{smallmatrix}a_u&b_u\\a_v&b_v\end{smallmatrix}\right)\), \(w=(w_1,w_2)'\) and \(c=(c_u,c_v)'\). As \(w\) has the mean \(0\)
+and the covariance matrix \(I_2\) (Theorem~\ref{r14-thm-mvn-iid}(a), Definition~\ref{r14-def-mvn}), Theorem~\ref{r11-thm-linear}(b) gives
+the mean \(c\) and the covariance matrix
+\[
+AA'=\begin{pmatrix}a_u^2+b_u^2&a_ua_v+b_ub_v\\a_ua_v+b_ub_v&a_v^2+b_v^2\end{pmatrix}
+\]
+So the requirements are \(c_u=\mu_u\), \(c_v=\mu_v\), \(a_u^2+b_u^2=\sigma_u^2\), \(a_v^2+b_v^2=\sigma_v^2\) and
+\(a_ua_v+b_ub_v=\rho\sigma_u\sigma_v\); and then \((u,v)'\) is bivariate normal with these parameters
+(Theorem~\ref{r14-thm-mvn-iid}(c), Definition~\ref{r14-def-bivariate}).
+
+(a) \(a_u^2+b_u^2=\bigl(\frac{1+\rho}2+\frac{1-\rho}2\bigr)\sigma_u^2=\sigma_u^2\), likewise \(a_v^2+b_v^2=\sigma_v^2\), and
+\(a_ua_v+b_ub_v=\bigl(\frac{1+\rho}2-\frac{1-\rho}2\bigr)\sigma_u\sigma_v=\rho\sigma_u\sigma_v\); so the correlation is
+\(\rho\sigma_u\sigma_v/(\sigma_u\sigma_v)=\rho\).
+
+(b)
+\begin{itemize}
+\item Another choice is \(a_u=\rho\sigma_u\), \(b_u=\sqrt{1-\rho^2}\,\sigma_u\), \(a_v=\sigma_v\), \(b_v=0\) (with \(c_u=\mu_u\),
+\(c_v=\mu_v\)): \(a_u^2+b_u^2=\sigma_u^2\), \(a_v^2+b_v^2=\sigma_v^2\) and \(a_ua_v+b_ub_v=\rho\sigma_u\sigma_v\).
+It differs from (a) if \(\rho\ne1\); for \(\rho=1\), take \(a_u=a_v=0\), \(b_u=\sigma_u\), \(b_v=\sigma_v\).
+\item There are infinitely many choices. If the three equations hold, then
+\((\rho\sigma_u\sigma_v-a_ua_v)^2=b_u^2b_v^2=(\sigma_u^2-a_u^2)(\sigma_v^2-a_v^2)\), that is,
+\[
+\sigma_u^2a_v^2-2\rho\sigma_u\sigma_va_ua_v+\sigma_v^2a_u^2=(1-\rho^2)\sigma_u^2\sigma_v^2
+\]
+an ellipse in the \((a_u,a_v)\)-plane if \(\lvert\rho\rvert<1\), and the line \(\sigma_ua_v=\rho\sigma_va_u\) if \(\rho=\pm1\).
+\item Conversely, for every \(a_u\) with \(\lvert a_u\rvert<\sigma_u\) this quadratic equation in \(a_v\) has a real solution, as its
+discriminant \(4\rho^2\sigma_u^2\sigma_v^2a_u^2-4\sigma_u^2\bigl(\sigma_v^2a_u^2-(1-\rho^2)\sigma_u^2\sigma_v^2\bigr)
+=4(1-\rho^2)\sigma_u^2\sigma_v^2(\sigma_u^2-a_u^2)\) is \(\geqslant0\). Then \(b_u=\sqrt{\sigma_u^2-a_u^2}>0\) and
+\(b_v=(\rho\sigma_u\sigma_v-a_ua_v)/b_u\) satisfy the three equations: \(a_ua_v+b_ub_v=\rho\sigma_u\sigma_v\), and
+\(b_v^2=(\sigma_u^2-a_u^2)(\sigma_v^2-a_v^2)/b_u^2=\sigma_v^2-a_v^2\) by the displayed equation. So every \(a_u\in(-\sigma_u,\sigma_u)\)
+gives a choice.
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{bapat}{Ch.~8, Exercise~14}]\label{r14-ex-rank-factor}
+Let \(y\sim N_n(0,\Sigma)\), where \(\Sigma\) is PSD of rank \(r\geqslant1\). Show that there are \(G\in\R^{n\times r}\) with \(\Sigma=GG'\) and
+\(x\sim N_r(0,I_r)\) such that \(y=Gx\) with probability \(1\).
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item By Lemma~\ref{r9-lem-eig-order}(a) and Theorem~\ref{r8-thm-rank-eigen},
+\(\Sigma=P\left(\begin{smallmatrix}D&0\\0&0\end{smallmatrix}\right)P'\) with \(P\) orthogonal and
+\(D=\diag(\lambda_1,\dots,\lambda_r)\), \(\lambda_1\geqslant\dots\geqslant\lambda_r>0\); the other eigenvalues are \(0\), as \(\Sigma\) is PSD
+(Theorem~\ref{r8-thm-eigen-criterion}(a)). Write \(P=[P_1\ P_2]\) with \(P_1\in\R^{n\times r}\), and put
+\(G=P\left(\begin{smallmatrix}D^{1/2}\\0\end{smallmatrix}\right)=P_1D^{1/2}\), where
+\(D^{1/2}=\diag(\sqrt{\lambda_1},\dots,\sqrt{\lambda_r})\).
+\item \(GG'=P\left(\begin{smallmatrix}D^{1/2}\\0\end{smallmatrix}\right)\bigl(D^{1/2}\ \ 0\bigr)P'
+=P\left(\begin{smallmatrix}D&0\\0&0\end{smallmatrix}\right)P'=\Sigma\) (Theorem~\ref{r5b-thm-block}(c)). So, if \(x\sim N_r(0,I_r)\), then
+\(Gx\sim N_n(0,GG')=N_n(0,\Sigma)\) (Theorem~\ref{r14-thm-mvn-linear}).
+\item To obtain \(y=Gx\), let \(x=D^{-1/2}P_1'y\). The blocks of
+\(P'\Sigma P=\left(\begin{smallmatrix}D&0\\0&0\end{smallmatrix}\right)\) are \(P_1'\Sigma P_1=D\), \(P_1'\Sigma P_2=0\) and \(P_2'\Sigma P_2=0\)
+(Theorem~\ref{r5b-thm-block}(b),(c)). By Theorem~\ref{r14-thm-mvn-linear},
+\(x\sim N_r(0,D^{-1/2}P_1'\Sigma P_1D^{-1/2})=N_r(0,I_r)\).
+\item \(Gx=P_1P_1'y=y-P_2P_2'y\), as \(P_1P_1'+P_2P_2'=PP'=I_n\) (Theorem~\ref{r5b-thm-block}(c)). Finally
+\(P_2'y\sim N_{n-r}(0,P_2'\Sigma P_2)=N_{n-r}(0,0)\) (Theorem~\ref{r14-thm-mvn-linear}), the distribution of the constant \(0\)
+(Definition~\ref{r14-def-mvn}); so \(y=Gx\) with probability \(1\). (If \(r=n\), there is no \(P_2\), and \(y=Gx\).)
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{haerdle-simar}{Theorems~4.9, 5.7(d), \S7.1, (7.2)}]\label{r11-pr-mean-cov-independent}
+Let \(x_1,\dots,x_n\) (\(n\geqslant2\)) be independent random vectors, each \(N_p(\mu,\Sigma)\), let \(X\) be the data matrix with the
+rows \(x_1',\dots,x_n'\), and let \(\bar x\) and \(S\) be its mean vector and sample covariance matrix
+(Definition~\ref{r12-def-data}).
+\begin{enumerate}
+\item Show that \(\cov(\bar x,\ x_i-\bar x)=0\) for every \(i\).
+\item Show that \(\bar x\sim N_p(\mu,\frac1n\Sigma)\) and that \(\bar x\) and \(S\) are independent.
+\item Let \(\Sigma\) be PD. Show that \(n(\bar x-\mu)'\Sigma^{-1}(\bar x-\mu)\sim\chi^2_p\), independently of \(S\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) Let \(u=(x_1',\dots,x_n')'\in\R^{np}\). By Theorem~\ref{r14-thm-mvn-iid}(a), \(u\sim N_{np}(\mu_u,V)\) with
+\(\mu_u=(\mu',\dots,\mu')'\) and \(V=\diag(\Sigma,\dots,\Sigma)\). Let \(G=[I_p\ \cdots\ I_p]\in\R^{p\times np}\), and let
+\(E_i\in\R^{p\times np}\) have the block \(I_p\) in position \(i\) and zero blocks elsewhere; so \(\bar x=\frac1nGu\)
+(Definition~\ref{r12-def-data}: \(\bar x=\frac1nX'\one=\frac1n(x_1+\dots+x_n)\)) and \(x_i=E_iu\). By the block product
+(Theorem~\ref{r5b-thm-block}(b),(c)), \(GVE_i'=\Sigma\) and \(GVG'=n\Sigma\). By Theorem~\ref{r14-thm-cov}(a),
+\[
+\cov\bigl(\bar x,\ x_i-\bar x\bigr)=\frac1nGV\Bigl(E_i-\frac1nG\Bigr)'=\frac1n\Sigma-\frac1{n^2}n\Sigma=0
+\]
+(b) \(G\mu_u=n\mu\), so \(\bar x=\frac1nGu\sim N_p(\mu,\frac1{n^2}GVG')=N_p(\mu,\frac1n\Sigma)\) by
+Theorem~\ref{r14-thm-mvn-linear}. Let \(K\in\R^{np\times np}\) have the block rows \(E_1-\frac1nG,\dots,E_n-\frac1nG\), so that
+\(Ku=\bigl((x_1-\bar x)',\dots,(x_n-\bar x)'\bigr)'\). The matrix \(\frac1nGVK'\) has the blocks \(\frac1nGV(E_i-\frac1nG)'\), which
+are \(0\) by (a); so \(\bar x\) and \(Ku\) are independent by Theorem~\ref{r14-thm-mvn-indep}(c), with \(A=\frac1nG\) and \(B=K\). As
+\(S=\frac1{n-1}\sum_i(x_i-\bar x)(x_i-\bar x)'\) (Proposition~\ref{r12-prop-data}(a)) is a function of \(Ku\), \(\bar x\) and \(S\)
+are independent (N3).
+
+(c) \(\frac1n\Sigma\) is PD (\(y'(\frac1n\Sigma)y=\frac1ny'\Sigma y\)), with the inverse \(n\Sigma^{-1}\), so
+Corollary~\ref{r14-cor-standard}(a) applied to \(\bar x\sim N_p(\mu,\frac1n\Sigma)\) gives
+\((\bar x-\mu)'(n\Sigma^{-1})(\bar x-\mu)\sim\chi^2_p\). The statistic is a function of \(\bar x\), hence independent of \(S\) by
+(b) and (N3).
+\end{solution}
+
+\clearpage
 \def\runningtitle{Bibliography}
 \renewcommand{\refname}{Bibliography}
 \begin{thebibliography}{10}
@@ -22619,7 +24260,8 @@ Roger~A. Horn and Charles~R. Johnson.
 \bibitem{casella-berger}
 George Casella and Roger~L. Berger.
 \newblock {\em {Statistical Inference}}.
-\newblock Duxbury, Pacific Grove, CA, second edition, 2002.
+\newblock Chapman and Hall/CRC, Boca Raton, FL, second edition, 2024.
+\newblock Reissue of the 2002 Duxbury edition.
 
 \bibitem{haerdle-simar}
 Wolfgang~Karl H{\"a}rdle and L{\'e}opold Simar.
@@ -22636,6 +24278,13 @@ Gareth James, Daniela Witten, Trevor Hastie, and Robert Tibshirani.
 George Casella, Roger~L. Berger, and Damaris Santana.
 \newblock {Solutions Manual for Statistical Inference, Second Edition}.
 \newblock University of Florida and North Carolina State University.
+
+\bibitem{tu-mc}
+Chang-Ye Tu.
+\newblock {Introduction to Matrix Calculus}.
+\newblock Lecture notes, expanded from Jan R. Magnus, ``A Gentle Introduction
+  to Matrix Calculus'',
+  \url{https://github.com/chang-ye-tu/mva/blob/master/note/mc.pdf}.
 
 \end{thebibliography}
 \end{document}

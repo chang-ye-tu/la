@@ -22,10 +22,11 @@
 - Knapp, A. W., 2016. Basic Algebra. Digital 2nd ed.
 - Zhang, F., 2026. Matrix Theory: Basic Results and Techniques. 3rd ed., Springer.
 - Horn, R. A., Johnson, C. R., 2013. Matrix Analysis. 2nd ed., Cambridge University Press.
-- Casella, G., Berger, R. L., 2002. Statistical Inference. 2nd ed., Duxbury.
+- [Casella, G., Berger, R. L., 2024. Statistical Inference. 2nd ed., Chapman and Hall/CRC.](https://doi.org/10.1201/9781003456285)
 - Casella, G., Berger, R. L., Santana, D. Solutions Manual for Statistical Inference, Second Edition.
 - [Härdle, W. K., Simar, L., 2015. Applied Multivariate Statistical Analysis. 4th ed., Springer.](https://link.springer.com/book/10.1007/978-3-662-45171-7)
 - [James, G., Witten, D., Hastie, T., Tibshirani, R., 2021. An Introduction to Statistical Learning: With Applications in R. 2nd ed., Springer.](https://www.statlearning.com/)
+- 教師講義：[Introduction to Matrix Calculus: Expanded "A Gentle Introduction to Matrix Calculus" by Jan R. Magnus](https://github.com/chang-ye-tu/mva/blob/master/note/mc.pdf)
 
 <!--
 - [Serre, D., 2010. Matrices: Theory and Applications. 2nd ed., Springer.](https://link.springer.com/book/10.1007/978-1-4419-7683-3)
@@ -33,8 +34,6 @@
 - [Blyth, T. S., Robertson, E. F., 2002. Basic Linear Algebra. Springer.](https://link.springer.com/book/10.1007/978-1-4471-0681-4)
 - [Blyth, T. S., Robertson, E. F., 2002. Further Linear Algebra. Springer.](https://link.springer.com/book/10.1007/978-1-4471-0661-6)
 - Magnus, J. R., Neudecker, H., 2019. Matrix Differential Calculus with Applications in Statistics and Econometrics. 3rd ed., John Wiley & Sons.
-- 教師講義
-  - [Introduction to Matrix Calculus: Expanded "A Gentle Introduction to Matrix Calculus" by Jan R. Magnus](https://github.com/chang-ye-tu/mva/blob/master/note/mc.pdf)
 -->
 
 ## 評分標準
