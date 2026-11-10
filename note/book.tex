@@ -13812,41 +13812,42 @@ degree at most \(n-1\) by (a).
 \subsection*{The characteristic polynomial}
 
 \begin{lemma}[cf.\ \citeat{lang}{Ch.~VIII, \S2}]\label{r7-lem-degree}
-For every \(t\in\R\) let \(M(t)\in\R^{m\times m}\) have entries of the form \(\alpha+\beta t\), where the numbers
-\(\alpha,\beta\in\R\) do not depend on \(t\). If at most \(d\) rows of \(M(t)\) contain an entry with \(\beta\ne0\), then
-there is a real polynomial \(q\), which is \(0\) or of degree at most \(d\), such that \(\det M(t)=q(t)\) for every
-\(t\in\R\).
+Let \(M\) be an \(m\times m\) matrix whose entries have the form \(\alpha+\beta t\) with \(\alpha,\beta\in\R\), and let
+\(\det M\) be computed by cofactor expansion (Theorem~\ref{r5d-thm-expansion}) with \(t\) treated as a number. If at
+most \(d\) rows of \(M\) contain an entry with \(\beta\ne0\), then \(\det M\) is \(0\) or a real polynomial of degree at
+most \(d\), and its value at every \(c\in\R\) is \(\det M(c)\), the determinant of the real matrix \(M(c)\) given by
+\(t=c\).
 \end{lemma}
 \begin{proof}
-Induction on \(m\). For \(m=1\), \(\det M(t)=\alpha+\beta t\) (Definition~\ref{r5d-def-det}(a),(d)), and \(q=\alpha+\beta t\)
-has the required form, since \(\beta=0\) if \(d=0\). Let \(m\geqslant2\).
+Induction on \(m\). For \(m=1\), \(\det M=\alpha+\beta t\) (Definition~\ref{r5d-def-det}(a),(d)), which is \(0\) or of
+degree at most \(d\), since \(\beta=0\) if \(d=0\); its value at \(c\) is \(\alpha+\beta c=\det M(c)\). Let \(m\geqslant2\).
 \begin{itemize}
-\item If no entry has \(\beta\ne0\), then \(M(t)=M(0)\) for every \(t\), and \(q=\det M(0)\), a number, will do.
+\item If no entry has \(\beta\ne0\), then \(M=M(c)\) for every \(c\), and \(\det M\) is the number \(\det M(c)\).
 \item Otherwise \(d\geqslant1\); let row \(i\) contain an entry with \(\beta\ne0\), write
-\(m_{ij}(t)=\alpha_{ij}+\beta_{ij}t\) for its entries, and expand along row \(i\) (Theorem~\ref{r5d-thm-expansion}):
+\(m_{ij}=\alpha_{ij}+\beta_{ij}t\) for its entries, and expand along row \(i\) (Theorem~\ref{r5d-thm-expansion}):
 \[
-\det M(t)=\sum_{j=1}^m(-1)^{i+j}m_{ij}(t)\det\bigl(M(t)(i|j)\bigr)
+\det M=\sum_{j=1}^m(-1)^{i+j}m_{ij}\det\bigl(M(i|j)\bigr)
 \]
-\item Each \(M(t)(i|j)\in\R^{(m-1)\times(m-1)}\) has entries of the same form, and its rows are the rows of \(M(t)\)
+\item Each \(M(i|j)\) is an \((m-1)\times(m-1)\) matrix with entries of the same form, and its rows are the rows of \(M\)
 other than row \(i\), each shortened by one entry; so at most \(d-1\) of them contain an entry with \(\beta\ne0\). By the
-induction hypothesis, \(\det\bigl(M(t)(i|j)\bigr)=q_j(t)\) for a real polynomial \(q_j\) that is \(0\) or of degree at
-most \(d-1\).
-\item By Proposition~\ref{r7-prop-poly}(b), \(\det M(t)\) is the value at \(t\) of
-\(q=\sum_j(-1)^{i+j}(\alpha_{ij}+\beta_{ij}t)q_j\). Each term is \(0\) or of degree at most \(1+(d-1)=d\)
-(Proposition~\ref{r7-prop-poly}(a)), so its coefficients of \(t^k\), \(k>d\), are \(0\), and so are those of \(q\)
-(Definition~\ref{r7-def-polynomial}).\qedhere
+induction hypothesis, \(q_j=\det\bigl(M(i|j)\bigr)\) is \(0\) or a real polynomial of degree at most \(d-1\), and its
+value at \(c\) is \(\det\bigl(M(c)(i|j)\bigr)\).
+\item Each term \((-1)^{i+j}(\alpha_{ij}+\beta_{ij}t)q_j\) is \(0\) or of degree at most \(1+(d-1)=d\)
+(Proposition~\ref{r7-prop-poly}(a)), so its coefficients of \(t^k\), \(k>d\), are \(0\), and so are those of \(\det M\)
+(Definition~\ref{r7-def-polynomial}). By Proposition~\ref{r7-prop-poly}(b), the value of \(\det M\) at \(c\) is
+\(\sum_j(-1)^{i+j}(\alpha_{ij}+\beta_{ij}c)\det\bigl(M(c)(i|j)\bigr)=\det M(c)\)
+(Theorem~\ref{r5d-thm-expansion}).\qedhere
 \end{itemize}
 \end{proof}
 
 \begin{definition}[\citeat{lang}{Ch.~VIII, \S2}, \citeat{hoffman-kunze}{\S6.2}, \citeat{harville}{\S21.1, (21.1.3)--(21.1.8)}, \citeat{hefferon}{Five.II.3, Definition~3.9}]\label{r7-def-charpoly}
-Let \(A=(a_{ij})\in\R^{n\times n}\). For \(t\in\R\), the \((i,j)\) entry of \(tI-A\) is \(\delta_{ij}t-a_{ij}\). By
-Lemma~\ref{r7-lem-degree} (with \(m=d=n\)) there is a real polynomial whose value at every \(c\in\R\) is
-\(\det(cI-A)\), and by Proposition~\ref{r7-prop-poly}(d) there is only one. It is the \textbf{characteristic
-polynomial} of \(A\), written
+Let \(A=(a_{ij})\in\R^{n\times n}\). The \textbf{characteristic polynomial} of \(A\) is
 \[
 p_A(t)=\det(tI-A)
 \]
-The equation \(p_A(t)=0\) is the \textbf{characteristic equation} of \(A\). Moreover:
+computed by cofactor expansion with \(t\) treated as a number. The \((i,j)\) entry of \(tI-A\) is
+\(\delta_{ij}t-a_{ij}\), so \(p_A\) is a real polynomial (Lemma~\ref{r7-lem-degree} with \(m=d=n\)). The equation
+\(p_A(t)=0\) is the \textbf{characteristic equation} of \(A\). Moreover:
 \begin{enumerate}
 \item \(p_A(c)=\det(cI-A)\) for every \(c\in\R\); so the eigenvalues of \(A\) are the real roots of \(p_A\)
 (Theorem~\ref{r7-thm-eig-singular});
@@ -13855,38 +13856,35 @@ The equation \(p_A(t)=0\) is the \textbf{characteristic equation} of \(A\). More
 \end{enumerate}
 \end{definition}
 \begin{proof}
-(a) By the choice of \(p_A\), \(p_A(c)=\det(cI-A)\) for every real \(c\). By Theorem~\ref{r7-thm-eig-singular}, a real
+(a) By Lemma~\ref{r7-lem-degree}, \(p_A(c)=\det(cI-A)\) for every real \(c\). By Theorem~\ref{r7-thm-eig-singular}, a real
 \(\lambda\) is an eigenvalue of \(A\) if and only if \(\det(\lambda I-A)=0\), that is, \(p_A(\lambda)=0\).
 
-(b) Induction on \(n\). For \(n=1\), \(\det(cI_1-A)=c-a_{11}\) for every real \(c\)
-(Definition~\ref{r5d-def-det}(a),(d)), so \(p_A=t-a_{11}\)
-(Proposition~\ref{r7-prop-poly}(d)), and \(-a_{11}=-\tr A=(-1)^1\det A\). Let \(n\geqslant2\).
+(b) Induction on \(n\). For \(n=1\), \(p_A=\det(tI_1-A)=t-a_{11}\) (Definition~\ref{r5d-def-det}(a),(d)), and
+\(-a_{11}=-\tr A=(-1)^1\det A\). Let \(n\geqslant2\).
 \begin{itemize}
-\item For \(c\in\R\), expand \(\det(cI-A)\) along row \(1\), whose entries are \(c-a_{11},-a_{12},\dots,-a_{1n}\)
-(Theorem~\ref{r5d-thm-expansion}); as \((cI-A)(1|1)=cI_{n-1}-A(1|1)\),
+\item Expand \(\det(tI-A)\) along row \(1\), whose entries are \(t-a_{11},-a_{12},\dots,-a_{1n}\)
+(Theorem~\ref{r5d-thm-expansion}); as \((tI-A)(1|1)=tI_{n-1}-A(1|1)\),
 \[
-\det(cI-A)=(c-a_{11})\,p_{A(1|1)}(c)+\sum_{j=2}^n(-1)^{1+j}(-a_{1j})\det\bigl((cI-A)(1|j)\bigr)
+p_A=(t-a_{11})\,p_{A(1|1)}+\sum_{j=2}^n(-1)^{1+j}(-a_{1j})\det\bigl((tI-A)(1|j)\bigr)
 \]
-\item For \(j\geqslant2\), the rows of \((cI-A)(1|j)\) are rows \(2,\dots,n\) of \(cI-A\) without their \(j\)th entry.
-Row \(i\) of \(cI-A\) contains \(c\) only in column \(i\), so the row that comes from row \(j\) does not contain \(c\),
-and at most \(n-2\) rows contain \(c\). By Lemma~\ref{r7-lem-degree}, \(\det\bigl((cI-A)(1|j)\bigr)=q_j(c)\) for a real
-polynomial \(q_j\) that is \(0\) or of degree at most \(n-2\).
+\item For \(j\geqslant2\), the rows of \((tI-A)(1|j)\) are rows \(2,\dots,n\) of \(tI-A\) without their \(j\)th entry.
+Row \(i\) of \(tI-A\) contains \(t\) only in column \(i\), so the row that comes from row \(j\) does not contain \(t\),
+and at most \(n-2\) rows contain \(t\). By Lemma~\ref{r7-lem-degree}, \(q_j=\det\bigl((tI-A)(1|j)\bigr)\) is \(0\) or a
+real polynomial of degree at most \(n-2\).
 \item By the induction hypothesis, \(p_{A(1|1)}=t^{n-1}-st^{n-2}+r\) with \(s=\tr A(1|1)=a_{22}+\dots+a_{nn}\) and
 \(r=0\) or \(\deg r\leqslant n-3\) (\(r=0\) if \(n=2\)). Multiplying out,
 \((t-a_{11})p_{A(1|1)}=t^n-(a_{11}+s)t^{n-1}+r_1\) with \(r_1=a_{11}st^{n-2}+(t-a_{11})r\), which is \(0\) or of degree
 at most \(n-2\) (Proposition~\ref{r7-prop-poly}(a)); and \(a_{11}+s=\tr A\) (Definition~\ref{r1-def-trace}).
-\item By Proposition~\ref{r7-prop-poly}(b), \(\det(cI-A)\) is the value at \(c\) of
-\(q=(t-a_{11})p_{A(1|1)}+\sum_{j=2}^n(-1)^{1+j}(-a_{1j})q_j\), so \(p_A=q\) (Proposition~\ref{r7-prop-poly}(d)). The
+\item So \(p_A=(t-a_{11})p_{A(1|1)}+\sum_{j=2}^n(-1)^{1+j}(-a_{1j})q_j\) (Definition~\ref{r7-def-polynomial}). The
 coefficients of \(t^k\), \(k\geqslant n-1\), of \(r_1\) and of every \(q_j\) are \(0\); so \(p_A\) has the coefficient
 \(1\) at \(t^n\), the coefficient \(-\tr A\) at \(t^{n-1}\), and \(0\) above \(t^n\).
 \item The constant term is the value at \(0\): by (a), \(p_A(0)=\det(-A)=(-1)^n\det A\)
 (Theorem~\ref{r5d-thm-product}(c)).\qedhere
 \end{itemize}
 \end{proof}
-In examples, \(\det(tI-A)\) is computed for each real \(t\) by row and column operations and cofactor expansion
-(Definition~\ref{r5d-def-det}, Theorems~\ref{r5d-thm-transpose} and~\ref{r5d-thm-expansion}). If this gives
-\(\det(tI-A)=q(t)\) for a polynomial \(q\) and every real \(t\), then \(p_A=q\), by (a) and
-Proposition~\ref{r7-prop-poly}(d). Many books call \(\det(A-tI)=(-1)^np_A(t)\) the characteristic polynomial; it has
+In examples, \(\det(tI-A)\) is also computed by row and column operations with \(t\) treated as a number
+(Definition~\ref{r5d-def-det}, Theorem~\ref{r5d-thm-transpose}); the result is \(p_A\), since its value at every real
+\(t\) is \(\det(tI-A)\), by (a) (Proposition~\ref{r7-prop-poly}(d)). Many books call \(\det(A-tI)=(-1)^np_A(t)\) the characteristic polynomial; it has
 the same roots. By (a), (b) and Proposition~\ref{r7-prop-poly}(d), a matrix \(A\in\R^{n\times n}\) has at most \(n\)
 eigenvalues; so the four eigenvalues \(1\), \(-1\), \(2\), \(-2\) of the \(4\times4\) matrix of
 Example~\ref{r7-exm-two} are all its eigenvalues.
