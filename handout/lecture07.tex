@@ -38,6 +38,13 @@
 \DeclareMathOperator{\col}{col}
 \DeclareMathOperator{\diag}{diag}
 \DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator\prb{\mathsf{P}}
+\DeclareMathOperator\expc{\mathsf{E}}
+\DeclareMathOperator\var{var}
+\DeclareMathOperator\cov{cov}
+\DeclareMathOperator\cor{cor}
+\DeclareMathOperator\argmin{argmin}
+\DeclareMathOperator\argmax{argmax}
 \DeclareMathOperator{\Span}{span}
 \theoremstyle{definition}
 \newtheorem{theorem}{Theorem}
@@ -155,6 +162,9 @@ Let \(A\in\R^{n\times n}\). \(\lambda\in\R\) is an \textbf{eigenvalue} of \(A\) 
 subspace \(\mathcal N(A-\lambda I)=\{x\in\R^n:Ax=\lambda x\}\) (\ref{f-rank}); its nonzero vectors are the eigenvectors
 belonging to \(\lambda\).
 \end{definition}
+Eigenvalues need not be real numbers: once the characteristic polynomial of \(A\) is defined below, the eigenvalues of
+\(A\) are defined as the \(n\) complex roots of that polynomial, listed with multiplicity, and the eigenvalues of this
+definition are exactly the real ones among them.
 
 \Needspace{11\baselineskip}
 \begin{theorem}\label{h-thm-eig-singular}
@@ -658,6 +668,7 @@ Theorem~\ref{h-thm-AB-BA}(a), with \(A'\), \(A\) in place of \(A\), \(B\) (\(m=3
 \(p_{AA'}=t\,p_{A'A}=t(t-1)(t-3)(t-4)\). Eigenvalues: \(1,3,4\) for \(A'A\); \(0,1,3,4\) for \(AA'\)
 (Definition~\ref{h-def-eigenvalues}).
 \end{board}
+\Needspace{8\baselineskip}
 \begin{board}[\(\lambda=4,3,1\): eigenvectors of \(A'A\), mapped by \(A\) (Theorem~\ref{h-thm-AB-BA}(b) with \(A'\),
 \(A\) in place of \(A\), \(B\)):]
 \boardtop
