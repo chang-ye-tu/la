@@ -197,11 +197,16 @@ Let \(z\in\R^n\) be a random vector, \(\expc(z)=\mu\), \(\var(z)=\Sigma\).
 \begin{proof}
 (a) Entry \((i,j)\) of \(AZB+D\) is \(\sum_r\sum_sa_{ir}z_{rs}b_{sj}+d_{ij}\) (\ref{f-views}); its expectation is
 \(\sum_r\sum_sa_{ir}\expc(z_{rs})b_{sj}+d_{ij}\) (\ref{f-prob}), entry \((i,j)\) of \(A\expc(Z)B+D\).
-\begin{board}[(b), (c):]
+\begin{board}[(b):]
 \boardtop
 \begin{align*}
 \expc(Az+b)&=A\mu+b,\qquad Az+b-\expc(Az+b)=A(z-\mu)&&\text{((a): \(Z=z\), \(B=1\), \(D=b\))}\\
-\var(Az+b)&=\expc\bigl(A(z-\mu)(z-\mu)'A'\bigr)=A\Sigma A'&&\text{(\ref{f-rules}; (a))}\\
+\var(Az+b)&=\expc\bigl(A(z-\mu)(z-\mu)'A'\bigr)=A\Sigma A'&&\text{(\ref{f-rules}; (a))}
+\end{align*}
+\end{board}
+\begin{board}[(c):]
+\boardtop
+\begin{align*}
 \var(a'z)&=a'\Sigma a\geqslant0&&\text{((b) with \(a'\), \(b=0\); \ref{f-prob})}
 \end{align*}
 \(\Sigma\) is symmetric (Definition~\ref{h-def-random}): PSD (\lec{8}, Definition~13).

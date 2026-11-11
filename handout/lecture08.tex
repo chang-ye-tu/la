@@ -228,20 +228,30 @@ Let \(A\in\R^{n\times p}\) with \(\rank A=p\). Then \(A'A\) is invertible. Let \
 \end{enumerate}
 \end{theorem}
 \begin{proof}
-\begin{board}[\(A'A\) is invertible; (a) \(Py\in\mathcal C(A)\), \(y-Py\perp\mathcal C(A)\) (Theorem~\ref{h-thm-complement}(a)):]
+\begin{board}[\(A'A\) is invertible:]
 \boardtop
 \begin{align*}
-\rank(A'A)&=\rank A=p,\ A'A\in\R^{p\times p}&&\text{(\ref{f-rank}, \ref{f-invertible})}\\
+\rank(A'A)&=\rank A=p,\ A'A\in\R^{p\times p}&&\text{(\ref{f-rank}, \ref{f-invertible})}
+\end{align*}
+\end{board}
+\begin{board}[(a) \(Py\in\mathcal C(A)\), \(y-Py\perp\mathcal C(A)\) (Theorem~\ref{h-thm-complement}(a)):]
+\boardtop
+\begin{align*}
 Py&=A\bigl((A'A)^{-1}A'y\bigr)\in\mathcal C(A),\qquad A'(y-Py)=A'y-A'A(A'A)^{-1}A'y=0
 &&\text{(\ref{f-basis}, \ref{f-rules})}
 \end{align*}
 \end{board}
-\begin{board}[(b), (c):]
+\begin{board}[(b):]
 \boardtop
 \begin{align*}
 \bigl((A'A)^{-1}\bigr)'&=\bigl((A'A)'\bigr)^{-1}=(A'A)^{-1}&&\text{(\ref{f-invertible}, \ref{f-rules})}\\
 P'&=A\bigl((A'A)^{-1}\bigr)'A'=P,\qquad(I-P)'=I-P'=I-P&&\text{(\ref{f-rules})}\\
-P^2&=A(A'A)^{-1}(A'A)(A'A)^{-1}A'=P,\qquad(I-P)^2=I-2P+P^2=I-P&&\text{(\ref{f-rules})}\\
+P^2&=A(A'A)^{-1}(A'A)(A'A)^{-1}A'=P,\qquad(I-P)^2=I-2P+P^2=I-P&&\text{(\ref{f-rules})}
+\end{align*}
+\end{board}
+\begin{board}[(c):]
+\boardtop
+\begin{align*}
 PA&=A(A'A)^{-1}A'A=A,\qquad(I-P)A=A-PA=0&&\text{(\ref{f-rules})}
 \end{align*}
 \end{board}
@@ -613,15 +623,13 @@ x&=QQ'x=Qy,\qquad y=Q'x\qquad(\text{so }y=0\iff x=0)\\
 x'Ax&=x'QQ'AQQ'x=(Q'x)'(Q'AQ)(Q'x)=y'\Lambda y=\lambda_1y_1^2+\dots+\lambda_ny_n^2
 \end{align*}
 \end{board}
-(a), (b)
-\begin{itemize}
-\item If every \(\lambda_i>0\) and \(x\ne0\): \(y\ne0\), some \(y_i^2>0\), so \(x'Ax>0\). Conversely, \(x=q_i\) (column
+(a) If every \(\lambda_i>0\) and \(x\ne0\): \(y\ne0\), some \(y_i^2>0\), so \(x'Ax>0\). Conversely, \(x=q_i\) (column
 \(i\) of \(Q\)) gives \(y=Q'Qe_i=e_i\) (\ref{f-orthonormal}, \ref{f-views}) and \(q_i'Aq_i=\lambda_i\); so PD \(\Rightarrow\)
 \(\lambda_i>0\). PSD: the same with \(\geqslant\).
-\item \((-A)q_i=-\lambda_iq_i\): (a) for \(-A\) gives ND and NSD. If \(\lambda_i>0>\lambda_j\), then
+
+(b) \((-A)q_i=-\lambda_iq_i\): (a) for \(-A\) gives ND and NSD. If \(\lambda_i>0>\lambda_j\), then
 \(q_i'Aq_i=\lambda_i>0>\lambda_j=q_j'Aq_j\): indefinite. If no \(\lambda_i<0\) (no \(\lambda_i>0\)), \(A\) is PSD (NSD),
 not indefinite.
-\end{itemize}
 \begin{board}[(c):]
 \[
 \det A=\lambda_1\cdots\lambda_n>0\implies A\text{ invertible}\qquad(\text{\lec{7}, Theorem~9; (a); \ref{f-invertible}})
