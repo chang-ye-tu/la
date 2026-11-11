@@ -4624,13 +4624,18 @@ Let \(A\in\R^{n\times n}\).
 \end{enumerate}
 \end{problem}
 \begin{solution}
-(a)--(c) For every positive integer \(k\), by Theorem~\ref{r1-thm-rules},
+(a) By Theorem~\ref{r1-thm-rules}, \((I-A)(I+A)=I+A-A-A^2=I-A^2\) and \((I+A)(I-A)=I-A^2\). If \(A^2=0\),
+both products equal \(I\), so \(I-A\) is invertible with \((I-A)^{-1}=I+A\).
+
+(b) By Theorem~\ref{r1-thm-rules}, \((I-A)(I+A+A^2)=(I+A+A^2)-(A+A^2+A^3)=I-A^3\) and in the same way
+\((I+A+A^2)(I-A)=I-A^3\). If \(A^3=0\), both products equal \(I\), so \((I-A)^{-1}=I+A+A^2\).
+
+(c) For every positive integer \(k\), by Theorem~\ref{r1-thm-rules},
 \[
 (I-A)(I+A+A^2+\dots+A^{k-1})=(I+A+\dots+A^{k-1})-(A+A^2+\dots+A^k)=I-A^k
 \]
 and in the same way \((I+A+\dots+A^{k-1})(I-A)=I-A^k\). If \(A^k=0\), both products equal
-\(I\), so \(I-A\) is invertible with inverse \(I+A+\dots+A^{k-1}\). Parts (a) and (b) are the
-cases \(k=2\) and \(k=3\): \((I-A)^{-1}=I+A\) and \(I+A+A^2\), respectively.
+\(I\), so \(I-A\) is invertible with inverse \(I+A+\dots+A^{k-1}\).
 
 (d) \(A(-A-2I)=(-A-2I)A=-A^2-2A=I\), since \(A^2+2A+I=0\). So \(A^{-1}=-A-2I\).
 
@@ -7598,8 +7603,9 @@ Which of the following form a basis of \(\R^3\)? (a) \(a_1,a_2\); (b) \(a_1,a_4,
 (c) \(a_2,a_4,a_7\); (d) \(a_3,a_5,a_9\).
 \end{exercise}
 \begin{solution}
-(a), (b) No: \(\dim\R^3=3\), so two vectors cannot span \(\R^3\), and four vectors of \(\R^3\) are
-dependent (Theorem~\ref{thm:r4-counting}(c)).
+(a) No: \(\dim\R^3=3\), so two vectors cannot span \(\R^3\) (Theorem~\ref{thm:r4-counting}(c)).
+
+(b) No: \(\dim\R^3=3\), so four vectors of \(\R^3\) are dependent (Theorem~\ref{thm:r4-counting}(c)).
 
 (c) Yes. Three vectors of \(\R^3\) form a basis if and only if they are independent
 (Theorem~\ref{thm:r4-counting}(d)). Row-reduce \([a_2\ a_4\ a_7]\):
