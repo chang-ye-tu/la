@@ -25624,6 +25624,1809 @@ Theorem~\ref{r15-thm-quadratic-chisq} (with \(\mu=0\) and \(\sigma=1\)), \(z'Az-
 \end{solution}
 
 \clearpage
+\def\unitnumber{12}
+\setcounter{theorem}{0}\setcounter{problem}{0}
+\section*{Chapter 12. Generalized inverses}
+
+\subsection*{Generalized inverses}
+
+\begin{definition}[\citeat{bapat}{\S4.1}, \citeat{harville}{\S9.1, Lemma~9.1.1}]\label{r10-def-ginverse}
+Let \(A\in\R^{m\times n}\). A matrix \(G\in\R^{n\times m}\) with \(AGA=A\) is a \textbf{generalized inverse} (or
+\textbf{g-inverse}) of \(A\); the symbol \(A^-\) denotes any g-inverse of \(A\). If \(A\in\R^{n\times n}\) is
+invertible, then \(A^{-1}\) is a g-inverse of \(A\), and it is the only one: \(AGA=A\) gives
+\(G=A^{-1}(AGA)A^{-1}=A^{-1}AA^{-1}=A^{-1}\).
+\end{definition}
+
+\begin{theorem}[\citeat{bapat}{Result~4.1}, \citeat{harville}{Lemma~9.5.1}]\label{r10-thm-ginv-solves}
+Let \(A\in\R^{m\times n}\) and \(G\in\R^{n\times m}\).
+\begin{enumerate}
+\item \(G\) is a g-inverse of \(A\) if and only if, for every \(y\in\mathcal C(A)\), \(x=Gy\) is a solution of
+\(Ax=y\).
+\item If \(G\) is a g-inverse of \(A\) and \(y\in\R^m\), then \(Ax=y\) is consistent if and only if \(AGy=y\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item Let \(AGA=A\) and \(y\in\mathcal C(A)\), say \(y=Az\). Then \(A(Gy)=AGAz=Az=y\).
+\item Conversely, let \(AGy=y\) for every \(y\in\mathcal C(A)\). For \(z\in\R^n\), \(y=Az\) lies in \(\mathcal C(A)\), so
+\(AGAz=Az\). With \(z=e_j\), column \(j\) of \(AGA\) equals column \(j\) of \(A\) (Theorem~\ref{r1-thm-views}(b)), for
+\(j=1,\dots,n\); so \(AGA=A\).
+\end{itemize}
+(b) \(Ax=y\) is consistent if and only if \(y\in\mathcal C(A)\) (Corollary~\ref{cor:r4-ax-b}(a)). If
+\(y\in\mathcal C(A)\), then \(AGy=y\) by (a). Conversely, if \(AGy=y\), then \(x=Gy\) is a solution.
+\end{proof}
+
+\begin{theorem}[\citeat{bapat}{\S4.1}, \citeat{harville}{Theorem~9.1.3, Corollary~9.1.4}]\label{r10-thm-ginv-exists}
+Let \(A\in\R^{m\times n}\) have rank \(r\).
+\begin{enumerate}
+\item Let \(r\geqslant1\), let \(A=BC\) be a full-rank factorization (\(B\in\R^{m\times r}\), \(C\in\R^{r\times n}\)), and let
+\(L\in\R^{r\times m}\) and \(K\in\R^{n\times r}\) satisfy \(LB=I_r\) and \(CK=I_r\). Then \(G=KL\) is a g-inverse of \(A\).
+Such \(L\) and \(K\) exist, for instance \(L=(B'B)^{-1}B'\) and \(K=C'(CC')^{-1}\).
+\item If \(r=0\), every \(G\in\R^{n\times m}\) is a g-inverse of \(A\).
+\end{enumerate}
+In particular, every matrix has a g-inverse.
+\end{theorem}
+\begin{proof}
+(a) \(AGA=BC\,KL\,BC=B(CK)(LB)C=BI_rI_rC=BC=A\). The two matrices given satisfy \(LB=I_r\) and \(CK=I_r\)
+(Theorem~\ref{thm:r4-full-rank-factorization}(c)).
+
+(b) Then \(A=0\) (Theorem~\ref{thm:r4-four-bases}), and \(AGA=0=A\) for every \(G\).
+
+Every \(A\) with \(r\geqslant1\) has a full-rank factorization (Theorem~\ref{thm:r4-full-rank-factorization}(a)), so (a)
+and (b) give a g-inverse of every matrix.
+\end{proof}
+
+\begin{theorem}[\citeat{bapat}{\S4.1, Result~5.18}]\label{r10-thm-ginv-normal-form}
+Let \(A\in\R^{m\times n}\) have rank \(r\geqslant1\), and let \(P\in\R^{m\times m}\) and \(Q\in\R^{n\times n}\) be invertible with
+\(PAQ=N_r=\left(\begin{smallmatrix}I_r&0\\0&0\end{smallmatrix}\right)\) (Theorem~\ref{thm:r4-normal-form}). Then \(G\in\R^{n\times m}\)
+is a g-inverse of \(A\) if and only if
+\[
+G=Q\begin{pmatrix}I_r&U\\V&W\end{pmatrix}P
+\]
+for some \(U\in\R^{r\times(m-r)}\), \(V\in\R^{(n-r)\times r}\) and \(W\in\R^{(n-r)\times(m-r)}\) (blocks with no rows or no
+columns are absent). In particular, unless \(r=m=n\), the matrix \(A\) has infinitely many g-inverses.
+\end{theorem}
+\begin{proof}
+Let \(G\in\R^{n\times m}\), put \(H=Q^{-1}GP^{-1}\in\R^{n\times m}\), so that \(G=QHP\), and partition
+\(H=\left(\begin{smallmatrix}H_{11}&H_{12}\\H_{21}&H_{22}\end{smallmatrix}\right)\) with \(H_{11}\in\R^{r\times r}\).
+\begin{itemize}
+\item By the block product (Theorem~\ref{r5b-thm-block}(c)), \(N_rH=\left(\begin{smallmatrix}H_{11}&H_{12}\\0&0\end{smallmatrix}\right)\)
+and
+\[
+N_rHN_r=\begin{pmatrix}H_{11}&0\\0&0\end{pmatrix}
+\]
+\item \(A=P^{-1}N_rQ^{-1}\), so \(AGA=P^{-1}N_rQ^{-1}QHPP^{-1}N_rQ^{-1}=P^{-1}N_rHN_rQ^{-1}\). Multiplying by \(P\) on the left
+and by \(Q\) on the right, and back by \(P^{-1}\) and \(Q^{-1}\), shows that \(AGA=A\) if and only if \(N_rHN_r=N_r\), that is,
+\(H_{11}=I_r\). Then \(U=H_{12}\), \(V=H_{21}\) and \(W=H_{22}\) are arbitrary.
+\item If \(QH_1P=QH_2P\), then \(H_1=H_2\) (multiply by \(Q^{-1}\) on the left and by \(P^{-1}\) on the right); so different
+blocks \(U,V,W\) give different g-inverses. If \(r<m\), the block \(U\) is present and its \((1,1)\) entry can be any number;
+if \(r<n\), likewise \(V\). So \(A\) has infinitely many g-inverses unless \(r=m=n\).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{corollary}[cf.\ \citeat{bapat}{\S4.1}]\label{r10-cor-ginv-rowreduction}
+Let \(A\in\R^{m\times n}\) have rank \(r\geqslant1\), and let row operations take \([A\mid I_m]\) to \([R\mid P]\), where \(R\)
+is the RREF of \(A\), with pivot columns \(k_1<\dots<k_r\) (Theorem~\ref{thm:r4-four-bases}). Let \(G\in\R^{n\times m}\)
+have row \(k_s\) equal to row \(s\) of \(P\) (\(s=1,\dots,r\)) and all other rows zero. Then \(G\) is a g-inverse of \(A\).
+\end{corollary}
+\begin{proof}
+\begin{itemize}
+\item Let \(B=[a_{k_1}\ \cdots\ a_{k_r}]\), and let \(C\) consist of the first \(r\) rows of \(R\). Then \(A=BC\) is a
+full-rank factorization (Theorem~\ref{thm:r4-full-rank-factorization}(a)).
+\item \(PA=R\) (Theorem~\ref{thm:r4-four-bases}), so \(Pa_{k_s}=\col_{k_s}(R)=e_s\in\R^m\) (Definition~\ref{r2-def-rref}).
+Hence \(PB=[e_1\ \cdots\ e_r]\) (Theorem~\ref{r1-thm-views}(a)), and the first \(r\) rows of \(P\) form a matrix
+\(L\in\R^{r\times m}\) with \(LB=I_r\) (Theorem~\ref{r1-thm-views}(c)).
+\item Let \(K=[e_{k_1}\ \cdots\ e_{k_r}]\in\R^{n\times r}\). Column \(s\) of \(CK\) is \(\col_{k_s}(C)\), the \(s\)th column of
+\(I_r\) (Definition~\ref{r2-def-rref}); so \(CK=I_r\).
+\item By the outer product expansion (Theorem~\ref{r1-thm-views}(d)), \(KL=e_{k_1}\row_1(L)+\dots+e_{k_r}\row_r(L)\) has
+row \(k_s\) equal to \(\row_s(L)=\row_s(P)\) and all other rows zero: \(KL=G\). By
+Theorem~\ref{r10-thm-ginv-exists}(a), \(G\) is a g-inverse of \(A\).\qedhere
+\end{itemize}
+\end{proof}
+
+\needspace{12\baselineskip}
+\begin{theorem}[\citeat{harville}{Theorem~4.4.10}, \citeat{bapat}{\S4.1}, \citeat{searle-khuri}{\S8.2.2}]\label{r10-thm-ginv-submatrix}
+Let \(A\in\R^{m\times n}\) have rank \(r\geqslant1\). For rows \(i_1<\dots<i_r\) and columns \(j_1<\dots<j_r\) of \(A\), let
+\(A_*\in\R^{r\times r}\) be the submatrix of \(A\) in these rows and columns: its \((s,t)\) entry is \(a_{i_sj_t}\).
+\begin{enumerate}
+\item \(A\) has \(r\) linearly independent rows and \(r\) linearly independent columns. If the rows \(i_1,\dots,i_r\) and
+the columns \(j_1,\dots,j_r\) of \(A\) are linearly independent, then \(A_*\) is invertible.
+\item Let \(A_*\) be invertible, and let \(G\in\R^{n\times m}\) have \((j_s,i_t)\) entry equal to the \((s,t)\) entry of
+\(A_*^{-1}\) (\(s,t=1,\dots,r\)) and all other entries \(0\). Then \(G\) is a g-inverse of \(A\). In particular, if
+\(A=\left(\begin{smallmatrix}A_{11}&A_{12}\\A_{21}&A_{22}\end{smallmatrix}\right)\) with \(A_{11}\in\R^{r\times r}\) invertible,
+then \(G=\left(\begin{smallmatrix}A_{11}^{-1}&0\\0&0\end{smallmatrix}\right)\in\R^{n\times m}\) is a g-inverse of \(A\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item The pivot columns of \(A\) are \(r\) linearly independent columns (Theorem~\ref{thm:r4-four-bases}(a)). As
+\(\rank A'=r\) (Theorem~\ref{thm:r4-rank-rules}(a)), the pivot columns of \(A'\) are \(r\) linearly independent columns of
+\(A'\), that is, transposed rows of \(A\).
+\item Let the rows \(i_1,\dots,i_r\) and the columns \(j_1,\dots,j_r\) be linearly independent. The vectors
+\(\row_{i_1}(A)',\dots,\row_{i_r}(A)'\) are \(r\) linearly independent vectors of \(\mathcal C(A')\), of dimension \(r\); so
+they form a basis of it (Theorem~\ref{thm:r4-counting}(d)), and
+\(\row_t(A)=f_{t1}\row_{i_1}(A)+\dots+f_{tr}\row_{i_r}(A)\) (\(t=1,\dots,m\)) for some numbers \(f_{tk}\).
+\item Let \(U\in\R^{m\times r}\) consist of the columns \(j_1,\dots,j_r\) of \(A\), and \(F=(f_{tk})\in\R^{m\times r}\). Entry
+\(j_s\) of the last equation reads \(u_{ts}=a_{tj_s}=\sum_{k=1}^rf_{tk}a_{i_kj_s}\); that is, \(U=FA_*\).
+\item The columns of \(U\) are linearly independent, so
+\(r=\rank U=\rank(FA_*)\leqslant\rank A_*\leqslant r\) (Theorems~\ref{thm:r4-rank-rules}(a),(b)
+and~\ref{thm:r4-rank-product}(a)), and \(A_*\) is invertible (Theorem~\ref{thm:r4-rank-rules}(d)).
+\end{itemize}
+(b) First the leading case \(A_*=A_{11}\) (\(i_s=j_s=s\)); blocks with no rows or no columns are absent when \(r=m\) or
+\(r=n\).
+\begin{itemize}
+\item The columns of \(\left(\begin{smallmatrix}A_{11}\\A_{21}\end{smallmatrix}\right)\) are linearly independent:
+\(\left(\begin{smallmatrix}A_{11}\\A_{21}\end{smallmatrix}\right)z=0\) gives \(A_{11}z=0\), so \(z=0\). They are
+\(r=\dim\mathcal C(A)\) vectors of \(\mathcal C(A)\), hence a basis of it (Theorem~\ref{thm:r4-counting}(d)).
+\item So each of the other columns is a combination of them:
+\(\left(\begin{smallmatrix}A_{12}\\A_{22}\end{smallmatrix}\right)=\left(\begin{smallmatrix}A_{11}\\A_{21}\end{smallmatrix}\right)X\)
+for some \(X\in\R^{r\times(n-r)}\) (Theorem~\ref{r1-thm-views}(a),(b)), that is, \(A_{12}=A_{11}X\) and \(A_{22}=A_{21}X\)
+(Theorem~\ref{r5b-thm-block}(c)). Then \(X=A_{11}^{-1}A_{12}\) and \(A_{22}=A_{21}A_{11}^{-1}A_{12}\).
+\item With \(F=\left(\begin{smallmatrix}A_{11}^{-1}&0\\0&0\end{smallmatrix}\right)\in\R^{n\times m}\), the block product
+(Theorem~\ref{r5b-thm-block}(c)) gives
+\[
+AF=\begin{pmatrix}I_r&0\\A_{21}A_{11}^{-1}&0\end{pmatrix},\qquad
+AFA=\begin{pmatrix}A_{11}&A_{12}\\A_{21}&A_{21}A_{11}^{-1}A_{12}\end{pmatrix}=A
+\]
+\end{itemize}
+Now the general case.
+\begin{itemize}
+\item Extend \(i_1,\dots,i_r\) by the other row indices, in increasing order, to a permutation \(\varphi\) of
+\(1,\dots,m\), and \(j_1,\dots,j_r\) likewise to a permutation \(\psi\) of \(1,\dots,n\); let \(P=P_\varphi\) and
+\(Q=P_\psi'\) (Definition~\ref{r5d-def-permutation-matrix}). Then \(\row_s(P)=e_{i_s}'\) and \(\col_t(Q)=e_{j_t}\) for
+\(s,t\leqslant r\), so the \((s,t)\) entry of \(PAQ\) is \(e_{i_s}'Ae_{j_t}=a_{i_sj_t}\) (Theorem~\ref{r1-thm-views}(c),(d)):
+the leading \(r\times r\) block of \(PAQ\) is \(A_*\).
+\item \(\rank(PAQ)=r\) (Theorem~\ref{thm:r4-rank-product}(d)), so by the leading case
+\(F=\left(\begin{smallmatrix}A_*^{-1}&0\\0&0\end{smallmatrix}\right)\in\R^{n\times m}\) is a g-inverse of \(PAQ\).
+\item \(P'P=PP'=I_m\) and \(Q'Q=QQ'=I_n\) (Proposition~\ref{r5d-prop-permutation-matrix}(c)), so \(A=P'(PAQ)Q'\) and
+\[
+A(QFP)A=P'(PAQ)Q'QFPP'(PAQ)Q'=P'(PAQ)F(PAQ)Q'=P'(PAQ)Q'=A
+\]
+\item Finally \(QFP=G\). Let \(f_{st}\) be the entries of \(F\); they are \(0\) unless \(s,t\leqslant r\). Column \(t\) of
+\(QF\) is \(Q\col_t(F)=\sum_{s\leqslant r}f_{st}\col_s(Q)=\sum_{s\leqslant r}f_{st}e_{j_s}\) for \(t\leqslant r\), and \(0\) for
+\(t>r\) (Theorem~\ref{r1-thm-views}(a),(b)). By the outer product expansion (Theorem~\ref{r1-thm-views}(d)),
+\(QFP=\sum_{t\leqslant r}\col_t(QF)\row_t(P)=\sum_{s,t\leqslant r}f_{st}\,e_{j_s}e_{i_t}'\), and \(e_{j_s}e_{i_t}'\in\R^{n\times m}\)
+has entry \(1\) in position \((j_s,i_t)\) and \(0\) elsewhere.\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{example}[cf.\ \citeat{harville}{\S9.5}]\label{r10-exm-ginverse}
+Let \(A\) be the matrix of Example~\ref{exm:r4-four-bases}, with the full-rank factorization \(A=BC\) of
+Example~\ref{exm:r4-factorization}:
+\[
+A=\begin{pmatrix}1&2&1&3\\1&3&0&5\\2&5&1&8\end{pmatrix},\qquad
+B=\begin{pmatrix}1&2\\1&3\\2&5\end{pmatrix},\qquad
+C=\begin{pmatrix}1&0&3&-1\\0&1&-1&2\end{pmatrix}
+\]
+Find two g-inverses of \(A\), and decide whether \(Ax=y\) is consistent for \(y=(1,2,3)'\) and for \(y=(1,1,1)'\).
+
+\textit{Solution.}
+\begin{itemize}
+\item Columns \(1\), \(2\) of \(C\) are the unit vectors of \(\R^2\). Rows \(1\), \(2\) of \(B\) form
+\(B_1=\left(\begin{smallmatrix}1&2\\1&3\end{smallmatrix}\right)\), and
+\(B_1\left(\begin{smallmatrix}3&-2\\-1&1\end{smallmatrix}\right)=I_2\), so
+\(B_1^{-1}=\left(\begin{smallmatrix}3&-2\\-1&1\end{smallmatrix}\right)\) (Theorem~\ref{r2-thm-invertible}); rows \(1\), \(3\)
+form \(B_2=\left(\begin{smallmatrix}1&2\\2&5\end{smallmatrix}\right)\), and likewise
+\(B_2^{-1}=\left(\begin{smallmatrix}5&-2\\-2&1\end{smallmatrix}\right)\), as
+\(B_2\left(\begin{smallmatrix}5&-2\\-2&1\end{smallmatrix}\right)=I_2\). Put
+\[
+K=\begin{pmatrix}1&0\\0&1\\0&0\\0&0\end{pmatrix},\qquad
+L_1=\begin{pmatrix}3&-2&0\\-1&1&0\end{pmatrix},\qquad
+L_2=\begin{pmatrix}5&0&-2\\-2&0&1\end{pmatrix}
+\]
+where \(L_1\) and \(L_2\) carry the columns of \(B_1^{-1}\) and \(B_2^{-1}\) in columns \(1,2\) and \(1,3\). Then \(CK=I_2\)
+(Theorem~\ref{r1-thm-views}(a),(b)), and by Theorem~\ref{r1-thm-views}(c) the rows of \(L_1B\) are
+\(3(1,2)-2(1,3)=(1,0)\) and \(-(1,2)+(1,3)=(0,1)\), and those of \(L_2B\) are \(5(1,2)-2(2,5)=(1,0)\) and
+\(-2(1,2)+(2,5)=(0,1)\): \(L_1B=L_2B=I_2\).
+\item By Theorem~\ref{r10-thm-ginv-exists}(a), both
+\[
+G_1=KL_1=\begin{pmatrix}3&-2&0\\-1&1&0\\0&0&0\\0&0&0\end{pmatrix},\qquad
+G_2=KL_2=\begin{pmatrix}5&0&-2\\-2&0&1\\0&0&0\\0&0&0\end{pmatrix}
+\]
+are g-inverses of \(A\): a g-inverse need not be unique.
+\item The same two matrices come from Theorem~\ref{r10-thm-ginv-submatrix}(b): the submatrices of \(A\) in rows
+\(1,2\) and in rows \(1,3\), with columns \(1,2\), are \(B_1\) and \(B_2\). Also, \(L_1\) consists of the first
+two rows of the matrix \(P\) of Example~\ref{exm:r4-four-bases}, so \(G_1\) is the g-inverse of
+Corollary~\ref{r10-cor-ginv-rowreduction}.
+\item Since \(CK=I_2\),
+\[
+AG_1=BCKL_1=BL_1=\begin{pmatrix}1&2\\1&3\\2&5\end{pmatrix}\begin{pmatrix}3&-2&0\\-1&1&0\end{pmatrix}
+=\begin{pmatrix}1&0&0\\0&1&0\\1&1&0\end{pmatrix}
+\]
+so \(AG_1y=(y_1,\ y_2,\ y_1+y_2)'\). By Theorem~\ref{r10-thm-ginv-solves}(b), \(Ax=y\) is consistent if and only if
+\(y_3=y_1+y_2\); this matches \(\row_3(A)=\row_1(A)+\row_2(A)\) (Example~\ref{exm:r4-four-bases}).
+\item \(y=(1,2,3)'\): consistent, and \(G_1y=(3-4,\ -1+2,\ 0,\ 0)'=(-1,1,0,0)'\) is a solution; indeed
+\(A(-1,1,0,0)'=-a_1+a_2=(1,2,3)'\).
+\item \(y=(1,1,1)'\): \(AG_1y=(1,1,2)'\ne y\), so \(Ax=y\) is inconsistent.
+\end{itemize}
+\end{example}
+
+\needspace{14\baselineskip}
+\subsection*{Solving linear systems with a generalized inverse}
+
+\begin{theorem}[\citeat{bapat}{Result~4.4}, \citeat{harville}{Theorem~11.2.4}]\label{r10-thm-general-solution}
+Let \(A\in\R^{m\times n}\), let \(G\) be a g-inverse of \(A\), and let \(y\in\mathcal C(A)\). The solutions of \(Ax=y\)
+are exactly the vectors
+\[
+x=Gy+(I_n-GA)z\qquad(z\in\R^n)
+\]
+In particular (\(y=0\)), \(\mathcal N(A)=\mathcal C(I_n-GA)\).
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+\item Write \(y=Av\). For every \(z\), \(A\bigl(Gy+(I-GA)z\bigr)=AGy+(A-AGA)z=AGAv+0=Av=y\).
+\item Conversely, let \(Au=y\), and put \(z=u-Gy\). Since \(GAu=Gy\) and \(GAGy=G(AGy)=Gy\)
+(Theorem~\ref{r10-thm-ginv-solves}(a)),
+\[
+Gy+(I-GA)(u-Gy)=Gy+u-Gy-GAu+GAGy=u-Gy+Gy=u
+\]
+\item For \(y=0\), the solutions of \(Ax=0\) are the vectors \((I-GA)z\), \(z\in\R^n\); that is,
+\(\mathcal N(A)=\mathcal C(I-GA)\).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{theorem}[\citeat{harville}{Theorem~11.10.1}]\label{r10-thm-invariant-combination}
+Let \(A\in\R^{m\times n}\) and \(y\in\mathcal C(A)\), let \(G\) be a g-inverse of \(A\), and let \(\lambda\in\R^n\). The
+following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\item \(\lambda'x\) has the same value for every solution \(x\) of \(Ax=y\);
+\item \(\lambda\in\mathcal C(A')\), that is, \(\lambda'=a'A\) for some \(a\in\R^m\);
+\item \(\lambda'GA=\lambda'\).
+\end{enumerate}
+If they hold, then \(\lambda'x=a'y\) for every solution \(x\).
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+\item (ii)\,\(\Rightarrow\)\,(i): if \(Ax=y\), then \(\lambda'x=a'Ax=a'y\), whatever the solution \(x\).
+\item (i)\,\(\Rightarrow\)\,(iii): by Theorem~\ref{r10-thm-general-solution}, \(\lambda'\bigl(Gy+(I-GA)z\bigr)=\lambda'Gy+\lambda'(I-GA)z\)
+is the same for every \(z\in\R^n\). Comparing \(z=e_j\) with \(z=0\), entry \(j\) of the row vector \(\lambda'(I-GA)\) is
+\(0\), for \(j=1,\dots,n\). So \(\lambda'(I-GA)=0\), that is, \(\lambda'=\lambda'GA\).
+\item (iii)\,\(\Rightarrow\)\,(ii): \(\lambda'=(\lambda'G)A=a'A\) with \(a=G'\lambda\)
+(Theorem~\ref{r1-thm-transpose}).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{example}\label{r10-exm-general-solution}
+For \(A\), \(G_1\) and \(y=(1,2,3)'\) of Example~\ref{r10-exm-ginverse}, find all solutions of \(Ax=y\), and decide
+whether \(x_1\) and \(x_1+3x_3-x_4\) have the same value for all of them.
+
+\textit{Solution.} \(G_1A=KL_1BC=KC\), as \(L_1B=I_2\); so
+\[
+G_1A=\begin{pmatrix}1&0&3&-1\\0&1&-1&2\\0&0&0&0\\0&0&0&0\end{pmatrix},\qquad
+I_4-G_1A=\begin{pmatrix}0&0&-3&1\\0&0&1&-2\\0&0&1&0\\0&0&0&1\end{pmatrix}
+\]
+By Theorem~\ref{r10-thm-general-solution}, with \(G_1y=(-1,1,0,0)'\), the solutions are
+\[
+x=\begin{pmatrix}-1\\1\\0\\0\end{pmatrix}+z_3\begin{pmatrix}-3\\1\\1\\0\end{pmatrix}+z_4\begin{pmatrix}1\\-2\\0\\1\end{pmatrix}
+=\begin{pmatrix}-1-3z_3+z_4\\1+z_3-2z_4\\z_3\\z_4\end{pmatrix}\qquad(z_3,z_4\in\R)
+\]
+\(z_1\) and \(z_2\) drop out, as columns \(1\), \(2\) of \(I_4-G_1A\) are \(0\). Columns \(3\), \(4\) are the special
+solutions \(s_1\), \(s_2\) of Example~\ref{exm:r4-four-bases}, and \(\mathcal N(A)=\mathcal C(I_4-G_1A)=\Span\{s_1,s_2\}\).
+\begin{itemize}
+\item \(\lambda=(1,0,0,0)'\): \(\lambda'G_1A=\row_1(G_1A)=(1,0,3,-1)\ne\lambda'\), so \(x_1=-1-3z_3+z_4\) is not the same
+for all solutions (Theorem~\ref{r10-thm-invariant-combination}).
+\item \(\lambda=(1,0,3,-1)'\): \(\lambda'G_1A=\row_1(G_1A)+3\row_3(G_1A)-\row_4(G_1A)=(1,0,3,-1)=\lambda'\), so
+\(x_1+3x_3-x_4\) is the same for all solutions: \((-1-3z_3+z_4)+3z_3-z_4=-1\). Here \(\lambda'\) is the first row of
+the RREF of \(A\), a vector of \(\mathcal R(A)\).
+\end{itemize}
+\end{example}
+
+\subsection*{Properties of generalized inverses}
+
+\begin{proposition}[\citeat{harville}{Lemma~9.3.3, Corollary~9.3.4, Lemma~9.2.8}, \citeat{searle-khuri}{Theorem~8.2(iv)}]\label{r10-prop-ginv-basic}
+Let \(A\in\R^{m\times n}\), and let \(G\) be a g-inverse of \(A\).
+\begin{enumerate}
+\item \(G'\) is a g-inverse of \(A'\).
+\item If \(A\) is symmetric, then \(G'\) and \(\frac12(G+G')\) are g-inverses of \(A\), and \(\frac12(G+G')\) is symmetric.
+So every symmetric matrix has a symmetric g-inverse.
+\item If \(A\) has full column rank, its g-inverses are exactly its left inverses, the \(L\in\R^{n\times m}\) with
+\(LA=I_n\). If \(A\) has full row rank, its g-inverses are exactly its right inverses, the \(K\in\R^{n\times m}\) with
+\(AK=I_m\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a) \(A'G'A'=(AGA)'=A'\) (Theorem~\ref{r1-thm-transpose}).
+
+(b) If \(A'=A\), then (a) reads \(AG'A=A\). So \(A\cdot\frac12(G+G')\cdot A=\frac12(AGA+AG'A)=\frac12(A+A)=A\), and
+\(\bigl(\frac12(G+G')\bigr)'=\frac12(G'+G)\).
+
+(c)
+\begin{itemize}
+\item Let \(\rank A=n\). Then \(A=AI_n\) is a full-rank factorization, so \(A\) has a left inverse \(L_0\)
+(Theorem~\ref{thm:r4-full-rank-factorization}(c)).
+\item Every left inverse \(L\) is a g-inverse: \(ALA=AI_n=A\). Every g-inverse \(G\) is a left inverse:
+\(GA=(L_0A)GA=L_0(AGA)=L_0A=I_n\).
+\item Let \(\rank A=m\). Then \(A=I_mA\) is a full-rank factorization, so \(A\) has a right inverse \(K_0\). Every right
+inverse \(K\) gives \(AKA=I_mA=A\), and every g-inverse \(G\) gives \(AG=AG(AK_0)=(AGA)K_0=AK_0=I_m\).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{lemma}[\citeat{harville}{Lemma~9.3.5}]\label{r10-lem-range-test}
+Let \(A\in\R^{m\times n}\), and let \(G\) be a g-inverse of \(A\).
+\begin{enumerate}
+\item For \(C\in\R^{m\times q}\): \(\mathcal C(C)\subseteq\mathcal C(A)\) if and only if \(AGC=C\).
+\item For \(B\in\R^{p\times n}\): \(\mathcal R(B)\subseteq\mathcal R(A)\) if and only if \(BGA=B\).
+\end{enumerate}
+The inclusions do not involve \(G\); so if \(AGC=C\) (or \(BGA=B\)) holds for one g-inverse \(G\), it holds for every
+g-inverse. In particular, the system \(AX=C\) (unknown \(X\in\R^{n\times q}\)) is consistent if and only if \(AGC=C\),
+and then \(X=GC\) is a solution.
+\end{lemma}
+\begin{proof}
+(a)
+\begin{itemize}
+\item If \(AGC=C\), then each column \(c_j=A(Gc_j)\) of \(C\) lies in \(\mathcal C(A)\) (Theorem~\ref{r1-thm-views}(a)), and
+so does every combination of them: \(\mathcal C(C)\subseteq\mathcal C(A)\).
+\item If \(\mathcal C(C)\subseteq\mathcal C(A)\), then \(c_j=Af_j\) for some \(f_j\in\R^n\) (\(j=1,\dots,q\)), that is, \(C=AF\)
+with \(F=[f_1\ \cdots\ f_q]\) (Theorem~\ref{r1-thm-views}(a)); so \(AGC=AGAF=AF=C\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item If \(BGA=B\), then each row \(\row_i(B)=(\row_i(B)G)A\) lies in \(\mathcal R(A)\) (Theorem~\ref{r1-thm-views}(c)), and
+so does every combination of the rows: \(\mathcal R(B)\subseteq\mathcal R(A)\).
+\item If \(\mathcal R(B)\subseteq\mathcal R(A)\), then \(\row_i(B)=l_i'A\) for some \(l_i\in\R^m\) (\(i=1,\dots,p\)), that is,
+\(B=LA\), where \(L\) has the rows \(l_1',\dots,l_p'\) (Theorem~\ref{r1-thm-views}(c)); so \(BGA=LAGA=LA=B\).
+\end{itemize}
+Finally, \(AX=C\) is consistent if and only if every system \(Ax_j=c_j\) is (Theorem~\ref{r1-thm-views}(a)), that is,
+\(c_j\in\mathcal C(A)\) for every \(j\) (Corollary~\ref{cor:r4-ax-b}(a)), that is, \(\mathcal C(C)\subseteq\mathcal C(A)\); and
+then \(A(GC)=C\) by (a).
+\end{proof}
+
+\needspace{10\baselineskip}
+\begin{theorem}[\citeat{harville}{Lemmas~10.2.5, 9.3.7, 10.2.6}, \citeat{bapat}{Result~4.2}]\label{r10-thm-rank-idempotent}
+Let \(A\in\R^{m\times n}\) have rank \(r\), and let \(G\) be a g-inverse of \(A\).
+\begin{enumerate}
+\item \(AG\in\R^{m\times m}\) and \(GA\in\R^{n\times n}\) are idempotent.
+\item \(\rank(AG)=\rank(GA)=r\); more precisely, \(\mathcal C(AG)=\mathcal C(A)\), \(\mathcal R(GA)=\mathcal R(A)\) and
+\(\mathcal N(GA)=\mathcal N(A)\).
+\item \(\tr(AG)=\tr(GA)=r\), \(\rank(I_n-GA)=n-r\) and \(\rank(I_m-AG)=m-r\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) \((AG)(AG)=(AGA)G=AG\) and \((GA)(GA)=G(AGA)=GA\).
+
+(b)
+\begin{itemize}
+\item By Theorem~\ref{thm:r4-rank-product}(a), applied to the products \((AG)A\), \(AG\) and \(A(GA)\), \(GA\),
+\[
+r=\rank(AGA)\leqslant\rank(AG)\leqslant\rank A=r,\qquad r=\rank(AGA)\leqslant\rank(GA)\leqslant\rank A=r
+\]
+\item \(\mathcal C(AG)\subseteq\mathcal C(A)\) and \(\mathcal C(A)=\mathcal C((AG)A)\subseteq\mathcal C(AG)\)
+(Theorem~\ref{thm:r4-rank-product}(a)); so \(\mathcal C(AG)=\mathcal C(A)\).
+\item Each row \(\row_i(GA)=\row_i(G)A\) lies in \(\mathcal R(A)\), and each row \(\row_i(A)=\row_i(A)(GA)\) (as \(A=AGA\)) lies
+in \(\mathcal R(GA)\) (Theorem~\ref{r1-thm-views}(c)); so \(\mathcal R(GA)=\mathcal R(A)\).
+\item If \(GAx=0\), then \(Ax=AGAx=0\); and \(Ax=0\) gives \(GAx=0\). So \(\mathcal N(GA)=\mathcal N(A)\).
+\end{itemize}
+(c) By (a) and (b), \(\tr(AG)=\rank(AG)=r\) and \(\tr(GA)=\rank(GA)=r\) (Theorem~\ref{r6-thm-idempotent}(c)). Also
+\(I_n-GA\) and \(I_m-AG\) are idempotent (Theorem~\ref{r6-thm-idempotent}(b)), so
+\(\rank(I_n-GA)=\tr(I_n-GA)=n-\tr(GA)=n-r\) (Theorem~\ref{r1-thm-trace}(a)), and likewise \(\rank(I_m-AG)=m-r\).
+\end{proof}
+
+\begin{theorem}[\citeat{bapat}{\S4.1, Result~4.3}, \citeat{harville}{Lemma~20.3.2, Theorem~20.3.1}]\label{r10-thm-reflexive}
+Let \(A\in\R^{m\times n}\). A g-inverse \(G\) of \(A\) with \(GAG=G\) is a \textbf{reflexive g-inverse} of \(A\); then \(A\)
+is also a g-inverse of \(G\).
+\begin{enumerate}
+\item If \(G_1\) and \(G_2\) are g-inverses of \(A\), then \(G_1AG_2\) is a reflexive g-inverse of \(A\). In particular
+\(GAG\) is one, for every g-inverse \(G\).
+\item Every g-inverse \(G\) of \(A\) has \(\rank G\geqslant\rank A\), and \(\rank G=\rank A\) if and only if \(G\) is
+reflexive.
+\item Let \(r=\rank A\geqslant1\) and let \(A=BC\) be a full-rank factorization, with \(B\in\R^{m\times r}\) and \(C\in\R^{r\times n}\). Then \(G\) is a
+reflexive g-inverse of \(A\) if and only if \(G=KL\) for some \(L\in\R^{r\times m}\) with \(LB=I_r\) and some
+\(K\in\R^{n\times r}\) with \(CK=I_r\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) \(A(G_1AG_2)A=(AG_1A)G_2A=AG_2A=A\), and
+\[
+(G_1AG_2)A(G_1AG_2)=G_1(AG_2A)G_1AG_2=G_1(AG_1A)G_2=G_1AG_2
+\]
+
+(b)
+\begin{itemize}
+\item \(\rank A=\rank(AGA)\leqslant\rank G\) (Theorem~\ref{thm:r4-rank-product}(a), twice). If \(G\) is reflexive, then
+also \(\rank G=\rank(GAG)\leqslant\rank A\); so \(\rank G=\rank A\).
+\item Conversely, let \(\rank G=\rank A\). Then \(\mathcal C(GA)\subseteq\mathcal C(G)\) (Theorem~\ref{thm:r4-rank-product}(a)),
+and \(\rank(GA)=\rank A=\rank G\) (Theorem~\ref{r10-thm-rank-idempotent}(b)); so \(\mathcal C(GA)=\mathcal C(G)\)
+(Theorem~\ref{thm:r4-counting}(a)).
+\item So each column of \(G\) is \(GAx_j\) for some \(x_j\in\R^n\), that is, \(G=GAX\) with \(X=[x_1\ \cdots\ x_m]\)
+(Theorem~\ref{r1-thm-views}(a)), and \(GAG=GAGAX=GAX=G\).
+\end{itemize}
+(c)
+\begin{itemize}
+\item If \(G=KL\), then \(G\) is a g-inverse of \(A\) (Theorem~\ref{r10-thm-ginv-exists}(a)), and
+\(GAG=KLBCKL=K(LB)(CK)L=KL=G\).
+\item Conversely, let \(G\) be a reflexive g-inverse. By Theorem~\ref{thm:r4-full-rank-factorization}(c), \(B\) has a left
+inverse \(L_0\) and \(C\) a right inverse \(K_0\). Multiplying \(BCGBC=AGA=A=BC\) by \(L_0\) on the left and by \(K_0\) on the
+right gives \(CGB=I_r\).
+\item So \(K=GB\) has \(CK=CGB=I_r\), \(L=CG\) has \(LB=CGB=I_r\), and \(G=GAG=(GB)(CG)=KL\).\qedhere
+\end{itemize}
+\end{proof}
+
+\needspace{12\baselineskip}
+\begin{example}\label{r10-exm-reflexive}
+Let \(A\) and \(G_1\) be as in Examples~\ref{r10-exm-ginverse} and~\ref{r10-exm-general-solution}. Is \(G_1\) reflexive? For
+the matrix \(U\in\R^{4\times3}\) with \((3,3)\) entry \(1\) and all other entries \(0\), show that
+\(G_3=G_1+(I_4-G_1A)U\) is a g-inverse of \(A\) that is not reflexive, and find the reflexive g-inverse \(G_3AG_3\).
+
+\textit{Solution.}
+\begin{itemize}
+\item The matrices \(G_1A\) and
+\[
+AG_1=\begin{pmatrix}1&0&0\\0&1&0\\1&1&0\end{pmatrix}
+\]
+are idempotent with trace \(1+1=2=\rank A\), as Theorem~\ref{r10-thm-rank-idempotent}(a),(c) says; \(AG_1\) is not symmetric.
+\item \(G_1\) has the two linearly independent nonzero rows \((3,-2,0)\) and \((-1,1,0)\), so \(\rank G_1=2=\rank A\), and
+\(G_1\) is reflexive (Theorem~\ref{r10-thm-reflexive}(b); also \(G_1=KL_1\), Theorem~\ref{r10-thm-reflexive}(c)).
+\item \((I_4-G_1A)U\) has column \(3\) equal to column \(3\) of \(I_4-G_1A\), which is \((-3,1,1,0)'\)
+(Example~\ref{r10-exm-general-solution}), and its other columns \(0\) (Theorem~\ref{r1-thm-views}(a)). So
+\[
+G_3=\begin{pmatrix}3&-2&-3\\-1&1&1\\0&0&1\\0&0&0\end{pmatrix}
+\]
+\item \(A(I_4-G_1A)=A-AG_1A=0\), so \(AG_3=AG_1+A(I_4-G_1A)U=AG_1\), and \(AG_3A=AG_1A=A\): \(G_3\) is a g-inverse of \(A\).
+\item The first three rows of \(G_3\) form a matrix \(M\) with \(\det M=1\cdot(3-2)=1\) (expansion along its last row,
+Theorem~\ref{r5d-thm-expansion}), so
+\(M\) is invertible (Theorem~\ref{r5d-thm-product}(a)). If \(G_3x=0\), then \(Mx=0\) and \(x=0\); so the three columns of
+\(G_3\) are linearly independent, and \(\rank G_3=3\ne\rank A\) (Theorem~\ref{thm:r4-rank-rules}(b)): \(G_3\) is not
+reflexive (Theorem~\ref{r10-thm-reflexive}(b)).
+\item \(G_3AG_3=G_3(AG_1)\). By Theorem~\ref{r1-thm-views}(a),(b), its columns are \(G_3(1,0,1)'=(3-3,\ -1+1,\ 1,\ 0)'\),
+\(G_3(0,1,1)'=(-2-3,\ 1+1,\ 1,\ 0)'\) and \(0\):
+\[
+G_3AG_3=\begin{pmatrix}0&-5&0\\0&2&0\\1&1&0\\0&0&0\end{pmatrix}
+\]
+a reflexive g-inverse of \(A\) (Theorem~\ref{r10-thm-reflexive}(a)), of rank \(2\).
+\end{itemize}
+\end{example}
+
+\begin{theorem}[\citeat{harville}{Theorem~9.4.1}, \citeat{bapat}{Result~6.1}]\label{r10-thm-invariance}
+Let \(A\in\R^{m\times n}\), \(B\in\R^{p\times n}\) and \(C\in\R^{m\times q}\).
+\begin{enumerate}
+\item If \(\mathcal R(B)\subseteq\mathcal R(A)\) and \(\mathcal C(C)\subseteq\mathcal C(A)\), then \(BGC\) is the same matrix for
+every g-inverse \(G\) of \(A\).
+\item Conversely, let \(BGC\) be the same matrix for every g-inverse \(G\) of \(A\). If \(C\ne0\), then
+\(\mathcal R(B)\subseteq\mathcal R(A)\); if \(B\ne0\), then \(\mathcal C(C)\subseteq\mathcal C(A)\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) Each row of \(B\) lies in \(\mathcal R(A)\) and each column of \(C\) in \(\mathcal C(A)\), so \(B=LA\) and \(C=AF\) for some
+\(L\in\R^{p\times m}\) and \(F\in\R^{n\times q}\) (Theorem~\ref{r1-thm-views}(a),(c)). Hence \(BGC=LAGAF=LAF\) for every
+g-inverse \(G\).
+
+(b)
+\begin{itemize}
+\item Fix a g-inverse \(G\) of \(A\) (Theorem~\ref{r10-thm-ginv-exists}). For all \(U,V\in\R^{n\times m}\), the matrix
+\(G+(I_n-GA)U+V(I_m-AG)\) is also a g-inverse of \(A\): as \(AGA=A\),
+\[
+A\bigl(G+(I_n-GA)U+V(I_m-AG)\bigr)A=AGA+(A-AGA)UA+AV(A-AGA)=A
+\]
+\item By hypothesis, \(B\bigl(G+(I_n-GA)U+V(I_m-AG)\bigr)C=BGC\). With \(V=0\) this gives \(B(I_n-GA)UC=0\) for every \(U\);
+with \(U=0\), \(BV(I_m-AG)C=0\) for every \(V\).
+\item Let \(C\ne0\), with a column \(c_k\ne0\), so \(c_k'c_k>0\). For \(i=1,\dots,n\), the matrix
+\(U_i=\frac1{c_k'c_k}e_ic_k'\in\R^{n\times m}\) has \(U_ic_k=e_i\). Column \(k\) of \(B(I_n-GA)U_iC\) is
+\(B(I_n-GA)U_ic_k=B(I_n-GA)e_i\), the \(i\)th column of \(B(I_n-GA)\) (Theorem~\ref{r1-thm-views}(a),(b)), and it is \(0\). So
+\(B(I_n-GA)=0\), that is, \(BGA=B\), and \(\mathcal R(B)\subseteq\mathcal R(A)\) (Lemma~\ref{r10-lem-range-test}(b)).
+\item Let \(B\ne0\), with a row \(b_k'\ne0\) (\(b_k\in\R^n\)). For \(i=1,\dots,m\), the matrix
+\(V_i=\frac1{b_k'b_k}b_ke_i'\in\R^{n\times m}\) has \(b_k'V_i=e_i'\). Row \(k\) of \(BV_i(I_m-AG)C\) is
+\(b_k'V_i(I_m-AG)C=e_i'(I_m-AG)C\), the \(i\)th row of \((I_m-AG)C\) (Theorem~\ref{r1-thm-views}(c)), and it is \(0\). So
+\((I_m-AG)C=0\), that is, \(AGC=C\), and \(\mathcal C(C)\subseteq\mathcal C(A)\) (Lemma~\ref{r10-lem-range-test}(a)).\qedhere
+\end{itemize}
+\end{proof}
+
+\needspace{14\baselineskip}
+\subsection*{Generalized inverses of \(A'A\)}
+
+\begin{theorem}[\citeat{harville}{Theorems~12.3.4, 12.3.1}, \citeat{abadir-magnus}{Exercise~10.54}]\label{r10-thm-ata}
+Let \(A\in\R^{m\times n}\), let \(G\) be a g-inverse of \(A'A\), and put \(P=AGA'=A(A'A)^-A'\in\R^{m\times m}\).
+\begin{enumerate}
+\item \(AGA'A=A\) and \(A'AGA'=A'\). Hence \(GA'\) is a g-inverse of \(A\).
+\item For every \(y\in\R^m\), \(Py\) is the orthogonal projection of \(y\) onto \(\mathcal C(A)\). Hence \(P\) does not depend on
+the choice of the g-inverse \(G\), and \(P=A(A'A)^{-1}A'\), the matrix of Theorem~\ref{r6-thm-hat}, if \(\rank A=n\).
+\item \(P'=P=P^2\), \(PA=A\) and \(A'P=A'\).
+\item \(\rank P=\tr P=\rank A\), and \(I_m-P\) is symmetric and idempotent, of rank \(m-\rank A\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item \(A'A(GA'A-I_n)=A'AGA'A-A'A=0\), so each column of \(GA'A-I_n\) lies in \(\mathcal N(A'A)=\mathcal N(A)\)
+(Theorems~\ref{r1-thm-views}(a) and~\ref{thm:r4-rank-ata}(a)). Hence \(A(GA'A-I_n)=0\), that is, \(AGA'A=A\).
+\item \(A'A\) is symmetric, so \(G'\) is also a g-inverse of it (Proposition~\ref{r10-prop-ginv-basic}(b)), and the first identity
+for \(G'\) reads \(AG'A'A=A\). Transposing (Theorem~\ref{r1-thm-transpose}), \(A'AGA'=A'\).
+\item \(A(GA')A=AGA'A=A\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item \(Py=A(GA'y)\in\mathcal C(A)\), and \(A'(y-Py)=A'y-A'AGA'y=0\) by (a). So \(y-Py\perp\mathcal C(A)\)
+(Theorem~\ref{r6-thm-complement}(a)), and \(Py\) is the orthogonal projection of \(y\) onto \(\mathcal C(A)\)
+(Definition~\ref{r6-def-projection}).
+\item If \(G_1\), \(G_2\) are g-inverses of \(A'A\), then \(AG_1A'y=AG_2A'y\) for every \(y\in\R^m\), as the projection is unique
+(Definition~\ref{r6-def-projection}). Taking for \(y\) the columns of \(I_m\), the columns of \(AG_1A'\) and \(AG_2A'\) agree
+(Theorem~\ref{r1-thm-views}(b)): \(AG_1A'=AG_2A'\).
+\item If \(\rank A=n\), then \(A'A\) is invertible (Theorem~\ref{r6-thm-hat}), its only g-inverse is \((A'A)^{-1}\)
+(Definition~\ref{r10-def-ginverse}), and \(P=A(A'A)^{-1}A'\).
+\end{itemize}
+(c)
+\begin{itemize}
+\item \(G'\) is a g-inverse of the symmetric \(A'A\) (Proposition~\ref{r10-prop-ginv-basic}(b)), so by (b),
+\(P=AG'A'=(AGA')'=P'\) (Theorem~\ref{r1-thm-transpose}).
+\item \(PA=AGA'A=A\) by (a), and \(A'P=A'P'=(PA)'=A'\).
+\item \(P^2=(PA)GA'=AGA'=P\).
+\end{itemize}
+(d)
+\begin{itemize}
+\item \(\mathcal C(P)=\mathcal C(A(GA'))\subseteq\mathcal C(A)\) and \(\mathcal C(A)=\mathcal C(PA)\subseteq\mathcal C(P)\)
+(Theorem~\ref{thm:r4-rank-product}(a)); so \(\rank P=\rank A\), and \(\rank P=\tr P\) as \(P\) is idempotent
+(Theorem~\ref{r6-thm-idempotent}(c)).
+\item \(I_m-P\) is symmetric by (c) and idempotent (Theorem~\ref{r6-thm-idempotent}(b)); so
+\(\rank(I_m-P)=\tr(I_m-P)=m-\tr P=m-\rank A\) (Theorems~\ref{r6-thm-idempotent}(c) and~\ref{r1-thm-trace}(a)).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{corollary}[\citeat{bapat}{Result~7.1}, \citeat{harville}{Theorem~9.4.1}]\label{r10-cor-invariant-quadratic}
+Let \(A\in\R^{m\times n}\), and let \(\lambda\in\R^n\), \(\lambda\ne0\). Then \(\lambda'G\lambda\) is the same number for every
+g-inverse \(G\) of \(A'A\) if and only if \(\lambda\in\mathcal C(A')\). If \(\lambda'=a'A\) (\(a\in\R^m\)), then for every
+g-inverse \(G\) of \(A'A\)
+\[
+\lambda'G\lambda=a'Pa=\lVert Pa\rVert^2\geqslant0
+\]
+where \(P=AGA'\) is the matrix of Theorem~\ref{r10-thm-ata}.
+\end{corollary}
+\begin{proof}
+\begin{itemize}
+\item Let \(\lambda'=a'A\). Then \(\lambda'G\lambda=a'AGA'a=a'Pa\) (Theorem~\ref{r1-thm-transpose}), and \(P\) does not depend on
+\(G\) (Theorem~\ref{r10-thm-ata}(b)). As \(P\) is symmetric and idempotent (Theorem~\ref{r10-thm-ata}(c)),
+\(a'Pa=a'P'Pa=\lVert Pa\rVert^2\).
+\item Conversely, let \(\lambda'G\lambda\) be the same for every g-inverse \(G\) of \(A'A\). Theorem~\ref{r10-thm-invariance}(b),
+for the matrix \(A'A\) with \(B=\lambda'\ne0\) and \(C=\lambda\ne0\), gives \(\mathcal R(\lambda')\subseteq\mathcal R(A'A)\):
+\(\lambda'=b'A'A\) for some \(b\in\R^n\). So \(\lambda=A'(Ab)\in\mathcal C(A')\).\qedhere
+\end{itemize}
+\end{proof}
+
+\needspace{12\baselineskip}
+\begin{example}\label{r10-exm-ata}
+Let \(A\) be the matrix of Example~\ref{r10-exm-ginverse}. Find the g-inverses \(F_1\) and \(F_2\) of \(A'A\) built from its
+submatrices in rows and columns \(1,2\) and in rows and columns \(1,3\), and the matrices \(AF_1A'\) and \(AF_2A'\). Compare
+\(\lambda'F_1\lambda\) and \(\lambda'F_2\lambda\) for \(\lambda=(1,0,3,-1)'\) and for \(\lambda=(1,0,0,0)'\).
+
+\textit{Solution.}
+\begin{itemize}
+\item With the columns \(a_1,\dots,a_4\) of \(A\), the \((i,j)\) entry of \(A'A\) is \(a_i'a_j\) (Theorem~\ref{r1-thm-views}(d)):
+\[
+A=\begin{pmatrix}1&2&1&3\\1&3&0&5\\2&5&1&8\end{pmatrix},\qquad
+A'A=\begin{pmatrix}6&15&3&24\\15&38&7&61\\3&7&2&11\\24&61&11&98\end{pmatrix}
+\]
+and \(\rank(A'A)=\rank A=2\) (Theorem~\ref{thm:r4-rank-ata}(b), Example~\ref{exm:r4-four-bases}).
+\item The submatrix in rows and columns \(1,2\) is \(\left(\begin{smallmatrix}6&15\\15&38\end{smallmatrix}\right)\), with
+determinant \(228-225=3\) and inverse \(\frac13\left(\begin{smallmatrix}38&-15\\-15&6\end{smallmatrix}\right)\); the one in rows and
+columns \(1,3\) is \(\left(\begin{smallmatrix}6&3\\3&2\end{smallmatrix}\right)\), with determinant \(12-9=3\) and inverse
+\(\frac13\left(\begin{smallmatrix}2&-3\\-3&6\end{smallmatrix}\right)\) (Theorem~\ref{r5d-thm-adjugate}). By
+Theorem~\ref{r10-thm-ginv-submatrix}(b),
+\[
+F_1=\frac13\begin{pmatrix}38&-15&0&0\\-15&6&0&0\\0&0&0&0\\0&0&0&0\end{pmatrix},\qquad
+F_2=\frac13\begin{pmatrix}2&0&-3&0\\0&0&0&0\\-3&0&6&0\\0&0&0&0\end{pmatrix}
+\]
+\item By Theorem~\ref{r1-thm-views}(a),(b), the columns of \(AF_1\) are \(\frac13(38a_1-15a_2)=\frac13(8,-7,1)'\),
+\(\frac13(-15a_1+6a_2)=\frac13(-3,3,0)'\), \(0\) and \(0\). The rows of \(A'\) are \(a_1',\dots,a_4'\), so by the outer product
+expansion (Theorem~\ref{r1-thm-views}(d))
+\[
+AF_1A'=\frac13\begin{pmatrix}8\\-7\\1\end{pmatrix}\begin{pmatrix}1&1&2\end{pmatrix}+\frac13\begin{pmatrix}-3\\3\\0\end{pmatrix}\begin{pmatrix}2&3&5\end{pmatrix}
+=\frac13\begin{pmatrix}2&-1&1\\-1&2&1\\1&1&2\end{pmatrix}
+\]
+\item Likewise the columns of \(AF_2\) are \(\frac13(2a_1-3a_3)=\frac13(-1,2,1)'\), \(0\), \(\frac13(-3a_1+6a_3)=\frac13(3,-3,0)'\) and
+\(0\), and
+\[
+AF_2A'=\frac13\begin{pmatrix}-1\\2\\1\end{pmatrix}\begin{pmatrix}1&1&2\end{pmatrix}+\frac13\begin{pmatrix}3\\-3\\0\end{pmatrix}\begin{pmatrix}1&0&1\end{pmatrix}
+=\frac13\begin{pmatrix}2&-1&1\\-1&2&1\\1&1&2\end{pmatrix}
+\]
+\item So \(AF_1A'=AF_2A'=P\), as Theorem~\ref{r10-thm-ata}(b) says, and \(\tr P=2=\rank A\) (Theorem~\ref{r10-thm-ata}(d)). With
+\(w=(1,1,-1)'\), \(P=I_3-\frac13ww'\), so \(Py=y-\frac13(w'y)w\). Here \(w'y=y_1+y_2-y_3=0\) exactly when \(y\in\mathcal C(A)\)
+(Example~\ref{r10-exm-ginverse}); so \(Py=y\) for \(y\in\mathcal C(A)\), and \(Pw=0\).
+\item \(\lambda=(1,0,3,-1)'\): only the entries \(\lambda_1=1\), \(\lambda_2=0\) meet the nonzero block of \(F_1\), so
+\(\lambda'F_1\lambda=\frac13\cdot38=\frac{38}3\); with \(\lambda_1=1\), \(\lambda_3=3\),
+\(\lambda'F_2\lambda=\frac13(2-9-9+54)=\frac{38}3\). Indeed \(\lambda'=3\row_1(A)-2\row_2(A)=a'A\) with \(a=(3,-2,0)'\), so
+\(\lambda\in\mathcal C(A')\), and \(Pa=\frac13(8,-7,1)'\), \(\lVert Pa\rVert^2=\frac{64+49+1}9=\frac{38}3\), as
+Corollary~\ref{r10-cor-invariant-quadratic} says.
+\item \(\lambda=(1,0,0,0)'\): \(\lambda'F_1\lambda=\frac{38}3\), but \(\lambda'F_2\lambda=\frac23\). By
+Corollary~\ref{r10-cor-invariant-quadratic}, \(\lambda\notin\mathcal C(A')\); correspondingly \(x_1\) is not the same for all
+solutions in Example~\ref{r10-exm-general-solution}.
+\end{itemize}
+\end{example}
+
+\subsection*{Minimum-norm and least-squares generalized inverses}
+
+\begin{theorem}[\citeat{bapat}{Result~4.5}, \citeat{harville}{Theorem~20.3.6}]\label{r10-thm-min-norm}
+Let \(A\in\R^{m\times n}\). A g-inverse \(G\) of \(A\) with \((GA)'=GA\) is a \textbf{minimum-norm g-inverse} of
+\(A\). For \(G\in\R^{n\times m}\), the following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\item \(G\) is a minimum-norm g-inverse of \(A\);
+\item for every \(y\in\mathcal C(A)\), \(x=Gy\) is a solution of \(Ax=y\), and \(\lVert Gy\rVert\leqslant\lVert x\rVert\) for
+every solution \(x\).
+\end{enumerate}
+If they hold, then \(\lVert x\rVert>\lVert Gy\rVert\) for every solution \(x\ne Gy\): \(Gy\) is the only shortest solution.
+\end{theorem}
+\begin{proof}
+For \(y=Au\in\mathcal C(A)\) and \(z\in\R^n\), Proposition~\ref{r6-prop-pythagoras} and
+Theorem~\ref{r1-thm-transpose} give
+\[
+\lVert Gy+(I-GA)z\rVert^2=\lVert Gy\rVert^2+\lVert(I-GA)z\rVert^2+2c,\qquad c=y'G'(I-GA)z=u'(GA)'(I-GA)z
+\tag{\(*\)}
+\]
+(i)\,\(\Rightarrow\)\,(ii)
+\begin{itemize}
+\item \(Gy\) is a solution, and every solution is \(x=Gy+(I-GA)z\) for some \(z\)
+(Theorems~\ref{r10-thm-ginv-solves}(a) and~\ref{r10-thm-general-solution}).
+\item \((GA)'=GA\), and \(GAGA=GA\) as \(AGA=A\); so \(c=u'GA(I-GA)z=u'(GA-GAGA)z=0\).
+\item Hence \(\lVert x\rVert^2=\lVert Gy\rVert^2+\lVert(I-GA)z\rVert^2\geqslant\lVert Gy\rVert^2\), with equality if and
+only if \((I-GA)z=0\), that is, \(x=Gy\).
+\end{itemize}
+(ii)\,\(\Rightarrow\)\,(i)
+\begin{itemize}
+\item By (ii) and Theorem~\ref{r10-thm-ginv-solves}(a), \(G\) is a g-inverse of \(A\).
+\item Let \(u,z\in\R^n\), \(d=\lVert(I-GA)z\rVert^2\) and \(c=u'(GA)'(I-GA)z\). Apply (ii) to \(y=A(\alpha u)\) for
+\(\alpha\in\R\) and to its solution \(Gy+(I-GA)z\) (Theorem~\ref{r10-thm-general-solution}): by \((*)\), with \(\alpha u\)
+in place of \(u\), \(0\leqslant d+2\alpha c\) for every \(\alpha\in\R\).
+\item If \(c\ne0\), then \(\alpha=-(d+1)/(2c)\) gives \(d+2\alpha c=-1<0\) \(\contradiction\) So \(c=0\) for all \(u,z\).
+\item Taking for \(u\) and \(z\) the \(i\)th and \(j\)th columns of \(I_n\), \(c\) is the \((i,j)\) entry of \((GA)'(I-GA)\)
+(Theorem~\ref{r1-thm-views}(b),(c));
+so \((GA)'(I-GA)=0\), that is, \((GA)'=(GA)'GA\). This matrix is symmetric, so
+\(GA=((GA)')'=(GA)'\).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{theorem}[\citeat{bapat}{Result~4.6}, \citeat{harville}{Theorem~20.3.12}]\label{r10-thm-ls-ginverse}
+Let \(A\in\R^{m\times n}\). A g-inverse \(G\) of \(A\) with \((AG)'=AG\) is a \textbf{least-squares g-inverse} of
+\(A\). For \(G\in\R^{n\times m}\), the following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+\item \(G\) is a least-squares g-inverse of \(A\);
+\item \(\lVert AGy-y\rVert\leqslant\lVert Ax-y\rVert\) for all \(x\in\R^n\) and \(y\in\R^m\).
+\end{enumerate}
+So, for every \(y\), \(x=Gy\) minimizes \(\lVert Ax-y\rVert\), also when \(Ax=y\) is inconsistent.
+\end{theorem}
+\begin{proof}
+For \(x=Gy+w\) (\(w\in\R^n\)), \(Ax-y=(AG-I)y+Aw\), and Proposition~\ref{r6-prop-pythagoras} gives
+\[
+\lVert Ax-y\rVert^2=\lVert(AG-I)y\rVert^2+\lVert Aw\rVert^2+2w'A'(AG-I)y
+\tag{\(**\)}
+\]
+(i)\,\(\Rightarrow\)\,(ii) As \(AG=(AG)'\) and \(AGA=A\), \(A'(AG-I)=A'(AG)'-A'=(AGA)'-A'=0\), so \(\lVert Ax-y\rVert^2=\lVert AGy-y\rVert^2+\lVert Aw\rVert^2
+\geqslant\lVert AGy-y\rVert^2\).
+
+(ii)\,\(\Rightarrow\)\,(i)
+\begin{itemize}
+\item For \(x\in\R^n\) put \(y=Ax\) in (ii): \(\lVert AGAx-Ax\rVert\leqslant\lVert Ax-Ax\rVert=0\), so \(AGAx=Ax\). Taking for
+\(x\) the columns of \(I_n\), \(AGA=A\) (Theorem~\ref{r1-thm-views}(b)).
+\item Let \(w\in\R^n\) and \(y\in\R^m\). Apply (ii) to \(\alpha y\) (\(\alpha\in\R\)) and \(x=\alpha Gy+w\): by \((**)\),
+\(\alpha^2\lVert(AG-I)y\rVert^2\leqslant\alpha^2\lVert(AG-I)y\rVert^2+\lVert Aw\rVert^2+2\alpha w'A'(AG-I)y\), that is,
+\(0\leqslant d+2\alpha c\) with \(d=\lVert Aw\rVert^2\) and \(c=w'A'(AG-I)y\).
+\item As in the proof of Theorem~\ref{r10-thm-min-norm}, \(c=0\) for all \(w\) and \(y\); so \(A'(AG-I)=0\), that is,
+\(A'AG=A'\).
+\item Transposing, \(G'A'A=A\); so \(AG=G'A'AG=(AG)'AG\), which is symmetric.\qedhere
+\end{itemize}
+\end{proof}
+For \(A\in\R^{m\times n}\) and a g-inverse \(F\) of \(A'A\), \(G=FA'\) is a least-squares g-inverse of \(A\): with \(P=AFA'\),
+\(AGA=PA=A\), and \(AG=P\) is symmetric (Theorem~\ref{r10-thm-ata}(c))~\citeat{harville}{Theorem~20.3.17}. It is even reflexive (Theorem~\ref{r10-thm-reflexive}):
+\(GAG=F(A'AFA')=FA'P=FA'=G\), as \(A'P=A'\). On the other hand, for the matrix \(A\) of Example~\ref{r10-exm-ginverse}, \(G_1\) is
+neither a least-squares nor a minimum-norm g-inverse: \(G_1A\) (Example~\ref{r10-exm-general-solution}) and
+\[
+AG_1=\begin{pmatrix}1&0&0\\0&1&0\\1&1&0\end{pmatrix}
+\]
+are not symmetric.
+
+\needspace{12\baselineskip}
+\subsection*{The Moore--Penrose inverse}
+
+\begin{definition}[\citeat{bapat}{\S4.3}, \citeat{harville}{Theorem~20.1.1}]\label{r10-def-mp}
+Let \(A\in\R^{m\times n}\). A matrix \(G\in\R^{n\times m}\) is a \textbf{Moore--Penrose inverse} of \(A\) if
+\begin{enumerate}[label=(P\arabic*)]
+\item \(AGA=A\);
+\item \(GAG=G\);
+\item \((AG)'=AG\);
+\item \((GA)'=GA\).
+\end{enumerate}
+Thus a Moore--Penrose inverse of \(A\) is a reflexive g-inverse of \(A\) (Theorem~\ref{r10-thm-reflexive}) that is
+both a least-squares and a minimum-norm g-inverse.
+\end{definition}
+
+\needspace{18\baselineskip}
+\begin{theorem}[\citeat{bapat}{\S4.3}, \citeat{harville}{Theorem~20.1.1}]\label{r10-thm-mp-unique}
+A matrix \(A\in\R^{m\times n}\) has at most one Moore--Penrose inverse. It is written \(A^+\).
+\end{theorem}
+\begin{proof}
+Let \(G_1\) and \(G_2\) both satisfy (P1)--(P4). Each step below uses the condition shown, together with
+\((BC)'=C'B'\) and \((B')'=B\) (Theorem~\ref{r1-thm-transpose}):
+\[
+\begin{aligned}
+G_1&=G_1AG_1&&\text{(P2) for }G_1\\
+&=G_1G_1'A'&&AG_1=(AG_1)'=G_1'A'\text{ by (P3)}\\
+&=G_1G_1'A'G_2'A'&&A'=(AG_2A)'=A'G_2'A'\text{ by (P1)}\\
+&=G_1G_1'A'AG_2&&G_2'A'=(AG_2)'=AG_2\text{ by (P3)}\\
+&=G_1AG_1AG_2&&G_1'A'=(AG_1)'=AG_1\text{ by (P3)}\\
+&=G_1AG_2&&AG_1A=A\text{ by (P1)}\\
+&=G_1AG_2AG_2&&G_2=G_2AG_2\text{ by (P2)}\\
+&=G_1AA'G_2'G_2&&G_2A=(G_2A)'=A'G_2'\text{ by (P4)}\\
+&=A'G_1'A'G_2'G_2&&G_1A=(G_1A)'=A'G_1'\text{ by (P4)}\\
+&=A'G_2'G_2&&A'G_1'A'=(AG_1A)'=A'\text{ by (P1)}\\
+&=G_2AG_2&&A'G_2'=(G_2A)'=G_2A\text{ by (P4)}\\
+&=G_2&&\text{(P2) for }G_2
+\end{aligned}
+\]
+\end{proof}
+
+\begin{theorem}[\citeat{bapat}{\S4.3}, \citeat{harville}{Theorem~20.1.1, \S20.2}]\label{r10-thm-mp-exists}
+Every \(A\in\R^{m\times n}\) has a Moore--Penrose inverse. More precisely, let \(r=\rank A\).
+\begin{enumerate}
+\item If \(r=0\), then \(A^+=0\in\R^{n\times m}\).
+\item If \(r\geqslant1\) and \(A=BC\) is a full-rank factorization, then \(A^+=C'(CC')^{-1}(B'B)^{-1}B'\).
+\item If \(r=n\), then \(A^+=(A'A)^{-1}A'\); if \(r=m\), then \(A^+=A'(AA')^{-1}\); if \(A\) is square and invertible,
+then \(A^+=A^{-1}\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) Then \(A=0\) (Theorem~\ref{thm:r4-four-bases}), and \(G=0\) satisfies (P1)--(P4), as every product in them is \(0\).
+
+(b) Let \(G=C'(CC')^{-1}(B'B)^{-1}B'\). With \(L=(B'B)^{-1}B'\) and \(K=C'(CC')^{-1}\), \(G=KL\), \(LB=I_r\) and
+\(CK=I_r\) (Theorem~\ref{thm:r4-full-rank-factorization}(c)).
+\begin{itemize}
+\item (P1): \(G\) is a g-inverse of \(A\) (Theorem~\ref{r10-thm-ginv-exists}(a)).
+\item (P2): \(GAG=KLBCKL=K(LB)(CK)L=KL=G\).
+\item (P3): \(AG=BCKL=BL=B(B'B)^{-1}B'\), the matrix \(P\) of Theorem~\ref{r6-thm-hat} for \(B\), which has full column rank;
+it is symmetric
+(Theorem~\ref{r6-thm-hat}(b)).
+\item (P4): \(GA=KLBC=KC=C'(CC')^{-1}C\), the matrix \(P\) of Theorem~\ref{r6-thm-hat} for \(C'\in\R^{n\times r}\), which has
+full column rank \(r\)
+(Theorem~\ref{thm:r4-rank-rules}(a)); it is symmetric (Theorem~\ref{r6-thm-hat}(b)).
+\end{itemize}
+With (a), every matrix has a Moore--Penrose inverse, and it is unique (Theorem~\ref{r10-thm-mp-unique}).
+
+(c) If \(r=n\), then \(A=AI_n\) is a full-rank factorization, and (b) gives
+\(A^+=I_n(I_nI_n')^{-1}(A'A)^{-1}A'=(A'A)^{-1}A'\). If \(r=m\), then \(A=I_mA\) is one, and (b) gives
+\(A^+=A'(AA')^{-1}(I_m'I_m)^{-1}I_m'=A'(AA')^{-1}\). If \(A\) is invertible, \(A^{-1}\) is its only g-inverse
+(Definition~\ref{r10-def-ginverse}), so \(A^+=A^{-1}\).
+\end{proof}
+
+\needspace{9\baselineskip}
+\begin{example}[\citeat{searle-khuri}{Example~8.1}]\label{r10-exm-mp}
+Find \(A^+\) for
+\[
+A=\begin{pmatrix}1&0&-1&1\\0&2&2&2\\-1&4&5&3\end{pmatrix}
+\]
+
+\textit{Solution.} Row-reduce \(A\):
+\[
+A\xrightarrow{R_3\leftarrow R_3+R_1}
+\begin{pmatrix}1&0&-1&1\\0&2&2&2\\0&4&4&4\end{pmatrix}
+\xrightarrow{R_3\leftarrow R_3-2R_2}
+\begin{pmatrix}1&0&-1&1\\0&2&2&2\\0&0&0&0\end{pmatrix}
+\xrightarrow{R_2\leftarrow\frac12R_2}
+\begin{pmatrix}1&0&-1&1\\0&1&1&1\\0&0&0&0\end{pmatrix}=R
+\]
+So \(\rank A=2\), with pivot columns \(1,2\), and Theorem~\ref{thm:r4-full-rank-factorization}(a) gives \(A=BC\) with
+\[
+B=\begin{pmatrix}1&0\\0&2\\-1&4\end{pmatrix},\qquad C=\begin{pmatrix}1&0&-1&1\\0&1&1&1\end{pmatrix},\qquad
+B'B=\begin{pmatrix}2&-4\\-4&20\end{pmatrix},\qquad CC'=3I_2
+\]
+Hence \((B'B)(CC')=6\left(\begin{smallmatrix}1&-2\\-2&10\end{smallmatrix}\right)\), whose inverse is
+\(\frac1{36}\left(\begin{smallmatrix}10&2\\2&1\end{smallmatrix}\right)\) (Theorem~\ref{r5d-thm-adjugate}; the determinant of
+\(\left(\begin{smallmatrix}1&-2\\-2&10\end{smallmatrix}\right)\) is \(6\)). By Theorems~\ref{r10-thm-mp-exists}(b)
+and~\ref{r2-thm-inverse-props}(b),
+\[
+\begin{aligned}
+A^+&=C'(CC')^{-1}(B'B)^{-1}B'=C'\bigl((B'B)(CC')\bigr)^{-1}B'
+=\frac1{36}\begin{pmatrix}1&0\\0&1\\-1&1\\1&1\end{pmatrix}\begin{pmatrix}10&2\\2&1\end{pmatrix}\begin{pmatrix}1&0&-1\\0&2&4\end{pmatrix}\\
+&=\frac1{36}\begin{pmatrix}1&0\\0&1\\-1&1\\1&1\end{pmatrix}\begin{pmatrix}10&4&-2\\2&2&2\end{pmatrix}
+=\frac1{36}\begin{pmatrix}10&4&-2\\2&2&2\\-8&-2&4\\12&6&0\end{pmatrix}
+=\frac1{18}\begin{pmatrix}5&2&-1\\1&1&1\\-4&-1&2\\6&3&0\end{pmatrix}
+\end{aligned}
+\]
+Check of (P3):
+\[
+AA^+=B(B'B)^{-1}B'=\frac16\begin{pmatrix}5&2&-1\\2&2&2\\-1&2&5\end{pmatrix}
+\]
+is symmetric; for instance, its first row is \(\row_1(A)A^+=\frac1{18}(5+0+4+6,\ 2+0+1+3,\ -1+0-2+0)=\frac16(5,2,-1)\).
+\end{example}
+
+\begin{proposition}[\citeat{harville}{Theorems~20.5.1, 20.5.3}, \citeat{bapat}{Result~6.3}, \citeat{abadir-magnus}{Exercises~10.25, 10.26, 10.28}]\label{r10-prop-mp-props}
+Let \(A\in\R^{m\times n}\).
+\begin{enumerate}
+\item \(\rank A^+=\rank A\), \(\mathcal C(A^+)=\mathcal C(A')\), \(\mathcal R(A^+)=\mathcal R(A')\) and
+\(\mathcal N(A^+)=\mathcal N(A')\).
+\item \(AA^+\) and \(A^+A\) are symmetric and idempotent, with \(\mathcal C(AA^+)=\mathcal C(A)\) and
+\(\mathcal C(A^+A)=\mathcal C(A')\). Hence \(AA^+y\) is the orthogonal projection of \(y\in\R^m\) onto \(\mathcal C(A)\), and
+\(A^+Ax\) is that of \(x\in\R^n\) onto \(\mathcal C(A')\).
+\item \((A')^+=(A^+)'\), \((A^+)^+=A\), and \((cA)^+=c^{-1}A^+\) for every number \(c\ne0\).
+\item If \(A\) is symmetric, then \(A^+\) is symmetric and \(AA^+=A^+A\). If \(A\) is PSD, then \(A^+\) is PSD.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a)
+\begin{itemize}
+\item By (P1) and (P2), \(A^+\) is a reflexive g-inverse of \(A\); so \(\rank A^+=\rank A\)
+(Theorem~\ref{r10-thm-reflexive}(b)).
+\item By (P2), (P4) and Theorem~\ref{r1-thm-transpose}, \(A^+=A^+AA^+=(A^+A)'A^+=A'(A^+)'A^+\); so
+\(\mathcal C(A^+)\subseteq\mathcal C(A')\) (Theorem~\ref{thm:r4-rank-product}(a)). Both spaces have dimension
+\(\rank A^+=\rank A=\rank A'\) (Theorem~\ref{thm:r4-rank-rules}(a)), so they are equal (Theorem~\ref{thm:r4-counting}(a)).
+\item Likewise, by (P2) and (P3), \(A^+=A^+(AA^+)'=A^+(A^+)'A'\): each row of \(A^+\) is \(\row_i(A^+(A^+)')A'\in\mathcal R(A')\)
+(Theorem~\ref{r1-thm-views}(c)). So \(\mathcal R(A^+)\subseteq\mathcal R(A')\), and the dimensions agree as before; the
+transposed spaces \(\mathcal C((A^+)')\subseteq\mathcal C(A)\) are therefore equal (Theorem~\ref{thm:r4-counting}(a)).
+\item Hence \(\mathcal N(A^+)=\mathcal C((A^+)')^\perp=\mathcal C(A)^\perp=\mathcal N(A')\) (Corollary~\ref{r6-cor-four-subspaces}).
+\end{itemize}
+\needspace{5\baselineskip}
+(b)
+\begin{itemize}
+\item \(AA^+\) and \(A^+A\) are symmetric by (P3) and (P4), and idempotent by Theorem~\ref{r10-thm-rank-idempotent}(a), as
+\(A^+\) is a g-inverse of \(A\).
+\item \(\mathcal C(AA^+)=\mathcal C(A)\) (Theorem~\ref{r10-thm-rank-idempotent}(b)). Also \(\mathcal C(A^+A)\subseteq\mathcal C(A^+)\)
+(Theorem~\ref{thm:r4-rank-product}(a)) and \(\rank(A^+A)=\rank A=\rank A^+\) (Theorem~\ref{r10-thm-rank-idempotent}(b) and
+part (a)); so \(\mathcal C(A^+A)=\mathcal C(A^+)=\mathcal C(A')\) (Theorem~\ref{thm:r4-counting}(a)).
+\item The projections: Theorem~\ref{r6-thm-idempotent}(d).
+\end{itemize}
+(c) Each claim is checked through (P1)--(P4) and the uniqueness of Theorem~\ref{r10-thm-mp-unique}.
+\begin{itemize}
+\item \((A^+)'\) for \(A'\): \(A'(A^+)'A'=(AA^+A)'=A'\), \((A^+)'A'(A^+)'=(A^+AA^+)'=(A^+)'\), and
+\(A'(A^+)'=(A^+A)'=A^+A\) and \((A^+)'A'=(AA^+)'=AA^+\) are symmetric.
+\item \(A\) for \(A^+\): the four conditions \(A^+AA^+=A^+\), \(AA^+A=A\), \((A^+A)'=A^+A\) and \((AA^+)'=AA^+\) are (P2),
+(P1), (P4) and (P3).
+\item \(c^{-1}A^+\) for \(cA\): \((cA)(c^{-1}A^+)(cA)=cAA^+A=cA\), \((c^{-1}A^+)(cA)(c^{-1}A^+)=c^{-1}A^+AA^+=c^{-1}A^+\), and
+\((cA)(c^{-1}A^+)=AA^+\) and \((c^{-1}A^+)(cA)=A^+A\) are symmetric.
+\end{itemize}
+(d)
+\begin{itemize}
+\item If \(A'=A\), then \((A^+)'=(A')^+=A^+\) by (c), and \(AA^+=(AA^+)'=(A^+)'A'=A^+A\) by (P3).
+\item If \(A\) is PSD (so symmetric), then \(A^+\) is symmetric and \(A^+=A^+AA^+=(A^+)'AA^+\); so \(A^+\) is PSD
+(Theorem~\ref{r8-thm-congruence}(a), with \(P=A^+\)).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{proposition}[\citeat{abadir-magnus}{Exercise~10.35}]\label{r10-prop-mp-spectral}
+Let \(A\in\R^{n\times n}\) be symmetric, with \(A=Q\Lambda Q'\) as in Theorem~\ref{r8-thm-spectral}(b): \(Q\) is orthogonal, with
+columns \(q_1,\dots,q_n\), and \(\Lambda=\diag(\lambda_1,\dots,\lambda_n)\). For a number \(\lambda\) let \(\lambda^+=1/\lambda\) if
+\(\lambda\ne0\) and \(0^+=0\), and let \(\Lambda^+=\diag(\lambda_1^+,\dots,\lambda_n^+)\). Then
+\[
+A^+=Q\Lambda^+Q'=\sum_{\lambda_i\ne0}\lambda_i^{-1}q_iq_i'
+\]
+\end{proposition}
+\begin{proof}
+\begin{itemize}
+\item For every number \(\lambda\), \(\lambda\lambda^+\lambda=\lambda\) and \(\lambda^+\lambda\lambda^+=\lambda^+\) (both sides are \(0\)
+if \(\lambda=0\)). A product of diagonal matrices is the diagonal matrix of the products of their diagonal entries; so
+\(\Lambda\Lambda^+\Lambda=\Lambda\), \(\Lambda^+\Lambda\Lambda^+=\Lambda^+\), and \(\Lambda\Lambda^+=\Lambda^+\Lambda\) is diagonal.
+\item Let \(G=Q\Lambda^+Q'\). As \(Q'Q=I_n\), \(AGA=Q\Lambda\Lambda^+\Lambda Q'=A\) and \(GAG=Q\Lambda^+\Lambda\Lambda^+Q'=G\): (P1),
+(P2). Also \(AG=Q\Lambda\Lambda^+Q'=GA\), which is symmetric (Theorem~\ref{r1-thm-transpose}): (P3), (P4). So \(G=A^+\)
+(Theorem~\ref{r10-thm-mp-unique}).
+\item Column \(i\) of \(Q\Lambda^+\) is \(\lambda_i^+q_i\), so by the outer product expansion (Theorem~\ref{r1-thm-views}(d))
+\(Q\Lambda^+Q'=\sum_i\lambda_i^+q_iq_i'\), in which the terms with \(\lambda_i=0\) are \(0\).\qedhere
+\end{itemize}
+\end{proof}
+
+For a symmetric \(A\ne0\), the symmetric g-inverse \(G=\sum_{c_j\ne0}c_j^{-1}E_j\) of Lemma~\ref{r15-lem-function} is \(A^+\): by
+Theorem~\ref{r8-thm-spectral-decomp}(c), \(E_j=\sum_{\lambda_i=c_j}q_iq_i'\), so \(G=\sum_{\lambda_i\ne0}\lambda_i^{-1}q_iq_i'\), which is
+\(A^+\) by Proposition~\ref{r10-prop-mp-spectral}.
+
+\needspace{14\baselineskip}
+\subsection*{The minimum-norm least-squares solution}
+
+\begin{theorem}[\citeat{harville}{Corollary~20.5.5, Theorem~20.6.1}, \citeat{abadir-magnus}{Exercise~10.29(e)}]\label{r10-thm-mp-shortest}
+Let \(A\in\R^{m\times n}\) and \(y\in\R^m\).
+\begin{enumerate}
+\item \(A^+=(A'A)^+A'\), and \(AA^+=A(A'A)^-A'\), the matrix \(P\) of Theorem~\ref{r10-thm-ata}.
+\item A vector \(x\in\R^n\) minimizes \(\lVert Ax-y\rVert\) if and only if \(Ax=AA^+y\). The vector \(A^+y\) is one of them, and
+every other one has \(\lVert x\rVert>\lVert A^+y\rVert\): \(A^+y\) is the only shortest minimizer of \(\lVert Ax-y\rVert\), the
+\textbf{minimum-norm least-squares solution} of \(Ax=y\). It is also the only minimizer in \(\mathcal C(A')\).
+\item If \(G\in\R^{n\times m}\) and \(Gy\) is the shortest minimizer of \(\lVert Ax-y\rVert\) for every \(y\in\R^m\), then
+\(G=A^+\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) Let \(F=(A'A)^+\) (Theorem~\ref{r10-thm-mp-exists}) and \(H=FA'\).
+\begin{itemize}
+\item \(F\) is a g-inverse of \(A'A\) by (P1), so \(AH=AFA'=P\) (Theorem~\ref{r10-thm-ata}(b)).
+\item (P1): \(AHA=PA=A\); (P3): \(AH=P\) is symmetric (Theorem~\ref{r10-thm-ata}(c)).
+\item (P2): \(HAH=(FA'AF)A'=FA'=H\), by (P2) for \(F\).
+\item (P4): \(HA=FA'A\) is symmetric, by (P4) for \(F\), a Moore--Penrose inverse of \(A'A\).
+\item So \(H=A^+\) (Theorem~\ref{r10-thm-mp-unique}), and \(AA^+=AH=P\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item By Proposition~\ref{r10-prop-mp-props}(b), \(AA^+y\) is the orthogonal projection of \(y\) onto \(\mathcal C(A)\). Every
+\(Ax\) lies in \(\mathcal C(A)\), so by Theorem~\ref{r6-thm-best-approximation}, \(\lVert Ax-y\rVert\geqslant\lVert AA^+y-y\rVert\),
+with equality exactly when \(Ax=AA^+y\). In particular \(x=A^+y\) is a minimizer.
+\item The minimizers are also the solutions of \(A'Ax=A'y\). If \(Ax=AA^+y\), then
+\(A'Ax=A'(AA^+)'y=(AA^+A)'y=A'y\), by (P3), Theorem~\ref{r1-thm-transpose} and (P1). Conversely, if \(A'Ax=A'y\), then
+multiplying by \((A^+)'\) on the left gives \((AA^+)'Ax=(AA^+)'y\), that is, \(AA^+Ax=AA^+y\) by (P3), and \(Ax=AA^+y\) by (P1).
+\item \(A'y\in\mathcal C(A')=\mathcal C(A'A)\) (Theorem~\ref{thm:r4-rank-ata}(c)), and \(F=(A'A)^+\) satisfies (P1) and (P4) for
+\(A'A\): it is a minimum-norm g-inverse of \(A'A\). By Theorem~\ref{r10-thm-min-norm}, for the matrix \(A'A\) and the right side
+\(A'y\), \(FA'y\) is a solution of \(A'Ax=A'y\), and every other solution \(x\) has \(\lVert x\rVert>\lVert FA'y\rVert\). Here
+\(FA'y=A^+y\) by (a).
+\item If \(x\) is a minimizer, then \(A(x-A^+y)=AA^+y-AA^+y=0\), so \(x-A^+y\in\mathcal N(A)=\mathcal C(A')^\perp\)
+(Corollary~\ref{r6-cor-four-subspaces}); and \(A^+y\in\mathcal C(A^+)=\mathcal C(A')\) (Proposition~\ref{r10-prop-mp-props}(a)).
+If moreover \(x\in\mathcal C(A')\), then \(x-A^+y\in\mathcal C(A')\cap\mathcal C(A')^\perp=\{0\}\)
+(Theorem~\ref{r6-thm-complement}(b)), that is, \(x=A^+y\).
+\end{itemize}
+(c) For every \(y\), \(Gy\) and \(A^+y\) are shortest minimizers of \(\lVert Ax-y\rVert\), and by (b) there is only one; so
+\(Gy=A^+y\). Taking for \(y\) the columns of \(I_m\) gives \(G=A^+\) (Theorem~\ref{r1-thm-views}(b)).
+\end{proof}
+
+\begin{example}[cf.\ \citeat{searle-khuri}{Example~8.1}]\label{r10-exm-mp-shortest}
+For \(A\) of Example~\ref{r10-exm-mp} and \(y=(0,0,6)'\), decide whether \(Ax=y\) is consistent, and find the minimizers of
+\(\lVert Ax-y\rVert\) and the minimum-norm least-squares solution.
+
+\textit{Solution.}
+\begin{itemize}
+\item By Example~\ref{r10-exm-mp},
+\[
+A^+=\frac1{18}\begin{pmatrix}5&2&-1\\1&1&1\\-4&-1&2\\6&3&0\end{pmatrix},\qquad
+AA^+=\frac16\begin{pmatrix}5&2&-1\\2&2&2\\-1&2&5\end{pmatrix}
+\]
+so \(AA^+y=(-1,2,5)'\ne y\), and \(Ax=y\) is inconsistent (Theorem~\ref{r10-thm-ginv-solves}(b); \(A^+\) is a g-inverse of \(A\) by
+(P1)).
+\item \(y-AA^+y=(1,-2,1)'\), and \(A'(1,-2,1)'=(1-1,\ -4+4,\ -1-4+5,\ 1-4+3)'=0\): it is orthogonal to \(\mathcal C(A)\). So the
+smallest value of \(\lVert Ax-y\rVert^2\) is \(\lVert(1,-2,1)'\rVert^2=6\) (Theorem~\ref{r10-thm-mp-shortest}(b)).
+\item \(A^+y=\frac6{18}(-1,1,2,0)'=\frac13(-1,1,2,0)'\), with \(\lVert A^+y\rVert^2=\frac69=\frac23\); check:
+\(A(-1,1,2,0)'=-a_1+a_2+2a_3=(-3,6,15)'=3(-1,2,5)'\).
+\item By Theorem~\ref{r10-thm-mp-shortest}(b), the minimizers are the solutions of \(Ax=(-1,2,5)'\), that is, \(A^+y+z\) with
+\(z\in\mathcal N(A)\) (Theorem~\ref{thm:r2-solution-structure}(a)). The RREF \(R\) of Example~\ref{r10-exm-mp} gives the special
+solutions \(s_1=(1,-1,1,0)'\) and \(s_2=(-1,-1,0,1)'\), a basis of \(\mathcal N(A)\) (Theorem~\ref{thm:r4-four-bases}(c)); so the
+minimizers are
+\[
+x=\frac13\begin{pmatrix}-1\\1\\2\\0\end{pmatrix}+t_1\begin{pmatrix}1\\-1\\1\\0\end{pmatrix}+t_2\begin{pmatrix}-1\\-1\\0\\1\end{pmatrix}
+\qquad(t_1,t_2\in\R)
+\]
+\item For instance \(x_0=(-1,1,0,0)'\) (\(t_1=-\frac23\), \(t_2=0\)) has \(Ax_0=-a_1+a_2=(-1,2,5)'\), and
+\(\lVert x_0\rVert^2=2>\frac23\). Here \(x_0-A^+y=-\frac23s_1\) is orthogonal to \(A^+y\), as \((-1,1,2,0)s_1=-1-1+2=0\), and
+\(\lVert x_0\rVert^2=\frac23+\frac49\cdot3=2\) (Proposition~\ref{r6-prop-pythagoras}).
+\item \((-1,1,2,0)=-(1,0,-1,1)+(0,1,1,1)\) is a combination of the nonzero rows of \(R\), so \(A^+y\in\mathcal C(A')\)
+(Theorem~\ref{thm:r4-four-bases}(b)), as Theorem~\ref{r10-thm-mp-shortest}(b) says.
+\end{itemize}
+\end{example}
+
+\needspace{14\baselineskip}
+\subsection*{Pearson's statistic}
+
+\begin{example}[\citeat{casella-berger}{Exercise~4.39}]\label{r10-exm-pearson}
+In \(N\) independent trials, each trial results in exactly one of \(k\geqslant2\) categories, category \(j\) with
+probability \(p_j>0\) (\(p_1+\dots+p_k=1\)). Let \(y_i\in\R^k\) record trial \(i\): \(y_i=e_j\) if trial \(i\) results in
+category \(j\). Let \(c=y_1+\dots+y_N\) be the vector of counts, \(p=(p_1,\dots,p_k)'\), \(D=\diag(p_1,\dots,p_k)\),
+\(V=D-pp'\) and \(u=(c-Np)/\sqrt N\). \textbf{Pearson's statistic} is
+\[
+X^2=\sum_{j=1}^k\frac{(c_j-Np_j)^2}{Np_j}
+\]
+where \(Np_j=\expc(c_j)\) is the expected count of cell \(j\). We show:
+\begin{enumerate}
+\item \(\expc(c)=Np\) and \(\var(c)=NV\); in particular \(\cov(c_i,c_j)=-Np_ip_j\) for \(i\ne j\);
+\item \(V\one=0\), \(\mathcal N(V)=\Span\{\one\}\) and \(\rank V=k-1\), so \(\var(c)\) is singular;
+\item \(D^{-1}\) is a g-inverse of \(V\);
+\item \(X^2=u'D^{-1}u\), and \(u'Gu=X^2\) for every g-inverse \(G\) of \(V\);
+\item let \(u_*\sim N_k(0,V)\), and take \(u_*\) as the normal approximation to \(u\) for large \(N\) (assumed, not proved
+here), so that \(X^2=u'D^{-1}u\) is approximated by \(u_*'D^{-1}u_*\); then \(u_*'D^{-1}u_*\sim\chi^2_{k-1}\).
+\end{enumerate}
+
+\textit{Solution.}
+(a)
+\begin{itemize}
+\item Entry \(j\) of \(y_i\) is \(1\) with probability \(p_j\) and \(0\) otherwise, so its expectation is \(p_j\): \(\expc(y_i)=p\).
+As \(y_i\) is one of \(e_1,\dots,e_k\), \(y_iy_i'=\diag(y_i)\), so \(\expc(y_iy_i')=D\) and \(\var(y_i)=D-pp'=V\)
+(Theorem~\ref{r14-thm-cov}(e)).
+\item With \(Z=[y_1\ \cdots\ y_N]\in\R^{k\times N}\), \(c=Z\one_N\), and \(\expc(c)=\expc(Z)\one_N=Np\)
+(Theorem~\ref{r11-thm-linear}(a)).
+\item The trials are independent, so \(y_1,\dots,y_N\) are independent and \(\cov(y_i,y_j)=0\) for \(i\ne j\) (N7). By
+Theorem~\ref{r14-thm-cov}(d), \(\var(c)=\var(y_1)+\dots+\var(y_N)=NV\). Its \((i,j)\) entry for \(i\ne j\) is
+\(\cov(c_i,c_j)=-Np_ip_j\) (Definition~\ref{r11-def-random}).
+\end{itemize}
+(b) \(V\one=p-p(p'\one)=p-p=0\). If \(Vx=0\), then \(Dx=p(p'x)\), so \(p_jx_j=p_j(p'x)\) and \(x_j=p'x\) for every \(j\) (as
+\(p_j>0\)): \(x=(p'x)\one\). Hence \(\mathcal N(V)=\Span\{\one\}\), and \(\rank V=k-1\) (Theorem~\ref{thm:r4-rank-nullity}). So
+\(\var(c)=NV\) is singular; correspondingly \(\one'c=N\) for every outcome of the trials, a constant, as
+Theorem~\ref{r11-thm-cov-psd} requires.
+
+(c) As \(p'D^{-1}=\one'\), \(VD^{-1}=I_k-p\one'\); as \(\one'D=p'\) and \(\one'p=1\),
+\[
+VD^{-1}V=(I_k-p\one')(D-pp')=D-pp'-pp'+p(\one'p)p'=D-pp'=V
+\]
+So \(D^{-1}\) is a g-inverse of \(V\) (Definition~\ref{r10-def-ginverse}).
+
+(d)
+\begin{itemize}
+\item \(u'D^{-1}u=\sum_ju_j^2/p_j=\sum_j(c_j-Np_j)^2/(Np_j)=X^2\).
+\item \(\one'u=(\one'c-N\one'p)/\sqrt N=0\), so \(u\in W=\Span\{\one\}^\perp\), a subspace of dimension \(k-1\)
+(Theorem~\ref{r6-thm-complement}(c)). \(W\) contains \(\mathcal C(V)\), since \(\one'Vw=(V\one)'w=0\) for every \(w\in\R^k\), and
+\(\dim\mathcal C(V)=\rank V=k-1\) by (b); so \(\mathcal C(V)=W\) (Theorem~\ref{thm:r4-counting}(a)), and \(u=Vw\) for some
+\(w\in\R^k\).
+\item For every g-inverse \(G\) of \(V\), \(u'Gu=w'VGVw=w'Vw\), the same number for all \(G\) (this is
+Theorem~\ref{r10-thm-invariance}(a) with \(B=u'\), \(C=u\)). By (c) it equals \(u'D^{-1}u=X^2\).
+\end{itemize}
+(e)
+\begin{itemize}
+\item Let \(q=(\sqrt{p_1},\dots,\sqrt{p_k})'\), so \(q'q=1\), and \(D^{-1/2}=\diag(p_1^{-1/2},\dots,p_k^{-1/2})\). Then
+\(D^{-1/2}p=q\) and \(D^{-1/2}VD^{-1/2}=I_k-qq'=P\), which is symmetric and idempotent (\(P^2=I_k-2qq'+q(q'q)q'=P\)), of rank
+\(\tr P=k-q'q=k-1\) (Theorems~\ref{r6-thm-idempotent}(c) and~\ref{r1-thm-trace}).
+\item By Theorem~\ref{r14-thm-mvn-linear}, \(v=D^{-1/2}u_*\sim N_k(0,P)\), and for \(z\sim N_k(0,I_k)\) also \(Pz\sim N_k(0,PP')=N_k(0,P)\).
+So \(v\) and \(Pz\) have the same MGF, hence the same distribution (N1), and \(v'v\) has the distribution of
+\((Pz)'(Pz)=z'Pz\).
+\item \(u_*'D^{-1}u_*=v'v\), and \(z'Pz\sim\chi^2_{k-1}\) (Theorem~\ref{r15-thm-quadratic-chisq} with \(\mu=0\), \(\sigma=1\)). Hence
+\(u_*'D^{-1}u_*\sim\chi^2_{k-1}\).
+\end{itemize}
+\end{example}
+
+\needspace{14\baselineskip}
+\subsection*{Exercises}
+
+\begin{exercise}\label{r10-ex-ginverse-drill}
+Let
+\[
+A=\begin{pmatrix}1&2&1&0\\-1&-2&0&1\\1&2&2&1\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find a full-rank factorization \(A=BC\) from the RREF of \(A\), a left inverse \(L\) of \(B\) and a right inverse
+\(K\) of \(C\) with integer entries, and the g-inverse \(G=KL\) of \(A\).
+\item For which \(y\in\R^3\) is \(Ax=y\) consistent? Decide for \(y=(1,1,3)'\) and \(y=(1,0,1)'\).
+\item Find all solutions of \(Ax=(1,1,3)'\).
+\item Which of \(x_1+2x_2-x_4\), \(x_3+x_4\) and \(x_1+2x_2\) have the same value for all these solutions?
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) Row-reduce \(A\):
+\[
+\begin{gathered}
+A\xrightarrow[R_3\leftarrow R_3-R_1]{R_2\leftarrow R_2+R_1}
+\begin{pmatrix}1&2&1&0\\0&0&1&1\\0&0&1&1\end{pmatrix}
+\xrightarrow{R_3\leftarrow R_3-R_2}
+\begin{pmatrix}1&2&1&0\\0&0&1&1\\0&0&0&0\end{pmatrix}
+\xrightarrow{R_1\leftarrow R_1-R_2}
+\begin{pmatrix}1&2&0&-1\\0&0&1&1\\0&0&0&0\end{pmatrix}=R
+\end{gathered}
+\]
+The pivot columns are \(1,3\), so (Theorem~\ref{thm:r4-full-rank-factorization}(a))
+\[
+B=\begin{pmatrix}1&1\\-1&0\\1&2\end{pmatrix},\qquad C=\begin{pmatrix}1&2&0&-1\\0&0&1&1\end{pmatrix}
+\]
+\begin{itemize}
+\item Columns \(1\), \(3\) of \(C\) are the unit vectors of \(\R^2\), and rows \(1\), \(2\) of \(B\) form
+\(B_1=\left(\begin{smallmatrix}1&1\\-1&0\end{smallmatrix}\right)\), with
+\(B_1\left(\begin{smallmatrix}0&-1\\1&1\end{smallmatrix}\right)=I_2\), so
+\(B_1^{-1}=\left(\begin{smallmatrix}0&-1\\1&1\end{smallmatrix}\right)\) (Theorem~\ref{r2-thm-invertible}). So
+\[
+K=\begin{pmatrix}1&0\\0&0\\0&1\\0&0\end{pmatrix},\qquad
+L=[B_1^{-1}\ \ 0]=\begin{pmatrix}0&-1&0\\1&1&0\end{pmatrix}
+\]
+give \(CK=I_2\) and \(LB=B_1^{-1}B_1=I_2\) (Theorems~\ref{r1-thm-views}(a),(b) and~\ref{r5b-thm-block}(c)).
+\item By Theorem~\ref{r10-thm-ginv-exists}(a),
+\[
+G=KL=\begin{pmatrix}0&-1&0\\0&0&0\\1&1&0\\0&0&0\end{pmatrix}
+\]
+is a g-inverse of \(A\).
+\end{itemize}
+(b) Since \(CK=I_2\),
+\[
+AG=BCKL=BL=\begin{pmatrix}1&1\\-1&0\\1&2\end{pmatrix}\begin{pmatrix}0&-1&0\\1&1&0\end{pmatrix}
+=\begin{pmatrix}1&0&0\\0&1&0\\2&1&0\end{pmatrix}
+\]
+so \(AGy=(y_1,\ y_2,\ 2y_1+y_2)'\). By Theorem~\ref{r10-thm-ginv-solves}(b), \(Ax=y\) is consistent if and only if
+\(y_3=2y_1+y_2\). For \(y=(1,1,3)'\), \(3=2+1\): consistent. For \(y=(1,0,1)'\), \(AGy=(1,0,2)'\ne y\): inconsistent.
+
+(c) \(Gy=(-1,\ 0,\ 1+1,\ 0)'=(-1,0,2,0)'\), and \(GA=KLBC=KC\), so
+\[
+GA=\begin{pmatrix}1&2&0&-1\\0&0&0&0\\0&0&1&1\\0&0&0&0\end{pmatrix},\qquad
+I_4-GA=\begin{pmatrix}0&-2&0&1\\0&1&0&0\\0&0&0&-1\\0&0&0&1\end{pmatrix}
+\]
+By Theorem~\ref{r10-thm-general-solution}, the solutions are
+\[
+x=\begin{pmatrix}-1\\0\\2\\0\end{pmatrix}+z_2\begin{pmatrix}-2\\1\\0\\0\end{pmatrix}+z_4\begin{pmatrix}1\\0\\-1\\1\end{pmatrix}
+=\begin{pmatrix}-1-2z_2+z_4\\z_2\\2-z_4\\z_4\end{pmatrix}\qquad(z_2,z_4\in\R)
+\]
+Check: \(A(-1,0,2,0)'=-a_1+2a_3=(-1+2,\ 1+0,\ -1+4)'=(1,1,3)'\).
+
+(d) Use Theorem~\ref{r10-thm-invariant-combination}(iii) with the rows of \(GA\) (Theorem~\ref{r1-thm-views}(c)).
+\begin{itemize}
+\item \(\lambda=(1,2,0,-1)'\): \(\lambda'GA=\row_1(GA)+2\row_2(GA)-\row_4(GA)=(1,2,0,-1)=\lambda'\); indeed
+\(x_1+2x_2-x_4=(-1-2z_2+z_4)+2z_2-z_4=-1\) for all solutions.
+\item \(\lambda=(0,0,1,1)'\): \(\lambda'GA=\row_3(GA)+\row_4(GA)=(0,0,1,1)=\lambda'\); indeed \(x_3+x_4=2\).
+\item \(\lambda=(1,2,0,0)'\): \(\lambda'GA=\row_1(GA)+2\row_2(GA)=(1,2,0,-1)\ne\lambda'\); indeed \(x_1+2x_2=-1+z_4\) changes
+with \(z_4\).
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r10-dr-rowreduction}
+Let
+\[
+A=\begin{pmatrix}1&-1&2&1\\2&-1&3&4\\1&0&1&3\end{pmatrix}
+\]
+\begin{enumerate}
+\item Row-reduce \([A\mid I_3]\) to \([R\mid P]\), and write down the g-inverse \(G\) of
+Corollary~\ref{r10-cor-ginv-rowreduction}.
+\item Compute \(AG\), and check that \(AGA=A\).
+\item Decide whether \(Ax=y\) is consistent for \(y=(1,3,2)'\) and for \(y=(2,1,0)'\), and find all solutions of the
+consistent system.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\[
+\begin{gathered}
+\left(\begin{array}{cccc|ccc}1&-1&2&1&1&0&0\\2&-1&3&4&0&1&0\\1&0&1&3&0&0&1\end{array}\right)
+\xrightarrow[R_3\leftarrow R_3-R_1]{R_2\leftarrow R_2-2R_1}
+\left(\begin{array}{cccc|ccc}1&-1&2&1&1&0&0\\0&1&-1&2&-2&1&0\\0&1&-1&2&-1&0&1\end{array}\right)
+\\
+\xrightarrow{R_3\leftarrow R_3-R_2}
+\left(\begin{array}{cccc|ccc}1&-1&2&1&1&0&0\\0&1&-1&2&-2&1&0\\0&0&0&0&1&-1&1\end{array}\right)
+\xrightarrow{R_1\leftarrow R_1+R_2}
+\left(\begin{array}{cccc|ccc}1&0&1&3&-1&1&0\\0&1&-1&2&-2&1&0\\0&0&0&0&1&-1&1\end{array}\right)=[R\mid P]
+\end{gathered}
+\]
+\(R\) is the RREF of \(A\), with pivot columns \(1,2\); so \(\rank A=2\). By Corollary~\ref{r10-cor-ginv-rowreduction},
+rows \(1\), \(2\) of \(G\) are rows \(1\), \(2\) of \(P\), and rows \(3\), \(4\) are zero:
+\[
+G=\begin{pmatrix}-1&1&0\\-2&1&0\\0&0&0\\0&0&0\end{pmatrix}
+\]
+(b) By the outer product expansion (Theorem~\ref{r1-thm-views}(d)), with \(a_1=(1,2,1)'\) and \(a_2=(-1,-1,0)'\),
+\[
+AG=a_1\row_1(G)+a_2\row_2(G)=\begin{pmatrix}-1&1&0\\-2&2&0\\-1&1&0\end{pmatrix}+\begin{pmatrix}2&-1&0\\2&-1&0\\0&0&0\end{pmatrix}
+=\begin{pmatrix}1&0&0\\0&1&0\\-1&1&0\end{pmatrix}
+\]
+By Theorem~\ref{r1-thm-views}(c), \(AGA\) has the rows \(\row_1(A)\), \(\row_2(A)\) and
+\(-\row_1(A)+\row_2(A)=(1,0,1,3)=\row_3(A)\): \(AGA=A\).
+
+(c) \(AGy=(y_1,\ y_2,\ -y_1+y_2)'\), so \(Ax=y\) is consistent if and only if \(y_3=y_2-y_1\)
+(Theorem~\ref{r10-thm-ginv-solves}(b)).
+\begin{itemize}
+\item \(y=(2,1,0)'\): \(AGy=(2,1,-1)'\ne y\), so \(Ax=y\) is inconsistent.
+\item \(y=(1,3,2)'\): \(AGy=(1,3,2)'=y\), so \(Ax=y\) is consistent, and \(Gy=(-1+3,\ -2+3,\ 0,\ 0)'=(2,1,0,0)'\) is a
+solution.
+\item Rows \(1\), \(2\) of \(GA\) are rows \(1\), \(2\) of \(PA=R\), and rows \(3\), \(4\) are zero (Theorem~\ref{r1-thm-views}(c)):
+\[
+GA=\begin{pmatrix}1&0&1&3\\0&1&-1&2\\0&0&0&0\\0&0&0&0\end{pmatrix},\qquad
+I_4-GA=\begin{pmatrix}0&0&-1&-3\\0&0&1&-2\\0&0&1&0\\0&0&0&1\end{pmatrix}
+\]
+\item By Theorem~\ref{r10-thm-general-solution}, the solutions are
+\[
+x=\begin{pmatrix}2\\1\\0\\0\end{pmatrix}+z_3\begin{pmatrix}-1\\1\\1\\0\end{pmatrix}+z_4\begin{pmatrix}-3\\-2\\0\\1\end{pmatrix}
+=\begin{pmatrix}2-z_3-3z_4\\1+z_3-2z_4\\z_3\\z_4\end{pmatrix}\qquad(z_3,z_4\in\R)
+\]
+(columns \(1\), \(2\) of \(I_4-GA\) are \(0\)). Check: \(A(2,1,0,0)'=2a_1+a_2=(2-1,\ 4-1,\ 2+0)'=(1,3,2)'\).
+\end{itemize}
+\end{solution}
+
+\begin{exercise}[cf.\ \citeat{bapat}{Ch.~4, Exercise~2}]\label{r10-dr-submatrix}
+Let
+\[
+A=\begin{pmatrix}1&2&1\\0&1&1\\1&3&2\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find \(\rank A\) by row reduction.
+\item Find the g-inverse \(G_1\) of Theorem~\ref{r10-thm-ginv-submatrix}(b) built from the leading \(2\times2\) submatrix,
+and check that \(AG_1A=A\).
+\item Find the g-inverse \(G_2\) built from the submatrix in rows \(2,3\) and columns \(1,3\), and check that
+\(AG_2A=A\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\[
+A\xrightarrow{R_3\leftarrow R_3-R_1}
+\begin{pmatrix}1&2&1\\0&1&1\\0&1&1\end{pmatrix}
+\xrightarrow{R_3\leftarrow R_3-R_2}
+\begin{pmatrix}1&2&1\\0&1&1\\0&0&0\end{pmatrix}
+\xrightarrow{R_1\leftarrow R_1-2R_2}
+\begin{pmatrix}1&0&-1\\0&1&1\\0&0&0\end{pmatrix}
+\]
+So \(\rank A=2\); the steps show \(\row_3(A)=\row_1(A)+\row_2(A)\).
+
+(b) The leading block \(A_{11}=\left(\begin{smallmatrix}1&2\\0&1\end{smallmatrix}\right)\) is invertible, with
+\(A_{11}^{-1}=\left(\begin{smallmatrix}1&-2\\0&1\end{smallmatrix}\right)\) (the product is \(I_2\)). By
+Theorem~\ref{r10-thm-ginv-submatrix}(b),
+\[
+G_1=\begin{pmatrix}1&-2&0\\0&1&0\\0&0&0\end{pmatrix},\qquad
+AG_1=\begin{pmatrix}1&0&0\\0&1&0\\1&1&0\end{pmatrix}
+\]
+where \(AG_1=a_1\row_1(G_1)+a_2\row_2(G_1)\) (Theorem~\ref{r1-thm-views}(d)). By Theorem~\ref{r1-thm-views}(c), \(AG_1A\) has
+the rows \(\row_1(A)\), \(\row_2(A)\) and \(\row_1(A)+\row_2(A)=\row_3(A)\): \(AG_1A=A\).
+
+(c) The submatrix in rows \(i_1=2\), \(i_2=3\) and columns \(j_1=1\), \(j_2=3\) is
+\(A_*=\left(\begin{smallmatrix}0&1\\1&2\end{smallmatrix}\right)\), with \(\det A_*=-1\) and
+\(A_*^{-1}=\left(\begin{smallmatrix}-2&1\\1&0\end{smallmatrix}\right)\) (Theorem~\ref{r5d-thm-adjugate}). By
+Theorem~\ref{r10-thm-ginv-submatrix}(b), the \((s,t)\) entry of \(A_*^{-1}\) goes to position \((j_s,i_t)\) of \(G_2\): the
+entries \(-2\), \(1\), \(1\), \(0\) go to positions \((1,2)\), \((1,3)\), \((3,2)\), \((3,3)\). So
+\[
+G_2=\begin{pmatrix}0&-2&1\\0&0&0\\0&1&0\end{pmatrix}
+\]
+and, by Theorem~\ref{r1-thm-views}(d),
+\[
+AG_2=a_1\row_1(G_2)+a_3\row_3(G_2)=\begin{pmatrix}0&-2&1\\0&0&0\\0&-2&1\end{pmatrix}+\begin{pmatrix}0&1&0\\0&1&0\\0&2&0\end{pmatrix}
+=\begin{pmatrix}0&-1&1\\0&1&0\\0&0&1\end{pmatrix}
+\]
+\(AG_2A\) has the rows \(-\row_2(A)+\row_3(A)=(1,2,1)=\row_1(A)\), \(\row_2(A)\) and \(\row_3(A)\): \(AG_2A=A\). (\(G_2\ne G_1\):
+a g-inverse is not unique.)
+\end{solution}
+
+\begin{exercise}\label{r10-ex-ginverse-4x4}
+Let
+\[
+A=\begin{pmatrix}2&2&0&1\\0&-2&2&1\\1&0&1&1\\2&4&-2&0\end{pmatrix},\qquad
+p_1=\begin{pmatrix}1\\-1\\0\\2\end{pmatrix},\quad p_2=\begin{pmatrix}1\\1\\1\\0\end{pmatrix},\quad
+q_1=\begin{pmatrix}1\\2\\-1\\0\end{pmatrix},\quad q_2=\begin{pmatrix}1\\0\\1\\1\end{pmatrix}
+\]
+\begin{enumerate}
+\item Show that \(A=p_1q_1'+p_2q_2'\), that this is a full-rank factorization \(A=BC\) with \(B=[p_1\ p_2]\) and the rows
+\(q_1'\), \(q_2'\) of \(C\), and that \(\rank A=2\).
+\item Find the g-inverses \(G_1\) and \(G_2\) of \(A\) of Theorem~\ref{r10-thm-ginv-submatrix}(b) built from the leading \(2\times2\)
+submatrix and from the submatrix in rows \(1,3\) and columns \(3,4\).
+\item Use \(G_2\) to find the condition on \(y\in\R^4\) for \(Ax=y\) to be consistent, and find all solutions of \(Ax=y\) for
+\(y=(2,0,1,2)'\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) By the outer product expansion (Theorem~\ref{r1-thm-views}(d)), \(p_1q_1'+p_2q_2'=BC\), and
+\[
+p_1q_1'+p_2q_2'=\begin{pmatrix}1&2&-1&0\\-1&-2&1&0\\0&0&0&0\\2&4&-2&0\end{pmatrix}
++\begin{pmatrix}1&0&1&1\\1&0&1&1\\1&0&1&1\\0&0&0&0\end{pmatrix}=A
+\]
+Since \(p_1'p_2=0\) and \(q_1'q_2=0\), the nonzero vectors \(p_1,p_2\) are linearly independent, and so are \(q_1,q_2\)
+(Proposition~\ref{r6-prop-orthogonal-list}(b)): \(B\) has full column rank and \(C\) full row rank
+(Theorem~\ref{thm:r4-rank-rules}(b),(c)). By Theorem~\ref{thm:r4-rank-product}(b), \(\rank A=\rank C=2\), and \(A=BC\) is a
+full-rank factorization.
+
+(b)
+\begin{itemize}
+\item The leading submatrix \(M_1=\left(\begin{smallmatrix}2&2\\0&-2\end{smallmatrix}\right)\) has
+\(M_1^{-1}=\frac14\left(\begin{smallmatrix}2&2\\0&-2\end{smallmatrix}\right)\) (the product is \(I_2\)). By
+Theorem~\ref{r10-thm-ginv-submatrix}(b),
+\[
+G_1=\frac12\begin{pmatrix}1&1&0&0\\0&-1&0&0\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\]
+\item The submatrix in rows \(i_1=1\), \(i_2=3\) and columns \(j_1=3\), \(j_2=4\) is \(M_2=\left(\begin{smallmatrix}0&1\\1&1\end{smallmatrix}\right)\),
+with \(M_2^{-1}=\left(\begin{smallmatrix}-1&1\\1&0\end{smallmatrix}\right)\) (the product is \(I_2\)). By
+Theorem~\ref{r10-thm-ginv-submatrix}(b), the \((s,t)\) entry of \(M_2^{-1}\) goes to position \((j_s,i_t)\): the entries \(-1\),
+\(1\), \(1\), \(0\) go to the positions \((3,1)\), \((3,3)\), \((4,1)\), \((4,3)\):
+\[
+G_2=\begin{pmatrix}0&0&0&0\\0&0&0&0\\-1&0&1&0\\1&0&0&0\end{pmatrix}
+\]
+\end{itemize}
+(c)
+\begin{itemize}
+\item With the columns \(a_1,\dots,a_4\) of \(A\), \(AG_2=[-a_3+a_4\ \ 0\ \ a_3\ \ 0]\) (Theorem~\ref{r1-thm-views}(a),(b)), so
+\(AG_2y=y_1(1,-1,0,2)'+y_3(0,2,1,-2)'=(y_1,\ 2y_3-y_1,\ y_3,\ 2y_1-2y_3)'\). By Theorem~\ref{r10-thm-ginv-solves}(b),
+\(Ax=y\) is consistent if and only if \(y_2=2y_3-y_1\) and \(y_4=2y_1-2y_3\).
+\item For \(y=(2,0,1,2)'\) both conditions hold. The rows of \(G_2A\) are \(0\), \(0\), \(\row_3(A)-\row_1(A)=(-1,-2,1,0)\) and
+\(\row_1(A)=(2,2,0,1)\) (Theorem~\ref{r1-thm-views}(c)), so
+\[
+G_2y=\begin{pmatrix}0\\0\\-1\\2\end{pmatrix},\qquad
+I_4-G_2A=\begin{pmatrix}1&0&0&0\\0&1&0&0\\1&2&0&0\\-2&-2&0&0\end{pmatrix}
+\]
+\item By Theorem~\ref{r10-thm-general-solution}, \(\mathcal N(A)=\mathcal C(I_4-G_2A)=\Span\{(1,0,1,-2)',(0,1,2,-2)'\}\), and the
+solutions are
+\[
+x=\begin{pmatrix}0\\0\\-1\\2\end{pmatrix}+z_1\begin{pmatrix}1\\0\\1\\-2\end{pmatrix}+z_2\begin{pmatrix}0\\1\\2\\-2\end{pmatrix}\qquad(z_1,z_2\in\R)
+\]
+\item The solution \(G_1y=(1,0,0,0)'=e_1\) (\(z_1=1\), \(z_2=0\)) is visible directly: \(y\) is the first column of \(A\).
+\end{itemize}
+\end{solution}
+
+\needspace{16\baselineskip}
+\begin{exercise}\label{r10-dr-reflexive}
+Let
+\[
+A=\begin{pmatrix}1&2&1\\0&1&1\\1&3&2\end{pmatrix},\qquad G_1=\begin{pmatrix}1&-2&0\\0&1&0\\0&0&0\end{pmatrix}
+\]
+where \(\rank A=2\) and \(G_1\) is a g-inverse of \(A\) (Exercise~\ref{r10-dr-submatrix}).
+\begin{enumerate}
+\item Compute \(G_1A\), check that it is idempotent, and find \(\tr(G_1A)\) and \(\rank(I_3-G_1A)\).
+\item Is \(G_1\) reflexive?
+\item Let \(U\in\R^{3\times3}\) have \((3,3)\) entry \(1\) and all other entries \(0\). Show that \(G_3=G_1+(I_3-G_1A)U\) is an
+invertible g-inverse of \(A\), and find the reflexive g-inverse \(G_3AG_3\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) By Theorem~\ref{r1-thm-views}(c), the rows of \(G_1A\) are \(\row_1(A)-2\row_2(A)=(1,0,-1)\), \(\row_2(A)=(0,1,1)\) and
+\(0\):
+\[
+G_1A=\begin{pmatrix}1&0&-1\\0&1&1\\0&0&0\end{pmatrix},\qquad
+I_3-G_1A=\begin{pmatrix}0&0&1\\0&0&-1\\0&0&1\end{pmatrix}
+\]
+The rows of \((G_1A)(G_1A)\) are \(\row_1(G_1A)-\row_3(G_1A)=(1,0,-1)\), \(\row_2(G_1A)+\row_3(G_1A)=(0,1,1)\) and \(0\): so
+\(G_1A\) is idempotent. \(\tr(G_1A)=1+1+0=2=\rank A\), and \(I_3-G_1A\) has rank \(1=3-2\) (its columns are multiples of
+\((1,-1,1)'\)), as Theorem~\ref{r10-thm-rank-idempotent}(c) says.
+
+(b) The rows \((1,-2,0)\) and \((0,1,0)\) of \(G_1\) are linearly independent, so \(\rank G_1=2=\rank A\), and \(G_1\) is
+reflexive (Theorem~\ref{r10-thm-reflexive}(b)). Check: \(G_1AG_1=(G_1A)G_1\) has the rows
+\(\row_1(G_1)-\row_3(G_1)=(1,-2,0)\), \(\row_2(G_1)+\row_3(G_1)=(0,1,0)\) and \(0\), so \(G_1AG_1=G_1\).
+
+(c)
+\begin{itemize}
+\item \((I_3-G_1A)U\) has column \(3\) equal to column \(3\) of \(I_3-G_1A\), that is, \((1,-1,1)'\), and its other columns
+\(0\) (Theorem~\ref{r1-thm-views}(a)). So
+\[
+G_3=\begin{pmatrix}1&-2&1\\0&1&-1\\0&0&1\end{pmatrix}
+\]
+\item \(A(I_3-G_1A)=A-AG_1A=0\), so \(AG_3=AG_1\) and \(AG_3A=AG_1A=A\): \(G_3\) is a g-inverse of \(A\). It is upper
+triangular with diagonal \(1,1,1\), so \(\det G_3=1\) (Theorem~\ref{r5d-thm-basic}(c)) and \(G_3\) is invertible
+(Theorem~\ref{r5d-thm-product}(a)); \(\rank G_3=3>\rank A\), so \(G_3\) is not reflexive
+(Theorem~\ref{r10-thm-reflexive}(b)).
+\item By Theorem~\ref{r1-thm-views}(d),
+\[
+AG_1=a_1\row_1(G_1)+a_2\row_2(G_1)=\begin{pmatrix}1&0&0\\0&1&0\\1&1&0\end{pmatrix}
+\]
+and \(G_3AG_3=G_3(AG_1)\) has the columns \(G_3(1,0,1)'=(1+1,\ 0-1,\ 0+1)'\),
+\(G_3(0,1,1)'=(-2+1,\ 1-1,\ 0+1)'\) and \(0\) (Theorem~\ref{r1-thm-views}(a),(b)):
+\[
+G_3AG_3=\begin{pmatrix}2&-1&0\\-1&0&0\\1&1&0\end{pmatrix}
+\]
+a reflexive g-inverse of \(A\) (Theorem~\ref{r10-thm-reflexive}(a)), of rank \(2\).
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r10-ex-ginverse-ata}
+Let
+\[
+A=\begin{pmatrix}1&1&0\\1&-1&2\\1&2&-1\\1&-2&3\end{pmatrix}
+\]
+\begin{enumerate}
+\item Compute \(A'A\), show that \(\rank A=2\), and find the g-inverse \(G\) of \(A'A\) of Theorem~\ref{r10-thm-ginv-submatrix}(b)
+built from its leading \(2\times2\) submatrix.
+\item Check that \(AGA'A=A\), and write down the g-inverse \(GA'\) of \(A\).
+\item Use \(GA'\) to decide whether \(Ax=y\) is consistent for \(y=(2,2,2,2)'\) and for \(y=e_1\). In the consistent case find
+all solutions and the shortest one.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) The columns are \(a_1=(1,1,1,1)'\), \(a_2=(1,-1,2,-2)'\) and \(a_3=(0,2,-1,3)'=a_1-a_2\), and, with the entries
+\(a_i'a_j\) (Theorem~\ref{r1-thm-views}(d)),
+\[
+A'A=\begin{pmatrix}4&0&4\\0&10&-10\\4&-10&14\end{pmatrix}
+\]
+\(a_1\) and \(a_2\) are nonzero and orthogonal, hence linearly independent (Proposition~\ref{r6-prop-orthogonal-list}(b)), and
+\(a_3\in\Span\{a_1,a_2\}\); so \(\rank A=2\), and \(\rank(A'A)=2\) (Theorem~\ref{thm:r4-rank-ata}(b)). The leading submatrix
+\(\diag(4,10)\) is invertible, so \(G=\diag(\frac14,\frac1{10},0)\) is a g-inverse of \(A'A\)
+(Theorem~\ref{r10-thm-ginv-submatrix}(b)).
+
+(b) Multiplying the rows of \(A'A\) by \(\frac14,\frac1{10},0\) (Theorem~\ref{r1-thm-views}(c)),
+\[
+GA'A=\begin{pmatrix}1&0&1\\0&1&-1\\0&0&0\end{pmatrix}
+\]
+so the columns of \(A(GA'A)\) are \(a_1\), \(a_2\) and \(a_1-a_2=a_3\) (Theorem~\ref{r1-thm-views}(a),(b)): \(AGA'A=A\), as
+Theorem~\ref{r10-thm-ata}(a) says. By Theorem~\ref{r10-thm-ata}(a),
+\[
+GA'=\begin{pmatrix}\frac14&\frac14&\frac14&\frac14\\[2pt]\frac1{10}&-\frac1{10}&\frac15&-\frac15\\[2pt]0&0&0&0\end{pmatrix}
+\]
+is a g-inverse of \(A\).
+
+(c)
+\begin{itemize}
+\item \(A(GA')y=\frac14(a_1'y)a_1+\frac1{10}(a_2'y)a_2\) (Theorem~\ref{r1-thm-views}(d)). For \(y=(2,2,2,2)'=2a_1\), \(a_1'y=8\) and
+\(a_2'y=0\), so \(AGA'y=2a_1=y\): consistent. For \(y=e_1\), \(AGA'e_1=\frac14a_1+\frac1{10}a_2=\frac1{20}(7,3,9,1)'\ne e_1\):
+inconsistent (Theorem~\ref{r10-thm-ginv-solves}(b)).
+\item For \(y=2a_1\), \(GA'y=(2,0,0)'\), and
+\[
+I_3-GA'A=\begin{pmatrix}0&0&-1\\0&0&1\\0&0&1\end{pmatrix}
+\]
+so the solutions are \(x=(2,0,0)'+z(-1,1,1)'\), \(z\in\R\) (Theorem~\ref{r10-thm-general-solution}).
+\item As \(Ax=y\) is consistent, its solutions are the minimizers of \(\lVert Ax-y\rVert\), and the shortest one is the only one in
+\(\mathcal C(A')=\mathcal N(A)^\perp\) (Theorem~\ref{r10-thm-mp-shortest}(b); Corollary~\ref{r6-cor-four-subspaces} and Theorem~\ref{r6-thm-perp-perp}(a)), where
+\(\mathcal N(A)=\Span\{(-1,1,1)'\}\). The condition \((2-z)(-1)+z+z=0\) gives \(z=\frac23\) and \(x^+=\frac13(4,2,2)'\), with
+\(\lVert x^+\rVert^2=\frac{24}9=\frac83\); the solution \((2,0,0)'\) has \(\lVert(2,0,0)'\rVert^2=4=\frac83+\frac43\).
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r10-ex-mp-drill}
+Let
+\[
+A=\begin{pmatrix}1&0&1&1\\0&1&1&2\\1&1&2&3\\2&1&3&4\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find \(A^+\) from a full-rank factorization, and check that \(AA^+\) and \(A^+A\) are symmetric.
+\item Find the shortest solution of \(Ax=(0,3,3,3)'\), and check it against all solutions.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) Row-reduce \(A\):
+\[
+\begin{pmatrix}1&0&1&1\\0&1&1&2\\1&1&2&3\\2&1&3&4\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4-2R_1]{R_3\leftarrow R_3-R_1}
+\begin{pmatrix}1&0&1&1\\0&1&1&2\\0&1&1&2\\0&1&1&2\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4-R_2]{R_3\leftarrow R_3-R_2}
+\begin{pmatrix}1&0&1&1\\0&1&1&2\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\]
+The last matrix is the RREF; the pivot columns are \(1,2\), so \(A=BC\) with (Theorem~\ref{thm:r4-full-rank-factorization}(a))
+\[
+B=\begin{pmatrix}1&0\\0&1\\1&1\\2&1\end{pmatrix},\qquad C=\begin{pmatrix}1&0&1&1\\0&1&1&2\end{pmatrix}
+\]
+By Theorem~\ref{r5d-thm-adjugate},
+\[
+B'B=\begin{pmatrix}6&3\\3&3\end{pmatrix},\quad (B'B)^{-1}=\frac13\begin{pmatrix}1&-1\\-1&2\end{pmatrix},\qquad
+CC'=\begin{pmatrix}3&3\\3&6\end{pmatrix},\quad (CC')^{-1}=\frac13\begin{pmatrix}2&-1\\-1&1\end{pmatrix}
+\]
+(both determinants are \(9\)). Then
+\[
+L=(B'B)^{-1}B'=\frac13\begin{pmatrix}1&-1&0&1\\-1&2&1&0\end{pmatrix},\qquad
+K=C'(CC')^{-1}=\frac13\begin{pmatrix}2&-1\\-1&1\\1&0\\0&1\end{pmatrix}
+\]
+and by Theorem~\ref{r10-thm-mp-exists}(b)
+\[
+A^+=KL=\frac19\begin{pmatrix}2&-1\\-1&1\\1&0\\0&1\end{pmatrix}\begin{pmatrix}1&-1&0&1\\-1&2&1&0\end{pmatrix}
+=\frac19\begin{pmatrix}3&-4&-1&2\\-2&3&1&-1\\1&-1&0&1\\-1&2&1&0\end{pmatrix}
+\]
+Since \(CK=I_2\) and \(LB=I_2\),
+\[
+AA^+=BCKL=BL=\frac13\begin{pmatrix}1&-1&0&1\\-1&2&1&0\\0&1&1&1\\1&0&1&2\end{pmatrix},\qquad
+A^+A=KLBC=KC=\frac13\begin{pmatrix}2&-1&1&0\\-1&1&0&1\\1&0&1&1\\0&1&1&2\end{pmatrix}
+\]
+both symmetric.
+
+(b)
+\begin{itemize}
+\item Let \(y=(0,3,3,3)'\). \(A^+\) is a g-inverse of \(A\), and \(AA^+y=\frac13(0-3+0+3,\ 0+6+3+0,\ 0+3+3+3,\ 0+0+3+6)'=(0,3,3,3)'=y\),
+so \(Ax=y\) is consistent (Theorem~\ref{r10-thm-ginv-solves}(b)).
+\item By (P1) and (P4), \(A^+\) is a minimum-norm g-inverse of \(A\), so the shortest solution is
+(Theorem~\ref{r10-thm-min-norm})
+\[
+A^+y=\frac19\begin{pmatrix}0-12-3+6\\0+9+3-3\\0-3+0+3\\0+6+3+0\end{pmatrix}=\begin{pmatrix}-1\\1\\0\\1\end{pmatrix}
+\]
+check: \(A(-1,1,0,1)'=-a_1+a_2+a_4=(0,3,3,3)'\).
+\item By Theorem~\ref{r10-thm-general-solution}, the solutions are \(A^+y+(I_4-A^+A)z\), where
+\[
+I_4-A^+A=\frac13\begin{pmatrix}1&1&-1&0\\1&2&0&-1\\-1&0&2&-1\\0&-1&-1&1\end{pmatrix}
+\]
+has the columns \(-\frac13s_1\), \(-\frac13s_2\), \(\frac13(2s_1-s_2)\) and \(\frac13(s_2-s_1)\), with the special solutions
+\(s_1=(-1,-1,1,0)'\) and \(s_2=(-1,-2,0,1)'\) of the RREF (Theorem~\ref{thm:r4-four-bases}(c)). So the solutions are
+\(x=(-1-t_1-t_2,\ 1-t_1-2t_2,\ t_1,\ 1+t_2)'\) (\(t_1,t_2\in\R\)), with
+\[
+\lVert x\rVert^2=(1+t_1+t_2)^2+(1-t_1-2t_2)^2+t_1^2+(1+t_2)^2=3+3(t_1+t_2)^2+3t_2^2
+\]
+smallest exactly for \(t_1=t_2=0\).
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r10-ex-min-norm}
+Let
+\[
+A=\begin{pmatrix}1&1&1&1&1\\1&-1&1&-1&1\\1&0&1&0&1\end{pmatrix},\qquad
+f_1=\begin{pmatrix}1\\1\\1\end{pmatrix},\ f_2=\begin{pmatrix}1\\-1\\0\end{pmatrix},\
+g_1=\begin{pmatrix}1\\0\\1\\0\\1\end{pmatrix},\ g_2=\begin{pmatrix}0\\1\\0\\1\\0\end{pmatrix}
+\]
+\begin{enumerate}
+\item Show that \(A=f_1g_1'+f_2g_2'\), that this is a full-rank factorization \(A=BC\) with \(B=[f_1\ f_2]\) and the rows \(g_1'\),
+\(g_2'\) of \(C\), and that \(B'B=CC'=\diag(3,2)\).
+\item Find \(A^+\) and \(AA^+\).
+\item Find the condition on \(y\in\R^3\) for \(Ax=y\) to be consistent. For \(y=(8,4,6)'\) find the shortest solution, and
+compare it with the solution \((6,2,0,0,0)'\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(f_1g_1'\) has the three rows \((1,0,1,0,1)\), and \(f_2g_2'\) the rows \((0,1,0,1,0)\), \((0,-1,0,-1,0)\) and \(0\); their sum
+is \(A\), and it is \(BC\) by the outer product expansion (Theorem~\ref{r1-thm-views}(d)). The nonzero vectors \(f_1\perp f_2\)
+are linearly independent, and so are \(g_1\perp g_2\) (Proposition~\ref{r6-prop-orthogonal-list}(b)); so \(B\) has full column
+rank, \(C\) has full row rank (Theorem~\ref{thm:r4-rank-rules}(b),(c)), and \(\rank A=\rank C=2\)
+(Theorem~\ref{thm:r4-rank-product}(b)). With the entries \(f_i'f_j\) and \(g_i'g_j\) (Theorem~\ref{r1-thm-views}(d)),
+\(B'B=\diag(3,2)\) and \(CC'=\diag(3,2)\).
+
+(b) By Theorem~\ref{r10-thm-mp-exists}(b) and the outer product expansion,
+\[
+A^+=C'\diag(\tfrac13,\tfrac12)\diag(\tfrac13,\tfrac12)B'=\frac19g_1f_1'+\frac14g_2f_2'
+=\frac1{36}\begin{pmatrix}4&4&4\\9&-9&0\\4&4&4\\9&-9&0\\4&4&4\end{pmatrix}
+\]
+and, by the proof of Theorem~\ref{r10-thm-mp-exists}(b),
+\[
+AA^+=B(B'B)^{-1}B'=\frac13f_1f_1'+\frac12f_2f_2'=\frac16\begin{pmatrix}5&-1&2\\-1&5&2\\2&2&2\end{pmatrix}
+\]
+(c)
+\begin{itemize}
+\item \(A^+\) is a g-inverse of \(A\), so \(Ax=y\) is consistent if and only if \(AA^+y=y\) (Theorem~\ref{r10-thm-ginv-solves}(b)),
+that is, \((I_3-AA^+)y=0\). With \(w=(1,1,-2)'\),
+\[
+I_3-AA^+=\frac16\begin{pmatrix}1&1&-2\\1&1&-2\\-2&-2&4\end{pmatrix}=\frac16ww'
+\]
+so \((I_3-AA^+)y=\frac16(w'y)w\), and \(Ax=y\) is consistent if and only if \(y_1+y_2-2y_3=0\).
+\item For \(y=(8,4,6)'\), \(8+4-12=0\): consistent. By (P1) and (P4), \(A^+\) is a minimum-norm g-inverse of \(A\), so the
+shortest solution is (Theorem~\ref{r10-thm-min-norm}) \(x^+=A^+y=\frac1{36}(72,36,72,36,72)'=(2,1,2,1,2)'\), with
+\(\lVert x^+\rVert^2=14\).
+\item The solution \(x=(6,2,0,0,0)'\) (\(Ax=6a_1+2a_2=(8,4,6)'\)) has \(\lVert x\rVert^2=40=14+\lVert(4,1,-2,-1,-2)'\rVert^2=14+26\).
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r10-ex-mp-4x4}
+For the matrix \(A=p_1q_1'+p_2q_2'=BC\) of Exercise~\ref{r10-ex-ginverse-4x4}, find \(A^+\), \(AA^+\) and \(A^+A\), and the shortest
+solution of \(Ax=(2,0,1,2)'\).
+\end{exercise}
+\begin{solution}
+\begin{itemize}
+\item \(p_1'p_1=q_1'q_1=6\), \(p_2'p_2=q_2'q_2=3\) and \(p_1'p_2=q_1'q_2=0\), so \(B'B=CC'=\diag(6,3)\)
+(Theorem~\ref{r1-thm-views}(d)). By Theorem~\ref{r10-thm-mp-exists}(b) and the outer product expansion,
+\[
+A^+=C'\diag(\tfrac16,\tfrac13)\diag(\tfrac16,\tfrac13)B'=\frac1{36}q_1p_1'+\frac19q_2p_2'
+=\frac1{36}\begin{pmatrix}5&3&4&2\\2&-2&0&4\\3&5&4&-2\\4&4&4&0\end{pmatrix}
+\]
+\item By the proof of Theorem~\ref{r10-thm-mp-exists}(b), \(AA^+=B(B'B)^{-1}B'\) and \(A^+A=C'(CC')^{-1}C\):
+\[
+AA^+=\frac16p_1p_1'+\frac13p_2p_2'=\frac16\begin{pmatrix}3&1&2&2\\1&3&2&-2\\2&2&2&0\\2&-2&0&4\end{pmatrix},\qquad
+A^+A=\frac16q_1q_1'+\frac13q_2q_2'=\frac16\begin{pmatrix}3&2&1&2\\2&4&-2&0\\1&-2&3&2\\2&0&2&2\end{pmatrix}
+\]
+They are the projection matrices onto \(\mathcal C(A)\) and \(\mathcal C(A')\) (Proposition~\ref{r10-prop-mp-props}(b)); both have
+trace \(2=\rank A\) (Theorem~\ref{r10-thm-rank-idempotent}(c)).
+\item The system is consistent (Exercise~\ref{r10-ex-ginverse-4x4}). By (P1) and (P4), \(A^+\) is a minimum-norm g-inverse of
+\(A\), so by Theorem~\ref{r10-thm-min-norm} the shortest solution is
+\(x^+=A^+(2,0,1,2)'=\frac1{36}(18,12,6,12)'=\frac16(3,2,1,2)'\), with \(\lVert x^+\rVert^2=\frac{18}{36}=\frac12\). It is the first
+column of \(A^+A\): \(A^+(2,0,1,2)'=A^+Ae_1\), the projection onto \(\mathcal C(A')\) of the solution \(e_1\).
+\item For the solutions \(e_1\) and \((0,0,-1,2)'\) of Exercise~\ref{r10-ex-ginverse-4x4},
+\(\lVert e_1-x^+\rVert^2=\frac{9+4+1+4}{36}=\frac12\) and \(\lVert(0,0,-1,2)'-x^+\rVert^2=\frac{9+4+49+100}{36}=\frac92\), and indeed
+\(1=\frac12+\frac12\) and \(5=\frac12+\frac92\).
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r10-ex-mendel}
+In an experiment of Mendel's type, \(N=160\) pea seeds fall into the four categories round yellow, round green, wrinkled yellow
+and wrinkled green, with the counts \(c=(93,27,31,9)'\). Mendel's theory gives the probabilities \(p=\frac1{16}(9,3,3,1)'\). Let
+\(D\), \(V\), \(u\) and \(X^2\) be as in Example~\ref{r10-exm-pearson}.
+\begin{enumerate}
+\item Compute the expected counts \(Np_j\), the contributions \((c_j-Np_j)^2/(Np_j)\) and \(X^2\).
+\item Under the approximation of Example~\ref{r10-exm-pearson}(e), the distribution of \(X^2\) is approximated by \(\chi^2_3\). Show
+that \(\prb(Y>\frac8{15})>\frac12\) for \(Y\sim\chi^2_3\).
+\item Compute \(V\), its leading \(3\times3\) block \(V_{11}\) and \(V_{11}^{-1}\), and check that \(u'Gu=X^2\) for the g-inverse
+\(G=\left(\begin{smallmatrix}V_{11}^{-1}&0\\0&0\end{smallmatrix}\right)\) of \(V\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) The expected counts are \(160\cdot\frac9{16}=90\), \(160\cdot\frac3{16}=30\) (twice) and \(160\cdot\frac1{16}=10\), and
+\(c-Np=(3,-3,1,-1)'\). The contributions are
+\[
+\frac9{90}=\frac1{10},\qquad\frac9{30}=\frac3{10},\qquad\frac1{30},\qquad\frac1{10}
+\]
+and \(X^2=\frac{3+9+1+3}{30}=\frac8{15}\).
+
+(b) Let \(z_1,z_2,z_3\) be independent \(N(0,1)\) variables. By Definition~\ref{r15-def-chisq}(a),
+\(v_3=z_1^2+z_2^2+z_3^2\sim\chi^2_3\) and \(v_2=z_1^2+z_2^2\sim\chi^2_2\), and \(v_3\geqslant v_2\). So the event \(\{v_2>c\}\) is
+contained in \(\{v_3>c\}\), and \(\prb(Y>c)=\prb(v_3>c)\geqslant\prb(v_2>c)=e^{-c/2}\) for \(c>0\) (Example~\ref{r15-exm-chisq}(a)).
+For \(c=\frac8{15}\), \(e^{-4/15}>\frac12\), since \(e^4<3^4=81<2^{15}\) (\(e<3\), Example~\ref{r11-exm-confidence-ellipse}). So under the
+approximation a value of \(X^2\) larger than the one computed in (a) has probability more than \(\frac12\): the counts agree well with Mendel's
+\(9:3:3:1\) law.
+
+(c)
+\begin{itemize}
+\item \(256D=\diag(144,48,48,16)\) and \(256pp'=(9,3,3,1)'(9,3,3,1)\), so
+\[
+V=D-pp'=\frac1{256}\begin{pmatrix}63&-27&-27&-9\\-27&39&-9&-3\\-27&-9&39&-3\\-9&-3&-3&15\end{pmatrix},\qquad
+V_{11}=\frac1{256}\begin{pmatrix}63&-27&-27\\-27&39&-9\\-27&-9&39\end{pmatrix}
+\]
+\item With \(D_3=\diag(p_1,p_2,p_3)\) and \(p_4=\frac1{16}\), the matrix \(D_3^{-1}+\frac1{p_4}\one_3\one_3'=\diag(\frac{16}9,\frac{16}3,\frac{16}3)+16J_3\)
+is
+\[
+V_{11}^{-1}=\frac{16}9\begin{pmatrix}10&9&9\\9&12&9\\9&9&12\end{pmatrix}
+\]
+Check:
+\[
+\begin{pmatrix}63&-27&-27\\-27&39&-9\\-27&-9&39\end{pmatrix}\begin{pmatrix}10&9&9\\9&12&9\\9&9&12\end{pmatrix}=144I_3
+\]
+and \(\frac1{256}\cdot\frac{16}9\cdot144=1\); so \(V_{11}\) is invertible with this inverse (Theorem~\ref{r2-thm-invertible}).
+\item \(\rank V=3\) (Example~\ref{r10-exm-pearson}(b)), so \(G\) is a g-inverse of \(V\) (Theorem~\ref{r10-thm-ginv-submatrix}(b)).
+\item \(u=(c-Np)/\sqrt{160}\), so with \(u_{(3)}=(u_1,u_2,u_3)'=(3,-3,1)'/\sqrt{160}\),
+\[
+u'Gu=u_{(3)}'V_{11}^{-1}u_{(3)}=\frac1{160}\cdot\frac{16}9\begin{pmatrix}3&-3&1\end{pmatrix}\begin{pmatrix}12\\0\\12\end{pmatrix}
+=\frac1{160}\cdot\frac{16}9\cdot48=\frac8{15}=X^2
+\]
+where \((12,0,12)'\) is the product of the matrix of \(V_{11}^{-1}\) (without the factor \(\frac{16}9\)) with \((3,-3,1)'\). In the
+form \(D_3^{-1}+16J_3\): \(u_{(3)}'D_3^{-1}u_{(3)}+16(u_1+u_2+u_3)^2=\frac1{160}\bigl(16+48+\frac{16}3+16\bigr)=\frac8{15}\), as
+\(u_1+u_2+u_3=-u_4=\frac1{\sqrt{160}}\).
+\end{itemize}
+\end{solution}
+
+\needspace{14\baselineskip}
+\subsection*{Problems}
+
+\begin{problem}[\citeat{bapat}{Ch.~4, Exercise~3}, \citeat{harville}{Theorem~9.2.7}]\label{r10-ex-all-ginverses}
+Let \(G\) be a g-inverse of \(A\in\R^{m\times n}\). Show that the g-inverses of \(A\) are exactly the matrices
+\[
+G+(I_n-GA)U+V(I_m-AG)\qquad(U,V\in\R^{n\times m})
+\]
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item Each such matrix is a g-inverse: since \(AGA=A\),
+\(A\bigl(G+(I-GA)U+V(I-AG)\bigr)A=AGA+(A-AGA)UA+AV(A-AGA)=A\).
+\item Conversely, let \(H\) be a g-inverse of \(A\), and put \(U=HAG\), \(V=H-G\). Then
+\[
+\begin{aligned}
+G+(I-GA)HAG+(H-G)(I-AG)&=G+HAG-GAHAG+H-HAG-G+GAG\\
+&=H-G(AHA)G+GAG=H-GAG+GAG=H
+\end{aligned}
+\]
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{harville-solutions}{Ch.~14, Exercise~44}]\label{r10-ex-rank-cab}
+Let \(A\in\R^{q\times p}\), \(B\in\R^{p\times n}\) and \(C\in\R^{m\times q}\), and let \(G\) be a g-inverse of \(CAB\). Show that
+\begin{enumerate}
+\item \(CABGC=C\) if and only if \(\rank(CAB)=\rank C\);
+\item \(BGCAB=B\) if and only if \(\rank(CAB)=\rank B\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a)
+\begin{itemize}
+\item Let \(\rank(CAB)=\rank C\). As \(\mathcal C(CAB)\subseteq\mathcal C(C)\) (Theorem~\ref{thm:r4-rank-product}(a)) and the
+two dimensions agree, \(\mathcal C(CAB)=\mathcal C(C)\) (Theorem~\ref{thm:r4-counting}(a)). So each column of \(C\) is
+\(CABr_j\) for some \(r_j\in\R^n\), that is, \(C=CABR\) with \(R=[r_1\ \cdots\ r_q]\) (Theorem~\ref{r1-thm-views}(a)). Hence
+\(CABGC=CABGCABR=CABR=C\).
+\item Conversely, if \(CABGC=C\), then \(\rank C=\rank\bigl((CAB)(GC)\bigr)\leqslant\rank(CAB)\leqslant\rank C\)
+(Theorem~\ref{thm:r4-rank-product}(a)), so \(\rank(CAB)=\rank C\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item Let \(\rank(CAB)=\rank B\). Each row \(\row_i(CAB)=\row_i(CA)B\) lies in \(\mathcal R(B)\) (Theorem~\ref{r1-thm-views}(c)),
+so \(\mathcal R(CAB)\subseteq\mathcal R(B)\); both have dimension \(\rank B\), so the spaces of the transposed vectors are
+equal (Theorem~\ref{thm:r4-counting}(a)), and \(\mathcal R(CAB)=\mathcal R(B)\). So each row of \(B\) is \(l_i'CAB\) for some
+\(l_i\in\R^m\), that is, \(B=LCAB\), where \(L\) has the rows \(l_1',\dots,l_p'\) (Theorem~\ref{r1-thm-views}(c)). Hence
+\(BGCAB=LCABGCAB=LCAB=B\).
+\item Conversely, if \(BGCAB=B\), then \(\rank B=\rank\bigl((BG)(CAB)\bigr)\leqslant\rank(CAB)\leqslant\rank B\), so
+\(\rank(CAB)=\rank B\).
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{bapat}{Ch.~4, Exercise~12}]\label{r10-ex-min-norm-char}
+Let \(A\in\R^{m\times n}\) and \(G\in\R^{n\times m}\). Show that \(G\) is a minimum-norm g-inverse of \(A\) if and only if
+\(GAA'=A'\).
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item If \(AGA=A\) and \((GA)'=GA\), then \(GAA'=(GA)'A'=A'G'A'=(AGA)'=A'\).
+\item Conversely, let \(GAA'=A'\). Then \(AGAA'=AA'\), that is, \((AG-I_m)AA'=0\). Transposing,
+\(AA'(AG-I_m)'=0\): the columns of \((AG-I_m)'\) lie in \(\mathcal N(AA')=\mathcal N(A')\)
+(Theorem~\ref{thm:r4-rank-ata}(a), applied to \(A'\)). So \(A'(AG-I_m)'=0\), and transposing again, \((AG-I_m)A=0\): \(AGA=A\).
+\item Multiplying \(GAA'=A'\) by \(G'\) on the right, \(A'G'=GAA'G'=(GA)(GA)'\), which is symmetric. So \((GA)'=A'G'\) is
+symmetric, and \(GA=((GA)')'=(GA)'\).
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{abadir-magnus}{Exercise~10.27}]\label{r10-ex-mp-idempotent}
+\begin{enumerate}
+\item Let \(A\in\R^{n\times n}\) be symmetric and idempotent. Show that \(A^+=A\).
+\item Does the converse hold?
+\item Show that \((AA^+)^+=AA^+\) and \((A^+A)^+=A^+A\) for every \(A\in\R^{m\times n}\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) If \(A=A'=A^2\), then \(A^3=A\cdot A^2=A^2=A\) and \((A^2)'=A^2\). So \(G=A\) satisfies (P1)--(P4): \(AAA=A\),
+\(AAA=A\), \((AA)'=AA\), \((AA)'=AA\). Hence \(A^+=A\) (Theorem~\ref{r10-thm-mp-unique}).
+
+(b) No. For \(A=-I_n\), \(A^+=A^{-1}=-I_n=A\) (Theorem~\ref{r10-thm-mp-exists}(c)), but \(A^2=I_n\ne A\): \(A\) is not
+idempotent.
+
+(c) \(AA^+\) and \(A^+A\) are symmetric and idempotent (Proposition~\ref{r10-prop-mp-props}(b)). Apply (a).
+\end{solution}
+
+\begin{problem}[\citeat{harville-solutions}{Ch.~20, Exercise~2}]\label{r10-ex-mp-transpose}
+Let \(A\in\R^{m\times n}\). Show that \(A^+=A'\) if and only if \(A'A\) is idempotent.
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item Let \(A'A\) be idempotent: \(A'A=A'AA'A\). Multiply on the left by \(A^+(A^+)'\) and on the right by \(A^+\). By
+(P1)--(P4) and Theorem~\ref{r1-thm-transpose},
+\[
+\begin{aligned}
+A^+(A^+)'A'AA^+&=A^+(AA^+)'AA^+=A^+AA^+AA^+=A^+AA^+=A^+\\
+A^+(A^+)'A'AA'AA^+&=A^+(AA^+)'AA'(AA^+)'=A^+AA^+A(AA^+A)'\\
+&=A^+AA'=(A^+A)'A'=(AA^+A)'=A'
+\end{aligned}
+\]
+So \(A^+=A'\).
+\item Conversely, let \(A^+=A'\). Then \(A'A=A^+A\), and \((A^+A)(A^+A)=A^+(AA^+A)=A^+A\): \(A'A\) is idempotent.
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{harville}{\S20.2}, \citeat{abadir-magnus}{Exercise~10.33(a)}]\label{r10-pr-mp-drill}
+Verify the conditions (P1)--(P4) to show:
+\begin{enumerate}
+\item \(\diag(d_1,\dots,d_n)^+=\diag(d_1^+,\dots,d_n^+)\), where \(d^+=1/d\) for a number \(d\ne0\) and \(0^+=0\);
+\item \((uv')^+=vu'/(\lVert u\rVert^2\lVert v\rVert^2)\) for nonzero \(u\in\R^m\) and \(v\in\R^n\); that is, \(A^+=A'/\tr(AA')\) for
+\(A=uv'\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) For \(D=\diag(d_1,\dots,d_n)\) and \(G=\diag(d_1^+,\dots,d_n^+)\), \(DG=GD=\diag(d_1d_1^+,\dots,d_nd_n^+)\) is symmetric, and
+\(dd^+d=d\), \(d^+dd^+=d^+\) for every number \(d\) (both sides are \(0\) if \(d=0\)); so \(DGD=D\) and \(GDG=G\). Hence \(G=D^+\)
+(Theorem~\ref{r10-thm-mp-unique}).
+
+(b) Let \(A=uv'\), \(c=\lVert u\rVert^2\lVert v\rVert^2\) and \(G=vu'/c\).
+\begin{itemize}
+\item \(AG=uv'vu'/c=uu'/\lVert u\rVert^2\) and \(GA=vu'uv'/c=vv'/\lVert v\rVert^2\) are symmetric: (P3), (P4).
+\item \(AGA=uu'uv'/\lVert u\rVert^2=uv'=A\) and \(GAG=vv'vu'/(\lVert v\rVert^2c)=vu'/c=G\): (P1), (P2). So \(G=A^+\)
+(Theorem~\ref{r10-thm-mp-unique}).
+\item \(A'=vu'\), and \(\tr(AA')=\tr(uv'vu')=\lVert v\rVert^2\tr(uu')=\lVert v\rVert^2u'u=c\) (Theorem~\ref{r1-thm-trace}(a),(b)); so
+\(A^+=A'/\tr(AA')\).
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{abadir-magnus}{Exercise~10.29(c)--(e)}]\label{r10-pr-ata-ginverse}
+Let \(A\in\R^{m\times n}\). Show that
+\begin{enumerate}
+\item \((A'A)^+=A^+(A^+)'\);
+\item \((AA')^+=(A^+)'A^+\);
+\item \(A^+=A'(AA')^+\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+First, by (P1)--(P4) and Theorem~\ref{r1-thm-transpose},
+\[
+A'AA^+=A'(AA^+)'=A'(A^+)'A'=(AA^+A)'=A',\qquad A^+(A^+)'A'=A^+(AA^+)'=A^+AA^+=A^+
+\]
+and likewise \(A'(A^+)'A^+=(A^+A)'A^+=A^+AA^+=A^+\).
+
+(a) Let \(G=A^+(A^+)'\). We check (P1)--(P4) for the matrix \(A'A\), using the identities above.
+\begin{itemize}
+\item (P1): \(A'A\,G\,A'A=(A'AA^+)(A^+)'A'A=A'(A^+)'A'A=(AA^+A)'A=A'A\).
+\item (P2): \(G\,A'A\,G=A^+(A^+)'(A'AA^+)(A^+)'=A^+(A^+)'A'(A^+)'=A^+(AA^+)'(A^+)'=A^+AA^+(A^+)'=A^+(A^+)'=G\).
+\item (P3): \(A'AG=(A'AA^+)(A^+)'=A'(A^+)'=(A^+A)'=A^+A\), which is symmetric by (P4).
+\item (P4): \(GA'A=(A^+(A^+)'A')A=A^+A\), which is symmetric.
+\end{itemize}
+So \((A'A)^+=G\) (Theorem~\ref{r10-thm-mp-unique}).
+
+(b) By Proposition~\ref{r10-prop-mp-props}(c), \((A')^+=(A^+)'\). Part (a) for \(A'\) in place of \(A\), as \((A')'A'=AA'\), gives
+\((AA')^+=(A')^+((A')^+)'=(A^+)'A^+\).
+
+(c) By the identity \(A'(A^+)'A^+=A^+\) and (b), \(A^+=A'\bigl((A^+)'A^+\bigr)=A'(AA')^+\).
+\end{solution}
+
+\begin{problem}[\citeat{prasolov}{Problem~44.1}]\label{r10-ex-pr-two-sided}
+Let \(A\in\R^{m\times n}\), \(B\in\R^{p\times q}\) and \(C\in\R^{m\times q}\), and let \(C=AX=YB\) for some
+\(X\in\R^{n\times q}\) and \(Y\in\R^{m\times p}\). Show that \(C=AZB\) for some \(Z\in\R^{n\times p}\).
+\end{problem}
+\begin{solution}
+Let \(G\) and \(H\) be g-inverses of \(A\) and \(B\) (Theorem~\ref{r10-thm-ginv-exists}).
+\begin{itemize}
+\item The system \(AX=C\) is consistent, so \(AGC=C\) (Lemma~\ref{r10-lem-range-test}); directly,
+\(AGC=AGAX=AX=C\), as \(AGA=A\).
+\item Likewise, as \(BHB=B\), \(CHB=YBHB=YB=C\).
+\item Hence \(C=AGC=AG(CHB)=A(GCH)B\), that is, \(C=AZB\) with \(Z=GCH\in\R^{n\times p}\).
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{prasolov}{Problem~44.2}]\label{r10-ex-pr-homogeneous}
+Let \(A\in\R^{m\times n}\) and \(B\in\R^{p\times q}\), and let \(G\) and \(H\) be g-inverses of \(A\) and \(B\). Show that a
+matrix \(X\in\R^{n\times p}\) satisfies \(AX=0\) and \(XB=0\) if and only if
+\[
+X=(I_n-GA)Y(I_p-BH)\qquad\text{for some }Y\in\R^{n\times p}
+\]
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item If \(X=(I_n-GA)Y(I_p-BH)\), then, as \(AGA=A\) and \(BHB=B\),
+\(AX=(A-AGA)Y(I_p-BH)=0\) and \(XB=(I_n-GA)Y(B-BHB)=0\).
+\item Conversely, let \(AX=0\) and \(XB=0\), and let \(r=\rank X\). If \(r=0\), then \(X=0\)
+(Theorem~\ref{thm:r4-four-bases}), and \(Y=0\) will do. Let \(r\geqslant1\), and let \(X=PQ\) be a full-rank factorization,
+with \(P\in\R^{n\times r}\) and \(Q\in\R^{r\times p}\) (Theorem~\ref{thm:r4-full-rank-factorization}(a)).
+\item \(\mathcal C(P)=\mathcal C(X)\) and \(\mathcal N(Q)=\mathcal N(X)\) (Theorem~\ref{thm:r4-full-rank-factorization}(b)). So
+each column of \(P\) is \(Xk_j\) for some \(k_j\in\R^p\), that is, \(P=XK\) with \(K=[k_1\ \cdots\ k_r]\)
+(Theorem~\ref{r1-thm-views}(a)), and \(AP=AXK=0\). Also \(XB=0\) says that each column of \(B\) lies in
+\(\mathcal N(X)=\mathcal N(Q)\) (Theorem~\ref{r1-thm-views}(a)), so \(QB=0\).
+\item As \(AP=0\), each column of \(P\) lies in \(\mathcal N(A)=\mathcal C(I_n-GA)\) (Theorem~\ref{r10-thm-general-solution}),
+so \(P=(I_n-GA)Y_1\) for some \(Y_1\in\R^{n\times r}\) (Theorem~\ref{r1-thm-views}(a)).
+\item \(QB=0\) gives \(B'Q'=0\) (Theorem~\ref{r1-thm-transpose}). \(H'\) is a g-inverse of \(B'\)
+(Proposition~\ref{r10-prop-ginv-basic}(a)), so each column of \(Q'\) lies in \(\mathcal N(B')=\mathcal C(I_p-H'B')\)
+(Theorem~\ref{r10-thm-general-solution}), and \(Q'=(I_p-H'B')Z\) for some \(Z\in\R^{p\times r}\). Transposing,
+\(Q=Z'(I_p-BH)=Y_2(I_p-BH)\) with \(Y_2=Z'\).
+\item Hence \(X=PQ=(I_n-GA)Y_1Y_2(I_p-BH)\), which has the required form with \(Y=Y_1Y_2\in\R^{n\times p}\).
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{prasolov}{Problem~44.3}]\label{r10-ex-pr-common-solution}
+Let \(A\in\R^{m\times n}\), \(B\in\R^{p\times q}\), \(C\in\R^{m\times p}\) and \(D\in\R^{n\times q}\), and let \(G\) and \(H\) be
+g-inverses of \(A\) and \(B\). Show that the equations \(AX=C\) and \(XB=D\) have a common solution \(X\in\R^{n\times p}\) if
+and only if each of them has a solution and \(AD=CB\); and that then \(X_0=GC+DH-GADH\) is a common solution.
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item If \(AX=C\) and \(XB=D\), then each equation has a solution, and \(AD=A(XB)=(AX)B=CB\)
+(Theorem~\ref{r1-thm-rules}).
+\item Conversely, let \(AX_1=C\), \(X_2B=D\) and \(AD=CB\). As \(AGA=A\) and \(BHB=B\), \(AGC=AGAX_1=AX_1=C\)
+(Lemma~\ref{r10-lem-range-test}) and \(DHB=X_2BHB=X_2B=D\).
+\item Using \(AGA=A\),
+\[
+AX_0=AGC+ADH-AGADH=C+ADH-ADH=C
+\]
+\item Using \(DHB=D\) and \(AD=CB\),
+\[
+X_0B=GCB+DHB-GADHB=GCB+D-GAD=GCB+D-GCB=D
+\]
+So \(X_0\) is a common solution.
+\end{itemize}
+\end{solution}
+
+\clearpage
 \def\runningtitle{Bibliography}
 \renewcommand{\refname}{Bibliography}
 \begin{thebibliography}{10}
