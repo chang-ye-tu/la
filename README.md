@@ -58,7 +58,7 @@
 | 11/11 | <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture07.pdf">Lecture 7: Eigenvalues and Diagonalization</a> |
 | 11/18 | <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture08.pdf">Lecture 8: Projections, Symmetric Matrices, and Quadratic Forms</a> |
 | 11/25 | <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture09.pdf">Lecture 9: Covariance Matrices and Principal Components</a> |
-| 12/02 | Lecture 10: Normal Vectors and Quadratic Forms |
+| 12/02 | <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture10.pdf">Lecture 10: Normal Vectors and Quadratic Forms</a> |
 | 12/09 | Lecture 11: Linear Models I |
 | 12/16 | Lecture 12: Linear Models II |
 | 12/23 | **期末考** |

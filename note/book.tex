@@ -24176,6 +24176,1454 @@ Corollary~\ref{r14-cor-standard}(a) applied to \(\bar x\sim N_p(\mu,\frac1n\Sigm
 \end{solution}
 
 \clearpage
+\def\unitnumber{11}
+\setcounter{theorem}{0}\setcounter{problem}{0}
+\section*{Chapter 11. Quadratic forms in normal vectors: chi-square, \(t\), and \(F\)}
+
+\subsection*{The chi-square distribution}
+
+This chapter uses the facts (N1)--(N7) stated after Definition~\ref{r14-def-mvn}, the facts on densities stated in the
+paragraph before Theorem~\ref{r14-thm-mvn-density}, and marginal densities as in Definition~\ref{r14-def-conditional}. In
+addition, it uses the following facts without proof: (D1) and (D2) from calculus, (D3) from probability~\citeat{casella-berger}{(4.3.2), (4.6.7), \S3.3, Theorem~1.5.10}. Integrals over unbounded intervals are improper
+integrals, and a function \(g\) is \textbf{integrable} over a set \(\Omega\) if \(\int_\Omega\lvert g\rvert<\infty\).
+\begin{enumerate}[label=(D\arabic*)]
+\item (\textbf{Change of variables}) Let \(\Omega,\Omega'\subseteq\R^m\) be open, and let \(\psi\colon\Omega'\to\Omega\) be
+one-to-one and onto, with continuous partial derivatives and Jacobian determinant
+\(J(v)=\det\bigl(\partial\psi_i(v)/\partial v_j\bigr)\ne0\) for \(v\in\Omega'\). Then
+\(\int_\Omega g(x)\,\mathrm{d}x=\int_{\Omega'}g(\psi(v))\lvert J(v)\rvert\,\mathrm{d}v\) for every \(g\) integrable over \(\Omega\). Consequently, if \(u\)
+has a density \(f\) that is \(0\) outside \(\Omega\), then \(\psi^{-1}(u)\) has the density \(f(\psi(v))\lvert J(v)\rvert\) for
+\(v\in\Omega'\), and \(0\) outside \(\Omega'\). For \(m=1\) this is the substitution rule of calculus; for an affine map
+\(\psi(v)=c+Bv\) of \(\R^m\) onto \(\R^m\) it is the change of variables before Theorem~\ref{r14-thm-mvn-density}.
+\item (\textbf{The Gamma function}) For \(c>0\), \(\Gamma(c)=\int_0^\infty x^{c-1}e^{-x}\,\mathrm{d}x\) is finite and positive,
+\(\Gamma(c+1)=c\,\Gamma(c)\) and \(\Gamma(1)=1\). Substituting \(x=by\) (D1) gives
+\(\int_0^\infty y^{c-1}e^{-by}\,\mathrm{d}y=\Gamma(c)\,b^{-c}\) for every \(b>0\). Substituting \(x=s^2/2\) (\(s>0\)) gives
+\(\Gamma(\frac12)=\sqrt2\int_0^\infty e^{-s^2/2}\,\mathrm{d}s=\sqrt\pi\), as the integrand is even and
+\(\int_\R e^{-s^2/2}\,\mathrm{d}s=\sqrt{2\pi}\) (the paragraph before Theorem~\ref{r14-thm-mvn-density}).
+\item (\textbf{Distribution functions}) If random variables \(u\) and \(v\) satisfy
+\(\prb(u\leqslant c)=\prb(v\leqslant c)\) for every \(c\in\R\), then \(u\) and \(v\) have the same
+distribution.
+\end{enumerate}
+By Theorem~\ref{r14-thm-mvn-density} (the case \(n=1\)), \(N(0,1)\) has the density \(\varphi(x)=(2\pi)^{-1/2}e^{-x^2/2}\). An
+identity between MGFs (defined before Definition~\ref{r14-def-mvn}) is needed only \textbf{near \(0\)}, that is, for all \(t\) in
+some open interval (or ball) containing \(0\), as in (N1) and (N2).
+
+\begin{lemma}[cf.\ \citeat{casella-berger}{Example~2.3.8}]\label{r15-lem-mgf}
+\begin{enumerate}
+\item Let \(w\sim N(0,1)\) and \(\delta\in\R\). For every \(t<\frac12\),
+\[
+\expc\bigl(e^{t(w+\delta)^2}\bigr)=(1-2t)^{-1/2}\exp\Bigl(\frac{\delta^2t}{1-2t}\Bigr)
+\]
+\item Let \(w\sim N_r(0,I_r)\) and \(\delta=(\delta_1,\dots,\delta_r)'\in\R^r\), and put
+\(\lambda=\lVert\delta\rVert^2=\delta_1^2+\dots+\delta_r^2\). Then, near \(0\),
+\[
+M_{\lVert w+\delta\rVert^2}(t)=(1-2t)^{-r/2}\exp\Bigl(\frac{\lambda t}{1-2t}\Bigr)
+\]
+Hence the distribution of \(\lVert w+\delta\rVert^2\) depends on \(\delta\) only through \(\lambda\).
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(a)
+\begin{itemize}
+\item \(w\) has the density \(\varphi\), so the expectation is \(\int_\R e^{t(x+\delta)^2}\varphi(x)\,\mathrm{d}x\) (the paragraph before
+Theorem~\ref{r14-thm-mvn-density}), provided this integral is finite.
+\item Put \(c=1-2t>0\) and \(m=2t\delta/c\). Then
+\(t(x+\delta)^2-\frac12x^2=-\frac c2x^2+2t\delta x+t\delta^2=-\frac c2(x-m)^2+\frac{t\delta^2}c\), since
+\(\frac c2m^2=\frac{2t^2\delta^2}c\) and \(t\delta^2+\frac{2t^2\delta^2}c=\frac{t\delta^2(c+2t)}c=\frac{t\delta^2}c\).
+\item Substituting \(x=m+y/\sqrt c\) (D1), \(\int_\R e^{-c(x-m)^2/2}\,\mathrm{d}x=c^{-1/2}\int_\R e^{-y^2/2}\,\mathrm{d}y=c^{-1/2}\sqrt{2\pi}\), as
+\(\varphi\) integrates to \(1\) (Theorem~\ref{r14-thm-mvn-density}(a)).
+\item Hence \(\expc\bigl(e^{t(w+\delta)^2}\bigr)=(2\pi)^{-1/2}e^{t\delta^2/c}\,c^{-1/2}\sqrt{2\pi}=c^{-1/2}e^{t\delta^2/c}\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item By Theorem~\ref{r14-thm-mvn-iid}(a), \(w_1,\dots,w_r\) are independent \(N(0,1)\) variables; so the variables
+\(u_i=(w_i+\delta_i)^2\) are independent (N3), and their MGFs are finite for \(t<\frac12\), by (a).
+\item \(M_{u_1+\dots+u_r}(t)=\expc\bigl(e^{tu_1+\dots+tu_r}\bigr)\) is the joint MGF of \((u_1,\dots,u_r)'\) at
+\((t,\dots,t)'\). By (N2) and (a), near \(0\) it equals
+\(\prod_{i=1}^rM_{u_i}(t)=\prod_{i=1}^r(1-2t)^{-1/2}\exp\bigl(\delta_i^2t/(1-2t)\bigr)\), the stated expression.
+\item If also \(\lVert\delta^*\rVert^2=\lambda\), then \(\lVert w+\delta^*\rVert^2\) has the same MGF near \(0\), hence the same
+distribution (N1).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{definition}[\citeat{tu-clm}{\S4.1}, \citeat{tu-asm}{Definition~P.115}]\label{r15-def-chisq}
+Let \(r\geqslant1\), and let \(w_1,\dots,w_r\) be independent \(N(0,1)\) variables; equivalently,
+\(w=(w_1,\dots,w_r)'\sim N_r(0,I_r)\) (Theorem~\ref{r14-thm-mvn-iid}(a)).
+\begin{enumerate}
+\item The distribution of \(w_1^2+\dots+w_r^2=\lVert w\rVert^2\) is the \textbf{chi-square distribution} \(\chi^2_r\) with \(r\)
+\textbf{degrees of freedom}, as in (N5).
+\item For \(\delta\in\R^r\), the distribution of \((w_1+\delta_1)^2+\dots+(w_r+\delta_r)^2=\lVert w+\delta\rVert^2\) is the
+\textbf{noncentral chi-square distribution} \(\chi^2_r(\lambda)\) with \(r\) degrees of freedom and \textbf{noncentrality
+parameter} \(\lambda=\delta_1^2+\dots+\delta_r^2\). By Lemma~\ref{r15-lem-mgf}(b) it depends only on \(r\) and \(\lambda\); every
+\(\lambda\geqslant0\) occurs (take \(\delta_1=\sqrt\lambda\) and \(\delta_i=0\) for \(i\geqslant2\)), and \(\chi^2_r(0)=\chi^2_r\).
+\end{enumerate}
+We write \(u\sim\chi^2_r(\lambda)\) if \(u\) has this distribution.
+\end{definition}
+
+\begin{lemma}[\citeat{tu-asm}{Lemma~P.117}]\label{r15-lem-normal-moments}
+If \(w\sim N(0,1)\), then \(\expc(w)=\expc(w^3)=0\), \(\expc(w^2)=1\) and \(\expc(w^4)=3\).
+\end{lemma}
+\begin{proof}
+\begin{itemize}
+\item \(N(0,1)\) has mean \(0\) and variance \(1\) (Definition~\ref{r14-def-mvn}), so \(\expc(w)=0\) and
+\(\expc(w^2)=\var(w)=1\).
+\item \(\lvert x\rvert^k\varphi(x)\) is integrable for \(k\leqslant4\), since \(x^ke^{-x^2/4}\) is bounded; so
+\(\expc(w^k)=\int_\R x^k\varphi(x)\,\mathrm{d}x\) (the paragraph before Theorem~\ref{r14-thm-mvn-density}). For \(k=3\) the
+integrand is odd, and \(\expc(w^3)=0\).
+\item \(\varphi'(x)=-x\varphi(x)\), so, integrating by parts on \([-R,R]\),
+\[
+\int_{-R}^Rx^4\varphi(x)\,\mathrm{d}x=-\int_{-R}^Rx^3\varphi'(x)\,\mathrm{d}x=-2R^3\varphi(R)+3\int_{-R}^Rx^2\varphi(x)\,\mathrm{d}x
+\]
+\item Let \(R\to\infty\). From the exponential series, \(e^{R^2/2}\geqslant\frac12(R^2/2)^2=R^4/8\), so
+\(0\leqslant R^3\varphi(R)\leqslant8(2\pi)^{-1/2}/R\to0\), while the integrals tend to \(\expc(w^4)\) and
+\(\expc(w^2)=1\). Hence \(\expc(w^4)=3\).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{theorem}[\citeat{casella-berger}{Lemma~5.3.2, Example~2.3.8}, \citeat{tu-asm}{Proposition~P.118}, \citeat{searle-khuri}{Corollary~10.2}]\label{r15-thm-chisq}
+Let \(r,s\geqslant1\) and \(\lambda,\kappa\geqslant0\).
+\begin{enumerate}
+\item If \(u\sim\chi^2_r(\lambda)\), then \(M_u(t)=(1-2t)^{-r/2}\exp\bigl(\lambda t/(1-2t)\bigr)\) near \(0\); conversely, a random
+variable with this MGF near \(0\) has the distribution \(\chi^2_r(\lambda)\).
+\item \(\chi^2_r\) has the density
+\[
+f_r(x)=\frac{x^{r/2-1}e^{-x/2}}{\Gamma(r/2)\,2^{r/2}}\quad(x>0),\qquad f_r(x)=0\quad(x\leqslant0)
+\]
+In particular \(f_1(x)=(2\pi x)^{-1/2}e^{-x/2}\) and \(f_2(x)=\frac12e^{-x/2}\) for \(x>0\).
+\item If \(u\sim\chi^2_r(\lambda)\) and \(v\sim\chi^2_s(\kappa)\) are independent, then \(u+v\sim\chi^2_{r+s}(\lambda+\kappa)\).
+\item If \(u\sim\chi^2_r(\lambda)\), then \(\expc(u)=r+\lambda\) and \(\var(u)=2r+4\lambda\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) \(u\) has the distribution of \(\lVert w+\delta\rVert^2\) in Definition~\ref{r15-def-chisq}(b), whose MGF is given by
+Lemma~\ref{r15-lem-mgf}(b). The converse is (N1).
+
+\needspace{6\baselineskip}
+(b)
+\begin{itemize}
+\item For \(t<\frac12\), by (D2) with \(c=r/2\) and \(b=(1-2t)/2\),
+\[
+\int_0^\infty e^{tx}f_r(x)\,\mathrm{d}x=\frac{1}{\Gamma(r/2)\,2^{r/2}}\int_0^\infty x^{r/2-1}e^{-(1-2t)x/2}\,\mathrm{d}x
+=\frac{1}{2^{r/2}}\Bigl(\frac2{1-2t}\Bigr)^{r/2}=(1-2t)^{-r/2}
+\]
+\item For \(t=0\) this says \(\int f_r=1\). So \(f_r\geqslant0\) is the density of some random variable \(U\), and
+\(M_U(t)=\int_0^\infty e^{tx}f_r(x)\,\mathrm{d}x=(1-2t)^{-r/2}\) for \(t<\frac12\) (the paragraph before
+Theorem~\ref{r14-thm-mvn-density}). By (a) with \(\lambda=0\), \(U\sim\chi^2_r\); so \(\chi^2_r\) has the density \(f_r\).
+\item \(\Gamma(\frac12)=\sqrt\pi\) and \(\Gamma(1)=1\) (D2) give \(f_1\) and \(f_2\).
+\end{itemize}
+(c) \(M_{u+v}(t)=\expc(e^{tu+tv})\) is the joint MGF of \((u,v)'\) at \((t,t)'\). By (N2) and (a), near \(0\),
+\[
+M_{u+v}(t)=M_u(t)M_v(t)=(1-2t)^{-(r+s)/2}\exp\Bigl(\frac{(\lambda+\kappa)t}{1-2t}\Bigr)
+\]
+so \(u+v\sim\chi^2_{r+s}(\lambda+\kappa)\) by (a).
+
+(d)
+\begin{itemize}
+\item The mean and the variance depend only on the distribution, so we may take \(u=u_1+\dots+u_r\) with
+\(u_i=(w_i+\delta_i)^2\) as in Definition~\ref{r15-def-chisq}(b).
+\item By Lemma~\ref{r15-lem-normal-moments} and the linearity of the expectation,
+\(\expc(u_i)=\expc(w_i^2)+2\delta_i\expc(w_i)+\delta_i^2=1+\delta_i^2\) and
+\[
+\expc(u_i^2)=\expc(w_i^4)+4\delta_i\expc(w_i^3)+6\delta_i^2\expc(w_i^2)+4\delta_i^3\expc(w_i)+\delta_i^4
+=3+6\delta_i^2+\delta_i^4
+\]
+so \(\var(u_i)=\expc(u_i^2)-\bigl(\expc(u_i)\bigr)^2=2+4\delta_i^2\).
+\item The \(u_i\) are independent (N3), so \(\cov(u_i,u_j)=0\) for \(i\ne j\) (N7). By
+Theorem~\ref{r14-thm-cov}(d), \(\var(u)=\sum_i\var(u_i)=2r+4\lambda\); and
+\(\expc(u)=\sum_i(1+\delta_i^2)=r+\lambda\).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{example}\label{r15-exm-chisq}
+\begin{enumerate}
+\item If \(u\sim\chi^2_2\) and \(c>0\), then \(\prb(u>c)=\int_c^\infty\frac12e^{-x/2}\,\mathrm{d}x=e^{-c/2}\)
+(Theorem~\ref{r15-thm-chisq}(b)). So \(\prb(u>c)=\frac1{20}\) for \(c=2\log20\).
+\item Let \(z\sim N_4(\mu,I_4)\) with \(\mu=(1,2,2,4)'\). Then \(w=z-\mu\sim N_4(0,I_4)\) (Theorem~\ref{r14-thm-mvn-linear}), and
+\(\lVert z\rVert^2=\lVert w+\mu\rVert^2\sim\chi^2_4(25)\), as \(\lambda=1+4+4+16=25\). By Theorem~\ref{r15-thm-chisq}(d),
+\(\expc\lVert z\rVert^2=4+25=29\) and \(\var\lVert z\rVert^2=8+100=108\). Likewise \(z_1^2\sim\chi^2_1(1)\) and
+\(z_2^2+z_3^2+z_4^2\sim\chi^2_3(24)\); these are independent by (N3), since \(z_1\) and \((z_2,z_3,z_4)'\) are independent
+(Theorem~\ref{r14-thm-mvn-indep}(a): the off-diagonal blocks of \(I_4\) are \(0\)); and their sum is \(\chi^2_4(25)\), as
+Theorem~\ref{r15-thm-chisq}(c) says.
+\end{enumerate}
+\end{example}
+
+\needspace{24\baselineskip}
+\subsection*{The \(t\) and \(F\) distributions}
+
+\begin{theorem}[\citeat{casella-berger}{\S5.3.2, (5.3.6), Exercise~5.17(a)}]\label{r15-thm-t-F-density}
+\begin{enumerate}
+\item Let \(Z\sim N(0,1)\) and \(V\sim\chi^2_\nu\) (\(\nu\geqslant1\)) be independent. Then \(V>0\) with probability \(1\), and
+\(T=Z/\sqrt{V/\nu}\) has the density
+\[
+f_T(x)=\frac{\Gamma\bigl(\frac{\nu+1}2\bigr)}{\Gamma\bigl(\frac\nu2\bigr)\sqrt{\nu\pi}}\Bigl(1+\frac{x^2}\nu\Bigr)^{-(\nu+1)/2}\qquad(x\in\R)
+\]
+\item Let \(U\sim\chi^2_a\) and \(V\sim\chi^2_b\) (\(a,b\geqslant1\)) be independent. Then \(F=(U/a)/(V/b)\) has the density
+\[
+f_F(x)=\frac{\Gamma\bigl(\frac{a+b}2\bigr)}{\Gamma\bigl(\frac a2\bigr)\Gamma\bigl(\frac b2\bigr)}\Bigl(\frac ab\Bigr)^{a/2}
+\frac{x^{a/2-1}}{(1+ax/b)^{(a+b)/2}}\quad(x>0),\qquad f_F(x)=0\quad(x\leqslant0)
+\]
+and \(F\) and \(U+V\) are independent.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item \(f_\nu=0\) on \((-\infty,0]\) (Theorem~\ref{r15-thm-chisq}(b)), so \(\prb(V\leqslant0)=\int_{-\infty}^0f_\nu=0\). As
+\(Z\) and \(V\) are independent, \((Z,V)'\) has the density \(\varphi(z)f_\nu(v)\) (the paragraph before
+Theorem~\ref{r14-thm-mvn-density}), which is \(0\) outside \(\Omega=\R\times(0,\infty)\).
+\item The map \(\psi(t,w)=\bigl(t\sqrt{w/\nu},\,w\bigr)\) of \(\Omega\) onto itself is one-to-one, with inverse
+\((z,v)\mapsto\bigl(z/\sqrt{v/\nu},\,v\bigr)\), and
+\[
+J(t,w)=\det\begin{pmatrix}\sqrt{w/\nu}&t/(2\sqrt{\nu w})\\0&1\end{pmatrix}=\sqrt{w/\nu}>0
+\]
+By (D1), \((T,V)=\psi^{-1}(Z,V)\) has the density \(\varphi\bigl(t\sqrt{w/\nu}\bigr)f_\nu(w)\sqrt{w/\nu}\) on \(\Omega\).
+\item So \(T\) has the marginal density (Definition~\ref{r14-def-conditional})
+\[
+f_T(t)=\int_0^\infty\frac{e^{-t^2w/(2\nu)}}{\sqrt{2\pi}}\cdot\frac{w^{\nu/2-1}e^{-w/2}}{\Gamma(\nu/2)\,2^{\nu/2}}\cdot\frac{w^{1/2}}{\nu^{1/2}}\,\mathrm{d}w
+=\frac{1}{\sqrt{2\pi}\,\Gamma(\nu/2)\,2^{\nu/2}\nu^{1/2}}\int_0^\infty w^{\frac{\nu+1}2-1}e^{-(1+t^2/\nu)w/2}\,\mathrm{d}w
+\]
+\item By (D2) with \(c=\frac{\nu+1}2\) and \(b=\frac12(1+t^2/\nu)\), the last integral is
+\(\Gamma\bigl(\frac{\nu+1}2\bigr)2^{(\nu+1)/2}(1+t^2/\nu)^{-(\nu+1)/2}\); and \(2^{(\nu+1)/2}/(\sqrt{2\pi}\,2^{\nu/2})=1/\sqrt\pi\). This
+is \(f_T(t)\).
+\end{itemize}
+(b) Put \(k=a/b\).
+\begin{itemize}
+\item As \(U\) and \(V\) are independent, \((U,V)'\) has the density \(f_a(u)f_b(v)\) (the paragraph before
+Theorem~\ref{r14-thm-mvn-density}), which is \(0\) outside \(\Omega=(0,\infty)^2\).
+\item The map \(\psi(x,y)=\bigl(kxy/(1+kx),\ y/(1+kx)\bigr)\) of \(\Omega\) onto itself is one-to-one, with inverse
+\((u,v)\mapsto\bigl((u/a)/(v/b),\ u+v\bigr)\): for \((u,v)=\psi(x,y)\), \(u/v=kx\) and \(u+v=y\). Its Jacobian determinant is
+\[
+J(x,y)=\det\begin{pmatrix}ky/(1+kx)^2&kx/(1+kx)\\-ky/(1+kx)^2&1/(1+kx)\end{pmatrix}=\frac{ky(1+kx)}{(1+kx)^3}=\frac{ky}{(1+kx)^2}>0
+\]
+\item By (D1), \((F,U+V)=\psi^{-1}(U,V)\) has, on \(\Omega\), the density
+\[
+h(x,y)=f_a\Bigl(\frac{kxy}{1+kx}\Bigr)f_b\Bigl(\frac y{1+kx}\Bigr)\frac{ky}{(1+kx)^2}
+=\frac{k^{a/2}x^{a/2-1}y^{(a+b)/2-1}e^{-y/2}}{\Gamma(a/2)\Gamma(b/2)\,2^{(a+b)/2}(1+kx)^{(a+b)/2}}
+\]
+collecting powers: \(y\) has the exponent \((\frac a2-1)+(\frac b2-1)+1\), and \(1+kx\) the exponent
+\(-(\frac a2-1)-(\frac b2-1)-2\).
+\item So \(h(x,y)=f_F(x)f_{a+b}(y)\) with \(f_F\geqslant0\) as stated. As \(h\) is a density and \(\int f_{a+b}=1\), the rule for
+products of integrals before Theorem~\ref{r14-thm-mvn-density} gives \(1=\int\!\!\int h=\int f_F\). So \(F\) has the marginal
+density \(\int_0^\infty h(x,y)\,\mathrm{d}y=f_F(x)\) (Definition~\ref{r14-def-conditional}), and \(U+V\sim\chi^2_{a+b}\) has the density
+\(f_{a+b}\) (Theorem~\ref{r15-thm-chisq}(c),(b)). As \((F,U+V)'\) has the product density \(f_F(x)f_{a+b}(y)\), \(F\) and
+\(U+V\) are independent (the paragraph before Theorem~\ref{r14-thm-mvn-density}).\qedhere
+\end{itemize}
+\end{proof}
+
+\needspace{12\baselineskip}
+\begin{definition}[\citeat{tu-clm}{\S4.1}, \citeat{tu-asm}{Definition~P.115}, \citeat{casella-berger}{Definitions~5.3.4, 5.3.6}]\label{r15-def-t-F}
+Let \(\nu,a,b\geqslant1\).
+\begin{enumerate}
+\item If \(Z\sim N(0,1)\) and \(V\sim\chi^2_\nu\) are independent, the distribution of \(T=Z/\sqrt{V/\nu}\) is the
+\textbf{\(t\) distribution} \(t_\nu\) with \(\nu\) degrees of freedom.
+\item If \(U\sim\chi^2_a\) and \(V\sim\chi^2_b\) are independent, the distribution of \(F=(U/a)/(V/b)\) is the
+\textbf{\(F\) distribution} \(F_{a,b}\) with \(a\) and \(b\) degrees of freedom.
+\item For \(\tau\in(0,1)\), the \textbf{\(\tau\) quantiles} \(t_{\nu,\tau}\), \(F_{a,b,\tau}\) and \(\chi^2_{\nu,\tau}\) are the
+numbers with \(\prb(T\leqslant t_{\nu,\tau})=\tau\) for \(T\sim t_\nu\), \(\prb(F\leqslant F_{a,b,\tau})=\tau\)
+for \(F\sim F_{a,b}\), and \(\prb(u\leqslant\chi^2_{\nu,\tau})=\tau\) for \(u\sim\chi^2_\nu\).
+\end{enumerate}
+By Theorem~\ref{r15-thm-t-F-density}, these distributions have the densities \(f_T\) and \(f_F\), so they do not depend on
+the choice of \(Z\), \(U\) and \(V\). Such variables exist: if \(g\sim N_{\nu+1}(0,I_{\nu+1})\)
+(Theorem~\ref{r14-thm-mvn-density}(b)), then \(Z=g_1\sim N(0,1)\) and \(V=g_2^2+\dots+g_{\nu+1}^2\sim\chi^2_\nu\)
+(Theorem~\ref{r14-thm-mvn-iid}(a), Definition~\ref{r15-def-chisq}) are independent (Theorem~\ref{r14-thm-mvn-indep}(a),
+(N3)); \(U\) and \(V\) are obtained in the same way from \(g\sim N_{a+b}(0,I_{a+b})\). The quantiles exist and are unique:
+\(G(x)=\prb(T\leqslant x)=\int_{-\infty}^xf_T\)
+is continuous; it is strictly increasing on \(\R\), as \(f_T\) is continuous and positive there; and \(G(x)\to0\) as
+\(x\to-\infty\), \(G(x)\to1\) as \(x\to\infty\), as \(\int f_T=1\). So \(G\) takes the value \(\tau\) exactly once (intermediate
+value theorem). The same holds for \(F\), and for \(u\sim\chi^2_\nu\), whose density \(f_\nu\) (Theorem~\ref{r15-thm-chisq}(b))
+is continuous and positive on \((0,\infty)\), with \((0,\infty)\) in place of \(\R\) and \(G(0)=0\). Hence, for
+\(\alpha\in(0,1)\), \(\prb(T>t_{\nu,1-\alpha})=\alpha\), \(\prb(F>F_{a,b,1-\alpha})=\alpha\) and
+\(\prb(u>\chi^2_{\nu,1-\alpha})=\alpha\).
+\end{definition}
+
+\needspace{14\baselineskip}
+\begin{theorem}[\citeat{tu-clm}{\S4.1}, \citeat{tu-asm}{Corollary~P.116}, \citeat{casella-berger}{Theorem~5.3.8(b)}]\label{r15-thm-t-symmetric}
+Let \(T\sim t_\nu\) and \(\alpha\in(0,1)\).
+\begin{enumerate}
+\item \(-T\sim t_\nu\): the \(t\) distribution is symmetric about \(0\). Hence \(\prb(T<-c)=\prb(T>c)\) for every
+\(c\in\R\), and
+\[
+\prb(T<-t_{\nu,1-\alpha})=\alpha,\qquad
+\prb\bigl(-t_{\nu,1-\alpha/2}\leqslant T\leqslant t_{\nu,1-\alpha/2}\bigr)=1-\alpha
+\]
+\item \(T^2\sim F_{1,\nu}\), and \(t_{\nu,1-\alpha/2}^2=F_{1,\nu,1-\alpha}\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Write \(T=Z/\sqrt{V/\nu}\) as in Definition~\ref{r15-def-t-F}.
+
+(a)
+\begin{itemize}
+\item \(-Z\sim N(0,1)\) (Theorem~\ref{r14-thm-mvn-linear} with \(A=-1\)), and \(-Z\) is independent of \(V\) (N3). So
+\(-T=(-Z)/\sqrt{V/\nu}\sim t_\nu\) (Definition~\ref{r15-def-t-F}), and
+\(\prb(T<-c)=\prb(-T>c)=\prb(T>c)\).
+\item For \(c=t_{\nu,1-\alpha}\), \(\prb(T>c)=\alpha\) (Definition~\ref{r15-def-t-F}); this gives the first identity.
+\item With \(\alpha/2\) in place of \(\alpha\) and \(c=t_{\nu,1-\alpha/2}\),
+\(\prb(-c\leqslant T\leqslant c)=1-\prb(T<-c)-\prb(T>c)=1-\frac\alpha2-\frac\alpha2\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item \(T^2=(Z^2/1)/(V/\nu)\), where \(Z^2\sim\chi^2_1\) (Definition~\ref{r15-def-chisq}) is independent of \(V\) (N3); so
+\(T^2\sim F_{1,\nu}\).
+\item By (a), \(\prb(T<0)=\prb(T>0)\), and \(\prb(T=0)=0\), as \(T\) has a density; so
+\(\prb(T\leqslant0)=\frac12<1-\frac\alpha2\), and \(c=t_{\nu,1-\alpha/2}>0\), as \(G\) in Definition~\ref{r15-def-t-F} is
+increasing. Then \(\prb(T^2\leqslant c^2)=\prb(-c\leqslant T\leqslant c)=1-\alpha\) by (a), so \(c^2\) is the
+\((1-\alpha)\) quantile of \(F_{1,\nu}\), which is unique (Definition~\ref{r15-def-t-F}).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{proposition}[\citeat{casella-berger}{Theorem~5.3.8(a), Exercise~5.17(c)}]\label{r15-prop-F-reciprocal}
+If \(F\sim F_{a,b}\), then \(1/F\sim F_{b,a}\). Hence \(F_{b,a,\alpha}=1/F_{a,b,1-\alpha}\) for \(\alpha\in(0,1)\).
+\end{proposition}
+\begin{proof}
+\begin{itemize}
+\item Write \(F=(U/a)/(V/b)\) as in Definition~\ref{r15-def-t-F}. \(U,V>0\) with probability \(1\) (as in the proof of
+Theorem~\ref{r15-thm-t-F-density}(a)), and \(1/F=(V/b)/(U/a)\) with \(V\sim\chi^2_b\) and \(U\sim\chi^2_a\) independent; so
+\(1/F\sim F_{b,a}\).
+\item Let \(c=F_{a,b,1-\alpha}\); \(c>0\) (Definition~\ref{r15-def-t-F}). As \(F\) has a density, \(\prb(F=c)=0\), and
+\(\prb(1/F\leqslant1/c)=\prb(F\geqslant c)=\prb(F>c)=\alpha\); so \(1/c\) is the \(\alpha\) quantile of
+\(F_{b,a}\).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{example}[\citeat{haerdle-simar}{\S4.4, (4.51), Theorem~4.7}]\label{r15-exm-quantiles}
+Let \(\alpha\in(0,1)\).
+\begin{itemize}
+\item For \(T\sim t_4\), Theorem~\ref{r15-thm-t-symmetric}(a), with \(\alpha/2\) in place of \(\alpha\), gives
+\(\prb(T<-t_{4,1-\alpha/2})=\frac\alpha2\); as \(T\) has a density, also \(\prb(T\leqslant-t_{4,1-\alpha/2})=\frac\alpha2\), so
+\(t_{4,\alpha/2}=-t_{4,1-\alpha/2}\) (Definition~\ref{r15-def-t-F}(c)), and \(\prb(\lvert T\rvert\leqslant t_{4,1-\alpha/2})=1-\alpha\).
+By Theorem~\ref{r15-thm-t-symmetric}(b), \(F_{1,4,1-\alpha}=t_{4,1-\alpha/2}^2\); by
+Proposition~\ref{r15-prop-F-reciprocal}, \(F_{4,3,\alpha}=1/F_{3,4,1-\alpha}\).
+\item Let \(u\sim\chi^2_2\) and \(\tau\in(0,1)\). For \(c>0\), \(\prb(u\leqslant c)=1-\prb(u>c)=1-e^{-c/2}\)
+(Example~\ref{r15-exm-chisq}(a)), and \(1-e^{-c/2}=\tau\) exactly for \(c=-2\log(1-\tau)\), which is \(>0\). So
+\(\chi^2_{2,\tau}=-2\log(1-\tau)\) (Definition~\ref{r15-def-t-F}(c)); in particular \(\chi^2_{2,1-\alpha}=2\log(1/\alpha)\), and
+\(\chi^2_{2,19/20}=2\log20\).
+\item Let \(x\sim N_n(\mu,\Sigma)\) with \(\Sigma\) PD. By Corollary~\ref{r14-cor-standard}(a),
+\(d_\Sigma(x,\mu)^2=(x-\mu)'\Sigma^{-1}(x-\mu)\sim\chi^2_n\), with the distance \(d_\Sigma\) of the paragraph after
+Theorem~\ref{r14-thm-mvn-density}. So the region \(\{u\in\R^n:d_\Sigma(u,\mu)^2\leqslant\chi^2_{n,1-\alpha}\}\), bounded by the
+contour of that paragraph with \(c^2=\chi^2_{n,1-\alpha}\), contains \(x\) with probability \(1-\alpha\). For \(n=2\) it is
+bounded by an ellipse, with \(c^2=2\log(1/\alpha)\).
+\end{itemize}
+\end{example}
+
+\subsection*{One normal sample}
+
+\begin{theorem}[\citeat{casella-berger}{Theorem~5.3.1}, \citeat{searle-khuri}{Examples~10.2, 10.3}]\label{r15-thm-one-sample}
+Let \(n\geqslant2\), and let \(x_1,\dots,x_n\) be independent \(N(\mu,\sigma^2)\) variables (\(\sigma>0\)), with mean
+\(\bar x=\frac1n\sum_ix_i\) and sample variance \(s^2=\frac1{n-1}\sum_i(x_i-\bar x)^2\) (Definition~\ref{r12-def-data}). Then:
+\begin{enumerate}
+\item \(\bar x\sim N(\mu,\sigma^2/n)\);
+\item \((n-1)s^2/\sigma^2\sim\chi^2_{n-1}\);
+\item \(\bar x\) and \(s^2\) are independent;
+\item \(\sqrt n(\bar x-\mu)/s\sim t_{n-1}\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Let \(x=(x_1,\dots,x_n)'\). Then \(x\sim N_n(\mu\one,\sigma^2I_n)\) (Theorem~\ref{r14-thm-mvn-iid}(a)), the deviations are
+\(C_nx=(x_1-\bar x,\dots,x_n-\bar x)'\) (Example~\ref{r1-exm-centering}), and \((n-1)s^2=(C_nx)'(C_nx)\).
+
+(a) This is Example~\ref{r14-exm-sample}(a), applied to \(x\).
+
+(b)
+\begin{itemize}
+\item Let \(z=(x-\mu\one)/\sigma\); then \(z\sim N_n(0,I_n)\) (Theorem~\ref{r14-thm-mvn-linear}).
+\item \(C_n\) is symmetric with the eigenvalues \(1\) (\(n-1\) times) and \(0\) (once) (Example~\ref{r8-exm-patterned}(a)). By
+Theorem~\ref{r8-thm-spectral}, there is an orthogonal \(P\) with \(P'C_nP=D=\diag(1,\dots,1,0)\), so \(C_n=PDP'\). (For instance
+\(P=[p_2\ \cdots\ p_n\ p_1]\), with the rows \(p_k'\) of the Helmert matrix \(K_n\) of Example~\ref{r6-exm-helmert}.)
+\item Let \(y=P'z\). Then \(y\sim N_n(0,P'P)=N_n(0,I_n)\) (Theorem~\ref{r14-thm-mvn-linear}), so \(y_1,\dots,y_n\) are independent
+\(N(0,1)\) variables (Theorem~\ref{r14-thm-mvn-iid}(a)).
+\item \(C_n\one=0\) and \(C_n'C_n=C_n\) (Proposition~\ref{r1-prop-centering}), so \(C_nx=\sigma C_nz\) and
+\[
+(n-1)s^2=(C_nx)'(C_nx)=\sigma^2z'C_nz=\sigma^2z'PDP'z=\sigma^2y'Dy=\sigma^2(y_1^2+\dots+y_{n-1}^2)
+\]
+So \((n-1)s^2/\sigma^2\sim\chi^2_{n-1}\) (Definition~\ref{r15-def-chisq}).
+\end{itemize}
+(c) By Example~\ref{r14-exm-sample}(b), applied to \(x\), \(\bar x\) is independent of the deviations \(C_nx\), and hence of
+\(s^2=\frac1{n-1}(C_nx)'(C_nx)\).
+
+(d)
+\begin{itemize}
+\item By (a) and Theorem~\ref{r14-thm-mvn-linear}, \(Z=\sqrt n(\bar x-\mu)/\sigma\sim N(0,1)\); by (b),
+\(V=(n-1)s^2/\sigma^2\sim\chi^2_{n-1}\); and \(Z\) and \(V\) are independent by (c) and (N3).
+\item \(V\) has a density (Theorem~\ref{r15-thm-chisq}(b)), so \(\prb(s^2=0)=\prb(V=0)=0\), and \(s>0\) with
+probability \(1\). Then
+\[
+\frac{\sqrt n(\bar x-\mu)}s=\frac{\sqrt n(\bar x-\mu)/\sigma}{\sqrt{(n-1)s^2/\bigl((n-1)\sigma^2\bigr)}}=\frac Z{\sqrt{V/(n-1)}}
+\]
+which has the distribution \(t_{n-1}\) (Definition~\ref{r15-def-t-F}).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{definition}[\citeat{casella-berger}{Definitions~9.1.1, 9.1.4, 9.1.5}]\label{r15-def-confidence}
+Let observations be modelled as random variables whose distribution depends on parameters, and let \(\alpha\in(0,1)\).
+\begin{enumerate}
+\item An interval \([L,U]\) whose endpoints \(L\leqslant U\) are computed from the observations is a \textbf{confidence
+interval} with level \(1-\alpha\) for a parameter \(\theta\in\R\) if \(\prb(L\leqslant\theta\leqslant U)=1-\alpha\) for all values
+of the parameters.
+\item A set \(C\subseteq\R^p\) computed from the observations is a \textbf{confidence region} with level \(1-\alpha\) for a
+parameter \(\theta\in\R^p\) if \(\prb(\theta\in C)=1-\alpha\) for all values of the parameters.
+\end{enumerate}
+\end{definition}
+
+\begin{example}[\citeat{casella-berger}{Example~9.2.10}]\label{r15-exm-one-sample}
+In Theorem~\ref{r15-thm-one-sample}, let \(\alpha\in(0,1)\), \(T=\sqrt n(\bar x-\mu)/s\), \(V=(n-1)s^2/\sigma^2\) and
+\(c=t_{n-1,1-\alpha/2}\); here \(s>0\) with probability \(1\) (the proof of Theorem~\ref{r15-thm-one-sample}(d)).
+\begin{itemize}
+\item By Theorems~\ref{r15-thm-one-sample}(d) and~\ref{r15-thm-t-symmetric}(a), \(\prb(-c\leqslant T\leqslant c)=1-\alpha\) for all
+values of \(\mu\) and \(\sigma\). The inequality \(-c\leqslant T\leqslant c\) holds exactly when
+\(\bar x-cs/\sqrt n\leqslant\mu\leqslant\bar x+cs/\sqrt n\). So
+\(\bigl[\bar x-t_{n-1,1-\alpha/2}\,s/\sqrt n,\ \bar x+t_{n-1,1-\alpha/2}\,s/\sqrt n\bigr]\) is a confidence interval for \(\mu\) with
+level \(1-\alpha\) (Definition~\ref{r15-def-confidence}(a)).
+\item Let \(c_1=\chi^2_{n-1,\alpha/2}\) and \(c_2=\chi^2_{n-1,1-\alpha/2}\) (Definition~\ref{r15-def-t-F}(c)). By
+Theorem~\ref{r15-thm-one-sample}(b), \(V\sim\chi^2_{n-1}\), which has a density (Theorem~\ref{r15-thm-chisq}(b)); so
+\(\prb(V=c_1)=0\) and \(\prb(c_1\leqslant V\leqslant c_2)=\prb(V\leqslant c_2)-\prb(V<c_1)=(1-\frac\alpha2)-\frac\alpha2=1-\alpha\) for
+all values of \(\mu\) and \(\sigma\). Also \(0<c_1<c_2\), as \(\prb(V\leqslant0)=0<\frac\alpha2<1-\frac\alpha2\). As
+\(c_1\leqslant V\leqslant c_2\) holds exactly when \((n-1)s^2/c_2\leqslant\sigma^2\leqslant(n-1)s^2/c_1\),
+\(\bigl[(n-1)s^2/\chi^2_{n-1,1-\alpha/2},\ (n-1)s^2/\chi^2_{n-1,\alpha/2}\bigr]\) is a confidence interval for \(\sigma^2\) with
+level \(1-\alpha\).
+\item Five measurements \(2,4,5,6,8\) are modelled as independent \(N(\mu,\sigma^2)\) variables. Here \(\bar x=25/5=5\), the
+deviations are \(-3,-1,0,1,3\), and \(s^2=(9+1+0+1+9)/4=5\); so \(s/\sqrt5=1\) and \((n-1)s^2=20\). The two intervals are
+\(\bigl[5-t_{4,1-\alpha/2},\ 5+t_{4,1-\alpha/2}\bigr]\) and \(\bigl[20/\chi^2_{4,1-\alpha/2},\ 20/\chi^2_{4,\alpha/2}\bigr]\).
+\item If \(\mu=3\), then \(\sqrt5(\bar x-3)/s\sim t_4\); its value here is \(\sqrt5\cdot2/\sqrt5=2\). So \(3\) lies in the interval
+for \(\mu\) exactly when \(t_{4,1-\alpha/2}\geqslant2\).
+\end{itemize}
+\end{example}
+
+\begin{example}[cf.\ \citeat{haerdle-simar}{\S7.1, (7.2), Theorem~4.9}]\label{r11-exm-confidence-ellipse}
+Four dimensions of each of \(n=16\) machined parts are measured; the measurement vectors \(x_1,\dots,x_{16}\in\R^4\) are
+modelled as independent \(N_4(\mu,\Sigma)\), with
+\[
+\Sigma=2I_4+2J_4=\begin{pmatrix}4&2&2&2\\2&4&2&2\\2&2&4&2\\2&2&2&4\end{pmatrix}
+\]
+known from long experience and \(\mu\) unknown. So each measurement has the variance \(4\), and any two have the
+correlation \(\frac12\). Let \(\alpha\in(0,1)\).
+\begin{itemize}
+\item By Theorem~\ref{r14-thm-mvn-iid}(a) (the block form), \(u=(x_1',\dots,x_{16}')'\sim N_{64}\bigl((\mu',\dots,\mu')',
+\diag(\Sigma,\dots,\Sigma)\bigr)\), and \(\bar x=\frac1{16}(x_1+\dots+x_{16})=\frac1{16}Gu\) with \(G=[I_4\ \cdots\ I_4]\in\R^{4\times64}\).
+By Theorem~\ref{r14-thm-mvn-linear} and the block product (Theorem~\ref{r5b-thm-block}(c)), as
+\(G\diag(\Sigma,\dots,\Sigma)G'=16\Sigma\), \(\bar x\sim N_4\bigl(\mu,\frac1{256}\cdot16\Sigma\bigr)=N_4(\mu,\frac1{16}\Sigma)\). Each
+\(\bar x_i\) has the standard deviation \(\sqrt{4/16}=\frac12\).
+\item \(\Sigma\) has the eigenvalues \(2+8=10\) and \(2\) (three times) (Example~\ref{r8-exm-patterned}(b)), so it is PD
+(Theorem~\ref{r8-thm-eigen-criterion}(a)), and so is \(\frac1{16}\Sigma\), with the inverse \(16\Sigma^{-1}\). Here
+\(\Sigma^{-1}=\frac12(I_4-\frac15J_4)\), as \((I_4+J_4)(I_4-\frac15J_4)=I_4+J_4-\frac15J_4-\frac45J_4=I_4\) (\(J_4^2=4J_4\),
+Proposition~\ref{r1-prop-centering}). By Corollary~\ref{r14-cor-standard}(a), \(q(\mu)=16(\bar x-\mu)'\Sigma^{-1}(\bar x-\mu)\sim\chi^2_4\),
+so \(\prb\bigl(q(\mu)\leqslant\chi^2_{4,1-\alpha}\bigr)=1-\alpha\) for every \(\mu\) (Definition~\ref{r15-def-t-F}(c)). Thus the ellipsoid
+\(\{m\in\R^4:16(\bar x-m)'\Sigma^{-1}(\bar x-m)\leqslant\chi^2_{4,1-\alpha}\}\), computed from the observations, is a confidence
+region for \(\mu\) with level \(1-\alpha\) (Definition~\ref{r15-def-confidence}(b)).
+\item By Theorem~\ref{r15-thm-chisq}(b), \(\chi^2_4\) has the density \(f_4(x)=\frac x4e^{-x/2}\) for \(x>0\), as
+\(\Gamma(2)=\Gamma(1)=1\) (D2). For \(w\sim\chi^2_4\) and \(c>0\), integrating by parts, as \(xe^{-x/2}\to0\) for \(x\to\infty\),
+\[
+\prb(w>c)=\int_c^\infty\frac x4e^{-x/2}\,\mathrm{d}x=\Bigl[-\frac x2e^{-x/2}\Bigr]_c^\infty+\int_c^\infty\frac12e^{-x/2}\,\mathrm{d}x=\Bigl(1+\frac c2\Bigr)e^{-c/2}
+\]
+\item Let \(\alpha=\frac1{20}\), and compare two possible target values \(m_1\), \(m_2\) with \(\bar x-m_1=(1,1,1,1)'\) and
+\(\bar x-m_2=(1,-1,1,-1)'\). Each coordinate of \(\bar x\) is two of its standard deviations away from the corresponding
+coordinate of \(m_1\), and also of \(m_2\). With \(d=\bar x-m\), \(q(m)=16d'\Sigma^{-1}d=8\bigl(d'd-\frac15(\one'd)^2\bigr)\), so
+\[
+q(m_1)=8\Bigl(4-\frac{16}5\Bigr)=\frac{32}5,\qquad q(m_2)=8(4-0)=32
+\]
+\item From the exponential series, \(2<e<3\) (\(e=\sum_{k\geqslant0}1/k!\), and \(1/k!\leqslant1/2^{k-1}\) for \(k\geqslant1\), strictly for \(k\geqslant3\)). So
+\(\prb(w>\frac{32}5)=\frac{21}5e^{-16/5}>\frac1{20}\), as \(e^{16}<3^{16}=43046721<84^5\); and \(\prb(w>32)=17e^{-16}<\frac1{20}\), as
+\(e^{16}>2^{16}=65536>340\). As \(\prb(w>c)\) is strictly decreasing in \(c\) (Definition~\ref{r15-def-t-F}) and
+\(\prb(w>\chi^2_{4,19/20})=\frac1{20}\), \(q(m_1)<\chi^2_{4,19/20}<q(m_2)\): \(m_1\) lies in the confidence region and \(m_2\) does
+not. The measurements are positively correlated, so deviations of the same sign are common and deviations of
+opposite signs are unusual; only the joint region takes this into account.
+\end{itemize}
+\end{example}
+
+\needspace{14\baselineskip}
+\subsection*{Quadratic forms in normal vectors}
+
+\begin{theorem}[\citeat{tu-clm}{Theorem~4.5}, \citeat{bapat}{Result~8.3}, \citeat{searle-khuri}{Theorem~10.2}]\label{r15-thm-quadratic-chisq}
+Let \(z\sim N_n(\mu,\sigma^2I_n)\) (\(\sigma>0\)), and let \(A\in\R^{n\times n}\) be symmetric and idempotent with
+\(\rank A=r\geqslant1\). Then
+\[
+\frac{z'Az}{\sigma^2}\sim\chi^2_r\Bigl(\frac{\mu'A\mu}{\sigma^2}\Bigr)
+\]
+In particular \(z'Az/\sigma^2\sim\chi^2_r\) if \(A\mu=0\).
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+\item By Theorem~\ref{r8-thm-idempotent-eigen}(c), \(A=P_1P_1'\) for some \(P_1\in\R^{n\times r}\) with \(P_1'P_1=I_r\).
+\item Let \(u=P_1'z/\sigma\) and \(\delta=P_1'\mu/\sigma\). By Theorem~\ref{r14-thm-mvn-linear},
+\(u\sim N_r\bigl(\delta,\ P_1'(\sigma^2I_n)P_1/\sigma^2\bigr)=N_r(\delta,I_r)\), and \(w=u-\delta\sim N_r(0,I_r)\).
+\item \(z'Az/\sigma^2=z'P_1P_1'z/\sigma^2=\lVert u\rVert^2=\lVert w+\delta\rVert^2\). By Definition~\ref{r15-def-chisq}, this has the
+distribution \(\chi^2_r(\lambda)\) with \(\lambda=\lVert\delta\rVert^2=\mu'P_1P_1'\mu/\sigma^2=\mu'A\mu/\sigma^2\).
+\item If \(A\mu=0\), then \(\lambda=0\).\qedhere
+\end{itemize}
+\end{proof}
+
+\needspace{18\baselineskip}
+\begin{theorem}[\citeat{searle-khuri}{Theorem~10.1}]\label{r15-thm-decomposition}
+Let \(y\sim N_n(\mu,\Sigma)\) with \(\Sigma\) positive definite, let \(A\in\R^{n\times n}\) be symmetric, and let
+\(B=\Sigma^{1/2}A\Sigma^{1/2}\) (Theorem~\ref{r8-thm-sqrt}). Let \(\gamma_1,\dots,\gamma_k\) be the distinct nonzero eigenvalues of
+\(B\), with multiplicities \(\nu_1,\dots,\nu_k\), and let the columns of \(P_i\in\R^{n\times\nu_i}\) be orthonormal eigenvectors of \(B\)
+for \(\gamma_i\). Then
+\[
+y'Ay=\gamma_1W_1+\dots+\gamma_kW_k,\qquad W_i=\lVert P_i'\Sigma^{-1/2}y\rVert^2
+\]
+where \(W_1,\dots,W_k\) are independent and \(W_i\sim\chi^2_{\nu_i}(\theta_i)\) with
+\(\theta_i=\mu'\Sigma^{-1/2}P_iP_i'\Sigma^{-1/2}\mu\). The \(\gamma_i\) and \(\nu_i\) are also the distinct nonzero eigenvalues of \(A\Sigma\)
+and their multiplicities.
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+\item \(\Sigma^{1/2}\) is symmetric and invertible, with \(\Sigma^{1/2}\Sigma^{1/2}=\Sigma\) and inverse \(\Sigma^{-1/2}\)
+(Theorem~\ref{r8-thm-sqrt}). Let \(z=\Sigma^{-1/2}y\) and \(c=\Sigma^{-1/2}\mu\). By Theorem~\ref{r14-thm-mvn-linear},
+\(z\sim N_n(c,\Sigma^{-1/2}\Sigma\Sigma^{-1/2})=N_n(c,I_n)\), and \(y'Ay=z'\Sigma^{1/2}A\Sigma^{1/2}z=z'Bz\).
+\item \(B\) is symmetric. The \(\nu_i\) columns of \(P_i\) are orthonormal vectors of the eigenspace \(\mathcal N(B-\gamma_iI)\), whose
+dimension is \(\nu_i\) (Theorem~\ref{r8-thm-rank-eigen}); so they form an orthonormal basis of it, and \(P_iP_i'\) is its
+projection matrix (Theorem~\ref{r6-thm-projection-matrix}(b)). By Theorem~\ref{r8-thm-spectral-decomp}(b), with the eigenvalue
+\(0\), if it occurs, contributing nothing, \(B=\sum_i\gamma_iP_iP_i'\), and \(z'Bz=\sum_i\gamma_i\lVert P_i'z\rVert^2=\sum_i\gamma_iW_i\).
+\item The \(m=\nu_1+\dots+\nu_k\) columns of \(P=[P_1\ \cdots\ P_k]\) are orthonormal (Theorem~\ref{r8-thm-sym-orth} for
+different eigenvalues), so \(u=P'z\sim N_m(P'c,P'P)=N_m(P'c,I_m)\) (Theorem~\ref{r14-thm-mvn-linear}). Its blocks are
+\(u_i=P_i'z\sim N_{\nu_i}(P_i'c,I_{\nu_i})\), and the off-diagonal blocks of \(I_m\) are \(0\); so \(u_1,\dots,u_k\) are
+independent (Theorem~\ref{r14-thm-mvn-indep}(b)).
+\item By Definition~\ref{r15-def-chisq}, \(W_i=\lVert u_i\rVert^2=\lVert(u_i-P_i'c)+P_i'c\rVert^2\sim\chi^2_{\nu_i}(\theta_i)\) with
+\(\theta_i=\lVert P_i'c\rVert^2=c'P_iP_i'c\); and the \(W_i\) are independent (N3).
+\item \(B=\Sigma^{1/2}(A\Sigma)\Sigma^{-1/2}\) is similar to \(A\Sigma\), so the two matrices have the same characteristic
+polynomial (Theorem~\ref{r7-thm-similar}), hence the same eigenvalues with the same multiplicities.\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{theorem}[\citeat{bapat}{Result~8.3}]\label{r15-thm-chisq-converse}
+Let \(z\sim N_n(0,I_n)\), let \(A\in\R^{n\times n}\) be symmetric, and let \(r\geqslant1\). If \(z'Az\sim\chi^2_r\), then \(A\) is
+idempotent and \(\rank A=r\).
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+\item By Theorem~\ref{r8-thm-spectral}, \(A=Q\diag(\gamma_1,\dots,\gamma_n)Q'\) with \(Q\) orthogonal. Then \(y=Q'z\sim N_n(0,I_n)\)
+(Theorem~\ref{r14-thm-mvn-linear}), its coordinates are independent \(N(0,1)\) variables (Theorem~\ref{r14-thm-mvn-iid}(a)), and
+\(z'Az=y'\diag(\gamma_1,\dots,\gamma_n)y=\sum_j\gamma_jy_j^2\).
+\item Let \(t_0>0\) with \(2t_0\lvert\gamma_j\rvert<1\) for every \(j\). For \(\lvert t\rvert<t_0\), Lemma~\ref{r15-lem-mgf}(a) (with
+\(\delta=0\) and \(t\gamma_j\) in place of \(t\)) gives \(M_{\gamma_jy_j^2}(t)=(1-2\gamma_jt)^{-1/2}\). The \(\gamma_jy_j^2\) are
+independent (N3), so, as in Lemma~\ref{r15-lem-mgf}(b), \(M_{z'Az}(t)=\prod_j(1-2\gamma_jt)^{-1/2}\) near \(0\) (N2).
+\item Also \(M_{z'Az}(t)=(1-2t)^{-r/2}\) near \(0\) (Theorem~\ref{r15-thm-chisq}(a)). Squaring and inverting,
+\(\prod_{j=1}^n(1-2\gamma_jt)=(1-2t)^r\) for all \(t\) in an open interval; both sides are polynomials in \(t\), so they are
+equal (Proposition~\ref{r7-prop-poly}(d)).
+\item The only root of the right side is \(\frac12\). If \(\gamma_j\ne0\), then \(t=1/(2\gamma_j)\) is a root of the left side
+(Proposition~\ref{r7-prop-poly}(b)); so \(1/(2\gamma_j)=\frac12\), that is, \(\gamma_j=1\). Hence the left side is \((1-2t)^m\),
+where \(m\) is the number of \(j\) with \(\gamma_j\ne0\), and comparing degrees (Proposition~\ref{r7-prop-poly}(a)) gives
+\(m=r\).
+\item So the eigenvalues of \(A\) are \(1\) (\(r\) times) and \(0\) (\(n-r\) times) (Theorem~\ref{r8-thm-spectral}(c)): \(A\) is
+idempotent (Theorem~\ref{r8-thm-idempotent-eigen}(b)), and \(\rank A=r\) (Theorem~\ref{r8-thm-rank-eigen}).\qedhere
+\end{itemize}
+\end{proof}
+
+\needspace{10\baselineskip}
+\begin{theorem}[\citeat{searle-khuri}{Theorem~10.2, Corollary~10.1}, \citeat{bapat}{Ch.~8, Exercise~15}]\label{r15-thm-chisq-pd}
+Let \(y\sim N_n(\mu,\Sigma)\) with \(\Sigma\) positive definite, let \(A\in\R^{n\times n}\) be symmetric, let \(r\geqslant1\), and let
+\(B=\Sigma^{1/2}A\Sigma^{1/2}\).
+\begin{enumerate}
+\item \(A\Sigma\) is idempotent if and only if \(B\) is idempotent; and \(\rank(A\Sigma)=\rank B\).
+\item If \(A\Sigma\) is idempotent of rank \(r\), then \(y'Ay\sim\chi^2_r(\mu'A\mu)\).
+\item If \(\mu=0\) and \(y'Ay\sim\chi^2_r\), then \(A\Sigma\) is idempotent of rank \(r\).
+\item \(A\Sigma\) is idempotent of rank \(r\) if and only if \(\tr(A\Sigma)=\tr\bigl((A\Sigma)^2\bigr)=\rank(A\Sigma)=r\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item \(B^2=\Sigma^{1/2}A\Sigma A\Sigma^{1/2}\) (Theorem~\ref{r8-thm-sqrt}). If \((A\Sigma)^2=A\Sigma\), multiplying on the right
+by \(\Sigma^{-1}\) gives \(A\Sigma A=A\), and then \(B^2=\Sigma^{1/2}A\Sigma^{1/2}=B\).
+\item If \(B^2=B\), multiplying by \(\Sigma^{-1/2}\) on both sides gives \(A\Sigma A=A\), and multiplying on the right by \(\Sigma\)
+gives \((A\Sigma)^2=A\Sigma\).
+\item \(B=\Sigma^{1/2}(A\Sigma)\Sigma^{-1/2}\), so \(\rank B=\rank(A\Sigma)\) (Theorem~\ref{thm:r4-rank-product}(d)).
+\end{itemize}
+(b) Let \(z=\Sigma^{-1/2}y\sim N_n(\Sigma^{-1/2}\mu,I_n)\) (Theorem~\ref{r14-thm-mvn-linear}); then \(y'Ay=z'Bz\). By (a), \(B\) is
+symmetric and idempotent of rank \(r\), so by Theorem~\ref{r15-thm-quadratic-chisq} (with \(\sigma=1\)),
+\(z'Bz\sim\chi^2_r(\mu'\Sigma^{-1/2}B\Sigma^{-1/2}\mu)=\chi^2_r(\mu'A\mu)\).
+
+(c) Now \(z\sim N_n(0,I_n)\) and \(z'Bz=y'Ay\sim\chi^2_r\); by Theorem~\ref{r15-thm-chisq-converse}, \(B\) is idempotent of rank \(r\),
+and so is \(A\Sigma\), by (a).
+
+(d)
+\begin{itemize}
+\item If \(A\Sigma\) is idempotent of rank \(r\), then \(\tr(A\Sigma)=\rank(A\Sigma)=r\) (Theorem~\ref{r6-thm-idempotent}(c)), and
+\((A\Sigma)^2=A\Sigma\) has the same trace.
+\item Conversely, \(\tr B=\tr(A\Sigma)\) and \(\tr B^2=\tr\bigl(\Sigma^{1/2}(A\Sigma)^2\Sigma^{-1/2}\bigr)=\tr\bigl((A\Sigma)^2\bigr)\)
+(Theorem~\ref{r1-thm-trace}(b)), and \(\rank B=\rank(A\Sigma)\) by (a). Write \(B=Q\diag(\beta_1,\dots,\beta_n)Q'\)
+(Theorem~\ref{r8-thm-spectral}); then \(\tr B=\sum_i\beta_i\), \(\tr B^2=\sum_i\beta_i^2\) (Theorem~\ref{r1-thm-trace}(b)), and
+\(\rank B\) is the number of \(i\) with \(\beta_i\ne0\) (Theorem~\ref{r8-thm-rank-eigen}).
+\item If all three numbers equal \(r\), then \(\sum_{\beta_i\ne0}(\beta_i-1)^2=\sum_i\beta_i^2-2\sum_i\beta_i+r=0\), so every nonzero
+\(\beta_i\) is \(1\): \(B\) is idempotent (Theorem~\ref{r8-thm-idempotent-eigen}(b)) of rank \(r\), and so is \(A\Sigma\), by
+(a).\qedhere
+\end{itemize}
+\end{proof}
+
+\needspace{12\baselineskip}
+\subsection*{Independence of quadratic and linear forms}
+
+\begin{lemma}\label{r15-lem-function}
+Let \(A\in\R^{n\times n}\) be symmetric. There is a symmetric \(G\in\R^{n\times n}\) with \(AGA=A\); hence
+\(x'Ax=(Ax)'G(Ax)\) for every \(x\in\R^n\): the number \(x'Ax\) is a function of the vector \(Ax\).
+\end{lemma}
+\begin{proof}
+If \(A=0\), take \(G=0\). Otherwise let \(A=c_1E_1+\dots+c_kE_k\) be the spectral decomposition
+(Theorem~\ref{r8-thm-spectral-decomp}), and let \(G=\sum_{c_j\ne0}c_j^{-1}E_j\), which is symmetric. As \(E_iE_j=0\) for \(i\ne j\)
+and \(E_j^2=E_j\) (Theorem~\ref{r8-thm-spectral-decomp}(b)), \(AGA=\sum_{c_j\ne0}c_jc_j^{-1}c_jE_j=\sum_jc_jE_j=A\). Then
+\(x'Ax=x'AGAx=(Ax)'G(Ax)\), as \(A'=A\).
+\end{proof}
+
+\needspace{14\baselineskip}
+\begin{theorem}[\citeat{tu-clm}{Theorem~4.6}, \citeat{bapat}{Result~8.5}, \citeat{searle-khuri}{Theorems~10.3, 10.4}]\label{r15-thm-indep}
+Let \(z\sim N_n(\mu,\sigma^2I_n)\), and let \(A,B\in\R^{n\times n}\) be symmetric.
+\begin{enumerate}
+\item If \(AB=0\), then \(z'Az\) and \(z'Bz\) are independent.
+\item If \(C\in\R^{m\times n}\) and \(CA=0\), then \(Cz\) and \(z'Az\) are independent.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item \(A(\sigma^2I_n)B'=\sigma^2AB=0\), so \(Az\) and \(Bz\) are independent (Theorem~\ref{r14-thm-mvn-indep}(c)).
+\item By Lemma~\ref{r15-lem-function}, \(z'Az\) is a function of \(Az\), and \(z'Bz\) is a function of \(Bz\); so they are
+independent (N3).
+\end{itemize}
+(b) \(C(\sigma^2I_n)A'=\sigma^2CA=0\), so \(Cz\) and \(Az\) are independent (Theorem~\ref{r14-thm-mvn-indep}(c)); and \(z'Az\) is a
+function of \(Az\) (Lemma~\ref{r15-lem-function}). So \(Cz\) and \(z'Az\) are independent (N3).
+\end{proof}
+For instance, in Theorem~\ref{r15-thm-one-sample}, \(\bar x=\frac1n\one'x\) and \(s^2=x'C_nx/(n-1)\) are independent by (b), as
+\(\frac1n\one'C_n=0\).
+
+\needspace{14\baselineskip}
+\begin{theorem}[\citeat{searle-khuri}{Theorems~10.3, 10.4}]\label{r15-thm-indep-general}
+Let \(y\sim N_n(\mu,\Sigma)\) (\(\Sigma\) positive semidefinite), and let \(A,B\in\R^{n\times n}\) be symmetric and
+\(C\in\R^{m\times n}\).
+\begin{enumerate}
+\item If \(A\Sigma B=0\), then \(y'Ay\) and \(y'By\) are independent.
+\item If \(C\Sigma A=0\), then \(Cy\) and \(y'Ay\) are independent.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) \(A\Sigma B'=A\Sigma B=0\), so \(Ay\) and \(By\) are independent (Theorem~\ref{r14-thm-mvn-indep}(c)); by
+Lemma~\ref{r15-lem-function} and (N3), so are \(y'Ay\) and \(y'By\).
+
+(b) \(C\Sigma A'=C\Sigma A=0\), so \(Cy\) and \(Ay\) are independent (Theorem~\ref{r14-thm-mvn-indep}(c)); by
+Lemma~\ref{r15-lem-function} and (N3), so are \(Cy\) and \(y'Ay\).
+\end{proof}
+
+\begin{theorem}[\citeat{bapat}{Results~8.4, 8.5}]\label{r15-thm-indep-converse}
+Let \(z\sim N_n(0,I_n)\), and let \(A_1,A_2,A\in\R^{n\times n}\) be symmetric and idempotent.
+\begin{enumerate}
+\item \(z'A_1z\) and \(z'A_2z\) are independent if and only if \(A_1A_2=0\).
+\item For \(\ell\in\R^n\), \(z'Az\) and \(\ell'z\) are independent if and only if \(A\ell=0\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) If \(A_1A_2=0\), the two forms are independent by Theorem~\ref{r15-thm-indep}(a). Conversely, let them be independent.
+If \(A_1=0\) or \(A_2=0\), then \(A_1A_2=0\); so let \(r_i=\rank A_i\geqslant1\).
+\begin{itemize}
+\item \(z'A_iz\sim\chi^2_{r_i}\) (Theorem~\ref{r15-thm-quadratic-chisq}), so \(z'(A_1+A_2)z\sim\chi^2_{r_1+r_2}\)
+(Theorem~\ref{r15-thm-chisq}(c)). \(A_1+A_2\) is symmetric, so it is idempotent (Theorem~\ref{r15-thm-chisq-converse}).
+\item Then \(A_1+A_2=(A_1+A_2)^2=A_1+A_2+A_1A_2+A_2A_1\), so \(A_1A_2+A_2A_1=0\).
+\item Multiplying on the right by \(A_2\) gives \(A_1A_2+A_2A_1A_2=0\); multiplying this on the left by \(A_2\) gives
+\(2A_2A_1A_2=0\). So \(A_2A_1A_2=0\), and then \(A_1A_2=0\).
+\end{itemize}
+(b) If \(A\ell=0\), then \(\ell'A=(A\ell)'=0\), and Theorem~\ref{r15-thm-indep}(b) (with \(C=\ell'\)) gives independence.
+Conversely, let \(z'Az\) and \(\ell'z\) be independent, and let \(\ell\ne0\) (for \(\ell=0\) there is nothing to prove).
+\begin{itemize}
+\item \(B=\ell\ell'/\ell'\ell\) is symmetric and idempotent, and \(z'Bz=(\ell'z)^2/\ell'\ell\) is a function of \(\ell'z\); so \(z'Az\)
+and \(z'Bz\) are independent (N3), and \(AB=0\) by (a).
+\item Hence \(A\ell=A\ell(\ell'\ell)/\ell'\ell=AB\ell=0\).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{example}[\citeat{bapat}{Ch.~8, Exercise~3}]\label{r15-exm-linear-indep}
+Let \(x_1,x_2\) be independent \(N(0,1)\) variables, so that \(x=(x_1,x_2)'\sim N_2(0,I_2)\) (Theorem~\ref{r14-thm-mvn-iid}(a)). Which
+linear functions \(c'x=c_1x_1+c_2x_2\) are independent of \((x_1-x_2)^2\)? With \(a=(1,-1)'\) and
+\[
+A=\tfrac12aa'=\frac12\begin{pmatrix}1&-1\\-1&1\end{pmatrix}
+\]
+which is symmetric and idempotent (\(A^2=\frac14a(a'a)a'=A\)), \((x_1-x_2)^2=(a'x)^2=2\,x'Ax\). A function of \(x'Ax\) is
+independent of \(c'x\) when \(x'Ax\) is, and conversely (N3); so by Theorem~\ref{r15-thm-indep-converse}(b), \(c'x\) is
+independent of \((x_1-x_2)^2\) exactly when \(Ac=\frac12a(a'c)=0\), that is, \(c_1=c_2\). These are the multiples of
+\(x_1+x_2\).
+\end{example}
+
+\begin{example}[cf.\ \citeat{searle-khuri}{Example~10.1}]\label{r15-exm-equicorrelated}
+Let \(n\geqslant2\), \(\sigma>0\), \(-1/(n-1)<\rho<1\), and \(x\sim N_n(\mu\one,\sigma^2R)\) with \(R=(1-\rho)I_n+\rho J_n\): equal means
+and variances, and the correlation \(\rho\) between any two observations. \(R\) is positive definite
+(Example~\ref{r8-exm-definite}(c)), and so is \(\Sigma=\sigma^2R\). Let \(\bar x\) and \(s^2\) be as in
+Theorem~\ref{r15-thm-one-sample}.
+\begin{itemize}
+\item \(C_nJ_n=(C_n\one)\one'=0\), so \(C_nR=(1-\rho)C_n\). With \(A=C_n/\bigl(\sigma^2(1-\rho)\bigr)\), \(A\Sigma=C_n\), which is
+idempotent of rank \(n-1\) (Proposition~\ref{r1-prop-centering}, Corollary~\ref{r6-cor-trace-hat}), and \(A(\mu\one)=0\). By
+Theorem~\ref{r15-thm-chisq-pd}(b),
+\((n-1)s^2/\bigl(\sigma^2(1-\rho)\bigr)=x'Ax\sim\chi^2_{n-1}\); in particular \(\expc(s^2)=\sigma^2(1-\rho)\)
+(Theorem~\ref{r15-thm-chisq}(d)).
+\item \(\bar x=c'x\) with \(c=\frac1n\one\). As \(\one'R=\bigl(1+(n-1)\rho\bigr)\one'\) and \(\one'C_n=0\), \(c'\Sigma A=0\); so \(\bar x\) and
+\(s^2\) are independent (Theorem~\ref{r15-thm-indep-general}(b)). Also
+\(\bar x\sim N\bigl(\mu,\ \sigma^2c'Rc\bigr)=N\bigl(\mu,\ \sigma^2(1+(n-1)\rho)/n\bigr)\) (Theorem~\ref{r14-thm-mvn-linear}).
+\item By the two steps above and Theorem~\ref{r14-thm-mvn-linear}, \(Z=\sqrt n(\bar x-\mu)/\sqrt{\sigma^2(1+(n-1)\rho)}\sim N(0,1)\)
+and \(V=(n-1)s^2/\bigl(\sigma^2(1-\rho)\bigr)\sim\chi^2_{n-1}\) are independent (N3). As in the proof of
+Theorem~\ref{r15-thm-one-sample}(d), by Definition~\ref{r15-def-t-F},
+\[
+T=\frac{\sqrt n(\bar x-\mu)}s\sqrt{\frac{1-\rho}{1+(n-1)\rho}}=\frac Z{\sqrt{V/(n-1)}}\sim t_{n-1}
+\]
+For \(\rho=0\) this is Theorem~\ref{r15-thm-one-sample}(d). For \(\rho>0\) the usual statistic \(\sqrt n(\bar x-\mu)/s\) is \(T\) times
+\(\sqrt{(1+(n-1)\rho)/(1-\rho)}\).
+\item Let \(n=9\), \(\rho=\frac14\) and \(\alpha\in(0,1)\). The factor is \(\sqrt{(1+2)/\frac34}=2\). With \(c=t_{8,1-\alpha/2}\), which is
+\(>0\) (the proof of Theorem~\ref{r15-thm-t-symmetric}(b)), the interval \(\bar x\pm cs/\sqrt9\), which has the level \(1-\alpha\) for
+independent observations (Example~\ref{r15-exm-one-sample}), contains \(\mu\) exactly when \(\lvert\sqrt9(\bar x-\mu)/s\rvert\leqslant c\),
+that is, when \(\lvert T\rvert\leqslant\frac c2\). By Theorem~\ref{r15-thm-t-symmetric}(a),
+\(\prb(\lvert T\rvert\leqslant\frac c2)=1-2\prb(T>\frac c2)\), and \(\prb(T>\frac c2)>\prb(T>c)=\frac\alpha2\), as the distribution function of
+\(t_8\) is strictly increasing (Definition~\ref{r15-def-t-F}). So the interval contains \(\mu\) with probability less than
+\(1-\alpha\): with positively correlated observations it is too short.
+\end{itemize}
+\end{example}
+
+\subsection*{Cochran's theorem}
+
+\begin{theorem}[\citeat{bapat}{Result~8.6}]\label{r15-thm-cochran-algebraic}
+Let \(A_1,\dots,A_p\in\R^{n\times n}\) with \(A_1+\dots+A_p=I_n\). The following are equivalent:
+\begin{enumerate}
+\item \(\rank A_1+\dots+\rank A_p=n\);
+\item \(A_i^2=A_i\) for \(i=1,\dots,p\);
+\item \(A_iA_j=0\) for \(i\ne j\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)\(\Rightarrow\)(c)
+\begin{itemize}
+\item Products with a zero matrix vanish, and deleting the \(A_i=0\) changes neither the sum of the matrices nor the sum of
+the ranks; so let every \(r_i=\rank A_i\geqslant1\), with full-rank factorizations \(A_i=B_iC_i\), \(B_i\in\R^{n\times r_i}\),
+\(C_i\in\R^{r_i\times n}\) (Theorem~\ref{thm:r4-full-rank-factorization}).
+\item By the block product (Theorem~\ref{r5b-thm-block}(c)),
+\[
+[B_1\ \cdots\ B_p]\begin{pmatrix}C_1\\\vdots\\C_p\end{pmatrix}=B_1C_1+\dots+B_pC_p=I_n
+\]
+and the first factor is square, as \(r_1+\dots+r_p=n\). By Theorem~\ref{r2-thm-invertible} the two factors are inverse to each
+other, so their product in the other order is \(I_n\); its \((i,j)\) block is \(C_iB_j\), so \(C_iB_j=0\) for \(i\ne j\).
+\item Hence \(A_iA_j=B_i(C_iB_j)C_j=0\) for \(i\ne j\).
+\end{itemize}
+(c)\(\Rightarrow\)(b) \(A_j=A_jI_n=A_j(A_1+\dots+A_p)=A_j^2\), since \(A_jA_i=0\) for \(i\ne j\).
+
+(b)\(\Rightarrow\)(a) \(\rank A_i=\tr A_i\) (Theorem~\ref{r6-thm-idempotent}(c)), so
+\(\sum_i\rank A_i=\sum_i\tr A_i=\tr(A_1+\dots+A_p)=\tr I_n=n\) (Theorem~\ref{r1-thm-trace}(a)).
+\end{proof}
+
+\needspace{18\baselineskip}
+\begin{theorem}[\citeat{searle-khuri}{Theorem~10.5}, \citeat{bapat}{\S8.3}]\label{r15-thm-cochran}
+Let \(x\sim N_n(\mu,\sigma^2I_n)\) (\(\sigma>0\)), and let \(A_1,\dots,A_p\in\R^{n\times n}\) be symmetric with
+\(A_1+\dots+A_p=I_n\) and \(r_i=\rank A_i\geqslant1\). Consider the conditions
+\begin{enumerate}
+\item \(r_1+\dots+r_p=n\);
+\item \(x'A_ix/\sigma^2\sim\chi^2_{r_i}(\mu'A_i\mu/\sigma^2)\) for \(i=1,\dots,p\);
+\item \(x'A_1x,\dots,x'A_px\) are mutually independent.
+\end{enumerate}
+Then (a) implies (b) and (c), and (b) implies (a).
+\end{theorem}
+\begin{proof}
+(a)\(\Rightarrow\)(b), (c)
+\begin{itemize}
+\item By Theorem~\ref{r15-thm-cochran-algebraic}, every \(A_i\) is idempotent and \(A_iA_j=0\) for \(i\ne j\). So (b) holds by
+Theorem~\ref{r15-thm-quadratic-chisq}.
+\item Let \(u_i=A_ix\) and \(u=(u_1',\dots,u_p')'=Lx\), where \(L\in\R^{pn\times n}\) has the blocks \(A_1,\dots,A_p\) stacked. By
+Theorem~\ref{r14-thm-mvn-linear}, \(u\sim N_{pn}(L\mu,\sigma^2LL')\), and the \((i,j)\) block of \(LL'\) is \(A_iA_j'=A_iA_j\), which
+is \(0\) for \(i\ne j\) (Theorem~\ref{r5b-thm-block}(c)).
+\item By Theorem~\ref{r14-thm-mvn-indep}(b), \(u_1,\dots,u_p\) are mutually independent, and so are the functions
+\(x'A_ix=x'A_i'A_ix=\lVert u_i\rVert^2\) (N3): this is (c).
+\end{itemize}
+(b)\(\Rightarrow\)(a) By Theorem~\ref{r15-thm-chisq}(d), \(\expc(x'A_ix/\sigma^2)=r_i+\mu'A_i\mu/\sigma^2\); by
+Theorem~\ref{r11-thm-quadratic}, \(\expc(x'A_ix)=\tr(A_i\sigma^2I_n)+\mu'A_i\mu\). So \(\tr A_i=r_i\), and
+\(\sum_ir_i=\tr(A_1+\dots+A_p)=\tr I_n=n\) (Theorem~\ref{r1-thm-trace}(a)).
+\end{proof}
+
+\begin{example}[\citeat{bapat}{Ch.~8, Exercise~5}]\label{r15-exm-cochran}
+Let \(x_1,\dots,x_n\) (\(n\geqslant2\)) be independent \(N(0,1)\) variables, so that \(x=(x_1,\dots,x_n)'\sim N_n(0,I_n)\)
+(Theorem~\ref{r14-thm-mvn-iid}(a)), and let \(\bar x=\frac1n\one'x\). With Cochran's theorem we show that \(\bar x\) and
+\(\sum_i(x_i-\bar x)^2\) are independent.
+\begin{itemize}
+\item Let \(A_1=\bar J_n\) and \(A_2=C_n\). They are symmetric, \(A_1+A_2=I_n\) (Definition~\ref{r1-def-ones}), and
+\(\rank A_1=\tr\bar J_n=1\), \(\rank A_2=n-1\) (Proposition~\ref{r1-prop-centering}, Theorem~\ref{r6-thm-idempotent}(c),
+Corollary~\ref{r6-cor-trace-hat}); so \(\rank A_1+\rank A_2=n\).
+\item \(x'A_1x=\frac1n(\one'x)^2=n\bar x^2\) and \(x'A_2x=\sum_i(x_i-\bar x)^2\) (Example~\ref{r1-exm-centering}). By
+Theorem~\ref{r15-thm-cochran}, (a) \(\Rightarrow\) (b), (c), with \(\mu=0\) and \(\sigma=1\): \(n\bar x^2\sim\chi^2_1\) and
+\(\sum_i(x_i-\bar x)^2\sim\chi^2_{n-1}\), and they are independent.
+\item The vectors \(A_1x=\bar x\one\) and \(A_2x\) are independent (Theorem~\ref{r14-thm-mvn-indep}(c)), as
+\(A_1I_nA_2'=\bar J_nC_n=\frac1n\one(C_n\one)'=0\) (\(C_n\) is symmetric and \(C_n\one=0\), Proposition~\ref{r1-prop-centering}). So \(\bar x\), the first entry of \(A_1x\), and \(\sum_i(x_i-\bar x)^2=\lVert A_2x\rVert^2\)
+are independent (N3).
+\end{itemize}
+\end{example}
+
+\needspace{16\baselineskip}
+\subsection*{Moments of quadratic forms}
+
+\begin{theorem}[\citeat{searle-khuri}{(10.34), (10.35), Corollary~10.2}, \citeat{abadir-magnus}{Exercises~11.21, 11.22}]\label{r15-thm-moments}
+Let \(y\sim N_n(\mu,\Sigma)\) (\(\Sigma\) positive semidefinite), and let \(A\in\R^{n\times n}\) be symmetric. Then
+\[
+\expc(y'Ay)=\tr(A\Sigma)+\mu'A\mu,\qquad\var(y'Ay)=2\tr\bigl((A\Sigma)^2\bigr)+4\mu'A\Sigma A\mu
+\]
+\end{theorem}
+\begin{proof}
+The mean is Theorem~\ref{r11-thm-quadratic}. For the variance:
+\begin{itemize}
+\item Let \(L=\Sigma^{1/2}\) (Theorem~\ref{r8-thm-sqrt}), so that \(L'=L\) and \(L^2=\Sigma\), and let \(w\sim N_n(0,I_n)\). Then
+\(\mu+Lw\sim N_n(\mu,\Sigma)\) (Theorem~\ref{r14-thm-mvn-iid}(b)), so \(y'Ay\) has the distribution of \((\mu+Lw)'A(\mu+Lw)\), and we
+may take \(y=\mu+Lw\). Then
+\[
+y'Ay=\mu'A\mu+c'w+w'Bw,\qquad c=2LA\mu,\quad B=LAL
+\]
+since the number \(w'LA\mu\) equals \(\mu'ALw\); \(B\) is symmetric.
+\item Write \(B=Q\diag(\gamma_1,\dots,\gamma_n)Q'\) (Theorem~\ref{r8-thm-spectral}) and \(v=Q'w\sim N_n(0,I_n)\)
+(Theorem~\ref{r14-thm-mvn-linear}); the \(v_i\) are independent \(N(0,1)\) variables (Theorem~\ref{r14-thm-mvn-iid}(a)), and
+\(w'Bw=\sum_i\gamma_iv_i^2\). The \(\gamma_iv_i^2\) are independent (N3), hence uncorrelated (N7), with
+\(\var(\gamma_iv_i^2)=\gamma_i^2\var(v_i^2)=2\gamma_i^2\) (Theorems~\ref{r11-thm-linear}(b) and~\ref{r15-thm-chisq}(d)). By
+Theorem~\ref{r14-thm-cov}(d), \(\var(w'Bw)=2\sum_i\gamma_i^2=2\tr(B^2)\), as \(B^2=Q\diag(\gamma_1^2,\dots,\gamma_n^2)Q'\)
+(Theorem~\ref{r1-thm-trace}(b)).
+\item \(\var(c'w)=c'c=4\mu'ALLA\mu=4\mu'A\Sigma A\mu\) (Theorem~\ref{r11-thm-linear}(b)).
+\item \(\expc(c'w)=0\), so \(\cov(w'Bw,c'w)=\expc(w'Bw\,c'w)=\sum_{i,j,l}b_{ij}c_l\expc(w_iw_jw_l)\). Each
+\(\expc(w_iw_jw_l)=0\): some index \(h\) occurs once or three times among \(i,j,l\), so \(w_iw_jw_l=w_h^e\,g\) with
+\(e\in\{1,3\}\) and \(g\) a function of the vector \(Ew\) of the other coordinates (the rows of \(E\) are the \(e_k'\), \(k\ne h\)).
+As \(e_h'I_nE'=0\), \(w_h\) and \(Ew\) are independent (Theorem~\ref{r14-thm-mvn-indep}(c)), and so are \(w_h^e\) and \(g\) (N3); so
+the expectation is \(\expc(w_h^e)\expc(g)\) (N7), and \(\expc(w_h^e)=0\) (Lemma~\ref{r15-lem-normal-moments}).
+\item As \(\mu'A\mu\) is a constant, Theorem~\ref{r14-thm-cov}(a),(c) gives
+\[
+\var(y'Ay)=\var(w'Bw)+\var(c'w)+2\cov(w'Bw,c'w)=2\tr(B^2)+4\mu'A\Sigma A\mu
+\]
+and \(\tr(B^2)=\tr(LALLAL)=\tr(ALLALL)=\tr\bigl((A\Sigma)^2\bigr)\) (Theorem~\ref{r1-thm-trace}(b)).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{corollary}[\citeat{searle-khuri}{Exercise~10.12}]\label{r15-cor-cov}
+Let \(y\sim N_n(\mu,\Sigma)\), and let \(A,B\in\R^{n\times n}\) be symmetric. Then
+\[
+\cov(y'Ay,\,y'By)=2\tr(A\Sigma B\Sigma)+4\mu'A\Sigma B\mu
+\]
+\end{corollary}
+\begin{proof}
+\begin{itemize}
+\item By Theorem~\ref{r14-thm-cov}(c),
+\(\var\bigl(y'(A+B)y\bigr)=\var(y'Ay)+\var(y'By)+2\cov(y'Ay,y'By)\).
+\item Apply Theorem~\ref{r15-thm-moments} to \(A+B\), \(A\) and \(B\). Here
+\(\tr\bigl(((A+B)\Sigma)^2\bigr)=\tr\bigl((A\Sigma)^2\bigr)+\tr\bigl((B\Sigma)^2\bigr)+2\tr(A\Sigma B\Sigma)\), as
+\(\tr(B\Sigma A\Sigma)=\tr(A\Sigma B\Sigma)\) (Theorem~\ref{r1-thm-trace}(b)); and
+\(\mu'(A+B)\Sigma(A+B)\mu=\mu'A\Sigma A\mu+\mu'B\Sigma B\mu+2\mu'A\Sigma B\mu\), as the number \(\mu'B\Sigma A\mu\) equals its
+transpose \(\mu'A\Sigma B\mu\). So
+\(2\cov(y'Ay,y'By)=4\tr(A\Sigma B\Sigma)+8\mu'A\Sigma B\mu\).\qedhere
+\end{itemize}
+\end{proof}
+
+\needspace{9\baselineskip}
+\begin{example}[\citeat{casella-berger}{Exercise~5.10(c)}, \citeat{casella-berger-solutions}{Exercise~5.10(c)}]\label{r15-exm-var-s2}
+In Theorem~\ref{r15-thm-one-sample}, \(\var(s^2)=2\sigma^4/(n-1)\). Two ways:
+\begin{itemize}
+\item \((n-1)s^2/\sigma^2\sim\chi^2_{n-1}\) has the variance \(2(n-1)\) (Theorem~\ref{r15-thm-chisq}(d)), so
+\(\var(s^2)=\frac{\sigma^4}{(n-1)^2}\cdot2(n-1)=\frac{2\sigma^4}{n-1}\).
+\item \(s^2=x'Ax\) with \(A=C_n/(n-1)\) and \(x\sim N_n(\mu\one,\sigma^2I_n)\). Here \(A\Sigma=\sigma^2C_n/(n-1)\), so
+\(\tr\bigl((A\Sigma)^2\bigr)=\sigma^4\tr(C_n)/(n-1)^2=\sigma^4/(n-1)\) (Proposition~\ref{r1-prop-centering},
+Corollary~\ref{r6-cor-trace-hat}), and \(A\mu\one=0\). By Theorem~\ref{r15-thm-moments},
+\(\var(s^2)=2\sigma^4/(n-1)+0\).
+\end{itemize}
+\end{example}
+
+\needspace{14\baselineskip}
+\subsection*{Exercises}
+
+\begin{exercise}\label{r15-dr-chisq-mgf}
+Let \(u\) have the MGF \((1-2t)^{-3}\exp\bigl(4t/(1-2t)\bigr)\) near \(0\), and let \(v\sim\chi^2_2(1)\) be independent of \(u\).
+\begin{enumerate}
+\item Identify the distribution of \(u\), and find \(\expc(u)\) and \(\var(u)\).
+\item Find the distribution of \(u+v\), its mean and its variance, and check that the means and the variances add up.
+\item Let \(z\sim N_4(\mu,I_4)\) with \(\mu=(1,-1,2,1)'\). Find the distributions of \(z_1^2+z_2^2\) and of \(\lVert z\rVert^2\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \((1-2t)^{-3}=(1-2t)^{-6/2}\), so \(u\sim\chi^2_6(4)\) (Theorem~\ref{r15-thm-chisq}(a)). By Theorem~\ref{r15-thm-chisq}(d),
+\(\expc(u)=6+4=10\) and \(\var(u)=12+16=28\).
+
+(b) By Theorem~\ref{r15-thm-chisq}(c), \(u+v\sim\chi^2_8(5)\), with mean \(8+5=13\) and variance \(16+20=36\). Also
+\(\expc(v)=2+1=3\) and \(\var(v)=4+4=8\), and indeed \(10+3=13\) and \(28+8=36\).
+
+(c) \(w=z-\mu\sim N_4(0,I_4)\) (Theorem~\ref{r14-thm-mvn-linear}), so \(w_1,\dots,w_4\) are independent \(N(0,1)\) variables
+(Theorem~\ref{r14-thm-mvn-iid}(a)), and \(z_i=w_i+\mu_i\). By Definition~\ref{r15-def-chisq},
+\(z_1^2+z_2^2=(w_1+1)^2+(w_2-1)^2\sim\chi^2_2(2)\) and \(\lVert z\rVert^2\sim\chi^2_4(1+1+4+1)=\chi^2_4(7)\).
+\end{solution}
+
+\begin{exercise}\label{r15-dr-chisq-tail}
+\begin{enumerate}
+\item Write down the densities of \(\chi^2_2\) and \(\chi^2_4\).
+\item For \(u\sim\chi^2_4\) and \(c>0\), show by integration by parts that \(\prb(u>c)=(1+c/2)e^{-c/2}\). Using
+\(\frac83<e<3\), show that \(8<\chi^2_{4,19/20}<10\) (Definition~\ref{r15-def-t-F}(c)).
+\item For \(v\sim\chi^2_2\), find the median of \(v\), the number \(c\) with \(\prb(v\leqslant c)=\frac12\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) By Theorem~\ref{r15-thm-chisq}(b), with \(\Gamma(1)=1\) and \(\Gamma(2)=1\cdot\Gamma(1)=1\) (D2): \(f_2(x)=\frac12e^{-x/2}\) and
+\(f_4(x)=\frac14xe^{-x/2}\) for \(x>0\), and both are \(0\) for \(x\leqslant0\).
+
+(b) As \(u\) has the density \(f_4\), integrating by parts (\(xe^{-x/2}\to0\) for \(x\to\infty\)),
+\[
+\prb(u>c)=\int_c^\infty\frac x4e^{-x/2}\,\mathrm{d}x=\Bigl[-\frac x2e^{-x/2}\Bigr]_c^\infty+\int_c^\infty\frac12e^{-x/2}\,\mathrm{d}x=\frac c2e^{-c/2}+e^{-c/2}
+\]
+\begin{itemize}
+\item From the series \(e=\sum_{k\geqslant0}1/k!\): \(e>1+1+\frac12+\frac16=\frac83\), and \(e<1+1+\frac12+\frac14+\dots=3\), as
+\(k!\geqslant2^{k-1}\) for \(k\geqslant1\), strictly for \(k\geqslant3\).
+\item \(\prb(u>8)=5e^{-4}>\frac1{20}\), as \(e^4<3^4=81<100\); and \(\prb(u>10)=6e^{-5}<\frac1{20}\), as
+\(e^5>(\frac83)^5=\frac{32768}{243}>120\) (\(32768>120\cdot243=29160\)).
+\item \(\prb(u>\chi^2_{4,19/20})=\frac1{20}\) (Definition~\ref{r15-def-t-F}), and \(c\mapsto\prb(u>c)\) is strictly decreasing, as the
+distribution function of \(u\) is strictly increasing on \((0,\infty)\). So \(8<\chi^2_{4,19/20}<10\).
+\end{itemize}
+(c) \(\prb(v\leqslant c)=1-e^{-c/2}\) (Example~\ref{r15-exm-chisq}(a)), which is \(\frac12\) for \(c=2\log2\) (as in
+Example~\ref{r15-exm-quantiles}, \(\chi^2_{2,1/2}=-2\log\frac12\)).
+\end{solution}
+
+\begin{exercise}\label{r15-dr-quantiles}
+Let \(T\sim t_5\), \(\alpha\in(0,1)\) and \(c=t_{5,1-\alpha/2}\).
+\begin{enumerate}
+\item Find \(\prb(T>c)\), \(t_{5,\alpha/2}\) and \(\prb(\lvert T\rvert\leqslant c)\).
+\item Express \(F_{1,5,1-\alpha}\) through \(c\).
+\item Express \(F_{5,2,\alpha}\) and \(F_{2,5,\alpha}\) through quantiles \(F_{a,b,1-\alpha}\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(\prb(T>c)=1-(1-\frac\alpha2)=\frac\alpha2\) (Definition~\ref{r15-def-t-F}). By Theorem~\ref{r15-thm-t-symmetric}(a),
+\(\prb(T<-c)=\frac\alpha2\); as \(T\) has a density, also \(\prb(T\leqslant-c)=\frac\alpha2\), so \(t_{5,\alpha/2}=-c\), and
+\(\prb(\lvert T\rvert\leqslant c)=1-\frac\alpha2-\frac\alpha2=1-\alpha\).
+
+(b) \(F_{1,5,1-\alpha}=t_{5,1-\alpha/2}^2=c^2\) (Theorem~\ref{r15-thm-t-symmetric}(b)).
+
+(c) By Proposition~\ref{r15-prop-F-reciprocal}, \(F_{5,2,\alpha}=1/F_{2,5,1-\alpha}\) and \(F_{2,5,\alpha}=1/F_{5,2,1-\alpha}\).
+\end{solution}
+
+\begin{exercise}\label{r15-dr-one-sample}
+Seven measurements \(1,3,4,5,6,7,9\) are modelled as independent \(N(\mu,\sigma^2)\) variables. Let \(\alpha\in(0,1)\) and
+\(c=t_{6,1-\alpha/2}\).
+\begin{enumerate}
+\item Compute \(\bar x\) and \(s^2\).
+\item Compute \(\sqrt7(\bar x-2)/s\), the statistic of Theorem~\ref{r15-thm-one-sample}(d) for \(\mu=2\), and find the condition on
+\(c\) under which it lies in \([-c,c]\).
+\item Compute the confidence interval \(\bar x\pm c\,s/\sqrt7\) for \(\mu\) with level \(1-\alpha\) (Example~\ref{r15-exm-one-sample}).
+Does it contain \(2\)?
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(\bar x=35/7=5\); the deviations are \(-4,-2,-1,0,1,2,4\), so \(s^2=(16+4+1+0+1+4+16)/6=42/6=7\).
+
+(b) \(s/\sqrt7=1\), so \(\sqrt7(\bar x-2)/s=(5-2)/1=3\), which lies in \([-c,c]\) exactly when \(c\geqslant3\). If \(\mu=2\), the
+statistic is a \(t_6\) variable (Theorem~\ref{r15-thm-one-sample}(d)), and it lies outside \([-c,c]\) with probability \(\alpha\)
+(Theorem~\ref{r15-thm-t-symmetric}(a)).
+
+(c) \([5-t_{6,1-\alpha/2},\ 5+t_{6,1-\alpha/2}]\). It contains \(2\) exactly when \(5-c\leqslant2\), that is, \(t_{6,1-\alpha/2}\geqslant3\),
+the condition of (b).
+\end{solution}
+
+\begin{exercise}\label{r11-ex-variance-interval}
+Three measurements \(4,7,10\) are modelled as independent \(N(\mu,\sigma^2)\) variables. Let \(\alpha\in(0,1)\).
+\begin{enumerate}
+\item Write down \(\bar x\), \((n-1)s^2\) and the confidence interval of Example~\ref{r15-exm-one-sample} for \(\sigma^2\).
+\item Write the interval of (a) in closed form with Example~\ref{r15-exm-quantiles}. Does it contain \(1\) for \(\alpha=\frac1{20}\)?
+Show that its upper end then exceeds \(351\).
+\item Write down the confidence interval of Example~\ref{r15-exm-one-sample} for \(\mu\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) Here \(n=3\), \(\bar x=7\) and \((n-1)s^2=9+0+9=18\). By Example~\ref{r15-exm-one-sample} the interval is
+\(\bigl[18/\chi^2_{2,1-\alpha/2},\ 18/\chi^2_{2,\alpha/2}\bigr]\).
+
+(b) By Example~\ref{r15-exm-quantiles}, \(\chi^2_{2,\tau}=-2\log(1-\tau)\); so \(\chi^2_{2,1-\alpha/2}=2\log(2/\alpha)\) and
+\(\chi^2_{2,\alpha/2}=2\log\bigl(2/(2-\alpha)\bigr)\), and the interval is
+\[
+\Bigl[\frac9{\log(2/\alpha)},\ \frac9{\log\bigl(2/(2-\alpha)\bigr)}\Bigr],\qquad\text{for }\alpha=\tfrac1{20}:\quad
+\Bigl[\frac9{\log40},\ \frac9{\log(40/39)}\Bigr]
+\]
+As \(e>1+1=2\) (\(e=\sum_{k\geqslant0}1/k!\)), \(e^9>2^9=512>40\), so \(\log40<9\) and the lower end exceeds \(1\): the interval does not contain \(1\). By
+Lemma~\ref{r14-lem-logdet} with \(p=1\) and \(A=(\frac{40}{39})\ne I_1\), \(\log\frac{40}{39}<\frac{40}{39}-1=\frac1{39}\), so the upper
+end exceeds \(9\cdot39=351\). Three observations say little about \(\sigma^2\).
+
+(c) \(s^2=9\), \(s=3\) and \(s/\sqrt3=\sqrt3\), so the interval is
+\(\bigl[7-\sqrt3\,t_{2,1-\alpha/2},\ 7+\sqrt3\,t_{2,1-\alpha/2}\bigr]\).
+\end{solution}
+
+\begin{exercise}\label{r11-ex-ellipse}
+Let \(x\sim N_4(\mu,\Sigma)\) with
+\[
+\mu=\begin{pmatrix}1\\1\\1\\1\end{pmatrix},\qquad\Sigma=\begin{pmatrix}4&3&1&1\\3&4&1&1\\1&1&4&3\\1&1&3&4\end{pmatrix}
+\]
+and let \(d^2=(x-\mu)'\Sigma^{-1}(x-\mu)\).
+\begin{enumerate}
+\item Check that \(h_1=(1,1,1,1)'\), \(h_2=(1,1,-1,-1)'\), \(h_3=(1,-1,1,-1)'\) and \(h_4=(1,-1,-1,1)'\) are eigenvectors of \(\Sigma\),
+and conclude that \(\Sigma\) is PD.
+\item Show that \(\prb(d^2\leqslant c)=1-(1+c/2)e^{-c/2}\) for \(c>0\). Describe the region
+\(E_\alpha=\{u\in\R^4:(u-\mu)'\Sigma^{-1}(u-\mu)\leqslant\chi^2_{4,1-\alpha}\}\), which contains \(x\) with probability \(1-\alpha\).
+\item Which of the points \(a=(4,4,4,4)'\) and \(b=(3,-1,3,-1)'\) lie in \(E_{1/20}\)? For each, find the probability that
+\(d^2\) exceeds its value of \((u-\mu)'\Sigma^{-1}(u-\mu)\), and compare with the Euclidean distances from \(\mu\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) Row by row,
+\[
+\Sigma h_1=\begin{pmatrix}9\\9\\9\\9\end{pmatrix}=9h_1,\qquad\Sigma h_2=\begin{pmatrix}5\\5\\-5\\-5\end{pmatrix}=5h_2,\qquad
+\Sigma h_3=\begin{pmatrix}1\\-1\\1\\-1\end{pmatrix}=h_3,\qquad\Sigma h_4=\begin{pmatrix}1\\-1\\-1\\1\end{pmatrix}=h_4
+\]
+The \(h_j\) are orthogonal (\(h_i'h_j=0\) for \(i\ne j\)) with \(h_j'h_j=4\), so \(q_j=\frac12h_j\) form an orthonormal basis of
+eigenvectors, and the eigenvalues of \(\Sigma\) are \(9\), \(5\), \(1\), \(1\) (Theorem~\ref{r8-thm-spectral}(b),(c)). All are \(>0\), so
+\(\Sigma\) is PD (Theorem~\ref{r8-thm-eigen-criterion}(a)).
+
+(b) By Corollary~\ref{r14-cor-standard}(a), \(d^2\sim\chi^2_4\); so, by Exercise~\ref{r15-dr-chisq-tail}(b),
+\(\prb(d^2\leqslant c)=1-\prb(d^2>c)=1-(1+c/2)e^{-c/2}\) for \(c>0\), and \(\prb(x\in E_\alpha)=\prb(d^2\leqslant\chi^2_{4,1-\alpha})=1-\alpha\)
+(Definition~\ref{r15-def-t-F}(c)). By the paragraph after Theorem~\ref{r14-thm-mvn-density}, with \(c=(\chi^2_{4,1-\alpha})^{1/2}\),
+\(E_\alpha\) is bounded by an ellipsoid with center \(\mu\), axes along \(q_1,\dots,q_4\), and semi-axes \(3c\), \(\sqrt5\,c\), \(c\),
+\(c\).
+
+(c) In the coordinates \(v_j=q_j'(u-\mu)\) of that paragraph, \((u-\mu)'\Sigma^{-1}(u-\mu)=v_1^2/9+v_2^2/5+v_3^2+v_4^2\).
+\begin{itemize}
+\item For \(a\), \(a-\mu=(3,3,3,3)'=3h_1\), so \(v=(6,0,0,0)'\) and the value is \(36/9=4\). For \(b\), \(b-\mu=(2,-2,2,-2)'=2h_3\), so
+\(v=(0,0,4,0)'\) and the value is \(16\).
+\item By Exercise~\ref{r15-dr-chisq-tail}(b), \(8<\chi^2_{4,19/20}<10\). So \(4<\chi^2_{4,19/20}\): \(a\) lies in \(E_{1/20}\); and
+\(16>\chi^2_{4,19/20}\): \(b\) does not. By (b), \(\prb(d^2>4)=3e^{-2}\) and \(\prb(d^2>16)=9e^{-8}\).
+\item The Euclidean distances are \(\lVert a-\mu\rVert=6\) and \(\lVert b-\mu\rVert=4\): the point farther from \(\mu\) is the less
+unusual one, because it lies in the direction \(h_1\) of the largest variance, and \(b\) in a direction of the smallest.
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r15-dr-helmert}
+Let \(C_4\) be the centering matrix (Definition~\ref{r1-def-ones}) and \(z\sim N_4(\mu,\sigma^2I_4)\) (\(\sigma>0\)), with
+\(\bar z=\frac14\one'z\).
+\begin{enumerate}
+\item Find an orthonormal basis \(q_1,q_2,q_3\) of \(\mathcal N(C_4-I_4)\) by row reduction and Gram--Schmidt, and compare it with
+the rows \(p_2'\), \(p_3'\), \(p_4'\) of the Helmert matrix \(K_4\) (Example~\ref{r6-exm-helmert}).
+\item Write \(z'C_4z=u_1^2+u_2^2+u_3^2\) with \(u_i=q_i'z\), and show that \(u_1\), \(u_2\), \(u_3\) are independent with variance
+\(\sigma^2\).
+\item Let \(A_1=\bar J_4\) and \(A_{i+1}=q_iq_i'\) (\(i=1,2,3\)). Show that \(A_1+A_2+A_3+A_4=I_4\) and that the ranks add up to \(4\),
+and conclude with Cochran's theorem that \(4\bar z^2\), \(u_1^2\), \(u_2^2\), \(u_3^2\) are independent; give their distributions
+divided by \(\sigma^2\).
+\item For \(\mu=(2,3,7,4)'\) and \(\sigma=1\), find the distribution of \(z'C_4z\), its mean and its variance, and show that
+\(z'C_4z\) and \(\bar z\) are independent.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(C_4-I_4=-\frac14J_4\) has the same null space as \(J_4\), which reduces as follows (the three operations use row \(1\)
+and change different rows):
+\[
+\begin{pmatrix}1&1&1&1\\1&1&1&1\\1&1&1&1\\1&1&1&1\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4-R_1]{R_2\leftarrow R_2-R_1,\ R_3\leftarrow R_3-R_1}
+\begin{pmatrix}1&1&1&1\\0&0&0&0\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\]
+So \(x_1=-x_2-x_3-x_4\), and the special solutions \(a_1=(-1,1,0,0)'\), \(a_2=(-1,0,1,0)'\), \(a_3=(-1,0,0,1)'\) form a basis
+(Theorem~\ref{thm:r4-four-bases}(c)). Gram--Schmidt (Theorem~\ref{r6-thm-gram-schmidt}):
+\begin{itemize}
+\item \(b_1=a_1\), \(\lVert b_1\rVert^2=2\);
+\item \(a_2'b_1=1\), \(b_2=a_2-\frac12b_1=(-\frac12,-\frac12,1,0)'\), \(\lVert b_2\rVert^2=\frac32\);
+\item \(a_3'b_1=1\), \(a_3'b_2=\frac12\), \(b_3=a_3-\frac12b_1-\frac13b_2=(-\frac13,-\frac13,-\frac13,1)'\), \(\lVert b_3\rVert^2=\frac43\).
+\end{itemize}
+So \(q_1=(-1,1,0,0)'/\sqrt2\), \(q_2=(-1,-1,2,0)'/\sqrt6\) and \(q_3=(-1,-1,-1,3)'/\sqrt{12}\): these are \(-p_2\), \(-p_3\) and \(-p_4\) for
+the rows \(p_2'=(1,-1,0,0)/\sqrt2\), \(p_3'=(1,1,-2,0)/\sqrt6\) and \(p_4'=(1,1,1,-3)/\sqrt{12}\) of \(K_4\).
+
+(b) By Example~\ref{r6-exm-helmert}(b), \(C_4=p_2p_2'+p_3p_3'+p_4p_4'=q_1q_1'+q_2q_2'+q_3q_3'\), so
+\(z'C_4z=(q_1'z)^2+(q_2'z)^2+(q_3'z)^2\), with \(u_1=(z_2-z_1)/\sqrt2\), \(u_2=(2z_3-z_1-z_2)/\sqrt6\) and
+\(u_3=(3z_4-z_1-z_2-z_3)/\sqrt{12}\). For \(P_1=[q_1\ q_2\ q_3]\), \(P_1'P_1=I_3\), so \(u=P_1'z\sim N_3(P_1'\mu,\sigma^2I_3)\)
+(Theorem~\ref{r14-thm-mvn-linear}): \(u_1\), \(u_2\), \(u_3\) are independent with variance \(\sigma^2\) (Theorem~\ref{r14-thm-mvn-iid}(a)).
+
+(c) By (b) and Definition~\ref{r1-def-ones}, \(A_2+A_3+A_4=C_4\) and \(A_1+C_4=I_4\). The \(A_i\) are symmetric and idempotent
+(Proposition~\ref{r1-prop-centering}; \((q_iq_i')^2=q_i(q_i'q_i)q_i'=q_iq_i'\)), so their ranks are their traces
+(Theorem~\ref{r6-thm-idempotent}(c)): \(\tr\bar J_4=1\) and \(\tr(q_iq_i')=q_i'q_i=1\); they add up to \(4\). By
+Theorem~\ref{r15-thm-cochran}, (a) \(\Rightarrow\) (b), (c), the forms \(z'A_1z=\frac14(\one'z)^2=4\bar z^2\) and
+\(z'A_{i+1}z=(q_i'z)^2=u_i^2\) are independent, with \(4\bar z^2/\sigma^2\sim\chi^2_1(4\bar\mu^2/\sigma^2)\), where
+\(\bar\mu=\frac14\one'\mu\), and \(u_i^2/\sigma^2\sim\chi^2_1\bigl((q_i'\mu)^2/\sigma^2\bigr)\).
+
+(d) \(C_4\) is symmetric and idempotent of rank \(3\) (Proposition~\ref{r1-prop-centering}, Corollary~\ref{r6-cor-trace-hat}). By
+Theorem~\ref{r15-thm-quadratic-chisq}, \(z'C_4z\sim\chi^2_3(\mu'C_4\mu)\), where \(\mu'C_4\mu=\sum_i(\mu_i-4)^2=4+1+9+0=14\)
+(Example~\ref{r1-exm-centering}); check with (c) and Theorem~\ref{r15-thm-chisq}(c):
+\((q_1'\mu)^2+(q_2'\mu)^2+(q_3'\mu)^2=\frac12+\frac{81}6+0=14\). By Theorem~\ref{r15-thm-chisq}(d), the mean is \(3+14=17\) and the
+variance is \(6+56=62\). As \(\bar z=\frac14\one'z\) and \(\frac14\one'C_4=0\) (Proposition~\ref{r1-prop-centering}), \(\bar z\) and
+\(z'C_4z\) are independent (Theorem~\ref{r15-thm-indep}(b)).
+\end{solution}
+
+\begin{exercise}\label{r15-dr-projections}
+Let \(v=(1,1,-1,-1)'\), \(u=(1,-1,0,0)'\), \(A=\frac14vv'\) and \(B=\frac12uu'\).
+\begin{enumerate}
+\item Write out \(A\) and \(B\), check that \(A^2=A\), \(B^2=B\) and \(AB=0\), and find \(\rank A\) and \(\rank B\).
+\item Let \(z\sim N_4(\mu,I_4)\) with \(\mu=(3,1,2,2)'\). Find the distributions of \(z'Az\) and \(z'Bz\), with their means and variances,
+and explain why \(z'Az\) and \(z'Bz\) are independent.
+\item Let \(\mu=0\). Find a basis of the set of \(c\in\R^4\) such that \(c'z\) is independent of \(z'Az\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\[
+A=\frac14\begin{pmatrix}1&1&-1&-1\\1&1&-1&-1\\-1&-1&1&1\\-1&-1&1&1\end{pmatrix},\qquad
+B=\frac12\begin{pmatrix}1&-1&0&0\\-1&1&0&0\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\]
+\(A^2=\frac1{16}v(v'v)v'=\frac4{16}vv'=A\), \(B^2=\frac14u(u'u)u'=\frac24uu'=B\), and \(AB=\frac18v(v'u)u'=0\), as \(v'u=1-1+0+0=0\).
+Both are symmetric and idempotent, so their ranks are their traces (Theorem~\ref{r6-thm-idempotent}(c)):
+\(\rank A=\frac14v'v=1\) and \(\rank B=\frac12u'u=1\).
+
+(b) \(\mu'A\mu=\frac14(v'\mu)^2=\frac14(3+1-2-2)^2=0\) and \(\mu'B\mu=\frac12(u'\mu)^2=\frac12(3-1)^2=2\). By
+Theorem~\ref{r15-thm-quadratic-chisq}, \(z'Az\sim\chi^2_1\) and \(z'Bz\sim\chi^2_1(2)\); by Theorem~\ref{r15-thm-chisq}(d), the means are
+\(1\) and \(3\), and the variances \(2\) and \(2+8=10\). They are independent by Theorem~\ref{r15-thm-indep}(a), as \(AB=0\).
+
+(c) By Theorem~\ref{r15-thm-indep-converse}(b), \(c'z\) is independent of \(z'Az\) exactly when \(Ac=0\). Row-reduce \(4A=vv'\):
+\[
+\begin{pmatrix}1&1&-1&-1\\1&1&-1&-1\\-1&-1&1&1\\-1&-1&1&1\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+R_1]{R_2\leftarrow R_2-R_1,\ R_3\leftarrow R_3+R_1}
+\begin{pmatrix}1&1&-1&-1\\0&0&0&0\\0&0&0&0\\0&0&0&0\end{pmatrix}
+\]
+So \(c_1=-c_2+c_3+c_4\), and the special solutions \((-1,1,0,0)'\), \((1,0,1,0)'\), \((1,0,0,1)'\) form a basis of \(\mathcal N(A)\)
+(Theorem~\ref{thm:r4-four-bases}(c)).
+\end{solution}
+
+\begin{exercise}\label{r15-dr-pd}
+Let \(y\sim N_4(\mu,\Sigma)\) with
+\[
+\Sigma=\begin{pmatrix}1&1&0&1\\1&2&1&2\\0&1&2&1\\1&2&1&3\end{pmatrix},\qquad\mu=\begin{pmatrix}1\\0\\-1\\1\end{pmatrix}
+\]
+\begin{enumerate}
+\item Show that \(\Sigma\) is positive definite, and find \(\Sigma^{-1}\) by row-reducing \([\Sigma\mid I_4]\).
+\item Find the distribution of \(y'\Sigma^{-1}y\), its mean and its variance.
+\item Let \(A=\Sigma^{-1}-e_1e_1'\). Compute \(A\Sigma\), check the conditions of Theorem~\ref{r15-thm-chisq-pd}(d), and find the
+distribution of \(y'Ay\), its mean and its variance.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) Row reduction (the two operations of the first arrow use row \(1\), those of the second the new row \(2\), those of the
+third row \(4\); each pair changes two different rows):
+\[
+\begin{gathered}
+\left(\begin{array}{cccc|cccc}1&1&0&1&1&0&0&0\\1&2&1&2&0&1&0&0\\0&1&2&1&0&0&1&0\\1&2&1&3&0&0&0&1\end{array}\right)
+\xrightarrow[R_4\leftarrow R_4-R_1]{R_2\leftarrow R_2-R_1}
+\left(\begin{array}{cccc|cccc}1&1&0&1&1&0&0&0\\0&1&1&1&-1&1&0&0\\0&1&2&1&0&0&1&0\\0&1&1&2&-1&0&0&1\end{array}\right)
+\\
+\xrightarrow[R_4\leftarrow R_4-R_2]{R_3\leftarrow R_3-R_2}
+\left(\begin{array}{cccc|cccc}1&1&0&1&1&0&0&0\\0&1&1&1&-1&1&0&0\\0&0&1&0&1&-1&1&0\\0&0&0&1&0&-1&0&1\end{array}\right)
+\xrightarrow[R_2\leftarrow R_2-R_4]{R_1\leftarrow R_1-R_4}
+\left(\begin{array}{cccc|cccc}1&1&0&0&1&1&0&-1\\0&1&1&0&-1&2&0&-1\\0&0&1&0&1&-1&1&0\\0&0&0&1&0&-1&0&1\end{array}\right)
+\\
+\xrightarrow{R_2\leftarrow R_2-R_3}
+\left(\begin{array}{cccc|cccc}1&1&0&0&1&1&0&-1\\0&1&0&0&-2&3&-1&-1\\0&0&1&0&1&-1&1&0\\0&0&0&1&0&-1&0&1\end{array}\right)
+\xrightarrow{R_1\leftarrow R_1-R_2}
+\left(\begin{array}{cccc|cccc}1&0&0&0&3&-2&1&0\\0&1&0&0&-2&3&-1&-1\\0&0&1&0&1&-1&1&0\\0&0&0&1&0&-1&0&1\end{array}\right)
+\end{gathered}
+\]
+So
+\[
+\Sigma^{-1}=\begin{pmatrix}3&-2&1&0\\-2&3&-1&-1\\1&-1&1&0\\0&-1&0&1\end{pmatrix}
+\]
+Check: \(\Sigma\Sigma^{-1}=I_4\); for instance row \(4\) of \(\Sigma\) times column \(2\) of \(\Sigma^{-1}\) is \(-2+6-1-3=0\). The leading
+principal minors are \(\Delta_1(\Sigma)=1\), \(\Delta_2(\Sigma)=2-1=1\) and \(\Delta_3(\Sigma)=1\cdot(4-1)-1\cdot(2-0)=1\) (expansion along
+row \(1\), Theorem~\ref{r5d-thm-expansion}); and \(\Delta_4(\Sigma)=\det\Sigma=1\), as the first two arrows add multiples of rows to
+other rows (Definition~\ref{r5d-def-det}(b)) and leave the left block upper triangular with diagonal entries \(1\)
+(Theorem~\ref{r5d-thm-basic}(c)). All are positive, so \(\Sigma\) is positive definite (Theorem~\ref{r8-thm-leading-minors}).
+
+(b) For \(A=\Sigma^{-1}\), \(A\Sigma=I_4\) is idempotent of rank \(4\). By Theorem~\ref{r15-thm-chisq-pd}(b),
+\(y'\Sigma^{-1}y\sim\chi^2_4(\mu'\Sigma^{-1}\mu)\); \(\Sigma^{-1}\mu=(3-1+0,\ -2+1-1,\ 1+0-1+0,\ 0+0+0+1)'=(2,-2,0,1)'\), so
+\(\mu'\Sigma^{-1}\mu=2+0+0+1=3\). The mean is \(4+3=7\), and the variance is \(8+12=20\) (Theorem~\ref{r15-thm-chisq}(d)).
+
+(c)
+\[
+A=\begin{pmatrix}2&-2&1&0\\-2&3&-1&-1\\1&-1&1&0\\0&-1&0&1\end{pmatrix},\qquad
+A\Sigma=I_4-e_1(e_1'\Sigma)=\begin{pmatrix}0&-1&0&-1\\0&1&0&0\\0&0&1&0\\0&0&0&1\end{pmatrix}
+\]
+Squaring, \((A\Sigma)^2=A\Sigma\) (row \(1\) of the square is \(-1\) times row \(2\) of \(A\Sigma\) plus \(-1\) times its row \(4\)); so
+\(\tr(A\Sigma)=\tr\bigl((A\Sigma)^2\bigr)=3\), and \(\rank(A\Sigma)=3\) (the first column is \(0\), the other three are independent). By
+Theorem~\ref{r15-thm-chisq-pd}(d),(b), \(y'Ay\sim\chi^2_3(\mu'A\mu)\), and \(A\mu=\Sigma^{-1}\mu-\mu_1e_1=(1,-2,0,1)'\), so
+\(\mu'A\mu=1+0+0+1=2\). So \(y'Ay\sim\chi^2_3(2)\), with mean \(5\) and variance \(6+8=14\) (Theorem~\ref{r15-thm-chisq}(d)).
+\end{solution}
+
+\begin{exercise}\label{r15-dr-decomposition}
+Let \(z\sim N_4(\mu,I_4)\) with \(\mu=(1,1,1,1)'\), and \(A=I_4+J_4\).
+\begin{enumerate}
+\item Write \(A=5\bar J_4+C_4\), and give the eigenvalues of \(A\) with their multiplicities.
+\item Use Theorem~\ref{r15-thm-decomposition} to write \(z'Az=5W_1+W_2\) with independent \(W_1\sim\chi^2_1(\theta_1)\) and
+\(W_2\sim\chi^2_3(\theta_2)\); find \(W_1\), \(W_2\), \(\theta_1\) and \(\theta_2\).
+\item Compute \(\expc(z'Az)\) and \(\var(z'Az)\) from (b), and again from Theorem~\ref{r15-thm-moments}.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(I_4=\bar J_4+C_4\) and \(J_4=4\bar J_4\), so \(A=5\bar J_4+C_4\), a spectral decomposition (Example~\ref{r8-exm-patterned}(b)): the
+eigenvalues are \(5\) (once, eigenvector \(\one\)) and \(1\) (three times, eigenspace \(\Span\{\one\}^\perp\)).
+
+(b) Here \(\Sigma=I_4\) and \(B=A\), with \(P_1=\one/2\) for \(\gamma_1=5\) and \(P_2=[q_1\ q_2\ q_3]\) of Exercise~\ref{r15-dr-helmert} for
+\(\gamma_2=1\) (\(P_1P_1'=\bar J_4\), \(P_2P_2'=C_4\)). So \(W_1=\lVert P_1'z\rVert^2=z'\bar J_4z=4\bar z^2\) and \(W_2=z'C_4z\), with
+\(\theta_1=\mu'\bar J_4\mu=4\) and \(\theta_2=\mu'C_4\mu=0\).
+
+(c) From (b) and Theorem~\ref{r15-thm-chisq}(d): \(\expc(z'Az)=5(1+4)+(3+0)=28\), and, as \(W_1\) and \(W_2\) are independent,
+\(\var(z'Az)=25(2+16)+(6+0)=456\). From Theorem~\ref{r15-thm-moments}: \(\tr A=8\) and \(\mu'A\mu=\one'(I_4+J_4)\one=4+16=20\), so the
+mean is \(28\); \(A^2=I_4+2J_4+J_4^2=I_4+6J_4\), so \(\tr(A^2)=28\) and \(\mu'A^2\mu=4+96=100\), and the variance is \(56+400=456\).
+\end{solution}
+
+\begin{exercise}\label{r15-dr-moments}
+Let \(y\sim N_4(\mu,\Sigma)\) with \(\Sigma\) and \(\mu\) as in Exercise~\ref{r15-dr-pd}, and let
+\[
+A=\begin{pmatrix}1&0&0&0\\0&0&0&0\\0&0&0&0\\0&0&0&-1\end{pmatrix},\qquad B=\begin{pmatrix}0&0&0&0\\0&0&1&0\\0&1&0&0\\0&0&0&0\end{pmatrix}
+\]
+so that \(y'Ay=y_1^2-y_4^2\) and \(y'By=2y_2y_3\).
+\begin{enumerate}
+\item Compute \(\expc(y'Ay)\) and \(\var(y'Ay)\).
+\item Compute \(\expc(y'By)\) and \(\var(y'By)\).
+\item Compute \(\cov(y'Ay,y'By)\), and find \(\var\bigl(y'(A+B)y\bigr)\) in two ways.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\[
+A\Sigma=\begin{pmatrix}1&1&0&1\\0&0&0&0\\0&0&0&0\\-1&-2&-1&-3\end{pmatrix},\qquad
+(A\Sigma)^2=\begin{pmatrix}0&-1&-1&-2\\0&0&0&0\\0&0&0&0\\2&5&3&8\end{pmatrix}
+\]
+so \(\tr(A\Sigma)=-2\) and \(\tr\bigl((A\Sigma)^2\bigr)=8\). Also \(\mu'A\mu=1-1=0\), \(A\mu=(1,0,0,-1)'\), \(A\Sigma A\mu=(0,0,0,2)'\) and
+\(\mu'A\Sigma A\mu=2\). By Theorem~\ref{r15-thm-moments}, \(\expc(y'Ay)=-2\) and \(\var(y'Ay)=16+8=24\).
+
+(b)
+\[
+B\Sigma=\begin{pmatrix}0&0&0&0\\0&1&2&1\\1&2&1&2\\0&0&0&0\end{pmatrix},\qquad
+(B\Sigma)^2=\begin{pmatrix}0&0&0&0\\2&5&4&5\\1&4&5&4\\0&0&0&0\end{pmatrix}
+\]
+so \(\tr(B\Sigma)=2\) and \(\tr\bigl((B\Sigma)^2\bigr)=10\). Also \(\mu'B\mu=2\mu_2\mu_3=0\), \(B\mu=(0,-1,0,0)'\), \(B\Sigma B\mu=(0,-1,-2,0)'\) and
+\(\mu'B\Sigma B\mu=2\). So \(\expc(y'By)=2\) and \(\var(y'By)=20+8=28\).
+
+(c)
+\[
+A\Sigma B\Sigma=\begin{pmatrix}0&1&2&1\\0&0&0&0\\0&0&0&0\\-1&-4&-5&-4\end{pmatrix}
+\]
+has the trace \(-4\), and \(A\Sigma B\mu=A\Sigma(0,-1,0,0)'=(-1,0,0,2)'\), so \(\mu'A\Sigma B\mu=-1+2=1\). By Corollary~\ref{r15-cor-cov},
+\(\cov(y'Ay,y'By)=-8+4=-4\), hence \(\var\bigl(y'(A+B)y\bigr)=24+28+2\cdot(-4)=44\). Directly,
+\[
+(A+B)\Sigma=\begin{pmatrix}1&1&0&1\\0&1&2&1\\1&2&1&2\\-1&-2&-1&-3\end{pmatrix},\qquad
+\bigl((A+B)\Sigma\bigr)^2=\begin{pmatrix}0&0&1&-1\\1&3&3&2\\0&1&3&-1\\1&1&-2&4\end{pmatrix}
+\]
+with the trace \(10\), and \((A+B)\mu=(1,-1,0,-1)'\), \((A+B)\Sigma(A+B)\mu=(-1,-2,-3,4)'\), \(\mu'(A+B)\Sigma(A+B)\mu=-1+3+4=6\); so
+\(\var\bigl(y'(A+B)y\bigr)=20+24=44\) (Theorem~\ref{r15-thm-moments}).
+\end{solution}
+
+\needspace{14\baselineskip}
+\subsection*{Problems}
+
+\begin{problem}[\citeat{casella-berger}{Exercise~5.13}, \citeat{casella-berger-solutions}{Exercise~5.13}]\label{r15-ex-unbiased-sigma}
+Let \(x_1,\dots,x_n\) (\(n\geqslant2\)) be independent \(N(\mu,\sigma^2)\) variables (\(\sigma>0\)) with sample variance \(s^2\). Find a
+constant \(c\) such that \(\expc(c\sqrt{s^2})=\sigma\).
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item \(q=(n-1)s^2/\sigma^2\sim\chi^2_{n-1}\) (Theorem~\ref{r15-thm-one-sample}(b)), and \(c\sqrt{s^2}=c\sqrt{\sigma^2/(n-1)}\,\sqrt q\).
+\item \(q\) has the density \(f_{n-1}\) (Theorem~\ref{r15-thm-chisq}(b)); so, by the paragraph before
+Theorem~\ref{r14-thm-mvn-density} and by (D2) with \(n/2\) and \(\frac12\) in place of \(c\) and \(b\),
+\[
+\expc(\sqrt q)=\int_0^\infty\sqrt x\,\frac{x^{(n-1)/2-1}e^{-x/2}}{\Gamma\bigl(\frac{n-1}2\bigr)2^{(n-1)/2}}\,\mathrm{d}x
+=\frac{\Gamma\bigl(\frac n2\bigr)2^{n/2}}{\Gamma\bigl(\frac{n-1}2\bigr)2^{(n-1)/2}}=\frac{\sqrt2\,\Gamma\bigl(\frac n2\bigr)}{\Gamma\bigl(\frac{n-1}2\bigr)}
+\]
+\item So \(\expc(c\sqrt{s^2})=c\,\sigma\sqrt{2/(n-1)}\;\Gamma\bigl(\frac n2\bigr)/\Gamma\bigl(\frac{n-1}2\bigr)\), which is \(\sigma\) for
+\[
+c=\frac{\Gamma\bigl(\frac{n-1}2\bigr)\sqrt{n-1}}{\sqrt2\,\Gamma\bigl(\frac n2\bigr)}
+\]
+For instance, for \(n=2\), \(c=\Gamma(\frac12)/\bigl(\sqrt2\,\Gamma(1)\bigr)=\sqrt{\pi/2}\).\qedhere
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{casella-berger}{Exercise~5.15}, \citeat{casella-berger-solutions}{Exercise~5.15}]\label{r15-ex-recursion}
+Let \(\bar x_n\) and \(s_n^2\) be the mean and the sample variance of numbers \(x_1,\dots,x_n\) (\(n\geqslant2\)), and let a further number
+\(x_{n+1}\) be added. Show that
+\begin{enumerate}
+\item \(\bar x_{n+1}=(x_{n+1}+n\bar x_n)/(n+1)\);
+\item \(ns_{n+1}^2=(n-1)s_n^2+\frac n{n+1}(x_{n+1}-\bar x_n)^2\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) \(\bar x_{n+1}=\frac1{n+1}\bigl(\sum_{i\leqslant n}x_i+x_{n+1}\bigr)=\frac1{n+1}(n\bar x_n+x_{n+1})\).
+
+(b)
+\begin{itemize}
+\item By (a), \(\bar x_{n+1}=\bar x_n+d\) with \(d=(x_{n+1}-\bar x_n)/(n+1)\). So
+\(ns_{n+1}^2=\sum_{i=1}^{n+1}(x_i-\bar x_{n+1})^2=\sum_{i=1}^{n+1}\bigl((x_i-\bar x_n)-d\bigr)^2\).
+\item Expanding, this is \(\sum_{i=1}^{n+1}(x_i-\bar x_n)^2-2d\sum_{i=1}^{n+1}(x_i-\bar x_n)+(n+1)d^2\). As
+\(\sum_{i\leqslant n}(x_i-\bar x_n)=0\), the middle sum is \(x_{n+1}-\bar x_n=(n+1)d\), and the first sum is
+\((n-1)s_n^2+(x_{n+1}-\bar x_n)^2\).
+\item Hence \(ns_{n+1}^2=(n-1)s_n^2+(x_{n+1}-\bar x_n)^2-(n+1)d^2=(n-1)s_n^2+\bigl(1-\frac1{n+1}\bigr)(x_{n+1}-\bar x_n)^2\).\qedhere
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{casella-berger}{Exercise~5.16}, \citeat{casella-berger-solutions}{Exercise~5.16}]\label{r15-ex-construct}
+Let \(x_1,x_2,x_3\) be independent, with \(x_i\sim N(i,i^2)\). Use them to construct a statistic with the distribution
+\begin{enumerate}
+\item \(\chi^2_3\);
+\item \(t_2\);
+\item \(F_{1,2}\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+Let \(z_i=(x_i-i)/i\). By Theorem~\ref{r14-thm-mvn-iid}(a), \(x\sim N_3(\mu,D)\) with \(\mu=(1,2,3)'\) and \(D=\diag(1,4,9)\), so
+\(z=D^{-1/2}(x-\mu)\sim N_3(0,I_3)\) (Theorem~\ref{r14-thm-mvn-linear}): \(z_1,z_2,z_3\) are independent \(N(0,1)\) variables
+(Theorem~\ref{r14-thm-mvn-iid}(a)), and \(z_1\) and \((z_2,z_3)'\) are independent (Theorem~\ref{r14-thm-mvn-indep}(a)).
+
+(a) \(z_1^2+z_2^2+z_3^2=\sum_{i=1}^3\bigl((x_i-i)/i\bigr)^2\sim\chi^2_3\) (Definition~\ref{r15-def-chisq}).
+
+(b) \(z_2^2+z_3^2\sim\chi^2_2\) is independent of \(z_1\) (N3), so
+\[
+\frac{z_1}{\sqrt{(z_2^2+z_3^2)/2}}=\frac{x_1-1}{\sqrt{\bigl(\frac14(x_2-2)^2+\frac19(x_3-3)^2\bigr)/2}}\sim t_2
+\]
+(Definition~\ref{r15-def-t-F}).
+
+(c) The square of the statistic in (b), \(z_1^2/\bigl((z_2^2+z_3^2)/2\bigr)\), has the distribution \(F_{1,2}\)
+(Theorem~\ref{r15-thm-t-symmetric}(b)).
+\end{solution}
+
+\begin{problem}[\citeat{casella-berger}{Exercise~5.17(b)}, \citeat{casella-berger-solutions}{Exercise~5.17(b)}]\label{r15-ex-F-moments}
+Let \(F\sim F_{p,q}\). Show that
+\[
+\expc(F)=\frac q{q-2}\quad(q>2),\qquad\var(F)=2\Bigl(\frac q{q-2}\Bigr)^2\frac{p+q-2}{p(q-4)}\quad(q>4)
+\]
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item Write \(F=(U/p)/(V/q)\) with \(U\sim\chi^2_p\) and \(V\sim\chi^2_q\) independent; \(V>0\) with probability \(1\), as \(f_q=0\)
+on \((-\infty,0]\). For \(k,l\in\{1,2\}\), \(U^k\) and \(V^{-l}\) are independent (N3), so \(\expc(U^kV^{-l})=\expc(U^k)\expc(V^{-l})\)
+(N7), where \(\expc(V^{-l})=\int_0^\infty v^{-l}f_q(v)\,\mathrm{d}v\) (the paragraph before Theorem~\ref{r14-thm-mvn-density}),
+whenever these expectations are finite.
+\item By (D2), for \(q>2l\), \(\int_0^\infty v^{-l}f_q(v)\,\mathrm{d}v=\frac{\Gamma(q/2-l)\,2^{q/2-l}}{\Gamma(q/2)\,2^{q/2}}\). With
+\(\Gamma(q/2)=(q/2-1)\Gamma(q/2-1)\) and \(\Gamma(q/2-1)=(q/2-2)\Gamma(q/2-2)\) (D2), this gives \(\expc(V^{-1})=\frac1{q-2}\) for
+\(q>2\) and \(\expc(V^{-2})=\frac1{(q-2)(q-4)}\) for \(q>4\).
+\item \(\expc(U)=p\) and \(\expc(U^2)=\var(U)+p^2=2p+p^2\) (Theorem~\ref{r15-thm-chisq}(d)).
+\item So \(\expc(F)=\frac qp\cdot p\cdot\frac1{q-2}=\frac q{q-2}\) and \(\expc(F^2)=\frac{q^2}{p^2}\cdot p(p+2)\cdot\frac1{(q-2)(q-4)}\),
+whence
+\[
+\var(F)=\frac{q^2(p+2)}{p(q-2)(q-4)}-\frac{q^2}{(q-2)^2}=\frac{q^2}{(q-2)^2}\cdot\frac{(p+2)(q-2)-p(q-4)}{p(q-4)}
+=2\Bigl(\frac q{q-2}\Bigr)^2\frac{p+q-2}{p(q-4)}\qedhere
+\]
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{casella-berger}{Exercise~5.18(a)}, \citeat{casella-berger-solutions}{Exercise~5.18(a)}]\label{r15-ex-t-moments}
+Let \(T\sim t_p\). Show that \(\expc(T)=0\) if \(p>1\), and \(\var(T)=p/(p-2)\) if \(p>2\).
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item Write \(T=Z/\sqrt{V/p}\) with \(Z\sim N(0,1)\) and \(V\sim\chi^2_p\) independent. As in Problem~\ref{r15-ex-F-moments},
+\(Z\) and \(V^{-1/2}\) are independent (N3), so \(\expc(T)=\sqrt p\,\expc(Z)\expc(V^{-1/2})\) (N7), where
+\(\expc(Z)=0\) and \(\expc(V^{-1/2})=\int_0^\infty v^{-1/2}f_p(v)\,\mathrm{d}v=\frac{\Gamma((p-1)/2)\,2^{(p-1)/2}}{\Gamma(p/2)\,2^{p/2}}\) is
+finite for \(p>1\) (D2). So \(\expc(T)=0\).
+\item \(T^2\sim F_{1,p}\) (Theorem~\ref{r15-thm-t-symmetric}(b)), so for \(p>2\), \(\var(T)=\expc(T^2)=p/(p-2)\), the mean of
+\(F_{1,p}\) (Problem~\ref{r15-ex-F-moments}).\qedhere
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{casella-berger}{Exercise~5.19}, \citeat{casella-berger-solutions}{Exercise~5.19}]\label{r15-ex-stochastic-order}
+A random variable \(u\) is \textbf{stochastically larger} than \(v\) if \(\prb(u>c)\geqslant\prb(v>c)\) for every \(c\),
+with strict inequality for some \(c\).
+\begin{enumerate}
+\item Let \(p>q\geqslant1\), \(u\sim\chi^2_p\) and \(v\sim\chi^2_q\). Show that \(\prb(u>c)>\prb(v>c)\) for every \(c>0\), so
+that \(\chi^2_p\) is stochastically larger than \(\chi^2_q\).
+\item Let \(k_1>k_2\geqslant1\), \(F_1\sim F_{k_1,\nu}\) and \(F_2\sim F_{k_2,\nu}\). Show that \(\prb(k_1F_1>c)>\prb(k_2F_2>c)\) for every
+\(c>0\), so that \(k_1F_1\) is stochastically larger than \(k_2F_2\).
+\item Show that \(kF_{k,\nu,1-\alpha}>(k-1)F_{k-1,\nu,1-\alpha}\) for \(k\geqslant2\) and \(\alpha\in(0,1)\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a)
+\begin{itemize}
+\item The two probabilities depend only on the distributions, so we may take \(v=g_1^2+\dots+g_q^2\) and put
+\(d=g_{q+1}^2+\dots+g_p^2\) for \(g\sim N_p(0,I_p)\) (Theorem~\ref{r14-thm-mvn-density}(b)): \(v\sim\chi^2_q\) and
+\(d\sim\chi^2_{p-q}\) (Definition~\ref{r15-def-chisq}) are independent (Theorem~\ref{r14-thm-mvn-indep}(a), (N3)). Then
+\(v+d\sim\chi^2_p\) (Theorem~\ref{r15-thm-chisq}(c)), so \(\prb(u>c)=\prb(v+d>c)\).
+\item For \(c>0\), \(\prb(v+d>c)-\prb(v>c)=\prb(v\leqslant c<v+d)\), as \(d>0\) with probability \(1\). As \(v\)
+and \(d\) are independent, this is the integral of their joint density \(f_q(x)f_{p-q}(y)\) (the paragraph before
+Theorem~\ref{r14-thm-mvn-density}), which is positive on \((0,\infty)^2\), over the region \(\{(x,y):0<x\leqslant c,\ y>c-x\}\); so it
+is positive. For \(c\leqslant0\) both probabilities are \(1\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item Let \(g\sim N_m(0,I_m)\) with \(m=k_1+\nu\) (Theorem~\ref{r14-thm-mvn-density}(b)), and let \(v=g_1^2+\dots+g_{k_2}^2\),
+\(d=g_{k_2+1}^2+\dots+g_{k_1}^2\) and \(w=g_{k_1+1}^2+\dots+g_m^2\). By Definition~\ref{r15-def-chisq}, \(v\sim\chi^2_{k_2}\),
+\(d\sim\chi^2_{k_1-k_2}\), \(v+d\sim\chi^2_{k_1}\) and \(w\sim\chi^2_\nu\).
+\item The three blocks of \(g\) of lengths \(k_2\), \(k_1-k_2\) and \(\nu\) are independent (Theorem~\ref{r14-thm-mvn-indep}(b)), and
+so are the vectors of its first \(k_1\) and of its last \(\nu\) coordinates (Theorem~\ref{r14-thm-mvn-indep}(a)). So \(v\), \(d\),
+\(w\) are independent, and so are \(v+d\) and \(w\) (N3). By
+Definition~\ref{r15-def-t-F}, \(k_1F_1\) has the distribution of \((v+d)/(w/\nu)\), and \(k_2F_2\) that of \(v/(w/\nu)\).
+\item For \(c>0\), \(\prb\bigl((v+d)/(w/\nu)>c\bigr)-\prb\bigl(v/(w/\nu)>c\bigr)=\prb(v\leqslant cw/\nu<v+d)>0\), as in
+(a), with the density \(f_{k_2}(x)f_{k_1-k_2}(y)f_\nu(s)\) of \((v,d,w)'\) and the region \(\{(x,y,s):0<x\leqslant cs/\nu<x+y\}\); for
+\(c\leqslant0\) both probabilities are \(1\).
+\end{itemize}
+
+(c) Let \(F_k\sim F_{k,\nu}\), \(F_{k-1}\sim F_{k-1,\nu}\) and \(c=(k-1)F_{k-1,\nu,1-\alpha}\); \(c>0\) (Definition~\ref{r15-def-t-F}). Then
+\(\prb(kF_k>kF_{k,\nu,1-\alpha})=\alpha=\prb\bigl((k-1)F_{k-1}>c\bigr)\), and by (b) with \(k_1=k\), \(k_2=k-1\),
+\(\prb(kF_k>c)>\alpha\). As
+\(x\mapsto\prb(kF_k>x)\) is decreasing, \(c<kF_{k,\nu,1-\alpha}\).
+\end{solution}
+
+\begin{problem}[\citeat{casella-berger}{Exercise~5.22}, \citeat{casella-berger-solutions}{Exercise~5.22}]\label{r15-ex-min-square}
+Let \(x\) and \(y\) be independent \(N(0,1)\) variables, and \(z=\min(x,y)\). Show that \(z^2\sim\chi^2_1\).
+\end{problem}
+\begin{solution}
+Let \(\Phi(a)=\prb(x\leqslant a)=\int_{-\infty}^a\varphi\). As \(\varphi(-s)=\varphi(s)\), substituting \(s\mapsto-s\) (D1) gives
+\(\prb(x\geqslant a)=\int_a^\infty\varphi=\Phi(-a)\); and \(y\) has the same distribution function. For \(c>0\), using the
+independence of \(x\) and \(y\),
+\[
+\begin{aligned}
+\prb(z^2\leqslant c)&=\prb(z\geqslant-\sqrt c)-\prb(z>\sqrt c)
+=\prb(x\geqslant-\sqrt c)\prb(y\geqslant-\sqrt c)-\prb(x>\sqrt c)\prb(y>\sqrt c)\\
+&=\Phi(\sqrt c)^2-\Phi(-\sqrt c)^2=\bigl(\Phi(\sqrt c)-\Phi(-\sqrt c)\bigr)\bigl(\Phi(\sqrt c)+\Phi(-\sqrt c)\bigr)=\prb(x^2\leqslant c)
+\end{aligned}
+\]
+since \(\Phi(\sqrt c)+\Phi(-\sqrt c)=1\) and \(\Phi(\sqrt c)-\Phi(-\sqrt c)=\prb(-\sqrt c\leqslant x\leqslant\sqrt c)\). For \(c\leqslant0\) both
+probabilities are \(0\). So \(z^2\) and \(x^2\) have the same distribution function, and hence the same distribution (D3). As \(x^2\sim\chi^2_1\) (Definition~\ref{r15-def-chisq}), \(z^2\sim\chi^2_1\).
+\end{solution}
+
+\begin{problem}[\citeat{searle-khuri}{Exercise~10.11}]\label{r15-ex-bilinear}
+Let \(u=(x',y')'\sim N_{m+n}(\mu,V)\) with \(x\in\R^m\) and \(y\in\R^n\), partitioned accordingly as
+\[
+\mu=\begin{pmatrix}\mu_1\\\mu_2\end{pmatrix},\qquad V=\begin{pmatrix}V_{11}&V_{12}\\V_{12}'&V_{22}\end{pmatrix}
+\]
+and let \(A\in\R^{m\times n}\). Find
+\begin{enumerate}
+\item \(\expc(x'Ay)\);
+\item \(\var(x'Ay)\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+\(x'Ay=\frac12u'Bu\) with the symmetric matrix \(B\in\R^{(m+n)\times(m+n)}\) below, since \(u'Bu=x'Ay+y'A'x=2x'Ay\)
+(Theorem~\ref{r5b-thm-block}(c)); by the block product,
+\[
+B=\begin{pmatrix}0&A\\A'&0\end{pmatrix},\qquad BV=\begin{pmatrix}AV_{12}'&AV_{22}\\A'V_{11}&A'V_{12}\end{pmatrix},\qquad
+B\mu=\begin{pmatrix}A\mu_2\\A'\mu_1\end{pmatrix}
+\]
+(a) By Theorem~\ref{r15-thm-moments}, \(\expc(x'Ay)=\frac12\bigl(\tr(BV)+\mu'B\mu\bigr)\). Here
+\(\tr(BV)=\tr(AV_{12}')+\tr(A'V_{12})=2\tr(AV_{12}')\) (Theorem~\ref{r1-thm-trace}(a),(b)) and \(\mu'B\mu=\mu_1'A\mu_2+\mu_2'A'\mu_1=2\mu_1'A\mu_2\);
+so \(\expc(x'Ay)=\mu_1'A\mu_2+\tr(AV_{12}')\).
+
+(b) By Theorem~\ref{r15-thm-moments}, \(\var(x'Ay)=\frac14\bigl(2\tr((BV)^2)+4\mu'BVB\mu\bigr)\).
+\begin{itemize}
+\item The diagonal blocks of \((BV)^2\) are \(AV_{12}'AV_{12}'+AV_{22}A'V_{11}\) and \(A'V_{11}AV_{22}+A'V_{12}A'V_{12}\). As
+\(\tr(A'V_{11}AV_{22})=\tr(AV_{22}A'V_{11})\) and \(\tr(A'V_{12}A'V_{12})=\tr(V_{12}'AV_{12}'A)=\tr(AV_{12}'AV_{12}')\)
+(Theorem~\ref{r1-thm-trace}), \(\frac12\tr\bigl((BV)^2\bigr)=\tr(AV_{12}'AV_{12}')+\tr(AV_{22}A'V_{11})\).
+\item \(\mu'BVB\mu=(B\mu)'V(B\mu)=\mu_2'A'V_{11}A\mu_2+2\mu_2'A'V_{12}A'\mu_1+\mu_1'AV_{22}A'\mu_1\), and the middle number equals its
+transpose \(\mu_1'AV_{12}'A\mu_2\).
+\item Hence
+\(\var(x'Ay)=\tr(AV_{12}'AV_{12}')+\tr(AV_{22}A'V_{11})+\mu_1'AV_{22}A'\mu_1+\mu_2'A'V_{11}A\mu_2+2\mu_1'AV_{12}'A\mu_2\).\qedhere
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{bapat}{Ch.~8, Exercise~16}]\label{r15-ex-idempotent-difference}
+Let \(A,B\in\R^{n\times n}\) be symmetric and idempotent, with \(A-B\) positive semidefinite.
+\begin{enumerate}
+\item Show that \(A-B\) is idempotent.
+\item Let \(z\sim N_n(0,I_n)\) and \(A\ne B\). Show that \(z'Az-z'Bz\sim\chi^2_{\rank A-\rank B}\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a)
+\begin{itemize}
+\item Let \(r=\rank A\). If \(r=0\), then \(A=0\), and both \(-B\) and \(B=B'B\) are positive semidefinite (Theorem~\ref{r8-thm-XtX}); so
+\(x'Bx=0\) for every \(x\), \(B=0\) (Proposition~\ref{r8-prop-qf-symmetric}(b)), and \(A-B=0\). If \(r=n\), then \(A=I_n\)
+(Theorem~\ref{r8-thm-idempotent-eigen}(a), Theorem~\ref{r8-thm-spectral}), and \(A-B=I_n-B\) is idempotent
+(Theorem~\ref{r6-thm-idempotent}(b)). Let \(1\leqslant r<n\).
+\item By Theorem~\ref{r8-thm-idempotent-eigen}(c), \(P'AP=\diag(I_r,0)\) for an orthogonal \(P\), so \(A=P\diag(I_r,0)P'\). Put \(\tilde B=P'BP\): it is
+symmetric, idempotent (\(\tilde B^2=P'B^2P=\tilde B\)) and positive semidefinite (\(\tilde B=\tilde B'\tilde B\), Theorem~\ref{r8-thm-XtX}), and
+\(\diag(I_r,0)-\tilde B=P'(A-B)P\) is positive semidefinite (Theorem~\ref{r8-thm-congruence}(a)). Partition
+\[
+\tilde B=\begin{pmatrix}B_{11}&B_{12}\\B_{12}'&B_{22}\end{pmatrix},\qquad B_{11}\in\R^{r\times r}
+\]
+\item \(B_{22}\) and \(-B_{22}\) are principal submatrices of positive semidefinite matrices, hence positive semidefinite
+(Theorem~\ref{r8-thm-principal-sub}); so \(B_{22}=0\) (Proposition~\ref{r8-prop-qf-symmetric}(b)).
+\item Then \(B_{12}=0\): for \(s\in\R\), \(e\in\R^r\) and \(f\in\R^{n-r}\), the vector \(x=(se',f')'\) gives
+\(0\leqslant x'\tilde Bx=s^2e'B_{11}e+2s\,e'B_{12}f\), which is negative for small \(s\) of the sign opposite to \(e'B_{12}f\) unless
+\(e'B_{12}f=0\); taking for \(e\) and \(f\) the columns of identity matrices gives \(B_{12}=0\).
+\item So \(\tilde B=\diag(B_{11},0)\), and \(\tilde B^2=\tilde B\) gives \(B_{11}^2=B_{11}\) (Proposition~\ref{r5b-prop-block-tri}(b)). Then
+\(I_r-B_{11}\) is idempotent (Theorem~\ref{r6-thm-idempotent}(b)), hence so is \(P'(A-B)P=\diag(I_r-B_{11},0)\), and
+\((A-B)^2=P\diag(I_r-B_{11},0)^2P'=A-B\).
+\end{itemize}
+(b) \(A-B\) is symmetric and idempotent by (a), and \(A-B\ne0\); so
+\(\rank(A-B)=\tr(A-B)=\tr A-\tr B=\rank A-\rank B\geqslant1\) (Theorems~\ref{r6-thm-idempotent}(c) and~\ref{r1-thm-trace}(a)). By
+Theorem~\ref{r15-thm-quadratic-chisq} (with \(\mu=0\) and \(\sigma=1\)), \(z'Az-z'Bz=z'(A-B)z\sim\chi^2_{\rank A-\rank B}\).
+\end{solution}
+
+\clearpage
 \def\runningtitle{Bibliography}
 \renewcommand{\refname}{Bibliography}
 \begin{thebibliography}{10}

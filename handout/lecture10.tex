@@ -1,0 +1,655 @@
+\def\handoutsay{false}\def\handoutfill{false}
+\documentclass[12pt]{article}
+\newcommand{\handoutrunning}{Lecture 10: Normal Vectors and Quadratic Forms}
+\providecommand{\handoutsay}{true}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[a4paper,margin=15mm,headheight=14pt,headsep=5mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,booktabs,needspace}
+\usepackage{pifont}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{fancyhdr}
+\usepackage{ifthen}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdfauthor={Chang-Ye Tu}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Linear Algebra}
+\fancyhead[R]{\small\handoutrunning}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt plus 1pt minus 1pt}
+\setlength{\emergencystretch}{1.5em}
+\usepackage{etoolbox}
+\newcommand{\handoutdisplayskips}{\setlength{\abovedisplayskip}{7pt plus 2pt minus 2pt}%
+  \setlength{\belowdisplayskip}{7pt plus 2pt minus 2pt}}
+\apptocmd{\normalsize}{\handoutdisplayskips}{}{\PackageWarning{handout}{could not patch normalsize}}
+\handoutdisplayskips
+\setlist[enumerate]{label=(\alph*),leftmargin=*,itemsep=2pt,topsep=3pt}
+\setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\iu}{\mathrm{i}}
+\newcommand{\contradiction}{\mathord{\text{\large\ding{56}}}}
+\newcommand{\one}{\mathbf 1}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\col}{col}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator\prb{\mathsf{P}}
+\DeclareMathOperator\expc{\mathsf{E}}
+\DeclareMathOperator\var{var}
+\DeclareMathOperator\cov{cov}
+\DeclareMathOperator\cor{cor}
+\DeclareMathOperator\argmin{argmin}
+\DeclareMathOperator\argmax{argmax}
+\DeclareMathOperator{\Span}{span}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{fact}{Fact}
+\renewcommand{\thefact}{F\arabic{fact}}
+\AddToHook{cmd/subsection/before}{\par\Needspace{9\baselineskip}}
+\AddToHook{env/theorem/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/proposition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/lemma/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/definition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/example/before}{\par\Needspace{4\baselineskip}}
+\definecolor{saybg}{gray}{0.86}
+\NewDocumentEnvironment{say}{+b}
+  {\ifthenelse{\equal{\handoutsay}{true}}{\par\Needspace{2\baselineskip}\noindent\colorbox{saybg}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}%
+   {\small\sffamily\ding{43}\enspace\textbf{Say.}\enspace#1}}\par}{}}
+  {}
+\providecommand{\handoutfill}{false}
+\newsavebox{\boardbox}
+\newlength{\boardht}
+\definecolor{boardrule}{gray}{0.55}
+\makeatletter
+\newcommand{\boardstart}{\par\if@inlabel\leavevmode\par\fi}
+\makeatother
+\NewDocumentEnvironment{board}{o +b}
+  {\boardstart\IfValueT{#1}{\noindent#1\par\nopagebreak}%
+   \noindent\begin{lrbox}{\boardbox}\begin{minipage}{\linewidth}#2\end{minipage}\end{lrbox}%
+   \setlength{\boardht}{\dimexpr\ht\boardbox+\dp\boardbox\relax}%
+   \ifthenelse{\equal{\handoutfill}{true}}%
+     {\setlength{\boardht}{1.4\boardht}%
+      {\setlength{\fboxsep}{0pt}\setlength{\fboxrule}{0.4pt}\color{boardrule}%
+       \framebox[\dimexpr\linewidth-2\fboxrule\relax]{\rule{0pt}{\boardht}}}}%
+     {\ifthenelse{\equal{\handoutsay}{true}}%
+        {\llap{\color{boardrule}\rule[-\dp\boardbox]{1.5pt}{\boardht}\hspace{4pt}}}{}%
+      \usebox{\boardbox}}%
+   \par}
+  {}
+\newcommand{\blank}[1]{\ifthenelse{\equal{\handoutfill}{true}}{\underline{\phantom{#1}}}{#1}}
+\newcommand{\lec}[1]{Lecture~#1}
+\newcommand{\handouttitle}[2]{%
+  \begin{center}
+  {\LARGE\sffamily\bfseries #2\par}\vspace{3pt}
+  {\sffamily Linear Algebra \textperiodcentered\ \lec{#1}\par}
+  \ifthenelse{\equal{\handoutsay}{true}}{\vspace{3pt}{\small\sffamily\colorbox{saybg}{\ding{43}\enspace\textbf{Say.}}\enspace
+    teacher's copy: the shaded boxes are not in the students' copy.\par}}{}
+  \ifthenelse{\equal{\handoutfill}{true}}{\vspace{3pt}{\small\sffamily Fill-in copy: complete the framed spaces in
+    class.\par}}{}
+  \end{center}}
+
+\hypersetup{pdftitle={Linear Algebra, Lecture 10: Normal Vectors and Quadratic Forms}}
+\newcommand{\boardtop}{\vspace*{-\abovedisplayskip}}
+\begin{document}
+\handouttitle{10}{Normal Vectors and Quadratic Forms}
+
+\textbf{Last time} (\lec{9}): \(\expc(Az+b)=A\mu+b\), \(\var(Az+b)=A\Sigma A'\), \(\cov(Az,Bz)=A\Sigma B'\); the
+\(4\times4\) \(\Sigma\) of Example~5. F1--F5: Chapters 1--6 of the textbook; F6--F11: probability, no proof.
+\(I=I_n\), \(e_j=\col_j(I)\).
+
+\subsection*{Facts}
+
+\begin{enumerate}[label=\textbf{F\arabic*.},ref=F\arabic*,leftmargin=*,itemsep=0pt,parsep=0pt,topsep=2pt]
+\item\label{f-rules} \((AB)C=A(BC)\), \(A(B+C)=AB+AC\), \((A+B)C=AC+BC\), \(c(AB)=(cA)B=A(cB)\), \(I_mA=A=AI_n\)
+(\(A\in\R^{m\times n}\)); \((A+B)'=A'+B'\), \((cA)'=cA'\), \((AB)'=B'A'\), \((A')'=A\); \(x'y=y'x\); \(A\) is
+\textbf{symmetric} if \(A'=A\).
+\item\label{f-views} \((AB)_{ij}=\sum_ra_{ir}b_{rj}\); for \(A=[a_1\ \cdots\ a_p]\): \(Ae_j=a_j\),
+\(\col_j(AB)=A\col_j(B)\), \(AB=a_1b_1'+\dots+a_pb_p'\) (\(b_j'\) = row \(j\) of \(B\));
+\(\diag(\alpha_1,\dots,\alpha_n)\diag(\beta_1,\dots,\beta_n)=\diag(\alpha_1\beta_1,\dots,\alpha_n\beta_n)\); block
+matrices multiply, and are transposed, block by block (when the blocks fit).
+\item\label{f-inverse} \(BA=I\) \(\Rightarrow\) \(B=A^{-1}\); \((A')^{-1}=(A^{-1})'\), so the inverse of an invertible
+symmetric matrix is symmetric.
+\item\label{f-centering} \(\one=\one_n=(1,\dots,1)'\in\R^n\), \(\bar y=\frac1n\one'y\), \(\bar J_n=\frac1n\one\one'\),
+\(C_n=I_n-\bar J_n\): \(C_n'=C_n=C_n^2\), \(C_n\one=0\), \(C_ny=y-\bar y\one\), \(y'C_ny=\sum_i(y_i-\bar y)^2\).
+\item\label{f-orthonormal} \(\lVert x\rVert^2=x'x\). \(Q\in\R^{n\times p}\) has \textbf{orthonormal} columns \(\iff\)
+\(Q'Q=I_p\). If \(p=n\) (\(Q\) \textbf{orthogonal}): \(Q^{-1}=Q'\), \(QQ'=I_n\).
+\item\label{f-prob} (Probability.) A random variable is a number whose value depends on chance. For random variables
+\(u\), \(v\) and numbers \(a\), \(b\), \(c\): \(\expc(au+bv+c)=a\expc(u)+b\expc(v)+c\) (also for finite sums);
+\(\var(u)=\expc\bigl((u-\expc(u))^2\bigr)\); \(\cov(u,v)=\expc\bigl((u-\expc(u))(v-\expc(v))\bigr)\). \(\prb(z\in A)\)
+is the probability that a random vector \(z\in\R^n\) takes a value in \(A\subseteq\R^n\):
+\(\prb(z\in A\cup B)=\prb(z\in A)+\prb(z\in B)\) for disjoint \(A\), \(B\), and \(\prb(z\in\R^n)=1\); \(y\), \(z\) have the
+\textbf{same distribution} if \(\prb(y\in A)=\prb(z\in A)\) for all \(A\), and then \(\expc g(y)=\expc g(z)\).
+\(u_1,\dots,u_m\) are \textbf{independent} if
+\(\prb(u_1\in A_1,\dots,u_m\in A_m)=\prb(u_1\in A_1)\cdots\prb(u_m\in A_m)\) for all \(A_1,\dots,A_m\). If \(u\) takes
+only the values \(a_1,\dots,a_m\): \(\expc g(u)=g(a_1)\prb(u=a_1)+\dots+g(a_m)\prb(u=a_m)\). (Sets and functions are
+those for which the probabilities and expectations are defined.)
+\item\label{f-factor} Random vectors \(u_1\in\R^{n_1},\dots,u_m\in\R^{n_m}\) whose MGFs (Definition~\ref{h-def-mvn})
+are finite near \(0\) are independent \(\iff\)
+\(M_{(u_1',\dots,u_m')'}(t_1,\dots,t_m)=M_{u_1}(t_1)\cdots M_{u_m}(t_m)\) for all \(t_k\in\R^{n_k}\) near \(0\).
+\item\label{f-functions} If \(u_1,\dots,u_m\) are independent, so are \(g_1(u_1),\dots,g_m(u_m)\), for any functions
+\(g_1,\dots,g_m\).
+\item\label{f-moments} If \(M_z\) is finite near \(0\), its first and second partial derivatives exist there, and at
+\(t=0\): \(\partial M_z/\partial t_i=\expc(z_i)\), \(\partial^2M_z/\partial t_j\partial t_i=\expc(z_iz_j)\).
+\item\label{f-product} If \(u_1,\dots,u_m\) are independent:
+\(\expc\bigl(g_1(u_1)\cdots g_m(u_m)\bigr)=\expc g_1(u_1)\cdots\expc g_m(u_m)\) (finite expectations). So independent
+random vectors \(u\), \(v\) have \(\cov(u,v)=0\).
+\item\label{f-chisq} Let \(r,\nu,a,b\geqslant1\). \(\chi^2_r\) (\textbf{chi-square}) is the distribution of
+\(w_1^2+\dots+w_r^2\) for independent \(w_1,\dots,w_r\sim N(0,1)\); \(t_\nu\) is that of \(Z/\sqrt{V/\nu}\) for
+independent \(Z\sim N(0,1)\), \(V\sim\chi^2_\nu\); \(F_{a,b}\) is that of \((U/a)/(V/b)\) for independent
+\(U\sim\chi^2_a\), \(V\sim\chi^2_b\). For \(u\) with one of these distributions, \(G(x)=\prb(u\leqslant x)\) is
+continuous, so \(\prb(u=c)=0\) for every \(c\); \(G\) is strictly increasing on \(\R\) (\(t_\nu\)), or \(G(0)=0\) and
+\(G\) is strictly increasing on \([0,\infty)\) (\(\chi^2_r\), \(F_{a,b}\)). For \(\tau\in(0,1)\), the \(\tau\)
+\textbf{quantile} \(t_{\nu,\tau}\), \(\chi^2_{r,\tau}\), \(F_{a,b,\tau}\) is the unique \(c\) with \(G(c)=\tau\); so
+\(\prb(u>c)=\alpha\) for the \((1-\alpha)\) quantile \(c\).
+\end{enumerate}
+
+\textbf{From \lec{8} and \lec{9}} (restated; \(A\in\R^{n\times n}\)).
+\begin{itemize}[itemsep=0pt,parsep=0pt,topsep=2pt]
+\item \lec{8}, Theorem~9 (\(A\) symmetric): (a) \(\R^n\) has an orthonormal basis \(q_1,\dots,q_n\) of eigenvectors of
+\(A\). (b) If \(q_1,\dots,q_n\in\R^n\) are orthonormal, \(Aq_i=\lambda_iq_i\), \(Q=[q_1\ \cdots\ q_n]\) and
+\(\Lambda=\diag(\lambda_1,\dots,\lambda_n)\): \(Q\) is orthogonal, \(A=Q\Lambda Q'\), the \(\lambda_i\) are the
+eigenvalues of \(A\), and \(\rank A=\#\{i:\lambda_i\ne0\}\). (d) \(A=\lambda_1q_1q_1'+\dots+\lambda_nq_nq_n'\).
+\item \lec{8}, Theorem~11: for symmetric \(A\), \(A^2=A\iff\) every eigenvalue of \(A\) is \(0\) or \(1\).
+Example~5: \(\rank C_n=n-1\).
+\item \lec{8}, Definition~13, Theorem~14(a),(c): a symmetric \(A\) is \textbf{positive definite} (PD) if
+\(x'Ax>0\) for all \(x\ne0\), \textbf{positive semidefinite} (PSD) if \(x'Ax\geqslant0\) for all \(x\); with
+\(\lambda_i\) as in Theorem~9(b): PD \(\iff\) every \(\lambda_i>0\); PSD \(\iff\) every \(\lambda_i\geqslant0\); PD
+\(\Rightarrow\) invertible. Theorem~15(a): \(B\) PSD, \(K\in\R^{n\times k}\) \(\Rightarrow\) \(K'BK\) PSD.
+\item \lec{9}, Definitions~1, 2: for a random vector \(z\), \(\expc(z)=(\expc(z_i))\),
+\(\var(z)=\expc\bigl((z-\mu)(z-\mu)'\bigr)\) (\(\mu=\expc(z)\)) has the entries \(\sigma_{ij}=\cov(z_i,z_j)\);
+\(\cov(u,v)=\expc\bigl((u-\mu_u)(v-\mu_v)'\bigr)\) has the entries \(\cov(u_i,v_j)\); so \(\var\bigl((u',v')'\bigr)\)
+has the blocks \(\var(u)\), \(\cov(u,v)\); \(\cov(v,u)\), \(\var(v)\).
+\item \lec{9}, Theorem~3(b),(c): \(\var(Az+b)=A\var(z)A'\); \(\var(z)\) is PSD. Theorem~4(d):
+\(\expc(uu')=\var(u)+\mu_u\mu_u'\).
+\item \lec{9}, Example~5: for the \(\Sigma\) of Example~\ref{h-exm-marginal} below, \(a=(-1,-2,1,0)'\) and
+\(b=(2,2,-2,1)'\): \(\Sigma a=(0,0,1,2)'\), \(\Sigma b=(0,0,0,1)'\), \(a'\Sigma a=b'\Sigma b=1\),
+\(\one'\Sigma\one=51\); \(\var(z_1+z_2)=\var(z_1-z_2)=5\), \(\cov(z_1+z_2,z_1-z_2)=3\) if \(\var(z)=\Sigma\).
+\end{itemize}
+
+\subsection*{1. Normal vectors}
+
+\begin{definition}\label{h-def-mvn}
+The \textbf{moment generating function} (MGF) of a random vector \(z\in\R^n\) is \(M_z(t)=\expc\exp(t'z)\)
+(\(t\in\R^n\), where finite). Let \(\mu\in\R^n\) and \(\Sigma\in\R^{n\times n}\) be symmetric and PSD. \(z\) has the
+\textbf{multivariate normal distribution} \(N_n(\mu,\Sigma)\), \(z\sim N_n(\mu,\Sigma)\), if
+\[
+M_z(t)=\exp\bigl(t'\mu+\tfrac12t'\Sigma t\bigr)\qquad\text{for all }t\in\R^n
+\]
+For \(n=1\): \(N(\mu,\sigma^2)\), with the MGF \(\exp(t\mu+\frac12\sigma^2t^2)\); \(N(0,1)\) is the \textbf{standard
+normal} distribution. \(u\) and \(v\) are \textbf{jointly normal} if \((u',v')'\) is multivariate normal.
+\end{definition}
+
+\Needspace{6\baselineskip}
+\begin{proposition}\label{h-prop-moments}
+If \(z\sim N_n(\mu,\Sigma)\), then \(\expc(z)=\mu\) and \(\var(z)=\Sigma\).
+\end{proposition}
+\begin{proof}
+The exponent \(q(t)=t'\mu+\frac12t'\Sigma t=\sum_kt_k\mu_k+\frac12\sum_k\sum_l\sigma_{kl}t_kt_l\) (\(\sigma_{kl}=\sigma_{lk}\))
+and the chain and product rules give
+\begin{align*}
+\frac{\partial q}{\partial t_i}&=\mu_i+(\Sigma t)_i,\qquad\frac{\partial^2q}{\partial t_j\partial t_i}=\sigma_{ij},\qquad
+\frac{\partial M_z}{\partial t_i}=\bigl(\mu_i+(\Sigma t)_i\bigr)M_z(t)\\
+\frac{\partial^2M_z}{\partial t_j\partial t_i}&=\Bigl(\sigma_{ij}+\bigl(\mu_i+(\Sigma t)_i\bigr)\bigl(\mu_j+(\Sigma t)_j\bigr)\Bigr)M_z(t)
+\end{align*}
+At \(t=0\), \(M_z(0)=1\): \(\expc(z_i)=\mu_i\), \(\expc(z_iz_j)=\sigma_{ij}+\mu_i\mu_j\) (\ref{f-moments}). So
+\(\expc(zz')=\Sigma+\mu\mu'\) and \(\var(z)=\Sigma\) (\lec{9}, Theorem~4(d)).
+\end{proof}
+
+\Needspace{10\baselineskip}
+\begin{theorem}\label{h-thm-linear}
+Let \(z\sim N_n(\mu,\Sigma)\), and \(A\in\R^{m\times n}\), \(b\in\R^m\) constant. Then
+\(Az+b\sim N_m(A\mu+b,\ A\Sigma A')\).
+\end{theorem}
+\begin{proof}
+\begin{board}[\(A\Sigma A'=(A')'\Sigma(A')\) is symmetric and PSD (\ref{f-rules}; \lec{8}, Theorem~15(a), \(K=A'\)); for
+\(t\in\R^m\):]
+\boardtop
+\begin{align*}
+t'(Az+b)&=t'b+(A't)'z\implies M_{Az+b}(t)=\exp(t'b)\,M_z(A't)&&\text{(\ref{f-rules}; \ref{f-prob})}\\
+M_{Az+b}(t)&=\exp\bigl(t'b+(A't)'\mu+\tfrac12(A't)'\Sigma(A't)\bigr)&&\text{(Definition~\ref{h-def-mvn})}\\
+&=\exp\bigl(t'(A\mu+b)+\tfrac12t'(A\Sigma A')t\bigr)&&\text{(\ref{f-rules})}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\begin{corollary}\label{h-cor-marginal}
+Let \(z\sim N_n(\mu,\Sigma)\).
+\begin{enumerate}
+\item For \(1\leqslant i_1<\dots<i_k\leqslant n\): \((z_{i_1},\dots,z_{i_k})'\sim N_k\), with the mean
+\((\mu_{i_1},\dots,\mu_{i_k})'\) and the submatrix of \(\Sigma\) in the rows and columns \(i_1,\dots,i_k\) as covariance
+matrix. In particular \(z_i\sim N(\mu_i,\sigma_{ii})\); and for \(z=(z_1',z_2')'\), \(z_1\in\R^p\), \(z_2\in\R^q\),
+\(\Sigma_{11}\in\R^{p\times p}\),
+\[
+\mu=\begin{pmatrix}\mu_1\\\mu_2\end{pmatrix},\qquad\Sigma=\begin{pmatrix}\Sigma_{11}&\Sigma_{12}\\\Sigma_{21}&\Sigma_{22}\end{pmatrix}
+\implies z_1\sim N_p(\mu_1,\Sigma_{11}),\quad z_2\sim N_q(\mu_2,\Sigma_{22})
+\]
+\item \(a'z\sim N(a'\mu,\ a'\Sigma a)\) for \(a\in\R^n\).
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(a) \(T=[e_{i_1}\ \cdots\ e_{i_k}]\): \(T'z=(z_{i_1},\dots,z_{i_k})'\), and \(T'\Sigma T\) has the entries
+\(e_{i_r}'\Sigma e_{i_s}=\sigma_{i_ri_s}\) (\ref{f-views}); Theorem~\ref{h-thm-linear} with \(A=T'\), \(b=0\).
+
+(b) Theorem~\ref{h-thm-linear} with \(A=a'\), \(b=0\).
+\end{proof}
+
+\Needspace{18\baselineskip}
+\begin{example}\label{h-exm-marginal}
+Let \(z\sim N_4(\mu,\Sigma)\), with \(\mu=(1,0,2,2)'\) and \(\Sigma\) of \lec{9}, Example~5:
+\[
+\Sigma=\begin{pmatrix}4&0&4&0\\0&1&2&2\\4&2&9&6\\0&2&6&9\end{pmatrix}=KK',\qquad
+K=\begin{pmatrix}2&0&0&0\\0&1&0&0\\2&2&1&0\\0&2&2&1\end{pmatrix}
+\]
+(\(x'\Sigma x=\lVert K'x\rVert^2\geqslant0\): \(\Sigma\) is PSD.) Find the distributions of \(z_2\), \((z_1,z_3)'\), \(\one'z\), \(e=z_3-z_1-2z_2\), \(f=z_4+2z_1+2z_2-2z_3\) and
+\((z_1+z_2,z_1-z_2)'\).
+\end{example}
+\textit{Solution.}
+\begin{board}[Corollary~\ref{h-cor-marginal}; \(e=a'z\), \(f=b'z\), \(a'\Sigma a=b'\Sigma b=1\), \(\one'\Sigma\one=51\)
+(\lec{9}, Example~5):]
+\boardtop
+\begin{align*}
+z_2&\sim N(0,1),\qquad\begin{pmatrix}z_1\\z_3\end{pmatrix}\sim
+N_2\left(\begin{pmatrix}1\\2\end{pmatrix},\begin{pmatrix}4&4\\4&9\end{pmatrix}\right)&&\text{(Corollary~\ref{h-cor-marginal}(a))}\\
+\one'z&\sim N(5,51)&&(\text{(b)};\ \one'\mu=1+0+2+2=5)\\
+e&\sim N(1,1)&&(a'\mu=-1-0+2+0=1)\\
+f&\sim N(0,1)&&(b'\mu=2+0-4+2=0)
+\end{align*}
+\end{board}
+\begin{board}[\(A=\left(\begin{smallmatrix}1&1&0&0\\1&-1&0&0\end{smallmatrix}\right)\), \(Az=(z_1+z_2,z_1-z_2)'\);
+\(A\Sigma A'=\var(Az)\) (\lec{9}, Theorem~3(b)), with the entries of \lec{9}, Example~5:]
+\[
+A\mu=\begin{pmatrix}1+0\\1-0\end{pmatrix}=\begin{pmatrix}1\\1\end{pmatrix},\qquad
+Az\sim N_2\left(\begin{pmatrix}1\\1\end{pmatrix},\begin{pmatrix}5&3\\3&5\end{pmatrix}\right)\qquad
+\text{(Theorem~\ref{h-thm-linear})}
+\]
+\end{board}
+
+\Needspace{22\baselineskip}
+\subsection*{2. Independence}
+
+\Needspace{19\baselineskip}
+\begin{theorem}\label{h-thm-indep}
+\begin{enumerate}
+\item Let \(z=(u',v')'\sim N_{p+q}(\mu,\Sigma)\), \(u\in\R^p\), \(v\in\R^q\), \(\mu=(\mu_u',\mu_v')'\),
+\(\Sigma=\left(\begin{smallmatrix}\Sigma_{uu}&\Sigma_{uv}\\\Sigma_{vu}&\Sigma_{vv}\end{smallmatrix}\right)\)
+(\(\Sigma_{uu}\in\R^{p\times p}\)). Then \(u\), \(v\) are independent \(\iff\) \(\Sigma_{uv}=0\) (\(\iff\)
+\(\cov(u,v)=0\)).
+\item Let \(D=\diag(\sigma_1^2,\dots,\sigma_n^2)\). Then \(z\sim N_n(\mu,D)\) \(\iff\) \(z_1,\dots,z_n\) are independent
+and \(z_i\sim N(\mu_i,\sigma_i^2)\). In particular \(z\sim N_n(\mu_0\one,\sigma^2I_n)\) \(\iff\) \(z_1,\dots,z_n\) are
+independent \(N(\mu_0,\sigma^2)\) variables (a \textbf{random sample} from \(N(\mu_0,\sigma^2)\)).
+\item Let \(z\sim N_n(\mu,\Sigma)\), and \(A\in\R^{p\times n}\), \(B\in\R^{q\times n}\) constant. Then \(Az\), \(Bz\) are
+independent \(\iff\) \(A\Sigma B'=0\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) \(\Rightarrow\): \(\Sigma=\var(z)\) (Proposition~\ref{h-prop-moments}) has the block
+\(\Sigma_{uv}=\cov(u,v)\) (\lec{9}, Definitions~1, 2), which is \(0\) if \(u\), \(v\) are independent (\ref{f-product}).
+\begin{board}[(a) \(\Leftarrow\): \(\Sigma_{uv}=0\), so \(\Sigma_{vu}=\Sigma_{uv}'=0\); for \(s\in\R^p\), \(t\in\R^q\), by
+blocks (\ref{f-views}):]
+\boardtop
+\begin{align*}
+(s',t')\mu&=s'\mu_u+t'\mu_v,\qquad(s',t')\,\Sigma\begin{pmatrix}s\\t\end{pmatrix}=s'\Sigma_{uu}s+t'\Sigma_{vv}t\\
+M_z(s,t)&=\exp\bigl(s'\mu_u+\tfrac12s'\Sigma_{uu}s\bigr)\exp\bigl(t'\mu_v+\tfrac12t'\Sigma_{vv}t\bigr)=M_u(s)M_v(t)
+&&\text{(Corollary~\ref{h-cor-marginal}(a))}
+\end{align*}
+For all \(s\), \(t\): \(u\), \(v\) are independent (\ref{f-factor}).
+\end{board}
+\begin{board}[(b) \(t'Dt=\sum_i\sigma_i^2t_i^2\) (\ref{f-views}), so \(D\) is PSD; \(\Rightarrow\) uses
+\(z_i\sim N(\mu_i,\sigma_i^2)\) (Corollary~\ref{h-cor-marginal}(a)), \(\Leftarrow\) uses \ref{f-product}; for all
+\(t\in\R^n\):]
+\boardtop
+\begin{align*}
+\Rightarrow\quad M_z(t)&=\exp\bigl(t'\mu+\tfrac12t'Dt\bigr)=\textstyle\prod_i\exp\bigl(t_i\mu_i+\tfrac12\sigma_i^2t_i^2\bigr)=\prod_iM_{z_i}(t_i)\\
+\Leftarrow\quad M_z(t)&=\expc\textstyle\prod_ie^{t_iz_i}=\prod_i\expc e^{t_iz_i}=\prod_i\exp\bigl(t_i\mu_i+\tfrac12\sigma_i^2t_i^2\bigr)=\exp\bigl(t'\mu+\tfrac12t'Dt\bigr)
+\end{align*}
+\(\Rightarrow\): \(z_1,\dots,z_n\) are independent (\ref{f-factor}). \(\Leftarrow\): \(z\sim N_n(\mu,D)\)
+(Definition~\ref{h-def-mvn}).
+\end{board}
+\begin{board}[(c) \(G=\left(\begin{smallmatrix}A\\B\end{smallmatrix}\right)\in\R^{(p+q)\times n}\),
+\(Gz=\bigl((Az)',(Bz)'\bigr)'\) (\ref{f-views}):]
+\[
+Gz\sim N_{p+q}(G\mu,G\Sigma G'),\qquad G\Sigma G'=\begin{pmatrix}A\Sigma A'&A\Sigma B'\\B\Sigma A'&B\Sigma B'\end{pmatrix}
+\qquad\text{(Theorem~\ref{h-thm-linear}; \ref{f-views})}
+\]
+By (a) with \(u=Az\), \(v=Bz\): independent \(\iff\) \(A\Sigma B'=0\).
+\end{board}
+\nopagebreak
+\end{proof}
+
+\begin{remark}\label{h-rem-uncorr}
+Joint normality is needed in Theorem~\ref{h-thm-indep}(a). Let \(u\) take the values \(-1\), \(0\), \(1\), each with
+probability \(\frac13\), and \(v=u^2\). By \ref{f-prob}, \(\expc(u)=\expc(u^3)=0\), \(\expc(u^2)=\frac23\), and
+\(\cov(u,v)=\expc(u^3)-\expc(u)\expc(u^2)=0\); but \(\prb(u=0,\ v=1)=0\ne\frac13\cdot\frac23=\prb(u=0)\prb(v=1)\).
+\end{remark}
+
+\Needspace{11\baselineskip}
+\begin{example}\label{h-exm-indep}
+For \(z\) of Example~\ref{h-exm-marginal}: are \(z_1\) and \((z_2,z_4)'\) independent? \(e\) and \((z_1,z_2)'\)? \(f\)
+and \((z_1,z_2,z_3)'\)? \(z_1+z_2\) and \(z_1-z_2\)?
+\end{example}
+\textit{Solution.}
+\begin{board}[Corollary~\ref{h-cor-marginal}(a) with \(i_1,i_2,i_3=1,2,4\):]
+\[
+\begin{pmatrix}z_1\\z_2\\z_4\end{pmatrix}\sim
+N_3\left(\begin{pmatrix}1\\0\\2\end{pmatrix},\begin{pmatrix}4&0&0\\0&1&2\\0&2&9\end{pmatrix}\right)
+\]
+\(\sigma_{12}=\sigma_{14}=0\): \(z_1\) and \((z_2,z_4)'\) are independent (Theorem~\ref{h-thm-indep}(a), \(p=1\),
+\(q=2\)).
+\end{board}
+\begin{board}[Theorem~\ref{h-thm-indep}(c) with \(B=a'\), \(B=b'\); \(\Sigma a=(0,0,1,2)'\), \(\Sigma b=(0,0,0,1)'\)
+(\lec{9}, Example~5):]
+\boardtop
+\begin{align*}
+[I_2\ \ 0]\,\Sigma a&=(0,0)'\implies e\text{ and }(z_1,z_2)'\text{ independent},\qquad z_3=z_1+2z_2+e\\
+[I_3\ \ 0]\,\Sigma b&=(0,0,0)'\implies f\text{ and }(z_1,z_2,z_3)'\text{ independent},\qquad z_4=-2z_1-2z_2+2z_3+f
+\end{align*}
+\(\cov(z_1+z_2,z_1-z_2)=3\ne0\): \(z_1+z_2\) and \(z_1-z_2\) are not independent (\ref{f-product}).
+\end{board}
+
+\Needspace{22\baselineskip}
+\subsection*{3. Conditional distributions}
+
+\Needspace{19\baselineskip}
+\begin{theorem}\label{h-thm-conditional}
+Let \(z\sim N_n(\mu,\Sigma)\) be partitioned as in Corollary~\ref{h-cor-marginal}(a), with \(\Sigma_{11}\) PD, and
+\(\Sigma_{22\cdot1}=\Sigma_{22}-\Sigma_{21}\Sigma_{11}^{-1}\Sigma_{12}\). Then \(\Sigma_{22\cdot1}\) is PSD, and
+\[
+w=z_2-\mu_2-\Sigma_{21}\Sigma_{11}^{-1}(z_1-\mu_1)\sim N_q(0,\Sigma_{22\cdot1}),\qquad w\text{ and }z_1\text{ independent}
+\]
+So \(z_2=\mu_2+\Sigma_{21}\Sigma_{11}^{-1}(z_1-\mu_1)+w\). For \(a\in\R^p\),
+\(N_q\bigl(\mu_2+\Sigma_{21}\Sigma_{11}^{-1}(a-\mu_1),\ \Sigma_{22\cdot1}\bigr)\) is the \textbf{conditional
+distribution of \(z_2\) given \(z_1=a\)}.
+\end{theorem}
+\begin{proof}
+\begin{board}[\(\Sigma_{11}^{-1}\) exists (\lec{8}, Theorem~14(c)) and is symmetric (\ref{f-inverse});
+\(B=\Sigma_{21}\Sigma_{11}^{-1}\), \(B'=\Sigma_{11}^{-1}\Sigma_{12}\) (\(\Sigma_{21}'=\Sigma_{12}\));
+\(L=\left(\begin{smallmatrix}I_p&0\\-B&I_q\end{smallmatrix}\right)\); blocks (\ref{f-views}):]
+\boardtop
+\begin{align*}
+L(z-\mu)&=\begin{pmatrix}z_1-\mu_1\\-B(z_1-\mu_1)+z_2-\mu_2\end{pmatrix}=\begin{pmatrix}z_1-\mu_1\\w\end{pmatrix}\\
+L\Sigma&=\begin{pmatrix}\Sigma_{11}&\Sigma_{12}\\\Sigma_{21}-B\Sigma_{11}&\Sigma_{22}-B\Sigma_{12}\end{pmatrix}
+=\begin{pmatrix}\Sigma_{11}&\Sigma_{12}\\0&\Sigma_{22\cdot1}\end{pmatrix}\\
+L\Sigma L'&=\begin{pmatrix}\Sigma_{11}&\Sigma_{12}\\0&\Sigma_{22\cdot1}\end{pmatrix}\begin{pmatrix}I_p&-B'\\0&I_q\end{pmatrix}
+=\begin{pmatrix}\Sigma_{11}&\Sigma_{12}-\Sigma_{11}B'\\0&\Sigma_{22\cdot1}\end{pmatrix}
+=\begin{pmatrix}\Sigma_{11}&0\\0&\Sigma_{22\cdot1}\end{pmatrix}
+\end{align*}
+\end{board}
+\begin{board}[Theorem~\ref{h-thm-linear} with \(A=L\), \(b=-L\mu\):]
+\boardtop
+\begin{align*}
+L(z-\mu)&\sim N_n(0,L\Sigma L')\implies w\sim N_q(0,\Sigma_{22\cdot1})&&\text{(Corollary~\ref{h-cor-marginal}(a))}\\
+\Sigma_{22\cdot1}&=\var(w)\text{ is PSD}&&\text{(Proposition~\ref{h-prop-moments}; \lec{9}, Theorem~3(c))}
+\end{align*}
+The off-diagonal blocks of \(L\Sigma L'\) are \(0\): \(z_1-\mu_1\) and \(w\) are independent
+(Theorem~\ref{h-thm-indep}(a)), and so are \(z_1=(z_1-\mu_1)+\mu_1\) and \(w\) (\ref{f-functions}).
+\end{board}
+\nopagebreak
+\end{proof}
+The conditional mean is an affine function of \(a\), and \(\Sigma_{22\cdot1}\) does not depend on \(a\). With
+\(B=\Sigma_{21}\Sigma_{11}^{-1}\), \(B\Sigma_{11}B'=\Sigma_{21}\Sigma_{11}^{-1}\Sigma_{11}\Sigma_{11}^{-1}\Sigma_{12}
+=\Sigma_{22}-\Sigma_{22\cdot1}\) is PSD (\lec{8}, Theorem~15(a) with \(\Sigma_{11}\), \(B'\) for its \(B\), \(K\)); so
+\(\var(c'w)=c'\Sigma_{22\cdot1}c\leqslant c'\Sigma_{22}c=\var(c'z_2)\) for \(c\in\R^q\) (\lec{9}, Theorem~3(b)): knowing \(z_1\) can only
+reduce the variance.
+
+\Needspace{10\baselineskip}
+\begin{example}\label{h-exm-conditional}
+For \(z\) of Example~\ref{h-exm-marginal}, find the conditional distribution of \((z_3,z_4)'\) given \(z_1=a_1\),
+\(z_2=a_2\).
+\end{example}
+\textit{Solution.}
+\begin{board}[Theorem~\ref{h-thm-conditional} with \((z_1,z_2)'\), \((z_3,z_4)'\) as its \(z_1\), \(z_2\), \(p=q=2\); the blocks of \(\Sigma\) (Example~\ref{h-exm-marginal}); \(x'\Sigma_{11}x=4x_1^2+x_2^2>0\)
+for \(x\ne0\): \(\Sigma_{11}\) is PD:]
+\boardtop
+\begin{align*}
+\Sigma_{11}&=\diag(4,1),\qquad\Sigma_{11}^{-1}=\diag(\tfrac14,1),\qquad
+\Sigma_{21}=\begin{pmatrix}4&2\\0&2\end{pmatrix},\qquad\Sigma_{21}\Sigma_{11}^{-1}=\begin{pmatrix}1&2\\0&2\end{pmatrix}\\
+\Sigma_{22\cdot1}&=\begin{pmatrix}9&6\\6&9\end{pmatrix}-\begin{pmatrix}1&2\\0&2\end{pmatrix}\begin{pmatrix}4&0\\2&2\end{pmatrix}
+=\begin{pmatrix}9&6\\6&9\end{pmatrix}-\begin{pmatrix}8&4\\4&4\end{pmatrix}=\begin{pmatrix}1&2\\2&5\end{pmatrix}
+\end{align*}
+\end{board}
+\begin{board}[The conditional mean (Theorem~\ref{h-thm-conditional}), \(\mu_1=(1,0)'\), \(\mu_2=(2,2)'\):]
+\[
+\begin{pmatrix}2\\2\end{pmatrix}+\begin{pmatrix}1&2\\0&2\end{pmatrix}\begin{pmatrix}a_1-1\\a_2\end{pmatrix}
+=\begin{pmatrix}a_1+2a_2+1\\2a_2+2\end{pmatrix},\qquad
+N_2\left(\begin{pmatrix}a_1+2a_2+1\\2a_2+2\end{pmatrix},\begin{pmatrix}1&2\\2&5\end{pmatrix}\right)
+\]
+The first entry agrees with Example~\ref{h-exm-indep}: \(z_3=z_1+2z_2+e\), \(e\sim N(1,1)\) independent of
+\((z_1,z_2)'\). Knowing \(z_1\), \(z_2\) reduces the variances of \(z_3\), \(z_4\) from \(9\), \(9\) to \(1\), \(5\).
+\end{board}
+
+\Needspace{19\baselineskip}
+\subsection*{4. The chi-square and \(t\) distributions}
+
+\begin{proposition}\label{h-prop-chisq-mean}
+If \(u\sim\chi^2_r\), then \(\expc(u)=r\).
+\end{proposition}
+\begin{proof}
+\(u\) has the distribution of \(w_1^2+\dots+w_r^2\) (\ref{f-chisq}), and \(\expc(w_i^2)=\var(w_i)+\expc(w_i)^2=1\)
+(Proposition~\ref{h-prop-moments} with \(n=1\); \lec{9}, Theorem~4(d)); so
+\(\expc(u)=\expc(w_1^2)+\dots+\expc(w_r^2)=r\) (\ref{f-prob}).
+\end{proof}
+
+\Needspace{16\baselineskip}
+\begin{theorem}\label{h-thm-t}
+Let \(T\sim t_\nu\), \(\alpha\in(0,1)\), \(c\in\R\). Then \(-T\sim t_\nu\), \(\prb(T<-c)=\prb(T>c)\),
+\[
+\prb(T<-t_{\nu,1-\alpha})=\alpha,\qquad\prb\bigl(-t_{\nu,1-\alpha/2}\leqslant T\leqslant t_{\nu,1-\alpha/2}\bigr)=1-\alpha,
+\qquad t_{\nu,1-\alpha/2}>0
+\]
+\end{theorem}
+\begin{proof}
+\begin{board}[\(T=Z/\sqrt{V/\nu}\), \(Z\sim N(0,1)\), \(V\sim\chi^2_\nu\) independent (\ref{f-chisq}); \(-Z\sim N(0,1)\)
+(Theorem~\ref{h-thm-linear}, \(A=-1\)), independent of \(V\) (\ref{f-functions}); \(k=t_{\nu,1-\alpha/2}\):]
+\boardtop
+\begin{align*}
+-T&=(-Z)/\sqrt{V/\nu}\sim t_\nu&&\text{(\ref{f-chisq})}\\
+\prb(T<-c)&=\prb(-T>c)=\prb(T>c)&&\text{(\ref{f-prob}: same distribution)}\\
+\prb(T<-t_{\nu,1-\alpha})&=\prb(T>t_{\nu,1-\alpha})=\alpha&&\text{(\ref{f-chisq})}\\
+\prb(-k\leqslant T\leqslant k)&=1-\prb(T<-k)-\prb(T>k)=1-\tfrac\alpha2-\tfrac\alpha2&&\text{(line 2 with \(c=k\); \ref{f-prob}, \ref{f-chisq})}\\
+\prb(T<0)&=\prb(T>0),\quad\prb(T=0)=0\implies\prb(T\leqslant0)=\tfrac12&&\text{(line 2 with \(c=0\); \ref{f-prob}, \ref{f-chisq})}\\
+\prb(T\leqslant0)&=\tfrac12<1-\tfrac\alpha2=\prb(T\leqslant k)\implies k>0&&\text{(\ref{f-chisq}: increasing)}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{19\baselineskip}
+\subsection*{5. Standardization and quadratic forms}
+
+\Needspace{16\baselineskip}
+\begin{proposition}\label{h-prop-sqrt}
+Let \(\Sigma\) be PD, \(\Sigma=Q\Lambda Q'\) (\lec{8}, Theorem~9), so \(\lambda_i>0\) (\lec{8}, Theorem~14(a));
+\(\Lambda^{\pm1/2}=\diag(\lambda_1^{\pm1/2},\dots,\lambda_n^{\pm1/2})\),
+\(\Sigma^{1/2}=Q\Lambda^{1/2}Q'\), \(\Sigma^{-1/2}=Q\Lambda^{-1/2}Q'\). Then \(\Sigma^{1/2}\), \(\Sigma^{-1/2}\) are
+symmetric, and
+\[
+\Sigma^{1/2}\Sigma^{1/2}=\Sigma,\qquad\Sigma^{1/2}\Sigma^{-1/2}=I,\qquad\Sigma^{-1/2}\Sigma\Sigma^{-1/2}=I,\qquad
+\Sigma^{-1/2}\Sigma^{-1/2}=\Sigma^{-1}
+\]
+\end{proposition}
+\begin{proof}
+\begin{board}[\(Q'Q=I=QQ'\) (\ref{f-orthonormal}); products of diagonal matrices (\ref{f-views}):]
+\boardtop
+\begin{align*}
+(Q\Lambda^{\pm1/2}Q')'&=Q\Lambda^{\pm1/2}Q'&&\text{(\ref{f-rules}; \(\Lambda^{\pm1/2}\) diagonal)}\\
+\Sigma^{1/2}\Sigma^{1/2}&=Q\Lambda^{1/2}Q'Q\Lambda^{1/2}Q'=Q\Lambda Q'=\Sigma\\
+\Sigma^{1/2}\Sigma^{-1/2}&=Q\Lambda^{1/2}\Lambda^{-1/2}Q'=QQ'=I\\
+\Sigma^{-1/2}\Sigma\Sigma^{-1/2}&=Q\Lambda^{-1/2}\Lambda\Lambda^{-1/2}Q'=QQ'=I\\
+(\Sigma^{-1/2}\Sigma^{-1/2})\Sigma&=Q\Lambda^{-1}Q'Q\Lambda Q'=QQ'=I\implies\Sigma^{-1/2}\Sigma^{-1/2}=\Sigma^{-1}
+&&\text{(\ref{f-inverse})}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{12\baselineskip}
+\begin{theorem}\label{h-thm-standard}
+Let \(z\sim N_n(\mu,\Sigma)\), \(\Sigma\) PD, and \(w=\Sigma^{-1/2}(z-\mu)\). Then \(w\sim N_n(0,I_n)\): the \(w_i\)
+are independent and \(N(0,1)\); \(z=\mu+\Sigma^{1/2}w\); and \((z-\mu)'\Sigma^{-1}(z-\mu)=w'w\sim\chi^2_n\).
+\end{theorem}
+\begin{proof}
+\begin{board}[Theorem~\ref{h-thm-linear} with \(A=\Sigma^{-1/2}\), \(b=-\Sigma^{-1/2}\mu\); \(\Sigma^{-1/2}\) is symmetric
+(Proposition~\ref{h-prop-sqrt}):]
+\boardtop
+\begin{align*}
+w&\sim N_n\bigl(\Sigma^{-1/2}\mu-\Sigma^{-1/2}\mu,\ \Sigma^{-1/2}\Sigma\Sigma^{-1/2}\bigr)=N_n(0,I_n)
+&&\text{(Proposition~\ref{h-prop-sqrt})}\\
+&\implies w_1,\dots,w_n\text{ independent, }N(0,1)&&\text{(Theorem~\ref{h-thm-indep}(b))}\\
+\Sigma^{1/2}w&=\Sigma^{1/2}\Sigma^{-1/2}(z-\mu)=z-\mu\\
+w'w&=(z-\mu)'\Sigma^{-1/2}\Sigma^{-1/2}(z-\mu)=(z-\mu)'\Sigma^{-1}(z-\mu)\sim\chi^2_n&&\text{(\ref{f-rules}; \ref{f-chisq})}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+So \(\prb\bigl((z-\mu)'\Sigma^{-1}(z-\mu)\leqslant\chi^2_{n,1-\alpha}\bigr)=1-\alpha\) (\ref{f-chisq}).
+
+\Needspace{13\baselineskip}
+\begin{theorem}\label{h-thm-quadratic-chisq}
+Let \(z\sim N_n(\mu,\sigma^2I_n)\) (\(\sigma>0\)), and \(A\in\R^{n\times n}\) symmetric, \(A^2=A\), \(\rank A=r\geqslant1\),
+\(A\mu=0\). Then \(z'Az/\sigma^2\sim\chi^2_r\).
+\end{theorem}
+\begin{proof}
+\begin{board}[\(A=\sum_i\lambda_iq_iq_i'\) (\lec{8}, Theorem~9(a),(d)), \(\lambda_i\in\{0,1\}\) (\lec{8}, Theorem~11),
+\(\#\{i:\lambda_i=1\}=\rank A=r\) (\lec{8}, Theorem~9(b)); number the \(q_i\) so that
+\(\lambda_1=\dots=\lambda_r=1\); \(Q_1=[q_1\ \cdots\ q_r]\):]
+\boardtop
+\begin{align*}
+A&=q_1q_1'+\dots+q_rq_r'=Q_1Q_1',\qquad Q_1'Q_1=I_r&&\text{(\ref{f-views}; \ref{f-orthonormal})}\\
+Q_1'\mu&=Q_1'Q_1Q_1'\mu=Q_1'A\mu=0\\
+u&=\tfrac1\sigma Q_1'z\sim N_r\bigl(0,\tfrac1{\sigma^2}Q_1'(\sigma^2I_n)Q_1\bigr)=N_r(0,I_r)&&\text{(Theorem~\ref{h-thm-linear})}\\
+z'Az/\sigma^2&=(Q_1'z)'(Q_1'z)/\sigma^2=u'u=u_1^2+\dots+u_r^2\sim\chi^2_r
+&&\text{(Theorem~\ref{h-thm-indep}(b); \ref{f-chisq})}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{11\baselineskip}
+\begin{theorem}\label{h-thm-quadratic-indep}
+Let \(z\sim N_n(\mu,\sigma^2I_n)\), and \(A,B\in\R^{n\times n}\) symmetric with \(A^2=A\), \(B^2=B\).
+\begin{enumerate}
+\item If \(AB=0\), then \(z'Az\) and \(z'Bz\) are independent.
+\item If \(K\in\R^{m\times n}\) and \(KA=0\), then \(Kz\) and \(z'Az\) are independent.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) \(A'A=A^2=A\): \(z'Az=z'A'Az=(Az)'(Az)\), a function of \(Az\); likewise \(z'Bz=(Bz)'(Bz)\);
+Theorem~\ref{h-thm-indep}(c), \ref{f-functions}:]
+\[
+A(\sigma^2I_n)B'=\sigma^2AB=0\implies Az,\ Bz\text{ independent}\implies z'Az,\ z'Bz\text{ independent}
+\]
+\end{board}
+\begin{board}[(b) \(z'Az=(Az)'(Az)\) as in (a); Theorem~\ref{h-thm-indep}(c), \ref{f-functions}:]
+\[
+K(\sigma^2I_n)A'=\sigma^2KA=0\implies Kz,\ Az\text{ independent}\implies Kz,\ z'Az\text{ independent}
+\]
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{19\baselineskip}
+\subsection*{6. One normal sample}
+
+\Needspace{16\baselineskip}
+\begin{theorem}\label{h-thm-one-sample}
+Let \(n\geqslant2\), \(x_1,\dots,x_n\) independent \(N(\mu,\sigma^2)\) variables (\(\sigma>0\)),
+\(\bar x=\frac1n\sum_ix_i\), \(s^2=\frac1{n-1}\sum_i(x_i-\bar x)^2\) and \(s=\sqrt{s^2}\).
+\begin{enumerate}
+\item \(\bar x\sim N(\mu,\sigma^2/n)\).
+\item \((n-1)s^2/\sigma^2\sim\chi^2_{n-1}\).
+\item \(\bar x\) and \(s^2\) are independent.
+\item \(\sqrt n(\bar x-\mu)/s\sim t_{n-1}\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\(x=(x_1,\dots,x_n)'\sim N_n(\mu\one,\sigma^2I_n)\) (Theorem~\ref{h-thm-indep}(b)), and \((n-1)s^2=x'C_nx\)
+(\ref{f-centering}).
+
+(a) Corollary~\ref{h-cor-marginal}(b) with \(a=\frac1n\one\): \(a'x=\bar x\), \(a'(\mu\one)=\mu\),
+\(a'(\sigma^2I_n)a=\sigma^2/n\).
+\begin{board}[(b) \(C_n'=C_n=C_n^2\), \(C_n(\mu\one)=0\) (\ref{f-centering}), \(\rank C_n=n-1\geqslant1\) (\lec{8},
+Example~5):]
+\[
+\frac{(n-1)s^2}{\sigma^2}=\frac{x'C_nx}{\sigma^2}\sim\chi^2_{n-1}\qquad\text{(Theorem~\ref{h-thm-quadratic-chisq}, \(A=C_n\))}
+\]
+\end{board}
+\begin{board}[(c) \(K=\frac1n\one'\): \(Kx=\bar x\), \(KC_n=\frac1n(C_n\one)'=0\) (\ref{f-rules}, \ref{f-centering}):]
+\[
+\bar x\text{ and }x'C_nx\text{ independent}\implies\bar x\text{ and }s^2=\tfrac1{n-1}x'C_nx\text{ independent}
+\qquad\text{(Theorem~\ref{h-thm-quadratic-indep}(b); \ref{f-functions})}
+\]
+\end{board}
+\begin{board}[(d) \(Z=\sqrt n(\bar x-\mu)/\sigma\sim N(0,1)\) ((a); Theorem~\ref{h-thm-linear}),
+\(V=(n-1)s^2/\sigma^2\sim\chi^2_{n-1}\) ((b)), independent ((c); \ref{f-functions}); \(\prb(V=0)=0\) (\ref{f-chisq}),
+so \(s>0\) with probability \(1\):]
+\[
+\frac{\sqrt n(\bar x-\mu)}s=\frac{\sqrt n(\bar x-\mu)/\sigma}{\sqrt{(n-1)s^2/\bigl((n-1)\sigma^2\bigr)}}
+=\frac Z{\sqrt{V/(n-1)}}\sim t_{n-1}\qquad\text{(\ref{f-chisq})}
+\]
+\end{board}
+\nopagebreak
+\end{proof}
+
+\begin{definition}\label{h-def-confidence}
+Let observations be modeled as random variables whose distribution depends on parameters, and \(\alpha\in(0,1)\). An
+interval \([L,U]\) whose endpoints \(L\leqslant U\) are computed from the observations is a \textbf{confidence
+interval} with level \(1-\alpha\) for a parameter \(\theta\in\R\) if \(\prb(L\leqslant\theta\leqslant U)=1-\alpha\) for
+all values of the parameters.
+\end{definition}
+
+\Needspace{13\baselineskip}
+\begin{example}\label{h-exm-one-sample}
+In Theorem~\ref{h-thm-one-sample}, let \(\alpha\in(0,1)\), \(T=\sqrt n(\bar x-\mu)/s\), \(V=(n-1)s^2/\sigma^2\). Find
+confidence intervals with level \(1-\alpha\) for \(\mu\) and for \(\sigma^2\); compute them for five measurements
+\(2,4,5,6,8\), modelled as independent \(N(\mu,\sigma^2)\) variables; when does \(3\) lie in the interval for \(\mu\)?
+\end{example}
+\textit{Solution.}
+\begin{board}[\(c=t_{n-1,1-\alpha/2}>0\), \(T\sim t_{n-1}\) (Theorems~\ref{h-thm-t}, \ref{h-thm-one-sample}(d));
+\(s>0\):]
+\boardtop
+\begin{align*}
+\prb(-c\leqslant T\leqslant c)&=1-\alpha&&\text{(Theorem~\ref{h-thm-t}; all \(\mu\), \(\sigma\))}\\
+-c\leqslant\frac{\sqrt n(\bar x-\mu)}s\leqslant c&\iff\bar x-\frac{cs}{\sqrt n}\leqslant\mu\leqslant\bar x+\frac{cs}{\sqrt n}
+\end{align*}
+So \([\bar x-cs/\sqrt n,\ \bar x+cs/\sqrt n]\) is a confidence interval for \(\mu\) with level \(1-\alpha\)
+(Definition~\ref{h-def-confidence}).
+\end{board}
+\begin{board}[\(c_1=\chi^2_{n-1,\alpha/2}\), \(c_2=\chi^2_{n-1,1-\alpha/2}\), \(V\sim\chi^2_{n-1}\)
+(Theorem~\ref{h-thm-one-sample}(b)); \ref{f-chisq}:]
+\boardtop
+\begin{align*}
+\prb(c_1\leqslant V\leqslant c_2)&=\prb(V\leqslant c_2)-\prb(V<c_1)=1-\tfrac\alpha2-\tfrac\alpha2&&(\prb(V=c_1)=0)\\
+\prb(V\leqslant0)&=0<\tfrac\alpha2<1-\tfrac\alpha2\implies0<c_1<c_2\\
+c_1\leqslant\frac{(n-1)s^2}{\sigma^2}\leqslant c_2&\iff\frac{(n-1)s^2}{c_2}\leqslant\sigma^2\leqslant\frac{(n-1)s^2}{c_1}
+\end{align*}
+So \([(n-1)s^2/c_2,\ (n-1)s^2/c_1]\) is a confidence interval for \(\sigma^2\) with level \(1-\alpha\).
+\end{board}
+\begin{board}[The data, \(n=5\):]
+\boardtop
+\begin{align*}
+\bar x&=\tfrac{25}5=5,\qquad x_i-\bar x:\ -3,-1,0,1,3,\qquad s^2=\tfrac{9+1+0+1+9}4=5\\
+\tfrac s{\sqrt5}&=1,\qquad(n-1)s^2=20\\
+\mu&:\ \bigl[5-t_{4,1-\alpha/2},\ 5+t_{4,1-\alpha/2}\bigr],\qquad\sigma^2:\ \bigl[20/\chi^2_{4,1-\alpha/2},\ 20/\chi^2_{4,\alpha/2}\bigr]\\
+\mu=3&:\ \frac{\sqrt5(\bar x-3)}s=\frac{\sqrt5\cdot2}{\sqrt5}=2,\qquad3\in\bigl[5-t_{4,1-\alpha/2},\ 5+t_{4,1-\alpha/2}\bigr]
+\iff t_{4,1-\alpha/2}\geqslant2
+\end{align*}
+\end{board}
+
+\bigskip
+\textbf{Practice.} The Exercises and Problems of the textbook, Chapters~10 and~11: normal vectors, linear
+transformations and marginal distributions, independence, conditional distributions, the chi-square, \(t\) and \(F\)
+distributions, quadratic forms in normal vectors, and one normal sample.
+
+\end{document}
