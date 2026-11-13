@@ -1,0 +1,731 @@
+\def\handoutsay{false}\def\handoutfill{false}
+\documentclass[12pt]{article}
+\newcommand{\handoutrunning}{Lecture 4: Bases, Dimension, and Rank}
+\providecommand{\handoutsay}{true}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[a4paper,margin=15mm,headheight=14pt,headsep=5mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,booktabs,needspace}
+\usepackage{pifont}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{fancyhdr}
+\usepackage{ifthen}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdfauthor={Chang-Ye Tu}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Linear Algebra}
+\fancyhead[R]{\small\handoutrunning}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt plus 1pt minus 1pt}
+\setlength{\emergencystretch}{1.5em}
+\usepackage{etoolbox}
+\newcommand{\handoutdisplayskips}{\setlength{\abovedisplayskip}{7pt plus 2pt minus 2pt}%
+  \setlength{\belowdisplayskip}{7pt plus 2pt minus 2pt}}
+\apptocmd{\normalsize}{\handoutdisplayskips}{}{\PackageWarning{handout}{could not patch normalsize}}
+\handoutdisplayskips
+\setlist[enumerate]{label=(\alph*),leftmargin=*,itemsep=2pt,topsep=3pt}
+\setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\iu}{\mathrm{i}}
+\newcommand{\contradiction}{\mathord{\text{\large\ding{56}}}}
+\newcommand{\one}{\mathbf 1}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\col}{col}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator\prb{\mathsf{P}}
+\DeclareMathOperator\expc{\mathsf{E}}
+\DeclareMathOperator\var{var}
+\DeclareMathOperator\cov{cov}
+\DeclareMathOperator\cor{cor}
+\DeclareMathOperator\argmin{argmin}
+\DeclareMathOperator\argmax{argmax}
+\DeclareMathOperator{\Span}{span}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{fact}{Fact}
+\renewcommand{\thefact}{F\arabic{fact}}
+\AddToHook{cmd/subsection/before}{\par\Needspace{9\baselineskip}}
+\AddToHook{env/theorem/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/proposition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/lemma/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/definition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/example/before}{\par\Needspace{4\baselineskip}}
+\definecolor{saybg}{gray}{0.86}
+\NewDocumentEnvironment{say}{+b}
+  {\ifthenelse{\equal{\handoutsay}{true}}{\par\Needspace{2\baselineskip}\noindent\colorbox{saybg}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}%
+   {\small\sffamily\ding{43}\enspace\textbf{Say.}\enspace#1}}\par}{}}
+  {}
+\providecommand{\handoutfill}{false}
+\newsavebox{\boardbox}
+\newlength{\boardht}
+\definecolor{boardrule}{gray}{0.55}
+\makeatletter
+\newcommand{\boardstart}{\par\if@inlabel\leavevmode\par\fi}
+\makeatother
+\NewDocumentEnvironment{board}{o +b}
+  {\boardstart\IfValueT{#1}{\noindent#1\par\nopagebreak}%
+   \noindent\begin{lrbox}{\boardbox}\begin{minipage}{\linewidth}#2\end{minipage}\end{lrbox}%
+   \setlength{\boardht}{\dimexpr\ht\boardbox+\dp\boardbox\relax}%
+   \ifthenelse{\equal{\handoutfill}{true}}%
+     {\setlength{\boardht}{1.4\boardht}%
+      {\setlength{\fboxsep}{0pt}\setlength{\fboxrule}{0.4pt}\color{boardrule}%
+       \framebox[\dimexpr\linewidth-2\fboxrule\relax]{\rule{0pt}{\boardht}}}}%
+     {\ifthenelse{\equal{\handoutsay}{true}}%
+        {\llap{\color{boardrule}\rule[-\dp\boardbox]{1.5pt}{\boardht}\hspace{4pt}}}{}%
+      \usebox{\boardbox}}%
+   \par}
+  {}
+\newcommand{\blank}[1]{\ifthenelse{\equal{\handoutfill}{true}}{\underline{\phantom{#1}}}{#1}}
+\newcommand{\lec}[1]{Lecture~#1}
+\newcommand{\handouttitle}[2]{%
+  \begin{center}
+  {\LARGE\sffamily\bfseries #2\par}\vspace{3pt}
+  {\sffamily Linear Algebra \textperiodcentered\ \lec{#1}\par}
+  \ifthenelse{\equal{\handoutsay}{true}}{\vspace{3pt}{\small\sffamily\colorbox{saybg}{\ding{43}\enspace\textbf{Say.}}\enspace
+    teacher's copy: the shaded boxes are not in the students' copy.\par}}{}
+  \ifthenelse{\equal{\handoutfill}{true}}{\vspace{3pt}{\small\sffamily Fill-in copy: complete the framed spaces in
+    class.\par}}{}
+  \end{center}}
+
+\hypersetup{pdftitle={Linear Algebra, Lecture 4: Bases, Dimension, and Rank}}
+\newcommand{\boardtop}{\vspace*{-\abovedisplayskip}}
+\DeclareMathOperator{\row}{row}
+\begin{document}
+\handouttitle{4}{Bases, Dimension, and Rank}
+
+\textbf{Last time} (\lec{3}): subspaces, spans, linear independence and bases. Here \(A=[a_1\ \cdots\ a_n]\in\R^{m\times
+n}\) has the columns \(a_j\); \(e_j\) is column \(j\) of \(I\); \(\row_i\), \(\col_j\) are row \(i\) and column \(j\).
+
+\textbf{From \lec{1}, \lec{2} and \lec{3}} (restated).
+\begin{itemize}[itemsep=0pt,parsep=0pt,topsep=2pt]
+\item \lec{1}, Theorems~3(a), 8, 4(a)--(c), Definition~7:
+\((AB)C=A(BC)\), \(A(B+C)=AB+AC\), \(c(AB)=(cA)B=A(cB)\), \(I_mA=A=AI_n\), \(A0=0\); \((A')_{ij}=a_{ji}\), \((A')'=A\),
+\((A+B)'=A'+B'\), \((cA)'=cA'\), \((AB)'=B'A'\); \(x'y=y'x=\sum_ix_iy_i\), \(x'x=x_1^2+\dots+x_n^2\);
+\(\col_j(AB)=A\col_j(B)\); \(Ax=x_1a_1+\dots+x_na_n\), \(Ae_j=a_j\);
+\(\row_i(AB)=\row_i(A)B=a_{i1}\row_1(B)+\dots+a_{in}\row_n(B)\).
+\item \lec{2}, Definitions~2, 4, 5: row operations \(R_r\leftarrow cR_r\)
+(\(c\ne0\)), \(R_r\leftarrow R_r+cR_s\), \(R_r\leftrightarrow R_s\) (\(r\ne s\)). \(R\) is in \textbf{RREF} if (a) the
+first nonzero entry of each nonzero row is \(1\), its \textbf{pivot}; (b) a column with a pivot has all other entries
+\(0\); (c) zero rows lie below nonzero rows; (d) the pivots of the nonzero rows \(1,\dots,r\) lie in columns
+\(k_1<\dots<k_r\), the \textbf{pivot columns}; so \(\col_{k_i}(R)=e_i\). \textbf{Echelon form}: (a), (c), (d).
+Gauss--Jordan: forward elimination gives an echelon form; then backward elimination, for each pivot from the last to
+the first, adds multiples of its row to the rows above it to make the entries above the pivot \(0\). An \textbf{RREF}
+(\textbf{echelon form}) \textbf{of} \(A\): a matrix in RREF (echelon form) reached from \(A\) by row operations.
+\item \lec{2}, Theorem~3(b), Proposition~7: if row operations take \([A\mid b]\) to
+\([R\mid z]\), then \(Ax=b\) and \(Rx=z\) have the same solutions. Let \(R\) be in RREF, with nonzero rows
+\(1,\dots,r\), pivot columns \(k_1<\dots<k_r\), \textbf{pivot unknowns} \(x_{k_i}\), the others \textbf{free unknowns}.
+(a) \(Ax=b\) is consistent \(\iff\) \(z_i=0\) for all \(i>r\). (b) If so, the solutions: free unknowns arbitrary,
+\(x_{k_i}=z_i-\sum_{j\text{ free}}R_{ij}x_j\) (\(i\leqslant r\)).
+\item \lec{2}, Definition~10, Theorems~14(c), 15, 22(a): \(P\in\R^{m\times m}\)
+is invertible if \(PQ=QP=I_m\) for some \(Q=P^{-1}\). If row operations take \(A\) to \(B\), then \(B=PA\), \(P\)
+invertible. \(A\in\R^{n\times n}\) is invertible \(\iff\) \(Ax=0\) only for \(x=0\). If \(Ax_p=b\), the solutions of
+\(Ax=b\) are the \(x_p+z\) with \(Az=0\).
+\item \lec{3}, Definition~3, Theorem~4, Example~5(b): a \textbf{subspace} \(W\subseteq\R^n\)
+(or \(\R^{1\times n}\)) is a vector space with the same operations: \(0,u+v,cu\in W\) (\(u,v\in W\), \(c\in\R\));
+\(\{x:Ax=0\}\) is one.
+\item \lec{3}, Definition~6, Theorems~7, 9(c):
+\(\Span\{v_1,\dots,v_k\}=\{\sum_ic_iv_i:c_i\in\R\}\) (\(\Span\varnothing=\{0\}\)) is the smallest subspace containing
+\(v_1,\dots,v_k\); adjoining vectors of \(\Span\{a_1,\dots,a_n\}\) keeps the span.
+\item \lec{3}, Definitions~10, 14, Propositions~11, 12(a),(b):
+\(v_1,\dots,v_k\) are \textbf{linearly independent} if \(c_1v_1+\dots+c_kv_k=0\) only for \(c_1=\dots=c_k=0\) (the empty
+list is independent), otherwise \textbf{dependent}. For \(v_i\in\R^m\), \(V=[v_1\ \cdots\ v_k]\): independent \(\iff\)
+\(Vc=0\) only for \(c=0\) \(\iff\) every column of an RREF of \(V\) is a pivot column; more than \(m\) vectors of \(\R^m\)
+are dependent. A list containing \(0\) is dependent; sublists of independent lists are independent. A \textbf{basis} of
+\(W\): independent vectors of \(W\) that span \(W\); \(e_1,\dots,e_n\) of \(\R^n\) (standard basis); \(\varnothing\) of
+\(\{0\}\).
+\end{itemize}
+
+\Needspace{15\baselineskip}
+\subsection*{1. Bases and dimension of subspaces of \(\R^n\)}
+
+\Needspace{12\baselineskip}
+\begin{theorem}\label{b4.1}
+Let \(R\) be an RREF of \(A\in\R^{m\times n}\), with \(r\) nonzero rows. The following are equivalent: (i) the columns
+\(a_1,\dots,a_n\) of \(A\) are linearly independent; (ii) \(Ax=0\) only for \(x=0\); (iii) \(r=n\), that is, every column
+of \(R\) is a pivot column. In particular, if \(n>m\), then any \(n\) vectors of \(\R^m\) are linearly dependent.
+\end{theorem}
+\begin{proof}
+\begin{board}[\lec{3}, Proposition~11, with \(V=A\); \lec{2}, Definition~4(a),(d):]
+\boardtop
+\begin{align*}
+&\text{(i)}\iff\text{(ii)}\iff\text{every column of \(R\) is a pivot column};\quad n>m\implies\text{dependent}\\
+&\text{each nonzero row of \(R\) has one pivot, in different columns}\implies r\text{ pivot columns}\\
+&\text{every column of \(R\) is a pivot column}\iff r=n
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{15\baselineskip}
+\begin{theorem}\label{b4.3}
+Let \(R\) be an RREF of \(A\in\R^{m\times n}\), with \(r\) nonzero rows, pivot columns \(k_1<\dots<k_r\) and entries
+\(R_{ij}\).
+\begin{enumerate}
+\item For \(x\in\R^n\): \(x_1a_1+\dots+x_na_n=0\iff x_1\col_1(R)+\dots+x_n\col_n(R)=0\).
+\item If \(r\geqslant1\), the \textbf{pivot columns} \(a_{k_1},\dots,a_{k_r}\) of \(A\) form a basis of
+\(\Span\{a_1,\dots,a_n\}\), and
+\[
+a_j=R_{1j}a_{k_1}+R_{2j}a_{k_2}+\dots+R_{rj}a_{k_r}\qquad(j=1,\dots,n)
+\]
+If \(r=0\), then \(A=0\) and \(\Span\{a_1,\dots,a_n\}=\{0\}\).
+\end{enumerate}
+In particular, every finite list that spans a subspace \(W\) contains a basis of \(W\).
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) \lec{1}, Theorem~4(b); \lec{2}, Theorem~3(b) for \([A\mid0]\to[R\mid0]\):]
+\[
+x_1a_1+\dots+x_na_n=Ax,\quad x_1\col_1(R)+\dots+x_n\col_n(R)=Rx;\qquad Ax=0\iff Rx=0
+\]
+\end{board}
+(b) \(r=0\): \(R=0\), and \(R=PA\) with \(P\) invertible (\lec{2}, Theorem~14(c)), so \(A=P^{-1}R=0\). Let
+\(r\geqslant1\).
+\begin{board}[Relations: \(\col_{k_i}(R)=e_i\), and rows \(r+1,\dots,m\) of \(R\) are \(0\):]
+\boardtop
+\begin{align*}
+&\col_j(R)=\textstyle\sum_{i=1}^rR_{ij}e_i=\sum_{i=1}^rR_{ij}\col_{k_i}(R)\quad(\text{every }j)\\
+&j\notin\{k_1,\dots,k_r\}:\ x_j=1,\ x_{k_i}=-R_{ij},\ \text{other }x_l=0\implies Rx=\col_j(R)-\textstyle\sum_iR_{ij}\col_{k_i}(R)=0\\
+&\phantom{j\notin\{k_1,\dots,k_r\}:\ }\implies Ax=a_j-\textstyle\sum_iR_{ij}a_{k_i}=0&&\text{((a))}\\
+&j=k_l:\ R_{ik_l}=1\ (i=l),\ 0\ (i\ne l)\implies\text{the formula reads }a_{k_l}=a_{k_l}
+\end{align*}
+\end{board}
+\begin{board}[Basis: \(U=\Span\{a_{k_1},\dots,a_{k_r}\}\):]
+\boardtop
+\begin{align*}
+&a_1,\dots,a_n\in U\implies\Span\{a_1,\dots,a_n\}\subseteq U\subseteq\Span\{a_1,\dots,a_n\}
+&&\text{(\lec{3}, Theorem~7)}\\
+&c_1a_{k_1}+\dots+c_ra_{k_r}=0\implies c_1e_1+\dots+c_re_r=0\implies c_1=\dots=c_r=0&&\text{((a))}
+\end{align*}
+\end{board}
+Last sentence: write the spanning vectors as the columns of a matrix and apply (b); if \(r=0\), then \(W=\{0\}\), and the
+empty list is a basis of \(W\).
+\end{proof}
+
+\Needspace{6\baselineskip}
+\textbf{Pivot columns of \(A\).} Let \(R\) be an RREF of \(A\), with pivot columns \(k_1<\dots<k_r\).
+\begin{itemize}
+\item By Theorem~\ref{b4.3}(a) (take \(x_j=-1\), \(x_l=0\) for \(l>j\)), \(a_j\) is a linear combination of
+\(a_1,\dots,a_{j-1}\) \(\iff\) \(\col_j(R)\) is a linear combination of \(\col_1(R),\dots,\col_{j-1}(R)\).
+\item In \(R\) this happens exactly when \(j\) is not a pivot column: \(\col_{k_i}(R)=e_i\), while the columns before
+\(k_i\) are \(0\) in rows \(i,\dots,m\) (\lec{2}, Definition~4(a),(c),(d)); and a column
+\(j\notin\{k_1,\dots,k_r\}\) is \(\sum_{k_i<j}R_{ij}\col_{k_i}(R)\) (proof of Theorem~\ref{b4.3}(b), first line; row \(i\)
+of \(R\) is \(0\) before column \(k_i\)).
+\item So the pivot columns of \(A\) are the columns that are not combinations of the earlier ones: they, and their
+number \(r\), do not depend on the row operations used.
+\end{itemize}
+
+\begin{remark}\label{b4.2}
+Let \(H\) be an echelon form of \(A\), with pivots in columns \(k_1<\dots<k_r\). Then the pivot columns of \(A\) are
+\(a_{k_1},\dots,a_{k_r}\), and \(r\) is the number of nonzero rows of \(H\). So for Theorem~\ref{b4.1} one may stop at
+an echelon form: (iii) says that every column of \(H\) contains a pivot. The same holds for a matrix reached from \(A\)
+that satisfies (c), (d) of the definition of RREF with its first nonzero entries not yet scaled to \(1\).
+\end{remark}
+\begin{proof}
+\begin{itemize}
+\item Backward elimination adds multiples of a row \(i\), whose pivot is in column \(k_i\), to rows \(l<i\), whose
+pivot is in a column \(k_l<k_i\). Row \(i\) is \(0\) before column \(k_i\), so row \(l\) changes only in columns
+\(\geqslant k_i\) and keeps its pivot in column \(k_l\). Row \(i\) is also \(0\) in the pivot columns
+\(k_{i+1},\dots,k_r\) already cleared, so they stay \(e_{i+1},\dots,e_r\); the zero rows of \(H\) do not change. So the
+result is in RREF (\lec{2}, Definition~5).
+\item So backward elimination takes \(H\) to an RREF of \(A\) with the same pivot columns \(k_1,\dots,k_r\) as \(H\);
+by the paragraph above, these are the pivot columns of \(A\).
+\item Scaling a row by \(c\ne0\) does not move its first nonzero entry.\qedhere
+\end{itemize}
+\end{proof}
+
+\Needspace{14\baselineskip}
+\begin{theorem}\label{b4.4}
+Every subspace \(W\) of \(\R^n\) has a basis, and any two bases of \(W\) have the same number of elements, the
+\textbf{dimension} \(\dim W\) of \(W\). \(\dim\R^n=n\) (standard basis), \(\dim\{0\}=0\) (empty list), and \(\dim W=0\)
+only for \(W=\{0\}\). If \(W\) is spanned by \(m\) vectors, then any \(k>m\) vectors of \(W\) are linearly dependent.
+\end{theorem}
+\begin{proof}
+\begin{board}[\(W=\Span\{w_1,\dots,w_m\}\), \(v_1,\dots,v_k\in W\), \(k>m\) (if \(m=0\): \(W=\{0\}\), and \(k\geqslant1\)
+vectors of \(\{0\}\) are dependent, \lec{3}, Proposition~12(a)); \(m\geqslant1\):]
+\boardtop
+\begin{align*}
+&v_j=a_{1j}w_1+\dots+a_{mj}w_m\ (j=1,\dots,k),\quad A=(a_{ij})\in\R^{m\times k}\\
+&k>m\implies Ax=0\ \text{for some }x\ne0&&\text{(Theorem~\ref{b4.1})}\\
+&x_1v_1+\dots+x_kv_k=\textstyle\sum_{j=1}^kx_j\sum_{i=1}^ma_{ij}w_i=\sum_{i=1}^m(Ax)_iw_i=0\\
+&\text{bases }v_1,\dots,v_k\text{ and }w_1,\dots,w_m\text{ of }W\implies k\leqslant m\text{ and }m\leqslant k
+\end{align*}
+\end{board}
+\begin{itemize}
+\item Existence: start with the empty list and, as long as the vectors chosen do not span \(W\), adjoin a vector
+\(v\in W\) outside their span. In a relation \(c_1v_1+\dots+c_kv_k+cv=0\), \(c\ne0\) would put \(v\) in the span of
+\(v_1,\dots,v_k\); so \(c=0\), and then every \(c_i=0\): the list stays independent.
+\item More than \(n\) vectors of \(\R^n\) are dependent (Theorem~\ref{b4.1}), so this stops after at most \(n\) steps, at a
+basis of \(W\).
+\item A basis with no vectors is the empty list, which spans \(\{0\}\) (\lec{3}, Definition~6).\qedhere
+\end{itemize}
+\end{proof}
+
+\Needspace{9\baselineskip}
+\begin{theorem}\label{b4.5}
+Let \(W\) be a subspace of \(\R^n\) with \(\dim W=d\).
+\begin{enumerate}
+\item If \(U\) is a subspace of \(W\), then \(\dim U\leqslant d\), and \(\dim U=d\) only for \(U=W\). In particular
+\(d\leqslant n\), and \(d=n\) only for \(W=\R^n\).
+\item Every linearly independent list of vectors of \(W\) can be extended to a basis of \(W\).
+\item More than \(d\) vectors of \(W\) are linearly dependent; fewer than \(d\) vectors do not span \(W\).
+\item \(d\) vectors of \(W\) are linearly independent \(\iff\) they span \(W\) \(\iff\) they form a basis of \(W\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\(d=0\): \(W=\{0\}\) (Theorem~\ref{b4.4}).
+\begin{itemize}
+\item Every subspace \(U\) of \(W\) is \(\{0\}=W\); a nonempty list of vectors of \(W\) contains \(0\), so it is
+dependent (\lec{3}, Proposition~12(a)); the empty list, the only independent one, is a basis of \(W\)
+(\lec{3}, Definition~14). So (a)--(c) hold.
+\item (d): the only list of \(0\) vectors is the empty list; it is independent, spans \(\{0\}=W\) and is a basis of \(W\).
+\end{itemize}
+Let \(d\geqslant1\), and let \(w_1,\dots,w_d\) be a basis of \(W\) (Theorem~\ref{b4.4}). We prove (c) first.
+\begin{board}[(c) \(w_1,\dots,w_d\) span \(W\); Theorem~\ref{b4.4}, last sentence:]
+\boardtop
+\begin{align*}
+&k>d\text{ vectors of }W\text{ are dependent}&&(m=d)\\
+&k<d\text{ vectors spanning }W\implies w_1,\dots,w_d\ (d>k)\text{ dependent}\ \contradiction&&(m=k)
+\end{align*}
+\end{board}
+(b)
+\begin{itemize}
+\item Let \(v_1,\dots,v_k\in W\) be independent. If they span \(W\), they form a basis of \(W\).
+\item Otherwise take \(v\in W\) outside \(\Span\{v_1,\dots,v_k\}\). Then \(v_1,\dots,v_k,v\) are independent: in
+\(c_1v_1+\dots+c_kv_k+cv=0\), \(c\ne0\) would put \(v\) in the span, so \(c=0\), and then every \(c_i=0\).
+\item Repeat. Each list obtained is independent in \(W\), so it has at most \(d\) vectors by (c); the process stops, at
+a basis of \(W\) that contains \(v_1,\dots,v_k\).
+\end{itemize}
+\begin{board}[(a) A basis of \(U\) (Theorem~\ref{b4.4}) consists of \(\dim U\) independent vectors of \(W\):]
+\boardtop
+\begin{align*}
+&\dim U\leqslant d&&\text{((c))}\\
+&U\ne W,\ v\in W\setminus U\implies\text{a basis of \(U\), and \(v\): }\dim U+1\text{ independent vectors of }W
+&&\text{(as in (b))}\\
+&\implies\dim U+1\leqslant d;\quad\text{so }\dim U=d\text{ only for }U=W&&\text{((c))}\\
+&W\subseteq\R^n,\ \dim\R^n=n\implies d\leqslant n,\ d=n\text{ only for }W=\R^n&&\text{(Theorem~\ref{b4.4})}
+\end{align*}
+\end{board}
+(d) A basis of \(W\) is independent and spans \(W\) (\lec{3}, Definition~14). Let \(v_1,\dots,v_d\in W\).
+\begin{itemize}
+\item If they are independent and \(w\in W\): by (c), \(x_0w+x_1v_1+\dots+x_dv_d=0\) with not all \(x_i=0\); \(x_0\ne0\),
+as \(v_1,\dots,v_d\) are independent; so \(w=-(x_1/x_0)v_1-\dots-(x_d/x_0)v_d\). They span \(W\): a basis.
+\item If they span \(W\): by Theorem~\ref{b4.3}, some of them form a basis of \(W\), which has \(d\) vectors
+(Theorem~\ref{b4.4}); so it is all of \(v_1,\dots,v_d\).\qedhere
+\end{itemize}
+\end{proof}
+Transposition carries a subspace of \(\R^{1\times n}\) onto a subspace of \(\R^n\) and preserves linear combinations,
+hence independence, spanning and bases; so Theorems~\ref{b4.4} and \ref{b4.5} also hold for subspaces of
+\(\R^{1\times n}\), such as the row space \(\mathcal R(A)\) below.
+
+\Needspace{20\baselineskip}
+\begin{example}\label{b4.6}
+Let \(W=\Span\{u_1,\dots,u_5\}\subseteq\R^4\), where \(u_1=(1,2,1,1)'\), \(u_2=(1,3,2,1)'\),
+\(u_3=(1,1,0,1)'\), \(u_4=(1,2,2,3)'\), \(u_5=(1,3,1,-1)'\). (a) Are \(u_1,\dots,u_5\) linearly independent? (b) Find a basis of \(W\) among \(u_1,\dots,u_5\), and \(\dim W\).
+(c) Express the remaining vectors in this basis.
+\end{example}
+\textit{Solution.}
+\begin{board}[Row-reduce \(A=[u_1\ \cdots\ u_5]\):]
+\[
+\begin{gathered}
+\begin{pmatrix}1&1&1&1&1\\2&3&1&2&3\\1&2&0&2&1\\1&1&1&3&-1\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4-R_1]{R_2\leftarrow R_2-2R_1,\ R_3\leftarrow R_3-R_1}
+\begin{pmatrix}1&1&1&1&1\\0&1&-1&0&1\\0&1&-1&1&0\\0&0&0&2&-2\end{pmatrix}
+\\
+\xrightarrow{R_3\leftarrow R_3-R_2}
+\begin{pmatrix}1&1&1&1&1\\0&1&-1&0&1\\0&0&0&1&-1\\0&0&0&2&-2\end{pmatrix}
+\xrightarrow{R_4\leftarrow R_4-2R_3}
+\begin{pmatrix}1&1&1&1&1\\0&1&-1&0&1\\0&0&0&1&-1\\0&0&0&0&0\end{pmatrix}
+\\
+\xrightarrow{R_1\leftarrow R_1-R_3}
+\begin{pmatrix}1&1&1&0&2\\0&1&-1&0&1\\0&0&0&1&-1\\0&0&0&0&0\end{pmatrix}
+\xrightarrow{R_1\leftarrow R_1-R_2}
+\begin{pmatrix}1&0&2&0&1\\0&1&-1&0&1\\0&0&0&1&-1\\0&0&0&0&0\end{pmatrix}=R
+\end{gathered}
+\]
+\end{board}
+\begin{board}[\(r=3\), pivot columns \(k_1=1\), \(k_2=2\), \(k_3=4\):]
+\boardtop
+\begin{align*}
+&\text{(a) No: }r=3<5;\ \text{indeed any five vectors of }\R^4\text{ are dependent}&&\text{(Theorem~\ref{b4.1})}\\
+&\text{(b) }u_1,u_2,u_4\text{ form a basis of }W,\ \dim W=3;\ 3<4\implies W\ne\R^4
+&&\text{(Theorems~\ref{b4.3}(b), \ref{b4.5}(a))}\\
+&\text{(c) columns \(3\), \(5\) of \(R\)}:\ u_3=2u_1-u_2,\quad u_5=u_1+u_2-u_4&&\text{(Theorem~\ref{b4.3}(b))}
+\end{align*}
+\end{board}
+Check: \(2(1,2,1,1)'-(1,3,2,1)'=(1,1,0,1)'=u_3\) and \((1,2,1,1)'+(1,3,2,1)'-(1,2,2,3)'=(1,3,1,-1)'=u_5\).
+
+\Needspace{12\baselineskip}
+\subsection*{2. The four subspaces of a matrix}
+
+\begin{definition}\label{b4.7}
+For \(A\in\R^{m\times n}\), the \textbf{column space}, \textbf{row space}, \textbf{null space} and \textbf{left null
+space} of \(A\) are
+\[
+\begin{aligned}
+\mathcal C(A)&=\{Ax:x\in\R^n\}\subseteq\R^m,&\qquad\mathcal R(A)&=\{y'A:y\in\R^m\}\subseteq\R^{1\times n}\\
+\mathcal N(A)&=\{x\in\R^n:Ax=0\},&\mathcal N(A')&=\{y\in\R^m:A'y=0\}
+\end{aligned}
+\]
+The columns of \(A\) span \(\mathcal C(A)\), the rows of \(A\) span \(\mathcal R(A)\), and \(y\in\mathcal N(A')\iff
+y'A=0\) (transpose). All four are subspaces (\lec{3}, Theorem~7, Example~5(b)).
+\end{definition}
+Let \(R\) be an RREF of \(A\), with \(r\) nonzero rows, pivot columns \(k_1<\dots<k_r\) and \textbf{free columns}
+\(f_1<\dots<f_{n-r}\) (the free unknowns of \(Ax=0\) are \(x_{f_1},\dots,x_{f_{n-r}}\)). For \(j=1,\dots,n-r\), the
+\textbf{special solution} \(s_j\in\R^n\) is the solution of \(Ax=0\) with \(x_{f_j}=1\) and \(x_{f_l}=0\) (\(l\ne j\)).
+By \lec{2}, Proposition~7(b), its entries are
+\[
+(s_j)_{f_l}=\delta_{jl}\ (1\leqslant l\leqslant n-r),\qquad(s_j)_{k_i}=-R_{if_j}\ (1\leqslant i\leqslant r)
+\]
+where \(\delta_{jl}=1\) if \(j=l\) and \(0\) otherwise.
+
+\Needspace{18\baselineskip}
+\begin{theorem}\label{b4.8}
+Let \(A\in\R^{m\times n}\), and let row operations take \([A\mid I_m]\) to \([R\mid P]\) with \(R\) in RREF (an RREF of
+\(A\)), with nonzero rows \(\rho_1',\dots,\rho_r'\) (\(\rho_i\in\R^n\)), pivot columns \(k_1<\dots<k_r\) and free columns
+\(f_1<\dots<f_{n-r}\). Then \(P\in\R^{m\times m}\) is invertible, \(PA=R\), and:
+\begin{enumerate}
+\item if \(r\geqslant1\), the pivot columns \(a_{k_1},\dots,a_{k_r}\) of \(A\) form a basis of \(\mathcal C(A)\);
+\item \(\mathcal R(R)=\mathcal R(A)\), and if \(r\geqslant1\), the nonzero rows \(\rho_1',\dots,\rho_r'\) of \(R\) form a
+basis of \(\mathcal R(A)\);
+\item the special solutions \(s_1,\dots,s_{n-r}\) form a basis of \(\mathcal N(A)\) (if \(r=n\): \(\mathcal N(A)=\{0\}\),
+empty basis);
+\item \(\row_{r+1}(P)',\dots,\row_m(P)'\) form a basis of \(\mathcal N(A')\) (if \(r=m\): \(\mathcal N(A')=\{0\}\), empty
+basis).
+\end{enumerate}
+Hence \(\dim\mathcal C(A)=\dim\mathcal R(A)=r\), \(\dim\mathcal N(A)=n-r\), \(\dim\mathcal N(A')=m-r\) (if \(r=0\), then
+\(A=0\) and \(\mathcal C(A)=\mathcal R(A)=\{0\}\)).
+\end{theorem}
+\begin{proof}
+\begin{board}[\(P\) and \(PA=R\): the row operations multiply on the left by an invertible \(E\) (\lec{2},
+Theorem~14(c)); column by column (\lec{1}, Theorem~4(a)):]
+\[
+E[A\mid I_m]=[EA\mid E]=[R\mid P]\implies P=E\text{ is invertible},\ PA=R
+\]
+\end{board}
+(a) \(\mathcal C(A)=\Span\{a_1,\dots,a_n\}\); Theorem~\ref{b4.3}(b).
+\begin{board}[(b) \(P=(p_{ij})\); \lec{1}, Theorem~4(c); \lec{3}, Theorem~7:]
+\boardtop
+\begin{align*}
+&\row_i(R)=\row_i(P)A=p_{i1}\row_1(A)+\dots+p_{im}\row_m(A)\in\mathcal R(A)\implies\mathcal R(R)\subseteq\mathcal R(A)\\
+&A=P^{-1}R\implies\mathcal R(A)\subseteq\mathcal R(R)\qquad\text{so }\mathcal R(R)=\mathcal R(A)\\
+&\text{rows }r+1,\dots,m\text{ of }R\text{ are }0\implies\rho_1',\dots,\rho_r'\text{ span }\mathcal R(R)=\mathcal R(A)\\
+&\col_{k_i}(R)=e_i\implies\text{entry }k_i\text{ of }c_1\rho_1'+\dots+c_r\rho_r'\text{ is }c_i\implies\text{independent}
+\end{align*}
+\end{board}
+\begin{board}[(c) \(Ax=0\iff Rx=0\) (\lec{2}, Theorem~3(b)); pivot unknowns from free ones (\lec{2},
+Proposition~7(b)); \(t\in\mathcal N(A)\), \(\tilde t=t_{f_1}s_1+\dots+t_{f_{n-r}}s_{n-r}\):]
+\boardtop
+\begin{align*}
+&\text{entry }f_l\text{ of }c_1s_1+\dots+c_{n-r}s_{n-r}\text{ is }\textstyle\sum_jc_j\delta_{jl}=c_l\implies\text{independent}\\
+&\tilde t\in\mathcal N(A)\ (\text{a subspace}),\quad\tilde t_{f_l}=t_{f_l}\ (l=1,\dots,n-r)\\
+&x_{k_i}=-\textstyle\sum_lR_{if_l}x_{f_l}\ \text{for every solution}\implies t=\tilde t\in\Span\{s_1,\dots,s_{n-r}\}\\
+&r=n:\ \text{no free unknowns, so }x=0\text{ is the only solution}
+\end{align*}
+\end{board}
+\begin{board}[(d) \lec{1}, Theorems~4(c), 8; \lec{3}, Proposition~12(b):]
+\boardtop
+\begin{align*}
+&i>r:\ \row_i(P)A=\row_i(PA)=\row_i(R)=0\implies A'\row_i(P)'=(\row_i(P)A)'=0\\
+&c'P=c_1\row_1(P)+\dots+c_m\row_m(P)=0\implies c'=c'PP^{-1}=0\\
+&\implies\text{the rows of }P\text{ are independent, and so are rows }r+1,\dots,m\\
+&A'y=0,\ z'=y'P^{-1}:\quad y'=z'P,\quad0=y'A=z'PA=z'R=z_1\rho_1'+\dots+z_r\rho_r'\\
+&\implies z_1=\dots=z_r=0\implies y'=\textstyle\sum_{i>r}z_i\row_i(P)&&\text{((b))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{15\baselineskip}
+\begin{example}\label{b4.9}
+Find bases of the four subspaces of
+\(A=\left(\begin{smallmatrix}1&2&1&3\\1&3&0&5\\2&5&1&8\end{smallmatrix}\right)\).
+\end{example}
+\textit{Solution.}
+\begin{board}[Row-reduce \([A\mid I_3]\):]
+\[
+\begin{gathered}
+\left(\begin{array}{cccc|ccc}1&2&1&3&1&0&0\\1&3&0&5&0&1&0\\2&5&1&8&0&0&1\end{array}\right)
+\xrightarrow[R_3\leftarrow R_3-2R_1]{R_2\leftarrow R_2-R_1}
+\left(\begin{array}{cccc|ccc}1&2&1&3&1&0&0\\0&1&-1&2&-1&1&0\\0&1&-1&2&-2&0&1\end{array}\right)
+\\
+\xrightarrow{R_3\leftarrow R_3-R_2}
+\left(\begin{array}{cccc|ccc}1&2&1&3&1&0&0\\0&1&-1&2&-1&1&0\\0&0&0&0&-1&-1&1\end{array}\right)
+\xrightarrow{R_1\leftarrow R_1-2R_2}
+\left(\begin{array}{cccc|ccc}1&0&3&-1&3&-2&0\\0&1&-1&2&-1&1&0\\0&0&0&0&-1&-1&1\end{array}\right)
+=[R\mid P]
+\end{gathered}
+\]
+\(r=2\), pivot columns \(1,2\), free unknowns \(x_3,x_4\) (already visible in the echelon form after the second arrow;
+Remark~\ref{b4.2}).
+\end{board}
+\begin{board}[\(\mathcal C(A)\), \(\mathcal R(A)\) (Theorem~\ref{b4.8}(a),(b)); columns \(3\), \(4\) of \(R\)
+(Theorem~\ref{b4.3}(b)):]
+\boardtop
+\begin{align*}
+&\mathcal C(A):\ a_1=(1,1,2)',\ a_2=(2,3,5)';\quad a_3=3a_1-a_2,\quad a_4=-a_1+2a_2;\quad\dim\mathcal C(A)=2\\
+&\mathcal R(A):\ \rho_1'=(1,0,3,-1),\ \rho_2'=(0,1,-1,2);\quad\dim\mathcal R(A)=2
+\end{align*}
+\end{board}
+Check: \(3(1,1,2)'-(2,3,5)'=(1,0,1)'=a_3\) and \(-(1,1,2)'+2(2,3,5)'=(3,5,8)'=a_4\).
+\begin{board}[\(\mathcal N(A)\), \(\mathcal N(A')\) (Theorem~\ref{b4.8}(c),(d)):]
+\boardtop
+\begin{align*}
+&Rx=0:\ x_1+3x_3-x_4=0,\ x_2-x_3+2x_4=0\\
+&\mathcal N(A):\ s_1=(-3,1,1,0)'\ (x_3=1,\ x_4=0),\quad s_2=(1,-2,0,1)'\ (x_3=0,\ x_4=1)\\
+&\dim\mathcal N(A)=2=4-2,\quad\dim\mathcal N(A')=1=3-2\\
+&\mathcal N(A'):\ y=\row_3(P)'=(-1,-1,1)'\\
+&y'A=-\row_1(A)-\row_2(A)+\row_3(A)=0:\quad\row_3(A)=\row_1(A)+\row_2(A)
+\end{align*}
+\end{board}
+Warning: every column of \(R\) has third entry \(0\), so every vector of \(\mathcal C(R)\) does; but \(a_1\) has third
+entry \(2\). So \(\mathcal C(R)\ne\mathcal C(A)\): row operations keep \(\mathcal R(A)\) and \(\mathcal N(A)\)
+(Theorem~\ref{b4.8}(b); \lec{2}, Theorem~3(b)), not \(\mathcal C(A)\), and a basis of \(\mathcal C(A)\) consists of pivot columns of \(A\) itself, not of \(R\).
+
+\Needspace{10\baselineskip}
+\subsection*{3. Rank}
+
+\begin{definition}\label{b4.11}
+By Theorem~\ref{b4.8}, \(\dim\mathcal C(A)=\dim\mathcal R(A)=r\), the number of pivots of an RREF of \(A\) (also when
+\(r=0\)): the \textbf{rank} \(\rank A\) of \(A\); by Remark~\ref{b4.2}, it is the number of nonzero rows of any echelon
+form of \(A\). \(A\in\R^{m\times n}\) has \textbf{full column rank} if \(\rank A=n\), \textbf{full row rank} if
+\(\rank A=m\). \(\dim\mathcal N(A)\) is the \textbf{nullity} of \(A\).
+\end{definition}
+
+\Needspace{8\baselineskip}
+\begin{theorem}\label{b4.12}
+For every \(A\in\R^{m\times n}\): \(\rank A+\dim\mathcal N(A)=n\) and \(\rank A+\dim\mathcal N(A')=m\).
+\end{theorem}
+\begin{proof}
+\begin{board}[\(R\) as in Theorem~\ref{b4.8}, \(\rank A=r\):]
+\boardtop
+\begin{align*}
+&n=r\ (\text{pivot columns})+(n-r)\ (\text{free columns}),\quad\dim\mathcal N(A)=n-r&&\text{(Theorem~\ref{b4.8}(c))}\\
+&\dim\mathcal N(A')=m-r,\ \text{the number of zero rows of }R&&\text{(Theorem~\ref{b4.8}(d))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{16\baselineskip}
+\begin{theorem}\label{b4.13}
+Let \(A\in\R^{m\times n}\).
+\begin{enumerate}
+\item \(\rank A'=\rank A\), and \(\rank A\leqslant\min\{m,n\}\).
+\item \(A\) has full column rank \(\iff\) its columns are linearly independent \(\iff\) \(\mathcal N(A)=\{0\}\).
+\item \(A\) has full row rank \(\iff\) its rows are linearly independent \(\iff\) \(\mathcal N(A')=\{0\}\) \(\iff\)
+\(\mathcal C(A)=\R^m\).
+\item If \(m=n\): \(A\) is invertible \(\iff\) \(\rank A=n\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Let \(R\) be an RREF of \(A\), with \(r\) nonzero rows and pivot columns \(k_1<\dots<k_r\); \(\rank A=r\)
+(Definition~\ref{b4.11}).
+\begin{board}[(a) \((y'A)'=A'y\) (\lec{1}, Theorem~8): transposing maps \(\mathcal R(A)\) onto
+\(\mathcal C(A')\), keeps linear combinations and is undone by transposing again:]
+\boardtop
+\begin{align*}
+&\text{a basis of }\mathcal R(A)\text{ goes to a basis of }\mathcal C(A')\implies
+\rank A'=\dim\mathcal C(A')=\dim\mathcal R(A)=\rank A\\
+&r\leqslant m\ (R\text{ has }m\text{ rows}),\quad r\leqslant n\ (k_1<\dots<k_r\text{ lie in }\{1,\dots,n\})
+\end{align*}
+\end{board}
+(b) Full column rank means \(r=n\) (Definition~\ref{b4.11}); so (b) is Theorem~\ref{b4.1}: (iii)
+\(\iff\) (i) \(\iff\) (ii).
+\begin{board}[(c) \lec{1}, Theorems~4(c), 8:]
+\boardtop
+\begin{align*}
+&\rank A=m\iff\dim\mathcal N(A')=m-\rank A=0\iff\mathcal N(A')=\{0\}&&\text{(Theorems~\ref{b4.12}, \ref{b4.4})}\\
+&y'A=y_1\row_1(A)+\dots+y_m\row_m(A),\quad y'A=0\iff A'y=0\\
+&\implies\bigl(\mathcal N(A')=\{0\}\iff\text{the rows of }A\text{ are independent}\bigr)\\
+&\rank A=\dim\mathcal C(A)=m\iff\mathcal C(A)=\R^m&&\text{(Theorems~\ref{b4.5}(a), \ref{b4.4})}
+\end{align*}
+\end{board}
+\begin{board}[(d) \lec{2}, Theorem~15:]
+\[
+A\text{ invertible}\iff(Ax=0\implies x=0)\iff\mathcal N(A)=\{0\}\iff\rank A=n\qquad\text{((b))}
+\]
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{13\baselineskip}
+\begin{corollary}\label{b4.14}
+Let \(A\in\R^{m\times n}\), \(b\in\R^m\), and \([A\mid b]\in\R^{m\times(n+1)}\).
+\begin{enumerate}
+\item \(Ax=b\) is consistent \(\iff\) \(b\in\mathcal C(A)\) \(\iff\) \(\rank[A\mid b]=\rank A\).
+\item If \(Ax=b\) is consistent, its solution is unique \(\iff\) \(\rank A=n\).
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+\begin{board}[(a) \(Ax=x_1a_1+\dots+x_na_n\) (\lec{1}, Theorem~4(b)):]
+\boardtop
+\begin{align*}
+&Ax=b\text{ has a solution}\iff b\in\mathcal C(A)\\
+&\mathcal C(A)\subseteq\mathcal C([A\mid b])\quad(\text{coefficient }0\text{ on }b)\\
+&b=Ac\implies x_1a_1+\dots+x_na_n+tb=A(x+tc)\in\mathcal C(A)\implies\mathcal C([A\mid b])=\mathcal C(A)\\
+&\rank[A\mid b]=\rank A\implies\mathcal C(A)=\mathcal C([A\mid b])\ni b&&\text{(Theorem~\ref{b4.5}(a))}
+\end{align*}
+\end{board}
+\begin{board}[(b) Solutions \(x_p+z\), \(z\in\mathcal N(A)\) (\lec{2}, Theorem~22(a)):]
+\[
+\text{unique}\iff\mathcal N(A)=\{0\}\iff\rank A=n\qquad\text{(Theorem~\ref{b4.13}(b))}
+\]
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{8\baselineskip}
+\textbf{Equations of \(\mathcal C(A)\).} Let row operations take \([A\mid I_m]\) to \([R\mid P]\) as in
+Theorem~\ref{b4.8}, \(r=\rank A\), and \(b\in\R^m\).
+\begin{board}[The same operations multiply on the left by \(E\) (\lec{2}, Theorem~14(c)); \lec{1},
+Theorem~4(a); Corollary~\ref{b4.14}(a); \lec{2}, Proposition~7(a) with \(z=Pb\):]
+\boardtop
+\begin{align*}
+&E[A\mid I_m]=[EA\mid E]=[R\mid P]\implies E=P,\quad E[A\mid b]=[R\mid Pb]\\
+&b\in\mathcal C(A)\iff Ax=b\text{ is consistent}\iff\row_i(P)\,b=0\quad(i=r+1,\dots,m)
+\end{align*}
+\end{board}
+No condition if \(r=m\).
+
+\Needspace{8\baselineskip}
+\begin{example}\label{b4.30}
+For \(A\) of Example~\ref{b4.9}, when is \(Ax=(1,t,4)'\) consistent? Find all its solutions then.
+\end{example}
+\textit{Solution.}
+\begin{board}[Example~\ref{b4.9}: \(r=2\), \(\row_3(P)=(-1,-1,1)\); the equations of \(\mathcal C(A)\):]
+\boardtop
+\begin{align*}
+&b\in\mathcal C(A)\iff-b_1-b_2+b_3=0\quad(\text{the coefficients of }\row_3(A)=\row_1(A)+\row_2(A))\\
+&b=(1,t,4)':\ -1-t+4=0\iff t=3
+\end{align*}
+\end{board}
+\begin{board}[\(t=3\), \(b=(1,3,4)'\); \(Ax=b\iff Rx=Pb\) (\lec{2}, Theorem~3(b)); all solutions by
+\lec{2}, Theorem~22(a), and Theorem~\ref{b4.8}(c):]
+\boardtop
+\begin{align*}
+&Pb=(3-6,\ -1+3,\ -1-3+4)'=(-3,2,0)'\\
+&Rx=Pb:\ x_1+3x_3-x_4=-3,\ x_2-x_3+2x_4=2;\quad x_3=x_4=0:\ x_p=(-3,2,0,0)'\\
+&\text{all solutions: }x_p+c_1s_1+c_2s_2\ (c_1,c_2\in\R);\quad\text{not unique: }\rank A=2<4\ \text{(Corollary~\ref{b4.14}(b))}
+\end{align*}
+\end{board}
+Check: \(Ax_p=-3a_1+2a_2=(-3+4,\ -3+6,\ -6+10)'=(1,3,4)'\).
+
+\Needspace{18\baselineskip}
+\subsection*{4. Rank equalities and inequalities}
+
+\Needspace{15\baselineskip}
+\begin{theorem}\label{b4.15}
+Let \(A\in\R^{m\times n}\) and \(B\in\R^{n\times p}\).
+\begin{enumerate}
+\item \(\mathcal C(AB)\subseteq\mathcal C(A)\), \(\mathcal N(B)\subseteq\mathcal N(AB)\), and
+\(\rank(AB)\leqslant\min\{\rank A,\rank B\}\).
+\item If \(A\) has full column rank, then \(\mathcal N(AB)=\mathcal N(B)\) and \(\rank(AB)=\rank B\).
+\item If \(B\) has full row rank, then \(\mathcal C(AB)=\mathcal C(A)\) and \(\rank(AB)=\rank A\).
+\item \(\rank(PAQ)=\rank A\) for all invertible \(P\in\R^{m\times m}\) and \(Q\in\R^{n\times n}\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) \((AB)'=B'A'\) (\lec{1}, Theorem~8); Theorem~\ref{b4.13}(a):]
+\boardtop
+\begin{align*}
+&ABx=A(Bx)\in\mathcal C(A);\quad Bx=0\implies ABx=A0=0\\
+&\rank(AB)=\dim\mathcal C(AB)\leqslant\dim\mathcal C(A)=\rank A&&\text{(Theorem~\ref{b4.5}(a))}\\
+&\rank(AB)=\rank\bigl((AB)'\bigr)=\rank(B'A')\leqslant\rank B'=\rank B
+\end{align*}
+\end{board}
+\begin{board}[(b) \(\mathcal N(A)=\{0\}\) (Theorem~\ref{b4.13}(b)):]
+\boardtop
+\begin{align*}
+&ABx=0\implies Bx\in\mathcal N(A)=\{0\}\implies x\in\mathcal N(B);\quad\text{with (a), }\mathcal N(AB)=\mathcal N(B)\\
+&\rank(AB)=p-\dim\mathcal N(AB)=p-\dim\mathcal N(B)=\rank B&&\text{(Theorem~\ref{b4.12})}
+\end{align*}
+\end{board}
+\begin{board}[(c) \(\mathcal C(B)=\R^n\) (Theorem~\ref{b4.13}(c)):]
+\boardtop
+\begin{align*}
+&x\in\R^n\implies x=Bw\implies Ax=(AB)w\in\mathcal C(AB)\implies\mathcal C(A)\subseteq\mathcal C(AB)\\
+&\text{with (a), }\mathcal C(AB)=\mathcal C(A),\text{ so }\rank(AB)=\rank A
+\end{align*}
+\end{board}
+\begin{board}[(d) Theorem~\ref{b4.13}(b),(d):]
+\boardtop
+\begin{align*}
+&Px=0\implies x=P^{-1}Px=0:\ P\text{ has full column rank}\\
+&\rank Q=n:\ Q\text{ has full row rank}\\
+&\rank(P(AQ))=\rank(AQ)=\rank A&&\text{((b), (c))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{12\baselineskip}
+\begin{theorem}\label{b4.18}
+Let \(A\in\R^{m\times n}\).
+\begin{enumerate}
+\item \(\mathcal N(A'A)=\mathcal N(A)\).
+\item \(\rank(A'A)=\rank A=\rank(AA')\).
+\item \(\mathcal C(A'A)=\mathcal C(A')\) and \(\mathcal C(AA')=\mathcal C(A)\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) \lec{1}, Theorem~8:]
+\boardtop
+\begin{align*}
+&Ax=0\implies A'Ax=A'0=0\\
+&A'Ax=0\implies(Ax)'(Ax)=x'A'Ax=0,\ \text{the sum of the squares of the entries of }Ax\implies Ax=0
+\end{align*}
+\end{board}
+\begin{board}[(b) \(A'A\) and \(A\) have \(n\) columns; Theorem~\ref{b4.12}:]
+\boardtop
+\begin{align*}
+&\rank(A'A)=n-\dim\mathcal N(A'A)=n-\dim\mathcal N(A)=\rank A&&\text{((a))}\\
+&A'\text{ in place of }A:\ \rank(AA')=\rank A'=\rank A&&\text{(\((A')'=A\); Theorem~\ref{b4.13}(a))}
+\end{align*}
+\end{board}
+\begin{board}[(c) Theorems~\ref{b4.15}(a), \ref{b4.5}(a):]
+\boardtop
+\begin{align*}
+&\mathcal C(A'A)\subseteq\mathcal C(A'),\ \text{both of dimension }\rank A\ \text{((b), Theorem~\ref{b4.13}(a))}
+\implies\mathcal C(A'A)=\mathcal C(A')\\
+&\mathcal C(AA')\subseteq\mathcal C(A),\ \text{both of dimension }\rank A\ \text{((b))}\implies\mathcal C(AA')=\mathcal C(A)
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+So \(A'A\in\R^{n\times n}\) is invertible \(\iff\) \(\rank A=n\) (Theorems~\ref{b4.18}(b), \ref{b4.13}(d)).
+
+\Needspace{14\baselineskip}
+\begin{example}\label{b4.20}
+\(A=\diag(1,1,1,0)\) and \(B=\diag(0,0,1,1)\) in \(\R^{4\times4}\): find \(\rank A\), \(\rank B\), \(\rank(AB)\) and
+\(\rank(A'A)\).
+\end{example}
+\textit{Solution.}
+\begin{board}[A zero column adds nothing to the span (\lec{3}, Theorem~9(c)); unit vectors are independent
+(\lec{3}, Definition~14, Proposition~12(b)):]
+\boardtop
+\begin{align*}
+&A=[e_1\ e_2\ e_3\ 0]:\ \mathcal C(A)=\Span\{e_1,e_2,e_3\},\ \rank A=3\\
+&B=[0\ 0\ e_3\ e_4]:\ \mathcal C(B)=\Span\{e_3,e_4\},\ \rank B=2\\
+&\row_i(AB)=a_{ii}\row_i(B)&&\text{(\lec{1}, Theorem~4(c))}\\
+&AB=\diag(0,0,1,0)=[0\ 0\ e_3\ 0]:\ \rank(AB)=1<\min\{3,2\}&&\text{(Theorem~\ref{b4.15}(a))}\\
+&A'=A\ (\text{diagonal}),\ A^2=A\ (\row_i(A^2)=a_{ii}\row_i(A))&&\text{(\lec{1}, Definition~7)}\\
+&A'A=A^2=A:\ \rank(A'A)=3=\rank A&&\text{(Theorem~\ref{b4.18}(b))}
+\end{align*}
+\end{board}
+
+\bigskip
+\textbf{Practice.} The Exercises and Problems of the textbook, Chapter~4: bases and dimension, the four subspaces, rank,
+consistency of \(Ax=b\), and the rank of products and of \(A'A\).
+
+\end{document}

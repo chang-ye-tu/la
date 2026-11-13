@@ -1,0 +1,690 @@
+\def\handoutsay{false}\def\handoutfill{false}
+\documentclass[12pt]{article}
+\newcommand{\handoutrunning}{Lecture 3: Vector Spaces, Subspaces, Span, and Bases}
+\providecommand{\handoutsay}{true}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[a4paper,margin=15mm,headheight=14pt,headsep=5mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,booktabs,needspace}
+\usepackage{pifont}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{fancyhdr}
+\usepackage{ifthen}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdfauthor={Chang-Ye Tu}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Linear Algebra}
+\fancyhead[R]{\small\handoutrunning}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt plus 1pt minus 1pt}
+\setlength{\emergencystretch}{1.5em}
+\usepackage{etoolbox}
+\newcommand{\handoutdisplayskips}{\setlength{\abovedisplayskip}{7pt plus 2pt minus 2pt}%
+  \setlength{\belowdisplayskip}{7pt plus 2pt minus 2pt}}
+\apptocmd{\normalsize}{\handoutdisplayskips}{}{\PackageWarning{handout}{could not patch normalsize}}
+\handoutdisplayskips
+\setlist[enumerate]{label=(\alph*),leftmargin=*,itemsep=2pt,topsep=3pt}
+\setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\iu}{\mathrm{i}}
+\newcommand{\contradiction}{\mathord{\text{\large\ding{56}}}}
+\newcommand{\one}{\mathbf 1}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\col}{col}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator\prb{\mathsf{P}}
+\DeclareMathOperator\expc{\mathsf{E}}
+\DeclareMathOperator\var{var}
+\DeclareMathOperator\cov{cov}
+\DeclareMathOperator\cor{cor}
+\DeclareMathOperator\argmin{argmin}
+\DeclareMathOperator\argmax{argmax}
+\DeclareMathOperator{\Span}{span}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{fact}{Fact}
+\renewcommand{\thefact}{F\arabic{fact}}
+\AddToHook{cmd/subsection/before}{\par\Needspace{9\baselineskip}}
+\AddToHook{env/theorem/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/proposition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/lemma/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/definition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/example/before}{\par\Needspace{4\baselineskip}}
+\definecolor{saybg}{gray}{0.86}
+\NewDocumentEnvironment{say}{+b}
+  {\ifthenelse{\equal{\handoutsay}{true}}{\par\Needspace{2\baselineskip}\noindent\colorbox{saybg}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}%
+   {\small\sffamily\ding{43}\enspace\textbf{Say.}\enspace#1}}\par}{}}
+  {}
+\providecommand{\handoutfill}{false}
+\newsavebox{\boardbox}
+\newlength{\boardht}
+\definecolor{boardrule}{gray}{0.55}
+\makeatletter
+\newcommand{\boardstart}{\par\if@inlabel\leavevmode\par\fi}
+\makeatother
+\NewDocumentEnvironment{board}{o +b}
+  {\boardstart\IfValueT{#1}{\noindent#1\par\nopagebreak}%
+   \noindent\begin{lrbox}{\boardbox}\begin{minipage}{\linewidth}#2\end{minipage}\end{lrbox}%
+   \setlength{\boardht}{\dimexpr\ht\boardbox+\dp\boardbox\relax}%
+   \ifthenelse{\equal{\handoutfill}{true}}%
+     {\setlength{\boardht}{1.4\boardht}%
+      {\setlength{\fboxsep}{0pt}\setlength{\fboxrule}{0.4pt}\color{boardrule}%
+       \framebox[\dimexpr\linewidth-2\fboxrule\relax]{\rule{0pt}{\boardht}}}}%
+     {\ifthenelse{\equal{\handoutsay}{true}}%
+        {\llap{\color{boardrule}\rule[-\dp\boardbox]{1.5pt}{\boardht}\hspace{4pt}}}{}%
+      \usebox{\boardbox}}%
+   \par}
+  {}
+\newcommand{\blank}[1]{\ifthenelse{\equal{\handoutfill}{true}}{\underline{\phantom{#1}}}{#1}}
+\newcommand{\lec}[1]{Lecture~#1}
+\newcommand{\handouttitle}[2]{%
+  \begin{center}
+  {\LARGE\sffamily\bfseries #2\par}\vspace{3pt}
+  {\sffamily Linear Algebra \textperiodcentered\ \lec{#1}\par}
+  \ifthenelse{\equal{\handoutsay}{true}}{\vspace{3pt}{\small\sffamily\colorbox{saybg}{\ding{43}\enspace\textbf{Say.}}\enspace
+    teacher's copy: the shaded boxes are not in the students' copy.\par}}{}
+  \ifthenelse{\equal{\handoutfill}{true}}{\vspace{3pt}{\small\sffamily Fill-in copy: complete the framed spaces in
+    class.\par}}{}
+  \end{center}}
+
+\hypersetup{pdftitle={Linear Algebra, Lecture 3: Vector Spaces, Subspaces, Span, and Bases}}
+\newcommand{\boardtop}{\vspace*{-\abovedisplayskip}}
+\begin{document}
+\handouttitle{3}{Vector Spaces, Subspaces, Span, and Bases}
+
+\textbf{Last time} (\lec{2}): row operations take \([A\mid b]\) to an RREF, from which consistency and all solutions are
+read off (pivot and free unknowns); a square \(A\) is invertible \(\iff\) \(Ax=0\) only for \(x=0\).
+
+\textbf{From \lec{1} and \lec{2}} (restated; \(A\in\R^{m\times n}\) has the columns \(a_1,\dots,a_n\)).
+\begin{itemize}[itemsep=0pt,parsep=0pt,topsep=2pt]
+\item \lec{1}, Definition~1, Theorem~3(a),(b): \(A+B\), \(cA\) are taken entry by entry and
+obey the laws of numbers; \(-A=(-1)A\); \(0\) is the zero matrix; \(e_j=\col_j(I_n)\). (a) \(A(BG)=(AB)G\),
+\(A(B+G)=AB+AG\), \((A+B)G=AG+BG\), \(A(cB)=c(AB)\), \(I_mA=A=AI_n\), \(0A=0\), \(A0=0\). (b) A \(1\times1\) factor
+\(c\) acts as a number: \(Mc=cM\).
+\item \lec{1}, Theorem~4(a),(b): \(\col_j(AB)=A\col_j(B)\); \(Ax=x_1a_1+\dots+x_na_n\) (\(x\in\R^n\)),
+\(Ae_j=a_j\).
+\item \lec{1}, Definition~7, Theorem~8: \((A')_{ij}=a_{ji}\); \(A\) is \textbf{symmetric} if
+\(A'=A\);
+\((A+B)'=A'+B'\), \((cA)'=cA'\), \((AB)'=B'A'\).
+\item \lec{1}, Definition~14, Proposition~15, Example~16:
+\(\one=\one_n=(1,\dots,1)'\in\R^n\), \(\bar J_n=\frac1n\one\one'\), \(C=C_n=I_n-\bar J_n\); \(\one'\one=n\), \(C'=C\),
+\(C\one=0\); for \(x\in\R^n\), \(\bar x=\frac1n\one'x\) and \(Cx=x-\bar x\one\).
+\item \lec{2}, Theorem~3(b): if row operations take \([A\mid b]\) to \([B\mid z]\), then \(Ax=b\) and
+\(Bx=z\) have the same solutions.
+\item \lec{2}, Definitions~1, 4: \(Ax=b\) is \textbf{consistent} if it has a solution. \(R\) is
+in \textbf{RREF} if the first nonzero entry of each nonzero row is \(1\) (its \textbf{pivot}), the only nonzero entry of
+its column; zero rows are last; the pivots of rows \(1,\dots,r\) lie in columns \(k_1<\dots<k_r\) (the \textbf{pivot
+columns}; \(\col_{k_i}(R)=e_i\)). E.g.\ \(I_n\).
+\item \lec{2}, Proposition~7: let row operations take \([A\mid b]\) to \([R\mid z]\), \(R\) in RREF with
+nonzero rows \(1,\dots,r\) and pivot columns \(k_1<\dots<k_r\); \(x_{k_1},\dots,x_{k_r}\) are the \textbf{pivot unknowns},
+the others the \textbf{free unknowns}. (a) \(Ax=b\) is consistent \(\iff\) \(z_i=0\) for all \(i>r\). (b) If so, the
+solutions are: free unknowns arbitrary, \(x_{k_i}=z_i-\sum_{j\text{ free}}R_{ij}x_j\) (\(i\leqslant r\)).
+\item \lec{2}, Theorems~9(a), 22(b): if \(m<n\), then \(Ax=0\) for some \(x\ne0\); a
+consistent \(Ax=b\) has exactly one solution \(\iff\) it has no free unknowns.
+\item \lec{2}, Theorem~14(c): if row operations \(\omega_1,\dots,\omega_k\) take \(A\) to \(B\), then
+\(B=PA\) with \(P=E_k\cdots E_1\), \(E_j=\omega_j(I_m)\), invertible. \(P\) depends only on the operations, and
+\(\col_j(B)=Pa_j\) (\lec{1}, Theorem~4(a)): the same operations take any columns of \(A\) to the
+corresponding columns of \(B\).
+\item \lec{2}, Definition~10, Theorem~15: \(A\in\R^{n\times n}\) is \textbf{invertible} if
+\(AB=BA=I_n\) for some \(B\), the inverse \(A^{-1}\); \(A\) is invertible \(\iff\) (\(Ax=0\Rightarrow x=0\)).
+\item \lec{2}, Example~6: row operations take
+\(A=\left(\begin{smallmatrix}1&1&1&-2\\1&1&2&-3\\2&1&5&-4\end{smallmatrix}\right)\) to
+\(R=\left(\begin{smallmatrix}1&0&0&2\\0&1&0&-3\\0&0&1&-1\end{smallmatrix}\right)\), in RREF; \(Ax=0\iff x=t(-2,3,1,1)'\)
+(\(t\in\R\)).
+\item \lec{2}, Examples~19, 23:
+\(A=\left(\begin{smallmatrix}1&-1&1&-1\\-1&1&-2&1\\2&-1&2&-1\\1&-1&1&0\end{smallmatrix}\right)\) is invertible,
+\(A^{-1}=\left(\begin{smallmatrix}0&1&1&0\\-1&0&1&-1\\-1&-1&0&0\\-1&0&0&1\end{smallmatrix}\right)\); \(Ax=(1,0,3,3)'\)
+has the solution \(x=(3,-1,-1,2)'\).
+\end{itemize}
+
+\subsection*{1. Vector spaces and subspaces}
+
+\begin{definition}\label{b3.1}\label{b3.2}
+A (real) \textbf{vector space} is a set \(V\) (its elements are \textbf{vectors}) with an \textbf{addition} \(u+v\in V\)
+(\(u,v\in V\)) and a \textbf{scalar multiplication} \(cv\in V\) (\(c\in\R\), \(v\in V\)) such that for all
+\(u,v,w\in V\), \(c,d\in\R\): (V1) \(u+v=v+u\); (V2) \(u+(v+w)=(u+v)+w\); (V3) there is a \textbf{zero vector}
+\(0\in V\) with \(v+0=v\) for all \(v\in V\); (V4) each \(v\in V\) has a \(-v\in V\) with \(v+(-v)=0\) (\(u-v=u+(-v)\)); (V5) \(1v=v\);
+(V6) \((cd)v=c(dv)\); (V7) \(c(u+v)=cu+cv\); (V8) \((c+d)v=cv+dv\). A vector \(c_1v_1+\dots+c_kv_k\) (\(c_i\in\R\)) is
+a \textbf{linear combination} of \(v_1,\dots,v_k\). \(\R^n\) and \(\R^{m\times n}\), with the entrywise \(A+B\), \(cA\),
+are vector spaces: (V1)--(V8) hold entry by entry, the zero vector is the zero matrix, and \(-A=(-1)A\)
+(\lec{1}, Definition~1).
+\end{definition}
+
+\Needspace{14\baselineskip}
+\begin{proposition}\label{b3.1-rules}
+Let \(V\) be a vector space, \(v\in V\), \(c\in\R\). Then \(0v=0\), \((-1)v=-v\), \(c0=0\); and \(cv=0\) \(\Rightarrow\)
+\(c=0\) or \(v=0\).
+\end{proposition}
+\begin{proof}
+\begin{board}[Add \(-(0v)\), \(-(c0)\) to both sides in lines 1, 4; line 3: any \(w\) with \(v+w=0\) is \(-v\), so
+\((-1)v=-v\) (line 2):]
+\boardtop
+\begin{align*}
+0v&=(0+0)v=0v+0v\implies0=0v&&\text{((V8); (V2)--(V4))}\\
+v+(-1)v&=1v+(-1)v=\bigl(1+(-1)\bigr)v=0v=0&&\text{((V5), (V8); line 1)}\\
+w&=w+\bigl(v+(-v)\bigr)=(w+v)+(-v)=0+(-v)=-v&&\text{((V1)--(V4))}\\
+c0&=c(0+0)=c0+c0\implies0=c0&&\text{((V3), (V7); (V2)--(V4))}\\
+c\ne0,\ cv=0&\implies v=1v=(c^{-1}c)v=c^{-1}(cv)=c^{-1}0=0&&\text{((V5), (V6); line 4)}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\begin{definition}\label{b3.3}
+A \textbf{subspace} of a vector space \(V\) is a subset \(W\subseteq V\) that is a vector space with the addition and
+the scalar multiplication of \(V\).
+\end{definition}
+
+\Needspace{15\baselineskip}
+\begin{theorem}\label{b3.4}
+For a subset \(W\) of a vector space \(V\), the following are equivalent:
+\begin{enumerate}
+\item \(W\) is a subspace of \(V\);
+\item \(0\in W\), and \(u+v\in W\), \(cu\in W\) for all \(u,v\in W\), \(c\in\R\) (\(W\) is \textbf{closed} under
+addition and scalar multiplication);
+\item \(0\in W\), and \(cu+v\in W\) for all \(u,v\in W\), \(c\in\R\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a)\(\Rightarrow\)(b)\(\Rightarrow\)(c):]
+\boardtop
+\begin{align*}
+\text{(a)}&\implies u+v\in W,\ cu\in W\ (u,v\in W,\ c\in\R)&&\text{(the operations of \(V\))}\\
+\text{(a)}&\implies\text{some }w\in W\ \text{((V3) in \(W\))}\implies0=0w\in W&&\text{(line 1; Proposition~\ref{b3.1-rules})}\\
+\text{(b)}&\implies cu\in W\implies cu+v\in W
+\end{align*}
+\end{board}
+\begin{board}[(c)\(\Rightarrow\)(a): the operations of \(V\) give operations on \(W\), and (V1)--(V8) hold:]
+\boardtop
+\begin{align*}
+v=0&:\ cu=cu+0\in W;\qquad c=1:\ u+v=1u+v\in W&&\text{((V3), (V5))}\\
+&\text{(V1), (V2), (V5)--(V8) hold in \(W\), as they hold in \(V\); (V3): \(0\in W\)}\\
+\text{(V4)}&:\ -w=(-1)w\in W\ (w\in W)&&\text{(Proposition~\ref{b3.1-rules})}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+So \(W\) is a subspace if it contains \(0\) and is closed under the two operations; it is not, if one of these fails.
+
+\Needspace{13\baselineskip}
+\begin{example}\label{b3.5}
+\begin{enumerate}
+\item The symmetric \(n\times n\) matrices form a subspace of \(\R^{n\times n}\).
+\item For \(A\in\R^{m\times n}\), \(\{x\in\R^n:Ax=0\}\) is a subspace of \(\R^n\); for \(b\ne0\), \(\{x\in\R^n:Ax=b\}\)
+is not.
+\item The \textbf{centered} vectors \(W_0=\{x\in\R^n:\one'x=0\}\) form a subspace of \(\R^n\), and \(Cx\in W_0\) for
+every \(x\in\R^n\).
+\item \(\{(x,y,z)'\in\R^3:xy=0\}\), the union of the subspaces \(\{x=0\}\) and \(\{y=0\}\), is not a subspace of
+\(\R^3\).
+\end{enumerate}
+\end{example}
+\textit{Solution.}
+\begin{board}[(a) Theorem~\ref{b3.4}(c); \(A\), \(B\) symmetric:]
+\[
+0'=0,\qquad(cA+B)'=cA'+B'=cA+B\qquad\text{(\lec{1}, Theorem~8)}
+\]
+\end{board}
+\begin{board}[(b) Theorem~\ref{b3.4}(c); \(Au=Av=0\):]
+\boardtop
+\begin{align*}
+A0&=0,\qquad A(cu+v)=cAu+Av=0&&\text{(\lec{1}, Theorem~3(a))}\\
+A0&=0\ne b\implies0\notin\{x:Ax=b\}&&\text{(Theorem~\ref{b3.4}(b))}
+\end{align*}
+\end{board}
+\begin{board}[(c) \(W_0\) is (b) with the \(1\times n\) matrix \(A=\one'\); \(C'=C\), \(C\one=0\) (\lec{1},
+Proposition~15):]
+\[
+\one'Cx=\one'C'x=(C\one)'x=0'x=0\qquad\text{(\lec{1}, Theorem~8)}
+\]
+\end{board}
+\begin{board}[(d) \(\{x=0\}\), \(\{y=0\}\) are (b) with \(A=(1\ 0\ 0)\), \((0\ 1\ 0)\); Theorem~\ref{b3.4}(b) fails:]
+\[
+(1,0,0)',\ (0,1,0)'\ \text{lie in the set }(1\cdot0=0\cdot1=0);\quad(1,0,0)'+(0,1,0)'=(1,1,0)'\ \text{does not }(1\cdot1\ne0)
+\]
+\end{board}
+So a union of subspaces need not be a subspace.
+
+\subsection*{2. Span}
+
+\begin{definition}\label{b3.6}
+For \(v_1,\dots,v_k\) in a vector space \(V\):
+\(\Span\{v_1,\dots,v_k\}=\{c_1v_1+\dots+c_kv_k:c_1,\dots,c_k\in\R\}\), the \textbf{span} of \(v_1,\dots,v_k\);
+\(\Span\varnothing=\{0\}\). If \(\Span\{v_1,\dots,v_k\}=W\), then \(v_1,\dots,v_k\) \textbf{span} \(W\).
+\end{definition}
+
+\Needspace{11\baselineskip}
+\begin{theorem}\label{b3.7}
+\(\Span\{v_1,\dots,v_k\}\) is a subspace of \(V\) that contains \(v_1,\dots,v_k\), and it is contained in every subspace
+of \(V\) that contains \(v_1,\dots,v_k\): it is the smallest such subspace.
+\end{theorem}
+\begin{proof}
+\begin{board}[\(k=0\) and \(k\geqslant1\):]
+\boardtop
+\begin{align*}
+k=0&:\ \Span\varnothing=\{0\}\ni c0+0=0;\ 0\in\text{every subspace}&&\text{(Proposition~\ref{b3.1-rules}; Theorem~\ref{b3.4})}\\
+k\geqslant1&:\ 0=0v_1+\dots+0v_k,\quad c\textstyle\sum_ia_iv_i+\sum_ib_iv_i=\sum_i(ca_i+b_i)v_i&&\text{(Theorem~\ref{b3.4}(c))}\\
+v_j&=1v_j+\textstyle\sum_{i\ne j}0v_i\in\Span\{v_1,\dots,v_k\}&&\text{(Proposition~\ref{b3.1-rules})}\\
+U&\ni v_1,\dots,v_k\text{ a subspace}\implies c_iv_i\in U,\ c_1v_1+\dots+c_kv_k\in U&&\text{(Theorem~\ref{b3.4}(b))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+For \(v_1,\dots,v_k\in\R^m\) and \(V=[v_1\ \cdots\ v_k]\in\R^{m\times k}\), \(Vc=c_1v_1+\dots+c_kv_k\) (\lec{1},
+Theorem~4(b)), so
+\[
+\Span\{v_1,\dots,v_k\}=\{Vc:c\in\R^k\},\qquad b\in\Span\{v_1,\dots,v_k\}\iff Vc=b\text{ is consistent}
+\]
+and this is decided by row-reducing \([V\mid b]\) (\lec{2}, Proposition~7).
+
+\Needspace{17\baselineskip}
+\begin{example}\label{b3.8}
+Let \(W=\Span\{v_1,v_2,v_3\}\subseteq\R^5\), \(v_1=(1,2,0,3,0)'\), \(v_2=(0,0,1,4,0)'\), \(v_3=(0,0,0,0,1)'\). Which
+\(y=(y_1,\dots,y_5)'\) lie in \(W\)? Do \((-3,-6,1,-5,2)'\) and \((2,4,6,7,8)'\)?
+\end{example}
+\textit{Solution.}
+\begin{board}[Row-reduce \([v_1\ v_2\ v_3\mid y]\), keeping the \(y_i\) as letters:]
+\[
+\begin{gathered}
+\left(\begin{array}{ccc|c}1&0&0&y_1\\2&0&0&y_2\\0&1&0&y_3\\3&4&0&y_4\\0&0&1&y_5\end{array}\right)
+\xrightarrow[R_4\leftarrow R_4-3R_1]{R_2\leftarrow R_2-2R_1}
+\left(\begin{array}{ccc|c}1&0&0&y_1\\0&0&0&y_2-2y_1\\0&1&0&y_3\\0&4&0&y_4-3y_1\\0&0&1&y_5\end{array}\right)
+\xrightarrow{R_4\leftarrow R_4-4R_3}
+\left(\begin{array}{ccc|c}1&0&0&y_1\\0&0&0&y_2-2y_1\\0&1&0&y_3\\0&0&0&y_4-3y_1-4y_3\\0&0&1&y_5\end{array}\right)
+\\
+\xrightarrow{R_2\leftrightarrow R_3}
+\left(\begin{array}{ccc|c}1&0&0&y_1\\0&1&0&y_3\\0&0&0&y_2-2y_1\\0&0&0&y_4-3y_1-4y_3\\0&0&1&y_5\end{array}\right)
+\xrightarrow{R_3\leftrightarrow R_5}
+\left(\begin{array}{ccc|c}1&0&0&y_1\\0&1&0&y_3\\0&0&1&y_5\\0&0&0&y_4-3y_1-4y_3\\0&0&0&y_2-2y_1\end{array}\right)
+\end{gathered}
+\]
+\end{board}
+\begin{board}[\lec{2}, Proposition~7, with the unknowns \(c_1,c_2,c_3\), \(r=3\), no free unknowns:]
+\boardtop
+\begin{align*}
+y\in W&\iff y_2-2y_1=0,\ y_4-3y_1-4y_3=0\iff y_2=2y_1,\ y_4=3y_1+4y_3&&\text{((a))}\\
+&\text{then }c=(y_1,y_3,y_5)':\ y=y_1v_1+y_3v_2+y_5v_3&&\text{((b))}\\
+(-3,-6,1,-5,2)'&:\ -6=2(-3),\ -5=3(-3)+4\cdot1\implies\in W,\ =-3v_1+v_2+2v_3\\
+(2,4,6,7,8)'&:\ 3\cdot2+4\cdot6=30\ne7\implies\notin W
+\end{align*}
+\end{board}
+
+\Needspace{17\baselineskip}
+\begin{theorem}\label{b3.10}
+Let \(A=[a_1\ \cdots\ a_n]\in\R^{m\times n}\) and \(B=[b_1\ \cdots\ b_p]\in\R^{m\times p}\).
+\begin{enumerate}
+\item \(\Span\{b_1,\dots,b_p\}\subseteq\Span\{a_1,\dots,a_n\}\) \(\iff\) every \(b_j\in\Span\{a_1,\dots,a_n\}\)
+\(\iff\) \(B=AF\) for some \(F\in\R^{n\times p}\).
+\item \(\Span\{b_1,\dots,b_p\}=\Span\{a_1,\dots,a_n\}\) \(\iff\) \(B=AF\) and \(A=BG\) for some \(F\in\R^{n\times p}\),
+\(G\in\R^{p\times n}\).
+\item If every \(b_j\in\Span\{a_1,\dots,a_n\}\), then \(\Span\{a_1,\dots,a_n,b_1,\dots,b_p\}=\Span\{a_1,\dots,a_n\}\). So
+deleting from a list a vector that is a linear combination of the others does not change the span.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) \(S_a=\Span\{a_1,\dots,a_n\}\), \(S_b=\Span\{b_1,\dots,b_p\}\), \(F=[f_1\ \cdots\ f_p]\):]
+\boardtop
+\begin{align*}
+S_b\subseteq S_a&\implies b_j\in S_b\subseteq S_a\ (\text{all }j)&&\text{(Theorem~\ref{b3.7}: \(b_j\in S_b\))}\\
+b_1,\dots,b_p\in S_a&\implies S_b\subseteq S_a&&\text{(Theorem~\ref{b3.7}: \(S_a\) a subspace, \(S_b\) the smallest)}\\
+\col_j(AF)&=Af_j=f_{1j}a_1+\dots+f_{nj}a_n&&\text{(\lec{1}, Theorem~4(a),(b))}
+\end{align*}
+So \(B=AF\) for some \(F\) \(\iff\) each \(b_j\) is a linear combination of \(a_1,\dots,a_n\).
+\end{board}
+(b) The spans are equal \(\iff\) each contains the other: (a) for both inclusions.
+\begin{board}[(c) \(b_j=k_{1j}a_1+\dots+k_{nj}a_n\) (\(j=1,\dots,p\)); the order of a list does not change its span:]
+\boardtop
+\begin{align*}
+\textstyle\sum_{i=1}^nx_ia_i+\sum_{j=1}^py_jb_j&=\textstyle\sum_{i=1}^n\bigl(x_i+\sum_{j=1}^pk_{ij}y_j\bigr)a_i
+\in\Span\{a_1,\dots,a_n\}\\
+\textstyle\sum_ix_ia_i&=\textstyle\sum_ix_ia_i+\sum_j0\,b_j\in\Span\{a_1,\dots,a_n,b_1,\dots,b_p\}\\
+&\text{last sentence: }a_i\text{ the remaining vectors, }b_1\text{ the deleted one }(p=1)
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\subsection*{3. Linear independence}
+
+\begin{definition}\label{b3.11}
+\(v_1,\dots,v_k\) in a vector space are \textbf{linearly dependent} if \(c_1v_1+\dots+c_kv_k=0\) for some
+\(c_1,\dots,c_k\in\R\), not all \(0\) (a \textbf{linear relation}); otherwise \textbf{linearly independent}:
+\(c_1v_1+\dots+c_kv_k=0\) only for \(c_1=\dots=c_k=0\). The empty list is independent.
+\end{definition}
+
+\Needspace{11\baselineskip}
+\begin{proposition}\label{b3.12}
+Let \(v_1,\dots,v_k\in\R^m\), \(V=[v_1\ \cdots\ v_k]\in\R^{m\times k}\). Then \(v_1,\dots,v_k\) are linearly independent
+\(\iff\) \(Vc=0\) only for \(c=0\) \(\iff\) every column of an RREF of \(V\) is a pivot column (no free unknowns). If
+\(k>m\), then \(v_1,\dots,v_k\) are linearly dependent.
+\end{proposition}
+\begin{proof}
+\begin{board}[\(Vc=c_1v_1+\dots+c_kv_k\) (\lec{1}, Theorem~4(b)):]
+\boardtop
+\begin{align*}
+&\text{linear relations among }v_1,\dots,v_k=\text{solutions }c\ne0\text{ of }Vc=0\\
+&Vc=0\text{ consistent }(c=0):\ c=0\text{ only}\iff\text{no free unknowns}
+&&\text{(\lec{2}, Theorem~22(b))}\\
+&k>m\implies Vc=0\text{ for some }c\ne0&&\text{(\lec{2}, Theorem~9(a))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{15\baselineskip}
+\begin{proposition}\label{b3.13}
+Let \(v_1,\dots,v_k\) be vectors of a vector space.
+\begin{enumerate}
+\item If \(v_i=0\) for some \(i\), or \(v_i=v_j\) for some \(i\ne j\), then \(v_1,\dots,v_k\) are dependent. A single
+vector \(v\) is independent \(\iff\) \(v\ne0\).
+\item A sublist of an independent list is independent.
+\item For \(k\geqslant2\): \(v_1,\dots,v_k\) are dependent \(\iff\) some \(v_j\) is a linear combination of the others.
+So two vectors are dependent \(\iff\) one of them is a multiple of the other.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\begin{board}[(a) Relations with a coefficient \(1\), the other coefficients \(0\) (Proposition~\ref{b3.1-rules}):]
+\boardtop
+\begin{align*}
+v_i=0&:\ 1v_i=0;\qquad v_i=v_j:\ 1v_i+(-1)v_j=0\\
+v\ne0,\ cv=0&\implies c=0\ (\text{independent});\qquad v=0:\ 1v=0\ (\text{dependent})&&\text{(Proposition~\ref{b3.1-rules})}
+\end{align*}
+\end{board}
+\begin{board}[(b) \(S\subseteq\{1,\dots,k\}\) the indices of a sublist; a relation among the \(v_i\), \(i\in S\) (not all
+\(c_i=0\)):]
+\[
+\textstyle\sum_{i\in S}c_iv_i=0\implies\sum_{i\in S}c_iv_i+\sum_{i\notin S}0\,v_i=0,\ \text{a relation among all of them}
+\]
+So a dependent sublist makes the whole list dependent; contrapositive: (b).
+\end{board}
+\begin{board}[(c) Both directions; for two vectors, ``the others'' is the other one:]
+\boardtop
+\begin{align*}
+v_j&=\textstyle\sum_{i\ne j}x_iv_i\implies v_j-\sum_{i\ne j}x_iv_i=0,\ \text{coefficient }1\text{ on }v_j\\
+\textstyle\sum_ix_iv_i&=0,\ x_j\ne0\implies v_j=\textstyle\sum_{i\ne j}(-x_i/x_j)v_i
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{13\baselineskip}
+\begin{example}\label{b3.15}
+Let \(a_1=(1,1,2)'\), \(a_2=(1,1,1)'\), \(a_3=(1,2,5)'\), \(a_4=(-2,-3,-4)'\), the columns of the matrix \(A\) of
+\lec{2}, Example~6. Find a linear relation among \(a_1,\dots,a_4\); show that \(a_1,a_2,a_3\) are
+independent.
+\end{example}
+\textit{Solution.}
+\begin{board}[Four vectors of \(\R^3\) are dependent (Proposition~\ref{b3.12}); \(A\), \(R\), \(Ax=0\) as restated:]
+\boardtop
+\begin{align*}
+x=(-2,3,1,1)'&:\ -2a_1+3a_2+a_3+a_4=Ax=0&&\text{(\lec{1}, Theorem~4(b))}\\
+&\implies a_4=2a_1-3a_2-a_3\\
+[a_1\ a_2\ a_3]&\to\text{columns }1\text{--}3\text{ of }R\text{, which form }I_3&&\text{(\lec{2}, Theorem~14(c))}\\
+&\implies\text{all pivot columns}\implies a_1,a_2,a_3\text{ independent}&&\text{(Proposition~\ref{b3.12})}
+\end{align*}
+\end{board}
+
+\subsection*{4. Bases}
+
+\begin{definition}\label{b3.17}
+\(v_1,\dots,v_k\) in a vector space \(V\) form a \textbf{basis} of a subspace \(W\) if they lie in \(W\), are linearly
+independent, and span \(W\).
+\begin{itemize}[itemsep=0pt,topsep=2pt]
+\item \(e_1,\dots,e_n\) form a basis of \(\R^n\), the \textbf{standard basis}: \(x=x_1e_1+\dots+x_ne_n\) (\lec{1},
+Theorem~4(b) with \(I_n\)), and this is \(0\) only for \(x=0\).
+\item \(E_{ij}\in\R^{m\times n}\) (entry \((i,j)\) is \(1\), all others \(0\)): the \(mn\) matrices \(E_{ij}\) form a basis
+of \(\R^{m\times n}\), as \(A=\sum_i\sum_ja_{ij}E_{ij}\), and \(\sum_i\sum_jc_{ij}E_{ij}=(c_{ij})\) is \(0\) only if every \(c_{ij}=0\).
+\item The empty list is a basis of \(\{0\}\).
+\end{itemize}
+\end{definition}
+
+\Needspace{8\baselineskip}
+\begin{theorem}\label{b3.18}
+If \(v_1,\dots,v_k\) form a basis of \(W\), each \(w\in W\) is \(w=c_1v_1+\dots+c_kv_k\) for exactly one
+\((c_1,\dots,c_k)\): the \textbf{coordinates} of \(w\) in this basis.
+\end{theorem}
+\begin{proof}
+\begin{board}[Existence: \(v_1,\dots,v_k\) span \(W\). Uniqueness:]
+\[
+\textstyle\sum_ix_iv_i=\sum_iy_iv_i\implies\sum_i(x_i-y_i)v_i=0\implies x_i=y_i\ (\text{all }i)\qquad\text{(independence)}
+\]
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{11\baselineskip}
+\begin{example}\label{b3.19}
+If \(P\in\R^{n\times n}\) is invertible, its columns \(p_1,\dots,p_n\) form a basis of \(\R^n\), and the coordinates of
+\(y\in\R^n\) are \(x=P^{-1}y\). For the invertible \(A\) of \lec{2}, Example~19: find the coordinates of
+\(y=(1,0,3,3)'\) in the basis of the columns of \(A\).
+\end{example}
+\textit{Solution.}
+\begin{board}[General: \(Px=x_1p_1+\dots+x_np_n\) (\lec{1}, Theorem~4(b)):]
+\boardtop
+\begin{align*}
+Px&=0\implies x=0:\ p_1,\dots,p_n\text{ independent}&&\text{(\lec{2}, Theorem~15)}\\
+y&=P(P^{-1}y)=(P^{-1}y)_1p_1+\dots+(P^{-1}y)_np_n&&\text{(\(PP^{-1}=I_n\); \lec{1}, Theorem~3(a))}\\
+&\text{they span }\R^n;\ \text{coordinates of }y\text{: }P^{-1}y&&\text{(Theorem~\ref{b3.18})}
+\end{align*}
+\end{board}
+\begin{board}[Numbers: \(A\), \(A^{-1}\) as restated:]
+\boardtop
+\begin{align*}
+A^{-1}y&=(0+0+3+0,\ -1+0+3-3,\ -1+0+0+0,\ -1+0+0+3)'=(3,-1,-1,2)'\\
+y&=3(1,-1,2,1)'-(-1,1,-1,-1)'-(1,-2,2,1)'+2(-1,1,-1,0)'
+\end{align*}
+\(A^{-1}y\) is the solution of \(Ax=y\) found in \lec{2}, Example~23.
+\end{board}
+
+\Needspace{12\baselineskip}
+\begin{example}\label{b3.22}
+In \(W_0=\{x\in\R^4:x_1+x_2+x_3+x_4=0\}\), show that \(w_1=(1,-1,0,0)'\), \(w_2=(0,1,-1,0)'\), \(w_3=(0,0,1,-1)'\) form a
+basis.
+\end{example}
+\textit{Solution.}
+\begin{board}[In \(W_0\): the entries of each \(w_i\) add up to \(0\). Span and independence:]
+\boardtop
+\begin{align*}
+x\in W_0&\implies x_4=-x_1-x_2-x_3\\
+x_1w_1+(x_1+x_2)w_2+(x_1+x_2+x_3)w_3&=(x_1,\ x_2,\ x_3,\ -x_1-x_2-x_3)'=x\\
+c_1w_1+c_2w_2+c_3w_3&=(c_1,\ c_2-c_1,\ c_3-c_2,\ -c_3)'=0\\
+&\implies c_1=0,\ c_2=0,\ c_3=0
+\end{align*}
+\end{board}
+
+\subsection*{5. Sums and direct sums}
+
+\begin{definition}\label{b3.30}
+For subspaces \(U\), \(W\) of a vector space \(V\): the \textbf{intersection} \(U\cap W\) is the set of the vectors in both
+\(U\) and \(W\); the \textbf{sum} is \(U+W=\{u+w:u\in U,\ w\in W\}\). The sum is \textbf{direct}, written \(U\oplus W\), if
+\(U\cap W=\{0\}\). So \(V=U\oplus W\) means \(V=U+W\) and \(U\cap W=\{0\}\).
+\end{definition}
+
+\Needspace{15\baselineskip}
+\begin{theorem}\label{b3.31}
+Let \(U\), \(W\) be subspaces of a vector space \(V\).
+\begin{enumerate}
+\item \(U\cap W\) and \(U+W\) are subspaces of \(V\).
+\item \(U+W\) contains \(U\) and \(W\), and it is contained in every subspace of \(V\) that contains \(U\cup W\): it is the
+smallest such subspace.
+\item If \(U=\Span\{u_1,\dots,u_p\}\) and \(W=\Span\{w_1,\dots,w_q\}\), then
+\(U+W=\Span\{u_1,\dots,u_p,w_1,\dots,w_q\}\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) Theorem~\ref{b3.4}(c) for both; \(c\in\R\), \(u_1,u_2\in U\), \(w_1,w_2\in W\):]
+\boardtop
+\begin{align*}
+&0\in U,\ 0\in W;\quad0=0+0\in U+W&&\text{((V3))}\\
+x,y\in U\cap W&\implies cx+y\in U,\ cx+y\in W\implies cx+y\in U\cap W&&\text{(Theorem~\ref{b3.4}(c))}\\
+x=u_1+w_1,\ y=u_2+w_2&\implies cx+y=(cu_1+u_2)+(cw_1+w_2)\in U+W&&\text{((V1), (V2), (V7))}
+\end{align*}
+\end{board}
+\begin{board}[(b) \(Z\) a subspace of \(V\) containing \(U\cup W\):]
+\boardtop
+\begin{align*}
+&u=u+0,\ w=0+w\implies U\subseteq U+W,\ W\subseteq U+W&&\text{((V1), (V3))}\\
+&u\in U,\ w\in W\implies u,w\in Z\implies u+w\in Z\implies U+W\subseteq Z&&\text{(Theorem~\ref{b3.4}(b))}
+\end{align*}
+\end{board}
+\begin{board}[(c) Both inclusions, with \(S=\Span\{u_1,\dots,u_p,w_1,\dots,w_q\}\):]
+\boardtop
+\begin{align*}
+u=\textstyle\sum_ia_iu_i\in U,\ w=\sum_jb_jw_j\in W&\implies u+w=\textstyle\sum_ia_iu_i+\sum_jb_jw_j\in S\\
+\textstyle\sum_ia_iu_i+\sum_jb_jw_j&=u+w,\quad u=\textstyle\sum_ia_iu_i\in U,\ w=\sum_jb_jw_j\in W
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+For \(A=[a_1\ \cdots\ a_p]\in\R^{m\times p}\), \(B=[b_1\ \cdots\ b_q]\in\R^{m\times q}\) and \([A\ B]\in\R^{m\times(p+q)}\)
+with the columns \(a_1,\dots,a_p,b_1,\dots,b_q\): by (c) and \lec{1}, Theorem~4(b),
+\[
+\Span\{a_1,\dots,a_p,b_1,\dots,b_q\}=\Span\{a_1,\dots,a_p\}+\Span\{b_1,\dots,b_q\}=\{Ax+By:x\in\R^p,\ y\in\R^q\}
+\]
+
+\Needspace{11\baselineskip}
+\begin{theorem}\label{b3.32}
+Let \(U\), \(W\) be subspaces of a vector space \(V\). Then \(U\cap W=\{0\}\) \(\iff\) each \(x\in U+W\) is \(x=u+w\)
+(\(u\in U\), \(w\in W\)) in exactly one way: \(u+w=u_1+w_1\) with \(u,u_1\in U\), \(w,w_1\in W\) \(\Rightarrow\)
+\(u=u_1\), \(w=w_1\).
+\end{theorem}
+\begin{proof}
+\begin{board}[\((\Rightarrow)\) with \(U\cap W=\{0\}\); \((\Leftarrow)\) by contraposition:]
+\boardtop
+\begin{align*}
+(\Rightarrow)\ u+w=u_1+w_1&\implies u-u_1=w_1-w&&\text{((V1)--(V4))}\\
+&\implies u-u_1=w_1-w\in U\cap W=\{0\},\ u=u_1,\ w=w_1&&\text{(Theorem~\ref{b3.4}(c))}\\
+(\Leftarrow)\ 0\ne x\in U\cap W&\implies x=x+0=0+x\ (x,0\in U;\ 0,x\in W):\ \text{two ways}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+So, if \(V=U\oplus W\), each \(v\in V\) is \(u+w\) for exactly one \(u\in U\), \(w\in W\) (the parts of \(v\) in
+\(U\), \(W\)).
+
+\Needspace{13\baselineskip}
+\begin{theorem}\label{b3.33}
+Let \(U\), \(W\) be subspaces of a vector space \(V\), \(u_1,\dots,u_p\) a basis of \(U\), \(w_1,\dots,w_q\) a basis of
+\(W\). If \(U\cap W=\{0\}\), then \(u_1,\dots,u_p,w_1,\dots,w_q\) form a basis of \(U\oplus W\). If \(U\cap W\ne\{0\}\),
+then \(u_1,\dots,u_p,w_1,\dots,w_q\) are linearly dependent. So \(U+W\) is direct \(\iff\)
+\(u_1,\dots,u_p,w_1,\dots,w_q\) are linearly independent.
+\end{theorem}
+\begin{proof}
+\begin{board}[Span: Theorem~\ref{b3.31}(b),(c); the two cases:]
+\boardtop
+\begin{align*}
+U\cap W=\{0\}&:\ \textstyle\sum_ia_iu_i+\sum_jb_jw_j=0\implies x=\textstyle\sum_ia_iu_i=\sum_j(-b_j)w_j\in U\cap W\\
+&\implies\textstyle\sum_ia_iu_i=x=0,\ \sum_jb_jw_j=0\implies a_i=0,\ b_j=0:\ \text{a basis}&&\text{(independence)}\\
+0\ne x\in U\cap W&:\ x=\textstyle\sum_ia_iu_i=\sum_jb_jw_j\implies\textstyle\sum_ia_iu_i+\sum_j(-b_j)w_j=0\\
+&\quad\text{not all }a_i=0\ (x\ne0):\ \text{dependent; so direct}\iff\text{independent}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{12\baselineskip}
+\begin{example}\label{b3.34}
+Show that \(\R^4=W_0\oplus\Span\{e_4\}\), with \(W_0\) and its basis \(w_1,w_2,w_3\) of Example~\ref{b3.22}; split
+\((1,2,3,6)'\); show that \(w_1,w_2,w_3,e_4\) form a basis of \(\R^4\).
+\end{example}
+\textit{Solution.}
+\begin{board}[Intersection, sum, and the basis (\(e_4\ne0\) is a basis of \(\Span\{e_4\}\): Proposition~\ref{b3.13}(a)):]
+\boardtop
+\begin{align*}
+ce_4&=(0,0,0,c)'\in W_0\iff c=0:\quad W_0\cap\Span\{e_4\}=\{0\}\\
+x-ce_4&=(x_1,\ x_2,\ x_3,\ x_4-c)'\in W_0\iff c=x_1+x_2+x_3+x_4\\
+x&=(x_1,\ x_2,\ x_3,\ -x_1-x_2-x_3)'+(x_1+x_2+x_3+x_4)e_4\quad\text{(the only way)}\\
+(1,2,3,6)'&=(1,2,3,-6)'+12e_4;\quad w_1,w_2,w_3,e_4\text{ form a basis of }\R^4&&\text{(Theorem~\ref{b3.33})}
+\end{align*}
+\end{board}
+
+\Needspace{12\baselineskip}
+\begin{example}\label{b3.35}
+Show that \(\R^n=\Span\{\one_n\}\oplus W_0\), \(x=\bar x\one+Cx\); split \((1,3,5,7,9)'\). For \(n=4\), show that
+\(\one_4,w_1,w_2,w_3\) form a basis of \(\R^4\); compare with Example~\ref{b3.34}.
+\end{example}
+\textit{Solution.}
+\begin{board}[Example~\ref{b3.5}(c); \lec{1}, Definition~14, Proposition~15,
+Example~16, Theorem~3(a),(b):]
+\boardtop
+\begin{align*}
+x&=\bar x\one+Cx,\quad\bar x\one\in\Span\{\one\},\ Cx\in W_0:\quad\R^n=\Span\{\one\}+W_0\\
+c\one\in W_0&\implies0=\one'(c\one)=cn,\ c=0:\quad\Span\{\one\}\cap W_0=\{0\}\\
+x&=\bar J_nx+C_nx,\quad\bar J_nx=\tfrac1n\one(\one'x)=\bar x\one,\quad\bar J_n+C_n=I_n\\
+x&=(1,3,5,7,9)':\ \bar x=25/5=5,\quad x=5\one+(-4,-2,0,2,4)'
+\end{align*}
+\end{board}
+So \(\bar x\one\) is the only constant vector whose difference from \(x\) is centered (Theorem~\ref{b3.32}).
+\begin{board}[\(n=4\): \(\one_4\ne0\) is a basis of \(\Span\{\one_4\}\) (Proposition~\ref{b3.13}(a)); Example~\ref{b3.22}:]
+\boardtop
+\begin{align*}
+&\one_4,w_1,w_2,w_3\text{ form a basis of }\R^4\quad\text{(Theorem~\ref{b3.33})}\\
+&x=(1,2,3,6)':\ \bar x=3,\ Cx=(-2,-1,0,3)'\in W_0;\quad\text{in Example~\ref{b3.34}: }(1,2,3,-6)'\in W_0
+\end{align*}
+The part in \(W_0\) depends on the second subspace.
+\end{board}
+
+\Needspace{15\baselineskip}
+\begin{example}\label{b3.36}
+In \(\R^4\) let \(U=\Span\{u_1,u_2\}\), \(W=\Span\{w_1,w_2\}\), \(u_1=(1,0,1,2)'\), \(u_2=(1,1,0,1)'\), \(w_1=(0,1,0,1)'\),
+\(w_2=(2,0,1,2)'\). Find bases of \(U+W\) and of \(U\cap W\). Is the sum direct?
+\end{example}
+\textit{Solution.}
+\begin{board}[\(U+W=\Span\{u_1,u_2,w_1,w_2\}\) (Theorem~\ref{b3.31}(c)); row-reduce \(M=[u_1\ u_2\ w_1\ w_2]\):]
+\[
+\begin{gathered}
+\begin{pmatrix}1&1&0&2\\0&1&1&0\\1&0&0&1\\2&1&1&2\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4-2R_1]{R_3\leftarrow R_3-R_1}
+\begin{pmatrix}1&1&0&2\\0&1&1&0\\0&-1&0&-1\\0&-1&1&-2\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4+R_2]{R_3\leftarrow R_3+R_2}
+\begin{pmatrix}1&1&0&2\\0&1&1&0\\0&0&1&-1\\0&0&2&-2\end{pmatrix}
+\\
+\xrightarrow{R_4\leftarrow R_4-2R_3}
+\begin{pmatrix}1&1&0&2\\0&1&1&0\\0&0&1&-1\\0&0&0&0\end{pmatrix}
+\xrightarrow{R_2\leftarrow R_2-R_3}
+\begin{pmatrix}1&1&0&2\\0&1&0&1\\0&0&1&-1\\0&0&0&0\end{pmatrix}
+\xrightarrow{R_1\leftarrow R_1-R_2}
+\begin{pmatrix}1&0&0&1\\0&1&0&1\\0&0&1&-1\\0&0&0&0\end{pmatrix}=R
+\end{gathered}
+\]
+\end{board}
+\begin{board}[Relations, \(U+W\):]
+\boardtop
+\begin{align*}
+Mc=0&\iff Rc=0\iff c_1+c_4=0,\ c_2+c_4=0,\ c_3-c_4=0&&\text{(\lec{2}, Theorem~3(b))}\\
+&\iff c=t(-1,-1,1,1)'\ (c_4=t\text{ free})&&\text{(\lec{2}, Proposition~7(b))}\\
+t=1&:\ -u_1-u_2+w_1+w_2=0,\quad w_2=u_1+u_2-w_1\\
+U+W&=\Span\{u_1,u_2,w_1\}&&\text{(Theorem~\ref{b3.10}(c))}\\
+[u_1\ u_2\ w_1]&\to\text{columns }1\text{--}3\text{ of }R\text{: }e_1,e_2,e_3&&\text{(\lec{2}, Theorem~14(c))}\\
+&\implies u_1,u_2,w_1\text{ independent: a basis of }U+W&&\text{(Proposition~\ref{b3.12})}
+\end{align*}
+\end{board}
+\begin{board}[\(U\cap W\), direct?]
+\boardtop
+\begin{align*}
+x\in U\cap W&\iff x=a_1u_1+a_2u_2=b_1w_1+b_2w_2,\ M(a_1,a_2,-b_1,-b_2)'=0\ \text{(some \(a_i,b_i\))}\\
+&\iff(a_1,a_2,-b_1,-b_2)'=t(-1,-1,1,1)',\ x=-t(u_1+u_2)\ \text{(some \(t\in\R\))}\\
+U\cap W&=\Span\{u_1+u_2\},\quad u_1+u_2=(2,1,1,3)'=w_1+w_2
+\end{align*}
+\(u_1+u_2\ne0\) is a basis of \(U\cap W\) (Proposition~\ref{b3.13}(a)); \(U\cap W\ne\{0\}\), so the sum is not direct
+(Definition~\ref{b3.30}). \(u_1,u_2\) are a basis of \(U\) (sublist of \(u_1,u_2,w_1\), Proposition~\ref{b3.13}(b)), \(w_1,w_2\) of \(W\) (not
+multiples of each other: first entries \(0,2\), second entries \(1,0\); Proposition~\ref{b3.13}(c)); accordingly \(u_1,u_2,w_1,w_2\) are dependent
+(Theorem~\ref{b3.33}).
+\end{board}
+
+\bigskip
+\textbf{Practice.} The Exercises and Problems of the textbook, Chapter~3: subspaces, span, linear independence, bases,
+and sums and direct sums of subspaces.
+
+\end{document}

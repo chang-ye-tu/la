@@ -1,0 +1,586 @@
+\def\handoutsay{false}\def\handoutfill{false}
+\documentclass[12pt]{article}
+\newcommand{\handoutrunning}{Lecture 6: Orthogonality, Gram--Schmidt, and Orthogonal Matrices}
+\providecommand{\handoutsay}{true}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[a4paper,margin=15mm,headheight=14pt,headsep=5mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,booktabs,needspace}
+\usepackage{pifont}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{fancyhdr}
+\usepackage{ifthen}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdfauthor={Chang-Ye Tu}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Linear Algebra}
+\fancyhead[R]{\small\handoutrunning}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt plus 1pt minus 1pt}
+\setlength{\emergencystretch}{1.5em}
+\usepackage{etoolbox}
+\newcommand{\handoutdisplayskips}{\setlength{\abovedisplayskip}{7pt plus 2pt minus 2pt}%
+  \setlength{\belowdisplayskip}{7pt plus 2pt minus 2pt}}
+\apptocmd{\normalsize}{\handoutdisplayskips}{}{\PackageWarning{handout}{could not patch normalsize}}
+\handoutdisplayskips
+\setlist[enumerate]{label=(\alph*),leftmargin=*,itemsep=2pt,topsep=3pt}
+\setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\iu}{\mathrm{i}}
+\newcommand{\contradiction}{\mathord{\text{\large\ding{56}}}}
+\newcommand{\one}{\mathbf 1}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\col}{col}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator\prb{\mathsf{P}}
+\DeclareMathOperator\expc{\mathsf{E}}
+\DeclareMathOperator\var{var}
+\DeclareMathOperator\cov{cov}
+\DeclareMathOperator\cor{cor}
+\DeclareMathOperator\argmin{argmin}
+\DeclareMathOperator\argmax{argmax}
+\DeclareMathOperator{\Span}{span}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{fact}{Fact}
+\renewcommand{\thefact}{F\arabic{fact}}
+\AddToHook{cmd/subsection/before}{\par\Needspace{9\baselineskip}}
+\AddToHook{env/theorem/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/proposition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/lemma/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/definition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/example/before}{\par\Needspace{4\baselineskip}}
+\definecolor{saybg}{gray}{0.86}
+\NewDocumentEnvironment{say}{+b}
+  {\ifthenelse{\equal{\handoutsay}{true}}{\par\Needspace{2\baselineskip}\noindent\colorbox{saybg}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}%
+   {\small\sffamily\ding{43}\enspace\textbf{Say.}\enspace#1}}\par}{}}
+  {}
+\providecommand{\handoutfill}{false}
+\newsavebox{\boardbox}
+\newlength{\boardht}
+\definecolor{boardrule}{gray}{0.55}
+\makeatletter
+\newcommand{\boardstart}{\par\if@inlabel\leavevmode\par\fi}
+\makeatother
+\NewDocumentEnvironment{board}{o +b}
+  {\boardstart\IfValueT{#1}{\noindent#1\par\nopagebreak}%
+   \noindent\begin{lrbox}{\boardbox}\begin{minipage}{\linewidth}#2\end{minipage}\end{lrbox}%
+   \setlength{\boardht}{\dimexpr\ht\boardbox+\dp\boardbox\relax}%
+   \ifthenelse{\equal{\handoutfill}{true}}%
+     {\setlength{\boardht}{1.4\boardht}%
+      {\setlength{\fboxsep}{0pt}\setlength{\fboxrule}{0.4pt}\color{boardrule}%
+       \framebox[\dimexpr\linewidth-2\fboxrule\relax]{\rule{0pt}{\boardht}}}}%
+     {\ifthenelse{\equal{\handoutsay}{true}}%
+        {\llap{\color{boardrule}\rule[-\dp\boardbox]{1.5pt}{\boardht}\hspace{4pt}}}{}%
+      \usebox{\boardbox}}%
+   \par}
+  {}
+\newcommand{\blank}[1]{\ifthenelse{\equal{\handoutfill}{true}}{\underline{\phantom{#1}}}{#1}}
+\newcommand{\lec}[1]{Lecture~#1}
+\newcommand{\handouttitle}[2]{%
+  \begin{center}
+  {\LARGE\sffamily\bfseries #2\par}\vspace{3pt}
+  {\sffamily Linear Algebra \textperiodcentered\ \lec{#1}\par}
+  \ifthenelse{\equal{\handoutsay}{true}}{\vspace{3pt}{\small\sffamily\colorbox{saybg}{\ding{43}\enspace\textbf{Say.}}\enspace
+    teacher's copy: the shaded boxes are not in the students' copy.\par}}{}
+  \ifthenelse{\equal{\handoutfill}{true}}{\vspace{3pt}{\small\sffamily Fill-in copy: complete the framed spaces in
+    class.\par}}{}
+  \end{center}}
+
+\hypersetup{pdftitle={Linear Algebra, Lecture 6: Orthogonality, Gram\textendash Schmidt, and Orthogonal Matrices}}
+\newcommand{\boardtop}{\vspace*{-\abovedisplayskip}}
+\DeclareMathOperator{\row}{row}
+\begin{document}
+\handouttitle{6}{Orthogonality, Gram--Schmidt, and Orthogonal Matrices}
+
+\textbf{Last time} (\lec{5}): block matrices and determinants; \(\det(AB)=\det A\det B\), \(\det A'=\det A\), and
+\(A\in\R^{n\times n}\) is invertible \(\iff\) \(\det A\ne0\). Throughout, \(I=I_n\) and \(e_j\) is column \(j\) of \(I\).
+
+\textbf{From \lec{1}, \lec{2}, \lec{3}, \lec{4} and \lec{5}} (restated).
+\begin{itemize}[itemsep=0pt,parsep=0pt,topsep=2pt]
+\item \lec{1}, Definition~7, Theorems~3, 8: \((A')_{ij}=a_{ji}\);
+\((AB)C=A(BC)\), \(A(B+C)=AB+AC\), \((A+B)C=AC+BC\), \(c(AB)=(cA)B=A(cB)\), \(I_mA=A=AI_n\)
+(\(A\in\R^{m\times n}\)); \((A+B)'=A'+B'\), \((AB)'=B'A'\), \((A')'=A\), \(I'=I\); \(x'y=y'x=x_1y_1+\dots+x_ny_n\) (\(x,y\in\R^n\)).
+\item \lec{1}, Definition~1, Theorem~4: for \(A=[a_1\ \cdots\ a_n]\in\R^{m\times n}\) and
+\(B\in\R^{n\times p}\), \(\col_j(AB)=A\col_j(B)\); \(Ax=x_1a_1+\dots+x_na_n\), \(Ae_j=a_j\);
+\((AB)_{ij}=\row_i(A)\col_j(B)\), so \((A'G)_{ij}=a_i'\col_j(G)\) (\(G\in\R^{m\times p}\));
+\(AB=a_1\row_1(B)+\dots+a_n\row_n(B)\). Matrices with the same columns are equal.
+\item \lec{1}, Definition~14, Example~16: \(\one=\one_n=(1,\dots,1)'\in\R^n\),
+\(\bar y=\frac1n\one'y\), \(\bar J_n=\frac1n\one\one'\), \(C_n=I_n-\bar J_n\);
+\(\sum_i(y_i-\bar y)^2=\sum_iy_i^2-n\bar y^2\).
+\item \lec{2}, Theorems~11(b), 15: for invertible \(A,B\in\R^{n\times n}\), \(AB\) is
+invertible and \((AB)^{-1}=B^{-1}A^{-1}\); for \(A,B\in\R^{n\times n}\), \(BA=I\) or \(AB=I\) \(\Rightarrow\) \(A\) is
+invertible and \(A^{-1}=B\).
+\item \lec{3}, Definition~6, Theorem~7, Proposition~12(a),(c):
+\(\Span\{v_1,\dots,v_k\}=\{c_1v_1+\dots+c_kv_k:c_i\in\R\}\) is a subspace that contains \(v_1,\dots,v_k\) and lies in
+every subspace containing them. A list containing \(0\) is dependent; for \(k\geqslant2\), \(v_1,\dots,v_k\) are
+dependent \(\iff\) some \(v_j\) is a combination of the others.
+\item \lec{3}, Definition~18, Theorems~19(a), 20, 21: for subspaces
+\(U\), \(W\) of \(\R^n\), \(U+W=\{u+w:u\in U,\ w\in W\}\) is a subspace. If \(U\cap W=\{0\}\), the sum is
+\textbf{direct}, written \(U\oplus W\); each of its vectors is \(u+w\) (\(u\in U\), \(w\in W\)) in exactly one way, and
+a basis of \(U\) together with a basis of \(W\) is a basis of \(U\oplus W\).
+\item \lec{4}, Theorem~4: every subspace \(W\) of \(\R^n\) has a basis, and any two bases of \(W\) have the
+same number of elements, \(\dim W\); \(\dim\R^n=n\), \(\dim\{0\}=0\) (empty list), and \(\dim W=0\) only for
+\(W=\{0\}\). If \(W\) is spanned by \(m\) vectors, then any \(k>m\) vectors of \(W\) are linearly dependent.
+\item \lec{4}, Theorem~5(a),(b),(d): let \(U\subseteq W\) be subspaces of \(\R^n\), \(\dim W=d\). Then
+\(\dim U=d\) \(\Rightarrow\) \(U=W\); an independent list in \(W\) extends to a basis of \(W\); \(d\) independent
+vectors of \(W\) form a basis of \(W\).
+\item \lec{4}, Definitions~7, 10, Theorems~11, 12(b): for
+\(A\in\R^{m\times n}\), \(\mathcal C(A)=\{Ax:x\in\R^n\}\) (the span of the columns of \(A\)) and
+\(\mathcal N(A)=\{x\in\R^n:Ax=0\}\) are subspaces; \(\rank A=\dim\mathcal C(A)\); \(\rank A+\dim\mathcal N(A')=m\);
+\(\rank A=n\) \(\iff\) the columns of \(A\) are independent.
+\item \lec{5}, Theorems~8(d), 12(b), 13(b): for \(A,B\in\R^{n\times n}\),
+\(\det I=1\), \(\det(AB)=\det A\det B\), \(\det A'=\det A\).
+\end{itemize}
+
+\subsection*{1. Inner products, lengths, and orthogonal complements}
+
+\begin{definition}\label{b6.1}
+For \(x,y\in\R^n\): the \textbf{inner product} \(x'y=x_1y_1+\dots+x_ny_n=y'x\); the \textbf{length}
+\(\lVert x\rVert=\sqrt{x'x}\); the \textbf{distance} \(\lVert x-y\rVert\); \(x\perp y\) (\textbf{orthogonal}) if
+\(x'y=0\). As \(x'x\) is a sum of squares, \(\lVert x\rVert\geqslant0\), and \(\lVert x\rVert=0\) only for \(x=0\): \(0\)
+is the only vector orthogonal to itself. \(\lVert cx\rVert=\lvert c\rvert\,\lVert x\rVert\) (\(c\in\R\); \((cx)'(cx)=c^2x'x\)). A
+\textbf{unit vector} has length \(1\); for \(x\ne0\), \(x/\lVert x\rVert\) is one.
+\end{definition}
+
+\Needspace{8\baselineskip}
+\begin{theorem}\label{b6.2}
+For \(x,y\in\R^n\): \(\lVert x+y\rVert^2=\lVert x\rVert^2+2x'y+\lVert y\rVert^2\). So
+\(x\perp y\Rightarrow\lVert x+y\rVert^2=\lVert x\rVert^2+\lVert y\rVert^2\) (\textbf{Pythagoras}).
+\end{theorem}
+\begin{proof}
+\begin{board}[Expand (\lec{1}, Theorems~3, 8):]
+\[
+\lVert x+y\rVert^2=(x+y)'(x+y)=x'x+x'y+y'x+y'y=\lVert x\rVert^2+2x'y+\lVert y\rVert^2
+\]
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{10\baselineskip}
+\begin{theorem}\label{b6.4}
+For \(x,y\in\R^n\): \(\lvert x'y\rvert\leqslant\lVert x\rVert\,\lVert y\rVert\) (\textbf{Cauchy--Schwarz inequality}),
+with equality \(\iff\) one of \(x\), \(y\) is a multiple of the other.
+\end{theorem}
+\begin{proof}
+\(x=0\): both sides are \(0\), and \(x=0y\). Let \(x\ne0\), \(c=x'y/\lVert x\rVert^2\) and \(w=y-cx\).
+\begin{board}[Inequality:]
+\boardtop
+\begin{align*}
+(cx)'w&=c(x'y-c\,x'x)=c(x'y-x'y)=0&&(x'x=\lVert x\rVert^2)\\
+\lVert y\rVert^2&=\lVert cx+w\rVert^2=c^2\lVert x\rVert^2+\lVert w\rVert^2\geqslant c^2\lVert x\rVert^2
+=(x'y)^2/\lVert x\rVert^2&&\text{(Theorem~\ref{b6.2})}\\
+(x'y)^2&\leqslant\lVert x\rVert^2\lVert y\rVert^2\implies\lvert x'y\rvert\leqslant\lVert x\rVert\,\lVert y\rVert
+&&\text{(times \(\lVert x\rVert^2>0\); square roots)}
+\end{align*}
+\end{board}
+\begin{board}[Equality:]
+\boardtop
+\begin{align*}
+\text{equality}&\iff\lVert w\rVert^2=0\iff w=0\iff y=cx&&\text{(Definition~\ref{b6.1})}\\
+y=ax&\implies c=a\,x'x/\lVert x\rVert^2=a,\ w=0\\
+x=ay,\ x\ne0&\implies a\ne0,\ y=a^{-1}x
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\begin{definition}\label{b6.5}
+Let \(W\) be a subspace of \(\R^n\). \(y\in\R^n\) is \textbf{orthogonal to} \(W\), \(y\perp W\), if \(y'w=0\) for every
+\(w\in W\). \(W^\perp=\{y\in\R^n:y\perp W\}\) is the \textbf{orthogonal complement} of \(W\).
+\end{definition}
+
+\Needspace{17\baselineskip}
+\begin{theorem}\label{b6.6}
+Let \(W\) be a subspace of \(\R^n\).
+\begin{enumerate}
+\item If \(W=\Span\{w_1,\dots,w_k\}\) and \(A=[w_1\ \cdots\ w_k]\): \(y\perp W\iff y'w_1=\dots=y'w_k=0\iff A'y=0\). So
+\(W^\perp=\mathcal N(A')\), a subspace of \(\R^n\).
+\item \(W\cap W^\perp=\{0\}\).
+\item \(\dim W+\dim W^\perp=n\), and \(\R^n=W\oplus W^\perp\): every \(y\in\R^n\) is \(y=w+v\) with \(w\in W\),
+\(v\in W^\perp\), in exactly one way.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) The entries of \(A'y\) are \(w_j'y\); \(w\in W\) is \(c_1w_1+\dots+c_kw_k=Ac\) (\lec{1},
+Theorems~4, 8; \lec{3}, Definition~6):]
+\boardtop
+\begin{align*}
+y\perp W&\implies y'w_j=w_j'y=0\ (j=1,\dots,k)\iff A'y=0&&(w_j\in W)\\
+A'y=0,\ w=Ac\in W&\implies y'w=y'Ac=(A'y)'c=0
+\end{align*}
+So \(W^\perp=\mathcal N(A')\), a subspace (\lec{4}, Definition~7).
+\end{board}
+\begin{board}[(b) Let \(y\in W\cap W^\perp\):]
+\boardtop
+\begin{align*}
+y\in W,\ y\perp W&\implies y'y=0\implies y=0&&\text{(Definition~\ref{b6.1})}
+\end{align*}
+\end{board}
+(c) Let \(d=\dim W\). If \(d=0\): \(W=\{0\}\), \(W^\perp=\R^n\). Let \(d\geqslant1\), and let \(A\in\R^{n\times d}\) have a
+basis of \(W\) as its columns (\lec{4}, Theorem~4).
+\begin{board}[(c) \(\dim W^\perp\) (\lec{4}, Definitions~7, 10, Theorem~11, with
+\(m=n\)):]
+\boardtop
+\begin{align*}
+\mathcal C(A)&=W,\quad\rank A=\dim W=d\\
+\dim W^\perp&=\dim\mathcal N(A')=n-\rank A=n-d&&\text{((a))}
+\end{align*}
+\end{board}
+\begin{board}[(c) \(\R^n=W\oplus W^\perp\) (\lec{3}, Definition~18,
+Theorems~19(a), 20, 21; \lec{4}, Theorems~4, 5(a)):]
+\boardtop
+\begin{align*}
+&W\cap W^\perp=\{0\}\implies W+W^\perp=W\oplus W^\perp\text{, a subspace of }\R^n&&\text{((b))}\\
+&\text{bases of }W\text{, }W^\perp\text{ together: }d+(n-d)=n\text{ vectors, a basis of }W\oplus W^\perp\\
+&\dim(W\oplus W^\perp)=n=\dim\R^n\implies W\oplus W^\perp=\R^n
+\end{align*}
+Each \(y\in\R^n\) is \(w+v\) (\(w\in W\), \(v\in W^\perp\)) in exactly one way.
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{9\baselineskip}
+\begin{corollary}\label{b6.7}
+For \(A\in\R^{m\times n}\): \(\mathcal N(A)=\mathcal C(A')^\perp\), \(\R^n=\mathcal C(A')\oplus\mathcal N(A)\);
+\(\mathcal N(A')=\mathcal C(A)^\perp\), \(\R^m=\mathcal C(A)\oplus\mathcal N(A')\).
+\end{corollary}
+\begin{proof}
+\begin{board}[\(\mathcal C(A')\), \(\mathcal C(A)\) are spanned by the columns of \(A'\), \(A\) (\lec{4},
+Definition~7):]
+\boardtop
+\begin{align*}
+\mathcal C(A')^\perp&=\mathcal N\bigl((A')'\bigr)=\mathcal N(A),\qquad\mathcal C(A)^\perp=\mathcal N(A')
+&&\text{(Theorem~\ref{b6.6}(a); \lec{1}, Theorem~8)}\\
+\R^n&=\mathcal C(A')\oplus\mathcal C(A')^\perp,\qquad\R^m=\mathcal C(A)\oplus\mathcal C(A)^\perp
+&&\text{(Theorem~\ref{b6.6}(c))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\subsection*{2. Orthonormal bases, Gram--Schmidt, and QR}
+
+\Needspace{10\baselineskip}
+\begin{theorem}\label{b6.11}
+Let \(u_1,\dots,u_k\in\R^n\) be nonzero, with \(u_i'u_j=0\) for \(i\ne j\).
+\begin{enumerate}
+\item If \(y=c_1u_1+\dots+c_ku_k\), then \(c_j=u_j'y/\lVert u_j\rVert^2\) (\(j=1,\dots,k\)).
+\item \(u_1,\dots,u_k\) are linearly independent.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a)]
+\boardtop
+\begin{align*}
+u_j'y&=c_1u_j'u_1+\dots+c_ku_j'u_k=c_j\lVert u_j\rVert^2,\quad\lVert u_j\rVert^2>0
+&&\text{(\lec{1}, Theorem~3; Definition~\ref{b6.1})}
+\end{align*}
+\end{board}
+\begin{board}[(b)]
+\boardtop
+\begin{align*}
+c_1u_1+\dots+c_ku_k=0&\implies c_j=u_j'0/\lVert u_j\rVert^2=0\ (j=1,\dots,k)&&\text{((a), \(y=0\))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\begin{definition}\label{b6.12}
+\(q_1,\dots,q_p\in\R^n\) are \textbf{orthonormal} if \(q_i'q_j=0\) (\(i\ne j\)) and \(\lVert q_j\rVert=1\) (all \(j\)).
+\(Q=[q_1\ \cdots\ q_p]\in\R^{n\times p}\) has \textbf{orthonormal columns} if \(Q'Q=I_p\), that is, \(q_1,\dots,q_p\)
+are orthonormal, as \((Q'Q)_{ij}=q_i'q_j\) (\lec{1}, Theorem~4). \(Q\in\R^{n\times n}\) with \(Q'Q=I_n\) is an
+\textbf{orthogonal matrix}. An \textbf{orthonormal basis} of a subspace is a basis of orthonormal vectors.
+\end{definition}
+
+\Needspace{10\baselineskip}
+\begin{theorem}\label{b6.13}
+Let \(Q\in\R^{n\times p}\), \(Q'Q=I_p\).
+\begin{enumerate}
+\item \((Qx)'(Qy)=x'y\) and \(\lVert Qx\rVert=\lVert x\rVert\) (\(x,y\in\R^p\)).
+\item If \(p=n\): \(Q\) is invertible, \(Q^{-1}=Q'\) and \(QQ'=I_n\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a)]
+\boardtop
+\begin{align*}
+(Qx)'(Qy)&=x'Q'Qy=x'I_py=x'y;\qquad y=x\colon\ \lVert Qx\rVert^2=\lVert x\rVert^2&&\text{(\lec{1}, Theorems~3, 8)}
+\end{align*}
+\end{board}
+\begin{board}[(b) \(Q\) is square:]
+\boardtop
+\begin{align*}
+Q'Q=I_n&\implies Q\text{ invertible},\ Q^{-1}=Q',\quad QQ'=QQ^{-1}=I_n&&\text{(\lec{2}, Theorem~15)}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{13\baselineskip}
+\begin{theorem}[Gram--Schmidt]\label{b6.14}
+Let \(a_1,\dots,a_p\in\R^n\) be linearly independent. Let \(b_1=a_1\) and, for \(j=2,\dots,p\),
+\[
+b_j=a_j-t_{1j}b_1-t_{2j}b_2-\dots-t_{j-1,j}b_{j-1},\qquad t_{ij}=\frac{a_j'b_i}{\lVert b_i\rVert^2}\quad(i<j)
+\]
+Then \(b_1,\dots,b_p\) are nonzero and pairwise orthogonal, and
+\(\Span\{b_1,\dots,b_j\}=\Span\{a_1,\dots,a_j\}\) (\(j=1,\dots,p\)). So \(q_j=b_j/\lVert b_j\rVert\) (\(j=1,\dots,p\))
+form an orthonormal basis of \(\Span\{a_1,\dots,a_p\}\).
+\end{theorem}
+\begin{proof}
+Induction on \(j\). \(b_1=a_1\ne0\) (\lec{3}, Proposition~12(a)). Let \(j\geqslant2\), and let
+\(b_1,\dots,b_{j-1}\) be nonzero, pairwise orthogonal, with span \(W_{j-1}=\Span\{a_1,\dots,a_{j-1}\}\); so \(b_j\) is
+defined.
+\begin{board}[Orthogonal: for \(l<j\), with \(b_l'b_i=0\) (\(i\ne l\)):]
+\boardtop
+\begin{align*}
+b_l'b_j&=b_l'a_j-\textstyle\sum_{i<j}t_{ij}b_l'b_i=b_l'a_j-t_{lj}\lVert b_l\rVert^2=b_l'a_j-a_j'b_l=0
+&&\text{(\lec{1}, Theorems~3, 8)}
+\end{align*}
+\end{board}
+\begin{board}[Nonzero:]
+\boardtop
+\begin{align*}
+b_j=0&\implies a_j=\textstyle\sum_{i<j}t_{ij}b_i\in W_{j-1}=\Span\{a_1,\dots,a_{j-1}\}\\
+&\implies a_1,\dots,a_p\text{ dependent }\contradiction&&\text{(\lec{3}, Proposition~12(c))}
+\end{align*}
+\end{board}
+\begin{board}[Span (\lec{3}, Theorem~7: a span lies in every subspace containing the list):]
+\boardtop
+\begin{align*}
+&b_1,\dots,b_{j-1}\in W_{j-1}\subseteq\Span\{a_1,\dots,a_j\},\quad b_j=a_j-\textstyle\sum_{i<j}t_{ij}b_i\in\Span\{a_1,\dots,a_j\}\\
+&a_1,\dots,a_{j-1}\in W_{j-1}\subseteq\Span\{b_1,\dots,b_j\},\quad a_j=b_j+\textstyle\sum_{i<j}t_{ij}b_i\in\Span\{b_1,\dots,b_j\}
+\end{align*}
+Each list lies in the span of the other, so the two spans are equal.
+\end{board}
+Last sentence: the \(q_j\) are pairwise orthogonal unit vectors (Definition~\ref{b6.1}), so independent
+(Theorem~\ref{b6.11}(b)), and \(\Span\{q_1,\dots,q_p\}=\Span\{b_1,\dots,b_p\}=\Span\{a_1,\dots,a_p\}\) (\lec{3},
+Theorem~7).
+\end{proof}
+
+\Needspace{18\baselineskip}
+\begin{corollary}\label{b6.15}
+Let \(W\) be a subspace of \(\R^n\), \(\dim W=d\geqslant1\).
+\begin{enumerate}
+\item \(W\) has an orthonormal basis.
+\item If \(q_1,\dots,q_p\in W\) are orthonormal and \(p<d\), there are \(q_{p+1},\dots,q_d\in W\) such that
+\(q_1,\dots,q_d\) form an orthonormal basis of \(W\).
+\item If \(Q\in\R^{n\times p}\), \(Q'Q=I_p\) and \(p<n\), then \([Q\ T]\) is orthogonal for some
+\(T\in\R^{n\times(n-p)}\). For every such \(T\), the columns of \(T\) form an orthonormal basis of \(\mathcal C(Q)^\perp\),
+and \(QQ'+TT'=I_n\).
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(a) \(W\) has a basis \(a_1,\dots,a_d\) (\lec{4}, Theorem~4); Theorem~\ref{b6.14} turns it into an
+orthonormal basis of \(\Span\{a_1,\dots,a_d\}=W\).
+\begin{board}[(b) \(q_1,\dots,q_p\) are independent (Theorem~\ref{b6.11}(b)); extend (\lec{4},
+Theorem~5(b)), then Gram--Schmidt (Theorem~\ref{b6.14}):]
+\boardtop
+\begin{align*}
+&q_1,\dots,q_p,a_{p+1},\dots,a_d\text{: a basis of }W\\
+&b_1=q_1;\quad b_i=q_i\ (i<j\leqslant p)\implies t_{ij}=q_j'q_i/\lVert q_i\rVert^2=0\implies b_j=q_j\\
+&q_1,\dots,q_p,\ b_{p+1}/\lVert b_{p+1}\rVert,\dots,b_d/\lVert b_d\rVert\text{: an orthonormal basis of }W
+\end{align*}
+\end{board}
+\begin{board}[(c) \(T\) exists: the columns \(q_1,\dots,q_p\) of \(Q\) are orthonormal (Definition~\ref{b6.12});
+\(\dim\R^n=n\) (\lec{4}, Theorem~4):]
+\boardtop
+\begin{align*}
+&p<n\implies q_{p+1},\dots,q_n\text{ with }q_1,\dots,q_n\text{ an orthonormal basis of }\R^n&&\text{((b), \(W=\R^n\))}\\
+&T=[q_{p+1}\ \cdots\ q_n]\implies[Q\ T]\text{ has orthonormal columns: orthogonal}&&\text{(Definition~\ref{b6.12})}
+\end{align*}
+\end{board}
+\begin{board}[(c) Let \(T=[v_1\ \cdots\ v_{n-p}]\) be any such matrix: \([Q\ T]'[Q\ T]=I_n\), so
+\(q_1,\dots,q_p,v_1,\dots,v_{n-p}\) are orthonormal (Definition~\ref{b6.12}), hence independent
+(Theorem~\ref{b6.11}(b)); \(\mathcal C(Q)=\Span\{q_1,\dots,q_p\}\) (\lec{4}, Definition~7):]
+\boardtop
+\begin{align*}
+v_k'q_i&=0\ (\text{all }k,\ i)\implies v_k\in\mathcal C(Q)^\perp&&\text{(Theorem~\ref{b6.6}(a))}\\
+\rank Q&=p\implies\dim\mathcal C(Q)^\perp=n-p&&\text{(\lec{4}, Theorem~12(b); Theorem~\ref{b6.6}(c))}\\
+&\implies v_1,\dots,v_{n-p}\text{ form a basis of }\mathcal C(Q)^\perp&&\text{(\lec{4}, Theorem~5(d))}\\
+I_n&=[Q\ T][Q\ T]'&&\text{(Theorem~\ref{b6.13}(b))}\\
+&=\textstyle\sum_iq_iq_i'+\sum_kv_kv_k'=QQ'+TT'&&\text{(\lec{1}, Theorem~4)}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{14\baselineskip}
+\begin{theorem}[QR decomposition]\label{b6.16}
+Let \(A=[a_1\ \cdots\ a_p]\in\R^{n\times p}\), \(\rank A=p\). Then \(A=QR\) with \(Q\in\R^{n\times p}\), \(Q'Q=I_p\), and
+\(R=(r_{ij})\in\R^{p\times p}\) upper triangular (\(r_{ij}=0\) for \(i>j\)) with \(r_{jj}>0\); moreover \(R=Q'A\).
+\end{theorem}
+\begin{proof}
+\begin{board}[\(a_1,\dots,a_p\) are independent (\lec{4}, Theorem~12(b)); Theorem~\ref{b6.14} gives
+\(b_j\), \(t_{ij}\), \(q_j\); \(Q=[q_1\ \cdots\ q_p]\), \(Q'Q=I_p\) (Definition~\ref{b6.12}):]
+\boardtop
+\begin{align*}
+r_{jj}&=\lVert b_j\rVert>0,\quad r_{ij}=t_{ij}\lVert b_i\rVert\ (i<j),\quad r_{ij}=0\ (i>j)
+&&\text{(\(b_j\ne0\), Theorem~\ref{b6.14}; Definition~\ref{b6.1})}\\
+a_j&=b_j+\textstyle\sum_{i<j}t_{ij}b_i=\sum_{i\leqslant j}r_{ij}q_i&&(b_i=\lVert b_i\rVert q_i)\\
+\col_j(QR)&=Q\col_j(R)=\textstyle\sum_{i\leqslant j}r_{ij}q_i=a_j\ (\text{all }j)\implies QR=A
+&&\text{(\lec{1}, Theorem~4)}\\
+Q'A&=Q'QR=I_pR=R&&\text{(\lec{1}, Theorem~3)}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{19\baselineskip}
+\begin{example}\label{b6.17}
+Find the QR decomposition of
+\[
+A=\begin{pmatrix}1&3&2\\2&1&3\\0&2&4\\2&2&5\end{pmatrix}
+\]
+\end{example}
+\textit{Solution.}
+\begin{board}[Gram--Schmidt (Theorem~\ref{b6.14}) on the columns \(a_1,a_2,a_3\):]
+\boardtop
+\begin{align*}
+b_1&=a_1=(1,2,0,2)',\quad\lVert b_1\rVert^2=1+4+0+4=9\\
+a_2'b_1&=3+2+0+4=9,\quad t_{12}=1\\
+b_2&=a_2-b_1=(3,1,2,2)'-(1,2,0,2)'=(2,-1,2,0)',\quad\lVert b_2\rVert^2=4+1+4+0=9\\
+a_3'b_1&=2+6+0+10=18,\quad a_3'b_2=4-3+8+0=9,\quad t_{13}=2,\quad t_{23}=1\\
+b_3&=a_3-2b_1-b_2=(2,3,4,5)'-(2,4,0,4)'-(2,-1,2,0)'=(-2,0,2,1)'\\
+\lVert b_3\rVert^2&=4+0+4+1=9
+\end{align*}
+Check: \(b_1'b_2=2-2+0+0=0\), \(b_1'b_3=-2+0+0+2=0\), \(b_2'b_3=-4+0+4+0=0\).
+\end{board}
+\begin{board}[\(Q\) and \(R\) (Theorem~\ref{b6.16}); all three lengths are \(3\):]
+\boardtop
+\begin{align*}
+&q_j=\tfrac13b_j,\quad r_{jj}=3,\quad r_{12}=3t_{12}=3,\quad r_{13}=3t_{13}=6,\quad r_{23}=3t_{23}=3\\
+&Q=\frac13\begin{pmatrix}1&2&-2\\2&-1&0\\0&2&2\\2&0&1\end{pmatrix},\qquad
+R=\begin{pmatrix}3&3&6\\0&3&3\\0&0&3\end{pmatrix}
+\end{align*}
+Check \(R=Q'A\): for instance \(r_{23}=q_2'a_3=\frac13(4-3+8+0)=3\).
+\end{board}
+
+\Needspace{16\baselineskip}
+\begin{example}\label{b6.18}
+Extend the orthonormal columns \(q_1,q_2,q_3\) of \(Q\) in Example~\ref{b6.17} to an orthonormal basis of \(\R^4\).
+\end{example}
+\textit{Solution.} We need a unit vector \(q_4\perp q_1,q_2,q_3\) (Definition~\ref{b6.12}): \(q_4=v/\lVert v\rVert\) with
+\(v\ne0\), \(b_1'v=b_2'v=b_3'v=0\), that is, \(v\in\mathcal N([b_1\ b_2\ b_3]')\) (Theorem~\ref{b6.6}(a)).
+\begin{board}[Solve by substitution:]
+\boardtop
+\begin{align*}
+&v_1+2v_2+2v_4=0,\qquad2v_1-v_2+2v_3=0,\qquad-2v_1+2v_3+v_4=0\\
+&\text{third: }v_4=2v_1-2v_3;\qquad\text{second: }v_2=2v_1+2v_3\\
+&\text{first: }v_1+(4v_1+4v_3)+(4v_1-4v_3)=9v_1=0\implies v_1=0,\ v_2=2v_3,\ v_4=-2v_3\\
+&v_3=1\colon\ v=(0,2,1,-2)',\quad v'v=0+4+1+4=9,\quad q_4=\tfrac13v,\qquad
+[Q\ q_4]=\frac13\begin{pmatrix}1&2&-2&0\\2&-1&0&2\\0&2&2&1\\2&0&1&-2\end{pmatrix}
+\end{align*}
+\end{board}
+\([Q\ q_4]\) is orthogonal (its columns are orthonormal, Definition~\ref{b6.12}). By Corollary~\ref{b6.15}(c), \(q_4\) alone is an orthonormal basis of
+\(\mathcal C(Q)^\perp=\mathcal C(A)^\perp\) (\(\mathcal C(Q)=\mathcal C(A)\) by Theorem~\ref{b6.14}), and
+\(QQ'+q_4q_4'=I_4\).
+
+\Needspace{20\baselineskip}
+\subsection*{3. Orthogonal matrices}
+
+\Needspace{17\baselineskip}
+\begin{theorem}\label{b6.19}
+\begin{enumerate}
+\item For \(Q\in\R^{n\times n}\) the following are equivalent: (i) \(Q'Q=I_n\) (\(Q\) is orthogonal); (ii) \(QQ'=I_n\);
+(iii) \(Q\) is invertible and \(Q^{-1}=Q'\); (iv) the columns of \(Q\) are orthonormal; (v) the transposed rows
+\(\row_1(Q)',\dots,\row_n(Q)'\) are orthonormal.
+\item If \(P,Q\in\R^{n\times n}\) are orthogonal, so are \(PQ\), \(Q'\) and \(Q^{-1}\).
+\item If \(Q\) is orthogonal, then \(\det Q=1\) or \(\det Q=-1\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) \(q_1,\dots,q_n\) are the columns of \(Q\); \(\col_j(Q')=\row_j(Q)'\) (\lec{1}, Definition~7):]
+\boardtop
+\begin{align*}
+&\text{(i)}\Rightarrow\text{(ii), (iii)}&&\text{(Theorem~\ref{b6.13}(b))}\\
+&\text{(ii)}\Rightarrow\text{(iii)}\colon\ QQ'=I_n\implies Q\text{ invertible},\ Q^{-1}=Q'&&\text{(\lec{2}, Theorem~15)}\\
+&\text{(iii)}\Rightarrow\text{(i)}\colon\ Q'Q=Q^{-1}Q=I_n\\
+&\text{(i)}\Leftrightarrow\text{(iv)}\colon\ (Q'Q)_{ij}=q_i'q_j&&\text{(\lec{1}, Theorem~4; Definition~\ref{b6.12})}\\
+&\text{(ii)}\Leftrightarrow\text{(v)}\colon\ (QQ')_{ij}=\row_i(Q)\row_j(Q)'&&\text{(\lec{1}, Theorem~4; Definition~\ref{b6.12})}
+\end{align*}
+\end{board}
+\begin{board}[(b) \(P^{-1}=P'\), \(Q^{-1}=Q'\) ((a)(iii)); \lec{2}, Theorem~11(b), and \lec{1},
+Theorem~8:]
+\boardtop
+\begin{align*}
+&PQ\text{ invertible},\ (PQ)^{-1}=Q^{-1}P^{-1}=Q'P'=(PQ)'\implies PQ\text{ orthogonal}&&\text{((a)(iii))}\\
+&(Q')'Q'=QQ'=I_n\implies Q'\text{ orthogonal};\quad Q^{-1}=Q'&&\text{((a)(ii))}
+\end{align*}
+\end{board}
+\begin{board}[(c) \lec{5}, Theorems~8(d), 12(b), 13(b):]
+\boardtop
+\begin{align*}
+1&=\det I_n=\det(Q'Q)=\det Q'\det Q=(\det Q)^2\implies\det Q=\pm1
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+So, for orthogonal \(Q\): \(\lVert Qx-Qy\rVert=\lVert Q(x-y)\rVert=\lVert x-y\rVert\) (Theorem~\ref{b6.13}(a)); \(Q\) keeps
+inner products, lengths and distances.
+
+\Needspace{22\baselineskip}
+\begin{example}\label{b6.20}
+Let \(n\geqslant2\). For \(k=2,\dots,n\) let \(u_k=(1,\dots,1,-(k-1),0,\dots,0)'\in\R^n\): \(k-1\) entries \(1\), then
+\(-(k-1)\) in position \(k\), then zeros. The \textbf{Helmert matrix} \(K_n\in\R^{n\times n}\) has the rows
+\[
+p_1'=\frac1{\sqrt n}\,\one_n',\quad p_k'=\frac1{\sqrt{k(k-1)}}\,u_k'\ (k=2,\dots,n);\quad
+K_4=\begin{pmatrix}1/2&1/2&1/2&1/2\\1/\sqrt2&-1/\sqrt2&0&0\\1/\sqrt6&1/\sqrt6&-2/\sqrt6&0\\
+1/\sqrt{12}&1/\sqrt{12}&1/\sqrt{12}&-3/\sqrt{12}\end{pmatrix}
+\]
+\begin{enumerate}
+\item Show that \(K_n\) is orthogonal.
+\item For \(y\in\R^n\), \(p_1'y=\sqrt n\,\bar y\), and for \(k\geqslant2\),
+\(p_k'y=\bigl(y_1+\dots+y_{k-1}-(k-1)y_k\bigr)/\sqrt{k(k-1)}\) is a \textbf{contrast} (its coefficients add up to
+\(0\)). Show that \(\sum_{i=1}^n(y_i-\bar y)^2=\sum_{k=2}^n(p_k'y)^2\).
+\item Check (b) for \(n=4\), \(y=(5,3,1,7)'\).
+\end{enumerate}
+\end{example}
+\textit{Solution.}
+\begin{board}[(a) By Theorem~\ref{b6.19}(a), (v)\(\Rightarrow\)(i), show that \(p_1,\dots,p_n\) are orthonormal:]
+\boardtop
+\begin{align*}
+&\one'u_k=(k-1)-(k-1)=0\ (k\geqslant2)\implies p_1'p_k=0\\
+&2\leqslant j<k\colon\ u_j=0\text{ outside positions }1,\dots,j;\ u_k\text{ has }1\text{ there }(j\leqslant k-1)\\
+&\phantom{2\leqslant j<k\colon\ }\implies u_j'u_k=\one'u_j=0\implies p_j'p_k=0\\
+&\one'\one=n,\quad u_k'u_k=(k-1)\cdot1+(k-1)^2=k(k-1)\implies\lVert p_1\rVert=\lVert p_k\rVert=1
+\end{align*}
+\end{board}
+\begin{board}[(b) The entries of \(K_ny\) are \(p_k'y\) (\lec{1}, Theorem~4); (a) and
+Theorem~\ref{b6.13}(a):]
+\boardtop
+\begin{align*}
+p_1'y&=\tfrac1{\sqrt n}\one'y=\tfrac1{\sqrt n}\,n\bar y=\sqrt n\,\bar y\\
+\textstyle\sum_iy_i^2&=\lVert y\rVert^2=\lVert K_ny\rVert^2=n\bar y^2+\textstyle\sum_{k=2}^n(p_k'y)^2\\
+\textstyle\sum_i(y_i-\bar y)^2&=\textstyle\sum_iy_i^2-n\bar y^2=\sum_{k=2}^n(p_k'y)^2
+&&\text{(\lec{1}, Example~16)}
+\end{align*}
+\end{board}
+In matrix form: \(K_n'K_n=I_n\) reads \(p_1p_1'+\dots+p_np_n'=I_n\) (\lec{1}, Theorem~4), and
+\(p_1p_1'=\frac1n\one\one'=\bar J_n\); so \(p_2p_2'+\dots+p_np_n'=I_n-\bar J_n=C_n\).
+\begin{board}[(c) \(n=4\), \(y=(5,3,1,7)'\):]
+\boardtop
+\begin{align*}
+&\bar y=4,\quad p_1'y=16/2=8=\sqrt4\cdot4\\
+&p_2'y=\frac{5-3}{\sqrt2}=\sqrt2,\quad p_3'y=\frac{5+3-2}{\sqrt6}=\sqrt6,\quad p_4'y=\frac{5+3+1-21}{\sqrt{12}}=-\sqrt{12}\\
+&2+6+12=20=1+1+9+9=\textstyle\sum_i(y_i-4)^2,\qquad\lVert y\rVert^2=25+9+1+49=84=64+20
+\end{align*}
+\end{board}
+
+\bigskip
+\textbf{Practice.} The Exercises and Problems of the textbook, Chapter~6, on inner products and orthogonal complements,
+Gram--Schmidt and the QR decomposition, and orthogonal matrices.
+
+\end{document}

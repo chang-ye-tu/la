@@ -1,0 +1,736 @@
+\def\handoutsay{false}\def\handoutfill{false}
+\documentclass[12pt]{article}
+\newcommand{\handoutrunning}{Lecture 5: Block Matrices and Determinants}
+\providecommand{\handoutsay}{true}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[a4paper,margin=15mm,headheight=14pt,headsep=5mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,booktabs,needspace}
+\usepackage{pifont}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{fancyhdr}
+\usepackage{ifthen}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdfauthor={Chang-Ye Tu}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Linear Algebra}
+\fancyhead[R]{\small\handoutrunning}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt plus 1pt minus 1pt}
+\setlength{\emergencystretch}{1.5em}
+\usepackage{etoolbox}
+\newcommand{\handoutdisplayskips}{\setlength{\abovedisplayskip}{7pt plus 2pt minus 2pt}%
+  \setlength{\belowdisplayskip}{7pt plus 2pt minus 2pt}}
+\apptocmd{\normalsize}{\handoutdisplayskips}{}{\PackageWarning{handout}{could not patch normalsize}}
+\handoutdisplayskips
+\setlist[enumerate]{label=(\alph*),leftmargin=*,itemsep=2pt,topsep=3pt}
+\setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\iu}{\mathrm{i}}
+\newcommand{\contradiction}{\mathord{\text{\large\ding{56}}}}
+\newcommand{\one}{\mathbf 1}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\col}{col}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator\prb{\mathsf{P}}
+\DeclareMathOperator\expc{\mathsf{E}}
+\DeclareMathOperator\var{var}
+\DeclareMathOperator\cov{cov}
+\DeclareMathOperator\cor{cor}
+\DeclareMathOperator\argmin{argmin}
+\DeclareMathOperator\argmax{argmax}
+\DeclareMathOperator{\Span}{span}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{fact}{Fact}
+\renewcommand{\thefact}{F\arabic{fact}}
+\AddToHook{cmd/subsection/before}{\par\Needspace{9\baselineskip}}
+\AddToHook{env/theorem/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/proposition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/lemma/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/definition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/example/before}{\par\Needspace{4\baselineskip}}
+\definecolor{saybg}{gray}{0.86}
+\NewDocumentEnvironment{say}{+b}
+  {\ifthenelse{\equal{\handoutsay}{true}}{\par\Needspace{2\baselineskip}\noindent\colorbox{saybg}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}%
+   {\small\sffamily\ding{43}\enspace\textbf{Say.}\enspace#1}}\par}{}}
+  {}
+\providecommand{\handoutfill}{false}
+\newsavebox{\boardbox}
+\newlength{\boardht}
+\definecolor{boardrule}{gray}{0.55}
+\makeatletter
+\newcommand{\boardstart}{\par\if@inlabel\leavevmode\par\fi}
+\makeatother
+\NewDocumentEnvironment{board}{o +b}
+  {\boardstart\IfValueT{#1}{\noindent#1\par\nopagebreak}%
+   \noindent\begin{lrbox}{\boardbox}\begin{minipage}{\linewidth}#2\end{minipage}\end{lrbox}%
+   \setlength{\boardht}{\dimexpr\ht\boardbox+\dp\boardbox\relax}%
+   \ifthenelse{\equal{\handoutfill}{true}}%
+     {\setlength{\boardht}{1.4\boardht}%
+      {\setlength{\fboxsep}{0pt}\setlength{\fboxrule}{0.4pt}\color{boardrule}%
+       \framebox[\dimexpr\linewidth-2\fboxrule\relax]{\rule{0pt}{\boardht}}}}%
+     {\ifthenelse{\equal{\handoutsay}{true}}%
+        {\llap{\color{boardrule}\rule[-\dp\boardbox]{1.5pt}{\boardht}\hspace{4pt}}}{}%
+      \usebox{\boardbox}}%
+   \par}
+  {}
+\newcommand{\blank}[1]{\ifthenelse{\equal{\handoutfill}{true}}{\underline{\phantom{#1}}}{#1}}
+\newcommand{\lec}[1]{Lecture~#1}
+\newcommand{\handouttitle}[2]{%
+  \begin{center}
+  {\LARGE\sffamily\bfseries #2\par}\vspace{3pt}
+  {\sffamily Linear Algebra \textperiodcentered\ \lec{#1}\par}
+  \ifthenelse{\equal{\handoutsay}{true}}{\vspace{3pt}{\small\sffamily\colorbox{saybg}{\ding{43}\enspace\textbf{Say.}}\enspace
+    teacher's copy: the shaded boxes are not in the students' copy.\par}}{}
+  \ifthenelse{\equal{\handoutfill}{true}}{\vspace{3pt}{\small\sffamily Fill-in copy: complete the framed spaces in
+    class.\par}}{}
+  \end{center}}
+
+\hypersetup{pdftitle={Linear Algebra, Lecture 5: Block Matrices and Determinants}}
+\newcommand{\boardtop}{\vspace*{-\abovedisplayskip}}
+\DeclareMathOperator{\row}{row}
+\DeclareMathOperator{\adj}{adj}
+\begin{document}
+\handouttitle{5}{Block Matrices and Determinants}
+
+\textbf{Last time} (\lec{4}, Definition~10, Theorem~12(d)): \(\rank A\) is the number of
+nonzero rows of an RREF of \(A\); \(A\in\R^{n\times n}\) is invertible \(\iff\) \(\rank A=n\). Throughout, \(e_j\) is
+column \(j\) of \(I\); \(\row_i\), \(\col_j\): row \(i\), column \(j\); \(A(i|j)\): \(A\) without row \(i\) and column \(j\).
+
+\textbf{From \lec{1} and \lec{2}} (restated).
+\begin{itemize}[itemsep=0pt,parsep=0pt,topsep=2pt]
+\item \lec{1}, Definitions~1, 2, Theorems~3, 4: \(A=B\) \(\iff\)
+all entries agree; \((A+B)_{ij}=a_{ij}+b_{ij}\), \((cA)_{ij}=ca_{ij}\); \((AB)_{ij}=\sum_ra_{ir}b_{rj}\); \((AB)C=A(BC)\), \(A(B+C)=AB+AC\), \((A+B)C=AC+BC\),
+\(c(AB)=(cA)B=A(cB)\), \(I_mA=A=AI_n\), \(0A=0\), \(A0=0\); a \(1\times1\) factor \(c\) acts as a number:
+\(McN=c(MN)\). For \(A=[a_1\ \cdots\ a_n]\), \(B=[b_1\ \cdots\ b_p]\): \(\col_j(AB)=Ab_j\), \(Ax=\sum_jx_ja_j\),
+\(\row_i(AB)=\row_i(A)B\), \(AB=\sum_la_l\row_l(B)\) (\textbf{outer product expansion}).
+\item \lec{1}, Definitions~7, 12: \((A')_{ij}=a_{ji}\); \(A\) is \textbf{symmetric} if \(A'=A\).
+\(\diag(d_1,\dots,d_n)\): diagonal entries \(d_i\), other entries \(0\); \(A\in\R^{n\times n}\) is \textbf{upper (lower) triangular} if \(a_{ij}=0\) for
+\(i>j\) (\(i<j\)).
+\item \lec{2}, Definitions~2, 5: row operations \(R_r\leftarrow cR_r\) (\(c\ne0\)),
+\(R_r\leftarrow R_r+cR_s\), \(R_r\leftrightarrow R_s\) (\(r\ne s\)). Forward elimination (Steps 1--4; Step 3, scaling a
+pivot to \(1\), may be postponed) gives leading entries in columns \(k_1<k_2<\cdots\), zero rows at the bottom; backward
+elimination (Step 5) adds multiples of each pivot row to the rows above it, to clear the entries above the pivot.
+\item \lec{2}, Definitions~10, 13, Theorems~11(a), 14(a),(c),
+15, Proposition~17: \(A\) is \textbf{invertible} if \(AB=BA=I\) for some \(B\), the unique
+inverse \(A^{-1}\); \((A^{-1})^{-1}=A\). The \textbf{elementary matrices} \(D_r(c)\) (\(c\ne0\)), \(T_{rs}(c)\),
+\(P_{rs}\) are \(I\) after \(R_r\leftarrow cR_r\), \(R_r\leftarrow R_r+cR_s\), \(R_r\leftrightarrow R_s\); a row operation
+\(\omega\) is \(\omega(A)=EA\), \(E=\omega(I)\); if \(\omega_1,\dots,\omega_k\) take \(A\) to \(B\), then
+\(B=E_k\cdots E_1A\). \(A\in\R^{n\times n}\) is invertible \(\iff\) an RREF of \(A\) is \(I_n\) \(\iff\) \(A\) is a product
+of elementary matrices; \(BA=I\) or \(AB=I\) \(\Rightarrow\) \(B=A^{-1}\).
+\(\left(\begin{smallmatrix}a&b\\c&d\end{smallmatrix}\right)^{-1}=\frac1{ad-bc}\left(\begin{smallmatrix}d&-b\\-c&a\end{smallmatrix}\right)\)
+if \(ad-bc\ne0\).
+\end{itemize}
+
+\subsection*{1. Block matrices}
+
+\begin{definition}\label{b5.1}\label{b5.2}
+A \textbf{partition} of \(A\in\R^{m\times n}\) splits the rows into consecutive groups of \(m_1,\dots,m_r\) rows and
+the columns into consecutive groups of \(n_1,\dots,n_s\) columns. With \(M_0=N_0=0\), \(M_i=m_1+\dots+m_i\),
+\(N_j=n_1+\dots+n_j\), the \textbf{block} \(A_{ij}\in\R^{m_i\times n_j}\) has the entries
+\((A_{ij})_{xy}=a_{M_{i-1}+x,\,N_{j-1}+y}\); \(A=(A_{ij})\) is the array of its blocks. Matrices of the same size,
+partitioned alike, are equal \(\iff\) their blocks are equal. A partition of \(B\in\R^{m\times n}\) is \textbf{conformal
+for addition} if it has the same groups; one of \(B\in\R^{n\times p}\) is \textbf{conformal for multiplication} (in
+\(AB\)) if its row groups are \(n_1,\dots,n_s\) (its column groups \(p_1,\dots,p_t\) are free).
+\end{definition}
+
+\Needspace{15\baselineskip}
+\begin{theorem}\label{b5.3}\label{b5.6}
+Let \(A\in\R^{m\times n}\) be partitioned into blocks \(A_{ij}\in\R^{m_i\times n_j}\) (\(1\leqslant i\leqslant r\),
+\(1\leqslant j\leqslant s\)).
+\begin{enumerate}
+\item If \(B\in\R^{m\times n}\) is partitioned conformally for addition, into blocks \(B_{ij}\), then \(A+B\) has the blocks
+\(A_{ij}+B_{ij}\), and \(cA\) the blocks \(cA_{ij}\) (\(c\in\R\)).
+\item \(A'\), with row groups \(n_1,\dots,n_s\) and column groups \(m_1,\dots,m_r\), has the \((j,i)\) block \(A_{ij}'\).
+\item If \(B\in\R^{n\times p}\) is partitioned conformally for multiplication, into blocks
+\(B_{jk}\in\R^{n_j\times p_k}\), then \(AB\), with row groups \(m_1,\dots,m_r\) and column groups \(p_1,\dots,p_t\), has the
+blocks \((AB)_{ik}=A_{i1}B_{1k}+\dots+A_{is}B_{sk}\in\R^{m_i\times p_k}\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) For \(u=M_{i-1}+x\), \(v=N_{j-1}+y\): \((A+B)_{uv}=a_{uv}+b_{uv}=(A_{ij}+B_{ij})_{xy}\), \((cA)_{uv}=(cA_{ij})_{xy}\).
+\begin{board}[(b) Row group \(j\) of \(A'\): rows \(N_{j-1}+1,\dots,N_j\); column group \(i\): columns
+\(M_{i-1}+1,\dots,M_i\) (\lec{1}, Definition~7):]
+\[
+(A')_{N_{j-1}+y,\,M_{i-1}+x}=a_{M_{i-1}+x,\,N_{j-1}+y}=(A_{ij})_{xy}=(A_{ij}')_{yx}
+\]
+\end{board}
+\Needspace{3\baselineskip}
+(c)
+\begin{itemize}
+\item \(A_{i*}\in\R^{m_i\times n}\): the rows of \(A\) in row group \(i\), \(A_{i*}=[A_{i1}\ \cdots\ A_{is}]\);
+\(B_{*k}\in\R^{n\times p_k}\): the columns of \(B\) in column group \(k\), the blocks \(B_{1k},\dots,B_{sk}\) stacked
+(conformality).
+\item The columns of \(AB\) in group \(k\) are those of \(AB_{*k}\) (\(\col_j(AB)=Ab_j\)); the rows of \(AB_{*k}\) in group
+\(i\) are those of \(A_{i*}B_{*k}\) (\(\row_i(AB)=\row_i(A)B\)) (\lec{1}, Theorem~4(a),(c)). So
+\((AB)_{ik}=A_{i*}B_{*k}\).
+\item Inner sum: \(A_{i*}B_{*k}=\sum_{l=1}^n\col_l(A_{i*})\row_l(B_{*k})\) by the outer product expansion
+(\lec{1}, Theorem~4(d)), and the indices \(N_{j-1}<l\leqslant N_j\) give
+\(\sum_{y=1}^{n_j}\col_y(A_{ij})\row_y(B_{jk})=A_{ij}B_{jk}\); adding the \(s\) stretches,
+\((AB)_{ik}=\sum_jA_{ij}B_{jk}\).\qedhere
+\end{itemize}
+\end{proof}
+For \(r=s=t=2\):
+\[
+\begin{pmatrix}A_{11}&A_{12}\\A_{21}&A_{22}\end{pmatrix}\begin{pmatrix}B_{11}&B_{12}\\B_{21}&B_{22}\end{pmatrix}
+=\begin{pmatrix}A_{11}B_{11}+A_{12}B_{21}&A_{11}B_{12}+A_{12}B_{22}\\A_{21}B_{11}+A_{22}B_{21}&A_{21}B_{12}+A_{22}B_{22}\end{pmatrix}
+\]
+\(\diag(A_1,\dots,A_r)\) has the square diagonal blocks \(A_i\) and zero blocks elsewhere; by (c), with the same groups,
+\(\diag(A_1,\dots,A_r)\diag(B_1,\dots,B_r)=\diag(A_1B_1,\dots,A_rB_r)\) (only \(j=i=k\) gives a nonzero term).
+
+\subsection*{2. Block elimination and the Schur complement}
+
+\Needspace{12\baselineskip}
+\begin{theorem}\label{b5.9}\label{b5.8}
+Let \(M=\begin{pmatrix}A&B\\C&D\end{pmatrix}\) with \(A\in\R^{p\times p}\) invertible, \(B\in\R^{p\times q}\),
+\(C\in\R^{n\times p}\), \(D\in\R^{n\times q}\), and \(S=D-CA^{-1}B\in\R^{n\times q}\), the \textbf{Schur complement} of
+\(A\) in \(M\). Then
+\[
+\begin{pmatrix}I_p&0\\-CA^{-1}&I_n\end{pmatrix}M=\begin{pmatrix}A&B\\0&S\end{pmatrix},\qquad
+M\begin{pmatrix}I_p&-A^{-1}B\\0&I_q\end{pmatrix}=\begin{pmatrix}A&0\\C&S\end{pmatrix}
+\]
+\end{theorem}
+\begin{proof}
+\begin{board}[Left factor: column groups \((p,n)\), the row groups of \(M\) (Theorem~\ref{b5.3}(c)):]
+\[
+\begin{pmatrix}I_p&0\\-CA^{-1}&I_n\end{pmatrix}M
+=\begin{pmatrix}I_pA+0C&I_pB+0D\\-CA^{-1}A+I_nC&-CA^{-1}B+I_nD\end{pmatrix}=\begin{pmatrix}A&B\\0&D-CA^{-1}B\end{pmatrix}
+\]
+\end{board}
+\begin{board}[Right factor: row groups \((p,q)\), the column groups of \(M\) (Theorem~\ref{b5.3}(c)):]
+\[
+M\begin{pmatrix}I_p&-A^{-1}B\\0&I_q\end{pmatrix}
+=\begin{pmatrix}AI_p+B0&-AA^{-1}B+BI_q\\CI_p+D0&-CA^{-1}B+DI_q\end{pmatrix}=\begin{pmatrix}A&0\\C&D-CA^{-1}B\end{pmatrix}
+\]
+\end{board}
+\nopagebreak
+\end{proof}
+When \(D\) is invertible, \(A-BD^{-1}C\) is likewise the \textbf{Schur complement} of \(D\) in \(M\).
+
+\Needspace{14\baselineskip}
+\begin{corollary}\label{b5.10}\label{b5.12}
+Let \(M=\begin{pmatrix}A&B\\C&D\end{pmatrix}\) with \(A\in\R^{p\times p}\), \(D\in\R^{q\times q}\), and let \(A\) and
+\(S=D-CA^{-1}B\) be invertible. Then \(M\) is invertible and
+\[
+M^{-1}=\begin{pmatrix}I_p&-A^{-1}B\\0&I_q\end{pmatrix}\begin{pmatrix}A^{-1}&0\\0&S^{-1}\end{pmatrix}
+\begin{pmatrix}I_p&0\\-CA^{-1}&I_q\end{pmatrix}
+=\begin{pmatrix}A^{-1}+A^{-1}BS^{-1}CA^{-1}&-A^{-1}BS^{-1}\\-S^{-1}CA^{-1}&S^{-1}\end{pmatrix}
+\]
+\end{corollary}
+\begin{proof}
+\begin{board}[\(E_3\), \(E_2\), \(E_1\): the three factors, from left to right; Theorem~\ref{b5.3}(c):]
+\boardtop
+\begin{align*}
+E_1M&=\begin{pmatrix}A&B\\0&S\end{pmatrix},\quad
+E_2E_1M=\begin{pmatrix}A^{-1}A&A^{-1}B\\S^{-1}\cdot0&S^{-1}S\end{pmatrix}=\begin{pmatrix}I_p&A^{-1}B\\0&I_q\end{pmatrix}
+&&\text{(Theorem~\ref{b5.9}, \(n=q\))}\\
+E_3E_2E_1M&=\begin{pmatrix}I_p&A^{-1}B-A^{-1}B\\0&I_q\end{pmatrix}=I\implies M^{-1}=E_3E_2E_1
+&&\text{(\lec{2}, Theorem~15)}
+\end{align*}
+\end{board}
+\begin{board}[Multiplying out (Theorem~\ref{b5.3}(c)):]
+\[
+E_2E_1=\begin{pmatrix}A^{-1}&0\\-S^{-1}CA^{-1}&S^{-1}\end{pmatrix},\qquad
+E_3(E_2E_1)=\begin{pmatrix}A^{-1}+A^{-1}BS^{-1}CA^{-1}&-A^{-1}BS^{-1}\\-S^{-1}CA^{-1}&S^{-1}\end{pmatrix}
+\]
+\end{board}
+\nopagebreak
+\end{proof}
+On \([M\mid I]\) with block rows \(R_1,R_2\), left multiplication by \(E_1\), \(E_2\), \(E_3\) is the \textbf{block row
+operation} \(R_2\leftarrow R_2-CA^{-1}R_1\), then \(R_1\leftarrow A^{-1}R_1\) and \(R_2\leftarrow S^{-1}R_2\), then
+\(R_1\leftarrow R_1-A^{-1}BR_2\) (Theorem~\ref{b5.3}(c)); together they give \([I\mid M^{-1}]\): \textbf{block elimination}.
+
+\Needspace{16\baselineskip}
+\begin{example}\label{b5.11}
+Find the Schur complement \(S\) of \(A\), and \(M^{-1}\), for \(M\in\R^{5\times5}\) with groups \((2,3)\) for rows and
+columns:
+\[
+M=\begin{pmatrix}A&B\\C&D\end{pmatrix},\quad A=\begin{pmatrix}2&1\\1&1\end{pmatrix},\quad
+B=\begin{pmatrix}2&1&3\\1&1&2\end{pmatrix},\quad C=B',\quad D=\begin{pmatrix}3&2&3\\2&3&3\\3&3&7\end{pmatrix}
+\]
+\end{example}
+\textit{Solution.}
+\begin{board}[\(A^{-1}\) (\lec{2}, Proposition~17: \(2\cdot1-1\cdot1=1\)); \(A^{-1}B\), \(CA^{-1}\); \(S\) (Theorem~\ref{b5.9}):]
+\[
+\begin{gathered}
+A^{-1}=\begin{pmatrix}1&-1\\-1&2\end{pmatrix},\qquad
+A^{-1}B=\begin{pmatrix}1&0&1\\0&1&1\end{pmatrix},\qquad
+CA^{-1}=\begin{pmatrix}2&1\\1&1\\3&2\end{pmatrix}\begin{pmatrix}1&-1\\-1&2\end{pmatrix}=\begin{pmatrix}1&0\\0&1\\1&1\end{pmatrix}\\
+S=D-CA^{-1}B=\begin{pmatrix}3&2&3\\2&3&3\\3&3&7\end{pmatrix}-\begin{pmatrix}2&1&3\\1&1&2\\3&2&5\end{pmatrix}
+=\begin{pmatrix}1&1&0\\1&2&1\\0&1&2\end{pmatrix}
+\end{gathered}
+\]
+\end{board}
+\begin{board}[\(S^{-1}\) (\(SS^{-1}=I_3\); \lec{2}, Theorem~15); the off-diagonal blocks of \(M^{-1}\)
+(Corollary~\ref{b5.10}):]
+\[
+S^{-1}=\begin{pmatrix}3&-2&1\\-2&2&-1\\1&-1&1\end{pmatrix},\qquad
+-A^{-1}BS^{-1}=\begin{pmatrix}-4&3&-2\\1&-1&0\end{pmatrix},\qquad
+-S^{-1}CA^{-1}=\begin{pmatrix}-4&1\\3&-1\\-2&0\end{pmatrix}
+\]
+\end{board}
+\begin{board}[The upper left block \(A^{-1}+A^{-1}BS^{-1}CA^{-1}=A^{-1}-(A^{-1}B)(-S^{-1}CA^{-1})\); \(M^{-1}\)
+(Corollary~\ref{b5.10}); a check of row \(1\):]
+\[
+\begin{gathered}
+\begin{pmatrix}1&-1\\-1&2\end{pmatrix}
+-\begin{pmatrix}1&0&1\\0&1&1\end{pmatrix}\begin{pmatrix}-4&1\\3&-1\\-2&0\end{pmatrix}
+=\begin{pmatrix}1&-1\\-1&2\end{pmatrix}-\begin{pmatrix}-6&1\\1&-1\end{pmatrix}=\begin{pmatrix}7&-2\\-2&3\end{pmatrix}\\
+M^{-1}=\left(\begin{array}{cc|ccc}7&-2&-4&3&-2\\-2&3&1&-1&0\\\hline-4&1&3&-2&1\\3&-1&-2&2&-1\\-2&0&1&-1&1\end{array}\right),\qquad
+\begin{aligned}\row_1(M)M^{-1}&=2(7,-2,-4,3,-2)+(-2,3,1,-1,0)\\&\quad+2(-4,1,3,-2,1)+(3,-1,-2,2,-1)\\
+&\quad+3(-2,0,1,-1,1)\\&=(1,0,0,0,0)\end{aligned}
+\end{gathered}
+\]
+\end{board}
+
+\Needspace{8\baselineskip}
+\begin{theorem}\label{b5.12b}
+Let \(M=\begin{pmatrix}A&B\\C&D\end{pmatrix}\) with \(A\in\R^{p\times p}\), \(D\in\R^{q\times q}\), and let \(D\) and
+\(F=A-BD^{-1}C\) be invertible. Then \(M\) is invertible and
+\[
+M^{-1}=\begin{pmatrix}F^{-1}&-F^{-1}BD^{-1}\\-D^{-1}CF^{-1}&D^{-1}+D^{-1}CF^{-1}BD^{-1}\end{pmatrix}
+\]
+\end{theorem}
+\begin{proof}
+For \(X=\left(\begin{smallmatrix}P&Q\\R&T\end{smallmatrix}\right)\), by Theorem~\ref{b5.3}(c) and
+Definition~\ref{b5.1}, \(MX=I\) \(\iff\) \(AP+BR=I_p\), \(CP+DR=0\), \(AQ+BT=0\), \(CQ+DT=I_q\).
+\begin{board}[Solve the four equations:]
+\boardtop
+\begin{align*}
+&R=-D^{-1}CP\implies(A-BD^{-1}C)P=FP=I_p\implies P=F^{-1},\ R=-D^{-1}CF^{-1}\\
+&T=D^{-1}-D^{-1}CQ\implies AQ+BT=FQ+BD^{-1}=0\\
+&\implies Q=-F^{-1}BD^{-1},\ T=D^{-1}+D^{-1}CF^{-1}BD^{-1}
+\end{align*}
+\end{board}
+\begin{board}[Conversely, these blocks satisfy the four equations:]
+\boardtop
+\begin{align*}
+AP+BR&=(A-BD^{-1}C)F^{-1}=I_p,\qquad CP+DR=CF^{-1}-CF^{-1}=0\\
+AQ+BT&=-(A-BD^{-1}C)F^{-1}BD^{-1}+BD^{-1}=0\\
+CQ+DT&=-CF^{-1}BD^{-1}+I_q+CF^{-1}BD^{-1}=I_q\\
+MX&=I\implies M^{-1}=X\qquad\text{(\lec{2}, Theorem~15)}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\subsection*{3. Determinants}
+
+\begin{definition}\label{b5.20}
+For \(A\in\R^{n\times n}\), the \textbf{determinant} \(\det A\) is defined by induction on \(n\): \(\det(a)=a\) for
+\(n=1\); for \(n\geqslant2\), with the \textbf{minors} \(\det A(i|j)\) and the \textbf{cofactors}
+\(c_{ij}=(-1)^{i+j}\det A(i|j)\),
+\[
+\det A=a_{11}c_{11}+a_{21}c_{21}+\dots+a_{n1}c_{n1}\qquad\text{(expansion along column \(1\))}
+\]
+For \(1\leqslant j\leqslant n\) let \(E_j(A)=a_{1j}c_{1j}+\dots+a_{nj}c_{nj}\) (along column \(j\)), and \(E_1(a)=a\) for
+\(n=1\). So \(E_1(A)=\det A\).
+\end{definition}
+
+\Needspace{7\baselineskip}
+\begin{theorem}\label{b5.13}
+Let \(n\geqslant1\), \(1\leqslant j\leqslant n\), \(A\in\R^{n\times n}\), rows \(r\ne s\), and \(c\in\R\).
+\begin{enumerate}
+\item \(E_j\) is linear in each row: multiplying row \(r\) by \(c\) multiplies \(E_j(A)\) by \(c\); if \(A_1,A_2,A_3\) agree
+except in row \(r\) and \(\row_r(A_3)=\row_r(A_1)+\row_r(A_2)\), then \(E_j(A_3)=E_j(A_1)+E_j(A_2)\).
+\item Adding \(c\) times row \(s\) to row \(r\) does not change \(E_j(A)\).
+\item Interchanging rows \(r\) and \(s\) changes the sign of \(E_j(A)\). So \(E_j(A)=0\) if two rows of \(A\) are equal.
+\item \(E_j(I_n)=1\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Induction on \(n\). For \(n=1\), \(E_1(a)=a\) satisfies (a) and (d); (b), (c) concern two rows. Let \(n\geqslant2\), assume
+(a)--(d) for \(\det=E_1\) on \(\R^{(n-1)\times(n-1)}\), and write \(E=E_j\),
+\(E(A)=\sum_i(-1)^{i+j}a_{ij}\det A(i|j)\).
+\begin{itemize}
+\item (a): \(i\ne r\): \(a_{ij}\) does not involve row \(r\), and \(\det A(i|j)\) is linear in it (\(A(i|j)\) contains row
+\(r\) without entry \(j\); induction); \(i=r\): \(\det A(r|j)\) does not involve row \(r\), and \(a_{rj}\) is linear in it.
+\item Rows \(k\), \(k+1\) equal \(\Rightarrow\) \(E(A)=0\): \(\det A(i|j)=0\) for \(i\ne k,k+1\) (two equal rows; induction,
+(c)); the terms \(i=k,k+1\) cancel, as \(a_{kj}=a_{k+1,j}\), \(A(k|j)=A(k+1|j)\) and the signs are \((-1)^{k+j}\),
+\((-1)^{k+1+j}\).
+\item Adjacent interchange: with \(E(u,v)\) the value when rows \(k\), \(k+1\) are \(u'\), \(v'\) (\(u,v\in\R^n\)),
+\(0=E(u+v,u+v)=E(u,u)+E(u,v)+E(v,u)+E(v,v)=E(u,v)+E(v,u)\) ((a), previous point).
+\item (c): interchanging rows \(r<s\) is \(2(s-r)-1\) adjacent interchanges (row \(s\) up to position \(r\), then the former
+row \(r\) down to position \(s\)), an odd number. Two equal rows: interchanging them, \(E(A)=-E(A)\).
+\item (b): by (a) in row \(r\), the new value is \(E(A)+cE(A_s)\), \(A_s\) = \(A\) with row \(r\) replaced by row \(s\);
+\(E(A_s)=0\) by (c).
+\item (d): \(\col_j(I_n)=e_j\), \(I_n(j|j)=I_{n-1}\): \(E(I_n)=(-1)^{2j}\det I_{n-1}=1\) (induction).\qedhere
+\end{itemize}
+\end{proof}
+
+\Needspace{13\baselineskip}
+\begin{theorem}\label{b5.14}
+Let \(A\in\R^{n\times n}\) and \(1\leqslant j\leqslant n\).
+\begin{enumerate}
+\item If \(A\) has a zero row, then \(E_j(A)=0\).
+\item If \(A\) is upper triangular, then \(E_j(A)=a_{11}a_{22}\cdots a_{nn}\); in particular
+\(E_j(\diag(d_1,\dots,d_n))=d_1\cdots d_n\).
+\item \(E_j(D_r(c))=c\), \(E_j(T_{rs}(c))=1\), \(E_j(P_{rs})=-1\), and \(E_j(FA)=E_j(F)E_j(A)\) for every elementary matrix
+\(F\in\R^{n\times n}\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) Multiplying the zero row by \(2\) does not change \(A\) (Theorem~\ref{b5.13}(a)):]
+\[
+E_j(A)=2E_j(A)\implies E_j(A)=0
+\]
+\end{board}
+(b)
+\begin{itemize}
+\item All \(a_{ii}\ne0\): \(R_i\leftarrow a_{ii}^{-1}R_i\) (all \(i\)) gives \(B\), upper triangular with diagonal entries
+\(1\), \(E_j(B)=E_j(A)/(a_{11}\cdots a_{nn})\) (Theorem~\ref{b5.13}(a)); backward elimination (\lec{2}, Definition~5) with
+these pivots turns \(B\) into \(I_n\) by additions: \(E_j(B)=E_j(I_n)=1\) (Theorem~\ref{b5.13}(b),(d)).
+\item Some \(a_{ii}=0\), \(i\) the largest: row \(i\) is \(0\) in columns \(1,\dots,i\). For \(l=i+1,\dots,n\) in turn,
+subtract a multiple of row \(l\) from row \(i\) to clear entry \((i,l)\) (\(a_{ll}\ne0\); row \(l\) is \(0\) before column
+\(l\), so the zeros made stay). This keeps \(E_j(A)\) (Theorem~\ref{b5.13}(b)) and makes row \(i\) zero:
+\(E_j(A)=0=a_{11}\cdots a_{nn}\) by (a).
+\end{itemize}
+\begin{board}[(c) \(D_r(c)\), \(T_{rs}(c)\), \(P_{rs}\) are \(I_n\) after \(R_r\leftarrow cR_r\),
+\(R_r\leftarrow R_r+cR_s\), \(R_r\leftrightarrow R_s\) (\lec{2}, Definition~13):]
+\(E_j(D_r(c))=cE_j(I_n)=c\), \(E_j(T_{rs}(c))=E_j(I_n)=1\), \(E_j(P_{rs})=-E_j(I_n)=-1\)
+(Theorem~\ref{b5.13}).\\
+\(FA\) is \(A\) after the operation of \(F\) (\lec{2}, Theorem~14(a)), so \(E_j(FA)\) is \(cE_j(A)\),
+\(E_j(A)\) or \(-E_j(A)\) (Theorem~\ref{b5.13}): \(E_j(FA)=E_j(F)E_j(A)\).
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{14\baselineskip}
+\begin{theorem}\label{b5.15}
+Let interchanges of two rows and additions of a multiple of one row to another take \(A\in\R^{n\times n}\) to an upper
+triangular \(U\), with \(t\) interchanges. Then \(E_j(A)=(-1)^tu_{11}\cdots u_{nn}\) for every \(j\). Forward elimination
+(Steps 1, 2, 4, without scaling) always ends with such a \(U\). Hence \(E_j(A)=\det A\) for every \(j\):
+\[
+\det A=a_{1j}c_{1j}+a_{2j}c_{2j}+\dots+a_{nj}c_{nj}\qquad(\textbf{expansion along column }j)
+\]
+\end{theorem}
+\begin{proof}
+\begin{board}[Each addition keeps \(E_j\), each interchange changes its sign (Theorem~\ref{b5.13}(b),(c)):]
+\(u_{11}\cdots u_{nn}=E_j(U)=(-1)^tE_j(A)\) (Theorem~\ref{b5.14}(b)).\\
+Forward elimination: leading entries in columns \(k_1<k_2<\cdots\), so \(k_i\geqslant i\), and zero rows at the bottom
+(\lec{2}, Definition~5): \(U\) is upper triangular.\\
+So \(E_j(A)=(-1)^tu_{11}\cdots u_{nn}=E_1(A)=\det A\) for every \(j\).
+\end{board}
+\nopagebreak
+\end{proof}
+If a row is multiplied by \(c\ne0\) on the way, \(\det\) is multiplied by \(c\) (Theorem~\ref{b5.13}(a)): divide by \(c\) at
+the end.
+
+\Needspace{19\baselineskip}
+\begin{example}\label{b5.16}
+Compute \(\det A\) for
+\[
+A=\begin{pmatrix}0&2&1&1\\1&2&1&0\\2&6&4&4\\1&0&2&3\end{pmatrix}
+\]
+\end{example}
+\textit{Solution.}
+\begin{board}[\(a_{11}=0\): begin with an interchange; then additions (Theorem~\ref{b5.15}):]
+\[
+\begin{gathered}
+A\xrightarrow{R_1\leftrightarrow R_2}
+\begin{pmatrix}1&2&1&0\\0&2&1&1\\2&6&4&4\\1&0&2&3\end{pmatrix}
+\xrightarrow[R_4\leftarrow R_4-R_1]{R_3\leftarrow R_3-2R_1}
+\begin{pmatrix}1&2&1&0\\0&2&1&1\\0&2&2&4\\0&-2&1&3\end{pmatrix}\\
+\xrightarrow[R_4\leftarrow R_4+R_2]{R_3\leftarrow R_3-R_2}
+\begin{pmatrix}1&2&1&0\\0&2&1&1\\0&0&1&3\\0&0&2&4\end{pmatrix}
+\xrightarrow{R_4\leftarrow R_4-2R_3}
+\begin{pmatrix}1&2&1&0\\0&2&1&1\\0&0&1&3\\0&0&0&-2\end{pmatrix}=U,\quad
+t=1:\ \det A=-\bigl(1\cdot2\cdot1\cdot(-2)\bigr)=4
+\end{gathered}
+\]
+\end{board}
+
+\Needspace{16\baselineskip}
+\begin{theorem}\label{b5.18}
+Let \(A,B\in\R^{n\times n}\).
+\begin{enumerate}
+\item \(A\) is invertible \(\iff\) \(\det A\ne0\) \(\iff\) \(\rank A=n\).
+\item \(\det(AB)=\det A\det B\).
+\item If \(A\) is invertible, \(\det A^{-1}=1/\det A\). Moreover \(\det(cA)=c^n\det A\) (\(c\in\R\)) and
+\(\det A^k=(\det A)^k\) (\(k=1,2,\dots\)).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) An RREF \(R=F_k\cdots F_1A\) of \(A\) (\lec{2}, Theorem~14(c)); \(\rank A\) and
+invertibility: \lec{4}, Definition~10, Theorem~12(d); \(\det I_n=1\) (Theorem~\ref{b5.13}(d)):]
+\boardtop
+\begin{align*}
+\det R&=\det F_k\cdots\det F_1\det A,\quad\det F_i\in\{c\ne0,\ 1,\ -1\}&&\text{(Theorem~\ref{b5.14}(c))}\\
+A\text{ invertible}&\implies R=I_n\implies\det A\ne0&&\text{(\lec{2}, Theorem~15)}\\
+A\text{ not invertible}&\iff\rank A<n\implies R\text{ has a zero row}&&\text{(\lec{4})}\\
+&\implies\det R=0\implies\det A=0&&\text{(Theorem~\ref{b5.14}(a))}
+\end{align*}
+\end{board}
+\begin{board}[(b) Two cases (\lec{2}, Theorem~15):]
+\(A\) not invertible: then \(AB\) is not invertible (an inverse \(G\) of \(AB\) would give \(A(BG)=I\)), and
+\(\det(AB)=0=\det A\det B\) by (a).\\
+\(A\) invertible: \(A=F_1\cdots F_k\) with elementary \(F_i\), and \(\det(AB)=\det F_1\cdots\det F_k\det B\)
+(Theorem~\ref{b5.14}(c)); with \(B=I_n\), \(\det A=\det F_1\cdots\det F_k\); so \(\det(AB)=\det A\det B\).
+\end{board}
+\begin{board}[(c) From (b); powers: \(A^{k+1}=A^kA\) (\lec{1}, after Theorem~3):]
+\boardtop
+\begin{align*}
+\det A\det A^{-1}&=\det(AA^{-1})=\det I_n=1\\
+\det(cA)&=\det(cI_n)\det A=c^n\det A&&\text{(Theorem~\ref{b5.14}(b))}\\
+\det A^{k+1}&=\det(A^kA)=\det A^k\det A&&\text{(induction on \(k\))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{11\baselineskip}
+\begin{theorem}\label{b5.21}\label{b5.22}
+Let \(A\in\R^{n\times n}\).
+\begin{enumerate}
+\item If \(n\geqslant2\): \(\det A=a_{i1}c_{i1}+a_{i2}c_{i2}+\dots+a_{in}c_{in}\) for every \(i\) (\textbf{expansion along row}
+\(i\)).
+\item \(\det A'=\det A\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) \(\row_i(A)=\sum_ja_{ij}e_j'\); \(G_j\) = \(A\) with row \(i\) replaced by \(e_j'\); \(H_j\) =
+\(G_j\) after \(R_k\leftarrow R_k-a_{kj}R_i\) (\(k\ne i\)), so \(\col_j(H_j)=e_i\), \(H_j(i|j)=A(i|j)\):]
+\boardtop
+\begin{align*}
+\det A&=\textstyle\sum_ja_{ij}\det G_j&&\text{(Theorem~\ref{b5.13}(a))}\\
+\det G_j&=\det H_j=(-1)^{i+j}\det A(i|j)=c_{ij}&&\text{(Theorems~\ref{b5.13}(b), \ref{b5.15}, column \(j\))}
+\end{align*}
+\end{board}
+\begin{board}[(b) Induction on \(n\); \(n=1\): \(A'=A\). For \(n\geqslant2\), \(A'(k|1)=A(1|k)'\):]
+\boardtop
+\begin{align*}
+\det A'&=\textstyle\sum_k(-1)^{k+1}a_{1k}\det A(1|k)'&&\text{(Definition~\ref{b5.20})}\\
+&=\textstyle\sum_k(-1)^{1+k}a_{1k}\det A(1|k)=\det A&&\text{(induction; (a), \(i=1\))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+An operation on the columns of \(A\) is the same operation on the rows of \(A'\); so Theorem~\ref{b5.13}(a)--(c) and
+Theorem~\ref{b5.14}(a) hold for columns, and a lower triangular \(A\) has \(\det A=\det A'=a_{11}\cdots a_{nn}\)
+(Theorem~\ref{b5.14}(b)). For \(n=2\), \(\det\left(\begin{smallmatrix}a&b\\c&d\end{smallmatrix}\right)=ad-bc\) (Definition~\ref{b5.20}), the number of
+\lec{2}, Proposition~17.
+
+\subsection*{4. The adjugate and Cramer's rule}
+
+\Needspace{12\baselineskip}
+\begin{theorem}\label{b5.24}\label{b5.25}
+Let \(n\geqslant2\) and \(A\in\R^{n\times n}\) with cofactors \(c_{ij}\). The \textbf{adjugate} of \(A\) is
+\(\adj A=(c_{ij})'\), that is, \((\adj A)_{ij}=c_{ji}\). Then \(A\adj A=(\det A)I_n\); if \(\det A\ne0\), then
+\(A^{-1}=\frac1{\det A}\adj A\). If \(A\) is symmetric, then \(c_{ji}=c_{ij}\).
+\end{theorem}
+\begin{proof}
+\begin{board}[Entry \((i,k)\) of \(A\adj A\); \(\tilde A\) = \(A\) with row \(k\) replaced by row \(i\) (\(k\ne i\)):]
+\boardtop
+\begin{align*}
+(A\adj A)_{ik}&=\textstyle\sum_ja_{ij}c_{kj}=\det A\ (k=i)&&\text{(Theorem~\ref{b5.21}(a), row \(i\))}\\
+\tilde A(k|j)=A(k|j)&\implies\textstyle\sum_ja_{ij}c_{kj}=\det\tilde A=0\ (k\ne i)
+&&\text{(Theorem~\ref{b5.21}(a), row \(k\); Theorem~\ref{b5.13}(c))}\\
+A\bigl(\tfrac1{\det A}\adj A\bigr)&=I_n\implies A^{-1}=\tfrac1{\det A}\adj A&&\text{(\lec{2}, Theorem~15)}
+\end{align*}
+\end{board}
+\begin{board}[\(A\) symmetric: deleting row \(j\) and column \(i\) of \(A=A'\):]
+\[
+A(j|i)=A'(j|i)=A(i|j)'\implies\det A(j|i)=\det A(i|j)\implies c_{ji}=c_{ij}\qquad\text{(Theorem~\ref{b5.21}(b))}
+\]
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{13\baselineskip}
+\begin{example}\label{b5.26}
+Find \(A^{-1}\) by Theorem~\ref{b5.24} for
+\(A=\left(\begin{smallmatrix}1&1&0&0\\0&1&1&0\\0&0&1&1\\-1&0&0&1\end{smallmatrix}\right)\).
+\end{example}
+\textit{Solution.}
+\begin{board}[Each \(3\times3\) minor is triangular (Theorem~\ref{b5.14}(b) and the lines after Theorem~\ref{b5.21}), or
+has a row with one nonzero entry (Theorem~\ref{b5.21}(a)):]
+\thickmuskip=2mu plus 1mu
+\boardtop
+\begin{alignat*}{4}
+c_{11}&=\det\left(\begin{smallmatrix}1&1&0\\0&1&1\\0&0&1\end{smallmatrix}\right)=1,\ &
+c_{12}&=-\det\left(\begin{smallmatrix}0&1&0\\0&1&1\\-1&0&1\end{smallmatrix}\right)=1,\ &
+c_{13}&=\det\left(\begin{smallmatrix}0&1&0\\0&0&1\\-1&0&1\end{smallmatrix}\right)=-1,\ &
+c_{14}&=-\det\left(\begin{smallmatrix}0&1&1\\0&0&1\\-1&0&0\end{smallmatrix}\right)=1\\
+c_{21}&=-\det\left(\begin{smallmatrix}1&0&0\\0&1&1\\0&0&1\end{smallmatrix}\right)=-1,\ &
+c_{22}&=\det\left(\begin{smallmatrix}1&0&0\\0&1&1\\-1&0&1\end{smallmatrix}\right)=1,\ &
+c_{23}&=-\det\left(\begin{smallmatrix}1&1&0\\0&0&1\\-1&0&1\end{smallmatrix}\right)=1,\ &
+c_{24}&=\det\left(\begin{smallmatrix}1&1&0\\0&0&1\\-1&0&0\end{smallmatrix}\right)=-1\\
+c_{31}&=\det\left(\begin{smallmatrix}1&0&0\\1&1&0\\0&0&1\end{smallmatrix}\right)=1,\ &
+c_{32}&=-\det\left(\begin{smallmatrix}1&0&0\\0&1&0\\-1&0&1\end{smallmatrix}\right)=-1,\ &
+c_{33}&=\det\left(\begin{smallmatrix}1&1&0\\0&1&0\\-1&0&1\end{smallmatrix}\right)=1,\ &
+c_{34}&=-\det\left(\begin{smallmatrix}1&1&0\\0&1&1\\-1&0&0\end{smallmatrix}\right)=1\\
+c_{41}&=-\det\left(\begin{smallmatrix}1&0&0\\1&1&0\\0&1&1\end{smallmatrix}\right)=-1,\ &
+c_{42}&=\det\left(\begin{smallmatrix}1&0&0\\0&1&0\\0&1&1\end{smallmatrix}\right)=1,\ &
+c_{43}&=-\det\left(\begin{smallmatrix}1&1&0\\0&1&0\\0&0&1\end{smallmatrix}\right)=-1,\ &
+c_{44}&=\det\left(\begin{smallmatrix}1&1&0\\0&1&1\\0&0&1\end{smallmatrix}\right)=1
+\end{alignat*}
+\end{board}
+\begin{board}[\(\det A\) along row \(1\) (Theorem~\ref{b5.21}(a)); \(A^{-1}\) (Theorem~\ref{b5.24}):]
+\[
+\det A=1\cdot c_{11}+1\cdot c_{12}+0\cdot c_{13}+0\cdot c_{14}=2,\qquad
+A^{-1}=\frac12\adj A=\frac12\begin{pmatrix}1&-1&1&-1\\1&1&-1&1\\-1&1&1&-1\\1&-1&1&1\end{pmatrix}
+\]
+\end{board}
+
+\Needspace{13\baselineskip}
+\begin{theorem}\label{b5.27}
+Let \(A\in\R^{n\times n}\) (\(n\geqslant2\)) with \(\det A\ne0\), \(b\in\R^n\), and \(A_j\) = \(A\) with column \(j\)
+replaced by \(b\). Then \(Ax=b\) has exactly one solution \(x\), and \(x_j=\det A_j/\det A\) (\(1\leqslant j\leqslant n\))
+(\textbf{Cramer's rule}).
+\end{theorem}
+\begin{proof}
+\begin{board}[\(A^{-1}=\frac1{\det A}\adj A\) (Theorem~\ref{b5.24}); \(A_j(i|j)=A(i|j)\), entry \((i,j)\) of \(A_j\) is \(b_i\):]
+\boardtop
+\begin{align*}
+Ax=b&\implies x=A^{-1}(Ax)=A^{-1}b;\quad A(A^{-1}b)=b\\
+&\implies\text{the only solution is }x=\tfrac1{\det A}(\adj A)b\\
+\bigl((\adj A)b\bigr)_j&=\textstyle\sum_i(\adj A)_{ji}b_i=\sum_ic_{ij}b_i\\
+\det A_j&=\textstyle\sum_ib_i(-1)^{i+j}\det A(i|j)=\sum_ic_{ij}b_i&&\text{(Theorem~\ref{b5.15}, column \(j\))}\\
+x_j&=\det A_j/\det A
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{16\baselineskip}
+\begin{example}\label{b5.28}
+For \(A\) of Example~\ref{b5.26} and \(b=(3,1,0,0)'\), find \(x_3\) in \(Ax=b\) by Cramer's rule, and check it against
+\(x=A^{-1}b\).
+\end{example}
+\textit{Solution.}
+\begin{board}[\(\det A=2\); row \(3\) of \(A_3\) has one nonzero entry, at \((3,4)\); expand along it, then along row
+\(3\) (Theorem~\ref{b5.21}(a)); Theorem~\ref{b5.27}; \((\adj A)b\) by \lec{1}, Theorem~4(b):]
+\[
+\begin{gathered}
+\det A_3=\det\begin{pmatrix}1&1&3&0\\0&1&1&0\\0&0&0&1\\-1&0&0&1\end{pmatrix}
+=(-1)^{3+4}\det\begin{pmatrix}1&1&3\\0&1&1\\-1&0&0\end{pmatrix}
+=-(-1)(-1)^{3+1}\det\begin{pmatrix}1&3\\1&1\end{pmatrix}=-2\\
+x_3=\frac{\det A_3}{\det A}=\frac{-2}2=-1\\
+x=\tfrac12(\adj A)b=\tfrac12\bigl(3\col_1(\adj A)+\col_2(\adj A)\bigr)=\tfrac12\bigl(3(1,1,-1,1)'+(-1,1,1,-1)'\bigr)=(1,2,-1,1)'
+\end{gathered}
+\]
+\end{board}
+
+\subsection*{5. Determinants of block matrices}
+
+\Needspace{11\baselineskip}
+\begin{theorem}\label{b5.29}
+Let \(A\in\R^{p\times p}\), \(B\in\R^{p\times q}\), \(C\in\R^{q\times p}\), \(D\in\R^{q\times q}\). Then
+\(\det\left(\begin{smallmatrix}A&B\\0&D\end{smallmatrix}\right)=\det A\det D
+=\det\left(\begin{smallmatrix}A&0\\C&D\end{smallmatrix}\right)\); in particular \(\det\diag(A,D)=\det A\det D\).
+\end{theorem}
+\begin{proof}
+\begin{board}[Three factors: expand \(p\) times along row \(1\), \(q\) times along the last row (Theorem~\ref{b5.21}(a));
+Theorem~\ref{b5.14}(b):]
+\[
+\det\begin{pmatrix}I_p&0\\0&D\end{pmatrix}=\det D,\qquad\det\begin{pmatrix}A&0\\0&I_q\end{pmatrix}=\det A,\qquad
+\det\begin{pmatrix}I_p&B\\0&I_q\end{pmatrix}=1
+\]
+\end{board}
+\begin{board}[The product (Theorem~\ref{b5.3}(c)); Theorem~\ref{b5.18}(b); the transpose (Theorem~\ref{b5.3}(b),
+Theorem~\ref{b5.21}(b)):]
+\boardtop
+\begin{align*}
+\begin{pmatrix}I_p&0\\0&D\end{pmatrix}\begin{pmatrix}I_p&B\\0&I_q\end{pmatrix}\begin{pmatrix}A&0\\0&I_q\end{pmatrix}
+&=\begin{pmatrix}I_p&0\\0&D\end{pmatrix}\begin{pmatrix}A&B\\0&I_q\end{pmatrix}=\begin{pmatrix}A&B\\0&D\end{pmatrix}
+\implies\det\begin{pmatrix}A&B\\0&D\end{pmatrix}=\det D\cdot1\cdot\det A\\
+\det\begin{pmatrix}A&0\\C&D\end{pmatrix}&=\det\begin{pmatrix}A'&C'\\0&D'\end{pmatrix}=\det A'\det D'=\det A\det D
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{13\baselineskip}
+\begin{theorem}\label{b5.30}
+Let \(M=\begin{pmatrix}A&B\\C&D\end{pmatrix}\) with \(A\in\R^{p\times p}\), \(B\in\R^{p\times q}\), \(C\in\R^{q\times p}\),
+\(D\in\R^{q\times q}\).
+\begin{enumerate}
+\item If \(A\) is invertible, then \(\det M=\det A\det(D-CA^{-1}B)\).
+\item If \(D\) is invertible, then \(\det M=\det D\det(A-BD^{-1}C)\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) The left factor of Theorem~\ref{b5.9} (\(n=q\)) is lower triangular with diagonal entries \(1\) (the lines after
+Theorem~\ref{b5.21}):]
+\[
+1\cdot\det M=\det\begin{pmatrix}A&B\\0&D-CA^{-1}B\end{pmatrix}=\det A\det(D-CA^{-1}B)\qquad
+\text{(Theorems~\ref{b5.18}(b), \ref{b5.29})}
+\]
+\end{board}
+\begin{board}[(b) The left factor is upper triangular with diagonal entries \(1\) (Theorems~\ref{b5.3}(c),
+\ref{b5.14}(b)):]
+\[
+\begin{pmatrix}I_p&-BD^{-1}\\0&I_q\end{pmatrix}M=\begin{pmatrix}A-BD^{-1}C&B-BD^{-1}D\\C&D\end{pmatrix}
+=\begin{pmatrix}A-BD^{-1}C&0\\C&D\end{pmatrix}
+\]
+\(1\cdot\det M=\det(A-BD^{-1}C)\det D\) (Theorems~\ref{b5.18}(b), \ref{b5.29}).
+\end{board}
+\nopagebreak
+\end{proof}
+If \(A\) is invertible, \(\det A\ne0\), so \(M\) is invertible \(\iff\) \(D-CA^{-1}B\) is (by (a) and
+Theorem~\ref{b5.18}(a)).
+
+\Needspace{10\baselineskip}
+\begin{theorem}\label{b5.32}
+Let \(A\in\R^{n\times n}\) and \(T\in\R^{m\times m}\) be invertible, \(U\in\R^{n\times m}\) and \(V\in\R^{m\times n}\).
+\begin{enumerate}
+\item \(\det(A+UTV)=\det A\det T\det(T^{-1}+VA^{-1}U)\). Hence \(A+UTV\) is invertible \(\iff\) \(T^{-1}+VA^{-1}U\) is
+invertible, and then (the \textbf{Sherman--Morrison--Woodbury formula})
+\[
+(A+UTV)^{-1}=A^{-1}-A^{-1}U(T^{-1}+VA^{-1}U)^{-1}VA^{-1}
+\]
+\item For \(u,v\in\R^n\), \(A+uv'\) is invertible \(\iff\) \(1+v'A^{-1}u\ne0\), and then\\
+\mbox{\((A+uv')^{-1}=A^{-1}-\frac1{1+v'A^{-1}u}A^{-1}uv'A^{-1}\)}.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) Let \(M=\left(\begin{smallmatrix}A&-U\\V&T^{-1}\end{smallmatrix}\right)\). As \((T^{-1})^{-1}=T\) (\lec{2},
+Theorem~11(a)), the Schur complements of \(A\) and of \(T^{-1}\) in \(M\) are
+\(E=T^{-1}-VA^{-1}(-U)=T^{-1}+VA^{-1}U\) and \(F=A-(-U)TV=A+UTV\).
+\begin{board}[Determinants:]
+\boardtop
+\begin{align*}
+\det M&=\det A\det E=\det T^{-1}\det F&&\text{(Theorem~\ref{b5.30}(a),(b))}\\
+\det F&=\det A\det T\det E,\quad\det A,\det T\ne0&&\text{(Theorem~\ref{b5.18}(c),(a))}\\
+F\text{ invertible}&\iff\det F\ne0\iff\det E\ne0\iff E\text{ invertible}&&\text{(Theorem~\ref{b5.18}(a))}
+\end{align*}
+\end{board}
+\begin{board}[\(E\), \(F\) invertible: the upper left block of \(M^{-1}\), with the blocks \(A\), \(-U\), \(V\), \(T^{-1}\)
+of \(M\):]
+\boardtop
+\begin{align*}
+(M^{-1})_{11}&=A^{-1}+A^{-1}(-U)E^{-1}VA^{-1}&&\text{(Corollary~\ref{b5.10}, Schur complement \(E\) of \(A\))}\\
+(M^{-1})_{11}&=F^{-1}&&\text{(Theorem~\ref{b5.12b}, Schur complement \(F\) of \(T^{-1}\))}\\
+F^{-1}&=A^{-1}-A^{-1}UE^{-1}VA^{-1}&&\text{(\(M^{-1}\) is unique: \lec{2}, Definition~10)}
+\end{align*}
+\end{board}
+\begin{board}[(b) In (a), \(m=1\), \(U=u\), \(T=(1)\), \(V=v'\):]
+\(A+UTV=A+uv'\) and \(T^{-1}+VA^{-1}U=(1+v'A^{-1}u)\), a \(1\times1\) matrix: invertible \(\iff\)
+\(1+v'A^{-1}u\ne0\) (Theorem~\ref{b5.18}(a), \(\det(a)=a\)), with inverse \(\bigl(1/(1+v'A^{-1}u)\bigr)\) (\lec{2}, Definition~10). As a
+\(1\times1\) factor acts as a number (\lec{1}, Theorem~3(b)),
+\[
+A^{-1}u\bigl(1/(1+v'A^{-1}u)\bigr)v'A^{-1}=\frac1{1+v'A^{-1}u}A^{-1}uv'A^{-1}
+\]
+\end{board}
+\nopagebreak
+\end{proof}
+
+\bigskip
+\textbf{Practice.} The Exercises and Problems of the textbook, Chapter~5: block products and transposes, block
+elimination and the Schur complement, determinants by row reduction and by cofactor expansion, the product rule, the
+adjugate and Cramer's rule, determinants of block matrices, and the Sherman--Morrison--Woodbury formula.
+
+\end{document}
