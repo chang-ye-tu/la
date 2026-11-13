@@ -60,7 +60,7 @@
 | 11/25 | <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture09.pdf">Lecture 9: Covariance Matrices and Principal Components</a> |
 | 12/02 | <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture10.pdf">Lecture 10: Normal Vectors and Quadratic Forms</a> |
 | 12/09 | <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture11.pdf">Lecture 11: Linear Models I</a> |
-| 12/16 | Lecture 12: Linear Models II |
+| 12/16 | <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture12.pdf">Lecture 12: Linear Models II</a> |
 | 12/23 | **期末考** |
 
 ## 授課教師
