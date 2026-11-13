@@ -30957,6 +30957,2239 @@ with level \(1-\alpha\) for \(\mu_1-\mu_2\) (Definition~\ref{r15-def-confidence}
 \end{solution}
 
 \clearpage
+\def\unitnumber{15}
+\setcounter{theorem}{0}\setcounter{problem}{0}
+\section*{Chapter 15. Extremal principles and the singular value decomposition}
+
+\subsection*{The generalized Rayleigh quotient}
+
+\needspace{12\baselineskip}
+\begin{theorem}[\citeat{bapat}{Result~5.2}, \citeat{searle-khuri}{Corollary~9.3}]\label{r9-thm-gen-rayleigh}
+Let \(A,B\in\R^{n\times n}\) be symmetric, with \(B\) PD, and let \(\mu_1\geqslant\dots\geqslant\mu_n\) be the
+eigenvalues of the symmetric matrix \(C=B^{-1/2}AB^{-1/2}\) (Theorem~\ref{r8-thm-sqrt}). Then for every \(x\ne0\)
+\[
+\mu_n\leqslant\frac{x'Ax}{x'Bx}\leqslant\mu_1
+\]
+The maximum \(\mu_1\) is attained at \(x=B^{-1/2}y\) for every eigenvector \(y\) of \(C\) belonging to \(\mu_1\), and the
+minimum \(\mu_n\) likewise. The numbers \(\mu_1,\dots,\mu_n\) are also the eigenvalues of \(B^{-1}A\) and of \(AB^{-1}\),
+listed with multiplicity.
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+\item \(B^{1/2}\) is symmetric and invertible, and so is \(B^{-1/2}=(B^{1/2})^{-1}\) (Theorems~\ref{r8-thm-sqrt}
+and~\ref{r2-thm-inverse-props}(c)); hence \(C'=C\).
+\item Put \(y=B^{1/2}x\). Then \(x=B^{-1/2}y\), \(x\ne0\) if and only if \(y\ne0\), \(x'Bx=x'B^{1/2}B^{1/2}x=y'y\) and
+\(x'Ax=y'B^{-1/2}AB^{-1/2}y=y'Cy\); so
+\[
+\frac{x'Ax}{x'Bx}=\frac{y'Cy}{y'y}
+\]
+\item Theorem~\ref{r9-thm-rayleigh}(a),(b) for \(C\) gives the bounds, attained at the eigenvectors \(y\) of \(C\) belonging
+to \(\mu_1\) and to \(\mu_n\), that is, at \(x=B^{-1/2}y\).
+\item \(B^{-1/2}B^{-1/2}=(B^{1/2}B^{1/2})^{-1}=B^{-1}\) (Theorem~\ref{r2-thm-inverse-props}(b)). So
+\(C=B^{-1/2}(AB^{-1/2})\) with \((AB^{-1/2})B^{-1/2}=AB^{-1}\), and \(B^{-1}A=B^{-1/2}(B^{-1/2}A)\) with
+\((B^{-1/2}A)B^{-1/2}=C\). By Theorem~\ref{r7-thm-AB-BA}(a) (\(m=n\)), \(p_{AB^{-1}}=p_C=p_{B^{-1}A}\): both matrices
+have the eigenvalues of \(C\) with the same multiplicities.\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{theorem}[\citeat{bapat}{Result~5.3}]\label{r9-thm-cs-max}
+Let \(B\in\R^{n\times n}\) be PD and \(y\in\R^n\). Then
+\[
+(x'y)^2\leqslant(x'Bx)(y'B^{-1}y)\qquad(x\in\R^n)
+\]
+If \(y\ne0\), then \(\max_{x\ne0}(x'y)^2/x'Bx=y'B^{-1}y\), attained at \(x=B^{-1}y\).
+\end{theorem}
+\begin{proof}
+If \(y=0\) or \(x=0\), both sides of the inequality are \(0\). Let \(y\ne0\).
+\begin{itemize}
+\item \((x'y)^2=x'yy'x\), so \((x'y)^2/x'Bx\) is \(x'Ax/x'Bx\) with the symmetric matrix \(A=yy'\). By
+Theorem~\ref{r9-thm-gen-rayleigh}, its maximum over \(x\ne0\) is the largest eigenvalue of
+\(C=B^{-1/2}yy'B^{-1/2}=ww'\), where \(w=B^{-1/2}y\ne0\). Here \(B^{-1/2}=(B^{1/2})^{-1}\) is symmetric and
+\(B^{-1/2}B^{-1/2}=(B^{1/2}B^{1/2})^{-1}=B^{-1}\) (Theorems~\ref{r8-thm-sqrt} and~\ref{r2-thm-inverse-props}(b),(c)), so
+\(w'w=y'B^{-1}y\) and \(B^{-1/2}w=B^{-1}y\).
+\item \(\rank(ww')\leqslant\rank w=1\) (Theorem~\ref{thm:r4-rank-product}(a)) and \(Cw=w(w'w)\ne0\), so \(C\) has rank
+\(1\). By Theorem~\ref{r8-thm-rank-eigen}, exactly one eigenvalue of \(C\), counted with multiplicity, is nonzero, and
+it equals \(\tr C=\tr(w'w)=w'w=y'B^{-1}y>0\) (Theorems~\ref{r7-thm-trace-det} and~\ref{r1-thm-trace}(b)). So the
+largest eigenvalue of \(C\) is \(y'B^{-1}y\); this gives the inequality for \(x\ne0\).
+\item \(Cw=(w'w)w\): \(w\) is an eigenvector of \(C\) belonging to \(y'B^{-1}y\), and the maximum is attained at
+\(x=B^{-1/2}w=B^{-1}y\) (Theorem~\ref{r9-thm-gen-rayleigh}).\qedhere
+\end{itemize}
+\end{proof}
+
+In statistics, let the rows \(x_1',\dots,x_n'\) of a data matrix \(X\in\R^{n\times p}\) fall into \(g\) groups:
+group \(l\) has the set \(\mathcal I_l\) of row indices, \(n_l\) rows and the mean vector \(\bar x_l\), and \(\bar x\) is the
+mean vector of all \(n\) rows. For \(a\in\R^p\), the values \(Xa=(a'x_1,\dots,a'x_n)'\) of the combination \(a'x\) have the
+group means \(a'\bar x_l\) and the grand mean \(a'\bar x\). By Theorem~\ref{r11-thm-oneway-anova}(b) for \(y=Xa\) (after
+the rows are arranged by group; the sums of squares do not depend on the order of the rows), their total sum of squares
+is the sum of the between-group and the within-group sums of squares
+\[
+\sum_{l=1}^gn_l(a'\bar x_l-a'\bar x)^2=a'Ba,\qquad\sum_{l=1}^g\sum_{i\in\mathcal I_l}(a'x_i-a'\bar x_l)^2=a'Wa
+\]
+where, as \(\bigl(a'(x_i-\bar x_l)\bigr)^2=a'(x_i-\bar x_l)(x_i-\bar x_l)'a\),
+\[
+B=\sum_{l=1}^gn_l(\bar x_l-\bar x)(\bar x_l-\bar x)',\qquad
+W=\sum_{l=1}^g\sum_{i\in\mathcal I_l}(x_i-\bar x_l)(x_i-\bar x_l)'
+\]
+\textbf{Fisher's linear discriminant function} is a combination \(a'x\) that maximizes \(a'Ba/a'Wa\)~\citeat{haerdle-simar}{\S14.2, Theorem~14.4}. Let \(W\) be PD.
+By Theorem~\ref{r9-thm-gen-rayleigh} for the symmetric \(B\) and the PD \(W\) (in the roles of \(A\) and \(B\) there), the
+maximum is the largest eigenvalue \(\mu_1\) of \(W^{-1}B\), attained at \(a=W^{-1/2}y\) for an eigenvector \(y\) of
+\(C=W^{-1/2}BW^{-1/2}\) belonging to \(\mu_1\); this \(a\) is an eigenvector of \(W^{-1}B\), as
+\(W^{-1}Ba=W^{-1/2}(W^{-1/2}BW^{-1/2})y=\mu_1a\).
+
+For two groups, let \(d=\bar x_1-\bar x_2\). As \(\bar x=(n_1\bar x_1+n_2\bar x_2)/n\) and \(n=n_1+n_2\),
+\[
+\bar x_1-\bar x=\frac{n_2}n\,d,\qquad\bar x_2-\bar x=-\frac{n_1}n\,d,\qquad
+B=\frac{n_1n_2^2+n_2n_1^2}{n^2}\,dd'=\frac{n_1n_2}n\,dd'
+\]
+so that
+\[
+\frac{a'Ba}{a'Wa}=\frac{n_1n_2}n\cdot\frac{(a'd)^2}{a'Wa}
+\]
+If \(d\ne0\), Theorem~\ref{r9-thm-cs-max} gives the maximum \((n_1n_2/n)\,d'W^{-1}d\), attained at \(a=W^{-1}d\). With the
+\textbf{pooled sample covariance matrix} \(S_p=W/(n-2)\), the ratio \((a'd)^2/a'S_pa\) is the squared difference of the two
+group means of \(a'x\) divided by its pooled sample variance, and it is largest for \(a=S_p^{-1}d=(n-2)W^{-1}d\).
+
+\begin{proposition}[\citeat{bapat}{\S8.5}]\label{r9-prop-multiple-correlation}
+Let \(y\) be a random variable and \(x\in\R^p\) a random vector with
+\[
+\var\begin{pmatrix}y\\x\end{pmatrix}=V=\begin{pmatrix}\sigma^2&u'\\u&\Sigma\end{pmatrix}
+\]
+where \(\sigma^2>0\), \(u\in\R^p\) and \(\Sigma\in\R^{p\times p}\) is PD. For \(\alpha\ne0\) in \(\R^p\), let \(\rho(\alpha)\) be
+the correlation of \(y\) and \(\alpha'x\) (Definition~\ref{r14-def-corr}).
+\begin{enumerate}
+\item \(\rho(\alpha)^2\leqslant u'\Sigma^{-1}u/\sigma^2\) for every \(\alpha\ne0\), with equality at \(\alpha=\Sigma^{-1}u\) if
+\(u\ne0\) (and at every \(\alpha\) if \(u=0\)). The number \(r_{y(x)}\geqslant0\) with
+\[
+r_{y(x)}^2=\max_{\alpha\ne0}\rho(\alpha)^2=\frac{u'\Sigma^{-1}u}{\sigma^2}
+\]
+is the \textbf{multiple correlation coefficient} of \(y\) and \(x_1,\dots,x_p\).
+\item If \(V\) is PD and \(Z=V^{-1}=(z_{ij})\), then \(r_{y(x)}^2=1-1/(\sigma^2z_{11})\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a)
+\begin{itemize}
+\item The matrix \(T=\left(\begin{smallmatrix}1&0'\\0&\alpha'\end{smallmatrix}\right)\in\R^{2\times(p+1)}\) maps \((y,x')'\) to
+\((y,\alpha'x)'\), so by Theorems~\ref{r11-thm-linear}(b) and~\ref{r5b-thm-block}
+\[
+\var\begin{pmatrix}y\\\alpha'x\end{pmatrix}=TVT'=\begin{pmatrix}\sigma^2&u'\alpha\\\alpha'u&\alpha'\Sigma\alpha\end{pmatrix}
+\]
+Here \(\var(\alpha'x)=\alpha'\Sigma\alpha>0\), as \(\Sigma\) is PD and \(\alpha\ne0\); so
+\(\rho(\alpha)^2=(\alpha'u)^2/(\sigma^2\,\alpha'\Sigma\alpha)\).
+\item By Theorem~\ref{r9-thm-cs-max} for the PD \(\Sigma\) and the vector \(u\),
+\((\alpha'u)^2\leqslant(\alpha'\Sigma\alpha)(u'\Sigma^{-1}u)\); divide by \(\sigma^2\,\alpha'\Sigma\alpha>0\). If \(u\ne0\), the
+same theorem gives equality at \(\alpha=\Sigma^{-1}u\ne0\); if \(u=0\), both sides are \(0\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item \(\Sigma\) is invertible, so by Theorem~\ref{r5d-thm-schur-det}(b) (the Schur complement of the lower right block),
+\(\det V=\det\Sigma\cdot(\sigma^2-u'\Sigma^{-1}u)\).
+\item \(V(1|1)=\Sigma\) (Definition~\ref{r5d-def-cofactor}), so the \((1,1)\) entry of \(\operatorname{adj}V\) is
+\(\det\Sigma\), and \(z_{11}=\det\Sigma/\det V\) (Theorem~\ref{r5d-thm-adjugate}). Both determinants are positive, as
+\(V\) and \(\Sigma\) are PD (Theorem~\ref{r8-thm-eigen-criterion}(c)).
+\item Hence \(1/z_{11}=\det V/\det\Sigma=\sigma^2-u'\Sigma^{-1}u\), and by (a)
+\(r_{y(x)}^2=(\sigma^2-1/z_{11})/\sigma^2=1-1/(\sigma^2z_{11})\).\qedhere
+\end{itemize}
+\end{proof}
+If \((x',y)'\) is normal with mean \((\mu',\tau)'\) and the PD covariance matrix
+\(\left(\begin{smallmatrix}\Sigma&u\\u'&\sigma^2\end{smallmatrix}\right)\) (the entries of \(V\) rearranged), then by
+Theorem~\ref{r14-thm-mvn-conditional} with \(z_1=x\) and \(z_2=y\), the conditional distribution of \(y\) given \(x\) is
+\(N\bigl(\tau+u'\Sigma^{-1}(x-\mu),\ \sigma^2-u'\Sigma^{-1}u\bigr)\). Its variance is \(\sigma^2(1-r_{y(x)}^2)\), and its mean
+contains \(u'\Sigma^{-1}x\), the combination \(\alpha'x\) of maximum correlation in (a); this is also the best linear
+predictor of Theorem~\ref{r11-thm-blp} up to the constant term (\(b^*=\Sigma^{-1}u\)). So \(r_{y(x)}^2\) is the population
+counterpart of \(R^2=\cor(y,\hat y)^2\) (Proposition~\ref{r11-prop-r2-corr}).
+
+\subsection*{The minimax principle}
+
+\begin{lemma}[\citeat{bapat}{Ch.~1, Exercise~19}]\label{r9-lem-intersect}
+If \(U\) and \(W\) are subspaces of \(\R^n\) with \(\dim U+\dim W>n\), then \(U\cap W\) contains a unit vector.
+\end{lemma}
+\begin{proof}
+If \(U\cap W=\{0\}\), then a basis of \(U\) together with a basis of \(W\) is linearly independent
+(Theorem~\ref{r3-thm-direct-sum-basis}); these are \(\dim U+\dim W>n\) vectors of \(\R^n\) \(\contradiction\)
+(Theorem~\ref{thm:r4-pivot-test}). So there is \(x\ne0\) in the subspace \(U\cap W\) (Theorem~\ref{r3-thm-sum}(a)), and
+\(x/\lVert x\rVert\) is a unit vector in it.
+\end{proof}
+
+\needspace{20\baselineskip}
+\begin{theorem}[Courant--Fischer; \citeat{bapat}{Result~5.8}, \citeat{abadir-magnus}{Exercises~12.43, 12.44}]\label{r9-thm-courant-fischer}
+Let \(A\in\R^{n\times n}\) be symmetric, with \(Q=[q_1\ \cdots\ q_n]\) as in Lemma~\ref{r9-lem-eig-order}.
+\begin{enumerate}
+\item (Min--max form.) Let \(2\leqslant k\leqslant n\). For \(w_1,\dots,w_{k-1}\in\R^n\), the vectors \(u\) with
+\(u\perp w_1,\dots,w_{k-1}\) form a subspace \(W\) of dimension at least \(n-k+1\), and
+\[
+m(w_1,\dots,w_{k-1})=\max\{u'Au:u\in W,\ \lVert u\rVert=1\}\geqslant\lambda_k
+\]
+with equality for \(w_i=q_i\) (\(i=1,\dots,k-1\)). That is,
+\[
+\lambda_k=\min_{w_1,\dots,w_{k-1}\in\R^n}\max\{u'Au:u\perp w_1,\dots,w_{k-1},\ \lVert u\rVert=1\}
+\]
+\item (Max--min form.) Let \(1\leqslant k\leqslant n-1\). For \(w_1,\dots,w_{n-k}\in\R^n\), the minimum of \(u'Au\) over
+the unit vectors \(u\perp w_1,\dots,w_{n-k}\) exists and is \(\leqslant\lambda_k\), with equality for \(w_i=q_{k+i}\)
+(\(i=1,\dots,n-k\)). That is,
+\[
+\lambda_k=\max_{w_1,\dots,w_{n-k}\in\R^n}\min\{u'Au:u\perp w_1,\dots,w_{n-k},\ \lVert u\rVert=1\}
+\]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item \(W=\mathcal N(M')\) with \(M=[w_1\ \cdots\ w_{k-1}]\in\R^{n\times(k-1)}\), since the entries of \(M'u\) are
+\(w_i'u\). As \(\rank M'\leqslant k-1\) (Theorem~\ref{thm:r4-rank-rules}(a)),
+\(\dim W=n-\rank M'\geqslant n-k+1\geqslant1\) (Theorem~\ref{thm:r4-rank-nullity}); so the maximum exists
+(Lemma~\ref{r9-lem-compression}).
+\item For \(w_i=q_i\) the maximum is \(\lambda_k\) (Theorem~\ref{r9-thm-constrained}).
+\item \(T=\Span\{q_1,\dots,q_k\}\) has dimension \(k\) (orthonormal vectors are independent,
+Proposition~\ref{r6-prop-orthogonal-list}(b)), and \(\dim W+\dim T\geqslant n+1\); so there is a unit vector
+\(u\in W\cap T\) (Lemma~\ref{r9-lem-intersect}). Write \(u=c_1q_1+\dots+c_kq_k\). As \(q_i'q_j\) is \(1\) for \(i=j\) and
+\(0\) otherwise, \(c_1^2+\dots+c_k^2=u'u=1\) and
+\[
+u'Au=\Bigl(\sum_{i\leqslant k}c_iq_i\Bigr)'\sum_{j\leqslant k}c_j\lambda_jq_j=\sum_{i\leqslant k}\lambda_ic_i^2
+\geqslant\lambda_k\sum_{i\leqslant k}c_i^2=\lambda_k
+\]
+So \(m(w_1,\dots,w_{k-1})\geqslant u'Au\geqslant\lambda_k\).
+\end{itemize}
+\needspace{3\baselineskip}
+(b)
+\begin{itemize}
+\item \(-A\) is symmetric, and \(\lambda_j(-A)=-\lambda_{n+1-j}(A)\) (Lemma~\ref{r9-lem-eig-order}(b)). Put
+\(j=n+1-k\); then \(2\leqslant j\leqslant n\), \(j-1=n-k\) and \(\lambda_j(-A)=-\lambda_k\).
+\item Let \(w_1,\dots,w_{n-k}\in\R^n\). By (a) for \(-A\) and \(j\), the maximum of \(u'(-A)u=-u'Au\) over the unit
+vectors \(u\perp w_1,\dots,w_{n-k}\) exists and is \(\geqslant\lambda_j(-A)=-\lambda_k\). So the minimum of \(u'Au\) over
+these \(u\) exists, it is minus that maximum, and it is \(\leqslant\lambda_k\).
+\item For \(w_i=q_{k+i}\) (\(i=1,\dots,n-k\)) the minimum is \(\lambda_k\) (Theorem~\ref{r9-thm-constrained}, second
+form).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{theorem}[Interlacing; \citeat{bapat}{Result~5.9}]\label{r9-thm-interlacing}
+Let \(A\in\R^{n\times n}\) be symmetric (\(n\geqslant2\)), let \(1\leqslant i\leqslant n\), and let
+\(B=A(i|i)\in\R^{(n-1)\times(n-1)}\) be \(A\) with row \(i\) and column \(i\) deleted
+(Definition~\ref{r5d-def-cofactor}). Then \(B\) is symmetric and
+\[
+\lambda_1(A)\geqslant\lambda_1(B)\geqslant\lambda_2(A)\geqslant\lambda_2(B)\geqslant\dots\geqslant\lambda_{n-1}(A)
+\geqslant\lambda_{n-1}(B)\geqslant\lambda_n(A)
+\]
+that is, \(\lambda_k(A)\geqslant\lambda_k(B)\geqslant\lambda_{k+1}(A)\) for \(k=1,\dots,n-1\).
+\end{theorem}
+\begin{proof}
+Let \(S\in\R^{n\times(n-1)}\) be \(I_n\) with column \(i\) deleted. Then \(S'S=I_{n-1}\) and \(S'AS=B\): entry \((s,t)\)
+of \(S'AS\) is \(a_{jl}\), where \(j\) and \(l\) are the \(s\)th and the \(t\)th of the indices \(\ne i\). So \(B\) is
+symmetric. For \(\tilde u\in\R^{n-1}\), \(u=S\tilde u\) has \(u_i=0\), \(\lVert u\rVert=\lVert\tilde u\rVert\) and
+\(u'Au=\tilde u'B\tilde u\).
+\begin{itemize}
+\item Left inequality. Let \(q_1,\dots,q_n\) be as in Lemma~\ref{r9-lem-eig-order}. By
+Theorem~\ref{r9-thm-constrained}, \(u'Au\leqslant\lambda_k(A)\) for every unit vector \(u\perp q_1,\dots,q_{k-1}\). For
+\(u=S\tilde u\), \(u'q_j=\tilde u'(S'q_j)\); so \(\tilde u'B\tilde u\leqslant\lambda_k(A)\) for every unit
+\(\tilde u\in\R^{n-1}\) with \(\tilde u\perp S'q_1,\dots,S'q_{k-1}\). The largest such \(\tilde u'B\tilde u\) is
+\(\geqslant\lambda_k(B)\): for \(k=1\) it is \(\lambda_1(B)\) (Theorem~\ref{r9-thm-rayleigh}), and for \(k\geqslant2\)
+apply Theorem~\ref{r9-thm-courant-fischer}(a) to \(B\) with \(w_j=S'q_j\). Hence \(\lambda_k(A)\geqslant\lambda_k(B)\).
+\item Right inequality. \(-B\) is \(-A\) with row and column \(i\) deleted. The left inequality for \(-A\) at the index
+\(n-k\in\{1,\dots,n-1\}\) gives \(\lambda_{n-k}(-A)\geqslant\lambda_{n-k}(-B)\), that is,
+\(-\lambda_{k+1}(A)\geqslant-\lambda_k(B)\) (Lemma~\ref{r9-lem-eig-order}(b), for \(A\) of order \(n\) and \(B\) of order
+\(n-1\)).\qedhere
+\end{itemize}
+\end{proof}
+For a data matrix \(X_0\) with \(n\) rows, the entries of \(X_0'C_nX_0\) are \(\col_j(X_0)'C_n\col_l(X_0)\)
+(Example~\ref{r1-exm-data});
+deleting variable \(i\) deletes row \(i\) and column \(i\) of this matrix, so its eigenvalues interlace those of the
+full matrix.
+
+\begin{theorem}[\citeat{bapat}{Result~5.10}]\label{r9-thm-monotone}
+Let \(A,B\in\R^{n\times n}\) be symmetric with \(A-B\) PSD. Then \(\lambda_k(A)\geqslant\lambda_k(B)\) for
+\(k=1,\dots,n\).
+\end{theorem}
+\begin{proof}
+Let \(u_1,\dots,u_n\) and \(v_1,\dots,v_n\) be the columns of orthogonal matrices as in Lemma~\ref{r9-lem-eig-order} for
+\(A\) and for \(B\), and fix \(k\).
+\begin{itemize}
+\item \(T_1=\Span\{u_k,\dots,u_n\}\) and \(T_2=\Span\{v_1,\dots,v_k\}\) have dimensions \(n-k+1\) and \(k\) (orthonormal
+vectors are independent, Proposition~\ref{r6-prop-orthogonal-list}(b)). By Lemma~\ref{r9-lem-intersect} there is a unit
+vector \(z\in T_1\cap T_2\).
+\item \(z\in T_1\), so \(z=\sum_{i\geqslant k}c_iu_i\), with \(c_i=u_i'z\), \(u_i'z=0\) for \(i<k\), and
+\(\sum_{i\geqslant k}c_i^2=z'z=1\). By Lemma~\ref{r9-lem-eig-order}(a),
+\[
+z'Az=\sum_{i=1}^n\lambda_i(A)(u_i'z)^2=\sum_{i\geqslant k}\lambda_i(A)c_i^2\leqslant\lambda_k(A)\sum_{i\geqslant k}c_i^2
+=\lambda_k(A)
+\]
+\item Likewise \(z=\sum_{j\leqslant k}d_jv_j\) with \(\sum_{j\leqslant k}d_j^2=1\), and
+\(z'Bz=\sum_{j\leqslant k}\lambda_j(B)d_j^2\geqslant\lambda_k(B)\).
+\item \(z'(A-B)z\geqslant0\), so \(\lambda_k(A)\geqslant z'Az\geqslant z'Bz\geqslant\lambda_k(B)\).\qedhere
+\end{itemize}
+\end{proof}
+If \(X\in\R^{n\times p}\) has the rows \(x_1',\dots,x_n'\), then \(X'X=x_1x_1'+\dots+x_nx_n'\) (outer product expansion,
+Theorem~\ref{r1-thm-views}(d)). So adding an observation \(x'\) as a new row turns \(X'X\) into \(X'X+xx'\) (as in
+Example~\ref{r11-exm-added-observation}), and \(xx'\) is
+PSD (\(v'xx'v=(x'v)^2\geqslant0\)). By Theorem~\ref{r9-thm-monotone}, no eigenvalue of \(X'X\) decreases when an
+observation is added.
+
+\subsection*{The singular value decomposition}
+
+\begin{proposition}[\citeat{searle-khuri}{Definition~9.1}, \citeat{harville}{Lemmas~18.2.21, 8.4.2}]\label{r9-prop-frobenius}
+Let \(A\in\R^{m\times n}\), with the Frobenius norm \(\lVert A\rVert_F\) of Definition~\ref{r9-def-frobenius}.
+\begin{enumerate}
+\item \(\lVert A\rVert_F\geqslant0\), with equality only for \(A=0\); \(\lVert cA\rVert_F=\lvert c\rvert\,\lVert A\rVert_F\)
+for \(c\in\R\); and \(\lVert A+B\rVert_F\leqslant\lVert A\rVert_F+\lVert B\rVert_F\) for \(B\in\R^{m\times n}\).
+\item \(\lVert AB\rVert_F\leqslant\lVert A\rVert_F\lVert B\rVert_F\) for \(B\in\R^{n\times p}\).
+\item \(\lVert PAQ\rVert_F=\lVert A\rVert_F\) for orthogonal \(P\in\R^{m\times m}\) and \(Q\in\R^{n\times n}\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a) The entries of \(A+B\) and \(cA\) are \(a_{ij}+b_{ij}\) and \(ca_{ij}\) (Definition~\ref{r1-def-matrix}), so if \(v\),
+\(w\) list the entries of \(A\), \(B\), then \(v+w\) and \(cv\) list those of \(A+B\) and \(cA\). Apply the remarks after
+Definition~\ref{r6-def-inner} and Theorem~\ref{r6-thm-cauchy-schwarz}(b) in \(\R^{mn}\).
+
+\needspace{4\baselineskip}
+(b)
+\begin{itemize}
+\item Column \(j\) of \(AB\) is \(Ab_j\), where \(b_j=\col_j(B)\) (Theorem~\ref{r1-thm-views}(a)), and entry \(i\) of
+\(Ab_j\) is \(\row_i(A)b_j=\sum_la_{il}b_{lj}\).
+\item By Cauchy--Schwarz (Theorem~\ref{r6-thm-cauchy-schwarz}(a)),
+\(\lVert Ab_j\rVert^2=\sum_i(\row_i(A)b_j)^2\leqslant\sum_i\bigl(\sum_la_{il}^2\bigr)\lVert b_j\rVert^2
+=\lVert A\rVert_F^2\lVert b_j\rVert^2\).
+\item Summing over \(j\):
+\(\lVert AB\rVert_F^2=\sum_j\lVert Ab_j\rVert^2\leqslant\lVert A\rVert_F^2\sum_j\lVert b_j\rVert^2
+=\lVert A\rVert_F^2\lVert B\rVert_F^2\).
+\end{itemize}
+(c) \(P'P=I_m\) and \(QQ'=I_n\) (Proposition~\ref{r6-prop-orthonormal}(b)), so by Theorem~\ref{r1-thm-trace}(b)
+\[
+\lVert PAQ\rVert_F^2=\tr(Q'A'P'PAQ)=\tr(Q'A'AQ)=\tr(A'AQQ')=\tr(A'A)=\lVert A\rVert_F^2
+\]
+\end{proof}
+
+\begin{theorem}[Singular value decomposition; \citeat{harville}{Theorem~21.12.1, Corollary~21.12.2}]\label{r9-thm-svd}
+Let \(A\in\R^{m\times n}\) have rank \(r\geqslant1\). Below, \(\left(\begin{smallmatrix}D&0\\0&0\end{smallmatrix}\right)\)
+denotes the matrix of the size required by the product, with \(D\) in the top left \(r\times r\) block and zeros
+elsewhere; blocks with no rows or no columns are absent (when \(r=n\) there is no \(Q_2\), and when \(r=m\) no \(P_2\)).
+\begin{enumerate}
+\item Let \(Q=[Q_1\ Q_2]\in\R^{n\times n}\) be orthogonal, with \(Q_1\in\R^{n\times r}\), and let \(D\in\R^{r\times r}\) be
+an invertible diagonal matrix with
+\[
+Q'A'AQ=\begin{pmatrix}D^2&0\\0&0\end{pmatrix}
+\]
+Put \(P_1=AQ_1D^{-1}\in\R^{m\times r}\), and let \(P=[P_1\ P_2]\), where \(P_2\in\R^{m\times(m-r)}\) is any matrix with
+\(P_1'P_2=0\). Then
+\[
+P'AQ=\begin{pmatrix}D&0\\0&0\end{pmatrix}
+\]
+\item Such \(Q\) and \(D\) exist with \(D=\diag(\sigma_1,\dots,\sigma_r)\) and \(\sigma_1\geqslant\dots\geqslant\sigma_r>0\):
+take \(\sigma_i^2=\lambda_i(A'A)\), the nonzero eigenvalues of \(A'A\), and \(Q\) as in Lemma~\ref{r9-lem-eig-order} for
+\(A'A\). Then \(P_1'P_1=I_r\), \(P_2\) can be chosen so that \(P\) is orthogonal, and, with the columns \(p_i\) of \(P\) and
+\(q_i\) of \(Q\),
+\[
+A=P\begin{pmatrix}D&0\\0&0\end{pmatrix}Q'=P_1DQ_1'=\sigma_1p_1q_1'+\dots+\sigma_rp_rq_r'
+\]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item By the block product (Theorem~\ref{r5b-thm-block}), \(Q'A'AQ\) has the blocks \(Q_1'A'AQ_1\), \(Q_1'A'AQ_2\),
+\(Q_2'A'AQ_1\), \(Q_2'A'AQ_2\). So \(Q_1'A'AQ_1=D^2\), and \((AQ_2)'(AQ_2)=Q_2'A'AQ_2=0\); its trace is \(0\), so
+\(AQ_2=0\) (Theorem~\ref{r1-thm-trace}(d)).
+\item \(AQ_1=P_1D\), and \(P_1'=D^{-1}Q_1'A'\), as \(D\) is diagonal. Hence
+\[
+P'AQ=\begin{pmatrix}P_1'AQ_1&P_1'AQ_2\\P_2'AQ_1&P_2'AQ_2\end{pmatrix}
+=\begin{pmatrix}D^{-1}Q_1'A'AQ_1&0\\P_2'P_1D&0\end{pmatrix}
+=\begin{pmatrix}D^{-1}D^2&0\\(P_1'P_2)'D&0\end{pmatrix}
+=\begin{pmatrix}D&0\\0&0\end{pmatrix}
+\]
+\end{itemize}
+\needspace{4\baselineskip}
+(b)
+\begin{itemize}
+\item \(A'A\) is symmetric and PSD (Theorem~\ref{r8-thm-XtX}), so its eigenvalues are \(\geqslant0\)
+(Theorem~\ref{r8-thm-eigen-criterion}(a)). As \(\rank(A'A)=\rank A=r\) (Theorem~\ref{thm:r4-rank-ata}(b)), exactly \(r\)
+of them are nonzero (Theorem~\ref{r8-thm-rank-eigen}):
+\(\lambda_1(A'A)\geqslant\dots\geqslant\lambda_r(A'A)>0=\lambda_{r+1}(A'A)=\dots=\lambda_n(A'A)\). So \(Q\) from
+Lemma~\ref{r9-lem-eig-order} and \(D\) satisfy the condition of (a).
+\item \(P_1'P_1=D^{-1}Q_1'A'AQ_1D^{-1}=D^{-1}D^2D^{-1}=I_r\): the columns of \(P_1\) are orthonormal, hence independent
+(Proposition~\ref{r6-prop-orthogonal-list}(b)), and \(\rank P_1'=\rank P_1=r\) (Theorem~\ref{thm:r4-rank-rules}(a),(b)).
+So \(\dim\mathcal N(P_1')=m-r\) (Theorem~\ref{thm:r4-rank-nullity}).
+\item If \(r<m\), let the columns of \(P_2\) form an orthonormal basis of \(\mathcal N(P_1')\)
+(Theorems~\ref{thm:r4-dimension} and~\ref{r6-thm-gram-schmidt}). Then \(P_1'P_2=0\) and \(P_2'P_2=I_{m-r}\), so
+\(P'P=I_m\) by blocks: \(P\) is orthogonal.
+\item As \(PP'=I_m\) and \(QQ'=I_n\) (Proposition~\ref{r6-prop-orthonormal}(b)), \(A=P(P'AQ)Q'\), the first form by (a).
+By blocks it is \([P_1D\ \ 0]\left(\begin{smallmatrix}Q_1'\\Q_2'\end{smallmatrix}\right)=P_1DQ_1'\), and the outer
+product expansion (Theorem~\ref{r1-thm-views}(d)), with \(\col_i(P_1D)=\sigma_ip_i\) and \(\row_i(Q_1')=q_i'\), gives the
+sum.\qedhere
+\end{itemize}
+\end{proof}
+A factorization \(A=P\left(\begin{smallmatrix}D&0\\0&0\end{smallmatrix}\right)Q'\) with orthogonal
+\(P\in\R^{m\times m}\) and \(Q\in\R^{n\times n}\) and \(D=\diag(\sigma_1,\dots,\sigma_r)\),
+\(\sigma_1\geqslant\dots\geqslant\sigma_r>0\), is a \textbf{singular value decomposition} (SVD) of \(A\), and
+\(A=P_1DQ_1'\) is the corresponding \textbf{compact SVD}. The numbers \(\sigma_1,\dots,\sigma_r\) are the
+\textbf{singular values} of \(A\), and the columns of \(P\) and \(Q\) are \textbf{singular vectors} of \(A\). We put
+\(\sigma_k=0\) for \(r<k\leqslant\min\{m,n\}\), and \(\sigma_1=0\) for \(A=0\). (Theorem~\ref{r9-thm-svd-props}(a)
+shows that \(r=\rank A\) and that \(\sigma_1,\dots,\sigma_r\) do not depend on the choice of the SVD.)
+
+\needspace{16\baselineskip}
+\begin{theorem}[\citeat{harville}{Theorem~21.12.3, \S21.12a}]\label{r9-thm-svd-props}
+Let \(A\in\R^{m\times n}\), let \(P\in\R^{m\times m}\) and \(Q\in\R^{n\times n}\) be orthogonal, and let
+\(D=\diag(\sigma_1,\dots,\sigma_r)\) with \(\sigma_1\geqslant\dots\geqslant\sigma_r>0\) be such that
+\(P'AQ=\left(\begin{smallmatrix}D&0\\0&0\end{smallmatrix}\right)\). Split \(P=[P_1\ P_2]\) and \(Q=[Q_1\ Q_2]\), where
+\(P_1\) and \(Q_1\) have the \(r\) columns \(p_1,\dots,p_r\) and \(q_1,\dots,q_r\).
+\begin{enumerate}
+\item \(r=\rank A\), and \(\sigma_1^2,\dots,\sigma_r^2\) are the nonzero eigenvalues of \(A'A\) and of \(AA'\), listed with
+multiplicity. So the singular values of \(A\) depend only on \(A\), not on the choice of \(P\) and \(Q\).
+\item \(Q'A'AQ=\left(\begin{smallmatrix}D^2&0\\0&0\end{smallmatrix}\right)\) and
+\(P'AA'P=\left(\begin{smallmatrix}D^2&0\\0&0\end{smallmatrix}\right)\): the columns of \(Q\) are orthonormal eigenvectors
+of \(A'A\), and those of \(P\) of \(AA'\); \(q_i\) and \(p_i\) belong to \(\sigma_i^2\) (\(i\leqslant r\)), the other columns to
+\(0\).
+\item \(P_1=AQ_1D^{-1}\) and \(Q_1=A'P_1D^{-1}\); that is, \(Aq_i=\sigma_ip_i\) and \(A'p_i=\sigma_iq_i\)
+(\(i=1,\dots,r\)).
+\item \(\lVert A\rVert_F^2=\sigma_1^2+\dots+\sigma_r^2\).
+\item If \(A\) is symmetric, its singular values are the absolute values of its nonzero eigenvalues; if \(A\) is PSD,
+they are its nonzero eigenvalues. For orthogonal \(U\in\R^{m\times m}\) and \(V\in\R^{n\times n}\), the matrices \(UAV\)
+and \(A'\) have the same singular values as \(A\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item \(\rank A=\rank(P'AQ)\) (Theorem~\ref{thm:r4-rank-product}(d)). The nonzero columns of \(P'AQ\) are
+\(\sigma_1e_1,\dots,\sigma_re_r\), which are independent (Proposition~\ref{r6-prop-orthogonal-list}(b)) and span its
+column space; so the rank is \(r\).
+\item As \(PP'=I_m\), \(Q'A'AQ=Q'A'PP'AQ=(P'AQ)'(P'AQ)\), the product of an \(n\times m\) and an \(m\times n\) block matrix,
+which is \(\left(\begin{smallmatrix}D^2&0\\0&0\end{smallmatrix}\right)\) (Theorem~\ref{r5b-thm-block}); likewise
+\(P'AA'P=(P'AQ)(P'AQ)'=\left(\begin{smallmatrix}D^2&0\\0&0\end{smallmatrix}\right)\).
+\item As \(Q^{-1}=Q'\) (Proposition~\ref{r6-prop-orthonormal}(b)), \(Q^{-1}(A'A)Q\) is diagonal with the diagonal
+entries \(\sigma_1^2,\dots,\sigma_r^2,0,\dots,0\); these are the eigenvalues of \(A'A\) listed with multiplicity (Definition~\ref{r7-def-diagonalizable}), and likewise for \(AA'\) with
+\(P\). Hence \(\sigma_1\geqslant\dots\geqslant\sigma_r\) are the positive square roots of the nonzero eigenvalues of
+\(A'A\), in decreasing order.
+\end{itemize}
+(b) The two identities were shown in (a). Multiplying the first by \(Q\) on the left,
+\(A'AQ=Q\left(\begin{smallmatrix}D^2&0\\0&0\end{smallmatrix}\right)\), whose columns say \(A'Aq_i=\sigma_i^2q_i\)
+(\(i\leqslant r\)) and \(A'Aq_i=0\) (\(i>r\)); likewise for \(P\).
+
+\needspace{3\baselineskip}
+(c)
+\begin{itemize}
+\item \(PP'=P_1P_1'+P_2P_2'=I_m\), and \(P_1'AQ_1=D\) and \(P_2'AQ_1=0\) are blocks of \(P'AQ\). So
+\[
+P_1=P_1(P_1'AQ_1)D^{-1}=(I_m-P_2P_2')AQ_1D^{-1}=AQ_1D^{-1}-P_2(P_2'AQ_1)D^{-1}=AQ_1D^{-1}
+\]
+\item In the same way, \(QQ'=Q_1Q_1'+Q_2Q_2'=I_n\), \(Q_1'A'P_1=(P_1'AQ_1)'=D\) and \(Q_2'A'P_1=(P_1'AQ_2)'=0\), so
+\[
+Q_1=Q_1(Q_1'A'P_1)D^{-1}=(I_n-Q_2Q_2')A'P_1D^{-1}=A'P_1D^{-1}-Q_2(Q_2'A'P_1)D^{-1}=A'P_1D^{-1}
+\]
+\end{itemize}
+(d) By Proposition~\ref{r9-prop-frobenius}(c), \(\lVert A\rVert_F=\lVert P'AQ\rVert_F\), and the squares of the entries of
+\(P'AQ\) add up to \(\sigma_1^2+\dots+\sigma_r^2\).
+
+\needspace{3\baselineskip}
+(e)
+\begin{itemize}
+\item Let \(A\) be symmetric; we choose a new pair \(P\), \(Q\). Number an orthonormal basis of eigenvectors \(q_1,\dots,q_n\)
+(Theorem~\ref{r8-thm-spectral}(a)), with eigenvalues \(d_1,\dots,d_n\), so that
+\(\lvert d_1\rvert\geqslant\dots\geqslant\lvert d_n\rvert\). Then \(Q'AQ=\diag(d_1,\dots,d_n)\) for
+\(Q=[q_1\ \cdots\ q_n]\), and \(d_1,\dots,d_n\) are the eigenvalues of \(A\), listed with multiplicity
+(Theorem~\ref{r8-thm-spectral}(b),(c)). By Theorem~\ref{r8-thm-rank-eigen}, exactly \(\rank A\) of the \(d_i\) are
+nonzero, namely \(d_1,\dots,d_{\rank A}\).
+\item Let \(\Delta=\diag(\delta_1,\dots,\delta_n)\), with \(\delta_i=1\) if \(d_i\geqslant0\) and \(\delta_i=-1\) if
+\(d_i<0\), and \(P=Q\Delta\). Then \(P'P=\Delta Q'Q\Delta=\Delta^2=I_n\), and
+\[
+P'AQ=\Delta Q'AQ=\diag(\delta_1d_1,\dots,\delta_nd_n)=\diag(\lvert d_1\rvert,\dots,\lvert d_n\rvert)
+\]
+is an SVD of \(A\). By (a), the singular values are the nonzero \(\lvert d_i\rvert\). If \(A\) is PSD, every
+\(d_i\geqslant0\) (Theorem~\ref{r8-thm-eigen-criterion}(a)), so \(\lvert d_i\rvert=d_i\) (and \(P=Q\)).
+\item In the setting of the theorem, \(UP\) and \(V'Q\) are orthogonal (\((UP)'(UP)=P'U'UP=I_m\), and likewise
+\((V'Q)'(V'Q)=I_n\)), and \((UP)'(UAV)(V'Q)=P'AQ\): an SVD of \(UAV\) with the same \(D\). Also \(Q'A'P=(P'AQ)'\) is the
+\(n\times m\) matrix with \(D'=D\) in the top left corner: an SVD of \(A'\) with \(Q\) and \(P\) exchanged.\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{corollary}[\citeat{harville-solutions}{Ch.~21, Exercise~28}]\label{r9-cor-svd-subspaces}
+In Theorem~\ref{r9-thm-svd-props} let \(r\geqslant1\). Then
+\[
+\mathcal C(A)=\mathcal C(P_1),\qquad\mathcal N(A')=\mathcal C(P_2),\qquad\mathcal C(A')=\mathcal C(Q_1),\qquad
+\mathcal N(A)=\mathcal C(Q_2)
+\]
+so the columns of \(P_1\), \(P_2\), \(Q_1\), \(Q_2\) are orthonormal bases of these four subspaces (an absent \(P_2\) or
+\(Q_2\) means that the subspace is \(\{0\}\)). Moreover, \(P_1P_1'y\) is the orthogonal projection of \(y\in\R^m\) onto
+\(\mathcal C(A)\), and if \(A\) has full column rank, then \(A(A'A)^{-1}A'=P_1P_1'\).
+\end{corollary}
+\begin{proof}
+\begin{itemize}
+\item As \(PP'=I_m\) and \(QQ'=I_n\), \(A=P(P'AQ)Q'=P\left(\begin{smallmatrix}D&0\\0&0\end{smallmatrix}\right)Q'=P_1DQ_1'\)
+by blocks, so
+\(Ax=P_1(DQ_1'x)\in\mathcal C(P_1)\); and \(P_1=AQ_1D^{-1}\) (Theorem~\ref{r9-thm-svd-props}(c)) gives
+\(\mathcal C(P_1)\subseteq\mathcal C(A)\).
+\item \(Q'Q=I_n\) gives \(Q_1'Q_2=0\), so \(AQ_2=P_1DQ_1'Q_2=0\) and \(\mathcal C(Q_2)\subseteq\mathcal N(A)\). The \(n-r\)
+columns of \(Q_2\) are orthonormal, hence independent (Proposition~\ref{r6-prop-orthogonal-list}(b)), so
+\(\dim\mathcal C(Q_2)=n-r=\dim\mathcal N(A)\) (Theorems~\ref{thm:r4-rank-nullity} and~\ref{r9-thm-svd-props}(a)). Hence
+\(\mathcal C(Q_2)=\mathcal N(A)\) (Theorem~\ref{thm:r4-counting}(a)).
+\item \(Q'A'P=(P'AQ)'\) is an SVD of \(A'\) with \(Q\) and \(P\) exchanged (Theorem~\ref{r9-thm-svd-props}(e)); the two
+items above, for \(A'\), give \(\mathcal C(A')=\mathcal C(Q_1)\) and \(\mathcal N(A')=\mathcal C(P_2)\).
+\item \(P_1\) has full column rank and \(P_1'P_1=I_r\), so by Theorem~\ref{r6-thm-hat}(a),
+\(P_1(P_1'P_1)^{-1}P_1'y=P_1P_1'y\) is the orthogonal projection of \(y\) onto \(\mathcal C(P_1)=\mathcal C(A)\). If \(A\)
+has full column rank, \(A(A'A)^{-1}A'y\) is also this projection (Theorem~\ref{r6-thm-hat}(a)), which is unique
+(Definition~\ref{r6-def-projection}); so \(A(A'A)^{-1}A'y=P_1P_1'y\) for every \(y\), and with \(y=e_1,\dots,e_m\) the two
+matrices have the same columns.\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{example}[\citeat{searle-khuri}{Example~7.3}, \citeat{abadir-magnus}{Exercise~8.39}]\label{r9-exm-svd}
+Find an SVD and the compact SVD of
+\[
+A=\begin{pmatrix}2&0&1&1\\0&2&1&1\\1&1&1&1\end{pmatrix}
+\]
+and orthonormal bases of its four subspaces.
+
+\textit{Solution.}
+\begin{itemize}
+\item The columns satisfy \(a_3=a_4=\frac12(a_1+a_2)\), and \(a_1\), \(a_2\) are independent; so \(\rank A=2=r\).
+Hence \(A(0,0,1,-1)'=a_3-a_4=0\) and \(A(1,1,-1,-1)'=a_1+a_2-a_3-a_4=0\).
+\item The matrix
+\[
+A'A=\begin{pmatrix}5&1&3&3\\1&5&3&3\\3&3&3&3\\3&3&3&3\end{pmatrix}
+\]
+has every row sum \(12\), so \(A'A\one_4=12\one_4\); and \(A'A(1,-1,0,0)'=(4,-4,0,0)'\). The two vectors of the first
+item lie in \(\mathcal N(A'A)=\mathcal N(A)\) (Theorem~\ref{thm:r4-rank-ata}(a)), of dimension \(4-2=2\)
+(Theorem~\ref{thm:r4-rank-nullity}). So the algebraic multiplicities \(\dim\mathcal N(A'A-cI)\)
+(Theorem~\ref{r8-thm-rank-eigen}) are at least \(1\), \(1\), \(2\) for \(c=12,4,0\). All multiplicities add up to \(4\)
+(Definition~\ref{r7-def-eigenvalues}); so these are exactly \(1\), \(1\), \(2\), and the eigenvalues of \(A'A\) are \(12\),
+\(4\), \(0\), \(0\). Check: \(\tr(A'A)=16=12+4\).
+\item The four vectors are pairwise orthogonal (Theorem~\ref{r8-thm-sym-orth}, and
+\((1,1,-1,-1)(0,0,1,-1)'=0\)). Normalized: \(q_1=\frac12(1,1,1,1)'\), \(q_2=\frac1{\sqrt2}(1,-1,0,0)'\),
+\(q_3=\frac12(1,1,-1,-1)'\), \(q_4=\frac1{\sqrt2}(0,0,1,-1)'\); and \(D=\diag(\sqrt{12},2)=\diag(2\sqrt3,2)\).
+\item \(P_1=AQ_1D^{-1}\): \(Aq_1=(2,2,2)'\) and \(Aq_2=\frac1{\sqrt2}(2,-2,0)'\), so \(p_1=\frac1{2\sqrt3}(2,2,2)'
+=\frac1{\sqrt3}(1,1,1)'\) and \(p_2=\frac12Aq_2=\frac1{\sqrt2}(1,-1,0)'\).
+\item \(\mathcal N(P_1')\): \(y_1+y_2+y_3=0\) and \(y_1-y_2=0\) give \(y=t(1,1,-2)'\); so \(p_3=\frac1{\sqrt6}(1,1,-2)'\).
+\item Hence \(A=P\left(\begin{smallmatrix}D&0\\0&0\end{smallmatrix}\right)Q'\) with
+\[
+P=\begin{pmatrix}\frac1{\sqrt3}&\frac1{\sqrt2}&\frac1{\sqrt6}\\[2pt]\frac1{\sqrt3}&-\frac1{\sqrt2}&\frac1{\sqrt6}\\[2pt]
+\frac1{\sqrt3}&0&-\frac2{\sqrt6}\end{pmatrix},\qquad
+\begin{pmatrix}D&0\\0&0\end{pmatrix}=\begin{pmatrix}2\sqrt3&0&0&0\\0&2&0&0\\0&0&0&0\end{pmatrix},\qquad
+Q=\begin{pmatrix}\frac12&\frac1{\sqrt2}&\frac12&0\\[2pt]\frac12&-\frac1{\sqrt2}&\frac12&0\\[2pt]
+\frac12&0&-\frac12&\frac1{\sqrt2}\\[2pt]\frac12&0&-\frac12&-\frac1{\sqrt2}\end{pmatrix}
+\]
+and the compact SVD is \(A=2\sqrt3\,p_1q_1'+2\,p_2q_2'\). Check:
+\[
+2\sqrt3\,p_1q_1'+2\,p_2q_2'=\begin{pmatrix}1\\1\\1\end{pmatrix}(1,1,1,1)+\begin{pmatrix}1\\-1\\0\end{pmatrix}(1,-1,0,0)
+=\begin{pmatrix}1&1&1&1\\1&1&1&1\\1&1&1&1\end{pmatrix}+\begin{pmatrix}1&-1&0&0\\-1&1&0&0\\0&0&0&0\end{pmatrix}=A
+\]
+\item By Corollary~\ref{r9-cor-svd-subspaces}: \(p_1,p_2\) is an orthonormal basis of \(\mathcal C(A)\), \(p_3\) of
+\(\mathcal N(A')\), \(q_1,q_2\) of \(\mathcal C(A')\), and \(q_3,q_4\) of \(\mathcal N(A)\).
+\end{itemize}
+The vector \(-p_2\) is also a unit eigenvector of \(AA'\) belonging to \(4\), but \(2\sqrt3\,p_1q_1'-2\,p_2q_2'\ne A\). So
+\(P_1\) must be computed from \(Q_1\) as \(AQ_1D^{-1}\); it cannot be chosen separately among the eigenvectors of \(AA'\).
+\end{example}
+
+\subsection*{Singular values as maxima; the spectral norm}
+
+\begin{theorem}[\citeat{bapat}{Results~5.5, 5.6}]\label{r9-thm-sigma-max}
+Let \(A\in\R^{m\times n}\), \(A\ne0\), have an SVD as in Theorem~\ref{r9-thm-svd-props}, with the columns
+\(p_1,\dots,p_m\) of \(P\) and \(q_1,\dots,q_n\) of \(Q\).
+\begin{enumerate}
+\item \(\lvert u'Av\rvert\leqslant\sigma_1\) for all unit vectors \(u\in\R^m\) and \(v\in\R^n\), and \(p_1'Aq_1=\sigma_1\).
+Hence
+\[
+\sigma_1=\max\{u'Av:\lVert u\rVert=\lVert v\rVert=1\}
+\]
+\item Let \(2\leqslant k\leqslant\min\{m,n\}\). If moreover \(u\perp p_1,\dots,p_{k-1}\) and \(v\perp q_1,\dots,q_{k-1}\),
+then \(\lvert u'Av\rvert\leqslant\sigma_k\); and \(p_k'Aq_k=\sigma_k\). So \(\sigma_k\) is the maximum of \(u'Av\) under
+these conditions.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Let \(u\in\R^m\) and \(v\in\R^n\) be unit vectors, \(w=P'u\) and \(z=Q'v\). Then \(\lVert w\rVert=\lVert z\rVert=1\)
+(Proposition~\ref{r6-prop-orthonormal}(a); \(P'\) and \(Q'\) are orthogonal), and
+\(A=P\left(\begin{smallmatrix}D&0\\0&0\end{smallmatrix}\right)Q'\) gives
+\[
+u'Av=w'\begin{pmatrix}D&0\\0&0\end{pmatrix}z=\sigma_1w_1z_1+\dots+\sigma_rw_rz_r
+\]
+\needspace{3\baselineskip}
+(a)
+\begin{itemize}
+\item As \(0<\sigma_i\leqslant\sigma_1\),
+\(\lvert u'Av\rvert\leqslant\sigma_1\sum_{i\leqslant r}\lvert w_i\rvert\lvert z_i\rvert\leqslant\sigma_1\lVert w\rVert
+\lVert z\rVert=\sigma_1\), by Cauchy--Schwarz (Theorem~\ref{r6-thm-cauchy-schwarz}(a)) for the vectors
+\((\lvert w_1\rvert,\dots,\lvert w_r\rvert)'\) and \((\lvert z_1\rvert,\dots,\lvert z_r\rvert)'\), whose lengths are at most
+\(\lVert w\rVert\) and \(\lVert z\rVert\).
+\item \(p_1'Aq_1=p_1'(\sigma_1p_1)=\sigma_1\) (Theorem~\ref{r9-thm-svd-props}(c)). As \(\sigma_1>0\), the maximum of
+\(u'Av\) is \(\sigma_1\).
+\end{itemize}
+\needspace{3\baselineskip}
+(b)
+\begin{itemize}
+\item The entries of \(w=P'u\) are \(w_i=p_i'u\), so \(u\perp p_1,\dots,p_{k-1}\) means \(w_1=\dots=w_{k-1}=0\); likewise
+\(z_1=\dots=z_{k-1}=0\).
+\item So \(u'Av=\sum_{i=k}^r\sigma_iw_iz_i\) (\(0\) if \(k>r\)), and as in (a) \(\lvert u'Av\rvert\leqslant\sigma_k\).
+\item \(p_k\) and \(q_k\) satisfy the conditions, and \(p_k'Aq_k=\sigma_k\): for \(k\leqslant r\), \(Aq_k=\sigma_kp_k\); for
+\(k>r\), \(Aq_k=0\) (Corollary~\ref{r9-cor-svd-subspaces}).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{definition}[\citeat{searle-khuri}{(9.3)}, \citeat{bapat}{Result~5.5}]\label{r9-def-spectral-norm}
+The \textbf{spectral norm} of \(A\in\R^{m\times n}\) is \(\lVert A\rVert_2=\sigma_1\), its largest singular value; and
+\(\lVert0\rVert_2=0\). It is not the Frobenius norm of Definition~\ref{r9-def-frobenius}, which some books also write
+\(\lVert A\rVert_2\).
+\end{definition}
+
+\begin{proposition}[\citeat{abadir-magnus}{Exercise~7.53(b)}, \citeat{bapat}{Result~5.5}]\label{r9-prop-spectral-norm}
+Let \(A\in\R^{m\times n}\).
+\begin{enumerate}
+\item \(\lVert A\rVert_2=\bigl(\lambda_1(A'A)\bigr)^{1/2}=\max_{x\ne0}\lVert Ax\rVert/\lVert x\rVert\); so
+\(\lVert Ax\rVert\leqslant\lVert A\rVert_2\lVert x\rVert\) for every \(x\in\R^n\), with equality at \(x=q_1\) if
+\(A\ne0\), where \(q_1\) is the first column of \(Q\) in an SVD of \(A\) as in Theorem~\ref{r9-thm-svd-props}. If
+\(\rank A=n\), then also \(\lVert Ax\rVert\geqslant\sigma_n\lVert x\rVert\) for every \(x\in\R^n\).
+\item \(\lVert A\rVert_2=\max\{u'Av:\lVert u\rVert=\lVert v\rVert=1\}\).
+\item \(\lVert UAV\rVert_2=\lVert A\rVert_2=\lVert A'\rVert_2\) for orthogonal \(U\in\R^{m\times m}\) and
+\(V\in\R^{n\times n}\).
+\item \(\lVert A\rVert_2\leqslant\lVert A\rVert_F\).
+\item If \(A\) is symmetric, then \(\lVert A\rVert_2=\max_i\lvert\lambda_i(A)\rvert=\max\{\lambda_1(A),-\lambda_n(A)\}\); if
+\(A\) is PSD, then \(\lVert A\rVert_2=\lambda_1(A)\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+For \(A=0\) every statement reads \(0=0\) or \(0\leqslant0\). Let \(A\ne0\), with an SVD as in
+Theorem~\ref{r9-thm-svd-props}.
+
+\needspace{3\baselineskip}
+(a)
+\begin{itemize}
+\item \(\lambda_1(A'A)=\sigma_1^2\) (Theorem~\ref{r9-thm-svd-props}(a)).
+\item For \(x\ne0\), \(\lVert Ax\rVert^2/\lVert x\rVert^2=x'A'Ax/x'x\leqslant\lambda_1(A'A)=\sigma_1^2\)
+(Theorem~\ref{r9-thm-rayleigh}(a) for \(A'A\)); take square roots.
+\item \(\lVert Aq_1\rVert=\lVert\sigma_1p_1\rVert=\sigma_1=\sigma_1\lVert q_1\rVert\) (Theorem~\ref{r9-thm-svd-props}(c)).
+\item Let \(\rank A=n\). Then \(A'A\in\R^{n\times n}\) has the \(n\) nonzero eigenvalues
+\(\sigma_1^2\geqslant\dots\geqslant\sigma_n^2\) (Theorem~\ref{r9-thm-svd-props}(a), with \(r=n\)), so
+\(\lambda_n(A'A)=\sigma_n^2\). For \(x\ne0\), \(\lVert Ax\rVert^2=x'A'Ax\geqslant\lambda_n(A'A)\,x'x=\sigma_n^2\lVert x\rVert^2\)
+(Theorem~\ref{r9-thm-rayleigh}(a) for \(A'A\)); take square roots. For \(x=0\) both sides are \(0\).
+\end{itemize}
+
+(b) This is Theorem~\ref{r9-thm-sigma-max}(a). (c) By Theorem~\ref{r9-thm-svd-props}(e), the three matrices have the same
+largest singular value. (d) \(\sigma_1^2\leqslant\sigma_1^2+\dots+\sigma_r^2=\lVert A\rVert_F^2\)
+(Theorem~\ref{r9-thm-svd-props}(d)).
+
+(e) By Theorem~\ref{r9-thm-svd-props}(e), \(\sigma_1\) is the largest \(\lvert\lambda_i\rvert\) with \(\lambda_i\ne0\),
+which is \(\max_i\lvert\lambda_i\rvert\), as \(A\ne0\) has a nonzero eigenvalue (Theorem~\ref{r8-thm-rank-eigen}). As
+\(\lambda_n\leqslant\lambda_i\leqslant\lambda_1\), \(\lvert\lambda_i\rvert\leqslant\max\{\lambda_1,-\lambda_n\}\), with equality
+for \(i=1\) or \(i=n\). If \(A\) is PSD, then \(\lambda_n\geqslant0\) (Theorem~\ref{r8-thm-eigen-criterion}(a)), and the
+maximum is \(\lambda_1\).
+\end{proof}
+
+\needspace{10\baselineskip}
+\begin{proposition}[\citeat{knapp-basic-real-analysis}{Ch.~III, Proposition~3.2}]\label{r9-prop-spectral-norm-rules}
+Let \(A,B\in\R^{m\times n}\).
+\begin{enumerate}
+\item \(\lVert A\rVert_2\geqslant0\), with equality only for \(A=0\); \(\lVert cA\rVert_2=\lvert c\rvert\,\lVert A\rVert_2\) for
+\(c\in\R\); and \(\lVert A+B\rVert_2\leqslant\lVert A\rVert_2+\lVert B\rVert_2\).
+\item \(\lVert AC\rVert_2\leqslant\lVert A\rVert_2\lVert C\rVert_2\) for \(C\in\R^{n\times p}\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+By Proposition~\ref{r9-prop-spectral-norm}(a), every matrix \(M\in\R^{s\times t}\) has
+\(\lVert M\rVert_2=\max_{x\ne0}\lVert Mx\rVert/\lVert x\rVert\) and \(\lVert Mx\rVert\leqslant\lVert M\rVert_2\lVert x\rVert\)
+for every \(x\in\R^t\).
+
+\needspace{3\baselineskip}
+(a)
+\begin{itemize}
+\item \(\lVert A\rVert_2\) is a maximum of numbers \(\geqslant0\). If \(\lVert A\rVert_2=0\), then \(Ax=0\) for every \(x\),
+so \(A=[Ae_1\ \cdots\ Ae_n]=0\) (Theorem~\ref{r1-thm-views}(b)).
+\item \(\lVert cAx\rVert=\lvert c\rvert\,\lVert Ax\rVert\) for every \(x\) (the remarks after
+Definition~\ref{r6-def-inner}), so the maxima for \(cA\) and for \(A\) differ by the factor \(\lvert c\rvert\).
+\item For every \(x\ne0\), by Theorem~\ref{r6-thm-cauchy-schwarz}(b),
+\[
+\lVert(A+B)x\rVert=\lVert Ax+Bx\rVert\leqslant\lVert Ax\rVert+\lVert Bx\rVert
+\leqslant\bigl(\lVert A\rVert_2+\lVert B\rVert_2\bigr)\lVert x\rVert
+\]
+Divide by \(\lVert x\rVert\) and take the maximum over \(x\ne0\).
+\end{itemize}
+(b) For every \(x\ne0\) in \(\R^p\),
+\(\lVert ACx\rVert=\lVert A(Cx)\rVert\leqslant\lVert A\rVert_2\lVert Cx\rVert\leqslant\lVert A\rVert_2\lVert C\rVert_2\lVert x\rVert\).
+Divide by \(\lVert x\rVert\) and take the maximum over \(x\ne0\).
+\end{proof}
+
+\subsection*{Approximation by matrices of lower rank}
+
+\begin{theorem}[Eckart--Young; \citeat{harville}{Theorem~21.12.4}]\label{r12-thm-eckart-young}
+Let \(A\in\R^{m\times n}\) have rank \(r\) and singular value decomposition
+\[
+A=P\begin{pmatrix}D&0\\0&0\end{pmatrix}Q'=\sigma_1p_1q_1'+\dots+\sigma_rp_rq_r',\qquad
+D=\diag(\sigma_1,\dots,\sigma_r),\quad\sigma_1\geqslant\dots\geqslant\sigma_r>0
+\]
+(Theorem~\ref{r9-thm-svd}), let \(1\leqslant k<r\), and let \(A_k=\sigma_1p_1q_1'+\dots+\sigma_kp_kq_k'\), which has rank \(k\). For
+every \(B\in\R^{m\times n}\) with \(\rank B\leqslant k\):
+\begin{enumerate}
+\item \(\lVert A-B\rVert_F^2\geqslant\sigma_{k+1}^2+\dots+\sigma_r^2\) (Definition~\ref{r9-def-frobenius}), with equality for \(B=A_k\);
+\item \(\lVert A-B\rVert_2\geqslant\sigma_{k+1}\) (Definition~\ref{r9-def-spectral-norm}), with equality for \(B=A_k\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item Let \(s=\rank B\leqslant k\). Take an orthonormal basis \(u_1,\dots,u_s\) of \(\mathcal C(B)\) and, as
+\(\dim\mathcal C(B)^\perp=m-s\geqslant k-s\) (Theorem~\ref{r6-thm-complement}(c); \(k<r\leqslant m\)), \(k-s\) vectors
+\(u_{s+1},\dots,u_k\) of an orthonormal basis of \(\mathcal C(B)^\perp\) (Theorems~\ref{thm:r4-dimension}
+and~\ref{r6-thm-gram-schmidt}). Then \(U=[u_1\ \cdots\ u_k]\) has \(U'U=I_k\), as \(\mathcal C(B)\perp\mathcal C(B)^\perp\), and
+\(\mathcal C(B)\subseteq\mathcal C(U)\):
+column \(j\) of \(B\) is \(U\ell_j\) for some \(\ell_j\in\R^k\), so \(B=UL\) with \(L=[\ell_1\ \cdots\ \ell_n]\)
+(Theorem~\ref{r1-thm-views}(a)). It therefore suffices to show
+\(\lVert UL-A\rVert_F^2\geqslant\sigma_{k+1}^2+\dots+\sigma_r^2\) for all \(U\in\R^{m\times k}\) with \(U'U=I_k\) and all
+\(L\in\R^{k\times n}\).
+\item As \(U'U=I_k\), \((UL-A)'(UL-A)=L'L-A'UL-L'U'A+A'A\), and
+\(L'L-A'UL-L'U'A+A'UU'A=(L-U'A)'(L-U'A)\). By Definition~\ref{r9-def-frobenius} and Theorem~\ref{r1-thm-trace}(d),~(b),
+\[
+\lVert UL-A\rVert_F^2=\tr\bigl[(L-U'A)'(L-U'A)\bigr]-\tr(A'UU'A)+\tr(A'A)\geqslant\tr(A'A)-\tr(U'AA'U)
+\]
+\item \(Q'Q=I_n\), so \(AA'=P\diag(\sigma_1^2,\dots,\sigma_r^2,0,\dots,0)P'\) (Theorem~\ref{r5b-thm-block}(c)). Thus
+\(\tr(A'A)=\tr(AA')=\sigma_1^2+\dots+\sigma_r^2\) (Theorem~\ref{r1-thm-trace}(b), \(P'P=I_m\)), and the columns of \(P\)
+are orthonormal eigenvectors of the symmetric matrix \(AA'\) for the eigenvalues
+\(\sigma_1^2\geqslant\dots\geqslant\sigma_r^2\geqslant0=\dots=0\) (Theorem~\ref{r8-thm-spectral}(c)).
+\item By Theorem~\ref{r12-thm-kyfan}(a) for \(AA'\in\R^{m\times m}\), \(\tr(U'AA'U)\leqslant\sigma_1^2+\dots+\sigma_k^2\). Hence
+\(\lVert UL-A\rVert_F^2\geqslant\sum_{i\leqslant r}\sigma_i^2-\sum_{i\leqslant k}\sigma_i^2=\sigma_{k+1}^2+\dots+\sigma_r^2\).
+\item \(A-A_k=\sum_{i=k+1}^r\sigma_ip_iq_i'=PEQ'\) (Theorem~\ref{r1-thm-views}(d)), where \(E\in\R^{m\times n}\) has the
+entries \(\sigma_{k+1},\dots,\sigma_r\) in positions \((k+1,k+1),\dots,(r,r)\) and zeros elsewhere. For orthogonal \(P\),
+\(Q\), \(\lVert PEQ'\rVert_F^2=\tr(QE'P'PEQ')=\tr(E'EQ'Q)=\tr(E'E)=\sigma_{k+1}^2+\dots+\sigma_r^2\)
+(Theorem~\ref{r1-thm-trace}(b)): equality holds.
+\item Likewise \(A_k=PE_kQ'\), where \(E_k\) has \(\sigma_1,\dots,\sigma_k\) in positions \((1,1),\dots,(k,k)\); its
+nonzero columns \(\sigma_ie_i\) are independent, so \(\rank A_k=\rank E_k=k\)
+(Theorem~\ref{thm:r4-rank-product}(d)).
+\end{itemize}
+(b)
+\begin{itemize}
+\item Let \(\rank B\leqslant k\). Then \(\dim\mathcal N(B)=n-\rank B\geqslant n-k\) (Theorem~\ref{thm:r4-rank-nullity}), and
+\(T=\Span\{q_1,\dots,q_{k+1}\}\) has dimension \(k+1\) (orthonormal vectors are independent,
+Proposition~\ref{r6-prop-orthogonal-list}(b)). As \((n-k)+(k+1)>n\), there is a unit vector \(x\in\mathcal N(B)\cap T\)
+(Lemma~\ref{r9-lem-intersect}).
+\item Write \(x=c_1q_1+\dots+c_{k+1}q_{k+1}\); then \(c_1^2+\dots+c_{k+1}^2=x'x=1\), as the \(q_i\) are orthonormal. Since
+\(k+1\leqslant r\), \(Aq_i=\sigma_ip_i\) (Theorem~\ref{r9-thm-svd-props}(c)), so \(Ax=\sum_{i\leqslant k+1}c_i\sigma_ip_i\), and, the
+\(p_i\) being orthonormal,
+\[
+\lVert Ax\rVert^2=\sum_{i\leqslant k+1}c_i^2\sigma_i^2\geqslant\sigma_{k+1}^2\sum_{i\leqslant k+1}c_i^2=\sigma_{k+1}^2
+\]
+\item \(Bx=0\), so \((A-B)x=Ax\), and \(\lVert A-B\rVert_2\geqslant\lVert(A-B)x\rVert=\lVert Ax\rVert\geqslant\sigma_{k+1}\)
+(Proposition~\ref{r9-prop-spectral-norm}(a)).
+\item Equality: \(A-A_k=PEQ'\) with \(E\) as in (a), so \(\lVert A-A_k\rVert_2=\lVert E\rVert_2\)
+(Proposition~\ref{r9-prop-spectral-norm}(c)). For \(y\in\R^n\), \(\lVert Ey\rVert^2=\sum_{i=k+1}^r\sigma_i^2y_i^2\leqslant
+\sigma_{k+1}^2\lVert y\rVert^2\), with equality for \(y=e_{k+1}\); so \(\lVert E\rVert_2=\sigma_{k+1}\)
+(Proposition~\ref{r9-prop-spectral-norm}(a)).\qedhere
+\end{itemize}
+\end{proof}
+So \(A_k\) keeps the part \(\sigma_1^2+\dots+\sigma_k^2\) of \(\lVert A\rVert_F^2=\sigma_1^2+\dots+\sigma_r^2\) and loses
+\(\sigma_{k+1}^2+\dots+\sigma_r^2\); no matrix \(B\) of rank at most \(k\) does better:
+\(\lVert A\rVert_F^2-\lVert A-B\rVert_F^2\leqslant\sigma_1^2+\dots+\sigma_k^2\). As \(A_k=PE_kQ'\) in the proof of (a),
+\(\lVert A_k\rVert_F^2=\lVert E_k\rVert_F^2=\sigma_1^2+\dots+\sigma_k^2\) (Proposition~\ref{r9-prop-frobenius}(c)): \(A_k\)
+reproduces the proportion
+\[
+\frac{\lVert A_k\rVert_F^2}{\lVert A\rVert_F^2}=\frac{\sigma_1^2+\dots+\sigma_k^2}{\sigma_1^2+\dots+\sigma_r^2}
+\]
+of the sum of squares \(\lVert A\rVert_F^2=\sum_{i,j}a_{ij}^2\) of the entries of \(A\).
+
+\begin{corollary}[\citeat{harville}{Corollary~21.12.6}]\label{r12-cor-symmetric}
+Let \(A\in\R^{n\times n}\) be symmetric of rank \(r\geqslant2\). Number an orthonormal basis \(q_1,\dots,q_n\) of
+eigenvectors of \(A\), \(Aq_i=d_iq_i\), so that \(\lvert d_1\rvert\geqslant\dots\geqslant\lvert d_n\rvert\)
+(Theorem~\ref{r8-thm-spectral}(a)). Then \(d_1,\dots,d_r\) are the nonzero eigenvalues of \(A\), listed with
+multiplicity, and \(d_{r+1}=\dots=d_n=0\) (Theorems~\ref{r8-thm-spectral}(c) and~\ref{r8-thm-rank-eigen}). Let
+\(1\leqslant k<r\). For every \(B\in\R^{n\times n}\) with \(\rank B\leqslant k\),
+\[
+\lVert A-B\rVert_F^2\geqslant d_{k+1}^2+\dots+d_r^2
+\]
+with equality for \(B=d_1q_1q_1'+\dots+d_kq_kq_k'\). If \(A\) is PSD, then \(d_1\geqslant\dots\geqslant d_r>0\) are its
+positive eigenvalues.
+\end{corollary}
+\begin{proof}
+\begin{itemize}
+\item \(Q=[q_1\ \cdots\ q_n]\) is orthogonal and \(Q'AQ=\diag(d_1,\dots,d_n)\) (Theorem~\ref{r8-thm-spectral}(b)). Let
+\(\delta_i=-1\) if \(d_i<0\) and \(\delta_i=1\) otherwise, \(\Delta=\diag(\delta_1,\dots,\delta_n)\) and \(P=Q\Delta\), whose
+columns are \(p_i=\delta_iq_i\) (Theorem~\ref{r1-thm-views}(a)). Then \(P'P=\Delta Q'Q\Delta=\Delta^2=I_n\), and, as
+\(\Delta\) scales the rows (Theorem~\ref{r1-thm-views}(c)),
+\[
+P'AQ=\Delta Q'AQ=\diag(\delta_1d_1,\dots,\delta_nd_n)=\begin{pmatrix}D&0\\0&0\end{pmatrix},\qquad
+D=\diag(\lvert d_1\rvert,\dots,\lvert d_r\rvert)
+\]
+\item As \(PP'=I_n\) and \(QQ'=I_n\) (Proposition~\ref{r6-prop-orthonormal}(b)), \(A=P(P'AQ)Q'\) is a singular value
+decomposition of \(A\), with the singular values \(\sigma_i=\lvert d_i\rvert\) (\(i\leqslant r\)).
+\item By Theorem~\ref{r12-thm-eckart-young}(a),
+\(\lVert A-B\rVert_F^2\geqslant\sigma_{k+1}^2+\dots+\sigma_r^2=d_{k+1}^2+\dots+d_r^2\), with equality for
+\(B=\sum_{i\leqslant k}\sigma_ip_iq_i'=\sum_{i\leqslant k}\lvert d_i\rvert\delta_iq_iq_i'=\sum_{i\leqslant k}d_iq_iq_i'\), as
+\(\lvert d_i\rvert\delta_i=d_i\).
+\item If \(A\) is PSD, then every \(d_i\geqslant0\) (Theorem~\ref{r8-thm-eigen-criterion}(a)), so the nonzero ones are
+positive and \(\lvert d_i\rvert=d_i\).\qedhere
+\end{itemize}
+\end{proof}
+
+\subsection*{The SVD in statistics}
+
+\begin{proposition}[\citeat{tu-asm}{Proposition~5.23}]\label{r12-prop-svd}
+Let \(X\in\R^{n\times p}\) be a data matrix with \(r=\rank(C_nX)\geqslant1\).
+\begin{enumerate}
+\item Let \(C_nX=P\begin{pmatrix}D&0\\0&0\end{pmatrix}Q'=\sigma_1p_1q_1'+\dots+\sigma_rp_rq_r'\) be a singular value
+decomposition (Theorem~\ref{r9-thm-svd}). Then \(S=\frac1{n-1}Q\diag\bigl(\sigma_1^2,\dots,\sigma_r^2,0,\dots,0\bigr)Q'\).
+Hence \(\lambda_m=\sigma_m^2/(n-1)\) for \(m\leqslant r\) and \(\lambda_m=0\) for \(m>r\); the columns \(q_1,\dots,q_p\) of
+\(Q\) can serve as \(v_1,\dots,v_p\) in Theorem~\ref{r12-thm-pca}; with this choice \(z_m=\sigma_mp_m\) for \(m\leqslant r\);
+and \(\mathrm{PVE}_m=\sigma_m^2/(\sigma_1^2+\dots+\sigma_r^2)\).
+\item Conversely, let \(v_m\), \(\lambda_m\), \(z_m\) be as in Theorem~\ref{r12-thm-pca}. Then
+\(C_nX=\sigma_1p_1v_1'+\dots+\sigma_rp_rv_r'\) with \(\sigma_m=\lVert z_m\rVert=\sqrt{(n-1)\lambda_m}\) and
+\(p_m=z_m/\sigma_m\). The vectors \(p_1,\dots,p_r\) extend to an orthogonal \(P\in\R^{n\times n}\), and
+\(C_nX=P\left(\begin{smallmatrix}D&0\\0&0\end{smallmatrix}\right)V'\), \(D=\diag(\sigma_1,\dots,\sigma_r)\), is a singular
+value decomposition, with the sum above as its compact SVD.
+\end{enumerate}
+\end{proposition}
+\needspace{4\baselineskip}
+\begin{proof}
+(a)
+\begin{itemize}
+\item \(P'P=I_n\), so \((C_nX)'(C_nX)=Q\diag(\sigma_1^2,\dots,\sigma_r^2,0,\dots,0)Q'\) (Theorem~\ref{r5b-thm-block}(c)); divide
+by \(n-1\) (Proposition~\ref{r12-prop-data}(a)).
+\item So \(Q\) is orthogonal and its columns are orthonormal eigenvectors of \(S\) for
+\(\sigma_1^2/(n-1)\geqslant\dots\geqslant\sigma_r^2/(n-1)>0=\dots=0\). By Theorem~\ref{r8-thm-spectral}(c) these are the
+eigenvalues \(\lambda_1\geqslant\dots\geqslant\lambda_p\) of \(S\), and \(V=Q\) is allowed in Theorem~\ref{r12-thm-pca}.
+\item \(z_m=C_nXq_m=\sum_i\sigma_ip_i(q_i'q_m)=\sigma_mp_m\), as \(q_i'q_m=0\) for \(i\ne m\) and \(q_m'q_m=1\).
+\item By Proposition~\ref{r12-prop-pve}, \(\mathrm{PVE}_m=\lambda_m/\sum_l\lambda_l=\sigma_m^2/\sum_l\sigma_l^2\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item \(VV'=I_p\) (Proposition~\ref{r6-prop-orthonormal}(b)), so \(C_nX=(C_nXV)V'=\sum_{m=1}^pz_mv_m'\)
+(Theorem~\ref{r1-thm-views}(d)), and \(z_m=0\) for \(m>r\), as \(\lVert z_m\rVert^2=(n-1)\lambda_m=0\)
+(Theorem~\ref{r12-thm-pca}(a),(d)).
+\item \((C_nX)'(C_nX)=(n-1)S=V\diag\bigl((n-1)\lambda_1,\dots,(n-1)\lambda_p\bigr)V'\) (Proposition~\ref{r12-prop-data}(a)),
+with \((n-1)\lambda_1\geqslant\dots\geqslant(n-1)\lambda_p\), and its nonzero eigenvalues are
+\(\sigma_1^2\geqslant\dots\geqslant\sigma_r^2\) (Theorem~\ref{r12-thm-pca}(a)). So \(Q=V\) and \(D\) are as in
+Theorem~\ref{r9-thm-svd}(b) for \(A=C_nX\), and there \(P_1=C_nX[v_1\ \cdots\ v_r]D^{-1}=[p_1\ \cdots\ p_r]\), as
+\(C_nXv_m/\sigma_m=z_m/\sigma_m=p_m\). Theorem~\ref{r9-thm-svd}(b) extends \(P_1\) to an orthogonal \(P\) and gives
+\(C_nX=P\left(\begin{smallmatrix}D&0\\0&0\end{smallmatrix}\right)V'=\sum_{m\leqslant r}\sigma_mp_mv_m'\).\qedhere
+\end{itemize}
+\end{proof}
+For \(A=C_nX\) and \(1\leqslant k<r\), the choice \(v_m=q_m\) in Proposition~\ref{r12-prop-svd}(a) gives, in
+Theorem~\ref{r12-thm-eckart-young}, \(A_k=\sigma_1p_1q_1'+\dots+\sigma_kp_kq_k'=z_1v_1'+\dots+z_kv_k'=Z_kV_k'\)
+(Theorem~\ref{r1-thm-views}(d); \(Z_k\) and \(V_k\) as in Theorem~\ref{r12-thm-closest} with \(M=k\)) and
+\(\sigma_{k+1}^2+\dots+\sigma_r^2=(n-1)(\lambda_{k+1}+\dots+\lambda_p)\). So Theorem~\ref{r12-thm-eckart-young}(a) for
+\(C_nX\) is Theorem~\ref{r12-thm-closest}(a) again, in the form of the paragraph after it (a best approximation among the
+matrices of rank at most \(M=k\)): the same bound, attained at the same matrix \(Z_kV_k'\).
+
+\begin{example}\label{r12-exm-svd}
+For the data of Example~\ref{r12-exm-data}, Example~\ref{r12-exm-pca} and Proposition~\ref{r12-prop-svd}(b) give
+\(\sigma_1=\sqrt{4\cdot25}=10\), \(\sigma_2=\sqrt{4\cdot9}=6\), \(\sigma_3=\sqrt{4\cdot5}=2\sqrt5\), \(\sigma_4=\sqrt{4\cdot1}=2\) and
+\[
+p_1=\frac{z_1}{\sigma_1}=\frac12\begin{pmatrix}0\\1\\1\\-1\\-1\end{pmatrix},\qquad
+p_2=\frac{z_2}{\sigma_2}=\frac12\begin{pmatrix}0\\1\\-1\\1\\-1\end{pmatrix},\qquad
+p_3=\frac{z_3}{\sigma_3}=\frac1{2\sqrt5}\begin{pmatrix}4\\-1\\-1\\-1\\-1\end{pmatrix},\qquad
+p_4=\frac{z_4}{\sigma_4}=\frac12\begin{pmatrix}0\\1\\-1\\-1\\1\end{pmatrix}
+\]
+so \(C_5X=\sigma_1p_1v_1'+\sigma_2p_2v_2'+\sigma_3p_3v_3'+\sigma_4p_4v_4'\), with the loading vectors \(v_m=\frac12h_m\) of
+Example~\ref{r12-exm-pca}. For instance \(\sigma_1p_1v_1'=z_1v_1'=\frac12(0,5,5,-5,-5)'(1,1,1,1)\). Check:
+\(\sigma_1^2+\sigma_2^2+\sigma_3^2+\sigma_4^2=100+36+20+4=160\), which is \(\lVert C_5X\rVert_F^2=\tr\bigl((C_5X)'(C_5X)\bigr)=4\cdot40\)
+(Theorem~\ref{r9-thm-svd-props}(d)).
+\end{example}
+
+\begin{theorem}[\citeat{harville}{\S21.12b}, \citeat{abadir-magnus}{Exercise~10.23}]\label{r10-thm-mp-svd}
+Let \(A\in\R^{m\times n}\) have rank \(r\geqslant1\), and let \(A=P_1DQ_1'\), where \(P_1\in\R^{m\times r}\) and
+\(Q_1\in\R^{n\times r}\) have orthonormal columns (\(P_1'P_1=Q_1'Q_1=I_r\)) and \(D=\diag(\sigma_1,\dots,\sigma_r)\) with
+\(\sigma_1,\dots,\sigma_r>0\) (a compact SVD, Theorem~\ref{r9-thm-svd}). Then
+\[
+A^+=Q_1D^{-1}P_1'=\sigma_1^{-1}q_1p_1'+\dots+\sigma_r^{-1}q_rp_r'
+\]
+where \(p_i\) and \(q_i\) are the columns of \(P_1\) and \(Q_1\); and \(AA^+=P_1P_1'\), \(A^+A=Q_1Q_1'\). If moreover \(P=[P_1\ P_2]\in\R^{m\times m}\) and
+\(Q=[Q_1\ Q_2]\in\R^{n\times n}\) are orthogonal, so that
+\(A=P\left(\begin{smallmatrix}D&0\\0&0\end{smallmatrix}\right)Q'\), then
+\(A^+=Q\left(\begin{smallmatrix}D^{-1}&0\\0&0\end{smallmatrix}\right)P'\).
+\end{theorem}
+\begin{proof}
+Put \(G=Q_1D^{-1}P_1'\).
+\begin{itemize}
+\item \(AG=P_1DQ_1'Q_1D^{-1}P_1'=P_1P_1'\) and \(GA=Q_1D^{-1}P_1'P_1DQ_1'=Q_1Q_1'\) are symmetric: (P3), (P4) of Definition~\ref{r10-def-mp}.
+\item \(AGA=P_1P_1'P_1DQ_1'=P_1DQ_1'=A\) and \(GAG=Q_1Q_1'Q_1D^{-1}P_1'=G\): (P1), (P2).
+\item So \(G=A^+\) (Theorem~\ref{r10-thm-mp-unique}), and \(AA^+=AG=P_1P_1'\), \(A^+A=GA=Q_1Q_1'\). Row \(i\) of \(D^{-1}P_1'\) is \(\sigma_i^{-1}p_i'\), so the outer product
+expansion (Theorem~\ref{r1-thm-views}(d)) gives the sum.
+\item By the block product (Theorem~\ref{r5b-thm-block}),
+\(Q\left(\begin{smallmatrix}D^{-1}&0\\0&0\end{smallmatrix}\right)P'
+=[Q_1\ Q_2]\left(\begin{smallmatrix}D^{-1}P_1'\\0\end{smallmatrix}\right)=Q_1D^{-1}P_1'\).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{definition}[\citeat{bapat}{\S10.2}]\label{r12-def-cca}
+Let the \(p=p_1+p_2\) variables of a data matrix \(X\) be split into two groups, \(X=[X_1\ X_2]\) with
+\(X_1\in\R^{n\times p_1}\), and partition \(S\) accordingly:
+\[
+S=\begin{pmatrix}S_{11}&S_{12}\\S_{21}&S_{22}\end{pmatrix},\qquad S_{11}\in\R^{p_1\times p_1},\quad S_{21}=S_{12}'
+\]
+Assume that \(S_{11}\) and \(S_{22}\) are PD. For \(a\in\R^{p_1}\) and
+\(b\in\R^{p_2}\), Proposition~\ref{r12-prop-data}(b), applied to \((a',0')'\) and \((0',b')'\), shows that \(X_1a\) and
+\(X_2b\) have sample variances \(a'S_{11}a\), \(b'S_{22}b\) and sample covariance \(a'S_{12}b\)
+(Theorem~\ref{r5b-thm-block}(c)).
+\begin{itemize}
+\item A \textbf{first canonical pair} is a pair \((a_1,b_1)\) that maximizes \(a'S_{12}b\) subject to
+\(a'S_{11}a=b'S_{22}b=1\); the maximum \(\rho_1\) is the \textbf{first canonical correlation}.
+\item For \(k\geqslant2\), once \((a_1,b_1),\dots,(a_{k-1},b_{k-1})\) are chosen, a \textbf{\(k\)th canonical pair}
+maximizes \(a'S_{12}b\) subject to \(a'S_{11}a=b'S_{22}b=1\) and \(a'S_{11}a_i=b'S_{22}b_i=0\) for \(i<k\); the maximum
+\(\rho_k\) is the \textbf{\(k\)th canonical correlation}.
+\end{itemize}
+\end{definition}
+When both variances are \(1\), \(a'S_{12}b\) is the sample correlation (Definition~\ref{r12-def-correlation}) \(a'S_{12}b/(a'S_{11}a\cdot b'S_{22}b)^{1/2}\) of
+\(X_1a\) and \(X_2b\); the side conditions make \(X_1a\) uncorrelated with \(X_1a_i\), and \(X_2b\) with \(X_2b_i\) (\(i<k\)).
+
+\begin{theorem}[\citeat{bapat}{\S10.2}]\label{r12-thm-cca}
+In Definition~\ref{r12-def-cca}, let \(K=S_{11}^{-1/2}S_{12}S_{22}^{-1/2}\in\R^{p_1\times p_2}\) (Theorem~\ref{r8-thm-sqrt})
+have rank \(s\geqslant1\) and compact SVD \(K=\rho_1u_1w_1'+\dots+\rho_su_sw_s'\),
+\(\rho_1\geqslant\dots\geqslant\rho_s>0\) (Theorem~\ref{r9-thm-svd}), and put \(a_k=S_{11}^{-1/2}u_k\),
+\(b_k=S_{22}^{-1/2}w_k\). For \(k=1,\dots,s\): if \((a_i,b_i)\) (\(i<k\)) are taken as the first \(k-1\) canonical pairs,
+then \((a_k,b_k)\) is a \(k\)th canonical pair, and the \(k\)th canonical correlation is \(\rho_k\).
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+\item \(S_{11}^{1/2}\) is symmetric and invertible, with inverse \(S_{11}^{-1/2}\) (Theorem~\ref{r8-thm-sqrt}); so
+\(a\mapsto u=S_{11}^{1/2}a\) maps \(\R^{p_1}\) onto \(\R^{p_1}\), with inverse \(u\mapsto S_{11}^{-1/2}u\). Likewise
+\(b\mapsto w=S_{22}^{1/2}b\), and \(S_{11}^{1/2}a_i=u_i\), \(S_{22}^{1/2}b_i=w_i\).
+\item With \(u=S_{11}^{1/2}a\) and \(w=S_{22}^{1/2}b\): \(a'S_{11}a=a'S_{11}^{1/2}S_{11}^{1/2}a=u'u\),
+\(b'S_{22}b=w'w\), \(a'S_{12}b=u'S_{11}^{-1/2}S_{12}S_{22}^{-1/2}w=u'Kw\), \(a'S_{11}a_i=u'u_i\) and \(b'S_{22}b_i=w'w_i\).
+\item So the \(k\)th problem is to maximize \(u'Kw\) over unit vectors \(u\in\R^{p_1}\), \(w\in\R^{p_2}\) with
+\(u\perp u_1,\dots,u_{k-1}\) and \(w\perp w_1,\dots,w_{k-1}\). By Theorem~\ref{r9-thm-sigma-max}(a),(b), the maximum is \(\rho_k\),
+attained at \(u=u_k\), \(w=w_k\), that is, at \(a=a_k\), \(b=b_k\).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{example}\label{r12-exm-cca}
+For the data of Example~\ref{r12-exm-data}, take variables \(1\), \(2\) as the first group and variables \(3\), \(4\) as
+the second:
+\[
+S_{11}=S_{22}=\begin{pmatrix}10&7\\7&10\end{pmatrix},\qquad S_{12}=\begin{pmatrix}5&3\\3&5\end{pmatrix}
+\]
+\begin{itemize}
+\item \(I_2=\bar J_2+C_2\), where \(\bar J_2\) and \(C_2\) are symmetric and idempotent and
+\(\bar J_2C_2=\bar J_2-\bar J_2^2=0\) (Definition~\ref{r1-def-ones}, Proposition~\ref{r1-prop-centering}); also
+\(C_2\bar J_2=(\bar J_2C_2)'=0\). As \(\bar J_2=\frac12\left(\begin{smallmatrix}1&1\\1&1\end{smallmatrix}\right)\) and
+\(C_2=\frac12\left(\begin{smallmatrix}1&-1\\-1&1\end{smallmatrix}\right)\),
+\[
+S_{11}=S_{22}=17\bar J_2+3C_2,\qquad S_{12}=8\bar J_2+2C_2
+\]
+\item So \((\sqrt{17}\bar J_2+\sqrt3C_2)^2=17\bar J_2+3C_2=S_{11}\), and \(\sqrt{17}\bar J_2+\sqrt3C_2\) is PSD, as
+\(x'(\sqrt{17}\bar J_2+\sqrt3C_2)x=\sqrt{17}\lVert\bar J_2x\rVert^2+\sqrt3\lVert C_2x\rVert^2\). By
+Theorem~\ref{r8-thm-sqrt}, \(S_{11}^{1/2}=S_{22}^{1/2}=\sqrt{17}\bar J_2+\sqrt3C_2\), and
+\(S_{11}^{-1/2}=S_{22}^{-1/2}=\frac1{\sqrt{17}}\bar J_2+\frac1{\sqrt3}C_2\), since the product of the two is
+\(\bar J_2+C_2=I_2\).
+\item Multiplying out, with \(\bar J_2^2=\bar J_2\), \(C_2^2=C_2\) and \(\bar J_2C_2=C_2\bar J_2=0\),
+\[
+K=S_{11}^{-1/2}S_{12}S_{22}^{-1/2}=\frac8{17}\bar J_2+\frac23C_2=\frac1{51}\begin{pmatrix}29&-5\\-5&29\end{pmatrix}
+\]
+With \(u_1=w_1=\frac1{\sqrt2}(1,-1)'\) and \(u_2=w_2=\frac1{\sqrt2}(1,1)'\), \(C_2=u_1u_1'\) and \(\bar J_2=u_2u_2'\), so
+\(K=\frac23u_1w_1'+\frac8{17}u_2w_2'\). As \(\frac23>\frac8{17}>0\) and \(u_1,u_2\) are orthonormal, this is a compact
+SVD with \(s=2\), \(\rho_1=\frac23\) and \(\rho_2=\frac8{17}\).
+\item By Theorem~\ref{r12-thm-cca}, the canonical correlations are \(\frac23\) and \(\frac8{17}\), with
+\[
+a_1=b_1=S_{11}^{-1/2}u_1=\frac1{\sqrt3}u_1=\frac1{\sqrt6}\begin{pmatrix}1\\-1\end{pmatrix},\qquad
+a_2=b_2=S_{11}^{-1/2}u_2=\frac1{\sqrt{17}}u_2=\frac1{\sqrt{34}}\begin{pmatrix}1\\1\end{pmatrix}
+\]
+as \(C_2u_1=u_1\), \(\bar J_2u_1=0\), \(\bar J_2u_2=u_2\) and \(C_2u_2=0\). The first pair contrasts variable \(1\) with
+variable \(2\), and variable \(3\) with variable \(4\); the second pair adds them. Check:
+\(a_1'S_{11}a_1=\frac16\cdot6=1\), \(a_1'S_{12}b_1=\frac16\cdot4=\frac23\), \(a_2'S_{11}a_2=\frac1{34}\cdot34=1\),
+\(a_2'S_{12}b_2=\frac1{34}\cdot16=\frac8{17}\) and \(a_2'S_{11}a_1=0\).
+\end{itemize}
+\end{example}
+
+\needspace{10\baselineskip}
+\begin{remark}[\citeat{bapat}{\S10.2}]\label{r12-rem-pop-cca}
+Canonical correlations are also defined for two random vectors \(x\in\R^{p_1}\) and \(y\in\R^{p_2}\). Let
+\[
+\var\begin{pmatrix}x\\y\end{pmatrix}=\Sigma=\begin{pmatrix}\Sigma_{11}&\Sigma_{12}\\\Sigma_{21}&\Sigma_{22}\end{pmatrix},\qquad
+\Sigma_{11}\in\R^{p_1\times p_1}
+\]
+with \(\Sigma_{11}=\var(x)\) and \(\Sigma_{22}=\var(y)\) PD (Definition~\ref{r11-def-random}). For
+\(a\in\R^{p_1}\) and \(b\in\R^{p_2}\), the matrix
+\(T=\left(\begin{smallmatrix}a'&0'\\0'&b'\end{smallmatrix}\right)\in\R^{2\times(p_1+p_2)}\) maps \((x',y')'\) to
+\((a'x,b'y)'\), and by Theorems~\ref{r11-thm-linear}(b) and~\ref{r5b-thm-block}(b),(c)
+\[
+\var\begin{pmatrix}a'x\\b'y\end{pmatrix}=T\Sigma T'
+=\begin{pmatrix}a'\Sigma_{11}a&a'\Sigma_{12}b\\b'\Sigma_{21}a&b'\Sigma_{22}b\end{pmatrix}
+\]
+So \(a'x\) and \(b'y\) have the variances \(a'\Sigma_{11}a\), \(b'\Sigma_{22}b\) and the covariance \(a'\Sigma_{12}b\); and, by
+Theorem~\ref{r12-thm-pop-pca}(a) for \(x\) and for \(y\), \(\cov(a'x,a_i'x)=a'\Sigma_{11}a_i\) and
+\(\cov(b'y,b_i'y)=b'\Sigma_{22}b_i\). These are the expressions of Definition~\ref{r12-def-cca} with \(\Sigma_{jl}\) in
+place of \(S_{jl}\). Canonical pairs \((a_k,b_k)\) and canonical
+correlations of \(x\) and \(y\) are defined as there, with the variances and covariances of \(a'x\) and \(b'y\). The proof of
+Theorem~\ref{r12-thm-cca} uses only that \(S_{11}\) and \(S_{22}\) are PD. Hence the canonical correlations of \(x\) and \(y\)
+are the singular values \(\rho_1\geqslant\dots\geqslant\rho_s>0\) of \(\Sigma_{11}^{-1/2}\Sigma_{12}\Sigma_{22}^{-1/2}\), attained at
+\(a_k=\Sigma_{11}^{-1/2}u_k\), \(b_k=\Sigma_{22}^{-1/2}w_k\) for its singular vectors \(u_k\), \(w_k\).
+With \(K=\Sigma_{11}^{-1/2}\Sigma_{12}\Sigma_{22}^{-1/2}\), \(KK'=\Sigma_{11}^{-1/2}B\Sigma_{11}^{-1/2}\) for the symmetric
+\(B=\Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}\), so \(\rho_1^2,\dots,\rho_s^2\) are the nonzero eigenvalues of \(KK'\)
+(Theorem~\ref{r9-thm-svd-props}(a)) and hence of \(\Sigma_{11}^{-1}\Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}\)
+(Corollary~\ref{r8-cor-real-eigen}(b) with \(A=\Sigma_{11}\)), the matrix named after Corollary~\ref{r8-cor-real-eigen}.
+If \(p_1=1\) and \(\Sigma_{12}\ne0\), then \(s=1\) and \(\rho_1^2=\Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}/\Sigma_{11}\): the canonical
+correlation of the random variable \(x\) and \(y\) is the multiple correlation coefficient \(r_{x(y)}\) of
+Proposition~\ref{r9-prop-multiple-correlation}, with \(\Sigma_{11}\), \(\Sigma_{21}\), \(\Sigma_{22}\) in the roles of
+\(\sigma^2\), \(u\), \(\Sigma\).
+\end{remark}
+
+\subsection*{The condition number}
+
+\begin{definition}[\citeat{tu-asm}{Definition~P.52}]\label{r9-def-condition}
+The \textbf{condition number} of an invertible \(A\in\R^{n\times n}\) is \(\kappa(A)=\lVert A\rVert_2\lVert A^{-1}\rVert_2\).
+For \(X\in\R^{n\times p}\) of full column rank with \(p<n\), with singular values \(\sigma_1\geqslant\dots\geqslant\sigma_p>0\),
+put \(\kappa(X)=\sigma_1/\sigma_p\) (for \(p=n\) the first definition gives the same number, by
+Proposition~\ref{r9-prop-condition}(a)).
+\end{definition}
+
+\begin{proposition}[\citeat{tu-asm}{Proposition~P.53, Corollary~P.55}]\label{r9-prop-condition}
+\begin{enumerate}
+\item Let \(A\in\R^{n\times n}\) be invertible. Then \(A\) has \(n\) singular values \(\sigma_1\geqslant\dots\geqslant\sigma_n>0\),
+\(\lVert A^{-1}\rVert_2=1/\sigma_n\), and \(\kappa(A)=\sigma_1/\sigma_n\geqslant1\). If \(A\) is PD, with eigenvalues
+\(\lambda_1\geqslant\dots\geqslant\lambda_n>0\), then \(\kappa(A)=\lambda_1/\lambda_n\).
+\item If \(X\in\R^{n\times p}\) has full column rank, then \(X'X\) is PD and \(\kappa(X'X)=\kappa(X)^2\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a)
+\begin{itemize}
+\item \(\rank A=n\) (Theorem~\ref{thm:r4-rank-rules}(d)), so \(A=PDQ'\) with \(P\), \(Q\) orthogonal and
+\(D=\diag(\sigma_1,\dots,\sigma_n)\), \(\sigma_1\geqslant\dots\geqslant\sigma_n>0\) (Theorem~\ref{r9-thm-svd}(b), with \(r=n\)).
+\item \(P^{-1}=P'\) and \(Q^{-1}=Q'\) (Proposition~\ref{r6-prop-orthonormal}(b)), so \(A^{-1}=QD^{-1}P'\)
+(Theorem~\ref{r2-thm-inverse-props}(b)), and \(\lVert A^{-1}\rVert_2=\lVert D^{-1}\rVert_2\)
+(Proposition~\ref{r9-prop-spectral-norm}(c)).
+\item For \(x\in\R^n\), \(\lVert D^{-1}x\rVert^2=\sum_ix_i^2/\sigma_i^2\leqslant\lVert x\rVert^2/\sigma_n^2\), with equality for
+\(x=e_n\); so \(\lVert D^{-1}\rVert_2=1/\sigma_n\) (Proposition~\ref{r9-prop-spectral-norm}(a)).
+\item Hence \(\kappa(A)=\sigma_1\cdot\frac1{\sigma_n}\geqslant1\) (Definition~\ref{r9-def-spectral-norm}). If \(A\) is PD, its
+singular values are its eigenvalues (Theorem~\ref{r9-thm-svd-props}(e)), so \(\kappa(A)=\lambda_1/\lambda_n\).
+\end{itemize}
+(b) \(X'X\) is PD (Theorem~\ref{r8-thm-XtX}). Its eigenvalues are \(\sigma_1^2\geqslant\dots\geqslant\sigma_p^2>0\)
+(Theorem~\ref{r9-thm-svd-props}(a), with \(r=p\)), so by (a), \(\kappa(X'X)=\sigma_1^2/\sigma_p^2=\kappa(X)^2\).
+\end{proof}
+
+\begin{theorem}[\citeat{tu-asm}{Theorem~P.54}]\label{r9-thm-conditioning}
+Let \(A\in\R^{n\times n}\) be invertible, \(Ax=b\ne0\), and \(A(x+\delta x)=b+\delta b\). Then
+\[
+\frac{\lVert\delta x\rVert}{\lVert x\rVert}\leqslant\kappa(A)\,\frac{\lVert\delta b\rVert}{\lVert b\rVert}
+\]
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+\item \(\lVert My\rVert\leqslant\lVert M\rVert_2\lVert y\rVert\) for every matrix \(M\) and vector \(y\)
+(Proposition~\ref{r9-prop-spectral-norm}(a)).
+\item Subtracting \(Ax=b\) from \(A(x+\delta x)=b+\delta b\) gives \(A\,\delta x=\delta b\), so \(\delta x=A^{-1}\delta b\) and
+\(\lVert\delta x\rVert\leqslant\lVert A^{-1}\rVert_2\lVert\delta b\rVert\).
+\item \(x\ne0\), as \(b\ne0\); and \(\lVert b\rVert=\lVert Ax\rVert\leqslant\lVert A\rVert_2\lVert x\rVert\), so
+\(1/\lVert x\rVert\leqslant\lVert A\rVert_2/\lVert b\rVert\).
+\item Multiplying the two bounds, both sides of each being \(\geqslant0\),
+\(\lVert\delta x\rVert/\lVert x\rVert\leqslant\lVert A^{-1}\rVert_2\lVert A\rVert_2\,\lVert\delta b\rVert/\lVert b\rVert\).\qedhere
+\end{itemize}
+\end{proof}
+A large \(\kappa(A)\) means that a small relative change of \(b\) may change the solution of \(Ax=b\) by a large relative
+amount. By Proposition~\ref{r9-prop-condition}(b), forming \(X'X\) squares the condition number of \(X\). A QR decomposition
+avoids this: if \(X\) has full column rank and \(X=QR\) (Theorem~\ref{r6-thm-qr}), then \(X'X=R'Q'QR=R'R\), so the normal
+equations \(X'Xb=X'y\) (Theorem~\ref{r10-thm-normal-equations}) read
+\(R'Rb=R'Q'y\), that is, \(Rb=Q'y\), as \(R'\) is invertible (Theorem~\ref{r2-thm-triangular}(a)); and
+\(R'R=X'X\) shows that \(R\) has the same singular values as \(X\) (Theorem~\ref{r9-thm-svd-props}(a)), so
+\(\kappa(R)=\kappa(X)\) (Proposition~\ref{r9-prop-condition}(a)). This is why least-squares estimates
+(Theorem~\ref{r10-thm-least-squares}) are computed in practice from \(Rb=Q'y\) rather than from \(X'X\).
+
+A large \(\kappa(X)\) also means that the columns of \(X\) are nearly linearly dependent, a near version of the exact
+collinearity of Proposition~\ref{r11-prop-collinearity}. Indeed, let \(X\in\R^{n\times p}\) have full column rank
+\(p\geqslant2\). A matrix \(B\in\R^{n\times p}\) has linearly dependent columns if and only if \(\rank B<p\)
+(Theorem~\ref{thm:r4-rank-rules}(b)), and by Theorem~\ref{r12-thm-eckart-young}(b) for \(A=X\) (so \(r=p\)) and
+\(k=p-1\), every such \(B\) has \(\lVert X-B\rVert_2\geqslant\sigma_p\), with equality for the matrix \(B=A_{p-1}\) of that
+theorem. So \(\sigma_p\) is the smallest spectral norm \(\lVert E\rVert_2\) of a change \(E\) for which \(X+E\) has
+linearly dependent columns, and relative to \(\lVert X\rVert_2=\sigma_1\) this distance is \(\sigma_p/\sigma_1=1/\kappa(X)\).
+
+\begin{example}\label{r9-exm-condition}
+The matrix
+\[
+A=\begin{pmatrix}2&0&1&-1\\0&2&1&1\\1&1&3&0\\-1&1&0&3\end{pmatrix}
+\]
+of Example~\ref{r8-exm-leading} is PD, with the eigenvalues \(4\), \(4\), \(1\), \(1\) and the eigenvectors \((1,1,2,0)'\),
+\((-1,1,0,2)'\) for \(4\) and \((1,1,-1,0)'\), \((1,-1,0,1)'\) for \(1\) (Example~\ref{r8-exm-leading}). So
+\(\kappa(A)=4/1=4\) (Proposition~\ref{r9-prop-condition}(a)). Take
+\(x=(1,1,2,0)'\), so that \(b=Ax=4x=(4,4,8,0)'\), and \(\delta b=(1,1,-1,0)'\). As \(A\,\delta b=\delta b\), the change of
+the solution is \(\delta x=A^{-1}\delta b=\delta b=(1,1,-1,0)'\). Then
+\[
+\frac{\lVert\delta x\rVert}{\lVert x\rVert}=\frac{\sqrt3}{\sqrt6},\qquad
+\frac{\lVert\delta b\rVert}{\lVert b\rVert}=\frac{\sqrt3}{\sqrt{96}}=\frac14\cdot\frac{\sqrt3}{\sqrt6}
+\]
+so the bound of Theorem~\ref{r9-thm-conditioning} holds with equality: the relative change of \(b\) is magnified four
+times in the solution.
+\end{example}
+
+\subsection*{The orthogonal Procrustes problem}
+
+\begin{theorem}[Orthogonal Procrustes; \citeat{horn-johnson}{\S7.4.5}, \citeat{prasolov}{Problem~34.2}]\label{r10-thm-procrustes}
+Let \(M\in\R^{n\times n}\), with an SVD \(M=P\left(\begin{smallmatrix}D&0\\0&0\end{smallmatrix}\right)Q'\)
+(Theorem~\ref{r9-thm-svd}; for \(M=0\) take \(P=Q=I_n\)) and the singular values \(\sigma_1,\dots,\sigma_n\), where
+\(\sigma_j=0\) for \(j>\rank M\).
+\begin{enumerate}
+\item For every orthogonal \(U\in\R^{n\times n}\), \(\tr(U'M)\leqslant\sigma_1+\dots+\sigma_n\), with equality for \(U=PQ'\).
+\item Let \(B,C\in\R^{n\times k}\) and \(M=CB'\). For every orthogonal \(U\in\R^{n\times n}\),
+\[
+\lVert UB-C\rVert_F^2\geqslant\lVert B\rVert_F^2+\lVert C\rVert_F^2-2(\sigma_1+\dots+\sigma_n)
+\]
+with equality for \(U=PQ'\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item \(\Delta=\left(\begin{smallmatrix}D&0\\0&0\end{smallmatrix}\right)=\diag(\sigma_1,\dots,\sigma_n)\), and \(P\), \(Q\), \(U\)
+are orthogonal: \(P'P=PP'=I_n\), and likewise for \(Q\), \(U\) (Proposition~\ref{r6-prop-orthonormal}(b)). So
+\(Z=Q'U'P\) is orthogonal, as \(Z'Z=P'UQQ'U'P=I_n\).
+\item By Theorem~\ref{r1-thm-trace}(b),
+\[
+\tr(U'M)=\tr(U'P\Delta Q')=\tr(Q'U'P\Delta)=\tr(Z\Delta)=z_{11}\sigma_1+\dots+z_{nn}\sigma_n
+\]
+since \(\Delta\) is diagonal.
+\item Column \(j\) of \(Z\) is a unit vector (\(Z'Z=I_n\)), so \(z_{jj}\leqslant1\); and \(\sigma_j\geqslant0\). Hence
+\(\tr(U'M)\leqslant\sigma_1+\dots+\sigma_n\).
+\item For \(U=PQ'\), \(Z=Q'QP'P=I_n\), and equality holds.
+\end{itemize}
+(b)
+\begin{itemize}
+\item \((UB)'(UB)=B'U'UB=B'B\), and \(\tr(C'UB)=\tr\bigl((C'UB)'\bigr)=\tr(B'U'C)=\tr(U'CB')\)
+(Theorem~\ref{r1-thm-trace}(a),(b)). So
+\[
+\lVert UB-C\rVert_F^2=\tr\bigl((UB-C)'(UB-C)\bigr)=\tr(B'B)-2\tr(U'CB')+\tr(C'C)
+\]
+\item By Definition~\ref{r9-def-frobenius}, \(\tr(B'B)=\lVert B\rVert_F^2\) and \(\tr(C'C)=\lVert C\rVert_F^2\); and (a) for
+\(M=CB'\) gives \(\tr(U'CB')\leqslant\sigma_1+\dots+\sigma_n\), with equality for \(U=PQ'\).\qedhere
+\end{itemize}
+\end{proof}
+In (b) the columns of \(B\) and \(C\) are two configurations of \(k\) points in \(\R^n\), and \(PQ'\) is an orthogonal
+transformation (a rotation, possibly composed with a reflection) that moves the first configuration as close as possible
+to the second; this is the \textbf{orthogonal Procrustes problem} of statistics (Procrustes analysis). For \(B=I_n\), (b)
+says that \(PQ'\) is an orthogonal matrix nearest to \(C=M\) in the Frobenius norm.
+
+\subsection*{Exercises}
+
+\begin{exercise}\label{r9-ex-gen-rayleigh-drill}
+Let
+\[
+A=\begin{pmatrix}2&4&0&2\\4&8&2&0\\0&2&2&4\\2&0&4&8\end{pmatrix},\qquad
+B=\begin{pmatrix}1&0&0&0\\0&4&0&0\\0&0&1&0\\0&0&0&4\end{pmatrix},\qquad
+y=\begin{pmatrix}2\\4\\1\\-4\end{pmatrix}
+\]
+and \(h_1=(1,1,1,1)'\), \(h_2=(1,-1,1,-1)'\), \(h_3=(1,1,-1,-1)'\), \(h_4=(1,-1,-1,1)'\).
+\begin{enumerate}
+\item Find \(C=B^{-1/2}AB^{-1/2}\), and check that \(h_1,\dots,h_4\) are eigenvectors of \(C\). Find the maximum and the
+minimum of \(x'Ax/x'Bx\) over \(x\ne0\), and vectors at which they are attained.
+\item Find the maximum of \((x'y)^2/x'Bx\) over \(x\ne0\), and a vector at which it is attained.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item \(B\) is PD (its eigenvalues \(1\), \(4\), \(1\), \(4\) are positive, Theorem~\ref{r8-thm-eigen-criterion}(a)).
+\(N=\diag(1,2,1,2)\) is PD with \(N^2=B\), so \(B^{1/2}=N\) (Theorem~\ref{r8-thm-sqrt}) and
+\(B^{-1/2}=\diag(1,\frac12,1,\frac12)\).
+\item Row \(i\) and column \(j\) of \(A\) are multiplied by the \(i\)th and the \(j\)th diagonal entry of \(B^{-1/2}\):
+\[
+C=B^{-1/2}AB^{-1/2}=\begin{pmatrix}2&2&0&1\\2&2&1&0\\0&1&2&2\\1&0&2&2\end{pmatrix}
+\]
+\item \(Ch_1=(5,5,5,5)'=5h_1\), \(Ch_2=(-1,1,-1,1)'=-h_2\), \(Ch_3=(3,3,-3,-3)'=3h_3\) and \(Ch_4=(1,-1,-1,1)'=h_4\). So the
+algebraic multiplicities \(\dim\mathcal N(C-cI)\) of \(c=5,3,1,-1\) are at least \(1\) (Theorem~\ref{r8-thm-rank-eigen});
+as all multiplicities add up to \(4\) (Definition~\ref{r7-def-eigenvalues}), the eigenvalues of \(C\) are \(\mu_1=5\),
+\(\mu_2=3\), \(\mu_3=1\) and \(\mu_4=-1\).
+\item By Theorem~\ref{r9-thm-gen-rayleigh}, the maximum is \(5\), attained at \(x=B^{-1/2}h_1=(1,\frac12,1,\frac12)'\), and so
+also at \((2,1,2,1)'\); the minimum is \(-1\), attained at \(B^{-1/2}h_2=(1,-\frac12,1,-\frac12)'\) and at \((2,-1,2,-1)'\).
+Check: at \(x=(2,1,2,1)'\), \(Ax=(10,20,10,20)'=5Bx\), so \(x'Ax=5x'Bx=5\cdot16=80\); at \(x=(2,-1,2,-1)'\),
+\(Ax=(-2,4,-2,4)'=-Bx\), so \(x'Ax=-x'Bx=-16\).
+\end{itemize}
+(b) By Theorem~\ref{r9-thm-cs-max}, the maximum is \(y'B^{-1}y=4+\frac{16}4+1+\frac{16}4=13\), attained at
+\(x=B^{-1}y=(2,1,1,-1)'\). Check: \((x'y)^2=(4+4+1+4)^2=13^2\) and \(x'Bx=4+4+1+4=13\).
+\end{solution}
+
+\begin{exercise}\label{r9-dr-fisher}
+Let
+\[
+S_p=\begin{pmatrix}1&1&0&0\\1&2&1&0\\0&1&2&1\\0&0&1&2\end{pmatrix}
+\]
+be the pooled sample covariance matrix of four variables in two groups of units (the paragraph after
+Theorem~\ref{r9-thm-cs-max}), and \(d=(1,2,1,1)'\) the difference of their mean vectors.
+\begin{enumerate}
+\item Show that \(S_p\) is PD.
+\item Solve \(S_pa=d\) by Gauss--Jordan elimination. Find the maximum of \((a'd)^2/a'S_pa\) over \(a\ne0\) and a vector at
+which it is attained.
+\item Compute \((a'd)^2/a'S_pa\) for \(a=d\) and for each variable alone (\(a=e_1,e_2,e_3,e_4\)).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) The leading principal minors are \(\Delta_1=1\), \(\Delta_2=2-1=1\), \(\Delta_3=1(4-1)-1(2-0)+0=1\) along row \(1\)
+(Theorem~\ref{r5d-thm-expansion}), and, along row \(1\) again,
+\[
+\Delta_4=1\cdot\det\begin{pmatrix}2&1&0\\1&2&1\\0&1&2\end{pmatrix}-1\cdot\det\begin{pmatrix}1&1&0\\0&2&1\\0&1&2\end{pmatrix}
+=\bigl(2(4-1)-1(2-0)\bigr)-1(4-1)=4-3=1
+\]
+All are \(>0\), so \(S_p\) is PD (Theorem~\ref{r8-thm-leading-minors}).
+
+(b) Row-reduce the augmented matrix:
+\[
+\begin{gathered}
+\left(\begin{array}{cccc|c}1&1&0&0&1\\1&2&1&0&2\\0&1&2&1&1\\0&0&1&2&1\end{array}\right)
+\xrightarrow{R_2\leftarrow R_2-R_1}
+\left(\begin{array}{cccc|c}1&1&0&0&1\\0&1&1&0&1\\0&1&2&1&1\\0&0&1&2&1\end{array}\right)
+\xrightarrow{R_3\leftarrow R_3-R_2}
+\left(\begin{array}{cccc|c}1&1&0&0&1\\0&1&1&0&1\\0&0&1&1&0\\0&0&1&2&1\end{array}\right)
+\\
+\xrightarrow{R_4\leftarrow R_4-R_3}
+\left(\begin{array}{cccc|c}1&1&0&0&1\\0&1&1&0&1\\0&0&1&1&0\\0&0&0&1&1\end{array}\right)
+\xrightarrow{R_3\leftarrow R_3-R_4}
+\left(\begin{array}{cccc|c}1&1&0&0&1\\0&1&1&0&1\\0&0&1&0&-1\\0&0&0&1&1\end{array}\right)
+\\
+\xrightarrow{R_2\leftarrow R_2-R_3}
+\left(\begin{array}{cccc|c}1&1&0&0&1\\0&1&0&0&2\\0&0&1&0&-1\\0&0&0&1&1\end{array}\right)
+\xrightarrow{R_1\leftarrow R_1-R_2}
+\left(\begin{array}{cccc|c}1&0&0&0&-1\\0&1&0&0&2\\0&0&1&0&-1\\0&0&0&1&1\end{array}\right)
+\end{gathered}
+\]
+So \(a=S_p^{-1}d=(-1,2,-1,1)'\); check: \(S_pa=(-1+2,\ -1+4-1,\ 2-2+1,\ -1+2)'=(1,2,1,1)'\). By
+Theorem~\ref{r9-thm-cs-max}, the maximum of \((a'd)^2/a'S_pa\) is \(d'S_p^{-1}d=d'a=-1+4-1+1=3\), attained at
+\(a=(-1,2,-1,1)'\): there \(a'd=3\) and \(a'S_pa=a'd=3\), and \(3^2/3=3\). The best combination gives the first and the third
+variable negative weights, although their mean differences are positive.
+
+(c) For \(a=d\): \(d'd=1+4+1+1=7\), \(S_pd=(3,6,5,3)'\) and \(d'S_pd=3+12+5+3=23\); so the ratio is \(7^2/23=\frac{49}{23}\).
+For \(a=e_j\) the ratio is \(d_j^2\) divided by the \(j\)th diagonal entry of \(S_p\): \(1/1=1\), \(4/2=2\), \(1/2\) and \(1/2\). All are below the maximum \(3\).
+\end{solution}
+
+\begin{exercise}[\citeat{bapat}{Ch.~8, Exercise~10}]\label{r9-ex-multiple-correlation}
+The random vector \((x_1,x_2,x_3)'\) has the covariance matrix
+\[
+V=\begin{pmatrix}3&-1&-1\\-1&3&-1\\-1&-1&3\end{pmatrix}
+\]
+Find the multiple correlation coefficient between \(x_1\) and \(x_2,x_3\), and a combination \(\alpha_1x_2+\alpha_2x_3\) with
+the largest correlation with \(x_1\). Check the result with the second expression of
+Proposition~\ref{r9-prop-multiple-correlation}.
+\end{exercise}
+\begin{solution}
+\begin{itemize}
+\item Partition \(V\) with \(y=x_1\) and \(x=(x_2,x_3)'\): \(\sigma^2=3\), \(u=(-1,-1)'\) and
+\(\Sigma=\left(\begin{smallmatrix}3&-1\\-1&3\end{smallmatrix}\right)\). \(\Sigma\) is PD: its leading principal minors are
+\(3\) and \(9-1=8\) (Theorem~\ref{r8-thm-leading-minors}).
+\item \(\det\Sigma=8\), so \(\Sigma^{-1}=\frac18\left(\begin{smallmatrix}3&1\\1&3\end{smallmatrix}\right)\)
+(Theorem~\ref{r5d-thm-adjugate}), and \(\alpha=\Sigma^{-1}u=\frac18(-4,-4)'=-\frac12(1,1)'\).
+\item \(u'\Sigma^{-1}u=u'\alpha=\frac12+\frac12=1\). By Proposition~\ref{r9-prop-multiple-correlation}, the largest squared
+correlation of \(x_1\) with a combination of \(x_2\), \(x_3\) is \(u'\Sigma^{-1}u/\sigma^2=\frac13\), attained at
+\(\alpha=-\frac12(1,1)'\), that is, for \(-\frac12(x_2+x_3)\) (or any nonzero multiple of it). The multiple correlation
+coefficient is \(\frac1{\sqrt3}\); the covariance \(\alpha'u=1\) is positive, so \(\cor\bigl(x_1,-\frac12(x_2+x_3)\bigr)=\frac1{\sqrt3}\).
+\item Second expression: along row \(1\) (Theorem~\ref{r5d-thm-expansion}),
+\(\det V=3(9-1)+1(-3-1)-1(1+3)=24-4-4=16\). So the leading principal minors of \(V\) are \(3\), \(9-1=8\) and
+\(\det V=16\), all positive, and \(V\) is PD (Theorem~\ref{r8-thm-leading-minors}), as
+Proposition~\ref{r9-prop-multiple-correlation}(b) requires. The \((1,1)\) entry of \(Z=V^{-1}\) is
+\(z_{11}=\det\Sigma/\det V=\frac8{16}=\frac12\) (Theorem~\ref{r5d-thm-adjugate}; the \((1,1)\) cofactor of \(V\) is
+\(\det\Sigma\)), and \(1-1/(\sigma^2z_{11})=1-\frac1{3\cdot\frac12}=1-\frac23=\frac13\).
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r9-dr-minimax}
+Let
+\[
+A=\begin{pmatrix}3&3&1&-1\\3&3&-1&1\\1&-1&-2&-2\\-1&1&-2&-2\end{pmatrix}
+\]
+and \(w=(1,-1,0,0)'\).
+\begin{enumerate}
+\item Check that \((1,1,0,0)'\), \((1,-1,1,-1)'\), \((1,-1,-1,1)'\) and \((0,0,1,1)'\) are eigenvectors of \(A\), and find the
+eigenvalues \(\lambda_1\geqslant\lambda_2\geqslant\lambda_3\geqslant\lambda_4\) of \(A\).
+\item Find an orthonormal basis of the subspace of the vectors \(u\perp w\). Use it to find the maximum and the minimum
+of \(u'Au\) over the unit vectors \(u\perp w\), and unit vectors at which they are attained.
+\item Check the inequality of Theorem~\ref{r9-thm-courant-fischer}(a) for \(k=2\) and that of
+Theorem~\ref{r9-thm-courant-fischer}(b) for \(k=3\), both with \(w_1=w\), and give a vector \(w_1\) for which each of them is
+an equality.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(A(1,1,0,0)'=(6,6,0,0)'\), \(A(1,-1,1,-1)'=(2,-2,2,-2)'\), \(A(1,-1,-1,1)'=(-2,2,2,-2)'\) and
+\(A(0,0,1,1)'=(0,0,-4,-4)'\): eigenvectors belonging to \(6\), \(2\), \(-2\) and \(-4\). So \(\dim\mathcal N(A-cI)\geqslant1\) for
+\(c=6,2,-2,-4\) (Theorem~\ref{r8-thm-rank-eigen}), and as the multiplicities add up to \(4\)
+(Definition~\ref{r7-def-eigenvalues}), these are all the eigenvalues, each simple: \(\lambda_1=6\), \(\lambda_2=2\),
+\(\lambda_3=-2\), \(\lambda_4=-4\). The unit eigenvectors are \(\pm q_i\), with \(q_1=\frac1{\sqrt2}(1,1,0,0)'\),
+\(q_2=\frac12(1,-1,1,-1)'\), \(q_3=\frac12(1,-1,-1,1)'\) and \(q_4=\frac1{\sqrt2}(0,0,1,1)'\). Check: \(\tr A=2=6+2-2-4\).
+
+\needspace{3\baselineskip}
+(b)
+\begin{itemize}
+\item \(u\perp w\) means \(u_1=u_2\). The vectors \(g_1=\frac1{\sqrt2}(1,1,0,0)'\), \(g_2=\frac1{\sqrt2}(0,0,1,1)'\) and
+\(g_3=\frac1{\sqrt2}(0,0,1,-1)'\) satisfy this and are orthonormal, hence linearly independent
+(Proposition~\ref{r6-prop-orthogonal-list}(b)); the subspace has dimension \(3\) (Theorem~\ref{r6-thm-complement}(c)), so
+they form an orthonormal basis of it (Theorem~\ref{thm:r4-counting}(d)).
+\item \(g_1=q_1\) and \(g_2=q_4\) are eigenvectors, so \(Ag_1=6g_1\) and \(Ag_2=-4g_2\); and
+\(Ag_3=\frac1{\sqrt2}(2,-2,0,0)'\), so \(g_3'Ag_3=\frac12(0,0,1,-1)(2,-2,0,0)'=0\). As \(A\) is symmetric,
+\(g_i'Ag_j=(Ag_i)'g_j\): so \(g_1'Ag_1=6\), \(g_2'Ag_2=-4\), \(g_1'Ag_j=6g_1'g_j=0\) for \(j=2,3\), and
+\(g_2'Ag_3=-4g_2'g_3=0\). With \(G=[g_1\ g_2\ g_3]\), therefore, \(G'AG=\diag(6,-4,0)\).
+\item By Lemma~\ref{r9-lem-compression}, the maximum is \(\lambda_1(G'AG)=6\), attained at \(u=Ge_1=g_1\), and the
+minimum is \(\lambda_3(G'AG)=-4\), attained at \(u=Ge_2=g_2\).
+\end{itemize}
+\needspace{3\baselineskip}
+(c)
+\begin{itemize}
+\item Theorem~\ref{r9-thm-courant-fischer}(a) with \(k=2\), \(w_1=w\): \(m(w)=6\geqslant\lambda_2=2\).
+\item Theorem~\ref{r9-thm-courant-fischer}(b) with \(k=3\), \(n-k=1\), \(w_1=w\): the minimum \(-4\leqslant\lambda_3=-2\).
+\item Equality holds in (a) for \(w_1=q_1\) and in (b) for \(w_1=q_4\): the maximum of \(u'Au\) over the unit vectors
+\(u\perp q_1\) is \(\lambda_2=2\), attained at \(q_2\), and the minimum over the unit vectors \(u\perp q_4\) is
+\(\lambda_3=-2\), attained at \(q_3\) (Theorem~\ref{r9-thm-constrained}).
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r9-ex-interlacing-drill}
+The symmetric matrix
+\[
+A=\begin{pmatrix}3&1&0&-1\\1&4&2&2\\0&2&4&2\\-1&2&2&4\end{pmatrix}
+\]
+has the eigenvalues \(8\), \(4\), \(2\), \(1\) (Exercise~\ref{r9-ex-rayleigh-drill}). Find the eigenvalues of \(B=A(1|1)\), and
+check the inequalities of Theorem~\ref{r9-thm-interlacing} for \(A\) and \(B\).
+\end{exercise}
+\begin{solution}
+\begin{itemize}
+\item Deleting row \(1\) and column \(1\) of \(A\) leaves
+\[
+B=\begin{pmatrix}4&2&2\\2&4&2\\2&2&4\end{pmatrix}=2I_3+2J_3
+\]
+\item \(2J_3=6\bar J_3\) and \(I_3=\bar J_3+C_3\) (Definition~\ref{r1-def-ones}), so \(B=8\bar J_3+2C_3\). As \(\bar J_3\one=\one\)
+and \(C_3\one=0\), \(B\one=8\one\); if \(\one'x=0\), then \(\bar J_3x=0\) and \(C_3x=x\), so \(Bx=2x\). Hence
+\(\frac1{\sqrt3}(1,1,1)'\), \(\frac1{\sqrt2}(1,-1,0)'\), \(\frac1{\sqrt6}(1,1,-2)'\) are orthonormal eigenvectors for \(8\), \(2\),
+\(2\), and these are the eigenvalues of \(B\) (Theorem~\ref{r8-thm-spectral}(c)): \(\lambda_1(B)=8\),
+\(\lambda_2(B)=\lambda_3(B)=2\).
+\item With \(\lambda_1(A)=8\), \(\lambda_2(A)=4\), \(\lambda_3(A)=2\), \(\lambda_4(A)=1\), the inequalities
+\(\lambda_k(A)\geqslant\lambda_k(B)\geqslant\lambda_{k+1}(A)\) (\(k=1,2,3\)) read
+\[
+8\geqslant8\geqslant4\geqslant2\geqslant2\geqslant2\geqslant1
+\]
+and they hold.
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r9-dr-monotone}
+Five units are measured on four variables; the rows of
+\[
+X=\begin{pmatrix}0&2&1&2\\2&0&0&2\\1&0&0&2\\0&1&2&2\\2&1&1&0\end{pmatrix}
+\]
+hold the values.
+\begin{enumerate}
+\item Find \(X'X\), check that \((1,1,1,2)'\), \((-2,1,1,0)'\), \((-2,-2,-2,3)'\) and \((0,-1,1,0)'\) are eigenvectors of it, and
+find its eigenvalues.
+\item A sixth unit with the values \(x'=(2,2,2,2)\) is added as a new row of \(X\). Find the new matrix \(X'X+xx'\), check
+that \((2,2,2,3)'\), \((-2,1,1,0)'\), \((-1,-1,-1,2)'\) and \((0,-1,1,0)'\) are eigenvectors of it, find its eigenvalues, and
+check Theorem~\ref{r9-thm-monotone}.
+\item Check Theorem~\ref{r9-thm-interlacing} for \(X'X\) and its \(3\times3\) submatrix \((X'X)(4|4)\), which belongs to the
+first three variables.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) The entries of \(X'X\) are the inner products of the columns of \(X\) (Theorem~\ref{r1-thm-views}(d)):
+\[
+X'X=\begin{pmatrix}9&2&2&6\\2&6&5&6\\2&5&6&6\\6&6&6&16\end{pmatrix}
+\]
+Then \(X'X(1,1,1,2)'=(25,25,25,50)'\), \(X'X(-2,1,1,0)'=(-14,7,7,0)'\), \(X'X(-2,-2,-2,3)'=(-8,-8,-8,12)'\) and
+\(X'X(0,-1,1,0)'=(0,-1,1,0)'\): eigenvectors belonging to \(25\), \(7\), \(4\) and \(1\). So \(\dim\mathcal N(X'X-cI)\geqslant1\) for
+these four \(c\) (Theorem~\ref{r8-thm-rank-eigen}); as the multiplicities add up to \(4\) (Definition~\ref{r7-def-eigenvalues}),
+the eigenvalues are \(25\), \(7\), \(4\) and \(1\).
+
+(b) \(xx'=4J_4\), the \(4\times4\) matrix with every entry \(4\), and
+\[
+X'X+xx'=\begin{pmatrix}13&6&6&10\\6&10&9&10\\6&9&10&10\\10&10&10&20\end{pmatrix}
+\]
+which is \(X'X\) for the \(6\times4\) data matrix (Theorem~\ref{r1-thm-views}(d)). Then
+\[
+\begin{gathered}
+(X'X+xx')(2,2,2,3)'=(80,80,80,120)',\qquad(X'X+xx')(-2,1,1,0)'=(-14,7,7,0)'
+\\
+(X'X+xx')(-1,-1,-1,2)'=(-5,-5,-5,10)',\qquad(X'X+xx')(0,-1,1,0)'=(0,-1,1,0)'
+\end{gathered}
+\]
+so, as in (a), the eigenvalues are \(40\), \(7\), \(5\) and \(1\). As \(xx'\) is PSD
+(\(v'xx'v=(x'v)^2\geqslant0\)), Theorem~\ref{r9-thm-monotone} applies, and indeed \(40\geqslant25\), \(7\geqslant7\),
+\(5\geqslant4\) and \(1\geqslant1\).
+
+(c) Deleting row \(4\) and column \(4\) of \(X'X\) leaves
+\[
+B=(X'X)(4|4)=\begin{pmatrix}9&2&2\\2&6&5\\2&5&6\end{pmatrix}
+\]
+the matrix of the inner products of the first three columns of \(X\). \(B(1,1,1)'=(13,13,13)'\), \(B(-2,1,1)'=(-14,7,7)'\) and
+\(B(0,-1,1)'=(0,-1,1)'\), so, as in (a), the eigenvalues of \(B\) are \(13\), \(7\) and \(1\). By Theorem~\ref{r9-thm-interlacing}
+(\(n=4\)), \(\lambda_k(X'X)\geqslant\lambda_k(B)\geqslant\lambda_{k+1}(X'X)\) for \(k=1,2,3\); indeed
+\[
+25\geqslant13\geqslant7\geqslant7\geqslant4\geqslant1\geqslant1
+\]
+\end{solution}
+
+\begin{exercise}\label{r9-ex-svd-drill}
+Let
+\[
+A=\begin{pmatrix}2&1\\1&2\\1&-1\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find an SVD and the compact SVD of \(A\).
+\item Find \(\lVert A\rVert_F\) and \(\lVert A\rVert_2\).
+\item Give orthonormal bases of the four subspaces of \(A\), and the matrix \(P_1P_1'\) of the projection onto
+\(\mathcal C(A)\); check that it equals \(A(A'A)^{-1}A'\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item \(A'A=\left(\begin{smallmatrix}6&3\\3&6\end{smallmatrix}\right)\), with characteristic polynomial
+\(t^2-12t+27=(t-9)(t-3)\) (Definition~\ref{r7-def-charpoly}(b)) and the unit eigenvectors \(q_1=\frac1{\sqrt2}(1,1)'\) for
+\(9\) and \(q_2=\frac1{\sqrt2}(1,-1)'\) for \(3\). So \(r=2\), \(\sigma_1=3\), \(\sigma_2=\sqrt3\), and \(Q=[q_1\ q_2]\).
+\item \(Aq_1=\frac1{\sqrt2}(3,3,0)'\) and \(Aq_2=\frac1{\sqrt2}(1,-1,2)'\), so \(p_1=\frac13Aq_1=\frac1{\sqrt2}(1,1,0)'\)
+and \(p_2=\frac1{\sqrt3}Aq_2=\frac1{\sqrt6}(1,-1,2)'\) (Theorem~\ref{r9-thm-svd}).
+\item \(\mathcal N(P_1')\): \(y_1+y_2=0\) and \(y_1-y_2+2y_3=0\) give \(y=t(1,-1,-1)'\); so \(p_3=\frac1{\sqrt3}(1,-1,-1)'\).
+\item Hence, with \(Q'=Q=\frac1{\sqrt2}\left(\begin{smallmatrix}1&1\\1&-1\end{smallmatrix}\right)\),
+\[
+A=\begin{pmatrix}\frac1{\sqrt2}&\frac1{\sqrt6}&\frac1{\sqrt3}\\[2pt]\frac1{\sqrt2}&-\frac1{\sqrt6}&-\frac1{\sqrt3}\\[2pt]
+0&\frac2{\sqrt6}&-\frac1{\sqrt3}\end{pmatrix}\begin{pmatrix}3&0\\0&\sqrt3\\0&0\end{pmatrix}Q',\qquad
+A=3p_1q_1'+\sqrt3\,p_2q_2'=\frac32\begin{pmatrix}1&1\\1&1\\0&0\end{pmatrix}+\frac12\begin{pmatrix}1&-1\\-1&1\\2&-2\end{pmatrix}
+\]
+\end{itemize}
+(b) \(\lVert A\rVert_F^2=4+1+1+4+1+1=12=9+3\) (Theorem~\ref{r9-thm-svd-props}(d)), so \(\lVert A\rVert_F=2\sqrt3\); and
+\(\lVert A\rVert_2=\sigma_1=3\leqslant2\sqrt3\) (Proposition~\ref{r9-prop-spectral-norm}(d)).
+
+\needspace{3\baselineskip}
+(c)
+\begin{itemize}
+\item By Corollary~\ref{r9-cor-svd-subspaces}: \(p_1,p_2\) is an orthonormal basis of \(\mathcal C(A)\), \(p_3\) of
+\(\mathcal N(A')\), \(q_1,q_2\) of \(\mathcal C(A')=\R^2\), and \(\mathcal N(A)=\{0\}\) (\(r=n=2\), no \(Q_2\)).
+\item \(P_1P_1'=p_1p_1'+p_2p_2'\) (Theorem~\ref{r1-thm-views}(d)):
+\[
+P_1P_1'=\frac12\begin{pmatrix}1&1&0\\1&1&0\\0&0&0\end{pmatrix}+\frac16\begin{pmatrix}1&-1&2\\-1&1&-2\\2&-2&4\end{pmatrix}
+=\frac13\begin{pmatrix}2&1&1\\1&2&-1\\1&-1&2\end{pmatrix}
+\]
+\item \(\det(A'A)=27\), so by Theorem~\ref{r5d-thm-adjugate}
+\[
+(A'A)^{-1}=\frac1{27}\begin{pmatrix}6&-3\\-3&6\end{pmatrix}=\frac19\begin{pmatrix}2&-1\\-1&2\end{pmatrix},\qquad
+A(A'A)^{-1}=\frac13\begin{pmatrix}1&0\\0&1\\1&-1\end{pmatrix}
+\]
+and
+\[
+A(A'A)^{-1}A'=\frac13\begin{pmatrix}2&1&1\\1&2&-1\\1&-1&2\end{pmatrix}=P_1P_1'
+\]
+\end{itemize}
+\end{solution}
+
+\begin{exercise}[cf.\ \citeat{harville}{Ch.~21, Exercise~26}, \citeat{harville-solutions}{Ch.~21, Exercise~26}]\label{r9-ex-svd-wide}
+Find an SVD and the compact SVD of \(A=\begin{pmatrix}1&0&1\\0&1&1\end{pmatrix}\) by applying Theorem~\ref{r9-thm-svd} to
+\(A'\), starting from the \(2\times2\) matrix \(AA'\).
+\end{exercise}
+\begin{solution}
+\begin{itemize}
+\item \(A'\in\R^{3\times2}\) has rank \(2\), and \((A')'A'=AA'=\left(\begin{smallmatrix}2&1\\1&2\end{smallmatrix}\right)\),
+with characteristic polynomial \(t^2-4t+3=(t-3)(t-1)\) and the unit eigenvectors \(p_1=\frac1{\sqrt2}(1,1)'\) for \(3\) and
+\(p_2=\frac1{\sqrt2}(1,-1)'\) for \(1\). So \(D=\diag(\sqrt3,1)\).
+\item Theorem~\ref{r9-thm-svd} for \(A'\), with \(P=[p_1\ p_2]\) in the role of \(Q\): the columns of \(A'PD^{-1}\) are
+\(q_1=\frac1{\sqrt3}A'p_1=\frac1{\sqrt6}(1,1,2)'\) and \(q_2=A'p_2=\frac1{\sqrt2}(1,-1,0)'\). A unit vector orthogonal to
+both: \(y_1+y_2+2y_3=0\) and \(y_1-y_2=0\) give \(q_3=\frac1{\sqrt3}(1,1,-1)'\).
+\item So \(Q'A'P=\left(\begin{smallmatrix}D\\0\end{smallmatrix}\right)\) with \(Q=[q_1\ q_2\ q_3]\), and transposing,
+\(P'AQ=[D\ \ 0]\):
+\[
+A=\frac1{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}\begin{pmatrix}\sqrt3&0&0\\0&1&0\end{pmatrix}
+\begin{pmatrix}\frac1{\sqrt6}&\frac1{\sqrt6}&\frac2{\sqrt6}\\[2pt]\frac1{\sqrt2}&-\frac1{\sqrt2}&0\\[2pt]
+\frac1{\sqrt3}&\frac1{\sqrt3}&-\frac1{\sqrt3}\end{pmatrix}
+\]
+\item The compact SVD is
+\(A=\sqrt3\,p_1q_1'+p_2q_2'=\frac12\left(\begin{smallmatrix}1&1&2\\1&1&2\end{smallmatrix}\right)
++\frac12\left(\begin{smallmatrix}1&-1&0\\-1&1&0\end{smallmatrix}\right)\). Also \(Aq_3=0\), so \(q_3\) spans
+\(\mathcal N(A)\).
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r9-dr-svd-rank1}
+Let
+\[
+A=\begin{pmatrix}1&1\\2&2\\2&2\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find \(\rank A\), the eigenvalues of \(A'A\), and an SVD of \(A\).
+\item Write down the compact SVD of \(A\) and orthonormal bases of the four subspaces of \(A\).
+\item Find \(\lVert A\rVert_F\), \(\lVert A\rVert_2\) and the matrix \(P_1P_1'\) of the projection onto \(\mathcal C(A)\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item The two columns are equal and nonzero, so \(\rank A=1=r\).
+\item \(A'A=\left(\begin{smallmatrix}9&9\\9&9\end{smallmatrix}\right)\), with characteristic polynomial
+\(t^2-18t=t(t-18)\) (Definition~\ref{r7-def-charpoly}(b)), and \(A'A(1,1)'=(18,18)'\), \(A'A(1,-1)'=0\). So the
+eigenvalues are \(18\) and \(0\), with the unit eigenvectors \(q_1=\frac1{\sqrt2}(1,1)'\) and \(q_2=\frac1{\sqrt2}(1,-1)'\);
+\(\sigma_1=\sqrt{18}=3\sqrt2\) and \(D=(3\sqrt2)\).
+\item \(P_1=AQ_1D^{-1}\) (Theorem~\ref{r9-thm-svd}): \(Aq_1=\frac1{\sqrt2}(2,4,4)'\), so
+\(p_1=\frac1{3\sqrt2}\cdot\frac1{\sqrt2}(2,4,4)'=\frac13(1,2,2)'\).
+\item \(\mathcal N(P_1')\) consists of the \(y\) with \(y_1+2y_2+2y_3=0\). The vectors \((2,1,-2)'\) and \((2,-2,1)'\) lie in it
+and are orthogonal (\(4-2-2=0\)); normalized, \(p_2=\frac13(2,1,-2)'\) and \(p_3=\frac13(2,-2,1)'\).
+\item Hence \(A=P\left(\begin{smallmatrix}D&0\\0&0\end{smallmatrix}\right)Q'\) with
+\[
+P=\frac13\begin{pmatrix}1&2&2\\2&1&-2\\2&-2&1\end{pmatrix},\qquad
+\begin{pmatrix}D&0\\0&0\end{pmatrix}=\begin{pmatrix}3\sqrt2&0\\0&0\\0&0\end{pmatrix},\qquad
+Q=\frac1{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}
+\]
+\end{itemize}
+(b) The compact SVD is \(A=3\sqrt2\,p_1q_1'=3\sqrt2\cdot\frac13(1,2,2)'\cdot\frac1{\sqrt2}(1,1)=(1,2,2)'(1,1)\), which is
+\(A\). By Corollary~\ref{r9-cor-svd-subspaces}: \(p_1\) is an orthonormal basis of \(\mathcal C(A)\), \(p_2,p_3\) of
+\(\mathcal N(A')\), \(q_1\) of \(\mathcal C(A')\), and \(q_2\) of \(\mathcal N(A)\).
+
+(c) \(\lVert A\rVert_F^2=1+1+4+4+4+4=18=\sigma_1^2\) (Theorem~\ref{r9-thm-svd-props}(d)), so
+\(\lVert A\rVert_F=3\sqrt2=\sigma_1=\lVert A\rVert_2\): the two norms agree for a matrix of rank \(1\). By
+Corollary~\ref{r9-cor-svd-subspaces},
+\[
+P_1P_1'=p_1p_1'=\frac19\begin{pmatrix}1&2&2\\2&4&4\\2&4&4\end{pmatrix}
+\]
+\end{solution}
+
+\begin{exercise}\label{r10-ex-svd-drill}
+Let
+\[
+A=\begin{pmatrix}1&3\\3&1\\3&3\\1&1\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find a singular value decomposition \(A=P\left(\begin{smallmatrix}D\\0\end{smallmatrix}\right)Q'\) with
+\(P\in\R^{4\times4}\), and the compact form.
+\item Give orthonormal bases of \(\mathcal C(A)\), \(\mathcal N(A')\), \(\mathcal C(A')\) and \(\mathcal N(A)\).
+\item Find \(\lVert A\rVert_2\), \(\lVert A\rVert_F\), \(\kappa(A)\) and \(\kappa(A'A)\).
+\item Find \(A^+\) from the singular value decomposition, and check it with \((A'A)^{-1}A'\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item \(A'A=\left(\begin{smallmatrix}20&16\\16&20\end{smallmatrix}\right)\), with \(A'A(1,1)'=36(1,1)'\) and
+\(A'A(1,-1)'=4(1,-1)'\). By Theorem~\ref{r9-thm-svd}(b): \(\sigma_1=6\), \(\sigma_2=2\), \(q_1=\frac1{\sqrt2}(1,1)'\),
+\(q_2=\frac1{\sqrt2}(1,-1)'\), \(p_1=\frac16Aq_1=\frac1{6\sqrt2}(4,4,6,2)'=\frac1{3\sqrt2}(2,2,3,1)'\) and
+\(p_2=\frac12Aq_2=\frac1{\sqrt2}(-1,1,0,0)'\).
+\item A vector \(y\) orthogonal to \(p_1\) and \(p_2\) satisfies \(y_1=y_2\) and \(4y_1+3y_3+y_4=0\); the vectors
+\((0,0,1,-3)'\) and \((5,5,-6,-2)'\) satisfy both and are orthogonal, with lengths \(\sqrt{10}\) and \(3\sqrt{10}\). Take
+\(p_3=\frac1{\sqrt{10}}(0,0,1,-3)'\) and \(p_4=\frac1{3\sqrt{10}}(5,5,-6,-2)'\).
+\item Then \(A=P\left(\begin{smallmatrix}D\\0\end{smallmatrix}\right)Q'\) with \(P=[p_1\ p_2\ p_3\ p_4]\),
+\(D=\diag(6,2)\), \(Q=\frac1{\sqrt2}\left(\begin{smallmatrix}1&1\\1&-1\end{smallmatrix}\right)\), and
+\[
+A=6p_1q_1'+2p_2q_2'=\begin{pmatrix}2&2\\2&2\\3&3\\1&1\end{pmatrix}+\begin{pmatrix}-1&1\\1&-1\\0&0\\0&0\end{pmatrix}
+\]
+\end{itemize}
+(b) By Corollary~\ref{r9-cor-svd-subspaces}: \(p_1,p_2\) is an orthonormal basis of \(\mathcal C(A)\), \(p_3,p_4\) of
+\(\mathcal N(A')\), and \(q_1,q_2\) of \(\mathcal C(A')=\R^2\); \(\mathcal N(A)=\{0\}\) (\(r=n=2\), no \(Q_2\)).
+
+(c) \(\lVert A\rVert_2=\sigma_1=6\) (Definition~\ref{r9-def-spectral-norm}); \(\lVert A\rVert_F^2=10+10+18+2=40=6^2+2^2\)
+(Theorem~\ref{r9-thm-svd-props}(d)), so \(\lVert A\rVert_F=2\sqrt{10}\); \(\kappa(A)=6/2=3\)
+(Definition~\ref{r9-def-condition}) and \(\kappa(A'A)=\kappa(A)^2=9\) (Proposition~\ref{r9-prop-condition}(b)).
+
+(d) By Theorem~\ref{r10-thm-mp-svd},
+\[
+A^+=\frac16q_1p_1'+\frac12q_2p_2'=\frac1{36}\begin{pmatrix}2&2&3&1\\2&2&3&1\end{pmatrix}
++\frac14\begin{pmatrix}-1&1&0&0\\1&-1&0&0\end{pmatrix}
+=\frac1{36}\begin{pmatrix}-7&11&3&1\\11&-7&3&1\end{pmatrix}
+\]
+As \(\rank A=2\), the number of columns, \(A^+=(A'A)^{-1}A'\) (Theorem~\ref{r10-thm-mp-exists}(c)). Here
+\(\det(A'A)=400-256=144\), so
+\((A'A)^{-1}=\frac1{144}\left(\begin{smallmatrix}20&-16\\-16&20\end{smallmatrix}\right)
+=\frac1{36}\left(\begin{smallmatrix}5&-4\\-4&5\end{smallmatrix}\right)\) (Theorem~\ref{r5d-thm-adjugate}), and
+\[
+(A'A)^{-1}A'=\frac1{36}\begin{pmatrix}5&-4\\-4&5\end{pmatrix}\begin{pmatrix}1&3&3&1\\3&1&3&1\end{pmatrix}
+=\frac1{36}\begin{pmatrix}-7&11&3&1\\11&-7&3&1\end{pmatrix}
+\]
+\end{solution}
+
+\begin{exercise}\label{r10-ex-rank-one-drill}
+Let
+\[
+A=\begin{pmatrix}2&1&2\\4&2&4\\4&2&4\\8&4&8\end{pmatrix}
+\]
+\begin{enumerate}
+\item Write \(A=uv'\), and find a compact singular value decomposition, \(\lVert A\rVert_2\) and \(\lVert A\rVert_F\).
+\item Find \(A^+\), \(AA^+\) and \(A^+A\).
+\item Decide whether \(Ax=b\) is consistent for \(b=(3,6,6,12)'\) and for \(b=(1,0,0,0)'\). Find the solution of minimum
+length in the consistent case, and compare it with the solution \((0,3,0)'\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item The rows of \(A\) are \(1\), \(2\), \(2\), \(4\) times \((2,1,2)\), so \(A=uv'\) with \(u=(1,2,2,4)'\), \(\lVert u\rVert=5\),
+and \(v=(2,1,2)'\), \(\lVert v\rVert=3\); \(\rank A=1\).
+\item \(A'A=v(u'u)v'=25vv'\) has rank \(\rank A=1\) (Theorem~\ref{thm:r4-rank-ata}(b)) and \(A'Av=25v(v'v)=225v\). By
+Theorem~\ref{r8-thm-rank-eigen}, \(225\) is its only nonzero eigenvalue, and the others are \(0\).
+\item By Theorem~\ref{r9-thm-svd}(b): \(\sigma_1=\sqrt{225}=15\), \(q_1=\frac13v\), and
+\(p_1=\frac1{15}Aq_1=\frac1{45}u(v'v)=\frac15u\). So \(A=15p_1q_1'\) is a compact SVD.
+\item \(\lVert A\rVert_2=\sigma_1=15\) (Definition~\ref{r9-def-spectral-norm}) and \(\lVert A\rVert_F^2=\sigma_1^2=225\)
+(Theorem~\ref{r9-thm-svd-props}(d)), so \(\lVert A\rVert_F=15\); indeed \(\lVert A\rVert_F^2=9+36+36+144=225\).
+\end{itemize}
+(b) By Theorem~\ref{r10-thm-mp-svd},
+\[
+A^+=\frac1{15}q_1p_1'=\frac1{225}vu'=\frac1{225}\begin{pmatrix}2&4&4&8\\1&2&2&4\\2&4&4&8\end{pmatrix},\qquad
+AA^+=p_1p_1'=\frac1{25}uu',\qquad A^+A=q_1q_1'=\frac19vv'
+\]
+(c)
+\begin{itemize}
+\item \(A^+\) is a g-inverse of \(A\) ((P1) of Definition~\ref{r10-def-mp}), so by Theorem~\ref{r10-thm-ginv-solves}(b),
+\(Ax=b\) is consistent if and only if \(AA^+b=\frac{u'b}{25}u\) equals \(b\). For \(b=(3,6,6,12)'=3u\), \(u'b=75\) and
+\(AA^+b=3u=b\): consistent. For \(b=(1,0,0,0)'\), \(AA^+b=\frac1{25}u\ne b\): there is no solution.
+\item \(A^+\) is a minimum-norm g-inverse ((P1) and (P4)), so by Theorem~\ref{r10-thm-min-norm} the shortest solution for
+\(b=3u\) is \(x^+=A^+b=\frac{u'b}{225}v=\frac{75}{225}v=\frac13(2,1,2)'\), with \(\lVert x^+\rVert^2=1\).
+\item The solution \(x=(0,3,0)'\) (\(Ax=3\col_2(A)=3u\)) has \(\lVert x\rVert^2=9\); and \(x-x^+=\frac13(-2,8,-2)'\) is orthogonal
+to \(x^+\), with \(\lVert x-x^+\rVert^2=\frac{72}9=8\), so \(9=1+8\).
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r10-ex-svd-4x3}
+Let
+\[
+A=\begin{pmatrix}6&0&0\\4&4&6\\5&2&6\\2&-4&0\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find a singular value decomposition of \(A\) and its compact form. (Write \(A'A=9M\) and use the vectors
+\(w_1=(2,1,2)'\), \(w_2=(-2,2,1)'\), \(w_3=(1,2,-2)'\).)
+\item Give orthonormal bases of the four subspaces of \(A\), and the eigenvalues of \(AA'\).
+\item Find \(\lVert A\rVert_2\), \(\lVert A\rVert_F\), \(\kappa(A)\) and \(\kappa(A'A)\).
+\item Find \(A^+\), once from \((A'A)^{-1}A'\) and once from the singular value decomposition, and \(AA^+\).
+\item Find a matrix \(A_2\) of rank at most \(2\) nearest to \(A\) in the spectral norm, and \(\lVert A-A_2\rVert_2\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item The entries of \(A'A\) are the inner products of the columns of \(A\) (Theorem~\ref{r1-thm-views}(d)):
+\[
+A'A=\begin{pmatrix}81&18&54\\18&36&36\\54&36&72\end{pmatrix}=9M,\qquad
+M=\begin{pmatrix}9&2&6\\2&4&4\\6&4&8\end{pmatrix}
+\]
+\(Mw_1=(32,16,32)'=16w_1\), \(Mw_2=(-8,8,4)'=4w_2\) and \(Mw_3=(1,2,-2)'=w_3\). So \(A'Aw_k=\lambda_kw_k\) with
+\(\lambda_1=144\), \(\lambda_2=36\), \(\lambda_3=9\); as \(\dim\mathcal N(A'A-cI)\geqslant1\) for these three values and the
+multiplicities add up to \(3\) (Theorem~\ref{r8-thm-rank-eigen}, Definition~\ref{r7-def-eigenvalues}), they are the
+eigenvalues of \(A'A\). The \(w_k\) are orthogonal with length \(3\), so \(q_k=\frac13w_k\) gives an orthogonal
+\(Q=[q_1\ q_2\ q_3]\). \(A'A\) has three nonzero eigenvalues, so \(\rank A=\rank(A'A)=3\)
+(Theorems~\ref{r8-thm-rank-eigen} and~\ref{thm:r4-rank-ata}(b)), and by Theorem~\ref{r9-thm-svd}(b), \(\sigma_1=12\),
+\(\sigma_2=6\), \(\sigma_3=3\).
+\item \(p_k=\sigma_k^{-1}Aq_k=(3\sigma_k)^{-1}Aw_k\): \(Aw_1=(12,24,24,0)'\), \(Aw_2=(-12,6,0,-12)'\) and
+\(Aw_3=(6,0,-3,-6)'\) give \(p_1=\frac13(1,2,2,0)'\), \(p_2=\frac13(-2,1,0,-2)'\) and \(p_3=\frac13(2,0,-1,-2)'\).
+\item A vector \(y\) orthogonal to \(p_1,p_2,p_3\) satisfies \(y_1+2y_2+2y_3=0\), \(-2y_1+y_2-2y_4=0\) and
+\(2y_1-y_3-2y_4=0\), so \(y=c\,(0,2,-2,1)'\); take \(p_4=\frac13(0,2,-2,1)'\).
+\end{itemize}
+Hence \(A=P\left(\begin{smallmatrix}D\\0\end{smallmatrix}\right)Q'\) with \(D=\diag(12,6,3)\),
+\[
+P=\frac13\begin{pmatrix}1&-2&2&0\\2&1&0&2\\2&0&-1&-2\\0&-2&-2&1\end{pmatrix},\qquad
+Q=\frac13\begin{pmatrix}2&-2&1\\1&2&2\\2&1&-2\end{pmatrix}
+\]
+and the compact form is
+\[
+A=12p_1q_1'+6p_2q_2'+3p_3q_3'
+=\frac43\begin{pmatrix}2&1&2\\4&2&4\\4&2&4\\0&0&0\end{pmatrix}
++\frac23\begin{pmatrix}4&-4&-2\\-2&2&1\\0&0&0\\4&-4&-2\end{pmatrix}
++\frac13\begin{pmatrix}2&4&-4\\0&0&0\\-1&-2&2\\-2&-4&4\end{pmatrix}
+\]
+(b) By Corollary~\ref{r9-cor-svd-subspaces}: \(p_1,p_2,p_3\) is an orthonormal basis of \(\mathcal C(A)\), \(p_4\) of
+\(\mathcal N(A')\) (indeed \(A'(0,2,-2,1)'=0\)), \(q_1,q_2,q_3\) of \(\mathcal C(A')=\R^3\), and \(\mathcal N(A)=\{0\}\). By
+Theorem~\ref{r9-thm-svd-props}(a),(b), the eigenvalues of the \(4\times4\) matrix \(AA'\) are \(144\), \(36\), \(9\), \(0\).
+
+(c) \(\lVert A\rVert_2=12\); \(\lVert A\rVert_F^2=36+68+65+20=189=12^2+6^2+3^2\) (the four terms are the squared lengths of the
+rows; Theorem~\ref{r9-thm-svd-props}(d)), so \(\lVert A\rVert_F=3\sqrt{21}\); \(\kappa(A)=12/3=4\)
+(Definition~\ref{r9-def-condition}) and \(\kappa(A'A)=16\) (Proposition~\ref{r9-prop-condition}(b)).
+
+(d)
+\begin{itemize}
+\item \(\rank A=3\), the number of columns, so \(A^+=(A'A)^{-1}A'=\frac19M^{-1}A'\) (Theorem~\ref{r10-thm-mp-exists}(c)).
+Along row \(1\), \(\det M=9\cdot16-2\cdot(-8)+6\cdot(-16)=64\) (Theorem~\ref{r5d-thm-expansion}), and by
+Theorem~\ref{r5d-thm-adjugate}
+\[
+M^{-1}=\frac1{64}\begin{pmatrix}16&8&-16\\8&36&-24\\-16&-24&32\end{pmatrix}
+=\frac1{16}\begin{pmatrix}4&2&-4\\2&9&-6\\-4&-6&8\end{pmatrix}
+\]
+so
+\[
+A^+=\frac1{144}\begin{pmatrix}4&2&-4\\2&9&-6\\-4&-6&8\end{pmatrix}
+\begin{pmatrix}6&4&5&2\\0&4&2&-4\\0&6&6&0\end{pmatrix}
+=\frac1{36}\begin{pmatrix}6&0&0&0\\3&2&-2&-8\\-6&2&4&4\end{pmatrix}
+\]
+\item By Theorem~\ref{r10-thm-mp-svd}, \(A^+=\frac1{12}q_1p_1'+\frac16q_2p_2'+\frac13q_3p_3'\), the same matrix:
+\[
+\frac1{108}\begin{pmatrix}2&4&4&0\\1&2&2&0\\2&4&4&0\end{pmatrix}
++\frac1{54}\begin{pmatrix}4&-2&0&4\\-4&2&0&-4\\-2&1&0&-2\end{pmatrix}
++\frac1{27}\begin{pmatrix}2&0&-1&-2\\4&0&-2&-4\\-4&0&2&4\end{pmatrix}
+=\frac1{36}\begin{pmatrix}6&0&0&0\\3&2&-2&-8\\-6&2&4&4\end{pmatrix}
+\]
+\item By Theorem~\ref{r10-thm-mp-svd}, \(AA^+=P_1P_1'\), where \(P_1=[p_1\ p_2\ p_3]\); as \(PP'=I_4\)
+(Proposition~\ref{r6-prop-orthonormal}(b)), \(P_1P_1'=I_4-p_4p_4'\):
+\[
+AA^+=I_4-\frac19\begin{pmatrix}0&0&0&0\\0&4&-4&2\\0&-4&4&-2\\0&2&-2&1\end{pmatrix}
+=\frac19\begin{pmatrix}9&0&0&0\\0&5&4&-2\\0&4&5&2\\0&-2&2&8\end{pmatrix}
+\]
+the matrix of the orthogonal projection onto \(\mathcal C(A)\) (Corollary~\ref{r9-cor-svd-subspaces}).
+\end{itemize}
+(e) By Theorem~\ref{r12-thm-eckart-young}(b) with \(k=2<r=3\), every \(B\) of rank at most \(2\) has
+\(\lVert A-B\rVert_2\geqslant\sigma_3=3\), with equality for
+\[
+A_2=12p_1q_1'+6p_2q_2'=A-3p_3q_3'=\frac13\begin{pmatrix}16&-4&4\\12&12&18\\16&8&16\\8&-8&-4\end{pmatrix}
+\]
+So \(\lVert A-A_2\rVert_2=3=\lVert A\rVert_2/\kappa(A)\): the matrix \(E=A_2-A=-3p_3q_3'\), of spectral norm \(3\), makes the
+columns of \(A+E=A_2\) linearly dependent (\(A_2w_3=0\)), and no \(E\) of smaller spectral norm does.
+\end{solution}
+
+\begin{exercise}\label{r10-ex-symmetric-svd}
+Let
+\[
+A=\begin{pmatrix}1&4&0&2\\4&1&2&0\\0&2&1&4\\2&0&4&1\end{pmatrix},\qquad
+h_1=\begin{pmatrix}1\\1\\1\\1\end{pmatrix},\ h_2=\begin{pmatrix}1\\-1\\1\\-1\end{pmatrix},\
+h_3=\begin{pmatrix}1\\1\\-1\\-1\end{pmatrix},\ h_4=\begin{pmatrix}1\\-1\\-1\\1\end{pmatrix}
+\]
+\begin{enumerate}
+\item Show that \(Ah_1=7h_1\), \(Ah_2=-5h_2\), \(Ah_3=3h_3\) and \(Ah_4=-h_4\).
+\item Find a singular value decomposition \(A=PDQ'\) of \(A\). Why is \(P\ne Q\)?
+\item Find \(\lVert A\rVert_2\), \(\lVert A\rVert_F\) and \(\kappa(A)\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(Ah_1=(7,7,7,7)'\) (every row sum is \(7\)), \(Ah_2=(-5,5,-5,5)'\), \(Ah_3=(3,3,-3,-3)'\) and \(Ah_4=(-1,1,1,-1)'\).
+
+(b)
+\begin{itemize}
+\item The \(h_k\) are orthogonal with length \(2\), so \(Q=\frac12[h_1\ h_2\ h_3\ h_4]\) is orthogonal, and
+\(Q'AQ=\Lambda=\diag(7,-5,3,-1)\) (from \(AQ=Q\Lambda\)).
+\item \(A'A=A^2=Q\Lambda^2Q'\), so \(A'Aq_k=\lambda_k^2q_k\) for \(q_k=\frac12h_k\), with \(\lambda_k^2=49,25,9,1\) in decreasing
+order. By Theorem~\ref{r9-thm-svd}(b), \(\sigma_1=7\), \(\sigma_2=5\), \(\sigma_3=3\), \(\sigma_4=1\), \(D=\diag(7,5,3,1)\), and
+\(p_k=\sigma_k^{-1}Aq_k=(\lambda_k/\lvert\lambda_k\rvert)q_k\):
+\[
+P=\frac12[h_1\ \ {-h_2}\ \ h_3\ \ {-h_4}],\qquad D=\diag(7,5,3,1),\qquad Q=\frac12[h_1\ h_2\ h_3\ h_4]
+\]
+\item The columns of \(P\) and \(Q\) differ in sign exactly where the eigenvalue is negative: \(P=Q\Delta\) with
+\(\Delta=\diag(1,-1,1,-1)\). As \(A\) has negative eigenvalues, \(P\ne Q\); the singular values are the absolute values of the
+eigenvalues (Theorem~\ref{r9-thm-svd-props}(e)).
+\end{itemize}
+(c) \(\lVert A\rVert_2=\sigma_1=7\) (Definition~\ref{r9-def-spectral-norm}); \(\lVert A\rVert_F^2=4\cdot21=84=49+25+9+1\)
+(Theorem~\ref{r9-thm-svd-props}(d)), so \(\lVert A\rVert_F=2\sqrt{21}\); \(\rank A=4\) and \(\kappa(A)=7/1=7\)
+(Proposition~\ref{r9-prop-condition}(a)).
+\end{solution}
+
+\begin{exercise}\label{r9-dr-norms}
+Let
+\[
+A=\begin{pmatrix}4&2&1&0\\1&0&4&2\\2&4&0&1\\0&1&2&4\end{pmatrix},\qquad
+B=\begin{pmatrix}-4&-2&-1&0\\2&4&0&1\\1&0&4&2\\0&-1&-2&-4\end{pmatrix}
+\]
+and \(h_1=(1,1,1,1)'\), \(h_2=(1,-1,1,-1)'\), \(h_3=(1,1,-1,-1)'\), \(h_4=(1,-1,-1,1)'\).
+\begin{enumerate}
+\item Find \(A'A\) and \(A'Ah_1,\dots,A'Ah_4\). Find the singular values, \(\lVert\cdot\rVert_2\) and \(\lVert\cdot\rVert_F\) of
+\(A\) and of \(B\).
+\item Find \(Ah_1,\dots,Ah_4\) and the eigenvalues of \(A\), and compare their absolute values with the singular values of
+\(A\).
+\item Find \(\lVert A+B\rVert_2\) and \(\lVert AB\rVert_2\), and check the inequalities of
+Proposition~\ref{r9-prop-spectral-norm-rules}.
+\item Find unit vectors \(u\), \(v\) with \(u'Av=\lVert A\rVert_2\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item The entries of \(A'A\) are the inner products of the columns of \(A\) (Theorem~\ref{r1-thm-views}(d)):
+\[
+A'A=\begin{pmatrix}21&16&8&4\\16&21&4&8\\8&4&21&16\\4&8&16&21\end{pmatrix}
+\]
+and \(A'Ah_1=(49,49,49,49)'=49h_1\), \(A'Ah_2=(9,-9,9,-9)'=9h_2\), \(A'Ah_3=(25,25,-25,-25)'=25h_3\),
+\(A'Ah_4=(1,-1,-1,1)'=h_4\). So \(\dim\mathcal N(A'A-cI)\geqslant1\) for \(c=49,25,9,1\) (Theorem~\ref{r8-thm-rank-eigen}), and
+as the multiplicities add up to \(4\) (Definition~\ref{r7-def-eigenvalues}), these are the eigenvalues of \(A'A\). By
+Theorem~\ref{r9-thm-svd-props}(a), \(A\) has the singular values \(7\), \(5\), \(3\), \(1\).
+\item \(B=UA\) with
+\[
+U=\begin{pmatrix}-1&0&0&0\\0&0&1&0\\0&1&0&0\\0&0&0&-1\end{pmatrix}
+\]
+(row \(1\) of \(B\) is minus row \(1\) of \(A\), rows \(2\) and \(3\) are rows \(3\) and \(2\) of \(A\), row \(4\) is minus row \(4\) of
+\(A\)), and \(U'U=I_4\); so \(B'B=A'U'UA=A'A\), and \(B\) has the same singular values.
+\item \(\lVert A\rVert_2=\lVert B\rVert_2=7\), and \(\lVert A\rVert_F^2=49+25+9+1=84=\lVert B\rVert_F^2\)
+(Theorem~\ref{r9-thm-svd-props}(d); also the sum of the squared entries, \(4\cdot21\)), so
+\(\lVert A\rVert_F=\lVert B\rVert_F=2\sqrt{21}\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item \(Ah_1=(7,7,7,7)'=7h_1\), \(Ah_2=(3,3,-3,-3)'=3h_3\), \(Ah_3=(5,-5,5,-5)'=5h_2\) and \(Ah_4=(1,-1,-1,1)'=h_4\). With
+\(H=[h_1\ h_2\ h_3\ h_4]\), invertible as \(H'H=4I_4\), this says \(AH=HM\), that is, \(H^{-1}AH=M\), where
+\[
+M=\begin{pmatrix}7&0&0&0\\0&0&5&0\\0&3&0&0\\0&0&0&1\end{pmatrix}
+\]
+\item By Theorem~\ref{r7-thm-similar}(a), \(p_A=p_M\); and \(M\) is block diagonal, so
+\(p_M(t)=(t-7)(t^2-15)(t-1)\) (Proposition~\ref{r7-prop-block-triangular}(a), applied twice; the middle block has the
+characteristic polynomial \(t^2-15\)). So the eigenvalues of \(A\) are \(7\), \(\sqrt{15}\), \(-\sqrt{15}\), \(1\)
+(Definition~\ref{r7-def-eigenvalues}).
+\item Their absolute values \(7\), \(\sqrt{15}\), \(\sqrt{15}\), \(1\) are not the singular values \(7\), \(5\), \(3\), \(1\):
+Theorem~\ref{r9-thm-svd-props}(e) needs a symmetric matrix, and \(A\) is not symmetric. (The products agree:
+\(7\cdot15\cdot1=105=7\cdot5\cdot3\cdot1\), the absolute value of \(\det A\).)
+\end{itemize}
+\needspace{3\baselineskip}
+(c)
+\begin{itemize}
+\item \(A+B=(0,1,1,0)'(3,4,4,3)\), the matrix with rows \(0\), \((3,4,4,3)\), \((3,4,4,3)\), \(0\). With \(w=(3,4,4,3)'\),
+\((A+B)'(A+B)=w(0,1,1,0)(0,1,1,0)'w'=2ww'\), of rank \(1\), and \(2ww'w=2(w'w)w=100w\). By
+Theorem~\ref{r8-thm-rank-eigen}, its eigenvalues are \(100\), \(0\), \(0\), \(0\); so
+\(\lVert A+B\rVert_2=10\leqslant\lVert A\rVert_2+\lVert B\rVert_2=14\).
+\item
+\[
+AB=\begin{pmatrix}-11&0&0&4\\0&-4&11&0\\0&11&-4&0\\4&0&0&-11\end{pmatrix}
+\]
+is symmetric. \(AB(1,0,0,1)'=-7(1,0,0,1)'\), \(AB(1,0,0,-1)'=-15(1,0,0,-1)'\), \(AB(0,1,1,0)'=7(0,1,1,0)'\) and
+\(AB(0,1,-1,0)'=-15(0,1,-1,0)'\); as in (a), its eigenvalues are \(7\), \(-7\), \(-15\), \(-15\), and
+\(\lVert AB\rVert_2=15\) (Proposition~\ref{r9-prop-spectral-norm}(e)); \(15\leqslant\lVert A\rVert_2\lVert B\rVert_2=49\).
+\end{itemize}
+(d) \(A'Ah_1=49h_1\), so \(q_1=\frac12h_1\), and \(p_1=\frac17Aq_1=\frac1{14}(7,7,7,7)'=\frac12(1,1,1,1)'\)
+(Theorem~\ref{r9-thm-svd}). By Theorem~\ref{r9-thm-sigma-max}(a), \(u=p_1\) and \(v=q_1\) give \(u'Av=\sigma_1=7\). Check:
+every row sum of \(A\) is \(7\), so \(Av=\frac12(7,7,7,7)'\) and \(u'Av=\frac14\cdot28=7\).
+\end{solution}
+
+\begin{exercise}\label{r12-ex-rank-one}
+Let
+\[
+A=\begin{pmatrix}1&1\\1&1\\2&-2\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find a compact SVD \(A=\sigma_1p_1q_1'+\sigma_2p_2q_2'\).
+\item Find a best approximation \(A_1\) of \(A\) by a matrix of rank at most \(1\), and \(\lVert A-A_1\rVert_F^2\).
+\item The matrix
+\[
+B=\begin{pmatrix}1&1\\1&1\\0&0\end{pmatrix}
+\]
+also has rank \(1\). Compute \(\lVert A-B\rVert_F^2\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(A'A=\begin{pmatrix}6&-2\\-2&6\end{pmatrix}\), and \(\det(tI_2-A'A)=(t-6)^2-4=(t-8)(t-4)\). Indeed
+\(A'A(1,-1)'=(8,-8)'\) and \(A'A(1,1)'=(4,4)'\), so \(q_1=\frac1{\sqrt2}(1,-1)'\), \(q_2=\frac1{\sqrt2}(1,1)'\),
+\(\sigma_1=\sqrt8=2\sqrt2\) and \(\sigma_2=2\). Then \(p_m=Aq_m/\sigma_m\), the columns of \(P_1=AQ_1D^{-1}\)
+(Theorem~\ref{r9-thm-svd}(a),(b)):
+\[
+p_1=\frac1{2\sqrt2}\cdot\frac1{\sqrt2}\begin{pmatrix}0\\0\\4\end{pmatrix}=\begin{pmatrix}0\\0\\1\end{pmatrix},\qquad
+p_2=\frac12\cdot\frac1{\sqrt2}\begin{pmatrix}2\\2\\0\end{pmatrix}=\frac1{\sqrt2}\begin{pmatrix}1\\1\\0\end{pmatrix}
+\]
+\(p_1\), \(p_2\) are orthonormal, and
+\[
+\sigma_1p_1q_1'+\sigma_2p_2q_2'=\begin{pmatrix}0&0\\0&0\\2&-2\end{pmatrix}+\begin{pmatrix}1&1\\1&1\\0&0\end{pmatrix}=A
+\]
+With \(p_3=\frac1{\sqrt2}(1,-1,0)'\), \(P=[p_1\ p_2\ p_3]\) is orthogonal, and this is the compact form of the SVD
+\(A=P\left(\begin{smallmatrix}D&0\\0&0\end{smallmatrix}\right)Q'\) of Theorem~\ref{r9-thm-svd}(b).
+
+(b) By Theorem~\ref{r12-thm-eckart-young}(a) (\(k=1\), \(r=2\)),
+\[
+A_1=\sigma_1p_1q_1'=\begin{pmatrix}0&0\\0&0\\2&-2\end{pmatrix}
+\]
+and \(\lVert A-A_1\rVert_F^2=\lVert\sigma_2p_2q_2'\rVert_F^2=1+1+1+1=4=\sigma_2^2\).
+
+(c)
+\[
+A-B=\begin{pmatrix}0&0\\0&0\\2&-2\end{pmatrix}
+\]
+so \(\lVert A-B\rVert_F^2=8=\sigma_1^2>4\): \(B=\sigma_2p_2q_2'\) keeps the
+smaller singular value and loses the larger one.
+\end{solution}
+
+\begin{exercise}\label{r12-ex-symmetric}
+Let \(A=2J_4-I_4\).
+\begin{enumerate}
+\item Show that \(A=7\bar J_4-C_4\), and find the eigenvalues of \(A\) and orthonormal eigenvectors.
+\item Write \(A=PDQ'\) with \(P\), \(Q\) orthogonal and \(D=\diag(7,1,1,1)\), a singular value decomposition.
+\item Find a best approximation of \(A\) by a matrix of rank at most \(1\), and the error \(\lVert A-A_1\rVert_F^2\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(2J_4=8\bar J_4\) and \(I_4=\bar J_4+C_4\) (Definition~\ref{r1-def-ones}), so \(A=8\bar J_4-\bar J_4-C_4=7\bar J_4-C_4\).
+As \(\bar J_4\one=\one\) and \(C_4\one=0\), \(A\one=7\one\); if \(\one'x=0\), then \(\bar J_4x=0\) and \(C_4x=x\), so
+\(Ax=-x\). Hence \(q_1=\frac12(1,1,1,1)'\), \(q_2=\frac12(1,-1,1,-1)'\), \(q_3=\frac12(1,1,-1,-1)'\), \(q_4=\frac12(1,-1,-1,1)'\)
+are orthonormal eigenvectors for \(7\), \(-1\), \(-1\), \(-1\), and these are the eigenvalues
+(Theorem~\ref{r8-thm-spectral}(c)).
+
+(b) \(A=7q_1q_1'-q_2q_2'-q_3q_3'-q_4q_4'=7q_1q_1'+1\cdot(-q_2)q_2'+1\cdot(-q_3)q_3'+1\cdot(-q_4)q_4'\)
+(Theorem~\ref{r8-thm-spectral}(b), Theorem~\ref{r1-thm-views}(d)). So \(A=PDQ'\) with \(Q=[q_1\ q_2\ q_3\ q_4]\),
+\(P=[q_1\ {-q_2}\ {-q_3}\ {-q_4}]\) (both orthogonal) and \(D=\diag(7,1,1,1)\): the singular values are \(7,1,1,1\), the
+absolute values of the eigenvalues.
+
+(c) By Theorem~\ref{r12-thm-eckart-young}(a) (\(k=1\)), or by Corollary~\ref{r12-cor-symmetric} with \(d_1=7\),
+\(d_2=d_3=d_4=-1\), \(A_1=7q_1q_1'=7\bar J_4=\frac74J_4\), and
+\(\lVert A-A_1\rVert_F^2=\lVert C_4\rVert_F^2=\tr(C_4'C_4)=\tr C_4=4-1=3=1^2+1^2+1^2\) (\(C_4\) is symmetric and idempotent,
+\(\tr\bar J_4=1\)).
+\end{solution}
+
+\begin{exercise}\label{r10-ex-low-rank}
+Four stores sell three products; the sales (in hundreds) are
+\[
+B=\begin{pmatrix}5&2&0\\2&6&2\\0&2&7\\4&8&8\end{pmatrix}
+\]
+(row \(i\): store \(i\); column \(j\): product \(j\)). Let \(w_1=(1,2,2)'\), \(w_2=(2,1,-2)'\) and \(w_3=(2,-2,1)'\).
+\begin{enumerate}
+\item Compute \(Bw_1\), \(Bw_2\), \(Bw_3\), and deduce the singular values and a compact singular value decomposition of
+\(B\).
+\item Find the best approximation \(B_1\) of \(B\) by a matrix of rank at most \(1\), the errors \(\lVert B-B_1\rVert_2\) and
+\(\lVert B-B_1\rVert_F\), and the fraction of \(\lVert B\rVert_F^2\) that \(B_1\) reproduces. Interpret \(B_1\).
+\item Find the best approximation \(B_2\) of rank at most \(2\) and its errors.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item \(Bw_1=(9,18,18,36)'=9(1,2,2,4)'\), \(Bw_2=(12,6,-12,0)'=6(2,1,-2,0)'\) and \(Bw_3=(6,-6,3,0)'=3(2,-2,1,0)'\).
+\item The \(w_j\) are orthogonal with length \(3\), so the \(q_j=\frac13w_j\) form an orthogonal matrix \(Q\). The vectors
+\(p_1=\frac15(1,2,2,4)'\), \(p_2=\frac13(2,1,-2,0)'\), \(p_3=\frac13(2,-2,1,0)'\) are orthonormal (lengths \(1\); inner
+products \(\frac1{15}(2+2-4)\), \(\frac1{15}(2-4+2)\), \(\frac19(4-2-2)\), all \(0\)), and \(Bq_1=15p_1\), \(Bq_2=6p_2\),
+\(Bq_3=3p_3\).
+\item So \(BQ=P_1D\) with \(P_1=[p_1\ p_2\ p_3]\), \(D=\diag(15,6,3)\), and
+\(Q'B'BQ=(P_1D)'(P_1D)=DP_1'P_1D=D^2\). By Theorem~\ref{r9-thm-svd}(a) (with \(Q_1=Q\), no \(Q_2\), and
+\(P_1=BQD^{-1}\)), \(P'BQ=\left(\begin{smallmatrix}D\\0\end{smallmatrix}\right)\) for \(P=[p_1\ p_2\ p_3\ p_4]\), with any unit
+vector \(p_4\) orthogonal to \(p_1,p_2,p_3\). By Theorem~\ref{r9-thm-svd-props}(a) the singular values are \(15\), \(6\), \(3\),
+and \(B=BQQ'=15p_1q_1'+6p_2q_2'+3p_3q_3'\) (Theorem~\ref{r1-thm-views}(d)) is a compact SVD.
+\end{itemize}
+(b) By Theorem~\ref{r12-thm-eckart-young} (\(k=1\)),
+\[
+B_1=15p_1q_1'=(1,2,2,4)'(1,2,2)=\begin{pmatrix}1&2&2\\2&4&4\\2&4&4\\4&8&8\end{pmatrix},\qquad
+B-B_1=\begin{pmatrix}4&0&-2\\0&2&-2\\-2&-2&3\\0&0&0\end{pmatrix}
+\]
+\(\lVert B-B_1\rVert_2=\sigma_2=6\) and \(\lVert B-B_1\rVert_F^2=36+9=45\), so \(\lVert B-B_1\rVert_F=3\sqrt5\); no matrix of rank
+at most \(1\) comes closer in either norm. As \(\lVert B\rVert_F^2=225+36+9=270\) (the sum of the squared entries),
+\(B_1\) reproduces \(\frac{225}{270}=\frac56\) of it. The entries of \(B_1\) are products \(a_ib_j\) with \(a=(1,2,2,4)'\) and
+\(b=(1,2,2)'\): among all tables of the form ``store effect times product effect'' \(ab'\), \(B_1\) has the smallest sum of
+squared differences from \(B\); store \(4\) follows it exactly.
+
+(c) By Theorem~\ref{r12-thm-eckart-young} (\(k=2\)),
+\[
+B_2=B_1+6p_2q_2'=B_1+\frac23\begin{pmatrix}2\\1\\-2\\0\end{pmatrix}(2,1,-2)
+=\frac13\begin{pmatrix}11&10&-2\\10&14&8\\-2&8&20\\12&24&24\end{pmatrix}
+\]
+with \(B-B_2=3p_3q_3'\), \(\lVert B-B_2\rVert_2=3\) and \(\lVert B-B_2\rVert_F^2=9\); \(B_2\) reproduces
+\(\frac{261}{270}=\frac{29}{30}\) of \(\lVert B\rVert_F^2\).
+\end{solution}
+
+\begin{exercise}\label{r9-ex-svd-centered}
+Write a compact SVD of the centered data matrix \(C_5X\), and give its singular values:
+\begin{enumerate}
+\item for the data of Exercise~\ref{r12-ex-pca-drill};
+\item for the data of Exercise~\ref{r10-ex-pca-drill}.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) In Exercise~\ref{r12-ex-pca-drill}, \(S\) has the eigenvalues \(15\), \(4\), \(3\), \(1\), with the loading vectors
+\(v_1,\dots,v_4\) and the score vectors \(z_1,\dots,z_4\) found there. By Proposition~\ref{r12-prop-svd}(b), \(r=4\),
+\(\sigma_m=\lVert z_m\rVert=\sqrt{4\lambda_m}\): \(\sigma_1=\sqrt{60}=2\sqrt{15}\), \(\sigma_2=\sqrt{16}=4\),
+\(\sigma_3=\sqrt{12}=2\sqrt3\), \(\sigma_4=\sqrt4=2\), and \(p_m=z_m/\sigma_m\):
+\[
+p_1=\frac1{2\sqrt5}\begin{pmatrix}-4\\1\\1\\1\\1\end{pmatrix},\qquad
+p_2=\frac1{2\sqrt3}\begin{pmatrix}0\\1\\1\\1\\-3\end{pmatrix},\qquad
+p_3=\frac1{\sqrt2}\begin{pmatrix}0\\-1\\1\\0\\0\end{pmatrix},\qquad
+p_4=\frac1{\sqrt6}\begin{pmatrix}0\\-1\\-1\\2\\0\end{pmatrix}
+\]
+So \(C_5X=2\sqrt{15}\,p_1v_1'+4p_2v_2'+2\sqrt3\,p_3v_3'+2p_4v_4'\), a compact SVD; for instance
+\(2\sqrt{15}\,p_1v_1'=z_1v_1'=(-4,1,1,1,1)'(0,1,1,-1)\). Check: \(\sigma_1^2+\dots+\sigma_4^2=60+16+12+4=92=\lVert C_5X\rVert_F^2\)
+(Theorem~\ref{r9-thm-svd-props}(d)).
+
+(b) In Exercise~\ref{r10-ex-pca-drill}, \(S\) has the eigenvalues \(10\), \(6\), \(3\), \(1\). In the same way, \(r=4\),
+\(\sigma_1=\sqrt{40}=2\sqrt{10}\), \(\sigma_2=\sqrt{24}=2\sqrt6\), \(\sigma_3=\sqrt{12}=2\sqrt3\), \(\sigma_4=\sqrt4=2\), and
+\[
+p_1=\frac1{\sqrt{30}}\begin{pmatrix}-2\\-2\\-2\\3\\3\end{pmatrix},\qquad
+p_2=\frac1{\sqrt2}\begin{pmatrix}0\\-1\\1\\0\\0\end{pmatrix},\qquad
+p_3=\frac1{\sqrt2}\begin{pmatrix}0\\0\\0\\-1\\1\end{pmatrix},\qquad
+p_4=\frac1{\sqrt6}\begin{pmatrix}-2\\1\\1\\0\\0\end{pmatrix}
+\]
+from the scores of that exercise (\(z_{im}=v_m'(x_i-\bar x)\)); so \(C_5X=2\sqrt{10}\,p_1v_1'+2\sqrt6\,p_2v_2'+2\sqrt3\,p_3v_3'+2p_4v_4'\),
+for instance \(2\sqrt{10}\,p_1v_1'=z_1v_1'=\frac13(-4,-4,-4,6,6)'(1,-1,0,1)\). Check:
+\(40+24+12+4=80=\lVert C_5X\rVert_F^2\).
+\end{solution}
+
+\begin{exercise}\label{r10-dr-mp-svd}
+The matrix
+\[
+A=\begin{pmatrix}2&1\\1&2\\1&-1\end{pmatrix}
+\]
+has the compact SVD \(A=3p_1q_1'+\sqrt3\,p_2q_2'\), with
+\(p_1=\frac1{\sqrt2}(1,1,0)'\), \(p_2=\frac1{\sqrt6}(1,-1,2)'\), \(q_1=\frac1{\sqrt2}(1,1)'\) and \(q_2=\frac1{\sqrt2}(1,-1)'\)
+(Exercise~\ref{r9-ex-svd-drill}).
+\begin{enumerate}
+\item Find \(A^+\) from the compact SVD.
+\item Check the result with the formula for a matrix of full column rank.
+\item For \(y=(3,0,0)'\), find \(A^+y\), the orthogonal projection \(AA^+y\) of \(y\) onto \(\mathcal C(A)\) and the residual
+\(y-AA^+y\). Find also \((A')^+\) and \((2A)^+\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) By Theorem~\ref{r10-thm-mp-svd}, \(A^+=\frac13q_1p_1'+\frac1{\sqrt3}q_2p_2'\), where
+\[
+q_1p_1'=\frac12\begin{pmatrix}1&1&0\\1&1&0\end{pmatrix},\qquad
+q_2p_2'=\frac1{\sqrt{12}}\begin{pmatrix}1&-1&2\\-1&1&-2\end{pmatrix}
+\]
+As \(\sqrt3\sqrt{12}=6\),
+\[
+A^+=\frac16\begin{pmatrix}1&1&0\\1&1&0\end{pmatrix}+\frac16\begin{pmatrix}1&-1&2\\-1&1&-2\end{pmatrix}
+=\frac16\begin{pmatrix}2&0&2\\0&2&-2\end{pmatrix}=\frac13\begin{pmatrix}1&0&1\\0&1&-1\end{pmatrix}
+\]
+(b) \(\rank A=2\), the number of columns, so \(A^+=(A'A)^{-1}A'\) (Theorem~\ref{r10-thm-mp-exists}(c)). Here
+\(A'A=\left(\begin{smallmatrix}6&3\\3&6\end{smallmatrix}\right)\), with determinant \(27\), so
+\((A'A)^{-1}=\frac1{27}\left(\begin{smallmatrix}6&-3\\-3&6\end{smallmatrix}\right)=\frac19\left(\begin{smallmatrix}2&-1\\-1&2\end{smallmatrix}\right)\)
+(Theorem~\ref{r5d-thm-adjugate}), and
+\[
+(A'A)^{-1}A'=\frac19\begin{pmatrix}2&-1\\-1&2\end{pmatrix}\begin{pmatrix}2&1&1\\1&2&-1\end{pmatrix}
+=\frac19\begin{pmatrix}3&0&3\\0&3&-3\end{pmatrix}=\frac13\begin{pmatrix}1&0&1\\0&1&-1\end{pmatrix}
+\]
+\needspace{5\baselineskip}
+(c)
+\begin{itemize}
+\item \(A^+y=\frac13(3,0)'=(1,0)'\), and \(AA^+y=A(1,0)'=(2,1,1)'\), the orthogonal projection of \(y\) onto \(\mathcal C(A)\)
+(Proposition~\ref{r10-prop-mp-props}(b)).
+\item The residual is \(y-AA^+y=(1,-1,-1)'\); check: \(A'(1,-1,-1)'=(2-1-1,\ 1-2+1)'=0\), so it is orthogonal to
+\(\mathcal C(A)\).
+\item By Proposition~\ref{r10-prop-mp-props}(c),
+\[
+(A')^+=(A^+)'=\frac13\begin{pmatrix}1&0\\0&1\\1&-1\end{pmatrix},\qquad
+(2A)^+=\frac12A^+=\frac16\begin{pmatrix}1&0&1\\0&1&-1\end{pmatrix}
+\]
+\end{itemize}
+\end{solution}
+
+\begin{exercise}\label{r12-ex-cca}
+The sample covariance matrix of four variables is
+\[
+S=\begin{pmatrix}4&0&2&1\\0&4&1&2\\2&1&4&0\\1&2&0&4\end{pmatrix}
+\]
+Find the canonical correlations and canonical pairs between the first two and the last two variables.
+\end{exercise}
+\begin{solution}
+\(S_{11}=S_{22}=4I_2\), so \(S_{11}^{-1/2}=S_{22}^{-1/2}=\frac12I_2\) (Theorem~\ref{r8-thm-sqrt}: \(2I_2\) is PSD and
+\((2I_2)^2=4I_2\)). Then
+\[
+K=\tfrac12S_{12}\cdot\tfrac12=\frac14\begin{pmatrix}2&1\\1&2\end{pmatrix}=\frac14(3\bar J_2+C_2)=\frac34u_1u_1'+\frac14u_2u_2',
+\qquad u_1=\frac1{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix},\ u_2=\frac1{\sqrt2}\begin{pmatrix}1\\-1\end{pmatrix}
+\]
+since \(\bar J_2=u_1u_1'\) and \(C_2=I_2-\bar J_2=u_2u_2'\). This is a singular value decomposition with
+\(\rho_1=\frac34\), \(\rho_2=\frac14\) and \(w_k=u_k\). By Theorem~\ref{r12-thm-cca}, the canonical correlations are
+\(\frac34\) and \(\frac14\), with \(a_1=b_1=\frac12u_1=\frac1{2\sqrt2}(1,1)'\) and \(a_2=b_2=\frac1{2\sqrt2}(1,-1)'\). Check:
+\(a_1'S_{11}a_1=4\cdot\frac28=1\) and \(a_1'S_{12}b_1=\frac18(1,1)\begin{pmatrix}2&1\\1&2\end{pmatrix}\begin{pmatrix}1\\1\end{pmatrix}=\frac68=\frac34\).
+\end{solution}
+
+\begin{exercise}\label{r10-ex-procrustes}
+Let \(A\) be the matrix of Exercise~\ref{r10-ex-symmetric-svd}.
+\begin{enumerate}
+\item Find the largest value of \(\tr(U'A)\) over the orthogonal \(U\in\R^{4\times4}\), and an orthogonal matrix \(U_0\) at
+which it is attained. Compare with \(U=I_4\).
+\item Find an orthogonal matrix nearest to \(A\) in the Frobenius norm, and the distance. Compare with
+\(\lVert I_4-A\rVert_F\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) By Theorem~\ref{r10-thm-procrustes}(a) and the singular value decomposition \(A=PDQ'\) of
+Exercise~\ref{r10-ex-symmetric-svd}, the largest value is \(7+5+3+1=16\), attained at
+\[
+U_0=PQ'=\sum_{k=1}^4p_kq_k'=\frac14\bigl(h_1h_1'-h_2h_2'+h_3h_3'-h_4h_4'\bigr)
+=\begin{pmatrix}0&1&0&0\\1&0&0&0\\0&0&0&1\\0&0&1&0\end{pmatrix}
+\]
+(the \((i,j)\) entry is \(\frac14\) times the sum of the products of the entries \(i\) and \(j\) of the \(h_k\), with signs
+\(+,-,+,-\)). Indeed \(\tr(U_0'A)=a_{21}+a_{12}+a_{43}+a_{34}=16\), whereas \(\tr(I_4'A)=\tr A=4\).
+
+(b) Theorem~\ref{r10-thm-procrustes}(b) with \(B=I_4\) and \(C=A\) (so \(CB'=A\)) gives
+\(\lVert U-A\rVert_F^2\geqslant\lVert I_4\rVert_F^2+\lVert A\rVert_F^2-2\cdot16=4+84-32=56\) for every orthogonal \(U\), with
+equality at \(U=U_0\). So \(U_0\) is nearest, at distance \(\sqrt{56}=2\sqrt{14}\); directly, \(U_0-A\) has four entries
+\(-1\), four entries \(-3\) and four entries \(-2\), and \(4+36+16=56\). By comparison,
+\(\lVert I_4-A\rVert_F^2=4\cdot16+4\cdot4=80\).
+\end{solution}
+
+\subsection*{Problems}
+
+\begin{problem}[\citeat{abadir-magnus}{Exercise~12.45}]\label{r9-ex-monotone-strict}
+Let \(A,B\in\R^{n\times n}\) be symmetric, with \(B\) PD. Show that \(\lambda_k(A+B)>\lambda_k(A)\) for
+\(k=1,\dots,n\).
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item \(B\) is PD, so \(\lambda_n(B)>0\) (Theorem~\ref{r8-thm-eigen-criterion}(a)), and \(u'Bu\geqslant\lambda_n(B)\) for
+every unit vector \(u\) (Theorem~\ref{r9-thm-rayleigh}(a)).
+\item \(k=n\): for every unit vector \(u\), \(u'(A+B)u=u'Au+u'Bu\geqslant\lambda_n(A)+\lambda_n(B)\)
+(Theorem~\ref{r9-thm-rayleigh}(a)); at a unit eigenvector of \(A+B\) belonging to \(\lambda_n(A+B)\) this gives
+\(\lambda_n(A+B)\geqslant\lambda_n(A)+\lambda_n(B)\).
+\item \(k\leqslant n-1\): let \(w_1,\dots,w_{n-k}\in\R^n\). For every unit vector \(u\perp w_1,\dots,w_{n-k}\),
+\(u'(A+B)u\geqslant u'Au+\lambda_n(B)\), so the minimum of \(u'(A+B)u\) over these \(u\) is at least the minimum of
+\(u'Au\) plus \(\lambda_n(B)\). Taking the maximum over \(w_1,\dots,w_{n-k}\) on both sides,
+Theorem~\ref{r9-thm-courant-fischer}(b) for \(A+B\) and for \(A\) gives \(\lambda_k(A+B)\geqslant\lambda_k(A)+\lambda_n(B)\).
+\item In both cases \(\lambda_k(A+B)\geqslant\lambda_k(A)+\lambda_n(B)>\lambda_k(A)\).
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{bapat}{Ch.~5, Exercise~17}]\label{r9-ex-minors-sign}
+Let \(A\in\R^{n\times n}\) (\(n\geqslant2\)) be symmetric with \(\det A=0\). Show that the \(n\) minors
+\(\det A(1|1),\dots,\det A(n|n)\) are either all \(\geqslant0\) or all \(\leqslant0\).
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item \(\det A=\lambda_1\cdots\lambda_n=0\) (Theorem~\ref{r7-thm-trace-det}), so \(0\) is an eigenvalue of \(A\). Let \(p\)
+be the number of positive eigenvalues of \(A\); then \(p\leqslant n-1\) and \(\lambda_{p+1}(A)=0\).
+\item Let \(B=A(i|i)\). By Theorem~\ref{r9-thm-interlacing},
+\(\lambda_k(B)\geqslant\lambda_{k+1}(A)\geqslant\lambda_{p+1}(A)=0\) for \(k\leqslant p\), and
+\(\lambda_k(B)\leqslant\lambda_k(A)\leqslant\lambda_{p+1}(A)=0\) for \(p+1\leqslant k\leqslant n-1\).
+\item If \(0\) has multiplicity at least \(2\), then also \(\lambda_{p+2}(A)=0\), and
+\(0=\lambda_{p+1}(A)\geqslant\lambda_{p+1}(B)\geqslant\lambda_{p+2}(A)=0\). So every \(A(i|i)\) has the eigenvalue \(0\), and
+\(\det A(i|i)=0\) for every \(i\).
+\item Let \(0\) be a simple eigenvalue, and let \(\det B\ne0\). Then no eigenvalue of \(B\) is \(0\), so by the second item
+\(B\) has exactly \(p\) positive and \(n-1-p\) negative eigenvalues, and \(\det B\) has the sign \((-1)^{n-1-p}\)
+(Theorem~\ref{r7-thm-trace-det}). So all nonzero minors \(\det A(i|i)\) have this same sign.
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{bapat}{Ch.~5, Exercise~4}]\label{r9-ex-sum-squares-sv}
+Let \(n\) be even, and let \(A\in\R^{n\times n}\) have \(n^2/2\) entries equal to \(2\) and the other entries equal to
+\(4\). Show that the sum of the squares of the singular values of \(A\) is \(10n^2\).
+\end{problem}
+\begin{solution}
+By Theorem~\ref{r9-thm-svd-props}(d) and Definition~\ref{r9-def-frobenius},
+\(\sigma_1^2+\dots+\sigma_r^2=\lVert A\rVert_F^2=\sum_i\sum_ja_{ij}^2=\frac{n^2}2\cdot2^2+\frac{n^2}2\cdot4^2
+=2n^2+8n^2=10n^2\).
+\end{solution}
+
+\begin{problem}[\citeat{prasolov}{Problem~34.6}]\label{r9-ex-pr-equal-sv}
+Let \(A\in\R^{n\times n}\), and let all singular values \(\sigma_1,\dots,\sigma_n\) of \(A\) be equal to the same number \(c\).
+Show that \(A=cU\) for an orthogonal matrix \(U\in\R^{n\times n}\).
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item The singular values are \(\geqslant0\) (the definitions after Theorem~\ref{r9-thm-svd}), so \(c\geqslant0\).
+\item Let \(c=0\). Then \(\sigma_1=0\), so \(A=0\): if \(A\ne0\), then \(r=\rank A\geqslant1\) and \(\sigma_1\geqslant\sigma_r>0\)
+(Theorem~\ref{r9-thm-svd}(b) and the definitions after it). So \(A=0\cdot I_n\).
+\item Let \(c>0\). As \(\sigma_k=0\) for \(\rank A<k\leqslant n\) and no \(\sigma_k\) is \(0\), \(\rank A=n\). By
+Theorem~\ref{r9-thm-svd-props}(a), applied to an SVD of \(A\) (Theorem~\ref{r9-thm-svd}(b)), the \(n\) eigenvalues of \(A'A\),
+listed with multiplicity, are \(\sigma_1^2,\dots,\sigma_n^2\), that is, \(c^2\) (\(n\) times).
+\item \(A'A\) is symmetric (Theorem~\ref{r1-thm-transpose}). By Theorem~\ref{r8-thm-spectral}, \(A'A=V\Lambda V'\) with \(V\)
+orthogonal and \(\Lambda\) the diagonal matrix of the eigenvalues of \(A'A\), here \(\Lambda=c^2I_n\); so
+\(A'A=c^2VV'=c^2I_n\) (Proposition~\ref{r6-prop-orthonormal}(b)).
+\item Put \(U=c^{-1}A\). Then \(U'U=c^{-2}A'A=I_n\), so \(U\) is orthogonal (Definition~\ref{r6-def-orthonormal}), and
+\(A=cU\).
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{prasolov}{Problem~34.8}]\label{r9-ex-pr-block-sv}
+Let \(A\in\R^{n\times n}\) have the singular values \(\sigma_1\geqslant\dots\geqslant\sigma_n\) (with \(\sigma_k=0\) for
+\(k>\rank A\), as in the definitions after Theorem~\ref{r9-thm-svd}). Show that the eigenvalues of
+\[
+M=\begin{pmatrix}0&A\\A'&0\end{pmatrix}\in\R^{2n\times2n}
+\]
+listed with multiplicity, are \(\sigma_1,\dots,\sigma_n,-\sigma_1,\dots,-\sigma_n\).
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item For \(t\in\R\), \(p_M(t)=\det(tI_{2n}-M)\) (Definition~\ref{r7-def-charpoly}(a)), and
+\(tI_{2n}-M=\left(\begin{smallmatrix}tI_n&-A\\-A'&tI_n\end{smallmatrix}\right)\).
+\item Let \(t\ne0\). Then \(tI_n\) is invertible with inverse \(t^{-1}I_n\), and \(\det(tI_n)=t^n\)
+(Theorem~\ref{r5d-thm-basic}(c)). By Theorem~\ref{r5d-thm-schur-det}(a), and \(\det(cB)=c^n\det B\)
+(Theorem~\ref{r5d-thm-product}(c)) with \(c=t^{-1}\),
+\[
+p_M(t)=t^n\det\bigl(tI_n-(-A')(t^{-1}I_n)(-A)\bigr)=t^n\det\bigl(t^{-1}(t^2I_n-A'A)\bigr)=t^nt^{-n}\det(t^2I_n-A'A)
+\]
+that is, \(p_M(t)=\det(t^2I_n-A'A)\) for every \(t\ne0\).
+\item The eigenvalues of \(A'A\), listed with multiplicity, are \(\sigma_1^2,\dots,\sigma_n^2\). If \(A=0\), then \(A'A=0\),
+\(p_{A'A}(t)=\det(tI_n)=t^n\) (Theorem~\ref{r5d-thm-basic}(c)), and all of them, like all \(\sigma_i\), are \(0\). If \(A\ne0\), then by Theorem~\ref{r9-thm-svd-props}(a), applied to an SVD of
+\(A\) (Theorem~\ref{r9-thm-svd}(b)), \(\sigma_1^2,\dots,\sigma_r^2\) (\(r=\rank A\)) are the nonzero ones, so the other
+\(n-r\) are \(0=\sigma_{r+1}^2=\dots=\sigma_n^2\). Hence, for every \(s\in\R\) (Definitions~\ref{r7-def-charpoly}(a)
+and~\ref{r7-def-eigenvalues}, Proposition~\ref{r7-prop-poly}(b)),
+\[
+\det(sI_n-A'A)=p_{A'A}(s)=(s-\sigma_1^2)(s-\sigma_2^2)\cdots(s-\sigma_n^2)
+\]
+\item Take \(s=t^2\), and write \(t^2-\sigma_i^2=(t-\sigma_i)(t+\sigma_i)\). Then, for every \(t\ne0\), \(p_M(t)=g(t)\), where
+\[
+g=(t-\sigma_1)\cdots(t-\sigma_n)\bigl(t-(-\sigma_1)\bigr)\cdots\bigl(t-(-\sigma_n)\bigr)
+\]
+(Proposition~\ref{r7-prop-poly}(b)). The polynomials \(p_M\) and \(g\) have the same value at every real \(t\ne0\), so \(p_M=g\)
+(Proposition~\ref{r7-prop-poly}(d)). By Definition~\ref{r7-def-eigenvalues}, the eigenvalues of \(M\), listed with
+multiplicity, are \(\sigma_1,\dots,\sigma_n,-\sigma_1,\dots,-\sigma_n\).
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{prasolov}{Problem~35.1}]\label{r9-ex-pr-eig-norm}
+Let \(A\in\R^{n\times n}\) be invertible, and let \(c\) be a real eigenvalue of \(A\). Show that
+\[
+\frac1{\lVert A^{-1}\rVert_2}\leqslant\lvert c\rvert\leqslant\lVert A\rVert_2
+\]
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item Let \(Ax=cx\) with \(x\ne0\) (Definition~\ref{r7-def-eigen}). As \(A\) is invertible, \(c\ne0\) and \(A^{-1}x=c^{-1}x\)
+(Proposition~\ref{r7-prop-eig-poly}(b)).
+\item By Proposition~\ref{r9-prop-spectral-norm}(a) and \(\lVert cx\rVert=\lvert c\rvert\,\lVert x\rVert\) (the remarks after
+Definition~\ref{r6-def-inner}),
+\(\lVert A\rVert_2=\max_{y\ne0}\lVert Ay\rVert/\lVert y\rVert\geqslant\lVert Ax\rVert/\lVert x\rVert
+=\lVert cx\rVert/\lVert x\rVert=\lvert c\rvert\).
+\item Likewise
+\(\lVert A^{-1}\rVert_2\geqslant\lVert A^{-1}x\rVert/\lVert x\rVert=\lVert c^{-1}x\rVert/\lVert x\rVert=1/\lvert c\rvert>0\).
+Taking reciprocals, \(1/\lVert A^{-1}\rVert_2\leqslant\lvert c\rvert\).
+\end{itemize}
+As \(\lVert A\rVert_2=\sigma_1\) and \(\lVert A^{-1}\rVert_2=1/\sigma_n\) (Definition~\ref{r9-def-spectral-norm},
+Proposition~\ref{r9-prop-condition}(a)), this says \(\sigma_n\leqslant\lvert c\rvert\leqslant\sigma_1\); and for two real
+eigenvalues \(c\), \(d\) of \(A\), \(\lvert c\rvert/\lvert d\rvert\leqslant\lVert A\rVert_2\lVert A^{-1}\rVert_2=\kappa(A)\)
+(Definition~\ref{r9-def-condition}).
+\end{solution}
+
+\begin{problem}[\citeat{bapat}{Ch.~5, Exercise~15}]\label{r12-ex-bapat-pd}
+Let \(A\in\R^{m\times m}\) and \(B\in\R^{q\times q}\) be PD and \(C\in\R^{m\times q}\). Show that
+\[
+F=\begin{pmatrix}A&C\\C'&B\end{pmatrix}
+\]
+is PD if and only if the largest singular value \(\sigma_1\) of \(K=A^{-1/2}CB^{-1/2}\) is less than \(1\) (with
+\(\sigma_1=0\) if \(C=0\)).
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item \(A^{-1/2}\), \(B^{-1/2}\) are symmetric and \(B^{-1/2}B^{-1/2}=(B^{1/2}B^{1/2})^{-1}=B^{-1}\) (Theorem~\ref{r8-thm-sqrt}), so
+\(KK'=A^{-1/2}CB^{-1}C'A^{-1/2}\), and \(\sigma_1^2\) is the largest eigenvalue of \(KK'\) (Theorem~\ref{r9-thm-svd-props}(a); \(0\)
+if \(C=0\)).
+\item With \(KK'=Q\Lambda Q'\) (Theorem~\ref{r8-thm-spectral}(b)), \(I_m-KK'=Q(I_m-\Lambda)Q'\) has the eigenvalues \(1-\lambda_i\);
+so \(\sigma_1<1\) if and only if \(I_m-KK'\) is PD (Theorem~\ref{r8-thm-eigen-criterion}(a)).
+\item \(A^{1/2}(I_m-KK')A^{1/2}=A-CB^{-1}C'\), and \(x\mapsto y=A^{1/2}x\) maps the nonzero vectors onto the nonzero vectors
+(\(A^{1/2}\) is invertible), with \(x'(A-CB^{-1}C')x=y'(I_m-KK')y\). So \(I_m-KK'\) is PD if and only if
+\(A-CB^{-1}C'\) is PD.
+\item Let \(L=\begin{pmatrix}I_m&-CB^{-1}\\0&I_q\end{pmatrix}\), invertible (Proposition~\ref{r5b-prop-block-elementary}). By
+Theorem~\ref{r5b-thm-block}(c), with \((B^{-1})'=B^{-1}\),
+\[
+LF=\begin{pmatrix}A-CB^{-1}C'&0\\C'&B\end{pmatrix},\qquad
+LFL'=\begin{pmatrix}A-CB^{-1}C'&0\\0&B\end{pmatrix}
+\]
+As \(x'(LFL')x=(L'x)'F(L'x)\) and \(L'\) is invertible, \(F\) is PD if and only if \(LFL'\) is PD. For
+\(x=(y',z')'\), \(x'(LFL')x=y'(A-CB^{-1}C')y+z'Bz\); as \(B\) is PD, this is positive for every \(x\ne0\) if and only if
+\(A-CB^{-1}C'\) is PD (take \(z=0\) for the converse).
+\item Combining the three equivalences: \(F\) is PD if and only if \(\sigma_1<1\).
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{prasolov}{Problem~34.2}]\label{r9-ex-pr-trace-orthogonal}
+Let \(U\in\R^{n\times n}\) be orthogonal and \(S\in\R^{n\times n}\) PSD.
+\begin{enumerate}
+\item Show that \(\lvert\tr(US)\rvert\leqslant\tr S\).
+\item Let \(S\) be PD. Show that \(\tr(US)=\tr S\) only for \(U=I_n\), and \(\lvert\tr(US)\rvert=\tr S\) only for \(U=I_n\) and
+\(U=-I_n\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a)
+\begin{itemize}
+\item By Theorem~\ref{r8-thm-spectral}, \(S=V\Lambda V'\) with \(V\in\R^{n\times n}\) orthogonal and
+\(\Lambda=\diag(\lambda_1,\dots,\lambda_n)\), where \(\lambda_1,\dots,\lambda_n\) are the eigenvalues of \(S\); they are
+\(\geqslant0\), as \(S\) is PSD (Theorem~\ref{r8-thm-eigen-criterion}(a)).
+\item Let \(W=V'UV=(w_{ij})\). By Theorem~\ref{r1-thm-trace}(b),
+\(\tr(US)=\tr\bigl((UV\Lambda)V'\bigr)=\tr(V'UV\Lambda)=\tr(W\Lambda)\). Column \(i\) of \(W\Lambda\) is \(\lambda_i\col_i(W)\)
+(Theorem~\ref{r1-thm-views}(a),(b)), whose \(i\)th entry is \(\lambda_iw_{ii}\); so
+\[
+\tr(US)=\lambda_1w_{11}+\lambda_2w_{22}+\dots+\lambda_nw_{nn}
+\]
+\item \(W\) is orthogonal, as \(V'\), \(U\) and \(V\) are (Theorem~\ref{r6-thm-orthogonal}(b)), so its columns are unit vectors
+(Theorem~\ref{r6-thm-orthogonal}(a)): \(w_{1i}^2+\dots+w_{ni}^2=1\). Hence \(w_{ii}^2\leqslant1\), that is,
+\(\lvert w_{ii}\rvert\leqslant1\), for \(i=1,\dots,n\).
+\item \(\tr S=\tr\bigl((V\Lambda)V'\bigr)=\tr(V'V\Lambda)=\tr\Lambda=\lambda_1+\dots+\lambda_n\)
+(Theorem~\ref{r1-thm-trace}(b), \(V'V=I_n\)). As every \(\lambda_i\geqslant0\),
+\[
+\lvert\tr(US)\rvert\leqslant\lambda_1\lvert w_{11}\rvert+\dots+\lambda_n\lvert w_{nn}\rvert\leqslant\lambda_1+\dots+\lambda_n=\tr S
+\]
+\end{itemize}
+(b) Now every \(\lambda_i>0\) (Theorem~\ref{r8-thm-eigen-criterion}(a)).
+\begin{itemize}
+\item Let \(\tr(US)=\tr S\). By (a), \(0=\tr S-\tr(US)=\lambda_1(1-w_{11})+\dots+\lambda_n(1-w_{nn})\), a sum of terms
+\(\geqslant0\), as \(w_{ii}\leqslant1\). So every term is \(0\), and as \(\lambda_i>0\), \(w_{ii}=1\) for \(i=1,\dots,n\).
+\item Column \(i\) of \(W\) is a unit vector with \(i\)th entry \(1\), so its other entries are \(0\): \(\col_i(W)=e_i\), and
+\(W=I_n\). As \(VV'=I_n\) (Proposition~\ref{r6-prop-orthonormal}(b)), \(U=VV'UVV'=VWV'=VV'=I_n\).
+\item Let \(\lvert\tr(US)\rvert=\tr S\). If \(\tr(US)=\tr S\), then \(U=I_n\). If \(\tr(US)=-\tr S\), then \(-U\) is orthogonal,
+as \((-U)'(-U)=U'U=I_n\), and \(\tr\bigl((-U)S\bigr)=-\tr(US)=\tr S\) (Theorem~\ref{r1-thm-trace}(a)); so \(-U=I_n\), that is,
+\(U=-I_n\).
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{abadir-magnus}{Exercise~8.40}]\label{r9-ex-polar}
+Let \(A\in\R^{m\times n}\).
+\begin{enumerate}
+\item If \(A\) has full column rank \(n\), show that \(A=UV\) for some \(U\in\R^{m\times n}\) with \(U'U=I_n\) and some PD
+\(V\in\R^{n\times n}\).
+\item If \(A\) has full row rank \(m\), show that \(A=VU'\) for some \(U\in\R^{n\times m}\) with \(U'U=I_m\) and some PD
+\(V\in\R^{m\times m}\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a)
+\begin{itemize}
+\item Here \(r=n\), so in the compact SVD \(A=P_1DQ_1'\) of Theorem~\ref{r9-thm-svd}, \(Q_1=Q\) is an orthogonal
+\(n\times n\) matrix, \(P_1'P_1=I_n\), and \(D=\diag(\sigma_1,\dots,\sigma_n)\) with every \(\sigma_i>0\).
+\item As \(Q'Q=I_n\), \(A=P_1(Q'Q)DQ'=(P_1Q')(QDQ')=UV\) with \(U=P_1Q'\) and \(V=QDQ'\).
+\item \(U'U=QP_1'P_1Q'=QQ'=I_n\) (Proposition~\ref{r6-prop-orthonormal}(b)). \(V\) is symmetric and \(Q'VQ=D\), so its
+eigenvalues are \(\sigma_1,\dots,\sigma_n>0\) (Definition~\ref{r7-def-diagonalizable}), and \(V\) is PD
+(Theorem~\ref{r8-thm-eigen-criterion}(a)).
+\end{itemize}
+(b) \(A'\in\R^{n\times m}\) has full column rank \(m\) (Theorem~\ref{thm:r4-rank-rules}(a)). By (a), \(A'=UV\) with
+\(U'U=I_m\) and \(V\) PD, so \(A=V'U'=VU'\).
+\end{solution}
+
+\clearpage
 \def\runningtitle{Bibliography}
 \renewcommand{\refname}{Bibliography}
 \begin{thebibliography}{10}
@@ -30975,17 +33208,20 @@ Shayle~R. Searle and Andr{\'e}~I. Khuri.
 R.~B. Bapat.
 \newblock {\em {Linear Algebra and Linear Models}}.
 \newblock Universitext. Springer, London, third edition, 2012.
+\newblock \url{https://doi.org/10.1007/978-1-4471-2739-0}.
 
 \bibitem{lang}
 Serge Lang.
 \newblock {\em {Linear Algebra}}.
 \newblock Undergraduate Texts in Mathematics. Springer, New York, third
   edition, 1987.
+\newblock \url{https://doi.org/10.1007/978-1-4757-1949-9}.
 
 \bibitem{harville}
 David~A. Harville.
 \newblock {\em {Matrix Algebra From a Statistician's Perspective}}.
 \newblock Springer, New York, 1997.
+\newblock \url{https://doi.org/10.1007/b98818}.
 
 \bibitem{abadir-magnus}
 Karim~M. Abadir and Jan~R. Magnus.
@@ -30996,11 +33232,13 @@ Karim~M. Abadir and Jan~R. Magnus.
 Rami Shakarchi.
 \newblock {\em {Solutions Manual for Lang's Linear Algebra}}.
 \newblock Springer, New York, 1996.
+\newblock \url{https://doi.org/10.1007/978-1-4612-0755-9}.
 
 \bibitem{harville-solutions}
 David~A. Harville.
 \newblock {\em {Matrix Algebra: Exercises and Solutions}}.
 \newblock Springer, New York, 2001.
+\newblock \url{https://doi.org/10.1007/978-1-4613-0181-3}.
 
 \bibitem{tu-asm}
 Chang-Ye Tu.
@@ -31030,11 +33268,14 @@ Serge Lang.
 \newblock {\em {Introduction to Linear Algebra}}.
 \newblock Undergraduate Texts in Mathematics. Springer, New York, second
   edition, 1986.
+\newblock \url{https://doi.org/10.1007/978-1-4612-1070-2}.
 
 \bibitem{knapp-basic-algebra}
 Anthony~W. Knapp.
 \newblock {\em {Basic Algebra}}.
 \newblock Anthony W. Knapp, East Setauket, NY, digital second edition, 2016.
+\newblock Freely downloadable from the author,
+  \url{https://www.math.stonybrook.edu/~aknapp/download.html}.
 
 \bibitem{zhang}
 Fuzhen Zhang.
@@ -31050,18 +33291,22 @@ Roger~A. Horn and Charles~R. Johnson.
 George Casella and Roger~L. Berger.
 \newblock {\em {Statistical Inference}}.
 \newblock Chapman and Hall/CRC, Boca Raton, FL, second edition, 2024.
-\newblock Reissue of the 2002 Duxbury edition.
+\newblock Reissue of the 2002 Duxbury edition,
+  \url{https://doi.org/10.1201/9781003456285}.
 
 \bibitem{haerdle-simar}
 Wolfgang~Karl H{\"a}rdle and L{\'e}opold Simar.
 \newblock {\em {Applied Multivariate Statistical Analysis}}.
 \newblock Springer, Berlin, fourth edition, 2015.
+\newblock \url{https://doi.org/10.1007/978-3-662-45171-7}.
 
 \bibitem{islr}
 Gareth James, Daniela Witten, Trevor Hastie, and Robert Tibshirani.
 \newblock {\em {An Introduction to Statistical Learning with Applications in
   R}}.
 \newblock Springer, New York, second edition, 2021.
+\newblock Freely downloadable from the authors,
+  \url{https://www.statlearning.com}.
 
 \bibitem{casella-berger-solutions}
 George Casella, Roger~L. Berger, and Damaris Santana.
@@ -31074,6 +33319,13 @@ Chang-Ye Tu.
 \newblock Lecture notes, expanded from Jan R. Magnus, ``A Gentle Introduction
   to Matrix Calculus'',
   \url{https://github.com/chang-ye-tu/mva/blob/master/note/mc.pdf}.
+
+\bibitem{knapp-basic-real-analysis}
+Anthony~W. Knapp.
+\newblock {\em {Basic Real Analysis}}.
+\newblock Anthony W. Knapp, East Setauket, NY, digital second edition, 2016.
+\newblock Freely downloadable from the author,
+  \url{https://www.math.stonybrook.edu/~aknapp/download.html}.
 
 \end{thebibliography}
 \end{document}
