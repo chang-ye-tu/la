@@ -38,6 +38,7 @@
 | 12/09 | <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture11.pdf">Lecture 11: Linear Models I</a> |
 | 12/16 | <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture12.pdf">Lecture 12: Linear Models II</a> |
 | 12/23 | **期末考** |
+| — | <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture13.pdf">Lecture 13: The Singular Value Decomposition</a> |
 
 ## 授課教師
 

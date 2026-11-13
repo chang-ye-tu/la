@@ -1,0 +1,695 @@
+\def\handoutsay{false}\def\handoutfill{false}
+\documentclass[12pt]{article}
+\newcommand{\handoutrunning}{Lecture 13: The Singular Value Decomposition}
+\providecommand{\handoutsay}{true}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[a4paper,margin=15mm,headheight=14pt,headsep=5mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,booktabs,needspace}
+\usepackage{pifont}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{fancyhdr}
+\usepackage{ifthen}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdfauthor={Chang-Ye Tu}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Linear Algebra}
+\fancyhead[R]{\small\handoutrunning}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt plus 1pt minus 1pt}
+\setlength{\emergencystretch}{1.5em}
+\usepackage{etoolbox}
+\newcommand{\handoutdisplayskips}{\setlength{\abovedisplayskip}{7pt plus 2pt minus 2pt}%
+  \setlength{\belowdisplayskip}{7pt plus 2pt minus 2pt}}
+\apptocmd{\normalsize}{\handoutdisplayskips}{}{\PackageWarning{handout}{could not patch normalsize}}
+\handoutdisplayskips
+\setlist[enumerate]{label=(\alph*),leftmargin=*,itemsep=2pt,topsep=3pt}
+\setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\iu}{\mathrm{i}}
+\newcommand{\contradiction}{\mathord{\text{\large\ding{56}}}}
+\newcommand{\one}{\mathbf 1}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\col}{col}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator\prb{\mathsf{P}}
+\DeclareMathOperator\expc{\mathsf{E}}
+\DeclareMathOperator\var{var}
+\DeclareMathOperator\cov{cov}
+\DeclareMathOperator\cor{cor}
+\DeclareMathOperator\argmin{argmin}
+\DeclareMathOperator\argmax{argmax}
+\DeclareMathOperator{\Span}{span}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{fact}{Fact}
+\renewcommand{\thefact}{F\arabic{fact}}
+\AddToHook{cmd/subsection/before}{\par\Needspace{9\baselineskip}}
+\AddToHook{env/theorem/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/proposition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/lemma/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/definition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/example/before}{\par\Needspace{4\baselineskip}}
+\definecolor{saybg}{gray}{0.86}
+\NewDocumentEnvironment{say}{+b}
+  {\ifthenelse{\equal{\handoutsay}{true}}{\par\Needspace{2\baselineskip}\noindent\colorbox{saybg}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}%
+   {\small\sffamily\ding{43}\enspace\textbf{Say.}\enspace#1}}\par}{}}
+  {}
+\providecommand{\handoutfill}{false}
+\newsavebox{\boardbox}
+\newlength{\boardht}
+\definecolor{boardrule}{gray}{0.55}
+\makeatletter
+\newcommand{\boardstart}{\par\if@inlabel\leavevmode\par\fi}
+\makeatother
+\NewDocumentEnvironment{board}{o +b}
+  {\boardstart\IfValueT{#1}{\noindent#1\par\nopagebreak}%
+   \noindent\begin{lrbox}{\boardbox}\begin{minipage}{\linewidth}#2\end{minipage}\end{lrbox}%
+   \setlength{\boardht}{\dimexpr\ht\boardbox+\dp\boardbox\relax}%
+   \ifthenelse{\equal{\handoutfill}{true}}%
+     {\setlength{\boardht}{1.4\boardht}%
+      {\setlength{\fboxsep}{0pt}\setlength{\fboxrule}{0.4pt}\color{boardrule}%
+       \framebox[\dimexpr\linewidth-2\fboxrule\relax]{\rule{0pt}{\boardht}}}}%
+     {\ifthenelse{\equal{\handoutsay}{true}}%
+        {\llap{\color{boardrule}\rule[-\dp\boardbox]{1.5pt}{\boardht}\hspace{4pt}}}{}%
+      \usebox{\boardbox}}%
+   \par}
+  {}
+\newcommand{\blank}[1]{\ifthenelse{\equal{\handoutfill}{true}}{\underline{\phantom{#1}}}{#1}}
+\newcommand{\lec}[1]{Lecture~#1}
+\newcommand{\handouttitle}[2]{%
+  \begin{center}
+  {\LARGE\sffamily\bfseries #2\par}\vspace{3pt}
+  {\sffamily Linear Algebra \textperiodcentered\ \lec{#1}\par}
+  \ifthenelse{\equal{\handoutsay}{true}}{\vspace{3pt}{\small\sffamily\colorbox{saybg}{\ding{43}\enspace\textbf{Say.}}\enspace
+    teacher's copy: the shaded boxes are not in the students' copy.\par}}{}
+  \ifthenelse{\equal{\handoutfill}{true}}{\vspace{3pt}{\small\sffamily Fill-in copy: complete the framed spaces in
+    class.\par}}{}
+  \end{center}}
+
+\hypersetup{pdftitle={Linear Algebra, Lecture 13: The Singular Value Decomposition}}
+\newcommand{\boardtop}{\vspace*{-\abovedisplayskip}}
+\DeclareMathOperator{\row}{row}
+\begin{document}
+\handouttitle{13}{The Singular Value Decomposition}
+
+\textbf{Last time} (\lec{12}): if \(a'\beta\) is estimable, \(a'\beta^0\) is its BLUE; \(t\) intervals and tests, the
+\(F\) test of a testable hypothesis, and the one-way analysis-of-variance table. Throughout, \(I\) and
+\(e_j=\col_j(I)\) are of the size required; \(\lambda_1(M)\geqslant\dots\geqslant\lambda_n(M)\) are the eigenvalues of a symmetric
+\(M\in\R^{n\times n}\); \(\diag(D,0)\) is the block matrix of the size required by the product, with
+\(D\in\R^{r\times r}\) in its top left block and zeros elsewhere (blocks with no rows or no columns are absent).
+
+\textbf{From earlier lectures} (restated).
+\begin{itemize}[itemsep=0pt,parsep=0pt,topsep=2pt]
+\item \lec{1}, Theorem~3(a), Definitions~7, 9, Theorems~8, 10(a), Proposition~13(a),(b); \lec{2}, Definition~10;
+\lec{7}, Definition~1: matrix products are associative and distributive; \((A')'=A\), \((A+B)'=A'+B'\),
+\((cA)'=cA'\), \((AB)'=B'A'\); \(A\) is \textbf{symmetric} if \(A'=A\), and \(B'B\), \(BB'\) are symmetric;
+\(\tr A=\sum_ia_{ii}\), \(\tr(A+B)=\tr A+\tr B\), \(\tr(cA)=c\tr A\); for \(D=\diag(d_1,\dots,d_n)\):
+\(\col_j(AD)=d_j\col_j(A)\), \(D\diag(f_1,\dots,f_n)=\diag(d_1f_1,\dots,d_nf_n)\), and
+\(D^{-1}=\diag(1/d_1,\dots,1/d_n)\) if all \(d_i\ne0\); if \(Ax=\lambda x\), \(\lambda\in\R\), \(x\ne0\), then \(x\) is an
+\textbf{eigenvector} of \(A\) belonging to \(\lambda\).
+\item \lec{1}, Theorem~4(a),(b),(d): for \(A=[a_1\ \cdots\ a_n]\in\R^{m\times n}\) and \(B\in\R^{n\times p}\):
+\(\col_j(AB)=A\col_j(B)\); \(Ax=x_1a_1+\dots+x_na_n\), \(Ae_j=a_j\); \((AB)_{ij}=\row_i(A)\col_j(B)\) and
+\(AB=a_1\row_1(B)+\dots+a_n\row_n(B)\).
+\item \lec{1}, Theorem~10(b),(c): \(\tr(AB)=\tr(BA)\) (\(A\in\R^{m\times n}\), \(B\in\R^{n\times m}\));
+\(\tr(A'A)=\sum_i\sum_ja_{ij}^2\), so \(\tr(A'A)=0\Rightarrow A=0\).
+\item \lec{2}, Theorem~11(b): \((AB)^{-1}=B^{-1}A^{-1}\) for invertible \(A,B\in\R^{n\times n}\).
+\item \lec{4}, Definitions~7, 10, Theorems~11, 12(a),(d), 15(d), 16(a),(b): for \(A\in\R^{m\times n}\),
+\(\mathcal C(A)=\{Ax:x\in\R^n\}\), \(\mathcal N(A)=\{x:Ax=0\}\), \(\rank A=\dim\mathcal C(A)\);
+\(\rank A+\dim\mathcal N(A)=n\); \(\rank A'=\rank A\leqslant\min\{m,n\}\); if \(m=n\), \(A\) is invertible \(\iff\)
+\(\rank A=n\); \(\rank(PAQ)=\rank A\) for invertible \(P\), \(Q\); \(\mathcal N(A'A)=\mathcal N(A)\) and
+\(\rank(A'A)=\rank A=\rank(AA')\).
+\item \lec{5}, Theorem~2(b),(c): block matrices are transposed block by block (block \((j,i)\) of \(A'\) is
+\(A_{ij}'\)) and multiplied block by block (when the blocks fit).
+\item \lec{6}, Definitions~1, 4, 8, Theorems~5(c), 7(b), 9: \(\lVert x\rVert=\sqrt{x'x}\), which is \(0\) only for
+\(x=0\); \(\lVert cx\rVert=\lvert c\rvert\,\lVert x\rVert\) (\(c\in\R\)); a \textbf{unit vector} has length \(1\), and
+\(x/\lVert x\rVert\) is one for \(x\ne0\). For a subspace \(W\subseteq\R^n\),
+\(W^\perp=\{y:y'w=0\text{ for all }w\in W\}\) and \(\dim W+\dim W^\perp=n\). Nonzero pairwise orthogonal vectors are
+linearly independent. \(Q\in\R^{n\times p}\) has \textbf{orthonormal} columns if \(Q'Q=I_p\); then
+\(\lVert Qx\rVert=\lVert x\rVert\); if moreover \(p=n\) (\(Q\) is \textbf{orthogonal}), \(Q^{-1}=Q'\) and \(QQ'=I_n\).
+\item \lec{6}, Corollary~11(a),(c): a subspace \(W\ne\{0\}\) of \(\R^n\) has an orthonormal basis. If \(Q'Q=I_p\) and
+\(p<n\), then \([Q\ T]\) is orthogonal for some \(T\in\R^{n\times(n-p)}\), and \(QQ'+TT'=I_n\) for every such \(T\).
+\item \lec{7}, Definition~5, Theorem~14(a): \(A\in\R^{n\times n}\) has \(n\) eigenvalues \(\lambda_1,\dots,\lambda_n\),
+listed with multiplicity; \(a_A(c)=\#\{i:\lambda_i=c\}\). If \(P\) is invertible and
+\(P^{-1}AP=\diag(\lambda_1,\dots,\lambda_n)\), then \(\lambda_1,\dots,\lambda_n\) are the eigenvalues of \(A\).
+\item \lec{8}, Theorems~8, 9(a),(b): let \(A\in\R^{n\times n}\) be symmetric. Eigenvectors for different eigenvalues
+are orthogonal; \(\R^n\) has an orthonormal basis of eigenvectors of \(A\). If \(q_1,\dots,q_n\) are orthonormal,
+\(Aq_i=\lambda_iq_i\) and \(Q=[q_1\ \cdots\ q_n]\): \(Q\) is orthogonal, \(Q'AQ=\diag(\lambda_1,\dots,\lambda_n)\), the
+\(\lambda_i\) are the eigenvalues of \(A\), \(\rank A=\#\{i:\lambda_i\ne0\}\), and \(\dim\mathcal N(A-cI)=a_A(c)\)
+(\(c\in\R\)).
+\item \lec{8}, Definition~13, Theorems~14(a), 15(b): a symmetric \(A\) is \textbf{positive definite} (PD) if
+\(x'Ax>0\) for all \(x\ne0\), \textbf{positive semidefinite} (PSD) if \(x'Ax\geqslant0\) for all \(x\); \(A\) is PD
+\(\iff\) every \(\lambda_i>0\), PSD \(\iff\) every \(\lambda_i\geqslant0\). For \(A\in\R^{n\times p}\), \(A'A\) is PSD,
+and PD \(\iff\) \(\rank A=p\).
+\item \lec{9}, Theorem~13(a): for a symmetric \(A\), orthonormal \(q_1,\dots,q_n\), \(Aq_i=\lambda_iq_i\), can be
+numbered so that \(\lambda_1\geqslant\dots\geqslant\lambda_n\); then \(Q=[q_1\ \cdots\ q_n]\) is orthogonal,
+\(Q'AQ=\diag(\lambda_1,\dots,\lambda_n)\), the \(\lambda_i\) are the eigenvalues of \(A\), and
+\(\lambda_n\leqslant x'Ax/x'x\leqslant\lambda_1\) for \(x\ne0\), with equality at \(x=q_n\) and \(x=q_1\).
+\item \lec{1}, Definition~14; \lec{9}, Definition~9, Proposition~10(a): for a data matrix \(X\in\R^{n\times p}\) (\(n\geqslant2\)),
+\(C_n=I_n-\frac1n\one\one'\) (\(\one=(1,\dots,1)'\in\R^n\)) and \(S=\frac1{n-1}X'C_nX=\frac1{n-1}(C_nX)'(C_nX)\).
+\item \lec{9}, Definition~15, Theorem~16(a),(d), Proposition~17: let \(S\ne0\), \(S=V\Lambda V'\),
+\(V=[v_1\ \cdots\ v_p]\) orthogonal, \(\Lambda=\diag(\lambda_1,\dots,\lambda_p)\), \(\lambda_1\geqslant\dots\geqslant\lambda_p\),
+the score vectors \(z_m=C_nXv_m\), and \(r=\rank(C_nX)\). Then \(\lambda_p\geqslant0\), \(\lambda_m>0\iff m\leqslant r\);
+\(z_m'z_l=(n-1)\lambda_m\) if \(l=m\), \(0\) if \(l\ne m\);
+\(\mathrm{PVE}_m=\lVert z_m\rVert^2/\tr\bigl((C_nX)'(C_nX)\bigr)=\lambda_m/(\lambda_1+\dots+\lambda_p)\).
+\item \lec{9}, Examples~11, 18: \(n=5\), \(p=4\),
+\(X=\left(\begin{smallmatrix}7&3&7&3\\9&9&5&7\\5&7&9&9\\3&5&1&1\\1&1&3&5\end{smallmatrix}\right)\),
+\(C_5X=\left(\begin{smallmatrix}2&-2&2&-2\\4&4&0&2\\0&2&4&4\\-2&0&-4&-4\\-4&-4&-2&0\end{smallmatrix}\right)\),
+\(S=\left(\begin{smallmatrix}10&7&5&3\\7&10&3&5\\5&3&10&7\\3&5&7&10\end{smallmatrix}\right)\); \(\lambda_m=25,9,5,1\),
+\(v_m=\frac12h_m\) with \(h_1=(1,1,1,1)'\), \(h_2=(1,1,-1,-1)'\), \(h_3=(1,-1,1,-1)'\), \(h_4=(1,-1,-1,1)'\);
+\(z_1=(0,5,5,-5,-5)'\), \(z_2=(0,3,-3,3,-3)'\), \(z_3=(4,-1,-1,-1,-1)'\), \(z_4=(0,1,-1,-1,1)'\).
+\item \lec{11}, Definition~1: in the linear model \(y=X\beta+\varepsilon\), \(X'X\beta=X'y\) are the \textbf{normal
+equations}.
+\end{itemize}
+
+\subsection*{1. The singular value decomposition}
+
+\Needspace{17\baselineskip}
+\begin{theorem}\label{b15.9}
+Let \(A\in\R^{m\times n}\), \(\rank A=r\geqslant1\).
+\begin{enumerate}
+\item Let \(Q=[Q_1\ Q_2]\in\R^{n\times n}\) be orthogonal, \(Q_1\in\R^{n\times r}\), and \(D\in\R^{r\times r}\)
+invertible and diagonal, with \(Q'A'AQ=\diag(D^2,0)\). Let \(P_1=AQ_1D^{-1}\in\R^{m\times r}\) and \(P=[P_1\ P_2]\),
+where \(P_2\in\R^{m\times(m-r)}\) and \(P_1'P_2=0\). Then \(P'AQ=\diag(D,0)\).
+\item Such \(Q\), \(D\) exist with \(D=\diag(\sigma_1,\dots,\sigma_r)\), \(\sigma_1\geqslant\dots\geqslant\sigma_r>0\):
+\(\sigma_i^2=\lambda_i(A'A)\) (\(i\leqslant r\)), \(Q\) as in \lec{9}, Theorem~13, for \(A'A\). Then \(P_1'P_1=I_r\),
+\(P_2\) can be chosen so that \(P\) is orthogonal, and, with the columns \(p_i\) of \(P\) and \(q_i\) of \(Q\),
+\[
+A=P\diag(D,0)Q'=P_1DQ_1'=\sigma_1p_1q_1'+\dots+\sigma_rp_rq_r'
+\]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) The blocks of \(Q'A'AQ\) (\lec{5}, Theorem~2(b),(c)):]
+\boardtop
+\begin{align*}
+&\begin{pmatrix}Q_1'A'AQ_1&Q_1'A'AQ_2\\Q_2'A'AQ_1&Q_2'A'AQ_2\end{pmatrix}=\begin{pmatrix}D^2&0\\0&0\end{pmatrix}\\
+&(AQ_2)'(AQ_2)=Q_2'A'AQ_2=0\\
+&\implies\tr\bigl((AQ_2)'(AQ_2)\bigr)=0\implies AQ_2=0&&\text{(\lec{1}, Theorem~10(c))}
+\end{align*}
+\end{board}
+\begin{board}[(a) \(AQ_1=P_1D\); \(P_1'=D^{-1}Q_1'A'\) (\(D^{-1}\) is diagonal); \lec{5}, Theorem~2(b),(c):]
+\[
+P'AQ=\begin{pmatrix}P_1'AQ_1&P_1'AQ_2\\P_2'AQ_1&P_2'AQ_2\end{pmatrix}
+=\begin{pmatrix}D^{-1}Q_1'A'AQ_1&0\\P_2'P_1D&0\end{pmatrix}
+=\begin{pmatrix}D^{-1}D^2&0\\(P_1'P_2)'D&0\end{pmatrix}=\begin{pmatrix}D&0\\0&0\end{pmatrix}
+\]
+\end{board}
+\begin{board}[(b) \(D\) and \(Q\): \(A'A\) is symmetric; \(\lambda_i=\lambda_i(A'A)\):]
+\boardtop
+\begin{align*}
+&A'A\text{ is PSD}\implies\lambda_i\geqslant0&&\text{(\lec{8}, Theorems~15(b), 14(a))}\\
+&\rank(A'A)=\rank A=r&&\text{(\lec{4}, Theorem~16(b))}\\
+&\implies\text{exactly \(r\) of the \(\lambda_i\) are nonzero}&&\text{(\lec{8}, Theorem~9(b))}\\
+&\lambda_1\geqslant\dots\geqslant\lambda_r>0=\lambda_{r+1}=\dots=\lambda_n\\
+&Q'A'AQ=\diag(\lambda_1,\dots,\lambda_n)=\diag(D^2,0)&&\text{(\lec{9}, Theorem~13)}
+\end{align*}
+\end{board}
+\begin{board}[(b) \(P\) is orthogonal:]
+\boardtop
+\begin{align*}
+&P_1'P_1=D^{-1}Q_1'A'AQ_1D^{-1}=D^{-1}D^2D^{-1}=I_r&&\text{((a))}\\
+&r<m\colon\ [P_1\ T]\text{ is orthogonal for some }T&&\text{(\lec{6}, Corollary~11(c))}\\
+&P_2=T\colon\ P'P=I_m\implies P_1'P_2=0&&\text{(\lec{5}, Theorem~2(c))}\\
+&r=m\colon\ P=P_1,\ P'P=I_m
+\end{align*}
+\end{board}
+\begin{board}[(b) The three forms: \(PP'=I_m\), \(QQ'=I_n\) (\lec{6}, Theorem~9):]
+\boardtop
+\begin{align*}
+A&=P(P'AQ)Q'=P\diag(D,0)Q'&&\text{((a))}\\
+&=[P_1D\ \ 0]\begin{pmatrix}Q_1'\\Q_2'\end{pmatrix}=P_1DQ_1'&&\text{(\lec{5}, Theorem~2(b),(c))}\\
+&=\sigma_1p_1q_1'+\dots+\sigma_rp_rq_r'&&\text{(\lec{1}, Theorem~4(a),(d): \(\col_i(P_1D)=\sigma_ip_i\))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\begin{definition}\label{b9.26}
+A factorization \(A=P\diag(D,0)Q'\) with orthogonal \(P\in\R^{m\times m}\), \(Q\in\R^{n\times n}\) and
+\(D=\diag(\sigma_1,\dots,\sigma_r)\), \(\sigma_1\geqslant\dots\geqslant\sigma_r>0\), is a \textbf{singular value
+decomposition} (SVD) of \(A\in\R^{m\times n}\); \(A=P_1DQ_1'\) is the \textbf{compact SVD}. \(\sigma_1,\dots,\sigma_r\)
+are the \textbf{singular values} of \(A\) (by Theorem~\ref{b15.10}(a), \(r=\rank A\) and they depend only on \(A\)), and
+the columns of \(P\) and \(Q\) are \textbf{singular vectors} of \(A\); \(\sigma_k=0\) for \(r<k\leqslant\min\{m,n\}\),
+and \(\sigma_1=0\) for \(A=0\). The \textbf{Frobenius norm} of \(A\) is
+\(\lVert A\rVert_F=\bigl(\tr(A'A)\bigr)^{1/2}=\bigl(\sum_i\sum_ja_{ij}^2\bigr)^{1/2}\) (\lec{1}, Theorem~10(c)).
+\end{definition}
+
+\Needspace{26\baselineskip}
+\begin{theorem}\label{b15.10}
+Let \(A\in\R^{m\times n}\), \(P\in\R^{m\times m}\) and \(Q\in\R^{n\times n}\) orthogonal,
+\(D=\diag(\sigma_1,\dots,\sigma_r)\), \(\sigma_1\geqslant\dots\geqslant\sigma_r>0\), \(P'AQ=\diag(D,0)\);
+\(P=[P_1\ P_2]\), \(Q=[Q_1\ Q_2]\), \(P_1\) with the columns \(p_1,\dots,p_r\), \(Q_1\) with \(q_1,\dots,q_r\).
+\begin{enumerate}
+\item \(r=\rank A\); \(\sigma_1^2,\dots,\sigma_r^2\) are the nonzero eigenvalues of \(A'A\) and of \(AA'\), listed with
+multiplicity.
+\item \(Q'A'AQ=\diag(D^2,0)\), \(P'AA'P=\diag(D^2,0)\): the columns of \(Q\) (of \(P\)) are orthonormal eigenvectors of
+\(A'A\) (of \(AA'\)); \(q_i\), \(p_i\) belong to \(\sigma_i^2\) (\(i\leqslant r\)), the other columns to \(0\).
+\item \(P_1=AQ_1D^{-1}\), \(Q_1=A'P_1D^{-1}\): \(Aq_i=\sigma_ip_i\), \(A'p_i=\sigma_iq_i\) (\(i\leqslant r\)).
+\item \(\lVert A\rVert_F^2=\sigma_1^2+\dots+\sigma_r^2\).
+\item If \(A\ne0\) is PSD, its singular values are its nonzero eigenvalues. For orthogonal \(U\in\R^{m\times m}\),
+\(V\in\R^{n\times n}\), the matrices \(UAV\) and \(A'\) have the singular values of \(A\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a), (b) \(PP'=I_m\), \(QQ'=I_n\), \(Q^{-1}=Q'\) (\lec{6}, Theorem~9); the nonzero columns
+\(\sigma_1e_1,\dots,\sigma_re_r\) of \(P'AQ\) are independent (\lec{6}, Theorem~7(b)) and span \(\mathcal C(P'AQ)\):]
+\boardtop
+\begin{align*}
+\rank A&=\rank(P'AQ)=r&&\text{(\lec{4}, Theorem~15(d))}\\
+Q'A'AQ&=Q'A'PP'AQ=(P'AQ)'(P'AQ)=\diag(D^2,0)&&\text{(\lec{5}, Theorem~2)}\\
+P'AA'P&=(P'AQ)(P'AQ)'=\diag(D^2,0)\\
+Q^{-1}(A'A)Q&=\diag(\sigma_1^2,\dots,\sigma_r^2,0,\dots,0)&&\text{(\lec{7}, Theorem~14(a))}\\
+A'AQ&=Q\diag(D^2,0)\colon\ A'Aq_i=\sigma_i^2q_i\ (i\leqslant r),\ A'Aq_i=0\ (i>r)
+\end{align*}
+So the \(\sigma_i^2\) and \(0\) are the eigenvalues of \(A'A\); the columns by \lec{1}, Theorem~4(a). Likewise for
+\(AA'\) with \(P\).
+\end{board}
+\begin{board}[(c) \(PP'=P_1P_1'+P_2P_2'=I_m\), \(QQ'=Q_1Q_1'+Q_2Q_2'=I_n\); \(P_1'AQ_1=D\), \(P_2'AQ_1=0\),
+\(P_1'AQ_2=0\) are blocks of \(P'AQ\), and \(Q_1'A'P_1=(P_1'AQ_1)'=D\), \(Q_2'A'P_1=(P_1'AQ_2)'=0\):]
+\boardtop
+\begin{align*}
+P_1&=P_1(P_1'AQ_1)D^{-1}=(I_m-P_2P_2')AQ_1D^{-1}=AQ_1D^{-1}-P_2(P_2'AQ_1)D^{-1}=AQ_1D^{-1}\\
+Q_1&=Q_1(Q_1'A'P_1)D^{-1}=(I_n-Q_2Q_2')A'P_1D^{-1}=A'P_1D^{-1}
+\end{align*}
+The columns (\lec{1}, Theorem~4(a)): \(Aq_i=\sigma_ip_i\), \(A'p_i=\sigma_iq_i\).
+\end{board}
+\begin{board}[(d) \lec{1}, Theorem~10(b),(c), and \(QQ'=I_n\), \(PP'=I_m\):]
+\[
+\lVert A\rVert_F^2=\tr(A'A)=\tr(A'AQQ')=\tr(Q'A'PP'AQ)=\lVert P'AQ\rVert_F^2=\sigma_1^2+\dots+\sigma_r^2
+\]
+\end{board}
+\begin{board}[(e) \(A\ne0\) PSD; \(H\), \(\lambda_i\): the \(Q\), \(\lambda_i\) of \lec{9}, Theorem~13, for \(A\);
+\(r=\rank A\):]
+\boardtop
+\begin{align*}
+&\lambda_i\geqslant0,\ \text{exactly \(r\) nonzero}\implies\lambda_1\geqslant\dots\geqslant\lambda_r>0=\lambda_{r+1}=\dots
+&&\text{(\lec{8}, Theorems~14(a), 9(b))}\\
+&H'AH=\diag(\lambda_1,\dots,\lambda_n)=\diag(D,0),\ D=\diag(\lambda_1,\dots,\lambda_r)\\
+&\implies A=H\diag(D,0)H'\text{ is an SVD (Definition~\ref{b9.26})}&&\text{(\lec{6}, Theorem~9)}\\
+&\implies\text{the singular values of \(A\) are }\lambda_1,\dots,\lambda_r&&\text{((a))}
+\end{align*}
+\end{board}
+\begin{board}[(e) \(UAV\) and \(A'\), with the \(P\), \(Q\) of the theorem:]
+\boardtop
+\begin{align*}
+&(UP)'(UP)=P'U'UP=I_m,\quad(V'Q)'(V'Q)=Q'VV'Q=I_n&&\text{(\lec{6}, Theorem~9)}\\
+&(UP)'(UAV)(V'Q)=P'AQ=\diag(D,0)\colon\text{ an SVD of }UAV\text{, same }D\\
+&Q'A'P=(P'AQ)'=\diag(D,0)\ (n\times m)\colon\text{ an SVD of }A'\text{, same }D&&\text{(\lec{5}, Theorem~2(b))}\\
+&\implies UAV\text{ and }A'\text{ have the singular values \(\sigma_1,\dots,\sigma_r\) of }A&&\text{((a))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{27\baselineskip}
+\begin{example}\label{b15.12}
+Find an SVD and the compact SVD of
+\[
+A=\begin{pmatrix}2&0&1&1\\0&2&1&1\\1&1&1&1\end{pmatrix}
+\]
+\end{example}
+\textit{Solution.}
+\begin{board}[Columns \(a_1,\dots,a_4\) of \(A\); \(\rank A=\dim\mathcal C(A)\) (\lec{4}, Definition~10):]
+\boardtop
+\begin{align*}
+&a_3=a_4=\tfrac12(a_1+a_2),\quad a_1,a_2\text{ independent}\\
+&\implies r=\rank A=2\\
+&A(0,0,1,-1)'=a_3-a_4=0\\
+&A(1,1,-1,-1)'=a_1+a_2-a_3-a_4=0
+\end{align*}
+\end{board}
+\begin{board}[\(A'A\) and its eigenvalues:]
+\boardtop
+\begin{align*}
+&A'A=\begin{pmatrix}5&1&3&3\\1&5&3&3\\3&3&3&3\\3&3&3&3\end{pmatrix}\colon\ \text{every row sum is }12\\
+&A'A(1,1,1,1)'=12(1,1,1,1)'\\
+&A'A(1,-1,0,0)'=4(1,-1,0,0)'\\
+&\dim\mathcal N(A'A)=\dim\mathcal N(A)=4-2=2&&\text{(\lec{4}, Theorems~16(a), 11)}\\
+&a_{A'A}(c)=\dim\mathcal N(A'A-cI)&&\text{(\lec{8}, Theorem~9(b))}\\
+&a_{A'A}(12)\geqslant1,\quad a_{A'A}(4)\geqslant1,\quad a_{A'A}(0)=2\\
+&\text{the }a_{A'A}(c)\text{ add up to }4\implies\text{eigenvalues }12,4,0,0&&\text{(\lec{7}, Definition~5)}
+\end{align*}
+Check: \(\tr(A'A)=5+5+3+3=16=12+4\) (Theorem~\ref{b15.10}(d)).
+\end{board}
+\begin{board}[Theorem~\ref{b15.9}(b). By \lec{8}, Theorem~8, and \((1,1,-1,-1)(0,0,1,-1)'=0\), the four vectors are
+pairwise orthogonal; normalize them:]
+\boardtop
+\begin{align*}
+&q_1=\tfrac12(1,1,1,1)',\ q_2=\tfrac1{\sqrt2}(1,-1,0,0)',\ q_3=\tfrac12(1,1,-1,-1)',\ q_4=\tfrac1{\sqrt2}(0,0,1,-1)'\\
+&D=\diag(\sqrt{12},2)=\diag(2\sqrt3,2)\\
+&Aq_1=(2,2,2)',\ Aq_2=\tfrac1{\sqrt2}(2,-2,0)'\implies p_1=\tfrac1{2\sqrt3}Aq_1=\tfrac1{\sqrt3}(1,1,1)',\
+p_2=\tfrac12Aq_2=\tfrac1{\sqrt2}(1,-1,0)'\\
+&P_1'y=0\colon\ y_1+y_2+y_3=0,\ y_1-y_2=0\implies y=t(1,1,-2)';\qquad p_3=\tfrac1{\sqrt6}(1,1,-2)'
+\end{align*}
+\end{board}
+\begin{board}[\(P\) is orthogonal; \(P_1'P_1=I_2\) (Theorem~\ref{b15.9}(b)):]
+\boardtop
+\begin{align*}
+&P=[P_1\ p_3]\colon\ P_1'p_3=0,\ p_3'p_3=1\implies P'P=I_3&&\text{(\lec{5}, Theorem~2(b),(c))}\\
+&P'AQ=\diag(D,0)&&\text{(Theorem~\ref{b15.9}(a))}
+\end{align*}
+\end{board}
+So \(A=P(P'AQ)Q'=P\diag(D,0)Q'\) (\(PP'=I_3\), \(QQ'=I_4\); \lec{6}, Theorem~9) with
+\[
+P=\begin{pmatrix}\frac1{\sqrt3}&\frac1{\sqrt2}&\frac1{\sqrt6}\\[2pt]\frac1{\sqrt3}&-\frac1{\sqrt2}&\frac1{\sqrt6}\\[2pt]
+\frac1{\sqrt3}&0&-\frac2{\sqrt6}\end{pmatrix},\qquad
+\diag(D,0)=\begin{pmatrix}2\sqrt3&0&0&0\\0&2&0&0\\0&0&0&0\end{pmatrix},\qquad
+Q=\begin{pmatrix}\frac12&\frac1{\sqrt2}&\frac12&0\\[2pt]\frac12&-\frac1{\sqrt2}&\frac12&0\\[2pt]
+\frac12&0&-\frac12&\frac1{\sqrt2}\\[2pt]\frac12&0&-\frac12&-\frac1{\sqrt2}\end{pmatrix}
+\]
+\begin{board}[The compact SVD \(A=2\sqrt3\,p_1q_1'+2\,p_2q_2'\); check:]
+\[
+2\sqrt3\,p_1q_1'+2\,p_2q_2'=\begin{pmatrix}1\\1\\1\end{pmatrix}(1,1,1,1)+\begin{pmatrix}1\\-1\\0\end{pmatrix}(1,-1,0,0)
+=\begin{pmatrix}1&1&1&1\\1&1&1&1\\1&1&1&1\end{pmatrix}+\begin{pmatrix}1&-1&0&0\\-1&1&0&0\\0&0&0&0\end{pmatrix}=A
+\]
+\end{board}
+\(-p_2\) is also a unit eigenvector of \(AA'\) belonging to \(4\) (Theorem~\ref{b15.10}(b)), but
+\(2\sqrt3\,p_1q_1'-2\,p_2q_2'\ne A\): \(P_1\) must be computed from \(Q_1\) as \(AQ_1D^{-1}\).
+
+\subsection*{2. Low-rank approximation and principal components}
+
+\Needspace{14\baselineskip}
+\begin{theorem}[Ky Fan]\label{b9.27}
+Let \(A\in\R^{n\times n}\) be symmetric, \(q_1,\dots,q_n\) orthonormal, \(Aq_i=\lambda_iq_i\),
+\(\lambda_1\geqslant\dots\geqslant\lambda_n\) (as in \lec{9}, Theorem~13); \(1\leqslant k\leqslant n\), \(G\in\R^{n\times k}\),
+\(G'G=I_k\). Then \(\tr(G'AG)\leqslant\lambda_1+\dots+\lambda_k\), with equality for \(G=[q_1\ \cdots\ q_k]\).
+\end{theorem}
+\begin{proof}
+\begin{board}[\(Q=[q_1\ \cdots\ q_n]\), \(Q'AQ=\Lambda=\diag(\lambda_1,\dots,\lambda_n)\), \(QQ'=I_n\) (\lec{9},
+Theorem~13; \lec{6}, Theorem~9); \(R=Q'G=(r_{ij})\in\R^{n\times k}\):]
+\boardtop
+\begin{align*}
+G&=QQ'G=QR,\qquad R'R=G'QQ'G=G'G=I_k\\
+\tr(G'AG)&=\tr(R'Q'AQR)=\tr(R'\Lambda R)\\
+&=\textstyle\sum_{j=1}^k\col_j(R)'\Lambda\col_j(R)=\sum_{j=1}^k\sum_{i=1}^n\lambda_ir_{ij}^2
+&&\text{(\lec{1}, Theorem~4(a),(d))}\\
+&=\textstyle\sum_{i=1}^nw_i\lambda_i,\qquad w_i=\sum_{j=1}^kr_{ij}^2
+\end{align*}
+\end{board}
+\begin{board}[\(0\leqslant w_i\leqslant1\), \(\sum_iw_i=k\):]
+\boardtop
+\begin{align*}
+&w_i\geqslant0,\qquad\textstyle\sum_iw_i=\sum_j\sum_ir_{ij}^2=\tr(R'R)=\tr I_k=k&&\text{(\lec{1}, Theorem~10(c))}\\
+&w_i=(RR')_{ii}&&\text{(\lec{1}, Theorem~4(d))}\\
+&k=n\colon\ RR'=I_n\implies w_i=1&&\text{(\lec{6}, Theorem~9)}\\
+&k<n\colon\ [R\ T]\text{ is orthogonal},\ RR'+TT'=I_n&&\text{(\lec{6}, Corollary~11(c))}\\
+&\implies w_i+\textstyle\sum_lt_{il}^2=1\implies w_i\leqslant1
+\end{align*}
+\end{board}
+\begin{board}[The bound (\(\lambda_1\geqslant\dots\geqslant\lambda_n\), \(0\leqslant w_i\leqslant1\); the right side expands to
+\(\sum_{i\leqslant k}\lambda_i-\sum_iw_i\lambda_i-\lambda_k(k-\sum_iw_i)\)); equality:]
+\boardtop
+\begin{align*}
+\textstyle\sum_{i\leqslant k}\lambda_i-\sum_{i=1}^nw_i\lambda_i
+&=\textstyle\sum_{i\leqslant k}(\lambda_i-\lambda_k)(1-w_i)+\sum_{i>k}(\lambda_k-\lambda_i)w_i
+&&(\textstyle\sum_iw_i=k)\\
+&\geqslant0&&(\text{every term is \(\geqslant0\)})\\
+G=[q_1\ \cdots\ q_k]&\colon\ AG=[\lambda_1q_1\ \cdots\ \lambda_kq_k]=G\diag(\lambda_1,\dots,\lambda_k)\\
+&\implies G'AG=\diag(\lambda_1,\dots,\lambda_k),\ \tr(G'AG)=\lambda_1+\dots+\lambda_k
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{18\baselineskip}
+\begin{theorem}[Eckart--Young]\label{b15.17}
+Let \(A\in\R^{m\times n}\), \(\rank A=r\), have an SVD \(A=P\diag(D,0)Q'=\sigma_1p_1q_1'+\dots+\sigma_rp_rq_r'\)
+(Theorem~\ref{b15.9}); let \(1\leqslant k<r\) and \(A_k=\sigma_1p_1q_1'+\dots+\sigma_kp_kq_k'\). Then \(\rank A_k=k\), and
+every \(B\in\R^{m\times n}\) with \(\rank B\leqslant k\) has
+\[
+\lVert A-B\rVert_F^2\geqslant\sigma_{k+1}^2+\dots+\sigma_r^2
+\]
+with equality for \(B=A_k\).
+\end{theorem}
+\begin{proof}
+\begin{board}[\(B=UL\): \(s=\rank B\leqslant k<r\leqslant m\) (\lec{4}, Theorem~12(a)); \(\mathcal C(B)\perp\mathcal C(B)^\perp\):]
+\boardtop
+\begin{align*}
+&u_1,\dots,u_s\text{: an orthonormal basis of }\mathcal C(B)\ (\text{none if }s=0)&&\text{(\lec{6}, Corollary~11(a))}\\
+&\dim\mathcal C(B)^\perp=m-s\geqslant k-s&&\text{(\lec{6}, Theorem~5(c))}\\
+&u_{s+1},\dots,u_k\colon\ k-s\text{ vectors of an orthonormal basis of }\mathcal C(B)^\perp&&\text{(\lec{6}, Corollary~11(a))}\\
+&U=[u_1\ \cdots\ u_k]\colon\ U'U=I_k,\quad\col_j(B)=U\ell_j\ (\ell_j\in\R^k)\\
+&B=UL,\quad L=[\ell_1\ \cdots\ \ell_n]&&\text{(\lec{1}, Theorem~4(a),(b))}
+\end{align*}
+So it suffices: \(\lVert UL-A\rVert_F^2\geqslant\sigma_{k+1}^2+\dots+\sigma_r^2\) for all \(U\in\R^{m\times k}\) with
+\(U'U=I_k\) and all \(L\in\R^{k\times n}\).
+\end{board}
+\begin{board}[\(U'U=I_k\); \lec{1}, Theorem~10(b),(c):]
+\boardtop
+\begin{align*}
+(UL-A)'(UL-A)&=L'L-A'UL-L'U'A+A'A=(L-U'A)'(L-U'A)-A'UU'A+A'A\\
+\lVert UL-A\rVert_F^2&=\tr\bigl[(L-U'A)'(L-U'A)\bigr]-\tr(A'UU'A)+\tr(A'A)\geqslant\tr(A'A)-\tr(U'AA'U)
+\end{align*}
+\end{board}
+\begin{board}[\(Q'Q=I_n\), \(P'P=I_m\); \lec{5}, Theorem~2; Theorem~\ref{b9.27} for \(AA'\) and \(G=U\):]
+\[
+AA'=P\diag(D,0)Q'Q\diag(D,0)'P'=P\diag(\sigma_1^2,\dots,\sigma_r^2,0,\dots,0)P'
+\]
+\begin{align*}
+\tr(A'A)&=\tr(AA')=\sigma_1^2+\dots+\sigma_r^2&&\text{(\lec{1}, Theorem~10(b))}\\
+AA'p_i&=\sigma_i^2p_i\ (i\leqslant r),\quad AA'p_i=0\ (i>r)&&\text{(\lec{1}, Theorem~4(a))}\\
+&\sigma_1^2\geqslant\dots\geqslant\sigma_r^2\geqslant0=\dots=0\text{: the eigenvalues of }AA'&&\text{(\lec{8}, Theorem~9(b))}\\
+\tr(U'AA'U)&\leqslant\sigma_1^2+\dots+\sigma_k^2\\
+\lVert UL-A\rVert_F^2&\geqslant\sigma_{k+1}^2+\dots+\sigma_r^2
+\end{align*}
+\end{board}
+\begin{board}[Equality, \(\rank A_k\): \(E\), \(E_k\in\R^{m\times n}\) have \(\sigma_{k+1},\dots,\sigma_r\) in positions
+\((k+1,k+1),\dots,(r,r)\), resp.\ \(\sigma_1,\dots,\sigma_k\) in \((1,1),\dots,(k,k)\), zeros elsewhere; the nonzero
+columns \(\sigma_ie_i\) of \(E_k\) are independent (\lec{6}, Theorem~7(b)):]
+\boardtop
+\begin{align*}
+A-A_k&=\textstyle\sum_{i=k+1}^r\sigma_ip_iq_i'=PEQ',\qquad A_k=PE_kQ'&&\text{(\lec{1}, Theorem~4(d))}\\
+\lVert A-A_k\rVert_F^2&=\tr(QE'P'PEQ')=\tr(E'EQ'Q)&&\text{(\lec{1}, Theorem~10(b))}\\
+&=\tr(E'E)=\sigma_{k+1}^2+\dots+\sigma_r^2&&\text{(\lec{1}, Theorem~10(c))}\\
+\rank A_k&=\rank E_k=k&&\text{(\lec{4}, Theorem~15(d))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+Likewise \(\lVert A_k\rVert_F^2=\tr(E_k'E_k)=\sigma_1^2+\dots+\sigma_k^2\): \(A_k\) reproduces the proportion
+\((\sigma_1^2+\dots+\sigma_k^2)/(\sigma_1^2+\dots+\sigma_r^2)\) of the sum of squares
+\(\lVert A\rVert_F^2=\sum_{i,j}a_{ij}^2\) of the entries of \(A\) (Theorem~\ref{b15.10}(d)), and no \(B\) with
+\(\rank B\leqslant k\) loses less than \(\sigma_{k+1}^2+\dots+\sigma_r^2\).
+
+\Needspace{21\baselineskip}
+\begin{proposition}\label{b15.19}
+Let \(X\in\R^{n\times p}\) be a data matrix, \(r=\rank(C_nX)\geqslant1\).
+\begin{enumerate}
+\item If \(C_nX=P\diag(D,0)Q'\) is an SVD, with the compact SVD \(\sigma_1p_1q_1'+\dots+\sigma_rp_rq_r'\), then
+\((n-1)S=Q\diag(\sigma_1^2,\dots,\sigma_r^2,0,\dots,0)Q'\); \(\lambda_m=\sigma_m^2/(n-1)\) (\(m\leqslant r\)),
+\(\lambda_m=0\) (\(m>r\)); \(V=Q\) can be taken in \lec{9}, Theorem~16, and then \(z_m=\sigma_mp_m\) (\(m\leqslant r\));
+\(\mathrm{PVE}_m=\sigma_m^2/(\sigma_1^2+\dots+\sigma_r^2)\) (\(m\leqslant r\)), \(\mathrm{PVE}_m=0\) (\(m>r\)).
+\item Conversely, for \(v_m\), \(\lambda_m\), \(z_m\) as in \lec{9}, Theorem~16, let \(\sigma_m=\lVert z_m\rVert=\sqrt{(n-1)\lambda_m}\)
+and \(p_m=z_m/\sigma_m\) (\(m\leqslant r\)). Then \(p_1,\dots,p_r\) extend to an orthogonal \(P\),
+\(C_nX=P\diag(D,0)V'\) (\(D=\diag(\sigma_1,\dots,\sigma_r)\)) is an SVD, and
+\(C_nX=\sigma_1p_1v_1'+\dots+\sigma_rp_rv_r'\) is its compact SVD.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\begin{board}[(a) \(P'P=I_n\); \lec{9}, Proposition~10(a); \lec{5}, Theorem~2:]
+\boardtop
+\begin{align*}
+(n-1)S&=(C_nX)'(C_nX)=Q\diag(D,0)'P'P\diag(D,0)Q'\\
+&=Q\diag(\sigma_1^2,\dots,\sigma_r^2,0,\dots,0)Q'\\
+Sq_m&=\tfrac{\sigma_m^2}{n-1}q_m\ (m\leqslant r),\quad Sq_m=0\ (m>r)&&\text{(\lec{1}, Theorem~4(a))}\\
+&\implies\tfrac{\sigma_1^2}{n-1}\geqslant\dots\geqslant\tfrac{\sigma_r^2}{n-1}>0=\dots=0\text{ are }\lambda_1,\dots,\lambda_p;\
+S\ne0&&\text{(\lec{8}, Theorem~9(b))}\\
+&\implies V=Q\text{ is as in \lec{9}, Theorem~16}\\
+z_m&=C_nXq_m=\textstyle\sum_i\sigma_ip_i(q_i'q_m)=\sigma_mp_m\quad(m\leqslant r)\\
+\mathrm{PVE}_m&=\lambda_m/\textstyle\sum_l\lambda_l=\sigma_m^2/\sum_{l\leqslant r}\sigma_l^2\ (m\leqslant r),\ 0\ (m>r)
+&&\text{(\lec{9}, Proposition~17)}
+\end{align*}
+\end{board}
+\Needspace{11\baselineskip}
+\begin{board}[(b) \lec{1}, Theorems~4(a),(d), 10(c); \lec{6}, Theorem~9; \lec{9}, Proposition~10(a), Theorem~16(a),(d):]
+\boardtop
+\begin{align*}
+&r\geqslant1\implies C_nX\ne0\implies\tr\bigl((n-1)S\bigr)=\tr\bigl((C_nX)'(C_nX)\bigr)>0\implies S\ne0\\
+C_nX&=(C_nXV)V'=z_1v_1'+\dots+z_pv_p'\quad(VV'=I_p)\\
+\lVert z_m\rVert^2&=(n-1)\lambda_m\colon\ z_m=0\ (m>r);\quad z_m=\sigma_mp_m,\ \sigma_m>0\ (m\leqslant r)\\
+&(C_nX)'(C_nX)v_m=(n-1)Sv_m=(n-1)\lambda_mv_m\ (SV=V\Lambda),\quad(n-1)\lambda_1\geqslant\dots\geqslant(n-1)\lambda_p\\
+&\implies V\text{ is as in \lec{9}, Theorem~13, for }(C_nX)'(C_nX),\text{ with the eigenvalues }(n-1)\lambda_m\\
+&\implies\sigma_m^2=(n-1)\lambda_m=\lambda_m\bigl((C_nX)'(C_nX)\bigr)\ (m\leqslant r)\\
+&\implies V,\ D=\diag(\sigma_1,\dots,\sigma_r)\text{ are as in Theorem~\ref{b15.9}(b) for }C_nX\\
+P_1&=C_nX[v_1\ \cdots\ v_r]D^{-1}=[z_1/\sigma_1\ \cdots\ z_r/\sigma_r]=[p_1\ \cdots\ p_r]
+\end{align*}
+Theorem~\ref{b15.9}(b) extends \(P_1\) to an orthogonal \(P\) and gives the two forms.
+\end{board}
+\nopagebreak
+\end{proof}
+For \(1\leqslant k<r\) and \(v_m=q_m\), the \(A_k\) of Theorem~\ref{b15.17} for \(A=C_nX\) is
+\(\sigma_1p_1q_1'+\dots+\sigma_kp_kq_k'=z_1v_1'+\dots+z_kv_k'\), with
+\(\sigma_{k+1}^2+\dots+\sigma_r^2=(n-1)(\lambda_{k+1}+\dots+\lambda_p)\): the scores and loading vectors of the first
+\(k\) principal components give a matrix of rank at most \(k\) closest to \(C_nX\).
+
+\Needspace{10\baselineskip}
+\begin{example}\label{b15.20}
+Write the compact SVD of \(C_5X\) for the data of \lec{9}, Examples~11 and 18.
+\end{example}
+\textit{Solution.}
+\begin{board}[Proposition~\ref{b15.19}(b), \(n-1=4\); \(\lambda_m=25,9,5,1\), \(v_m=\frac12h_m\), \(z_m\) (\lec{9},
+Example~18); \(r=4\) (\(\lambda_4=1>0\); \lec{9}, Theorem~16(a)):]
+\boardtop
+\begin{align*}
+&\sigma_1=\sqrt{4\cdot25}=10,\quad\sigma_2=\sqrt{4\cdot9}=6,\quad\sigma_3=\sqrt{4\cdot5}=2\sqrt5,\quad\sigma_4=\sqrt{4\cdot1}=2\\
+&C_5X=\sigma_1p_1v_1'+\sigma_2p_2v_2'+\sigma_3p_3v_3'+\sigma_4p_4v_4',\qquad
+\sigma_1p_1v_1'=z_1v_1'=\tfrac12(0,5,5,-5,-5)'(1,1,1,1)\\
+&\text{check (Theorem~\ref{b15.10}(d)): }\sigma_1^2+\sigma_2^2+\sigma_3^2+\sigma_4^2=100+36+20+4=160
+=\lVert C_5X\rVert_F^2=4\tr S=4\cdot40
+\end{align*}
+\end{board}
+with \(p_m=z_m/\sigma_m\):
+\[
+p_1=\frac12\begin{pmatrix}0\\1\\1\\-1\\-1\end{pmatrix},\qquad
+p_2=\frac12\begin{pmatrix}0\\1\\-1\\1\\-1\end{pmatrix},\qquad
+p_3=\frac1{2\sqrt5}\begin{pmatrix}4\\-1\\-1\\-1\\-1\end{pmatrix},\qquad
+p_4=\frac12\begin{pmatrix}0\\1\\-1\\-1\\1\end{pmatrix}
+\]
+
+\subsection*{3. The spectral norm and the condition number}
+
+\begin{definition}\label{b15.14}\label{b15.26}
+The \textbf{spectral norm} of \(A\in\R^{m\times n}\) is \(\lVert A\rVert_2=\sigma_1\), its largest singular value
+(\(\lVert0\rVert_2=0\)); it is not \(\lVert A\rVert_F\). The \textbf{condition number} of an invertible
+\(A\in\R^{n\times n}\) is \(\kappa(A)=\lVert A\rVert_2\lVert A^{-1}\rVert_2\). For \(X\in\R^{n\times p}\) with
+\(\rank X=p<n\) and singular values \(\sigma_1\geqslant\dots\geqslant\sigma_p>0\), \(\kappa(X)=\sigma_1/\sigma_p\) (for
+\(p=n\), Proposition~\ref{b15.27}(a) gives the same number).
+\end{definition}
+
+\Needspace{15\baselineskip}
+\begin{proposition}\label{b15.15}
+Let \(A\in\R^{m\times n}\).
+\begin{enumerate}
+\item \(\lVert A\rVert_2=\bigl(\lambda_1(A'A)\bigr)^{1/2}=\max_{x\ne0}\lVert Ax\rVert/\lVert x\rVert\); so
+\(\lVert Ax\rVert\leqslant\lVert A\rVert_2\lVert x\rVert\) for every \(x\in\R^n\), with equality at \(x=q_1\) if
+\(A\ne0\) (\(q_1\) the first column of \(Q\) in an SVD).
+\item \(\lVert UAV\rVert_2=\lVert A\rVert_2=\lVert A'\rVert_2\) for orthogonal \(U\in\R^{m\times m}\),
+\(V\in\R^{n\times n}\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\(A=0\): every statement reads \(0=0\) or \(0\leqslant0\). Let \(A\ne0\), so \(\rank A\geqslant1\), with an SVD
+(Theorem~\ref{b15.9}(b)) as in Theorem~\ref{b15.10}.
+\begin{board}[(a)]
+\boardtop
+\begin{align*}
+\lambda_1(A'A)&=\sigma_1^2&&\text{(Theorem~\ref{b15.10}(a))}\\
+\lVert Ax\rVert^2/\lVert x\rVert^2&=x'A'Ax/x'x\leqslant\lambda_1(A'A)=\sigma_1^2\quad(x\ne0)&&\text{(\lec{9}, Theorem~13(a), for \(A'A\))}\\
+\lVert Aq_1\rVert&=\lVert\sigma_1p_1\rVert=\sigma_1=\sigma_1\lVert q_1\rVert&&\text{(Theorem~\ref{b15.10}(c))}
+\end{align*}
+So the maximum is \(\sigma_1=\lVert A\rVert_2\), and \(\lVert Ax\rVert\leqslant\lVert A\rVert_2\lVert x\rVert\) (also for
+\(x=0\)).
+\end{board}
+(b) By Theorem~\ref{b15.10}(e), \(UAV\), \(A\) and \(A'\) have the same largest singular value.
+\end{proof}
+
+\Needspace{16\baselineskip}
+\begin{proposition}\label{b15.27}
+\begin{enumerate}
+\item Let \(A\in\R^{n\times n}\) be invertible. Then \(A\) has \(n\) singular values
+\(\sigma_1\geqslant\dots\geqslant\sigma_n>0\), \(\lVert A^{-1}\rVert_2=1/\sigma_n\) and \(\kappa(A)=\sigma_1/\sigma_n\geqslant1\).
+If \(A\) is PD, with eigenvalues \(\lambda_1\geqslant\dots\geqslant\lambda_n>0\), then \(\kappa(A)=\lambda_1/\lambda_n\).
+\item If \(X\in\R^{n\times p}\), \(\rank X=p\), then \(X'X\) is PD and \(\kappa(X'X)=\kappa(X)^2\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\begin{board}[(a) \lec{4}, Theorem~12(d); Theorem~\ref{b15.9}(b) with \(r=n\); \lec{2}, Theorem~11(b); \lec{6},
+Theorem~9:]
+\boardtop
+\begin{align*}
+&\rank A=n\implies A=PDQ',\ D=\diag(\sigma_1,\dots,\sigma_n),\ \sigma_1\geqslant\dots\geqslant\sigma_n>0\\
+&A^{-1}=(Q')^{-1}D^{-1}P^{-1}=QD^{-1}P'\implies\lVert A^{-1}\rVert_2=\lVert D^{-1}\rVert_2&&\text{(Proposition~\ref{b15.15}(b))}\\
+&\lVert D^{-1}x\rVert^2=\textstyle\sum_ix_i^2/\sigma_i^2\leqslant\lVert x\rVert^2/\sigma_n^2,\ \text{equality at }x=e_n\\
+&\implies\lVert D^{-1}\rVert_2=1/\sigma_n&&\text{(Proposition~\ref{b15.15}(a))}\\
+&\kappa(A)=\sigma_1\cdot\tfrac1{\sigma_n}\geqslant1;\quad A\text{ PD}\implies\sigma_i=\lambda_i,\ \kappa(A)=\lambda_1/\lambda_n
+&&\text{(Theorem~\ref{b15.10}(e))}
+\end{align*}
+\end{board}
+\begin{board}[(b) \(\sigma_1\geqslant\dots\geqslant\sigma_p>0\): the singular values of \(X\) (\(r=p\)):]
+\boardtop
+\begin{align*}
+&X'X\text{ is PD}&&\text{(\lec{8}, Theorem~15(b))}\\
+&\text{its eigenvalues are }\sigma_1^2\geqslant\dots\geqslant\sigma_p^2>0&&\text{(Theorem~\ref{b15.10}(a))}\\
+&\kappa(X'X)=\sigma_1^2/\sigma_p^2=\kappa(X)^2&&\text{((a); Definition~\ref{b15.14})}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{14\baselineskip}
+\begin{theorem}\label{b15.28}
+Let \(A\in\R^{n\times n}\) be invertible, \(Ax=b\ne0\) and \(A(x+\delta x)=b+\delta b\). Then
+\[
+\frac{\lVert\delta x\rVert}{\lVert x\rVert}\leqslant\kappa(A)\,\frac{\lVert\delta b\rVert}{\lVert b\rVert}
+\]
+\end{theorem}
+\begin{proof}
+\begin{board}[\(\lVert My\rVert\leqslant\lVert M\rVert_2\lVert y\rVert\) for every \(M\), \(y\)
+(Proposition~\ref{b15.15}(a)):]
+\boardtop
+\begin{align*}
+A\,\delta x&=\delta b\implies\delta x=A^{-1}\delta b\implies\lVert\delta x\rVert\leqslant\lVert A^{-1}\rVert_2\lVert\delta b\rVert
+&&\text{(subtract \(Ax=b\))}\\
+x&\ne0\ (b\ne0),\quad\lVert b\rVert=\lVert Ax\rVert\leqslant\lVert A\rVert_2\lVert x\rVert\implies
+\frac1{\lVert x\rVert}\leqslant\frac{\lVert A\rVert_2}{\lVert b\rVert}\\
+\frac{\lVert\delta x\rVert}{\lVert x\rVert}&\leqslant\lVert A^{-1}\rVert_2\lVert A\rVert_2\,\frac{\lVert\delta b\rVert}{\lVert b\rVert}
+=\kappa(A)\,\frac{\lVert\delta b\rVert}{\lVert b\rVert}&&\text{(multiply; all terms \(\geqslant0\))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+A large \(\kappa(A)\): a small relative change of \(b\) may change the solution of \(Ax=b\) by a large relative amount.
+For the normal equations \(X'X\beta=X'y\) (\lec{11}, Definition~1) with \(\rank X=p\), \(\kappa(X'X)=\kappa(X)^2\)
+(Proposition~\ref{b15.27}(b)): forming \(X'X\) squares the condition number of \(X\).
+
+\Needspace{17\baselineskip}
+\begin{example}\label{b15.29}
+Let
+\[
+A=\begin{pmatrix}2&0&1&-1\\0&2&1&1\\1&1&3&0\\-1&1&0&3\end{pmatrix}
+\]
+Find \(\kappa(A)\), and compare the two sides of Theorem~\ref{b15.28} for \(x=(1,1,2,0)'\) and \(\delta b=(1,1,-1,0)'\).
+\end{example}
+\textit{Solution.}
+\begin{board}[Four products; the four vectors are pairwise orthogonal, of lengths \(\sqrt6\), \(\sqrt6\), \(\sqrt3\),
+\(\sqrt3\):]
+\boardtop
+\begin{align*}
+&A(1,1,2,0)'=4(1,1,2,0)',\qquad A(-1,1,0,2)'=4(-1,1,0,2)'\\
+&A(1,1,-1,0)'=(1,1,-1,0)',\qquad A(1,-1,0,1)'=(1,-1,0,1)'\\
+&\text{divided by their lengths: orthonormal}\implies\text{eigenvalues }4,4,1,1&&\text{(\lec{8}, Theorem~9(b))}\\
+&\text{all eigenvalues }>0\implies A\text{ is PD}&&\text{(\lec{8}, Theorem~14(a))}\\
+&\rank A=\#\{i:\lambda_i\ne0\}=4&&\text{(\lec{8}, Theorem~9(b))}\\
+&\implies A\text{ is invertible}&&\text{(\lec{4}, Theorem~12(d))}\\
+&\kappa(A)=4/1=4&&\text{(Proposition~\ref{b15.27}(a))}
+\end{align*}
+\end{board}
+\begin{board}[\(b=Ax\), \(\delta x=A^{-1}\delta b\):]
+\boardtop
+\begin{align*}
+&b=Ax=4x=(4,4,8,0)',\qquad A\,\delta b=\delta b\implies\delta x=A^{-1}\delta b=\delta b=(1,1,-1,0)'\\
+&\frac{\lVert\delta x\rVert}{\lVert x\rVert}=\frac{\sqrt3}{\sqrt6},\qquad
+\frac{\lVert\delta b\rVert}{\lVert b\rVert}=\frac{\sqrt3}{\sqrt{96}}=\frac14\cdot\frac{\sqrt3}{\sqrt6}
+\implies\frac{\lVert\delta x\rVert}{\lVert x\rVert}=\kappa(A)\,\frac{\lVert\delta b\rVert}{\lVert b\rVert}
+\end{align*}
+\end{board}
+Equality in Theorem~\ref{b15.28}: the relative change of \(b\) is magnified four times in the solution.
+
+\bigskip
+\textbf{Practice.} The Exercises and Problems of the textbook, Chapter~15: the singular value decomposition, low-rank
+approximation, principal components through the SVD, the spectral norm and the condition number.
+
+\end{document}
