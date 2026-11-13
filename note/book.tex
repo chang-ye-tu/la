@@ -33190,6 +33190,2439 @@ eigenvalues are \(\sigma_1,\dots,\sigma_n>0\) (Definition~\ref{r7-def-diagonaliz
 \end{solution}
 
 \clearpage
+\def\unitnumber{16}
+\setcounter{theorem}{0}\setcounter{problem}{0}
+\section*{Chapter 16. Kronecker products, vec, and matrix derivatives}
+
+\subsection*{The Kronecker product}
+
+\begin{definition}[\citeat{tu-mc}{\S2.3}, \citeat{harville}{\S16.1}, \citeat{searle-khuri}{\S4.11}]\label{r13-def-kronecker}
+Let \(A=(a_{ij})\in\R^{m\times n}\) and \(B\in\R^{p\times q}\). The \textbf{Kronecker product} of \(A\) and \(B\) is the
+\(mp\times nq\) matrix
+\[
+A\otimes B=\begin{pmatrix}a_{11}B&\cdots&a_{1n}B\\\vdots&&\vdots\\a_{m1}B&\cdots&a_{mn}B\end{pmatrix}
+\]
+partitioned into \(m\) rows and \(n\) columns of \(p\times q\) blocks, the \((i,j)\) block being \(a_{ij}B\). Thus the
+entry of \(A\otimes B\) in row \((i-1)p+r\) and column \((j-1)q+s\) is \(a_{ij}b_{rs}\) (\(1\leqslant r\leqslant p\),
+\(1\leqslant s\leqslant q\)). For column vectors \(a\in\R^m\) and \(b\in\R^p\), \(a\otimes b=(a_1b',\ \dots,\ a_mb')'\in\R^{mp}\).
+For a number \(c\) (a \(1\times1\) matrix), \(c\otimes B=B\otimes c=cB\).
+\end{definition}
+Unlike \(AB\), the product \(A\otimes B\) is defined for matrices of any sizes.
+
+\begin{example}[\citeat{searle-khuri}{\S4.11}]\label{r13-exm-kronecker}
+With \(A=(1,\ 2,\ 3)\) and \(B=\begin{pmatrix}6&7\\8&9\end{pmatrix}\),
+\[
+A\otimes B=\begin{pmatrix}6&7&12&14&18&21\\8&9&16&18&24&27\end{pmatrix},\qquad
+B\otimes A=\begin{pmatrix}6&12&18&7&14&21\\8&16&24&9&18&27\end{pmatrix}
+\]
+Both contain the six products \(a_jb_{rs}\), in different orders, so \(A\otimes B\ne B\otimes A\). Two Kronecker products
+with the summing vector (Definition~\ref{r1-def-ones}) occur in designs:
+\[
+I_2\otimes\one_3=\begin{pmatrix}1&0\\1&0\\1&0\\0&1\\0&1\\0&1\end{pmatrix},\qquad
+\one_3\otimes I_2=\begin{pmatrix}1&0\\0&1\\1&0\\0&1\\1&0\\0&1\end{pmatrix}
+\]
+\end{example}
+
+\begin{theorem}[\citeat{tu-mc}{Propositions~3, 4, Exercise~1}, \citeat{abadir-magnus}{Exercises~10.2--10.9}, \citeat{harville-solutions}{Ch.~16, Exercise~10}, \citeat{harville}{Lemma~16.1.2}]\label{r13-thm-kron-rules}
+Let the sizes of the matrices be such that the operations below are defined, and let \(c\in\R\).
+\begin{enumerate}
+\item \((cA)\otimes B=A\otimes(cB)=c(A\otimes B)\), and \(A\otimes B=0\) if \(A=0\) or \(B=0\). For column vectors \(a\in\R^m\)
+and \(b\in\R^n\), \(a\otimes b'=ab'=b'\otimes a\).
+\item \((A_1+A_2)\otimes B=A_1\otimes B+A_2\otimes B\) and \(A\otimes(B_1+B_2)=A\otimes B_1+A\otimes B_2\).
+\item If \(A\) is partitioned into blocks \(A_{kl}\) (Definition~\ref{r5b-def-partition}), then \(A\otimes B\) is partitioned
+into the blocks \(A_{kl}\otimes B\), in the same arrangement; for instance \([A_1\ A_2]\otimes B=[A_1\otimes B\ \ A_2\otimes B]\).
+\item \((A\otimes B)\otimes C=A\otimes(B\otimes C)\); this matrix is written \(A\otimes B\otimes C\).
+\item \((A\otimes B)'=A'\otimes B'\).
+\item (\textbf{Mixed product}) For \(A\in\R^{m\times n}\), \(B\in\R^{p\times q}\), \(C\in\R^{n\times s}\) and \(D\in\R^{q\times t}\),
+\[
+(A\otimes B)(C\otimes D)=(AC)\otimes(BD)
+\]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Throughout, \(A=(a_{ij})\in\R^{m\times n}\) and \(B\in\R^{p\times q}\), and we compare matrices block by block
+(Definition~\ref{r5b-def-partition}).
+
+(a)
+\begin{itemize}
+\item The \((i,j)\) blocks of \((cA)\otimes B\), \(A\otimes(cB)\) and \(c(A\otimes B)\) are \((ca_{ij})B\), \(a_{ij}(cB)\) and
+\(c(a_{ij}B)\), which are equal. If \(A=0\) or \(B=0\), every block \(a_{ij}B\) is \(0\).
+\item \(a\otimes b'\) has the rows \(a_1b',\dots,a_mb'\), which are the rows of \(ab'\) (Theorem~\ref{r1-thm-views}(c)).
+\(b'\otimes a=(b_1a,\ \dots,\ b_na)\) has the columns \(b_ja\), which are the columns of \(ab'\)
+(Theorem~\ref{r1-thm-views}(a)).
+\end{itemize}
+
+(b) The \((i,j)\) block of \((A_1+A_2)\otimes B\) is \((a^{(1)}_{ij}+a^{(2)}_{ij})B=a^{(1)}_{ij}B+a^{(2)}_{ij}B\), the sum of the
+\((i,j)\) blocks of \(A_1\otimes B\) and \(A_2\otimes B\); and \(a_{ij}(B_1+B_2)=a_{ij}B_1+a_{ij}B_2\).
+
+(c)
+\begin{itemize}
+\item Let the row groups of \(A\) have \(m_1,\dots,m_r\) rows and the column groups \(n_1,\dots,n_c\) columns. Row \(i\) of
+\(A\) gives the block row of \(A\otimes B\) formed by rows \((i-1)p+1,\dots,ip\), and column \(j\) the block column formed
+by columns \((j-1)q+1,\dots,jq\). So the rows of \(A\) in group \(k\) give \(m_kp\) consecutive rows of \(A\otimes B\), and the
+columns in group \(l\) give \(n_lq\) consecutive columns.
+\item The submatrix of \(A\otimes B\) in these rows and columns consists of the blocks \(a_{ij}B\) with row \(i\) in group
+\(k\) and column \(j\) in group \(l\), arranged as the entries \(a_{ij}\) are arranged in \(A_{kl}\). By
+Definition~\ref{r13-def-kronecker}, it is \(A_{kl}\otimes B\).
+\end{itemize}
+
+(d) Partition \(A\otimes B\) into its blocks \(a_{ij}B\). By (c), \((A\otimes B)\otimes C\) is partitioned into the blocks
+\((a_{ij}B)\otimes C\), which equal \(a_{ij}(B\otimes C)\) by (a). These are the blocks of \(A\otimes(B\otimes C)\)
+(Definition~\ref{r13-def-kronecker}).
+
+(e) By Theorem~\ref{r5b-thm-block}(b), \((A\otimes B)'\) has \(n\) block rows and \(m\) block columns, and its \((j,i)\) block
+is \((a_{ij}B)'=a_{ij}B'\). This is the \((j,i)\) block of \(A'\otimes B'\), since the \((j,i)\) entry of \(A'\) is \(a_{ij}\).
+
+(f)
+\begin{itemize}
+\item \(A\otimes B\) has \(n\) block columns of width \(q\), and \(C\otimes D\) has \(n\) block rows of height \(q\): the partitions
+are conformal for multiplication. By Theorem~\ref{r5b-thm-block}(c), the \((i,k)\) block of the product is
+\[
+\sum_{j=1}^n(a_{ij}B)(c_{jk}D)=\Bigl(\sum_{j=1}^na_{ij}c_{jk}\Bigr)BD=(AC)_{ik}\,BD
+\]
+\item This is the \((i,k)\) block of \((AC)\otimes(BD)\), for \(i=1,\dots,m\) and \(k=1,\dots,s\).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{corollary}[\citeat{harville}{\S16.1}, \citeat{tu-mc}{Proposition~4}, \citeat{abadir-magnus}{Exercise~10.8}, \citeat{harville-solutions}{Ch.~16, Exercise~4}]\label{r13-cor-kron}
+Let \(A\in\R^{m\times n}\) and \(B\in\R^{p\times q}\).
+\begin{enumerate}
+\item \(A\otimes B=(A\otimes I_p)(I_n\otimes B)=(I_m\otimes B)(A\otimes I_q)\); \(I_m\otimes I_p=I_{mp}\); \(I_m\otimes B\) is block
+diagonal with \(m\) diagonal blocks \(B\); and for a diagonal \(D=\diag(d_1,\dots,d_m)\), \(D\otimes B=\diag(d_1B,\dots,d_mB)\).
+\item If \(A\) and \(B\) are square and invertible, then \(A\otimes B\) is invertible and \((A\otimes B)^{-1}=A^{-1}\otimes B^{-1}\).
+\item If \(A\) and \(B\) are square, then \(\tr(A\otimes B)=\tr A\cdot\tr B\).
+\item If \(G\) is a g-inverse of \(A\) and \(F\) a g-inverse of \(B\) (Definition~\ref{r10-def-ginverse}), then \(G\otimes F\) is a
+g-inverse of \(A\otimes B\).
+\item If \(A\) and \(B\) are square and both symmetric, both orthogonal, or both idempotent, then \(A\otimes B\) is symmetric,
+orthogonal, or idempotent, respectively.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(a) By Theorem~\ref{r13-thm-kron-rules}(f), \((A\otimes I_p)(I_n\otimes B)=(AI_n)\otimes(I_pB)=A\otimes B\) and
+\((I_m\otimes B)(A\otimes I_q)=(I_mA)\otimes(BI_q)=A\otimes B\). The \((i,j)\) block of \(D\otimes B\) is \(d_iB\) for \(i=j\) and \(0\)
+for \(i\ne j\); for \(D=I_m\) this gives \(I_m\otimes B\), and for \(B=I_p\) it gives \(I_m\otimes I_p=I_{mp}\).
+
+(b) Let \(A\in\R^{m\times m}\), \(B\in\R^{p\times p}\). By Theorem~\ref{r13-thm-kron-rules}(f) and (a),
+\((A\otimes B)(A^{-1}\otimes B^{-1})=(AA^{-1})\otimes(BB^{-1})=I_m\otimes I_p=I_{mp}\); so \(A\otimes B\) is invertible with this
+inverse (Theorem~\ref{r2-thm-invertible}).
+
+(c) The diagonal blocks of \(A\otimes B\) are \(a_{11}B,\dots,a_{mm}B\), so
+\(\tr(A\otimes B)=\sum_i\tr(a_{ii}B)=\bigl(\sum_ia_{ii}\bigr)\tr B=\tr A\cdot\tr B\) (Theorem~\ref{r1-thm-trace}(a)).
+
+(d) By Theorem~\ref{r13-thm-kron-rules}(f), applied twice,
+\((A\otimes B)(G\otimes F)(A\otimes B)=(AGA)\otimes(BFB)=A\otimes B\).
+
+(e) By Theorem~\ref{r13-thm-kron-rules}(e),(f): if \(A'=A\) and \(B'=B\), then \((A\otimes B)'=A'\otimes B'=A\otimes B\); if
+\(A'A=I\) and \(B'B=I\), then \((A\otimes B)'(A\otimes B)=(A'A)\otimes(B'B)=I\); if \(A^2=A\) and \(B^2=B\), then
+\((A\otimes B)^2=A^2\otimes B^2=A\otimes B\).
+\end{proof}
+
+\begin{example}[cf.\ \citeat{harville}{\S16.1}, \citeat{bapat}{\S8.3}]\label{r13-exm-designs}
+(a) In the one-way model of Theorem~\ref{r11-thm-oneway} with \(g\) groups of \(m\) observations each (\(n=gm\)), the
+indicator of group \(l\) is \(e_l\otimes\one_m\), so \(X_1=[d_1\ \cdots\ d_g]=I_g\otimes\one_m\) and
+\(X=[\one_n\ \ X_1]=[\one_g\otimes\one_m\ \ I_g\otimes\one_m]\). By Theorem~\ref{r13-thm-kron-rules}(e),(f) and
+Corollary~\ref{r13-cor-kron}(a),(b),
+\[
+X_1'X_1=(I_g\otimes\one_m')(I_g\otimes\one_m)=I_g\otimes(\one_m'\one_m)=mI_g
+\]
+and the hat matrix of \(X\) (Theorem~\ref{r10-thm-PX}), the orthogonal projection matrix onto
+\(\mathcal C(X)=\mathcal C(X_1)\) (Theorem~\ref{r11-thm-oneway}(c)), is (Theorem~\ref{r6-thm-hat})
+\[
+H=X_1(X_1'X_1)^{-1}X_1'=(I_g\otimes\one_m)\bigl(\tfrac1mI_g\bigr)(I_g\otimes\one_m')=I_g\otimes\bar J_m
+\]
+So the hat matrix of the balanced one-way design is block diagonal with \(g\) blocks \(\bar J_m\), and, as
+\(I_n=I_g\otimes I_m=I_g\otimes(\bar J_m+C_m)\), the residual maker is \(M=I_n-H=I_g\otimes C_m\)
+(Definition~\ref{r1-def-ones}, Theorem~\ref{r13-thm-kron-rules}(b)).
+
+(b) In a \textbf{two-way layout} a response \(y_{ij}\) is observed once for each level \(i\) of a factor with \(a\) levels and
+each level \(j\) of a second factor with \(b\) levels; the model without interaction is
+\(y_{ij}=\mu+\alpha_i+\beta_j+\varepsilon_{ij}\). List the observations as \(y=(y_{11},\dots,y_{1b},y_{21},\dots,y_{ab})'\). The
+observation \((i,j)\) is entry \((i-1)b+j\), so the column of \(\alpha_i\) is \(e_i\otimes\one_b\) and that of \(\beta_j\) is
+\(\one_a\otimes e_j\) (Definition~\ref{r13-def-kronecker}), and
+\[
+X=[\one_a\otimes\one_b\ \ I_a\otimes\one_b\ \ \one_a\otimes I_b]\in\R^{ab\times(1+a+b)},\qquad\beta=(\mu,\alpha_1,\dots,\alpha_a,\beta_1,\dots,\beta_b)'
+\]
+By Theorem~\ref{r13-thm-kron-rules}(e),(f), \((\one_a\otimes\one_b)'(I_a\otimes\one_b)=\one_a'\otimes(\one_b'\one_b)=b\one_a'\),
+\((I_a\otimes\one_b)'(\one_a\otimes I_b)=\one_a\otimes\one_b'=\one_a\one_b'\), \((\one_a\otimes I_b)'(\one_a\otimes I_b)=aI_b\), and
+so on; with the block product (Theorem~\ref{r5b-thm-block}(c)),
+\[
+X'X=\begin{pmatrix}ab&b\one_a'&a\one_b'\\b\one_a&bI_a&\one_a\one_b'\\a\one_b&\one_b\one_a'&aI_b\end{pmatrix}
+\]
+For \(a=2\) and \(b=3\),
+\[
+X=\begin{pmatrix}1&1&0&1&0&0\\1&1&0&0&1&0\\1&1&0&0&0&1\\1&0&1&1&0&0\\1&0&1&0&1&0\\1&0&1&0&0&1\end{pmatrix},\qquad
+X'X=\begin{pmatrix}6&3&3&2&2&2\\3&3&0&1&1&1\\3&0&3&1&1&1\\2&1&1&2&0&0\\2&1&1&0&2&0\\2&1&1&0&0&2\end{pmatrix}
+\]
+\end{example}
+
+\subsection*{The vec operator}
+
+\begin{definition}[\citeat{tu-mc}{\S2.4, Exercise~2}, \citeat{harville}{\S16.2}, \citeat{searle-khuri}{\S9.4.1}, \citeat{abadir-magnus}{Exercise~10.17}]\label{r13-def-vec}
+For \(A\in\R^{m\times n}\) with columns \(a_1,\dots,a_n\), \(\operatorname{vec}A\in\R^{mn}\) is the vector obtained by stacking the
+columns:
+\[
+\operatorname{vec}A=\begin{pmatrix}a_1\\\vdots\\a_n\end{pmatrix}
+\]
+Thus \(a_{ij}\) is entry \((j-1)m+i\) of \(\operatorname{vec}A\). For instance, for \(A=\begin{pmatrix}1&2&3\\4&5&6\end{pmatrix}\),
+\(\operatorname{vec}A=(1,4,2,5,3,6)'\) and \(\operatorname{vec}A'=(1,2,3,4,5,6)'\).
+\end{definition}
+Since sums and multiples are taken entrywise, \(\operatorname{vec}(cA+dB)=c\operatorname{vec}A+d\operatorname{vec}B\) for
+\(A,B\in\R^{m\times n}\) and \(c,d\in\R\); and for \(A,B\in\R^{m\times n}\), \(\operatorname{vec}A=\operatorname{vec}B\) if and only if
+\(A=B\). For a column vector \(a\), \(\operatorname{vec}a=\operatorname{vec}a'=a\). The squared length of
+\(\operatorname{vec}A\) is \(\sum_{i,j}a_{ij}^2=\lVert A\rVert_F^2\) (Definition~\ref{r9-def-frobenius}).
+
+\needspace{14\baselineskip}
+\begin{theorem}[\citeat{tu-mc}{Propositions~5, 6}, \citeat{harville}{\S16.2}, \citeat{abadir-magnus}{Exercises~10.18--10.20}]\label{r13-thm-vec}
+\begin{enumerate}
+\item For column vectors \(a\in\R^m\) and \(b\in\R^n\), \(\operatorname{vec}(ab')=b\otimes a\).
+\item For \(A\in\R^{m\times n}\), \(B\in\R^{n\times p}\) and \(C\in\R^{p\times q}\),
+\[
+\operatorname{vec}(ABC)=(C'\otimes A)\operatorname{vec}B
+\]
+\item In particular, \(\operatorname{vec}(AB)=(I_p\otimes A)\operatorname{vec}B=(B'\otimes I_m)\operatorname{vec}A\) for
+\(A\in\R^{m\times n}\), \(B\in\R^{n\times p}\), and \(ABx=(x'\otimes A)\operatorname{vec}B\) for \(x\in\R^p\).
+\item For \(A,B\in\R^{m\times n}\), \((\operatorname{vec}A)'\operatorname{vec}B=\tr(A'B)\). More generally, for
+\(A\in\R^{m\times n}\), \(B\in\R^{m\times p}\), \(C\in\R^{p\times q}\) and \(D\in\R^{n\times q}\),
+\[
+\tr(A'BCD')=(\operatorname{vec}A)'(D\otimes B)\operatorname{vec}C
+\]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) Column \(j\) of \(ab'\) is \(b_ja\) (Theorem~\ref{r1-thm-views}(a)), so
+\(\operatorname{vec}(ab')=(b_1a',\ \dots,\ b_na')'=b\otimes a\) (Definition~\ref{r13-def-kronecker}).
+
+(b)
+\begin{itemize}
+\item Let \(b_j\) be column \(j\) of \(B\) and \(u_j\) column \(j\) of \(I_p\). By the outer product expansion of \(B=BI_p\)
+(Theorem~\ref{r1-thm-views}(d)), \(B=\sum_{j=1}^pb_ju_j'\), so \(ABC=\sum_j(Ab_j)(C'u_j)'\)
+(Theorems~\ref{r1-thm-rules} and~\ref{r1-thm-transpose}).
+\item By (a) and the mixed product (Theorem~\ref{r13-thm-kron-rules}(f)),
+\(\operatorname{vec}\bigl((Ab_j)(C'u_j)'\bigr)=(C'u_j)\otimes(Ab_j)=(C'\otimes A)(u_j\otimes b_j)=(C'\otimes A)\operatorname{vec}(b_ju_j')\).
+\item Summing over \(j\) (vec is linear):
+\(\operatorname{vec}(ABC)=(C'\otimes A)\operatorname{vec}\bigl(\sum_jb_ju_j'\bigr)=(C'\otimes A)\operatorname{vec}B\).
+\end{itemize}
+
+(c) Apply (b) to \(AB\,I_p\), to \(I_m\,AB\), and to \(ABx\) (with \(C=x\in\R^{p\times1}\)), using \(\operatorname{vec}(ABx)=ABx\).
+
+(d)
+\begin{itemize}
+\item The \(j\)th diagonal entry of \(A'B\) is \(\col_j(A)'\col_j(B)=\sum_ia_{ij}b_{ij}\) (Theorem~\ref{r1-thm-views}(d)), so
+\(\tr(A'B)=\sum_{i,j}a_{ij}b_{ij}\); and \((\operatorname{vec}A)'\operatorname{vec}B\) is the same sum, as both vectors list the
+entries in the same order.
+\item Hence, by (b), \(\tr(A'BCD')=(\operatorname{vec}A)'\operatorname{vec}(BCD')=(\operatorname{vec}A)'(D\otimes B)\operatorname{vec}C\).\qedhere
+\end{itemize}
+\end{proof}
+Applied to \(A'\) and \(B\), (d) also gives \(\tr(AB)=(\operatorname{vec}A')'\operatorname{vec}B\)
+for \(A\in\R^{m\times n}\), \(B\in\R^{n\times m}\).
+
+\begin{example}[cf.\ \citeat{bapat}{\S8.3}, \citeat{searle-khuri}{\S12.12.2}]\label{r13-exm-two-way}
+In the two-way layout of Example~\ref{r13-exm-designs}(b), arrange the data in \(Y=(y_{ij})\in\R^{a\times b}\); then
+\(y=\operatorname{vec}Y'\), since row \(i\) of \(Y\) is column \(i\) of \(Y'\). Let
+\[
+P=I_a\otimes\bar J_b+\bar J_a\otimes C_b\in\R^{ab\times ab}
+\]
+\begin{itemize}
+\item \(P\) is symmetric (Corollary~\ref{r13-cor-kron}(e)), and \(P^2=P\): by Theorem~\ref{r13-thm-kron-rules}(b),(f) and
+\(\bar J^2=\bar J\), \(C^2=C\), \(C\bar J=\bar JC=0\) (Proposition~\ref{r1-prop-centering}; \(\bar J_b\one_b=\one_b\)),
+\(P^2=I_a\otimes\bar J_b+\bar J_a\otimes(\bar J_bC_b)+\bar J_a\otimes(C_b\bar J_b)+\bar J_a\otimes C_b=P\).
+\item \(PX=X\): \(P(\one_a\otimes\one_b)=\one_a\otimes\one_b+\one_a\otimes C_b\one_b=\one_a\otimes\one_b\),
+\(P(I_a\otimes\one_b)=I_a\otimes\one_b+\bar J_a\otimes C_b\one_b=I_a\otimes\one_b\), and
+\(P(\one_a\otimes I_b)=\one_a\otimes\bar J_b+\one_a\otimes C_b=\one_a\otimes I_b\). So \(\mathcal C(X)\subseteq\mathcal C(P)\).
+\item \(P=XT\) for a matrix \(T\): \(I_a\otimes\bar J_b=(I_a\otimes\one_b)(I_a\otimes\tfrac1b\one_b')\) and
+\(\bar J_a\otimes C_b=(\one_a\otimes I_b)(\tfrac1a\one_a'\otimes C_b)\). So \(\mathcal C(P)\subseteq\mathcal C(X)\), and
+\(\mathcal C(P)=\mathcal C(X)\).
+\item By Theorem~\ref{r6-thm-idempotent}(d), \(Py\) is the orthogonal projection of \(y\) onto \(\mathcal C(X)\), that is, the
+vector \(\hat y\) of fitted values (Theorem~\ref{r10-thm-least-squares}(b)).
+\item By Theorem~\ref{r13-thm-vec}(b), \((I_a\otimes\bar J_b)\operatorname{vec}Y'=\operatorname{vec}(\bar J_bY')\), whose entry
+\((i,j)\) is the row mean \(\bar y_{i\cdot}=\frac1b\sum_ly_{il}\); and
+\((\bar J_a\otimes C_b)\operatorname{vec}Y'=\operatorname{vec}(C_bY'\bar J_a)\), whose entry \((i,j)\) is \(\bar y_{\cdot j}-\bar y_{\cdot\cdot}\),
+the column mean minus the overall mean (Example~\ref{r1-exm-centering}). Hence
+\[
+\hat y_{ij}=\bar y_{i\cdot}+\bar y_{\cdot j}-\bar y_{\cdot\cdot}
+\]
+\end{itemize}
+For \(a=2\), \(b=3\) and \(Y=\begin{pmatrix}6&8&4\\2&4&6\end{pmatrix}\): the row means are \(6\), \(4\), the column means
+\(4\), \(6\), \(5\), and \(\bar y_{\cdot\cdot}=5\). So \(\hat y=(5,7,6,3,5,4)'\) and \(e=y-\hat y=(1,1,-2,-1,-1,2)'\); indeed
+\(X'e=(0,\ 0,\ 0,\ 0,\ 0,\ 0)'\): the entries of \(e\) add up to \(0\) along each row and each column of the layout.
+\end{example}
+
+\begin{example}\label{r13-exm-multivariate}
+In \textbf{multivariate regression}, \(p\) responses are measured on each of \(n\) units, \(Y\in\R^{n\times p}\) holds them
+(column \(j\) is response \(j\)), and \(Y=XB+E\) with a design \(X\in\R^{n\times(k+1)}\) of full column rank, an unknown
+\(B\in\R^{(k+1)\times p}\) and errors \(E\). The least-squares estimate minimizes
+\(\lVert Y-XB\rVert_F^2=\lVert\operatorname{vec}Y-\operatorname{vec}(XB)\rVert^2\). By Theorem~\ref{r13-thm-vec}(c),
+\(\operatorname{vec}(XB)=(I_p\otimes X)\operatorname{vec}B\): this is the least-squares problem with response \(\operatorname{vec}Y\)
+and design \(I_p\otimes X\). As \((I_p\otimes X)'(I_p\otimes X)=I_p\otimes X'X\) is invertible with inverse
+\(I_p\otimes(X'X)^{-1}\) (Corollary~\ref{r13-cor-kron}(b)), \(I_p\otimes X\) has full column rank
+(Theorems~\ref{thm:r4-rank-ata}(b) and~\ref{thm:r4-rank-rules}(d)), and by Theorem~\ref{r10-thm-least-squares}(c) the unique
+estimate is
+\[
+\operatorname{vec}\hat B=\bigl(I_p\otimes(X'X)^{-1}\bigr)(I_p\otimes X')\operatorname{vec}Y=\bigl(I_p\otimes(X'X)^{-1}X'\bigr)\operatorname{vec}Y
+=\operatorname{vec}\bigl((X'X)^{-1}X'Y\bigr)
+\]
+that is, \(\hat B=(X'X)^{-1}X'Y\): column \(j\) of \(\hat B\) is the least-squares estimate for response \(j\) alone.
+If \(X\) has any rank, let \(G\) be a g-inverse of \(X'X\); then \(I_p\otimes G\) is a g-inverse of
+\(I_p\otimes X'X\) (Corollary~\ref{r13-cor-kron}(d)), and by Theorems~\ref{r10-thm-normal-equations}(c)
+and~\ref{r10-thm-least-squares}(a) the same computation gives the least-squares estimate
+\(\operatorname{vec}B^0=\bigl(I_p\otimes GX'\bigr)\operatorname{vec}Y=\operatorname{vec}(GX'Y)\), that is, \(B^0=GX'Y\): column \(j\) of
+\(B^0\) is a least-squares estimate for response \(j\) alone.
+\end{example}
+
+\begin{theorem}[\citeat{abadir-magnus}{Exercise~13.65}, \citeat{tu-mc}{\S13}]\label{r13-thm-data-matrix}
+Let \(Y\in\R^{n\times p}\) be a random matrix with rows \(y_1',\dots,y_n'\) such that \(\expc(y_i)=\mu\) and
+\(\var(y_i)=\Sigma=(\sigma_{jl})\) for every \(i\), and \(\cov(y_{ij},y_{kl})=0\) for \(i\ne k\): the
+observations on different units are uncorrelated. Then \(\expc(\operatorname{vec}Y)=\mu\otimes\one_n\) and
+\(\var(\operatorname{vec}Y)=\Sigma\otimes I_n\); and \(\operatorname{vec}Y'=(y_1',\dots,y_n')'\) has
+\(\expc(\operatorname{vec}Y')=\one_n\otimes\mu\) and \(\var(\operatorname{vec}Y')=I_n\otimes\Sigma\).
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+\item Block \(j\) of \(\operatorname{vec}Y\) is column \(j\) of \(Y\), \((y_{1j},\dots,y_{nj})'\), with mean \(\mu_j\one_n\). So
+\(\expc(\operatorname{vec}Y)\) has the blocks \(\mu_1\one_n,\dots,\mu_p\one_n\): it is \(\mu\otimes\one_n\)
+(Definitions~\ref{r11-def-random} and~\ref{r13-def-kronecker}).
+\item The entry of \(\var(\operatorname{vec}Y)\) in block \((j,l)\), position \((i,k)\), is
+\(\cov(y_{ij},y_{kl})\) (Definition~\ref{r11-def-random}). It is \(\sigma_{jl}\) for \(i=k\) (entry \((j,l)\) of
+\(\var(y_i)\)) and \(0\) for \(i\ne k\). So block \((j,l)\) is \(\sigma_{jl}I_n\), the \((j,l)\) block of
+\(\Sigma\otimes I_n\).
+\item Likewise block \(i\) of \(\operatorname{vec}Y'\) is \(y_i\), with mean \(\mu\), and block \((i,k)\) of its covariance
+matrix, with entries \(\cov(y_{ij},y_{kl})\), is \(\Sigma\) for \(i=k\) and \(0\) for \(i\ne k\): the \((i,k)\) block
+of \(I_n\otimes\Sigma\).\qedhere
+\end{itemize}
+\end{proof}
+For \(n\geqslant2\) the rows of \(Y\) satisfy the hypotheses of Theorem~\ref{r14-thm-sample}, which gives \(\expc(\bar y)=\mu\) and
+\(\var(\bar y)=\frac1n\Sigma\) for the mean vector \(\bar y=\frac1nY'\one_n\), and \(\expc(S)=\Sigma\) for the
+sample covariance matrix \(S=\frac1{n-1}Y'C_nY\) (Definition~\ref{r12-def-data}). The covariance matrix of \(\bar y\) also follows
+from the theorem with the mixed product: by Theorem~\ref{r13-thm-vec}(b),
+\(\bar y=I_pY'(\frac1n\one_n)=(\frac1n\one_n'\otimes I_p)\operatorname{vec}Y'\), and by Theorem~\ref{r11-thm-linear}(b) and
+Theorem~\ref{r13-thm-kron-rules}(e),(f),
+\[
+\var(\bar y)=\bigl(\tfrac1n\one_n'\otimes I_p\bigr)(I_n\otimes\Sigma)\bigl(\tfrac1n\one_n\otimes I_p\bigr)
+=\tfrac1{n^2}(\one_n'\one_n)\otimes\Sigma=\tfrac1n\Sigma
+\]
+
+\subsection*{The commutation matrix}
+
+\begin{definition}[\citeat{tu-mc}{\S2.5}, \citeat{harville}{\S16.3a}, \citeat{abadir-magnus}{Exercise~11.9(a)}]\label{r13-def-commutation}
+Let \(m,n\geqslant1\). The \textbf{commutation matrix} \(K_{mn}\in\R^{mn\times mn}\) is the matrix with
+\[
+K_{mn}\operatorname{vec}A=\operatorname{vec}A'\qquad\text{for every }A\in\R^{m\times n}
+\]
+(the next theorem shows that there is exactly one such matrix). We write \(K_n=K_{nn}\) (not the Helmert matrix \(K_n\) of Example~\ref{r6-exm-helmert}). For example,
+for \(A=(a_{ij})\in\R^{2\times3}\), \(\operatorname{vec}A=(a_{11},a_{21},a_{12},a_{22},a_{13},a_{23})'\) and
+\(\operatorname{vec}A'=(a_{11},a_{12},a_{13},a_{21},a_{22},a_{23})'\), so
+\[
+K_{23}=\begin{pmatrix}1&0&0&0&0&0\\0&0&1&0&0&0\\0&0&0&0&1&0\\0&1&0&0&0&0\\0&0&0&1&0&0\\0&0&0&0&0&1\end{pmatrix}
+\]
+\end{definition}
+
+\begin{theorem}[\citeat{harville}{\S16.3, Theorem~16.3.2}, \citeat{tu-mc}{Propositions~7, 8, Exercise~4}, \citeat{abadir-magnus}{Exercises~11.1--11.5}]\label{r13-thm-commutation}
+Let \(m,n,p,q\geqslant1\).
+\begin{enumerate}
+\item There is exactly one matrix \(K_{mn}\) as in Definition~\ref{r13-def-commutation}: row \((i-1)n+j\) of \(K_{mn}\) is row
+\((j-1)m+i\) of \(I_{mn}\) (\(1\leqslant i\leqslant m\), \(1\leqslant j\leqslant n\)). It is a permutation matrix.
+\item \(K_{mn}'=K_{mn}^{-1}=K_{nm}\); \(K_{m1}=K_{1m}=I_m\); and \(K_n\) is symmetric.
+\item \(\tr K_n=n\).
+\item For \(A\in\R^{m\times n}\) and \(B\in\R^{p\times q}\),
+\[
+K_{pm}(A\otimes B)=(B\otimes A)K_{qn},\qquad B\otimes A=K_{pm}(A\otimes B)K_{nq}
+\]
+and for column vectors \(a\in\R^m\), \(b\in\R^p\), \(K_{pm}(a\otimes b)=b\otimes a\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item For \(A\in\R^{m\times n}\), \(a_{ij}\) is entry \((j-1)m+i\) of \(\operatorname{vec}A\); in \(A'\in\R^{n\times m}\) it is the \((j,i)\)
+entry, so it is entry \((i-1)n+j\) of \(\operatorname{vec}A'\) (Definition~\ref{r13-def-vec}).
+\item As \((i,j)\) runs over the \(mn\) pairs, both \((i-1)n+j\) and \((j-1)m+i\) run over \(1,\dots,mn\), each value once. So
+\(\varphi\bigl((i-1)n+j\bigr)=(j-1)m+i\) defines a permutation \(\varphi\) of degree \(mn\) (Definition~\ref{r5d-def-permutation}),
+and its permutation matrix \(P_\varphi\) has row \((i-1)n+j\) equal to row \((j-1)m+i\) of \(I_{mn}\)
+(Definition~\ref{r5d-def-permutation-matrix}).
+\item By Proposition~\ref{r5d-prop-permutation-matrix}(a), entry \((i-1)n+j\) of \(P_\varphi\operatorname{vec}A\) is entry
+\((j-1)m+i\) of \(\operatorname{vec}A\), that is, \(a_{ij}\), which is entry \((i-1)n+j\) of \(\operatorname{vec}A'\). So
+\(P_\varphi\operatorname{vec}A=\operatorname{vec}A'\) for every \(A\).
+\item If also \(K\operatorname{vec}A=\operatorname{vec}A'\) for every \(A\), then \(Kv=P_\varphi v\) for every \(v\in\R^{mn}\), since
+every \(v\) is \(\operatorname{vec}A\) for some \(A\); taking \(v=e_r\) gives equal columns (Theorem~\ref{r1-thm-views}(b)), so
+\(K=P_\varphi\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item By (a) and Proposition~\ref{r5d-prop-permutation-matrix}(c), \(K_{mn}\) is invertible with \(K_{mn}^{-1}=K_{mn}'\).
+\item For every \(A\in\R^{m\times n}\), \(K_{nm}K_{mn}\operatorname{vec}A=K_{nm}\operatorname{vec}A'=\operatorname{vec}(A')'=\operatorname{vec}A\);
+as in (a), \(K_{nm}K_{mn}=I_{mn}\), so \(K_{nm}=K_{mn}^{-1}\) (Theorem~\ref{r2-thm-invertible}).
+\item For \(a\in\R^m\), \(\operatorname{vec}a=\operatorname{vec}a'=a\), so \(K_{m1}a=a\) and \(K_{1m}a=a\) for every \(a\): \(K_{m1}=K_{1m}=I_m\).
+Finally \(K_n'=K_n^{-1}=K_n\).
+\end{itemize}
+(c) For \(n=1\), \(K_1=I_1\). Let \(n\geqslant2\). By (a), the diagonal entry of \(K_n\) in position \((i-1)n+j\) is \(1\) if
+\((j-1)n+i=(i-1)n+j\), that is, \((j-i)(n-1)=0\), that is, \(i=j\), and \(0\) otherwise. So exactly \(n\) diagonal entries are
+\(1\), and \(\tr K_n=n\).
+
+(d)
+\begin{itemize}
+\item Let \(X\in\R^{q\times n}\). By Definition~\ref{r13-def-commutation} and Theorem~\ref{r13-thm-vec}(b), applied three times,
+\[
+K_{pm}(A\otimes B)\operatorname{vec}X=K_{pm}\operatorname{vec}(BXA')=\operatorname{vec}(AX'B')=(B\otimes A)\operatorname{vec}X'
+=(B\otimes A)K_{qn}\operatorname{vec}X
+\]
+As \(\operatorname{vec}X\) runs over \(\R^{nq}\), this gives \(K_{pm}(A\otimes B)=(B\otimes A)K_{qn}\), as in (a).
+\item Multiplying on the right by \(K_{nq}=K_{qn}^{-1}\) (by (b)) gives \(K_{pm}(A\otimes B)K_{nq}=B\otimes A\).
+\item By Theorem~\ref{r13-thm-vec}(a), \(K_{pm}(a\otimes b)=K_{pm}\operatorname{vec}(ba')=\operatorname{vec}(ab')=b\otimes a\).\qedhere
+\end{itemize}
+\end{proof}
+For the data matrix of Theorem~\ref{r13-thm-data-matrix}, \(\operatorname{vec}Y'=K_{np}\operatorname{vec}Y\), and (d) with (b) gives
+again \(\var(\operatorname{vec}Y')=K_{np}(\Sigma\otimes I_n)K_{np}'=(I_n\otimes\Sigma)K_{np}K_{pn}=I_n\otimes\Sigma\)
+(Theorem~\ref{r11-thm-linear}(b)).
+
+\begin{theorem}[\citeat{harville}{(16.3.18), (16.1.26)}, \citeat{abadir-magnus}{Exercise~10.12(b)}]\label{r13-thm-kron-det}
+\begin{enumerate}
+\item For \(A\in\R^{m\times m}\) and \(B\in\R^{n\times n}\), \(\det(A\otimes B)=(\det A)^n(\det B)^m\).
+\item For \(A\in\R^{m\times n}\) and \(B\in\R^{p\times q}\), \(\rank(A\otimes B)=\rank A\cdot\rank B\).
+\item For square \(A\) and \(B\), \(A\otimes B\) is invertible if and only if \(A\) and \(B\) are invertible.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item By Corollary~\ref{r13-cor-kron}(a), \(A\otimes B=(A\otimes I_n)(I_m\otimes B)\), and \(I_m\otimes B\) is block diagonal with \(m\)
+blocks \(B\). Applying Theorem~\ref{r5d-thm-block-tri} (\(\det\diag(A_1,D)=\det A_1\cdot\det D\)) \(m-1\) times,
+\(\det(I_m\otimes B)=(\det B)^m\); likewise \(\det(I_n\otimes A)=(\det A)^n\).
+\item By Theorem~\ref{r13-thm-commutation}(d) with \(B=I_n\) (\(p=q=n\)), \(K_{nm}(A\otimes I_n)=(I_n\otimes A)K_{nm}\), so
+\(A\otimes I_n=K_{mn}(I_n\otimes A)K_{nm}\) (Theorem~\ref{r13-thm-commutation}(b)).
+\item By Theorem~\ref{r5d-thm-product}(b), \(\det(A\otimes I_n)=\det K_{mn}\cdot(\det A)^n\cdot\det K_{nm}\), and
+\(\det K_{mn}\cdot\det K_{nm}=\det(K_{mn}K_{nm})=\det I_{mn}=1\). Hence \(\det(A\otimes B)=(\det A)^n(\det B)^m\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item For any matrix \(M\) with a g-inverse \(N\), \(\rank M=\tr(MN)\) (Theorem~\ref{r10-thm-rank-idempotent}(c)).
+\item Let \(G\) and \(F\) be g-inverses of \(A\) and \(B\) (Theorem~\ref{r10-thm-ginv-exists}). By
+Corollary~\ref{r13-cor-kron}(d), \(G\otimes F\) is a g-inverse of \(A\otimes B\). By the first step (for \(A\otimes B\), \(A\) and
+\(B\)), the mixed product and Corollary~\ref{r13-cor-kron}(c),
+\[
+\rank(A\otimes B)=\tr\bigl((A\otimes B)(G\otimes F)\bigr)=\tr(AG\otimes BF)=\tr(AG)\tr(BF)=\rank A\cdot\rank B
+\]
+\end{itemize}
+(c) By (a), \(\det(A\otimes B)\ne0\) if and only if \(\det A\ne0\) and \(\det B\ne0\); apply Theorem~\ref{r5d-thm-product}(a).
+\end{proof}
+
+\needspace{12\baselineskip}
+\begin{theorem}[\citeat{searle-khuri}{Theorem~6.10}, \citeat{abadir-magnus}{Exercises~10.11(a), 10.12(a)}]\label{r13-thm-kron-eigen}
+Let \(A\in\R^{m\times m}\) and \(B\in\R^{n\times n}\).
+\begin{enumerate}
+\item If \(Ax=\lambda x\) and \(By=\mu y\) with \(x\ne0\), \(y\ne0\), then \((A\otimes B)(x\otimes y)=\lambda\mu(x\otimes y)\) and
+\(x\otimes y\ne0\): \(\lambda\mu\) is an eigenvalue of \(A\otimes B\) with eigenvector \(x\otimes y\).
+\item If \(P^{-1}AP=\Lambda=\diag(\lambda_1,\dots,\lambda_m)\) and \(Q^{-1}BQ=M=\diag(\mu_1,\dots,\mu_n)\) (Definition~\ref{r7-def-diagonalizable}),
+then \((P\otimes Q)^{-1}(A\otimes B)(P\otimes Q)=\Lambda\otimes M\). So \(A\otimes B\) is diagonalizable, its eigenvalues, listed with
+multiplicity, are the \(mn\) products \(\lambda_i\mu_j\), and \(p_i\otimes q_j\) is an eigenvector for \(\lambda_i\mu_j\), where
+\(p_i=\col_i(P)\), \(q_j=\col_j(Q)\).
+\item If \(A\) and \(B\) are symmetric, with \(A=P\Lambda P'\), \(B=QMQ'\) as in Theorem~\ref{r8-thm-spectral}(b), then \(P\otimes Q\) is
+orthogonal and \(A\otimes B=(P\otimes Q)(\Lambda\otimes M)(P\otimes Q)'\). If \(A\) and \(B\) are PSD (PD), then \(A\otimes B\) is PSD (PD).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) By the mixed product, \((A\otimes B)(x\otimes y)=(Ax)\otimes(By)=(\lambda x)\otimes(\mu y)=\lambda\mu(x\otimes y)\)
+(Theorem~\ref{r13-thm-kron-rules}(a),(f)). If \(x_i\ne0\) and \(y_j\ne0\), the entry \(x_iy_j\) of \(x\otimes y\) is not \(0\).
+
+(b)
+\begin{itemize}
+\item \(P\otimes Q\) is invertible with inverse \(P^{-1}\otimes Q^{-1}\) (Corollary~\ref{r13-cor-kron}(b)), and by the mixed product
+\((P^{-1}\otimes Q^{-1})(A\otimes B)(P\otimes Q)=(P^{-1}AP)\otimes(Q^{-1}BQ)=\Lambda\otimes M\).
+\item \(\Lambda\otimes M=\diag(\lambda_1M,\dots,\lambda_mM)\) (Corollary~\ref{r13-cor-kron}(a)) is diagonal, with \(\lambda_i\mu_j\) in
+position \((i-1)n+j\); and column \((i-1)n+j\) of \(P\otimes Q\) is \(p_i\otimes q_j\) (Definition~\ref{r13-def-kronecker}). By
+Definition~\ref{r7-def-diagonalizable}, these \(mn\) numbers are the eigenvalues of \(A\otimes B\), listed with multiplicity, and
+\(p_i\otimes q_j\) belongs to \(\lambda_i\mu_j\).
+\end{itemize}
+(c)
+\begin{itemize}
+\item \(P\otimes Q\) is orthogonal and \(A\otimes B\) symmetric (Corollary~\ref{r13-cor-kron}(e)); as \((P\otimes Q)^{-1}=(P\otimes Q)'\),
+(b) gives \(A\otimes B=(P\otimes Q)(\Lambda\otimes M)(P\otimes Q)'\).
+\item If \(A\), \(B\) are PSD (PD), all \(\lambda_i,\mu_j\geqslant0\) (\(>0\)) (Theorem~\ref{r8-thm-eigen-criterion}(a)), so all eigenvalues
+\(\lambda_i\mu_j\) of \(A\otimes B\) are \(\geqslant0\) (\(>0\)), and \(A\otimes B\) is PSD (PD) by the same theorem.\qedhere
+\end{itemize}
+\end{proof}
+In (b), \(\det(A\otimes B)=\prod_{i,j}\lambda_i\mu_j=\prod_i\bigl(\lambda_i^n\prod_j\mu_j\bigr)=(\det A)^n(\det B)^m\)
+(Theorem~\ref{r7-thm-trace-det}), in agreement with Theorem~\ref{r13-thm-kron-det}(a); and \(\tr(A\otimes B)=\sum_{i,j}\lambda_i\mu_j=\tr A\cdot\tr B\).
+
+\subsection*{The duplication matrix}
+
+\begin{definition}[\citeat{tu-mc}{\S2.6}, \citeat{harville}{\S16.4}, \citeat{searle-khuri}{\S9.4.1}]\label{r13-def-duplication}
+For \(A\in\R^{n\times n}\), \(\operatorname{vech}A\in\R^{n(n+1)/2}\) is the vector obtained from \(\operatorname{vec}A\) by deleting the entries
+above the diagonal:
+\[
+\operatorname{vech}A=(a_{11},\dots,a_{n1},a_{22},\dots,a_{n2},\dots,a_{nn})'
+\]
+For symmetric \(A\) it lists each distinct entry once. The \textbf{duplication matrix} \(D_n\in\R^{n^2\times n(n+1)/2}\) is the matrix with
+\(D_n\operatorname{vech}A=\operatorname{vec}A\) for every symmetric \(A\in\R^{n\times n}\). For example,
+\[
+\operatorname{vech}\begin{pmatrix}1&7&6\\7&3&8\\6&8&2\end{pmatrix}=(1,7,6,3,8,2)',\qquad
+D_2=\begin{pmatrix}1&0&0\\0&1&0\\0&1&0\\0&0&1\end{pmatrix}
+\]
+\end{definition}
+
+\needspace{14\baselineskip}
+\begin{proposition}[\citeat{harville}{\S16.4b, (16.4.6), (16.4.14)}, \citeat{tu-mc}{Proposition~9, Exercise~5}]\label{r13-prop-duplication}
+Let \(n\geqslant1\).
+\begin{enumerate}
+\item There is exactly one duplication matrix \(D_n\). Its column for the position of \(a_{ij}\) (\(i\geqslant j\)) in
+\(\operatorname{vech}A\) has the entry \(1\) in rows \((j-1)n+i\) and \((i-1)n+j\) (one row if \(i=j\)) and \(0\) elsewhere. The
+columns of \(D_n\) are nonzero and pairwise orthogonal, \(D_n'D_n\) is diagonal with the entries \(1\) (\(i=j\)) and \(2\)
+(\(i>j\)), and \(D_n\) has full column rank \(n(n+1)/2\).
+\item For symmetric \(A\), \(\operatorname{vech}A=(D_n'D_n)^{-1}D_n'\operatorname{vec}A\).
+\item \(K_nD_n=D_n\), and \(D_n(D_n'D_n)^{-1}D_n'=\frac12(I_{n^2}+K_n)\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a)
+\begin{itemize}
+\item For symmetric \(A\) and \(i\geqslant j\), the entries \((j-1)n+i\) and \((i-1)n+j\) of \(\operatorname{vec}A\) are \(a_{ij}\) and
+\(a_{ji}=a_{ij}\), the entry of \(\operatorname{vech}A\) for \((i,j)\). So the matrix described has \(D_n\operatorname{vech}A=\operatorname{vec}A\).
+As \(A\) runs over the symmetric matrices, \(\operatorname{vech}A\) runs over all of \(\R^{n(n+1)/2}\); as in
+Theorem~\ref{r13-thm-commutation}(a), \(D_n\) is unique.
+\item Every row of \(D_n\) has exactly one entry \(1\), so two different columns have no nonzero entry in a common row: they are
+orthogonal, and \(D_n'D_n\) is diagonal with the squared lengths \(1\) or \(2\) of the columns (Theorem~\ref{r1-thm-views}(d)).
+\item \(D_n'D_n\) is invertible, so \(\rank D_n=\rank(D_n'D_n)=n(n+1)/2\) (Theorems~\ref{thm:r4-rank-ata}(b)
+and~\ref{thm:r4-rank-rules}(d)).
+\end{itemize}
+(b) Multiply \(D_n\operatorname{vech}A=\operatorname{vec}A\) on the left by \((D_n'D_n)^{-1}D_n'\).
+
+(c)
+\begin{itemize}
+\item For symmetric \(A\), \(K_nD_n\operatorname{vech}A=K_n\operatorname{vec}A=\operatorname{vec}A'=\operatorname{vec}A=D_n\operatorname{vech}A\);
+as \(\operatorname{vech}A\) runs over \(\R^{n(n+1)/2}\), \(K_nD_n=D_n\).
+\item Let \(M=D_n(D_n'D_n)^{-1}D_n'\) and \(N=\frac12(I_{n^2}+K_n)\). \(M\) is symmetric and idempotent. \(K_n\) is symmetric with
+\(K_n^2=K_n'K_n=I\) (Theorem~\ref{r13-thm-commutation}(b)), so \(N'=N\) and \(N^2=\frac14(I+2K_n+K_n^2)=N\).
+\item \(ND_n=\frac12(D_n+K_nD_n)=D_n\), so \(NM=M\) and \(MN=(NM)'=M\). Hence \(\Delta=N-M\) is symmetric with
+\(\Delta^2=N-NM-MN+M=N-M=\Delta\).
+\item \(\tr M=\tr\bigl((D_n'D_n)^{-1}D_n'D_n\bigr)=\frac{n(n+1)}2\) and \(\tr N=\frac12(n^2+n)\) by Theorem~\ref{r13-thm-commutation}(c)
+(Theorem~\ref{r1-thm-trace}). So \(\rank\Delta=\tr\Delta=0\) (Theorem~\ref{r6-thm-idempotent}(c)), and \(\Delta=0\).\qedhere
+\end{itemize}
+\end{proof}
+
+\subsection*{Derivatives and differentials}
+
+Let \(S\subseteq\R^n\) and \(c\in S\). The \textbf{ball} \(B(c,\delta)\) of radius \(\delta>0\) is the set of \(x\in\R^n\) with
+\(\lVert x-c\rVert<\delta\), and \(S\) is \textbf{open} if every \(c\in S\) has a ball \(B(c,\delta)\subseteq S\). For matrix variables
+\(X\in\R^{n\times q}\) the distance is \(\lVert X-C\rVert_F=\lVert\operatorname{vec}X-\operatorname{vec}C\rVert\) (Definition~\ref{r9-def-frobenius}),
+so a set of matrices is open if the corresponding set of vectors \(\operatorname{vec}X\) is. For a function \(f\) on an open set
+\(S\) and \(x\in S\), the \textbf{partial derivative} \(\partial f(x)/\partial x_j\) is the derivative at \(t=0\) of the function
+\(t\mapsto f(x+te_j)\) of one variable, when it exists~\citeat{harville}{\S15.1}.
+
+\begin{definition}[\citeat{tu-mc}{\S3}, \citeat{harville}{\S15.1}, \citeat{searle-khuri}{(9.11)}]\label{r13-def-derivative}
+Let \(S\subseteq\R^n\) be open and \(f=(f_1,\dots,f_m)':S\to\R^m\). If all partial derivatives of \(f_1,\dots,f_m\) exist at \(x\in S\),
+the \textbf{derivative} (or \textbf{Jacobian matrix}) of \(f\) at \(x\) is the \(m\times n\) matrix
+\[
+\mathrm Df(x)=\frac{\partial f(x)}{\partial x'}\quad\text{with }(i,j)\text{ entry }\frac{\partial f_i(x)}{\partial x_j}
+\]
+Row \(i\) holds the partial derivatives of \(f_i\), column \(j\) the partial derivatives with respect to \(x_j\). For a scalar
+function (\(m=1\)), \(\mathrm Df(x)\) is a row vector, and the column \(\partial f(x)/\partial x=(\mathrm Df(x))'\) is the
+\textbf{gradient}. A matrix function \(F\), with values \(F(X)\in\R^{m\times p}\), of a matrix \(X\) in an open set of
+\(\R^{n\times q}\) is regarded as the vector function \(\operatorname{vec}X\mapsto\operatorname{vec}F(X)\); its derivative is the
+\(mp\times nq\) matrix
+\[
+\mathrm DF(X)=\frac{\partial\operatorname{vec}F(X)}{\partial(\operatorname{vec}X)'}
+\]
+For a scalar function \(\varphi(X)\) we also write \(\partial\varphi/\partial X\) for the \(n\times q\) matrix with \((i,j)\) entry
+\(\partial\varphi/\partial x_{ij}\); thus \(\mathrm D\varphi(X)=(\operatorname{vec}(\partial\varphi/\partial X))'\).
+\end{definition}
+Some books write \(\partial y/\partial x\) for the \emph{transposed} derivative of a vector function: there
+\(\partial(Ax)/\partial x=A'\). In these notes \(\mathrm D\) always has one row for each entry of the function and one column for
+each variable.
+
+We use the following facts from calculus without proof~\citeat{harville}{Lemmas~15.1.1, 15.2.2, Theorem~15.7.1}. A function on an open set is \textbf{continuously differentiable}
+(\(C^1\)) if its partial derivatives exist and are continuous there, and \textbf{twice continuously differentiable} (\(C^2\)) if
+moreover the partial derivatives of the partial derivatives exist and are continuous; vector and matrix functions are \(C^1\)
+(\(C^2\)) if all their entries are.
+\begin{itemize}
+\item (\textbf{Rules}) Sums, products and quotients (with nonzero denominator) of \(C^1\) (\(C^2\)) functions are \(C^1\) (\(C^2\)), and
+\(\partial(f+g)/\partial x_j=\partial f/\partial x_j+\partial g/\partial x_j\),
+\(\partial(fg)/\partial x_j=(\partial f/\partial x_j)g+f\,\partial g/\partial x_j\), \(\partial(cf)/\partial x_j=c\,\partial f/\partial x_j\)
+(\(c\) constant); constants and the variables are \(C^2\), so polynomials in the variables are \(C^2\). A \(C^1\) function is
+continuous, and a continuous function that is not \(0\) (or is positive) at \(c\) is not \(0\) (positive) on some ball around \(c\).
+\item (\textbf{Chain rule}) If \(g\) is \(C^1\) on an open \(S\subseteq\R^n\) with values in an open \(T\subseteq\R^m\), and \(f\) is \(C^1\)
+(\(C^2\)) on \(T\) with values in \(\R^p\), then \(f\circ g\) is \(C^1\) on \(S\) (\(C^2\) if \(g\) is too), and
+\(\mathrm D(f\circ g)(x)=\mathrm Df(g(x))\,\mathrm Dg(x)\). The functions \(\log t\) and \(t^{-1/2}\) of \(t>0\) are \(C^2\), with
+derivatives \(1/t\) and \(-\frac12t^{-3/2}\).
+\end{itemize}
+
+\begin{example}[\citeat{searle-khuri}{Example~9.1, \S9.3.1, \S9.5.2}]\label{r13-exm-derivative}
+(a) For \(f(x)=Ax\) with \(A\in\R^{m\times n}\) constant, \(f_i(x)=\sum_ja_{ij}x_j\), so \(\partial f_i/\partial x_j=a_{ij}\) and
+\(\mathrm Df(x)=A\). For
+\[
+A=\begin{pmatrix}2&6&-1\\3&-2&4\\3&4&7\end{pmatrix},\qquad Ax=\begin{pmatrix}2x_1+6x_2-x_3\\3x_1-2x_2+4x_3\\3x_1+4x_2+7x_3\end{pmatrix}
+\]
+the partial derivatives of the first entry are \(2,6,-1\), the first row of \(\mathrm D(Ax)=A\); in the transposed notation,
+\(\partial(Ax)/\partial x=A'\) has these numbers in its first column.
+
+(b) For \(\lambda=3x_1+4x_2+9x_3=a'x\) with \(a=(3,4,9)'\), \(\mathrm D\lambda=(3,\ 4,\ 9)=a'\), and the gradient is \(a\).
+
+(c) For \(X\in\R^{n\times q}\) and constant \(A\in\R^{q\times n}\), \(\tr(XA)=\sum_{r,s}x_{rs}a_{sr}\), so
+\(\partial\tr(XA)/\partial x_{ij}=a_{ji}\): \(\partial\tr(XA)/\partial X=A'\), and \(\mathrm D\tr(XA)=(\operatorname{vec}A')'\).
+\end{example}
+
+\begin{lemma}[\citeat{tu-mc}{Proposition~2}]\label{r13-lem-forms}
+\begin{enumerate}
+\item If \(A,B\in\R^{m\times n}\) and \(Ax=Bx\) for every \(x\in\R^n\), then \(A=B\).
+\item For \(A\in\R^{n\times n}\), \(x'Ax=0\) for every \(x\in\R^n\) if and only if \(A'=-A\) (\(A\) is skew-symmetric).
+\item For \(A,B\in\R^{n\times n}\), \(x'Ax=x'Bx\) for every \(x\) if and only if \(A+A'=B+B'\). In particular, for symmetric \(A\)
+and \(B\), \(x'Ax=x'Bx\) for every \(x\) only if \(A=B\).
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(a) With \(x=e_j\), \(\col_j(A)=Ae_j=Be_j=\col_j(B)\) for every \(j\) (Theorem~\ref{r1-thm-views}(b)).
+
+(b)
+\begin{itemize}
+\item If \(A'=-A\), then \(x'Ax=(x'Ax)'=x'A'x=-x'Ax\), as a number is its own transpose; so \(x'Ax=0\).
+\item Conversely, let \(x'Ax=0\) for every \(x\). With \(x=e_i\), \(a_{ii}=0\). With \(x=e_i+e_j\) (\(i\ne j\)),
+\(0=a_{ii}+a_{ij}+a_{ji}+a_{jj}=a_{ij}+a_{ji}\). So \(A'=-A\).
+\end{itemize}
+(c) \(x'Ax=x'Bx\) for every \(x\) means \(x'(A-B)x=0\) for every \(x\), that is, by (b), \((A-B)'=-(A-B)\), or
+\(A+A'=B+B'\). For symmetric \(A\), \(B\) this reads \(2A=2B\).
+\end{proof}
+
+\begin{definition}[\citeat{tu-mc}{\S4}, \citeat{abadir-magnus}{Ch.~13}]\label{r13-def-differential}
+Let \(f\) be \(C^1\) on an open \(S\subseteq\R^n\) with values in \(\R^m\), and \(x\in S\). The \textbf{differential} of \(f\) at \(x\) is the
+linear function of \(\mathrm{d}x\in\R^n\)
+\[
+\mathrm{d}f(x)=\mathrm Df(x)\,\mathrm{d}x
+\]
+where \(\mathrm{d}x\) is an arbitrary vector (an increment of \(x\)). For a \(C^1\) matrix function \(F\) of \(X\in\R^{n\times q}\), the
+differential \(\mathrm{d}F(X)\) is the matrix of the size of \(F(X)\) with \(\operatorname{vec}\mathrm{d}F(X)=\mathrm DF(X)\operatorname{vec}\mathrm{d}X\),
+\(\mathrm{d}X\in\R^{n\times q}\) arbitrary; its \((k,l)\) entry is \(\sum_{i,j}(\partial f_{kl}/\partial x_{ij})\,\mathrm{d}x_{ij}\).
+\end{definition}
+So \(\mathrm{d}f(x)\) has the size of \(f\), whatever the number of variables, while \(\mathrm Df(x)\) has one column for each variable;
+this makes differentials easier to compute with. For the identity function \(f(x)=x\), \(\mathrm Df(x)=I_n\) and the differential is
+\(\mathrm{d}x\) itself.
+
+\needspace{12\baselineskip}
+\begin{theorem}[First identification theorem; \citeat{tu-mc}{Proposition~14}]\label{r13-thm-identification}
+\begin{enumerate}
+\item Let \(f\) be \(C^1\) on an open \(S\subseteq\R^n\) with values in \(\R^m\), \(x\in S\) and \(A\in\R^{m\times n}\). Then
+\(\mathrm{d}f(x)=A\,\mathrm{d}x\) for every \(\mathrm{d}x\) if and only if \(\mathrm Df(x)=A\).
+\item For a \(C^1\) matrix function \(F\) of \(X\in\R^{n\times q}\) with values in \(\R^{m\times p}\) and \(A\in\R^{mp\times nq}\):
+\(\operatorname{vec}\mathrm{d}F(X)=A\operatorname{vec}\mathrm{d}X\) for every \(\mathrm{d}X\) if and only if \(\mathrm DF(X)=A\).
+\item For a \(C^1\) scalar function \(\varphi\) of \(X\in\R^{n\times q}\) and \(C\in\R^{n\times q}\): \(\mathrm{d}\varphi(X)=\tr(C'\mathrm{d}X)\)
+for every \(\mathrm{d}X\) if and only if \(\mathrm D\varphi(X)=(\operatorname{vec}C)'\), that is, \(\partial\varphi/\partial X=C\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) If \(\mathrm Df(x)=A\), then \(\mathrm{d}f(x)=A\,\mathrm{d}x\) by Definition~\ref{r13-def-differential}. Conversely,
+\(A\,\mathrm{d}x=\mathrm Df(x)\,\mathrm{d}x\) for every \(\mathrm{d}x\) gives \(\mathrm Df(x)=A\) by Lemma~\ref{r13-lem-forms}(a).
+
+(b) This is (a) for the vector function \(\operatorname{vec}X\mapsto\operatorname{vec}F(X)\) (Definitions~\ref{r13-def-derivative}
+and~\ref{r13-def-differential}).
+
+(c) By Theorem~\ref{r13-thm-vec}(d), \(\tr(C'\mathrm{d}X)=(\operatorname{vec}C)'\operatorname{vec}\mathrm{d}X\); so this is (b) with \(m=p=1\) and
+\(A=(\operatorname{vec}C)'\), and \(\mathrm D\varphi(X)=(\operatorname{vec}C)'\) means \(\partial\varphi/\partial x_{ij}=c_{ij}\) for all \(i,j\).
+\end{proof}
+So, to find a derivative, we compute the differential and bring it to one of these forms.
+
+\begin{theorem}[\citeat{tu-mc}{\S4.1, \S7, Proposition~15}, \citeat{abadir-magnus}{Exercises~13.1--13.3}]\label{r13-thm-diff-rules}
+Let \(F\) and \(G\) be \(C^1\) matrix functions (vector and scalar functions included) of the same variable on an open set, and
+let \(A\) be a constant matrix and \(\alpha\) a number.
+\begin{enumerate}
+\item \(\mathrm{d}A=0\), \(\mathrm{d}(\alpha F)=\alpha\,\mathrm{d}F\), \(\mathrm{d}(F+G)=\mathrm{d}F+\mathrm{d}G\), \(\mathrm{d}(F')=(\mathrm{d}F)'\),
+\(\mathrm{d}\operatorname{vec}F=\operatorname{vec}\mathrm{d}F\) and, for square \(F\), \(\mathrm{d}\tr F=\tr\mathrm{d}F\).
+\item \(\mathrm{d}(FG)=(\mathrm{d}F)G+F\,\mathrm{d}G\) and \(\mathrm{d}(F\otimes G)=(\mathrm{d}F)\otimes G+F\otimes\mathrm{d}G\), whenever the products are
+defined.
+\item (\textbf{Chain rule}) Let \(y=g(x)\) be \(C^1\) on an open \(S\subseteq\R^n\) with values in an open \(T\subseteq\R^m\), and let
+\(z=f(y)\) be \(C^1\) on \(T\), with differentials \(\mathrm{d}z=A(y)\,\mathrm{d}y\) and \(\mathrm{d}y=B(x)\,\mathrm{d}x\). Then the differential of
+\(x\mapsto f(g(x))\) is \(\mathrm{d}z=A(g(x))B(x)\,\mathrm{d}x\): we may substitute \(\mathrm{d}y=B(x)\,\mathrm{d}x\) into \(\mathrm{d}z=A(y)\,\mathrm{d}y\).
+The same holds for matrix functions, through \(\operatorname{vec}\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) By Definition~\ref{r13-def-differential}, the \((k,l)\) entry of \(\mathrm{d}F\) is \(\sum_{i,j}(\partial f_{kl}/\partial x_{ij})\,\mathrm{d}x_{ij}\). The
+partial derivatives of a constant are \(0\), and those of \(\alpha f_{kl}\) and of \(f_{kl}+g_{kl}\) are
+\(\alpha\,\partial f_{kl}/\partial x_{ij}\) and \(\partial f_{kl}/\partial x_{ij}+\partial g_{kl}/\partial x_{ij}\) (rules of calculus); this gives
+the first three rules. \(F'\), \(\operatorname{vec}F\) and \(\tr F\) rearrange entries of \(F\) or add them up, so their differentials
+rearrange or add up the differentials of these entries.
+
+(b)
+\begin{itemize}
+\item For \(C^1\) scalar functions \(u\), \(v\), the product rule gives
+\(\mathrm{d}(uv)=\sum_{i,j}\bigl((\partial u/\partial x_{ij})v+u\,\partial v/\partial x_{ij}\bigr)\mathrm{d}x_{ij}=(\mathrm{d}u)v+u\,\mathrm{d}v\).
+\item The \((k,l)\) entry of \(FG\) is \(\sum_rf_{kr}g_{rl}\), so by (a) its differential is
+\(\sum_r\bigl((\mathrm{d}f_{kr})g_{rl}+f_{kr}\,\mathrm{d}g_{rl}\bigr)\), the \((k,l)\) entry of \((\mathrm{d}F)G+F\,\mathrm{d}G\).
+\item The entries of \(F\otimes G\) are the products \(f_{ij}g_{st}\) (Definition~\ref{r13-def-kronecker}), with differentials
+\((\mathrm{d}f_{ij})g_{st}+f_{ij}\,\mathrm{d}g_{st}\), the corresponding entries of \((\mathrm{d}F)\otimes G+F\otimes\mathrm{d}G\).
+\end{itemize}
+(c) By the chain rule of calculus, \(\mathrm D(f\circ g)(x)=\mathrm Df(g(x))\,\mathrm Dg(x)\), and by
+Theorem~\ref{r13-thm-identification}(a), \(\mathrm Df(y)=A(y)\) and \(\mathrm Dg(x)=B(x)\). So the differential of \(f\circ g\) at \(x\) is
+\(A(g(x))B(x)\,\mathrm{d}x\) (Definition~\ref{r13-def-differential}).
+\end{proof}
+In practice we write \(f(y)\) and \(f(x)\) for the same quantity seen as a function of \(y\) or of \(x\). The rules let us compute
+differentials without writing down partial derivatives.
+
+\begin{example}[\citeat{tu-mc}{Exercises~10, 12}]\label{r13-exm-differentials}
+(a) For \(f(x)=x_1^2x_2\), Theorem~\ref{r13-thm-diff-rules}(b) gives \(\mathrm{d}(x_1^2)=2x_1\,\mathrm{d}x_1\) and
+\[
+\mathrm{d}f=(\mathrm{d}x_1^2)x_2+x_1^2\,\mathrm{d}x_2=2x_1x_2\,\mathrm{d}x_1+x_1^2\,\mathrm{d}x_2=(2x_1x_2,\ x_1^2)\,\mathrm{d}x
+\]
+so \(\mathrm Df(x)=(2x_1x_2,\ x_1^2)\) (Theorem~\ref{r13-thm-identification}(a)).
+
+(b) For \(f(x)=(x_1^2-x_2^2,\ x_1x_2x_3)'\) with \(x=(x_1,x_2,x_3)'\),
+\[
+\mathrm{d}f=\begin{pmatrix}2x_1\,\mathrm{d}x_1-2x_2\,\mathrm{d}x_2\\x_2x_3\,\mathrm{d}x_1+x_1x_3\,\mathrm{d}x_2+x_1x_2\,\mathrm{d}x_3\end{pmatrix}
+=\begin{pmatrix}2x_1&-2x_2&0\\x_2x_3&x_1x_3&x_1x_2\end{pmatrix}\mathrm{d}x
+\]
+and \(\mathrm Df(x)\) is the \(2\times3\) matrix on the right.
+\end{example}
+
+\begin{theorem}[\citeat{tu-mc}{Exercise~11}, \citeat{abadir-magnus}{Exercises~13.4, 13.6(a)}]\label{r13-thm-forms}
+Let \(a\in\R^n\) and \(A\in\R^{m\times n}\) be constant.
+\begin{enumerate}
+\item \(\mathrm{d}(a'x)=a'\,\mathrm{d}x\): \(\mathrm D(a'x)=a'\), and the gradient of \(a'x\) is \(a\).
+\item \(\mathrm{d}(Ax)=A\,\mathrm{d}x\): \(\mathrm D(Ax)=A\).
+\item For \(A\in\R^{n\times n}\), \(\mathrm{d}(x'Ax)=x'(A+A')\,\mathrm{d}x\): \(\mathrm D(x'Ax)=x'(A+A')\), and the gradient is \((A+A')x\), which
+is \(2Ax\) if \(A\) is symmetric.
+\item For \(X\in\R^{n\times q}\), \(a\in\R^n\) and \(b\in\R^q\), \(\mathrm{d}(a'Xb)=a'(\mathrm{d}X)b\):
+\(\partial(a'Xb)/\partial X=ab'\), and \(\mathrm D(a'Xb)=(b\otimes a)'\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a), (b) By Theorem~\ref{r13-thm-diff-rules}(a),(b), \(\mathrm{d}(Ax)=(\mathrm{d}A)x+A\,\mathrm{d}x=A\,\mathrm{d}x\); take \(A=a'\) for (a), and apply
+Theorem~\ref{r13-thm-identification}(a).
+
+(c) By the product rule, \(\mathrm{d}(x'Ax)=(\mathrm{d}x)'Ax+x'A\,\mathrm{d}x\). The number \((\mathrm{d}x)'Ax\) equals its transpose
+\(x'A'\,\mathrm{d}x\); so \(\mathrm{d}(x'Ax)=x'(A+A')\,\mathrm{d}x\), and Theorem~\ref{r13-thm-identification}(a) gives the derivative.
+
+(d) \(\mathrm{d}(a'Xb)=a'(\mathrm{d}X)b=\tr\bigl(b\,a'\,\mathrm{d}X\bigr)=\tr\bigl((ab')'\mathrm{d}X\bigr)\) (Theorem~\ref{r1-thm-trace}(b)), so
+\(\partial(a'Xb)/\partial X=ab'\) by Theorem~\ref{r13-thm-identification}(c), and \(\operatorname{vec}(ab')=b\otimes a\)
+(Theorem~\ref{r13-thm-vec}(a)).
+\end{proof}
+
+\begin{example}[\citeat{searle-khuri}{Example~9.2}]\label{r13-exm-quadratic}
+For
+\[
+A=\begin{pmatrix}1&3&5\\3&4&7\\5&7&9\end{pmatrix},\qquad q=x'Ax=x_1^2+6x_1x_2+10x_1x_3+4x_2^2+14x_2x_3+9x_3^2
+\]
+(Definition~\ref{r8-def-quadratic-form}), and by Theorem~\ref{r13-thm-forms}(c) the gradient is
+\[
+2Ax=\begin{pmatrix}2x_1+6x_2+10x_3\\6x_1+8x_2+14x_3\\10x_1+14x_2+18x_3\end{pmatrix}
+\]
+the partial derivatives of \(q\) read off its terms. The upper triangular
+\[
+B=\begin{pmatrix}1&6&10\\0&4&14\\0&0&9\end{pmatrix}
+\]
+gives the same \(q=x'Bx\), and indeed \(B+B'=2A\) (Lemma~\ref{r13-lem-forms}(c)): the derivative \(x'(B+B')\) is the same.
+\end{example}
+
+\needspace{24\baselineskip}
+\subsection*{Traces, determinants and inverses}
+
+\begin{theorem}[\citeat{tu-mc}{\S7, (30)--(32)}, \citeat{abadir-magnus}{Exercises~13.10(a), 13.21(a), 13.32, 13.36(a)}, \citeat{searle-khuri}{(9.26), (9.33)--(9.40)}, \citeat{bapat}{Result~9.5}]\label{r13-thm-trace-det}
+Let \(X\) be a variable in \(\R^{n\times n}\) (\(n\geqslant2\)) and \(A\) a constant matrix; \(c_{ij}\) are the cofactors of \(X\)
+(Definition~\ref{r5d-def-cofactor}).
+\begin{enumerate}
+\item \(\mathrm{d}\tr(AX)=\tr(A\,\mathrm{d}X)\), so \(\partial\tr(AX)/\partial X=A'\). For \(X\in\R^{n\times q}\) and \(A\in\R^{n\times n}\),
+\(\mathrm{d}\tr(X'AX)=\tr\bigl(X'(A+A')\,\mathrm{d}X\bigr)\), so \(\partial\tr(X'AX)/\partial X=(A+A')X\).
+\item \(\det X\) is a polynomial in the entries of \(X\), \(\partial\det X/\partial x_{ij}=c_{ij}\), and
+\(\mathrm{d}\det X=\tr(\operatorname{adj}X\,\mathrm{d}X)\). If \(X\) is invertible, then
+\[
+\mathrm{d}\det X=\det X\,\tr(X^{-1}\mathrm{d}X)\qquad(\textbf{Jacobi's formula}),\qquad\frac{\partial\det X}{\partial X}=\det X\,(X^{-1})'
+\]
+\item The invertible matrices form an open set, on which \(X\mapsto X^{-1}\) is \(C^2\), and
+\[
+\mathrm{d}X^{-1}=-X^{-1}(\mathrm{d}X)X^{-1},\qquad\mathrm D(X^{-1})=-(X^{-1})'\otimes X^{-1}
+\]
+\item On the open set \(\{X:\det X\ne0\}\), \(\mathrm{d}\log\lvert\det X\rvert=\tr(X^{-1}\mathrm{d}X)\); so
+\(\partial\log\det X/\partial X=(X^{-1})'\) where \(\det X>0\).
+\item (\textbf{Matrices depending on one parameter}) Let the entries of \(A(t)\in\R^{n\times n}\) be \(C^1\) functions of \(t\) on an open
+interval, and let \(\frac{\mathrm{d} A}{\mathrm{d}t}\) be the matrix of their derivatives. Then
+\(\frac{\mathrm{d}}{\mathrm{d}t}\det A(t)=\tr\bigl(\operatorname{adj}A(t)\,\frac{\mathrm{d}A}{\mathrm{d}t}\bigr)\), and where \(\det A(t)>0\),
+\(\frac{\mathrm{d}}{\mathrm{d}t}\log\det A(t)=\tr\bigl(A(t)^{-1}\frac{\mathrm{d}A}{\mathrm{d}t}\bigr)\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item By Theorem~\ref{r13-thm-diff-rules}(a),(b), \(\mathrm{d}\tr(AX)=\tr(A\,\mathrm{d}X)=\tr((A')'\mathrm{d}X)\); apply
+Theorem~\ref{r13-thm-identification}(c).
+\item By the product rule, \(\mathrm{d}\tr(X'AX)=\tr((\mathrm{d}X)'AX)+\tr(X'A\,\mathrm{d}X)\). As \(\tr M=\tr M'\) (Theorem~\ref{r1-thm-trace}(a)),
+\(\tr((\mathrm{d}X)'AX)=\tr(X'A'\,\mathrm{d}X)\). So \(\mathrm{d}\tr(X'AX)=\tr\bigl(((A+A')X)'\mathrm{d}X\bigr)\); apply
+Theorem~\ref{r13-thm-identification}(c).
+\end{itemize}
+(b)
+\begin{itemize}
+\item \(\det X\) is a polynomial in the entries, by induction on the size: \(\det(x_{11})=x_{11}\) for a
+\(1\times1\) matrix, and the expansion along row \(1\) (Theorem~\ref{r5d-thm-expansion}),
+\(\det X=\sum_kx_{1k}(-1)^{1+k}\det X(1|k)\), is a sum of products of entries of \(X\) with determinants of size \(n-1\).
+\item By the expansion along row \(i\) (Theorem~\ref{r5d-thm-expansion}), \(\det X=\sum_kx_{ik}c_{ik}\), where
+\(c_{ik}=(-1)^{i+k}\det X(i|k)\) does not involve row \(i\) of \(X\). With all entries other than \(x_{ij}\) fixed, \(\det X\) is
+\(c_{ij}x_{ij}\) plus a constant, so \(\partial\det X/\partial x_{ij}=c_{ij}\).
+\item Hence \(\mathrm{d}\det X=\sum_{i,j}c_{ij}\,\mathrm{d}x_{ij}=\sum_{j}\sum_i(\operatorname{adj}X)_{ji}\,\mathrm{d}x_{ij}=\sum_j(\operatorname{adj}X\,\mathrm{d}X)_{jj}
+=\tr(\operatorname{adj}X\,\mathrm{d}X)\), as \((\operatorname{adj}X)_{ji}=c_{ij}\) (Theorem~\ref{r5d-thm-adjugate}).
+\item If \(X\) is invertible, \(\operatorname{adj}X=\det X\cdot X^{-1}\) (Theorem~\ref{r5d-thm-adjugate}), which gives Jacobi's formula; and
+\(\partial\det X/\partial X=(c_{ij})=(\operatorname{adj}X)'=\det X\,(X^{-1})'\).
+\end{itemize}
+(c)
+\begin{itemize}
+\item \(\det\) is a polynomial, hence continuous; if \(\det C\ne0\), then \(\det X\ne0\) on a ball around \(C\) (rules of calculus): the set of
+invertible matrices is open.
+\item On it, \(X^{-1}=\frac1{\det X}\operatorname{adj}X\) (Theorem~\ref{r5d-thm-adjugate}), whose entries are polynomials divided by the nonzero
+polynomial \(\det X\); so \(X\mapsto X^{-1}\) is \(C^2\).
+\item Differentiating \(X^{-1}X=I_n\) by the product rule, \((\mathrm{d}X^{-1})X+X^{-1}\mathrm{d}X=\mathrm{d}I_n=0\); multiplying on the right by
+\(X^{-1}\) gives \(\mathrm{d}X^{-1}=-X^{-1}(\mathrm{d}X)X^{-1}\).
+\item By Theorem~\ref{r13-thm-vec}(b), \(\operatorname{vec}\mathrm{d}X^{-1}=-\bigl((X^{-1})'\otimes X^{-1}\bigr)\operatorname{vec}\mathrm{d}X\); apply
+Theorem~\ref{r13-thm-identification}(b).
+\end{itemize}
+\needspace{3\baselineskip}
+(d)
+\begin{itemize}
+\item On \(\{\det X>0\}\), \(\log\det X=h(\det X)\) with \(h(t)=\log t\); by the chain rule (Theorem~\ref{r13-thm-diff-rules}(c)) and (b),
+\(\mathrm{d}\log\det X=\frac1{\det X}\,\mathrm{d}\det X=\tr(X^{-1}\mathrm{d}X)\).
+\item On \(\{\det X<0\}\), \(\log\lvert\det X\rvert=h(-\det X)\), and \(\mathrm{d}\log\lvert\det X\rvert=\frac1{-\det X}(-\mathrm{d}\det X)=\tr(X^{-1}\mathrm{d}X)\).
+\item Where \(\det X>0\), Theorem~\ref{r13-thm-identification}(c) with \(C=(X^{-1})'\) gives \(\partial\log\det X/\partial X=(X^{-1})'\).
+\end{itemize}
+(e)
+\begin{itemize}
+\item By the chain rule of calculus applied to \(t\mapsto A(t)\mapsto\det A(t)\), and (b),
+\(\frac{\mathrm{d}}{\mathrm{d}t}\det A=\sum_{i,j}\frac{\partial\det A}{\partial a_{ij}}\,\frac{\mathrm{d}a_{ij}}{\mathrm{d}t}=\sum_{i,j}c_{ij}\frac{\mathrm{d}a_{ij}}{\mathrm{d}t}
+=\tr\bigl(\operatorname{adj}A\,\frac{\mathrm{d}A}{\mathrm{d}t}\bigr)\), as in (b).
+\item Where \(\det A>0\), \(\frac{\mathrm{d}}{\mathrm{d}t}\log\det A=\frac1{\det A}\frac{\mathrm{d}}{\mathrm{d}t}\det A=\tr\bigl(\frac{\operatorname{adj}A}{\det A}\frac{\mathrm{d}A}{\mathrm{d}t}\bigr)
+=\tr\bigl(A^{-1}\frac{\mathrm{d}A}{\mathrm{d}t}\bigr)\).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{example}\label{r9-exm-logdet}
+Let \(f(X)=\log\det X\) on the set of \(X\in\R^{4\times4}\) with \(\det X>0\), which is open, as \(\det\) is a polynomial in the
+entries (Theorem~\ref{r13-thm-trace-det}(b)) and hence continuous. Evaluate \(\partial f/\partial X\) at
+\[
+X_0=\bigl(\min(i,j)\bigr)=\begin{pmatrix}1&1&1&1\\1&2&2&2\\1&2&3&3\\1&2&3&4\end{pmatrix}
+\]
+and check it along a direction in which \(f(X_0+t\,\mathrm{d}X)\) is computed exactly.
+
+\textit{Solution.} By Theorem~\ref{r13-thm-trace-det}(d), \(\partial f/\partial X=(X^{-1})'\) where \(\det X>0\).
+\begin{itemize}
+\item Let \(L\in\R^{4\times4}\) have \(l_{ik}=1\) for \(k\leqslant i\) and \(l_{ik}=0\) for \(k>i\). Then
+\((LL')_{ij}=\sum_kl_{ik}l_{jk}\) counts the \(k\) with \(k\leqslant i\) and \(k\leqslant j\), so \(LL'=X_0\). As \(L'\) is upper
+triangular with unit diagonal, \(\det L=\det L'=1\) (Theorems~\ref{r5d-thm-transpose} and~\ref{r5d-thm-basic}(c)), and
+\(\det X_0=1\) (Theorem~\ref{r5d-thm-product}(b)). So \(\det X_0>0\) and \(f(X_0)=0\).
+\item Let
+\[
+T=\begin{pmatrix}2&-1&0&0\\-1&2&-1&0\\0&-1&2&-1\\0&0&-1&1\end{pmatrix}
+\]
+Column \(j\) of \(X_0T\) is \(-c_{j-1}+2c_j-c_{j+1}\) for \(j\leqslant3\) (with \(c_0=0\)) and \(c_4-c_3\) for \(j=4\), where \(c_j\) is
+column \(j\) of \(X_0\); these are \(e_1,\dots,e_4\). So \(X_0T=I_4\) and \(X_0^{-1}=T\) (Theorem~\ref{r2-thm-invertible}), and, as
+\(T'=T\),
+\[
+\frac{\partial f}{\partial X}(X_0)=(X_0^{-1})'=T,\qquad\mathrm{d}f=\tr(T\,\mathrm{d}X)\ \text{at }X_0
+\]
+\item Check along the rank-one direction \(\mathrm{d}X=uv'\) with \(u=e_1-e_2\) and \(v=e_1\) (adding \(t\) to \(x_{11}\) and \(-t\) to
+\(x_{21}\)): by the matrix determinant lemma (Theorem~\ref{r5d-thm-det-lemma}),
+\(\det(X_0+tuv')=\det X_0\,(1+t\,v'X_0^{-1}u)=1+t\bigl(2-(-1)\bigr)=1+3t\). So \(f(X_0+tuv')=\log(1+3t)\) for \(t>-\frac13\), with
+derivative \(3\) at \(t=0\); and \(\tr(Tuv')=v'Tu=t_{11}-t_{12}=3\) (Theorem~\ref{r1-thm-trace}(b)).
+\end{itemize}
+\end{example}
+
+\begin{example}[\citeat{tu-mc}{Exercise~22}, \citeat{abadir-magnus}{Exercises~13.22(a), 13.25(a)}]\label{r13-exm-matrix-functions}
+Let \(X\) range over the invertible \(n\times n\) matrices, and let \(A\), \(B\) be constant.
+
+(a) For \(F(X)=AX^{-1}B\), \(\mathrm{d}F=A(\mathrm{d}X^{-1})B=-AX^{-1}(\mathrm{d}X)X^{-1}B\) (Theorems~\ref{r13-thm-diff-rules}
+and~\ref{r13-thm-trace-det}(c)). By Theorem~\ref{r13-thm-vec}(b),
+\(\operatorname{vec}\mathrm{d}F=-\bigl((X^{-1}B)'\otimes AX^{-1}\bigr)\operatorname{vec}\mathrm{d}X\), so \(\mathrm DF(X)=-(X^{-1}B)'\otimes AX^{-1}\).
+
+(b) For \(\varphi(X)=\tr(AX^{-1})\), \(\mathrm{d}\varphi=-\tr(AX^{-1}(\mathrm{d}X)X^{-1})=-\tr(X^{-1}AX^{-1}\mathrm{d}X)\) (Theorem~\ref{r1-thm-trace}(c)),
+so \(\partial\varphi/\partial X=-(X^{-1}AX^{-1})'\) (Theorem~\ref{r13-thm-identification}(c)).
+\end{example}
+
+\begin{example}[\citeat{bapat}{Results~9.1, 9.2, 9.5}]\label{r13-exm-variance-components}
+In the \textbf{one-way random effects model} the \(m\) observations of a group are \(y_j=\mu+a+\varepsilon_j\) (\(j=1,\dots,m\)), where
+\(a\), \(\varepsilon_1,\dots,\varepsilon_m\) are uncorrelated random variables with means \(0\), \(\var(a)=\sigma_1^2\) and
+\(\var(\varepsilon_j)=\sigma^2>0\) (the variance components). With \(y=\mu\one_m+[\one_m\ I_m](a,\varepsilon')'\),
+Theorem~\ref{r11-thm-linear}(b) gives
+\[
+V=\var(y)=[\one_m\ I_m]\begin{pmatrix}\sigma_1^2&0\\0&\sigma^2I_m\end{pmatrix}\begin{pmatrix}\one_m'\\I_m\end{pmatrix}=\sigma_1^2J_m+\sigma^2I_m
+\]
+Maximum-likelihood methods for \(\sigma_1^2\), \(\sigma^2\) need the derivatives of \(\log\det V\). As \(\mathrm{d}V/\mathrm{d}\sigma_1^2=J_m\) and
+\(\mathrm{d}V/\mathrm{d}\sigma^2=I_m\), Theorem~\ref{r13-thm-trace-det}(e) gives
+\[
+\frac{\partial\log\det V}{\partial\sigma_1^2}=\tr(V^{-1}J_m),\qquad\frac{\partial\log\det V}{\partial\sigma^2}=\tr(V^{-1})
+\]
+By Theorem~\ref{r5d-thm-woodbury}(b) (\(A=\sigma^2I_m\), \(u=\sigma_1^2\one_m\), \(v=\one_m\)),
+\(V^{-1}=\frac1{\sigma^2}\bigl(I_m-\frac{\sigma_1^2}{\sigma^2+m\sigma_1^2}J_m\bigr)\), so \(\tr(V^{-1}J_m)=\frac m{\sigma^2+m\sigma_1^2}\). This
+agrees with \(\det V=\sigma^{2(m-1)}(\sigma^2+m\sigma_1^2)\) (Theorem~\ref{r5d-thm-det-lemma}), whose logarithm has the derivative
+\(\frac m{\sigma^2+m\sigma_1^2}\) in \(\sigma_1^2\). For \(m=4\), \(\sigma_1^2=1\), \(\sigma^2=2\):
+\[
+V=J_4+2I_4=\begin{pmatrix}3&1&1&1\\1&3&1&1\\1&1&3&1\\1&1&1&3\end{pmatrix},\qquad
+V^{-1}=\frac12\Bigl(I_4-\frac16J_4\Bigr)=\frac1{12}\begin{pmatrix}5&-1&-1&-1\\-1&5&-1&-1\\-1&-1&5&-1\\-1&-1&-1&5\end{pmatrix}
+\]
+so \(\tr(V^{-1}J_4)=\one_4'V^{-1}\one_4=\frac{4\cdot2}{12}=\frac23=\frac m{\sigma^2+m\sigma_1^2}\) and
+\(\tr(V^{-1})=\frac{4\cdot5}{12}=\frac53\); and \(\det V=2^3\cdot6=48\). Indeed
+\(\frac{m-1}{\sigma^2}+\frac1{\sigma^2+m\sigma_1^2}=\frac32+\frac16=\frac53\).
+\end{example}
+
+\needspace{16\baselineskip}
+\begin{theorem}[\citeat{searle-khuri}{\S\S9.5.2--9.5.4}, \citeat{abadir-magnus}{Exercises~13.25(b), 13.26(b)}]\label{r13-thm-symmetric}
+Let \(X\) range over an open set of symmetric \(n\times n\) matrices, the variables being the entries \(x_{ij}\) with \(i\geqslant j\)
+(that is, \(\operatorname{vech}X\)). For a function \(\varphi\) of these variables, write \(\partial\varphi/\partial X\) for the symmetric
+matrix with \((i,j)\) and \((j,i)\) entries \(\partial\varphi/\partial x_{ij}\); and write \(\diag(M)\) for the diagonal part of a square
+matrix \(M\).
+\begin{enumerate}
+\item Let \(\varphi\) be \(C^1\), with differential \(\mathrm{d}\varphi=\tr(C\,\mathrm{d}X)\) for symmetric \(\mathrm{d}X\), where \(C=(c_{ij})\) is
+symmetric (and may depend on \(X\)). Then
+\[
+\frac{\partial\varphi}{\partial x_{ij}}=2c_{ij}\ (i>j),\qquad\frac{\partial\varphi}{\partial x_{ii}}=c_{ii},\qquad
+\frac{\partial\varphi}{\partial(\operatorname{vech}X)'}=(\operatorname{vec}C)'D_n
+\]
+that is, \(\partial\varphi/\partial X=2C-\diag(C)\).
+\item If \(X\) is PD, \(\partial\log\det X/\partial X=2X^{-1}-\diag(X^{-1})\).
+\item \(\partial\tr(AX)/\partial X=A+A'-\diag(A)\) for constant \(A\in\R^{n\times n}\).
+\item \(\partial(a'Xa)/\partial X=2aa'-\diag(aa')\) for constant \(a\in\R^n\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item Let \(E_{ij}=e_ie_j'\). The differential \(\mathrm{d}\varphi=\mathrm D\varphi\,\mathrm{d}\operatorname{vech}X\) at the unit vector of the
+variable \(x_{ij}\) is \(\partial\varphi/\partial x_{ij}\) (Definitions~\ref{r13-def-derivative} and~\ref{r13-def-differential}). This
+increment changes only \(x_{ij}\), by \(1\), that is, the \((i,j)\) and \((j,i)\) entries of \(X\): \(\mathrm{d}X=E_{ij}+E_{ji}\) for \(i>j\) and
+\(\mathrm{d}X=E_{ii}\) for \(i=j\).
+\item Hence \(\partial\varphi/\partial x_{ij}=\tr(CE_{ij})+\tr(CE_{ji})=c_{ji}+c_{ij}=2c_{ij}\) for \(i>j\)
+(\(\tr(Ce_ie_j')=e_j'Ce_i\), Theorem~\ref{r1-thm-trace}(b)), and \(\partial\varphi/\partial x_{ii}=\tr(CE_{ii})=c_{ii}\).
+\item Vector form: \(\operatorname{vec}\mathrm{d}X=D_n\,\mathrm{d}\operatorname{vech}X\) (Definition~\ref{r13-def-duplication}), so by
+Theorem~\ref{r13-thm-vec}(d) (\(C'=C\))
+\[
+\mathrm{d}\varphi=(\operatorname{vec}C)'\operatorname{vec}\mathrm{d}X=(\operatorname{vec}C)'D_n\,\mathrm{d}\operatorname{vech}X
+\]
+and Theorem~\ref{r13-thm-identification}(a) applies. The entries of \((\operatorname{vec}C)'D_n\) are \(c_{ii}\) and \(c_{ij}+c_{ji}=2c_{ij}\)
+(Proposition~\ref{r13-prop-duplication}(a)), as above.
+\end{itemize}
+(b) \(\log\det X\) is the composite of the linear map \(\operatorname{vech}X\mapsto X\) and \(\log\det\); by the chain rule
+(Theorem~\ref{r13-thm-diff-rules}(c)) and Theorem~\ref{r13-thm-trace-det}(d), \(\mathrm{d}\log\det X=\tr(X^{-1}\mathrm{d}X)\) for symmetric
+\(\mathrm{d}X\), and \(C=X^{-1}\) is symmetric. Apply (a).
+
+(c) For symmetric \(\mathrm{d}X\), \(\tr(A\,\mathrm{d}X)=\tr((A\,\mathrm{d}X)')=\tr(\mathrm{d}X\,A')=\tr(A'\mathrm{d}X)\) (Theorem~\ref{r1-thm-trace}(a),(b)),
+so \(\mathrm{d}\tr(AX)=\tr\bigl(\frac12(A+A')\mathrm{d}X\bigr)\) with the symmetric \(C=\frac12(A+A')\). Apply (a).
+
+(d) \(a'Xa=\tr(Xaa')=\tr(aa'X)\) (Theorem~\ref{r1-thm-trace}(b)), so this is (c) with \(A=aa'\).
+\end{proof}
+So the derivative with respect to a symmetric matrix is not simply the unrestricted one: for \(\log\det X\) the unrestricted
+derivative is \((X^{-1})'=X^{-1}\), while each off-diagonal variable \(x_{ij}\) (\(i>j\)) enters \(X\) twice and gets the derivative
+\(2(X^{-1})_{ij}\).
+
+\subsection*{Second differentials and the Hessian matrix}
+
+We also use without proof~\citeat{tu-mc}{\S9}, \citeat{harville}{\S15.1}: if \(f\) is \(C^2\) on an open set, then \(\partial^2f/\partial x_i\partial x_j=\partial^2f/\partial x_j\partial x_i\), where
+\(\partial^2f/\partial x_i\partial x_j\) is the partial derivative with respect to \(x_i\) of \(\partial f/\partial x_j\) (\textbf{symmetry of second
+derivatives}).
+
+\begin{definition}[\citeat{tu-mc}{\S9}, \citeat{searle-khuri}{\S9.5.7}, \citeat{harville}{\S15.1}]\label{r13-def-hessian}
+Let \(f\) be a \(C^2\) scalar function on an open \(S\subseteq\R^n\). The \textbf{Hessian matrix} of \(f\) at \(x\in S\) is the \(n\times n\)
+matrix
+\[
+\mathrm Hf(x)=\frac{\partial^2f(x)}{\partial x\,\partial x'}\quad\text{with }(i,j)\text{ entry }\frac{\partial^2f(x)}{\partial x_i\,\partial x_j}
+\]
+It is the derivative of the gradient, \(\mathrm Hf(x)=\mathrm D\bigl((\mathrm Df)'\bigr)(x)\), and it is symmetric. The \textbf{second
+differential} \(\mathrm{d}^2f(x)\) is the differential of \(x\mapsto\mathrm{d}f(x)=\mathrm Df(x)\,\mathrm{d}x\) with \(\mathrm{d}x\) held fixed. For a
+scalar function of a matrix \(X\), \(\mathrm Hf(X)=\partial^2f/\partial\operatorname{vec}X\,\partial(\operatorname{vec}X)'\).
+\end{definition}
+With \(a_j=\partial f/\partial x_j\), \(\mathrm{d}f(x)=\sum_ja_j(x)\,\mathrm{d}x_j\), and by Theorem~\ref{r13-thm-diff-rules},
+\(\mathrm{d}^2f(x)=\sum_j(\mathrm{d}a_j)\,\mathrm{d}x_j=\sum_j\sum_i(\partial a_j/\partial x_i)\,\mathrm{d}x_i\,\mathrm{d}x_j\), that is,
+\[
+\mathrm{d}^2f(x)=(\mathrm{d}x)'\,\mathrm Hf(x)\,\mathrm{d}x
+\]
+To compute \(\mathrm{d}^2f\) we apply the rules of Theorem~\ref{r13-thm-diff-rules} to \(\mathrm{d}f\), treating \(\mathrm{d}x\) (or \(\mathrm{d}X\))
+as a constant: \(\mathrm{d}(\mathrm{d}x)=0\).
+
+\needspace{14\baselineskip}
+\begin{theorem}[Second identification theorem; \citeat{tu-mc}{Propositions~16, 18}, \citeat{abadir-magnus}{Exercises~13.47(c), 13.48(c)}]\label{r13-thm-identification2}
+Let \(f\) be a \(C^2\) scalar function on an open set.
+\begin{enumerate}
+\item For a vector variable \(x\in\R^n\) and \(B\in\R^{n\times n}\): \(\mathrm{d}^2f(x)=(\mathrm{d}x)'B\,\mathrm{d}x\) for every \(\mathrm{d}x\) if and only if
+\(\mathrm Hf(x)=\frac12(B+B')\).
+\item For a matrix variable \(X\in\R^{n\times q}\), \(A\in\R^{q\times q}\) and \(B\in\R^{n\times n}\):
+\(\mathrm{d}^2f(X)=\tr\bigl(A(\mathrm{d}X)'B\,\mathrm{d}X\bigr)\) for every \(\mathrm{d}X\) if and only if \(\mathrm Hf(X)=\frac12(A'\otimes B+A\otimes B')\).
+\item For \(X\in\R^{n\times q}\) and \(A,B\in\R^{q\times n}\): \(\mathrm{d}^2f(X)=\tr\bigl(A(\mathrm{d}X)B\,\mathrm{d}X\bigr)\) for every \(\mathrm{d}X\) if and only
+if \(\mathrm Hf(X)=\frac12K_{qn}(A'\otimes B+B'\otimes A)\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) Both \(\mathrm Hf(x)\) and \(\frac12(B+B')\) are symmetric. If \(\mathrm{d}^2f(x)=(\mathrm{d}x)'B\,\mathrm{d}x\) for every \(\mathrm{d}x\), then
+\((\mathrm{d}x)'\mathrm Hf(x)\,\mathrm{d}x=(\mathrm{d}x)'B\,\mathrm{d}x\), and Lemma~\ref{r13-lem-forms}(c) gives \(2\mathrm Hf(x)=B+B'\). Conversely,
+\((\mathrm{d}x)'\frac12(B+B')\,\mathrm{d}x=(\mathrm{d}x)'B\,\mathrm{d}x\), as \((\mathrm{d}x)'B'\,\mathrm{d}x\) is a number equal to its transpose.
+
+(b) By Theorems~\ref{r1-thm-trace}(b) and~\ref{r13-thm-vec}(d),(b),
+\[
+\tr(A(\mathrm{d}X)'B\,\mathrm{d}X)=\tr((\mathrm{d}X)'B(\mathrm{d}X)A)=(\operatorname{vec}\mathrm{d}X)'\operatorname{vec}(B(\mathrm{d}X)A)
+=(\operatorname{vec}\mathrm{d}X)'(A'\otimes B)\operatorname{vec}\mathrm{d}X
+\]
+By (a) for the variable \(\operatorname{vec}X\),
+\(\mathrm Hf(X)=\frac12\bigl(A'\otimes B+(A'\otimes B)'\bigr)=\frac12(A'\otimes B+A\otimes B')\) (Theorem~\ref{r13-thm-kron-rules}(e)).
+
+(c)
+\begin{itemize}
+\item As \(\tr M=\tr M'\), \(\tr(A(\mathrm{d}X)B\,\mathrm{d}X)=\tr((\mathrm{d}X)'B'(\mathrm{d}X)'A')=(\operatorname{vec}\mathrm{d}X)'\operatorname{vec}(B'(\mathrm{d}X)'A')
+=(\operatorname{vec}\mathrm{d}X)'(A\otimes B')\operatorname{vec}(\mathrm{d}X)'\), and \(\operatorname{vec}(\mathrm{d}X)'=K_{nq}\operatorname{vec}\mathrm{d}X\)
+(Definition~\ref{r13-def-commutation}). So \(\mathrm{d}^2f=(\operatorname{vec}\mathrm{d}X)'(A\otimes B')K_{nq}\operatorname{vec}\mathrm{d}X\).
+\item By (a), \(\mathrm Hf(X)=\frac12\bigl((A\otimes B')K_{nq}+K_{nq}'(A'\otimes B)\bigr)\), with \(K_{nq}'=K_{qn}\) (Theorem~\ref{r13-thm-commutation}(b)).
+By Theorem~\ref{r13-thm-commutation}(d) for \(B'\in\R^{n\times q}\) and \(A\in\R^{q\times n}\), \(K_{qn}(B'\otimes A)=(A\otimes B')K_{nq}\). Hence
+\(\mathrm Hf(X)=\frac12K_{qn}(A'\otimes B+B'\otimes A)\).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{example}[\citeat{tu-mc}{Exercises~23, 25, 29}, \citeat{abadir-magnus}{Exercises~13.46, 13.47(b), 13.52}]\label{r13-exm-hessians}
+(a) For \(f(x)=x'Ax\) (\(A\in\R^{n\times n}\)), \(\mathrm{d}f=(\mathrm{d}x)'Ax+x'A\,\mathrm{d}x\) and \(\mathrm{d}^2f=2(\mathrm{d}x)'A\,\mathrm{d}x\), so
+\(\mathrm Hf(x)=A+A'\) (Theorem~\ref{r13-thm-identification2}(a)); for symmetric \(A\), \(\mathrm Hf=2A\).
+
+(b) For \(f(X)=\tr(X'AX)\) with \(X\in\R^{n\times q}\), \(\mathrm{d}f=\tr(X'(A+A')\,\mathrm{d}X)\) (Theorem~\ref{r13-thm-trace-det}(a)) and
+\(\mathrm{d}^2f=\tr((\mathrm{d}X)'(A+A')\,\mathrm{d}X)=\tr\bigl(I_q(\mathrm{d}X)'(A+A')\,\mathrm{d}X\bigr)\); by Theorem~\ref{r13-thm-identification2}(b),
+\(\mathrm Hf(X)=I_q\otimes(A+A')\).
+
+(c) For \(f(X)=\log\det X\) (\(\det X>0\)), \(\mathrm{d}f=\tr(X^{-1}\mathrm{d}X)\) and, by Theorem~\ref{r13-thm-trace-det}(c),
+\(\mathrm{d}^2f=\tr((\mathrm{d}X^{-1})\,\mathrm{d}X)=-\tr\bigl(X^{-1}(\mathrm{d}X)X^{-1}\mathrm{d}X\bigr)\). Theorem~\ref{r13-thm-identification2}(c) with
+\(q=n\), \(A=-X^{-1}\), \(B=X^{-1}\) gives \(\mathrm Hf(X)=-K_n\bigl((X^{-1})'\otimes X^{-1}\bigr)\).
+\end{example}
+
+\subsection*{Conditions for extrema}
+
+For functions of one variable we use without proof~\citeat{abadir-magnus}{\S A.3.4}: (\textbf{Fermat's rule}) if \(h\) is differentiable on an open interval and has a
+local minimum or maximum at a point \(t_0\) of it, then \(h'(t_0)=0\); and (\textbf{Taylor's formula}) if \(h\) is \(C^2\) on an open
+interval that contains \([0,1]\), then \(h(1)=h(0)+h'(0)+\frac12h''(\tau)\) for some \(\tau\) with \(0<\tau<1\).
+
+\begin{definition}[\citeat{magnus-neudecker}{\S7.2, \S7.7}, \citeat{abadir-magnus}{\S A.4.3}]\label{r13-def-extremum}
+Let \(f\) be a scalar function on \(S\subseteq\R^n\) and \(c\in S\). \(f\) has a \textbf{local minimum} at \(c\) if \(f(x)\geqslant f(c)\) for all
+\(x\in S\) in some ball \(B(c,\delta)\), a \textbf{strict local minimum} if \(f(x)>f(c)\) there for \(x\ne c\), and a \textbf{global minimum}
+(\textbf{strict global minimum}) if \(f(x)\geqslant f(c)\) for all \(x\in S\) (\(f(x)>f(c)\) for \(x\ne c\)); maxima likewise with the
+inequalities reversed. If \(S\) is open and \(f\) is \(C^1\), \(c\) is a \textbf{stationary point} of \(f\) if \(\mathrm Df(c)=0\). A set \(S\) is
+\textbf{convex} if \(tx+(1-t)y\in S\) for all \(x,y\in S\) and \(0\leqslant t\leqslant1\).
+\end{definition}
+
+\needspace{16\baselineskip}
+\begin{lemma}[\citeat{magnus-neudecker}{Theorems~7.2, 7.4, 7.7}]\label{r13-lem-line}
+Let \(S\subseteq\R^n\) be open, \(f\) a \(C^2\) scalar function on \(S\), \(c\in S\) and \(u\in\R^n\). Let
+\(I=\{t\in\R:c+tu\in S\}\) and \(h(t)=f(c+tu)\) for \(t\in I\).
+\begin{enumerate}
+\item \(I\) is open and contains \(0\), and \(h\) is \(C^2\) on \(I\), with \(h'(t)=\mathrm Df(c+tu)u\) and
+\(h''(t)=u'\mathrm Hf(c+tu)u\).
+\item Suppose that \(\lVert u\rVert<\delta\) for a ball \(B(c,\delta)\subseteq S\), or that \(S\) is convex and \(c+u\in S\). Then, for
+some \(0<\tau<1\),
+\[
+f(c+u)=f(c)+\mathrm Df(c)u+\tfrac12u'\mathrm Hf(c+\tau u)u
+\]
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(a)
+\begin{itemize}
+\item \(0\in I\) as \(c\in S\). \(I\) is open: if \(c+t_0u\in S\), some ball \(B(c+t_0u,\varepsilon)\) lies in \(S\), and it contains
+\(c+tu\) for \(\lvert t-t_0\rvert\,\lVert u\rVert<\varepsilon\).
+\item By the chain rule of calculus (\(t\mapsto c+tu\) has the derivative \(u\)),
+\(h'(t)=\mathrm Df(c+tu)u=\sum_ju_j\,\partial f/\partial x_j(c+tu)\).
+\item The same rule for each \(t\mapsto\partial f/\partial x_j(c+tu)\) gives
+\(h''(t)=\sum_j\sum_iu_ju_i\,\partial^2f/\partial x_i\partial x_j(c+tu)=u'\mathrm Hf(c+tu)u\) (Definition~\ref{r13-def-hessian}), which is
+continuous in \(t\): \(h\) is \(C^2\) on \(I\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item In the first case, \(c+tu\in B(c,\delta)\subseteq S\) for \(\lvert t\rvert<\delta/\lVert u\rVert\) (for every \(t\) if \(u=0\)), and
+\(\delta/\lVert u\rVert>1\): \(I\) contains an open interval that contains \([0,1]\).
+\item In the second case, \(I\) is an interval: for \(t\) between two points \(t_1\), \(t_2\) of \(I\), \(c+tu\) is a convex combination of
+\(c+t_1u\) and \(c+t_2u\), so it lies in \(S\). By (a) \(I\) is open, and it contains \(0\) and \(1\).
+\item By Taylor's formula and (a), for some \(0<\tau<1\),
+\(f(c+u)=h(1)=h(0)+h'(0)+\frac12h''(\tau)=f(c)+\mathrm Df(c)u+\frac12u'\mathrm Hf(c+\tau u)u\).\qedhere
+\end{itemize}
+\end{proof}
+
+\needspace{20\baselineskip}
+\begin{theorem}[\citeat{magnus-neudecker}{Theorems~7.2, 7.4, 7.7, 7.8, 7.13}]\label{r13-thm-extrema}
+Let \(S\subseteq\R^n\) be open, \(f\) a \(C^2\) scalar function on \(S\), and \(c\in S\).
+\begin{enumerate}
+\item (\textbf{First-order condition}) If \(f\) has a local minimum or maximum at \(c\), then \(\mathrm Df(c)=0\).
+\item If \(f\) has a local minimum (maximum) at \(c\), then \(\mathrm Hf(c)\) is PSD (NSD).
+\item (\textbf{Second-order condition}) If \(\mathrm Df(c)=0\) and \(\mathrm Hf(c)\) is PD (ND), then \(f\) has a strict local minimum (maximum) at
+\(c\). If \(\mathrm Df(c)=0\) and \(\mathrm Hf(c)\) is indefinite, then \(f\) has neither a local minimum nor a local maximum at \(c\).
+\item (\textbf{Global minimum}) Let \(S\) also be convex. If \(\mathrm Df(c)=0\) and \(\mathrm Hf(x)\) is PSD for every \(x\in S\), then \(f\) has a global
+minimum at \(c\); if \(\mathrm Hf(x)\) is PD for every \(x\in S\), the global minimum at \(c\) is strict.
+\item (\textbf{Constraints}) Let \(S\) be convex, let \(g\) be \(C^2\) on \(S\) with values in \(\R^m\), let \(l\in\R^m\), and let
+\(\psi(x)=f(x)-l'g(x)\). If \(\mathrm D\psi(c)=0\), \(g(c)=0\), and \(\mathrm H\psi(x)\) is PSD (PD) for every \(x\in S\), then \(f(x)\geqslant f(c)\)
+(\(f(x)>f(c)\) for \(x\ne c\)) for every \(x\in S\) with \(g(x)=0\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Throughout, for a given \(u\in\R^n\), \(I\) and \(h(t)=f(c+tu)\) are as in Lemma~\ref{r13-lem-line}.
+
+(a) Let \(f(x)\geqslant f(c)\) for \(x\in B(c,\delta)\subseteq S\) (a local minimum). For \(u=e_j\), \(h\) has a local minimum at \(t=0\), as
+\(c+te_j\in B(c,\delta)\) for \(\lvert t\rvert<\delta\). By Fermat's rule and Lemma~\ref{r13-lem-line}(a),
+\(0=h'(0)=\mathrm Df(c)e_j=\partial f/\partial x_j(c)\), for every \(j\): \(\mathrm Df(c)=0\). For a maximum apply this to \(-f\).
+
+(b)
+\begin{itemize}
+\item Let \(f\) have a local minimum at \(c\), say \(f(x)\geqslant f(c)\) for \(x\in B(c,\delta)\subseteq S\), and suppose
+\(u'\mathrm Hf(c)u<0\) for some \(u\). By Lemma~\ref{r13-lem-line}(a), \(h''(0)=u'\mathrm Hf(c)u<0\). As \(h''\) is continuous and \(I\) is
+open, \(h''(t)<0\) for \(\lvert t\rvert\leqslant\varepsilon\), for some \(\varepsilon>0\) with \([-\varepsilon,\varepsilon]\subseteq I\).
+\item Choose \(0<s_0\leqslant\varepsilon\) with \(s_0\lVert u\rVert<\delta\). By Lemma~\ref{r13-lem-line}(b) for the vector \(s_0u\) (first
+case) and \(\mathrm Df(c)=0\) (by (a)), for some \(0<\tau<1\),
+\[
+f(c+s_0u)=f(c)+\tfrac12s_0^2u'\mathrm Hf(c+\tau s_0u)u=f(c)+\tfrac12s_0^2h''(\tau s_0)<f(c)
+\]
+as \(0<\tau s_0<\varepsilon\). But \(c+s_0u\in B(c,\delta)\), so \(f(c+s_0u)\geqslant f(c)\) \(\contradiction\)
+\item Hence \(\mathrm Hf(c)\) is PSD. For a maximum apply this to \(-f\), whose Hessian is \(-\mathrm Hf\).
+\end{itemize}
+(c)
+\begin{itemize}
+\item Let \(\mathrm Hf(c)\) be PD with smallest eigenvalue \(\lambda>0\) (Theorem~\ref{r8-thm-eigen-criterion}(a)); then
+\(u'\mathrm Hf(c)u\geqslant\lambda\lVert u\rVert^2\) for every \(u\) (Theorem~\ref{r9-thm-rayleigh}(a)).
+\item The second partial derivatives are continuous, so the \(2n^2\) functions
+\(\frac\lambda{2n}\pm\bigl(\partial^2f/\partial x_i\partial x_j(z)-\partial^2f/\partial x_i\partial x_j(c)\bigr)\) of \(z\), positive at \(z=c\), are positive on
+a ball \(B(c,\delta)\subseteq S\) (rules of calculus). For \(z\in B(c,\delta)\), every entry of \(E=\mathrm Hf(z)-\mathrm Hf(c)\) is less than
+\(\frac\lambda{2n}\) in absolute value, so \(\lVert E\rVert_F^2<n^2\frac{\lambda^2}{4n^2}\), and by Theorem~\ref{r6-thm-cauchy-schwarz}(a) and
+Proposition~\ref{r9-prop-frobenius}(b), \(\lvert u'Eu\rvert\leqslant\lVert u\rVert\,\lVert Eu\rVert\leqslant\lVert E\rVert_F\lVert u\rVert^2<\frac\lambda2\lVert u\rVert^2\) for \(u\ne0\).
+\item For \(0<\lVert u\rVert<\delta\), Lemma~\ref{r13-lem-line}(b) (first case) with \(\mathrm Df(c)=0\) gives
+\(f(c+u)-f(c)=\frac12u'\mathrm Hf(z)u\) with \(z=c+\tau u\in B(c,\delta)\); so
+\(f(c+u)-f(c)=\frac12u'\mathrm Hf(c)u+\frac12u'Eu>\frac12\lambda\lVert u\rVert^2-\frac14\lambda\lVert u\rVert^2>0\): a strict local minimum.
+For ND apply this to \(-f\).
+\item If \(\mathrm Hf(c)\) is indefinite, it is neither PSD nor NSD (Definition~\ref{r8-def-definite}), so by (b) \(c\) is neither a local
+minimum nor a local maximum.
+\end{itemize}
+(d) Let \(x\in S\) and \(u=x-c\). By Lemma~\ref{r13-lem-line}(b) (\(S\) convex, \(c+u=x\in S\)) and \(\mathrm Df(c)=0\),
+\(f(x)=f(c)+\frac12u'\mathrm Hf(c+\tau u)u\), where \(c+\tau u=(1-\tau)c+\tau x\in S\). This is \(\geqslant f(c)\) if \(\mathrm Hf(c+\tau u)\) is
+PSD, and \(>f(c)\) for \(x\ne c\) if it is PD.
+
+(e) \(\psi\) is \(C^2\) on \(S\) (rules of calculus), so by (d) applied to \(\psi\), \(\psi(x)\geqslant\psi(c)\) for every \(x\in S\) (\(>\) for
+\(x\ne c\) in the PD case). If \(g(x)=0\), then \(f(x)=\psi(x)\), and \(\psi(c)=f(c)\) as \(g(c)=0\).
+\end{proof}
+To use (e) one solves \(\mathrm D\psi(x)=0\), \(g(x)=0\) for \(x\) and the \textbf{Lagrange multipliers} \(l\) (\textbf{Lagrange's method}), and
+then checks the Hessian of the \textbf{Lagrangian} \(\psi\). For linear constraints \(g(x)=Rx-r\), \(\mathrm H\psi=\mathrm Hf\).
+
+We also use without proof \textbf{Lagrange's theorem}~\citeat{magnus-neudecker}{Theorem~7.10}: let \(S\subseteq\R^n\) be open, let \(f\) be a \(C^1\) scalar function and \(g\)
+a \(C^1\) function with values in \(\R^m\) (\(m<n\)) on \(S\), and let \(c\in S\) with \(g(c)=0\) and \(\rank\mathrm Dg(c)=m\). If
+\(f(x)\geqslant f(c)\) for every \(x\) with \(g(x)=0\) in some ball \(B(c,\delta)\subseteq S\) (a local minimum under the constraint
+\(g(x)=0\)), or \(f(x)\leqslant f(c)\) for all these \(x\) (a local maximum), then there is exactly one \(l\in\R^m\) with
+\[
+\mathrm Df(c)=l'\,\mathrm Dg(c)
+\]
+that is, \(\mathrm D\psi(c)=0\) for the Lagrangian \(\psi=f-l'g\). For \(S\), \(f\) and \(g\) as here but with \(m\leqslant n\), a point
+\(c\in S\) with \(g(c)=0\), \(\rank\mathrm Dg(c)=m\) and \(\mathrm Df(c)=l'\,\mathrm Dg(c)\) for some \(l\in\R^m\) is a
+\textbf{stationary point of \(f\) under the constraint \(g(x)=0\)}. So, for \(m<n\), Lagrange's method finds all the points where
+\(f\) has a local minimum or maximum under the constraint and \(\rank\mathrm Dg=m\); Theorem~\ref{r13-thm-extrema}(e) shows that a
+stationary point is a minimum when the Hessian of \(\psi\) is PSD on a convex \(S\).
+
+\begin{example}[\citeat{tu-mc}{Exercises~14, 15}, \citeat{harville}{Theorem~19.1.1}]\label{r13-exm-quadratic-min}
+Let \(A\in\R^{n\times n}\) be PD, \(b\in\R^n\), and \(f(x)=\frac12x'Ax-b'x\).
+
+(a) By Theorem~\ref{r13-thm-forms}, \(\mathrm{d}f=x'A\,\mathrm{d}x-b'\,\mathrm{d}x=(Ax-b)'\mathrm{d}x\), and \(\mathrm{d}^2f=(\mathrm{d}x)'A\,\mathrm{d}x\), so
+\(\mathrm Hf=A\) is PD at every \(x\). The only stationary point is \(\hat x=A^{-1}b\), and by Theorem~\ref{r13-thm-extrema}(d) it is the strict
+global minimizer. Directly: \((x-\hat x)'A(x-\hat x)=x'Ax-2b'x+b'A^{-1}b=2f(x)+b'A^{-1}b\), which is smallest, \(0\), at \(x=\hat x\);
+the minimum is \(f(\hat x)=-\frac12b'A^{-1}b\).
+
+(b) Minimize \(f\) subject to \(c'x=0\) (\(c\ne0\)). The Lagrangian \(\psi(x)=\frac12x'Ax-b'x-\lambda c'x\) has
+\(\mathrm{d}\psi=(Ax-b-\lambda c)'\mathrm{d}x\), so the conditions are \(Ax=b+\lambda c\) and \(c'x=0\), or, in block form,
+\[
+\begin{pmatrix}A&c\\c'&0\end{pmatrix}\begin{pmatrix}x\\-\lambda\end{pmatrix}=\begin{pmatrix}b\\0\end{pmatrix}
+\]
+From \(x=A^{-1}(b+\lambda c)\) and \(0=c'x=c'A^{-1}b+\lambda c'A^{-1}c\), with \(c'A^{-1}c>0\) (\(A^{-1}\) is PD, Proposition~\ref{r8-prop-pd-basic}(c)), we get
+\(\tilde\lambda=-c'A^{-1}b/c'A^{-1}c\) and \(\tilde x=A^{-1}b-\frac{c'A^{-1}b}{c'A^{-1}c}A^{-1}c\). As \(\mathrm H\psi=A\) is PD,
+\(\tilde x\) is the strict minimizer under the constraint (Theorem~\ref{r13-thm-extrema}(e)).
+\end{example}
+
+\begin{proposition}[\citeat{magnus-neudecker}{Example~7.3}]\label{r13-prop-sphere}
+Let \(A\in\R^{n\times n}\) (\(n\geqslant2\)) be symmetric, \(f(x)=x'Ax\) and \(g(x)=x'x-1\) on \(\R^n\). A vector \(x\) is a stationary
+point of \(f\) under the constraint \(g(x)=0\) (on the unit sphere) if and only if \(x\) is a unit eigenvector of \(A\); then
+\(f(x)\) is its eigenvalue. The maximum \(\lambda_1\) and the minimum \(\lambda_n\) of \(f\) on the unit sphere (the largest and the
+smallest eigenvalue of \(A\)) are attained exactly at the unit eigenvectors belonging to \(\lambda_1\) and to \(\lambda_n\).
+\end{proposition}
+\begin{proof}
+\begin{itemize}
+\item By Theorem~\ref{r13-thm-forms}(c), \(\mathrm Dg(x)=2x'\) and \(\mathrm Df(x)=2x'A\), as \(I_n\) and \(A\) are symmetric. For
+\(x'x=1\), \(x\ne0\) and \(\rank\mathrm Dg(x)=1\).
+\item So a unit vector \(x\) is a stationary point of \(f\) under the constraint if and only if \(2x'A=l\cdot2x'\) for some
+\(l\in\R\), that is (transposing, \(A'=A\)), \(Ax=lx\): \(x\) is an eigenvector belonging to \(l\). Then
+\(f(x)=x'(lx)=l\,x'x=l\).
+\item On the unit sphere \(f(x)=x'Ax/x'x\), so the last statement is Theorem~\ref{r9-thm-rayleigh}(a),(b).\qedhere
+\end{itemize}
+\end{proof}
+By Lagrange's theorem, the points where \(f\) is largest or smallest on the sphere must be stationary points under the
+constraint, and the proposition finds them all; Theorem~\ref{r9-thm-rayleigh} gives the same answer without derivatives.
+
+\begin{theorem}[Quadratic minimization under linear constraints; \citeat{harville}{Theorem~19.2.1, \S19.3a}]\label{r9-thm-equality-qp}
+Let \(A\in\R^{p\times p}\) be PD, \(b\in\R^p\), \(C\in\R^{m\times p}\) of rank \(m\) and \(d\in\R^m\). Let \(q(x)=\frac12x'Ax-b'x\) and
+\(\hat x=A^{-1}b\), its unconstrained minimizer (Example~\ref{r13-exm-quadratic-min}(a)). Then \(V=CA^{-1}C'\) is PD, hence
+invertible, and with \(\lambda=V^{-1}(C\hat x-d)\):
+\begin{enumerate}
+\item the unique minimizer of \(q\) on \(\{x\in\R^p:Cx=d\}\) is
+\[
+x^*=\hat x-A^{-1}C'V^{-1}(C\hat x-d)=\hat x-A^{-1}C'\lambda
+\]
+\item \(q(x)=q(x^*)+\frac12(x-x^*)'A(x-x^*)\) for every \(x\) with \(Cx=d\);
+\item \(q(x^*)-q(\hat x)=\frac12(C\hat x-d)'V^{-1}(C\hat x-d)\);
+\item \((x^*,\lambda)\) is the unique solution of the \((p+m)\times(p+m)\) linear system
+\[
+\begin{pmatrix}A&C'\\C&0\end{pmatrix}\begin{pmatrix}x\\\lambda\end{pmatrix}=\begin{pmatrix}b\\d\end{pmatrix}
+\]
+Its first block row says \(\mathrm Dq(x^*)=(Ax^*-b)'=(-\lambda)'C\): \(x^*\) is a stationary point of \(q\) under the constraint
+\(Cx-d=0\) (the paragraph after Theorem~\ref{r13-thm-extrema}; \(\mathrm D(Cx-d)=C\)), with multiplier vector \(-\lambda\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\(A^{-1}\) is PD (Proposition~\ref{r8-prop-pd-basic}(c)) and \(C'\in\R^{p\times m}\) has rank \(m\)
+(Theorem~\ref{thm:r4-rank-rules}(a)), so \(V=(C')'A^{-1}C'\) is PD (Theorem~\ref{r8-thm-congruence}(b)), hence invertible
+(Proposition~\ref{r8-prop-pd-basic}(c)).
+
+(d) Let \(K\) be the block matrix. The Schur complement of \(A\) in \(K\) is \(0-CA^{-1}C'=-V\), so
+\(\det K=\det A\cdot\det(-V)=(-1)^m\det A\det V\ne0\) (Theorems~\ref{r5d-thm-schur-det}(a) and~\ref{r5d-thm-product}(c)), and
+\(K\) is invertible (Theorem~\ref{r5d-thm-product}(a)): the system has exactly one solution. The pair \((x^*,\lambda)\) is a
+solution: \(Ax^*+C'\lambda=A\hat x-C'\lambda+C'\lambda=b\) and \(Cx^*=C\hat x-V\lambda=C\hat x-(C\hat x-d)=d\). By
+Theorem~\ref{r13-thm-forms}(a),(c), \(\mathrm Dq(x)=x'A-b'=(Ax-b)'\).
+
+(b) For \(h\in\R^p\), as \(A\) is symmetric,
+\[
+q(x^*+h)=\tfrac12(x^*)'Ax^*+h'Ax^*+\tfrac12h'Ah-b'x^*-b'h=q(x^*)+h'(Ax^*-b)+\tfrac12h'Ah
+\]
+By (d), \(Ax^*-b=-C'\lambda\). If \(Cx=d\), then \(h=x-x^*\) satisfies \(Ch=d-d=0\), so \(h'(Ax^*-b)=-(Ch)'\lambda=0\), and
+\(q(x)=q(x^*)+\frac12h'Ah\).
+
+(a) \(Cx^*=d\) by (d). By (b), \(q(x)\geqslant q(x^*)\) whenever \(Cx=d\), with equality only if \((x-x^*)'A(x-x^*)=0\), that is,
+\(x=x^*\), as \(A\) is PD.
+
+(c) By Example~\ref{r13-exm-quadratic-min}(a), \(2q(x)+b'A^{-1}b=(x-\hat x)'A(x-\hat x)\) for every \(x\), and
+\(2q(\hat x)+b'A^{-1}b=0\); so \(q(x^*)=q(\hat x)+\frac12(x^*-\hat x)'A(x^*-\hat x)\), and \(x^*-\hat x=-A^{-1}C'\lambda\). So
+\(q(x^*)-q(\hat x)=\frac12\lambda'CA^{-1}AA^{-1}C'\lambda=\frac12\lambda'V\lambda=\frac12(C\hat x-d)'V^{-1}(C\hat x-d)\), as \(V^{-1}\)
+is symmetric.
+\end{proof}
+For \(A=I_p\) and \(b=a\), \(q(x)=\frac12\lVert x-a\rVert^2-\frac12\lVert a\rVert^2\), and (a) gives the point of the set
+\(\{x:Cx=d\}\) closest to \(a\), namely \(x^*=a-C'(CC')^{-1}(Ca-d)\). For \(a=0\) this is \(C'(CC')^{-1}d\), the shortest solution of
+\(Cx=d\), as in Theorem~\ref{r10-thm-min-norm} with the minimum-norm g-inverse \(G=C'(CC')^{-1}\) of \(C\) (\(CGC=C\), and
+\(GC\) is symmetric).
+
+\begin{example}\label{r9-exm-equality-qp}
+Minimize
+\[
+q(x)=x_1^2+x_2^2+x_3^2+x_4^2-x_1x_2-x_2x_3-x_3x_4-2(x_1+x_2+x_3+x_4)
+\]
+subject to \(x_1+x_2+x_3+x_4=10\) and \(x_1-x_2+x_3-x_4=6\).
+
+\textit{Solution.} Here \(q(x)=\frac12x'Ax-b'x\) with \(b=2\one_4\) and
+\[
+A=\begin{pmatrix}2&-1&0&0\\-1&2&-1&0\\0&-1&2&-1\\0&0&-1&2\end{pmatrix},\qquad
+A^{-1}=\frac15\begin{pmatrix}4&3&2&1\\3&6&4&2\\2&4&6&3\\1&2&3&4\end{pmatrix}
+\]
+(multiply to check \(AA^{-1}=I_4\), Theorem~\ref{r2-thm-invertible}). The leading principal minors of \(A\) are \(2,3,4,5\), so
+\(A\) is PD (Theorem~\ref{r8-thm-leading-minors}). The constraints are \(Cx=d\) with
+\[
+C=\begin{pmatrix}1&1&1&1\\1&-1&1&-1\end{pmatrix},\qquad d=\begin{pmatrix}10\\6\end{pmatrix}
+\]
+and \(\rank C=2\) (the rows are not multiples of each other). The unconstrained minimizer is
+\(\hat x=A^{-1}b=\frac25(10,15,15,10)'=(4,6,6,4)'\), with \(q(\hat x)=-\frac12b'\hat x=-20\)
+(Example~\ref{r13-exm-quadratic-min}(a)). Next
+\[
+A^{-1}C'=\frac15\begin{pmatrix}10&2\\15&-1\\15&1\\10&-2\end{pmatrix},\qquad
+V=CA^{-1}C'=\begin{pmatrix}10&0\\0&\frac65\end{pmatrix},\qquad
+C\hat x-d=\begin{pmatrix}20\\0\end{pmatrix}-\begin{pmatrix}10\\6\end{pmatrix}=\begin{pmatrix}10\\-6\end{pmatrix}
+\]
+so \(\lambda=V^{-1}(C\hat x-d)=(1,-5)'\). By Theorem~\ref{r9-thm-equality-qp}(a),(c),
+\[
+x^*=\begin{pmatrix}4\\6\\6\\4\end{pmatrix}-\frac15\begin{pmatrix}10&2\\15&-1\\15&1\\10&-2\end{pmatrix}\begin{pmatrix}1\\-5\end{pmatrix}
+=\begin{pmatrix}4\\6\\6\\4\end{pmatrix}-\begin{pmatrix}0\\4\\2\\4\end{pmatrix}=\begin{pmatrix}4\\2\\4\\0\end{pmatrix},\qquad
+q(x^*)-q(\hat x)=\tfrac12\bigl(10\cdot1+(-6)(-5)\bigr)=20
+\]
+so the constrained minimum is \(q(x^*)=0\). Checks: \(x^*\) satisfies both constraints; \(q(x^*)=16+4+16-8-8-20=0\); and
+\(Ax^*-b=(6,-4,6,-4)'-(2,2,2,2)'=(4,-6,4,-6)'=-C'\lambda\), as in Theorem~\ref{r9-thm-equality-qp}(d).
+\end{example}
+
+\needspace{16\baselineskip}
+\subsection*{Least squares by differentiation}
+
+\begin{theorem}[\citeat{tu-clm}{Theorem~2.4}, \citeat{searle-khuri}{Example~9.3}, \citeat{abadir-magnus}{Exercise~13.54}]\label{r13-thm-ols}
+Let \(X\in\R^{n\times(k+1)}\), \(y\in\R^n\), and \(S(\beta)=(y-X\beta)'(y-X\beta)\) for \(\beta\in\R^{k+1}\).
+\begin{enumerate}
+\item \(\mathrm{d}S=-2(y-X\beta)'X\,\mathrm{d}\beta\), so \(\mathrm DS(\beta)=-2(y-X\beta)'X\) and the gradient is \(2X'X\beta-2X'y\); and
+\(\mathrm HS(\beta)=2X'X\), which is PSD.
+\item \(\hat\beta\) minimizes \(S\) if and only if \(X'X\hat\beta=X'y\) (the normal equations).
+\item If \(\rank X=k+1\), then \(\mathrm HS\) is PD and \(\hat\beta=(X'X)^{-1}X'y\) is the strict global minimizer.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a)
+\begin{itemize}
+\item With \(e=y-X\beta\), \(\mathrm{d}e=-X\,\mathrm{d}\beta\), and by the product rule \(\mathrm{d}S=(\mathrm{d}e)'e+e'\,\mathrm{d}e=2e'\,\mathrm{d}e=-2e'X\,\mathrm{d}\beta\)
+(Theorems~\ref{r13-thm-diff-rules} and~\ref{r13-thm-forms}); so \(\mathrm DS(\beta)=-2(y-X\beta)'X\) (Theorem~\ref{r13-thm-identification}(a)).
+Equivalently, \(S=y'y-2\beta'X'y+\beta'X'X\beta\) has the derivative \(-2y'X+2\beta'X'X\) (Theorem~\ref{r13-thm-forms}).
+\item With \(\mathrm{d}\beta\) fixed, \(\mathrm{d}^2S=-2(\mathrm{d}e)'X\,\mathrm{d}\beta=2(\mathrm{d}\beta)'X'X\,\mathrm{d}\beta\), so \(\mathrm HS(\beta)=2X'X\)
+(Theorem~\ref{r13-thm-identification2}(a)), which is PSD (Theorem~\ref{r8-thm-XtX}).
+\end{itemize}
+(b) If \(\hat\beta\) minimizes \(S\) on the open set \(\R^{k+1}\), then \(\mathrm DS(\hat\beta)=0\) (Theorem~\ref{r13-thm-extrema}(a)), that is,
+\(X'(y-X\hat\beta)=0\). Conversely, if \(X'X\hat\beta=X'y\), then \(\hat\beta\) is a stationary point, and as \(\R^{k+1}\) is convex and
+\(\mathrm HS\) is PSD everywhere, \(\hat\beta\) is a global minimizer (Theorem~\ref{r13-thm-extrema}(d)).
+
+(c) If \(\rank X=k+1\), \(X'X\) is PD (Theorem~\ref{r8-thm-XtX}) and invertible, the normal equations have the single solution
+\((X'X)^{-1}X'y\) (Theorem~\ref{r10-thm-normal-equations}(b)), and the minimum is strict (Theorem~\ref{r13-thm-extrema}(d)).
+\end{proof}
+The projection route of Chapter~13 (least squares needs no calculus: the paragraph after
+Theorem~\ref{r10-thm-least-squares}) gives the same normal equations: by Theorem~\ref{r10-thm-least-squares}(a),
+\(S(\beta)=S(\hat\beta)+\lVert X(\hat\beta-\beta)\rVert^2\). This identity is Lemma~\ref{r13-lem-line}(b) written out for the
+quadratic function \(S\): with \(u=\beta-\hat\beta\), \(\mathrm DS(\hat\beta)u=0\) and \(\frac12u'(2X'X)u=\lVert Xu\rVert^2\), with no remainder because
+the Hessian \(2X'X\) does not depend on \(\beta\). Differentiation finds the normal equations as the condition for a stationary point;
+the projection explains them as \(y-X\hat\beta\perp\mathcal C(X)\) (Proposition~\ref{r10-prop-residuals}(a)).
+
+\begin{example}\label{r13-exm-ols}
+For the design \(X=[\one_4\ X_0]\in\R^{4\times3}\) (\(k=2\)) and \(y=(9,3,5,3)'\) of Example~\ref{r10-exm-least-squares},
+\[
+X'X=\begin{pmatrix}4&4&8\\4&8&8\\8&8&20\end{pmatrix},\qquad X'y=\begin{pmatrix}20\\28\\44\end{pmatrix}
+\]
+(computed there). At \(\beta=0\) the gradient \(2X'X\beta-2X'y\) is \(-2(20,28,44)'\ne0\). At
+\(\hat\beta=(1,2,1)'\), \(X'X\hat\beta=(4+8+8,\ 4+16+8,\ 8+16+20)'=X'y\), so the gradient is \(0\). The leading principal minors of
+\(X'X\) are \(4\), \(4\cdot8-4\cdot4=16\) and \(\det(X'X)=64\), all positive, so \(\mathrm HS=2X'X\) is PD
+(Theorem~\ref{r8-thm-leading-minors}) and \(\hat\beta=(1,2,1)'\) is the strict global minimizer, with
+\(S(\hat\beta)=4\) (Theorem~\ref{r13-thm-ols}(c)).
+\end{example}
+
+\subsection*{Further statistical applications}
+
+\begin{example}[Hazel's selection index; \citeat{searle-khuri}{Example~9.4}, \citeat{bapat}{Result~5.3}]\label{r13-exm-hazel}
+An animal is measured on \(p\) traits, \(x\in\R^p\) (the phenotypes), with \(x=g+e\), where \(g\) holds the unobserved genetic values
+and \(e\) environmental effects uncorrelated with \(g\). Let \(G=\var(g)\), \(P=\var(x)\) (PD), and let \(a\in\R^p\)
+weigh the traits by their economic value, with \(a'Ga>0\). The breeder ranks animals by an \textbf{index} \(I=b'x\) and wants it to be as
+highly correlated as possible with the genetic worth \(H=a'g\).
+\begin{itemize}
+\item By Theorem~\ref{r11-thm-linear}(b) for \(z=(g',e')'\), with \(\var(z)=\diag(G,E)\), \(E=\var(e)\):
+\(P=G+E\), and the \(2\times2\) covariance matrix of \(I=(b',b')z\) and \(H=(a',0)z\) has the off-diagonal entry
+\(\cov(I,H)=b'Ga\). So the correlation is \(r(b)=\dfrac{b'Ga}{\sqrt{b'Pb}\,\sqrt{a'Ga}}\) for \(b\ne0\).
+\item The derivative of \(\varphi(b)=b'Ga/\sqrt{b'Pb}\) is found from
+\(\mathrm{d}\varphi=\frac{a'G\,\mathrm{d}b}{(b'Pb)^{1/2}}-\frac{(b'Ga)\,b'P\,\mathrm{d}b}{(b'Pb)^{3/2}}\) (Theorem~\ref{r13-thm-forms}, chain rule);
+it is \(0\) if and only if \((b'Pb)\,Ga=(b'Ga)\,Pb\). So at a stationary point with \(b'Ga\ne0\), \(b\) is a multiple of \(P^{-1}Ga\), and
+\(r\) does not change when \(b\) is multiplied by a positive number.
+\item The stationary condition alone does not show a maximum. By Theorem~\ref{r9-thm-cs-max} with \(B=P\) and the vector \(Ga\),
+\((b'Ga)^2\leqslant(b'Pb)(a'GP^{-1}Ga)\), with equality at \(b=P^{-1}Ga\). Hence \(r(b)\leqslant\sqrt{a'GP^{-1}Ga/a'Ga}\) for every
+\(b\ne0\), and the bound is attained at \(b=P^{-1}Ga\), where \(b'Ga=a'GP^{-1}Ga\) and \(r=\sqrt{b'Ga/a'Ga}\).
+\end{itemize}
+For four traits with \(E=I_4\),
+\[
+G=\begin{pmatrix}2&1&1&0\\1&2&0&1\\1&0&2&1\\0&1&1&2\end{pmatrix},\qquad
+P=G+I_4=\begin{pmatrix}3&1&1&0\\1&3&0&1\\1&0&3&1\\0&1&1&3\end{pmatrix},\qquad
+a=\begin{pmatrix}3\\1\\1\\0\end{pmatrix}
+\]
+\begin{itemize}
+\item \(G\) is PSD, as \(x'Gx=(x_1+x_2)^2+(x_1+x_3)^2+(x_2+x_4)^2+(x_3+x_4)^2\geqslant0\), so \(P=G+I_4\) is PD
+(Proposition~\ref{r8-prop-pd-basic}(b)); and \(a'Ga=4^2+4^2+1^2+1^2=34>0\).
+\item \(a=Pe_1\) is the first column of \(P\), and \(GP=G^2+G=PG\). So \(Ga=GPe_1=PGe_1\), and
+\[
+b=P^{-1}Ga=Ge_1=\begin{pmatrix}2\\1\\1\\0\end{pmatrix},\qquad
+Ga=\begin{pmatrix}8\\5\\5\\2\end{pmatrix}=Pb
+\]
+\item Then \(b'Ga=16+5+5+0=26\), and the best index \(I=2x_1+x_2+x_3\) has \(r=\sqrt{26/34}=\sqrt{13/17}\).
+\item The index \(I=a'x\) has \(a'Pa=a'Ga+a'a=34+11=45\) and only
+\(r=34/\sqrt{45\cdot34}=\sqrt{34/45}\), less than \(\sqrt{13/17}\) as \(34\cdot17=578<585=13\cdot45\).
+\end{itemize}
+\end{example}
+
+\begin{example}[Newton--Raphson; \citeat{searle-khuri}{\S9.2}]\label{r13-exm-newton}
+To solve \(n\) nonlinear equations \(f(x)=0\) in \(n\) unknowns, with \(f\) \(C^1\) and derivative \(G(x)=\mathrm Df(x)\), one uses the
+first-order approximation \(f(x_r+\Delta)\approx f(x_r)+G(x_r)\Delta\), the differential at the current guess \(x_r\). Setting the right side
+equal to \(0\) gives the \textbf{Newton--Raphson} step
+\[
+x_{r+1}=x_r-G(x_r)^{-1}f(x_r)\qquad(r=0,1,2,\dots)
+\]
+provided \(G(x_r)\) is invertible; one stops when the step is negligible. To find a stationary point of a \(C^2\) scalar function
+\(\varphi\), apply it to the gradient: \(f=(\mathrm D\varphi)'\), \(G=\mathrm H\varphi\), so \(x_{r+1}=x_r-\mathrm H\varphi(x_r)^{-1}(\mathrm D\varphi(x_r))'\).
+If \(\varphi(x)=\frac12x'Ax-b'x\) with \(A\) symmetric and invertible, the gradient \(Ax-b\) is linear, the approximation is exact, and one
+step from any \(x_0\) gives \(x_1=x_0-A^{-1}(Ax_0-b)=A^{-1}b\), the stationary point. For least squares with \(\rank X=k+1\)
+(Theorem~\ref{r13-thm-ols}(c)), \(x_1=\beta_0-(2X'X)^{-1}(2X'X\beta_0-2X'y)=(X'X)^{-1}X'y\): in Example~\ref{r13-exm-ols}, one
+step from \(\beta_0=0\) gives \(\hat\beta=(1,2,1)'\). For other functions several steps are needed.
+\end{example}
+
+For the stationary points of a \(C^2\) scalar function \(\varphi\), the step has a second reading. Let
+\[
+q_r(y)=\varphi(x_r)+\mathrm D\varphi(x_r)(y-x_r)+\tfrac12(y-x_r)'\mathrm H\varphi(x_r)(y-x_r)\qquad(y\in\R^n)
+\]
+the second-order Taylor polynomial of \(\varphi\) at \(x_r\). By Theorem~\ref{r13-thm-forms} and the symmetry of
+\(\mathrm H\varphi(x_r)\), the gradient of \(q_r\) is \((\mathrm D\varphi(x_r))'+\mathrm H\varphi(x_r)(y-x_r)\) and its Hessian is
+\(\mathrm H\varphi(x_r)\): \(q_r\) has the same value, gradient and Hessian as \(\varphi\) at \(x_r\), and its gradient is \(0\) exactly
+at \(y=x_{r+1}\). So the Newton--Raphson step jumps to the stationary point of this quadratic approximation of \(\varphi\). If
+\(\mathrm H\varphi(x_r)\) is PD, \(x_{r+1}\) is the unique minimizer of \(q_r\): with \(z=y-x_r\),
+\(q_r(y)=\varphi(x_r)+\frac12z'\mathrm H\varphi(x_r)z-\bigl(-(\mathrm D\varphi(x_r))'\bigr)'z\), and
+Example~\ref{r13-exm-quadratic-min}(a) gives the unique minimizer \(z=-\mathrm H\varphi(x_r)^{-1}(\mathrm D\varphi(x_r))'=x_{r+1}-x_r\);
+the constant \(\varphi(x_r)\) does not change it.
+
+\needspace{16\baselineskip}
+\begin{theorem}[\citeat{searle-khuri}{\S9.5.5}, \citeat{abadir-magnus}{Exercises~13.37(a), 13.38(a)}]\label{r13-thm-jacobian}
+\begin{enumerate}
+\item If \(h\) is a one-to-one \(C^1\) map of an open \(U\subseteq\R^n\) onto an open \(W\) with a \(C^1\) inverse, then
+\(\mathrm D(h^{-1})(h(x))\,\mathrm Dh(x)=I_n\); so \(\lvert\det\mathrm D(h^{-1})(h(x))\rvert=1/\lvert\det\mathrm Dh(x)\rvert\). (The
+determinant \(\det\mathrm Dh(x)\) is the \textbf{Jacobian determinant} of \(h\) at \(x\).)
+\item Let \(A\in\R^{n\times n}\) be invertible and \(b\in\R^n\). If \(x\) has the density \(f_x\), then \(y=Ax+b\) has the density
+\[
+f_y(y)=\frac{f_x\bigl(A^{-1}(y-b)\bigr)}{\lvert\det A\rvert}
+\]
+\item Let \(A\in\R^{m\times m}\) and \(B\in\R^{n\times n}\) be invertible. The map \(X\mapsto Y=AXB\) of \(\R^{m\times n}\) onto itself reads
+\(\operatorname{vec}Y=(B'\otimes A)\operatorname{vec}X\), and \(\det(B'\otimes A)=(\det A)^n(\det B)^m\). So if the random matrix \(X\) has the
+density \(f_X\) (of \(\operatorname{vec}X\)), then \(Y=AXB\) has the density
+\(f_Y(Y)=f_X(A^{-1}YB^{-1})\,\lvert\det A\rvert^{-n}\lvert\det B\rvert^{-m}\).
+\item On the open set of invertible \(X\in\R^{n\times n}\), the map \(X\mapsto X^{-1}\) has the Jacobian determinant
+\[
+\det\mathrm D(X^{-1})=(-1)^n(\det X)^{-2n}
+\]
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) \(h^{-1}(h(x))=x\) on \(U\); by the chain rule of calculus, \(\mathrm D(h^{-1})(h(x))\,\mathrm Dh(x)=I_n\), and taking determinants
+(Theorem~\ref{r5d-thm-product}(b)) gives the second statement.
+
+(b) \(h(x)=Ax+b\) is one-to-one from \(\R^n\) onto \(\R^n\), with \(\mathrm Dh(x)=A\) (Theorem~\ref{r13-thm-forms}(b)) and the \(C^1\) inverse
+\(h^{-1}(y)=A^{-1}(y-b)\). By the change of variables (D1), stated before Lemma~\ref{r15-lem-mgf}, with \(\psi=h^{-1}\),
+whose Jacobian determinant is \(\det\mathrm D(h^{-1})(y)\), and (a), \(f_y(y)=f_x(A^{-1}(y-b))/\lvert\det A\rvert\).
+
+(c) By Theorem~\ref{r13-thm-vec}(b), \(\operatorname{vec}(AXB)=(B'\otimes A)\operatorname{vec}X\). \(B'\otimes A\) is invertible
+(Theorem~\ref{r13-thm-kron-det}(c)), and \(\det(B'\otimes A)=(\det B')^m(\det A)^n=(\det A)^n(\det B)^m\)
+(Theorems~\ref{r13-thm-kron-det}(a) and~\ref{r5d-thm-transpose}). Apply (b) to the vector \(\operatorname{vec}X\), with
+\((B'\otimes A)^{-1}\operatorname{vec}Y=\operatorname{vec}(A^{-1}YB^{-1})\) (Corollary~\ref{r13-cor-kron}(b), Theorem~\ref{r13-thm-vec}(b)).
+
+(d) By Theorem~\ref{r13-thm-trace-det}(c), \(\mathrm D(X^{-1})=-(X^{-1})'\otimes X^{-1}\), an \(n^2\times n^2\) matrix. By
+Theorem~\ref{r5d-thm-product}(c) (\(\det(cM)=c^{n^2}\det M\) for \(M\in\R^{n^2\times n^2}\)), Theorem~\ref{r13-thm-kron-det}(a)
+and Theorems~\ref{r5d-thm-transpose} and~\ref{r5d-thm-product}(c),
+\[
+\det\mathrm D(X^{-1})=(-1)^{n^2}\bigl(\det(X^{-1})'\bigr)^n(\det X^{-1})^n=(-1)^{n^2}(\det X)^{-2n}=(-1)^n(\det X)^{-2n}
+\]
+as \(n^2-n=n(n-1)\) is even.
+\end{proof}
+
+\begin{example}[Aitken's integral; \citeat{searle-khuri}{\S9.5.6}]\label{r13-exm-aitken}
+Let \(A\in\R^{n\times n}\) be PD. Then
+\[
+\int_{\R^n}e^{-\frac12x'Ax}\,\mathrm{d}x=(2\pi)^{n/2}(\det A)^{-1/2}
+\]
+\begin{itemize}
+\item Let \(P=A^{-1/2}\) (Theorem~\ref{r8-thm-sqrt}): \(P\) is symmetric, PD as the inverse of the PD matrix \(A^{1/2}\)
+(Proposition~\ref{r8-prop-pd-basic}(c)), \(P'AP=A^{-1/2}AA^{-1/2}=I_n\), and
+\((\det P)^2=\det(P^2)=\det A^{-1}=1/\det A\) (Theorem~\ref{r5d-thm-product}(b),(c)); as \(\det P>0\)
+(Theorem~\ref{r8-thm-eigen-criterion}(c)), \(\det P=(\det A)^{-1/2}\).
+\item Change variables by \(x=Py\) (the change of variables stated before Theorem~\ref{r14-thm-mvn-density}, with \(c=0\) and
+\(B=P\)): the integral is
+\[
+\begin{aligned}
+\int e^{-\frac12y'P'APy}\det P\,\mathrm{d}y&=(\det A)^{-1/2}\int e^{-\frac12(y_1^2+\dots+y_n^2)}\,\mathrm{d}y\\
+&=(\det A)^{-1/2}\prod_{i=1}^n\int_\R e^{-y_i^2/2}\,\mathrm{d}y_i=(\det A)^{-1/2}(2\pi)^{n/2}
+\end{aligned}
+\]
+\end{itemize}
+(The second line uses the rule for products and \(\int_\R e^{-s^2/2}\,\mathrm{d}s=\sqrt{2\pi}\), stated at the same place.) With
+\(A=\Sigma^{-1}\) and the further change \(x\mapsto x-\mu\), this is the computation in the proof of
+Theorem~\ref{r14-thm-mvn-density} that the normal density integrates to \(1\).
+\end{example}
+
+\begin{example}[\citeat{tu-mc}{\S13}, \citeat{abadir-magnus}{Exercise~13.61}]\label{r13-exm-covariance}
+Let \(S\in\R^{p\times p}\) be PD (for instance a sample covariance matrix, Definition~\ref{r12-def-data}), and minimize
+\[
+f(\Sigma)=\log\det\Sigma+\tr(\Sigma^{-1}S)
+\]
+over the PD matrices \(\Sigma\in\R^{p\times p}\), with the variables \(\operatorname{vech}\Sigma\). The PD matrices form an open set (they are the
+symmetric matrices whose leading principal minors, polynomials in the entries, are positive, Theorem~\ref{r8-thm-leading-minors}) and a
+convex set (Proposition~\ref{r8-prop-pd-basic}(b)); \(\det\Sigma>0\) on it, and \(f\) is \(C^2\) (Theorem~\ref{r13-thm-trace-det}).
+
+(a) By Theorems~\ref{r13-thm-diff-rules} and~\ref{r13-thm-trace-det}(c),(d) and Theorem~\ref{r1-thm-trace}(c),
+\[
+\mathrm{d}f=\tr(\Sigma^{-1}\mathrm{d}\Sigma)-\tr\bigl(\Sigma^{-1}(\mathrm{d}\Sigma)\Sigma^{-1}S\bigr)=\tr(M\,\mathrm{d}\Sigma),\qquad M=\Sigma^{-1}-\Sigma^{-1}S\Sigma^{-1}
+\]
+At a stationary point \(\tr(M\,\mathrm{d}\Sigma)=0\) for every symmetric \(\mathrm{d}\Sigma\); as \(M\) is symmetric, \(\mathrm{d}\Sigma=M\) gives
+\(\tr(M'M)=0\), so \(M=0\) (Theorem~\ref{r1-thm-trace}(d)), that is, \(\Sigma^{-1}=\Sigma^{-1}S\Sigma^{-1}\), or \(\Sigma=S\). So \(S\) is the only
+stationary point.
+
+(b) With \(\mathrm{d}\Sigma\) fixed, \(\mathrm{d}^2f=\tr\bigl((\mathrm{d}M)\,\mathrm{d}\Sigma\bigr)\), where
+\(\mathrm{d}M=-\Sigma^{-1}(\mathrm{d}\Sigma)\Sigma^{-1}+\Sigma^{-1}(\mathrm{d}\Sigma)\Sigma^{-1}S\Sigma^{-1}+\Sigma^{-1}S\Sigma^{-1}(\mathrm{d}\Sigma)\Sigma^{-1}\); the
+first term of \(\mathrm{d}M\) contributes \(-\tr\bigl(\Sigma^{-1}(\mathrm{d}\Sigma)\Sigma^{-1}\mathrm{d}\Sigma\bigr)\), the second differential of
+\(\log\det\Sigma\) (Example~\ref{r13-exm-hessians}(c)). At \(\Sigma=S\), \(\mathrm{d}M=S^{-1}(\mathrm{d}\Sigma)S^{-1}\), and with \(W=S^{-1/2}(\mathrm{d}\Sigma)S^{-1/2}\) (Theorem~\ref{r8-thm-sqrt}),
+\(\mathrm{d}^2f=\tr(S^{-1}\mathrm{d}\Sigma\,S^{-1}\mathrm{d}\Sigma)=\tr(W^2)=\lVert W\rVert_F^2>0\) for \(\mathrm{d}\Sigma\ne0\). So the Hessian at \(S\) (with
+respect to \(\operatorname{vech}\Sigma\)) is PD (Theorem~\ref{r13-thm-identification2}(a)), and \(S\) is a strict local minimizer
+(Theorem~\ref{r13-thm-extrema}(c)).
+
+The minimum at \(S\) is global, \(f(\Sigma)>f(S)=\log\det S+p\) for every PD \(\Sigma\ne S\): this is the step for \(\Sigma\) in
+the proof of Theorem~\ref{r14-thm-mle}, with \(S\) in place of \(\hat\Sigma\) (that step uses only that \(\hat\Sigma\) is PD), by
+Lemma~\ref{r14-lem-logdet}, without derivatives.
+\end{example}
+In multivariate statistics this criterion is used to fit a covariance matrix: among all PD matrices \(\Sigma\), the one that
+makes \(\log\det\Sigma+\tr(\Sigma^{-1}S)\) smallest is the matrix \(S\) that is put in, whether it is the sample covariance matrix
+\(\frac1{n-1}Y'C_nY\) of Definition~\ref{r12-def-data} or the maximum-likelihood estimate \(\frac1nY'C_nY\) of
+Theorem~\ref{r14-thm-mle}.
+
+\needspace{14\baselineskip}
+
+\subsection*{Exercises}
+
+\begin{exercise}\label{r13-dr-kronecker}
+Let \(A=\begin{pmatrix}1&2\\0&-1\end{pmatrix}\), \(B=\begin{pmatrix}2&1&0\\1&0&-1\end{pmatrix}\) and \(C=\begin{pmatrix}2&1\\1&1\end{pmatrix}\).
+\begin{enumerate}
+\item Compute \(A\otimes B\) and \(B\otimes A\), and find \(\rank(A\otimes B)\).
+\item Find \(A^{-1}\), \(C^{-1}\) and \((A\otimes C)^{-1}\).
+\item Find \(\tr(A\otimes C)\) and \(\det(A\otimes C)\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) By Definition~\ref{r13-def-kronecker},
+\[
+A\otimes B=\begin{pmatrix}B&2B\\0&-B\end{pmatrix}=\begin{pmatrix}2&1&0&4&2&0\\1&0&-1&2&0&-2\\0&0&0&-2&-1&0\\0&0&0&-1&0&1\end{pmatrix},\qquad
+B\otimes A=\begin{pmatrix}2&4&1&2&0&0\\0&-2&0&-1&0&0\\1&2&0&0&-1&-2\\0&-1&0&0&0&1\end{pmatrix}
+\]
+\(A\) is invertible (\(\det A=-1\)) and the rows of \(B\) are not proportional, so \(\rank A=\rank B=2\) and
+\(\rank(A\otimes B)=2\cdot2=4\) (Theorem~\ref{r13-thm-kron-det}(b)).
+
+(b) \(A\begin{pmatrix}1&2\\0&-1\end{pmatrix}=\begin{pmatrix}1&0\\0&1\end{pmatrix}\), so \(A^{-1}=A\); and
+\(C\begin{pmatrix}1&-1\\-1&2\end{pmatrix}=I_2\), so \(C^{-1}=\begin{pmatrix}1&-1\\-1&2\end{pmatrix}\) (Theorem~\ref{r2-thm-invertible}). By
+Corollary~\ref{r13-cor-kron}(b),
+\[
+A\otimes C=\begin{pmatrix}2&1&4&2\\1&1&2&2\\0&0&-2&-1\\0&0&-1&-1\end{pmatrix},\qquad
+(A\otimes C)^{-1}=A^{-1}\otimes C^{-1}=\begin{pmatrix}1&-1&2&-2\\-1&2&-2&4\\0&0&-1&1\\0&0&1&-2\end{pmatrix}
+\]
+(c) \(\tr(A\otimes C)=\tr A\cdot\tr C=0\cdot3=0\) (Corollary~\ref{r13-cor-kron}(c)); directly, \(2+1-2-1=0\). By
+Theorem~\ref{r13-thm-kron-det}(a) with \(m=n=2\), \(\det(A\otimes C)=(\det A)^2(\det C)^2=(-1)^2\cdot1^2=1\).
+\end{solution}
+
+\begin{exercise}\label{r13-dr-kron-eigen}
+Let \(A=\begin{pmatrix}2&1\\1&2\end{pmatrix}\) and
+\[
+B=\begin{pmatrix}1&1&0\\1&1&0\\0&0&2\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find the eigenvalues of \(A\) and of \(B\), with eigenvectors.
+\item Find the eigenvalues of \(A\otimes B\) with their multiplicities, and \(\tr(A\otimes B)\), \(\det(A\otimes B)\) and \(\rank(A\otimes B)\). Is
+\(A\otimes B\) PSD?
+\item Check directly that \((1,1)'\otimes(0,0,1)'\) and \((1,-1)'\otimes(1,1,0)'\) are eigenvectors of \(A\otimes B\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(A(1,1)'=(3,3)'\) and \(A(1,-1)'=(1,-1)'\): the eigenvalues of \(A\) are \(3\) and \(1\). \(B(1,1,0)'=(2,2,0)'\), \(B(1,-1,0)'=0\) and
+\(B(0,0,1)'=(0,0,2)'\): the eigenvalues of \(B\) are \(2\), \(0\), \(2\). The eigenvectors found are orthogonal, so (after normalizing)
+they give \(A=P\Lambda P'\), \(B=QMQ'\) as in Theorem~\ref{r8-thm-spectral}.
+
+(b) By Theorem~\ref{r13-thm-kron-eigen}(b),(c), the eigenvalues of \(A\otimes B\) are the products \(3\cdot2,3\cdot0,3\cdot2,1\cdot2,1\cdot0,1\cdot2\):
+\(6\) (twice), \(2\) (twice) and \(0\) (twice). Hence \(\tr(A\otimes B)=6+6+2+2=16=\tr A\cdot\tr B=4\cdot4\),
+\(\det(A\otimes B)=0=(\det A)^3(\det B)^2\), and, \(A\otimes B\) being symmetric, \(\rank(A\otimes B)=4\), the number of nonzero eigenvalues
+(Theorem~\ref{r8-thm-rank-eigen}), which is \(\rank A\cdot\rank B=2\cdot2\). All eigenvalues are \(\geqslant0\), so \(A\otimes B\) is PSD
+(Theorem~\ref{r8-thm-eigen-criterion}(a)), but not PD.
+
+(c)
+\[
+A\otimes B=\begin{pmatrix}2&2&0&1&1&0\\2&2&0&1&1&0\\0&0&4&0&0&2\\1&1&0&2&2&0\\1&1&0&2&2&0\\0&0&2&0&0&4\end{pmatrix}
+\]
+With \(u=(1,1)'\otimes(0,0,1)'=(0,0,1,0,0,1)'\), \((A\otimes B)u=(0,0,6,0,0,6)'=6u\); with \(w=(1,-1)'\otimes(1,1,0)'=(1,1,0,-1,-1,0)'\),
+\((A\otimes B)w=(2,2,0,-2,-2,0)'=2w\), as Theorem~\ref{r13-thm-kron-eigen}(a) predicts (\(3\cdot2\) and \(1\cdot2\)).
+\end{solution}
+
+\begin{exercise}\label{r13-dr-vec}
+Let \(A=\begin{pmatrix}1&2\\0&1\end{pmatrix}\), \(B=\begin{pmatrix}1&0\\2&1\end{pmatrix}\) and \(C=\begin{pmatrix}1&1\\0&2\end{pmatrix}\).
+\begin{enumerate}
+\item Compute \(ABC\) and \(\operatorname{vec}(ABC)\).
+\item Compute \(C'\otimes A\) and check that \((C'\otimes A)\operatorname{vec}B=\operatorname{vec}(ABC)\).
+\item Compute \(\tr(A'B)\) as \((\operatorname{vec}A)'\operatorname{vec}B\), and check it directly.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(AB=\begin{pmatrix}5&2\\2&1\end{pmatrix}\) and \(ABC=\begin{pmatrix}5&9\\2&4\end{pmatrix}\), so \(\operatorname{vec}(ABC)=(5,2,9,4)'\)
+(Definition~\ref{r13-def-vec}).
+
+(b) \(C'=\begin{pmatrix}1&0\\1&2\end{pmatrix}\), so
+\[
+C'\otimes A=\begin{pmatrix}A&0\\A&2A\end{pmatrix}=\begin{pmatrix}1&2&0&0\\0&1&0&0\\1&2&2&4\\0&1&0&2\end{pmatrix},\qquad
+(C'\otimes A)\begin{pmatrix}1\\2\\0\\1\end{pmatrix}=\begin{pmatrix}1+4\\2\\1+4+0+4\\2+2\end{pmatrix}=\begin{pmatrix}5\\2\\9\\4\end{pmatrix}
+\]
+with \(\operatorname{vec}B=(1,2,0,1)'\), as Theorem~\ref{r13-thm-vec}(b) says.
+
+(c) \(\operatorname{vec}A=(1,0,2,1)'\), so \((\operatorname{vec}A)'\operatorname{vec}B=1+0+0+1=2\). Directly,
+\(A'B=\begin{pmatrix}1&0\\2&1\end{pmatrix}\begin{pmatrix}1&0\\2&1\end{pmatrix}=\begin{pmatrix}1&0\\4&1\end{pmatrix}\), with trace \(2\)
+(Theorem~\ref{r13-thm-vec}(d)).
+\end{solution}
+
+\begin{exercise}\label{r13-dr-commutation}
+\begin{enumerate}
+\item Write down \(K_{32}\) and check \(K_{32}\operatorname{vec}A=\operatorname{vec}A'\) for
+\[
+A=\begin{pmatrix}1&4\\2&5\\3&6\end{pmatrix}
+\]
+\item Check that \(K_{32}=K_{23}'\), with \(K_{23}\) of Definition~\ref{r13-def-commutation}.
+\item For \(a=(1,2)'\) and \(b=(3,0,1)'\), compute \(a\otimes b\), \(b\otimes a\) and \(K_{32}(a\otimes b)\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) By Theorem~\ref{r13-thm-commutation}(a) (\(m=3\), \(n=2\)), row \((i-1)2+j\) of \(K_{32}\) is row \((j-1)3+i\) of \(I_6\): rows \(1,2,\dots,6\)
+of \(K_{32}\) are rows \(1,4,2,5,3,6\) of \(I_6\),
+\[
+K_{32}=\begin{pmatrix}1&0&0&0&0&0\\0&0&0&1&0&0\\0&1&0&0&0&0\\0&0&0&0&1&0\\0&0&1&0&0&0\\0&0&0&0&0&1\end{pmatrix}
+\]
+For the given \(A\), \(\operatorname{vec}A=(1,2,3,4,5,6)'\) and \(K_{32}\operatorname{vec}A=(1,4,2,5,3,6)'=\operatorname{vec}A'\), as
+\(A'=\begin{pmatrix}1&2&3\\4&5&6\end{pmatrix}\).
+
+(b) The rows of \(K_{23}\) are rows \(1,3,5,2,4,6\) of \(I_6\); transposing, the columns of \(K_{23}'\) are \(e_1,e_3,e_5,e_2,e_4,e_6\), so the
+\(1\) of column \(j\) of \(K_{23}'\) stands in the row listed \(j\)th. Hence row \(1\) of \(K_{23}'\) has its \(1\) in column \(1\), row \(2\) in
+column \(4\), row \(3\) in column \(2\), row \(4\) in column \(5\), row \(5\) in column \(3\), row \(6\) in column \(6\): this is \(K_{32}\)
+(Theorem~\ref{r13-thm-commutation}(b)).
+
+(c) \(a\otimes b=(3,0,1,6,0,2)'\) and \(b\otimes a=(3,6,0,0,1,2)'\) (Definition~\ref{r13-def-kronecker}). Taking entries \(1,4,2,5,3,6\) of
+\(a\otimes b\), \(K_{32}(a\otimes b)=(3,6,0,0,1,2)'=b\otimes a\) (Theorem~\ref{r13-thm-commutation}(d)).
+\end{solution}
+
+\begin{exercise}\label{r13-dr-oneway}
+Three groups of two observations each give \(y=(5,7,\ 2,4,\ 6,6)'\). In the one-way model without intercept,
+\(y=X_1\beta+\varepsilon\) with \(X_1=I_3\otimes\one_2\) (Example~\ref{r13-exm-designs}(a)).
+\begin{enumerate}
+\item Compute \(X_1'X_1\), \(X_1'y\) and the least-squares estimate \(\hat\beta\).
+\item Compute the hat matrix \(H=I_3\otimes\bar J_2\), the fitted values \(Hy\), the residuals \(e=(I_3\otimes C_2)y\) and
+\(\mathrm{SSE}=e'e\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) By Example~\ref{r13-exm-designs}(a), \(X_1'X_1=2I_3=\diag(2,2,2)\), and \(X_1'y=(I_3\otimes\one_2')y\) holds the three group totals,
+\((12,6,12)'\). So \(\hat\beta=(X_1'X_1)^{-1}X_1'y=\frac12(12,6,12)'=(6,3,6)'\) (Theorem~\ref{r10-thm-least-squares}(c)): the group means.
+
+(b)
+\[
+H=I_3\otimes\bar J_2=\frac12\begin{pmatrix}1&1&0&0&0&0\\1&1&0&0&0&0\\0&0&1&1&0&0\\0&0&1&1&0&0\\0&0&0&0&1&1\\0&0&0&0&1&1\end{pmatrix},\qquad
+Hy=\begin{pmatrix}6\\6\\3\\3\\6\\6\end{pmatrix},\qquad e=y-Hy=\begin{pmatrix}-1\\1\\-1\\1\\0\\0\end{pmatrix}
+\]
+and \((I_3\otimes C_2)y\) gives the same \(e\) (deviations from the group means). Hence \(\mathrm{SSE}=1+1+1+1=4\).
+\end{solution}
+
+\begin{exercise}\label{r13-dr-data-cov}
+Three units are measured on two variables; the rows of the random data matrix \(Y\in\R^{3\times2}\) are uncorrelated and have the same mean vector, each with
+covariance matrix \(\Sigma=\begin{pmatrix}2&1\\1&3\end{pmatrix}\).
+\begin{enumerate}
+\item Write down \(\var(\operatorname{vec}Y)\) and \(\var(\operatorname{vec}Y')\).
+\item Find \(\var(\bar y)\) and the variance of the difference \(\bar y_1-\bar y_2\) of the two variable means.
+\item Find \(\var(y_{11}+y_{21})\) and \(\var(y_{11}+y_{12})\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) By Theorem~\ref{r13-thm-data-matrix},
+\[
+\var(\operatorname{vec}Y)=\Sigma\otimes I_3=\begin{pmatrix}2&0&0&1&0&0\\0&2&0&0&1&0\\0&0&2&0&0&1\\1&0&0&3&0&0\\0&1&0&0&3&0\\0&0&1&0&0&3\end{pmatrix},\qquad
+\var(\operatorname{vec}Y')=I_3\otimes\Sigma=\begin{pmatrix}2&1&0&0&0&0\\1&3&0&0&0&0\\0&0&2&1&0&0\\0&0&1&3&0&0\\0&0&0&0&2&1\\0&0&0&0&1&3\end{pmatrix}
+\]
+(b) \(\var(\bar y)=\frac13\Sigma=\begin{pmatrix}2/3&1/3\\1/3&1\end{pmatrix}\) (Theorem~\ref{r14-thm-sample}(a), with the rows of \(Y\) as \(x_1,x_2,x_3\)). With \(c=(1,-1)'\),
+\(\var(c'\bar y)=c'\var(\bar y)c=\frac13(2-1-1+3)=1\) (Theorem~\ref{r11-thm-linear}(b)).
+
+(c) \(y_{11}\) and \(y_{21}\) are entries \(1\) and \(2\) of \(\operatorname{vec}Y\); with \(d=(1,1,0,0,0,0)'\),
+\(\var(d'\operatorname{vec}Y)=d'(\Sigma\otimes I_3)d=2+2=4\): different units are uncorrelated. \(y_{11}\) and \(y_{12}\) are entries
+\(1\) and \(2\) of \(\operatorname{vec}Y'\), so \(\var(y_{11}+y_{12})=(1,1)\Sigma(1,1)'=2+1+1+3=7\).
+\end{solution}
+
+\begin{exercise}\label{r9-ex-kronecker}
+Let
+\[
+A=\begin{pmatrix}1&1&1\\1&0&-1\end{pmatrix}\in\R^{2\times3},\qquad
+B=\begin{pmatrix}2&1\\-1&1\\1&-1\end{pmatrix}\in\R^{3\times2}
+\]
+\begin{enumerate}
+\item Write out \(A\otimes B\in\R^{6\times6}\) and find its rank.
+\item Compute \(AB\) and \(BA\), show that \((A\otimes B)(B\otimes A)=AB\otimes BA\), and find the eigenvalues and the
+trace of this \(6\times6\) matrix.
+\item Write the equation \(AXB=C\) (\(X\in\R^{3\times3}\), \(C\in\R^{2\times2}\)) as a linear system
+\(M\operatorname{vec}X=\operatorname{vec}C\) with \(M\in\R^{4\times9}\). Show that \(\rank M=4\) and
+\(MM'=B'B\otimes AA'\).
+\item Show that the solution of \(AXB=C\) of least Frobenius norm is \(X^*=A'(AA')^{-1}C(B'B)^{-1}B'\). Find
+\(X^*\) for \(C=\diag(18,6)\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) By Definition~\ref{r13-def-kronecker}, the blocks of \(A\otimes B\) are \(B,B,B\) in the first block row and
+\(B,0,-B\) in the second:
+\[
+A\otimes B=\begin{pmatrix}2&1&2&1&2&1\\-1&1&-1&1&-1&1\\1&-1&1&-1&1&-1\\2&1&0&0&-2&-1\\-1&1&0&0&1&-1\\1&-1&0&0&-1&1\end{pmatrix}
+\]
+The two rows of \(A\) are not multiples of each other, nor are the two columns of \(B\), so \(\rank A=\rank B=2\), and
+\(\rank(A\otimes B)=2\cdot2=4\) by Theorem~\ref{r13-thm-kron-det}(b). Indeed rows \(3\) and \(6\) are the negatives of
+rows \(2\) and \(5\).
+
+(b) Multiplying,
+\[
+AB=\begin{pmatrix}2&1\\1&2\end{pmatrix},\qquad BA=\begin{pmatrix}3&2&1\\0&-1&-2\\0&1&2\end{pmatrix}
+\]
+By the mixed product (Theorem~\ref{r13-thm-kron-rules}(f)), with the \(2\times3\) and \(3\times2\) factors \(A\), \(B\)
+and the \(3\times2\) and \(2\times3\) factors \(B\), \(A\), \((A\otimes B)(B\otimes A)=AB\otimes BA\).
+\begin{itemize}
+\item \(AB(1,1)'=3(1,1)'\) and \(AB(1,-1)'=(1,-1)'\): the eigenvalues of \(AB\) are \(3\) and \(1\), and
+\(P=\left(\begin{smallmatrix}1&1\\1&-1\end{smallmatrix}\right)\) gives \(P^{-1}(AB)P=\diag(3,1)\)
+(Definition~\ref{r7-def-diagonalizable}).
+\item Expanding along the first column (Theorem~\ref{r5d-thm-expansion}),
+\(p_{BA}(t)=\det(tI_3-BA)=(t-3)\bigl((t+1)(t-2)+2\bigr)=(t-3)(t^2-t)=t(t-1)(t-3)\). The three eigenvalues \(3\), \(1\),
+\(0\) are distinct, so eigenvectors belonging to them form a basis of \(\R^3\) (Theorem~\ref{r7-thm-indep}); the matrix
+\(Q\) with these columns is invertible and \(Q^{-1}(BA)Q=\diag(3,1,0)\) (Definition~\ref{r7-def-diagonalizable}).
+\item By Theorem~\ref{r13-thm-kron-eigen}(b), the eigenvalues of \(AB\otimes BA\), with multiplicity, are the products
+\(3\cdot3,3\cdot1,3\cdot0,1\cdot3,1\cdot1,1\cdot0\), that is, \(9,3,3,1,0,0\); and the trace is
+\(16=\tr(AB)\tr(BA)=4\cdot4\) (Corollary~\ref{r13-cor-kron}(c)).
+\end{itemize}
+(c) By Theorem~\ref{r13-thm-vec}(b), \(\operatorname{vec}(AXB)=(B'\otimes A)\operatorname{vec}X\), so
+\(M=B'\otimes A\in\R^{4\times9}\), and \(\rank M=\rank B'\cdot\rank A=2\cdot2=4\) (Theorems~\ref{r13-thm-kron-det}(b)
+and~\ref{thm:r4-rank-rules}(a)). By Theorem~\ref{r13-thm-kron-rules}(e),(f),
+\(MM'=(B'\otimes A)(B\otimes A')=B'B\otimes AA'\). The rows of \(A\) and the columns of \(B\) are orthogonal, so
+\(AA'=\diag(3,2)\), \(B'B=\diag(6,3)\) and \(MM'=\diag(18,12,9,6)\) (Corollary~\ref{r13-cor-kron}(a)).
+
+(d)
+\begin{itemize}
+\item \(\lVert X\rVert_F=\lVert\operatorname{vec}X\rVert\) (Definition~\ref{r13-def-vec}). \(M\) has rank \(4\), its number of
+rows, so \(\mathcal C(M)=\R^4\) (Theorem~\ref{thm:r4-rank-rules}(c)): the system \(M\operatorname{vec}X=\operatorname{vec}C\)
+has solutions, and they are the minimizers of \(\lVert M\operatorname{vec}X-\operatorname{vec}C\rVert\) (minimum \(0\)). By
+Theorem~\ref{r10-thm-mp-shortest}(b), the shortest of them is \(M^+\operatorname{vec}C\), and
+\(M^+=M'(MM')^{-1}\) (Theorem~\ref{r10-thm-mp-exists}(c), \(\rank M=4\)).
+\item By Corollary~\ref{r13-cor-kron}(b) and Theorem~\ref{r13-thm-vec}(b), as \((B'B)^{-1}\) is symmetric,
+\[
+(MM')^{-1}\operatorname{vec}C=\bigl((B'B)^{-1}\otimes(AA')^{-1}\bigr)\operatorname{vec}C
+=\operatorname{vec}\bigl((AA')^{-1}C(B'B)^{-1}\bigr)
+\]
+and \(M'=B\otimes A'\) (Theorem~\ref{r13-thm-kron-rules}(e)) maps \(\operatorname{vec}Y\) to \(\operatorname{vec}(A'YB')\)
+(Theorem~\ref{r13-thm-vec}(b)). Hence \(X^*=A'(AA')^{-1}C(B'B)^{-1}B'\).
+\item For \(C=\diag(18,6)\), \((AA')^{-1}C(B'B)^{-1}=\diag(\frac13,\frac12)\diag(18,6)\diag(\frac16,\frac13)=I_2\), and
+\[
+X^*=A'B'=(BA)'=\begin{pmatrix}3&0&0\\2&-1&1\\1&-2&2\end{pmatrix},\qquad\lVert X^*\rVert_F^2=24
+\]
+\item Check: \(AX^*B=(AA')(B'B)=\diag(18,6)\). Other solutions are longer: \(A(1,-2,1)'=0\), so
+\(X=X^*+(1,-2,1)'e_1'\) also solves \(AXB=C\), and
+\[
+X=\begin{pmatrix}4&0&0\\0&-1&1\\2&-2&2\end{pmatrix},\qquad\lVert X\rVert_F^2=16+1+1+4+4+4=30>24
+\]
+\end{itemize}
+\end{solution}
+
+\needspace{16\baselineskip}
+\begin{exercise}\label{r13-dr-quadratic}
+Let \(f(x)=x'Ax+b'x\) for \(x\in\R^4\), with
+\[
+A=\begin{pmatrix}1&2&0&0\\0&2&1&0\\0&1&3&1\\0&0&1&2\end{pmatrix},\qquad b=\begin{pmatrix}-2\\-4\\-4\\2\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find \(\mathrm{d}f\), the gradient and the Hessian of \(f\).
+\item Find the stationary point by Gauss elimination.
+\item Show that it is the strict global minimizer, and find the minimum value.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) By Theorem~\ref{r13-thm-forms}, \(\mathrm{d}f=\bigl(x'(A+A')+b'\bigr)\mathrm{d}x\); the gradient is \((A+A')x+b\), and by
+Example~\ref{r13-exm-hessians}(a) the Hessian is
+\[
+A+A'=\begin{pmatrix}2&2&0&0\\2&4&2&0\\0&2&6&2\\0&0&2&4\end{pmatrix}
+\]
+(b) Solve \((A+A')x=-b=(2,4,4,-2)'\):
+\[
+\left(\begin{array}{cccc|c}2&2&0&0&2\\2&4&2&0&4\\0&2&6&2&4\\0&0&2&4&-2\end{array}\right)
+\xrightarrow{R_2\leftarrow R_2-R_1}
+\left(\begin{array}{cccc|c}2&2&0&0&2\\0&2&2&0&2\\0&2&6&2&4\\0&0&2&4&-2\end{array}\right)
+\xrightarrow{R_3\leftarrow R_3-R_2}
+\left(\begin{array}{cccc|c}2&2&0&0&2\\0&2&2&0&2\\0&0&4&2&2\\0&0&2&4&-2\end{array}\right)
+\]
+\[
+\left(\begin{array}{cccc|c}2&2&0&0&2\\0&2&2&0&2\\0&0&4&2&2\\0&0&2&4&-2\end{array}\right)
+\xrightarrow{R_4\leftarrow R_4-\frac12R_3}
+\left(\begin{array}{cccc|c}2&2&0&0&2\\0&2&2&0&2\\0&0&4&2&2\\0&0&0&3&-3\end{array}\right)
+\]
+so \(x_4=-1\); \(4x_3-2=2\) gives \(x_3=1\); \(2x_2+2=2\) gives \(x_2=0\); and \(2x_1=2\) gives \(x_1=1\): the stationary
+point is \(\hat x=(1,0,1,-1)'\).
+
+(c) The operations add multiples of a row to a later row, so the leading principal minors of \(A+A'\) are the
+products of the pivots: \(2\), \(2\cdot2=4\), \(2\cdot2\cdot4=16\) and \(\det(A+A')=2\cdot2\cdot4\cdot3=48\)
+(Theorem~\ref{r5d-thm-gauss}), all positive. So the Hessian is PD at every \(x\) (Theorem~\ref{r8-thm-leading-minors}), and
+\(\hat x\) is the strict global minimizer (Theorem~\ref{r13-thm-extrema}(d)). As \(\hat x'(A+A')\hat x=-b'\hat x\),
+\(f(\hat x)=\frac12\hat x'(A+A')\hat x+b'\hat x=\frac12b'\hat x=\frac12(-2+0-4-2)=-4\).
+\end{solution}
+
+\begin{exercise}\label{r13-dr-matrix-derivatives}
+Let \(A=J_4\) and
+\[
+X_0=\begin{pmatrix}2&-1&0&0\\-1&2&-1&0\\0&-1&2&-1\\0&0&-1&1\end{pmatrix}
+\]
+\begin{enumerate}
+\item Find \(\partial\det X/\partial X\) and \(\partial\log\det X/\partial X\) at \(X=X_0\) (\(X\) an unrestricted \(4\times4\) variable).
+\item Write \(\mathrm D(X^{-1})\) at \(X_0\) as a Kronecker product, and find the differential of \(X^{-1}\) at \(X_0\) for the
+increment \(\mathrm{d}X=E_{41}\).
+\item Find \(\partial\tr(AX^{-1})/\partial X\) at \(X_0\).
+\item Now let \(X\) be a symmetric variable. Find \(\partial\log\det X/\partial X\) at \(X_0\) in the sense of Theorem~\ref{r13-thm-symmetric}.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+\(X_0\) is the matrix \(T\) of Example~\ref{r9-exm-logdet}, the inverse of the matrix \(M=\bigl(\min(i,j)\bigr)\) there, and
+\(\det M=1\). So \(X_0\) is invertible, \(\det X_0=1/\det M=1\) (Theorem~\ref{r5d-thm-product}(c)), and
+\[
+X_0^{-1}=M=\begin{pmatrix}1&1&1&1\\1&2&2&2\\1&2&3&3\\1&2&3&4\end{pmatrix}
+\]
+which is symmetric (check: \(X_0M=I_4\)).
+
+(a) By Theorem~\ref{r13-thm-trace-det}(b),(d), \(\partial\det X/\partial X=\det X_0\,(X_0^{-1})'=M\), and
+\(\partial\log\det X/\partial X=(X_0^{-1})'=M\) is the same matrix, as \(\det X_0=1>0\).
+
+(b) By Theorem~\ref{r13-thm-trace-det}(c), \(\mathrm D(X^{-1})=-(X_0^{-1})'\otimes X_0^{-1}=-M\otimes M\), a
+\(16\times16\) matrix, and \(\mathrm{d}X^{-1}=-X_0^{-1}(\mathrm{d}X)X_0^{-1}\). With \(\mathrm{d}X=E_{41}=e_4e_1'\)
+(Proposition~\ref{r1-prop-units}), \(Me_4=(1,2,3,4)'\) is column \(4\) of \(M\) and \(e_1'M=(1,1,1,1)\) is row \(1\), so
+\[
+\mathrm{d}X^{-1}=-(Me_4)(e_1'M)=-\begin{pmatrix}1\\2\\3\\4\end{pmatrix}\begin{pmatrix}1&1&1&1\end{pmatrix}
+=-\begin{pmatrix}1&1&1&1\\2&2&2&2\\3&3&3&3\\4&4&4&4\end{pmatrix}
+\]
+(c) By Example~\ref{r13-exm-matrix-functions}(b), \(\partial\tr(AX^{-1})/\partial X=-(X_0^{-1}AX_0^{-1})'\). Here
+\(A=J_4=\one_4\one_4'\), so \(X_0^{-1}AX_0^{-1}=(M\one_4)(\one_4'M)=vv'\) with \(v=M\one_4=(4,7,9,10)'\), the row sums of \(M\)
+(\(\one_4'M=v'\), as \(M\) is symmetric). The derivative is
+\[
+-vv'=-\begin{pmatrix}16&28&36&40\\28&49&63&70\\36&63&81&90\\40&70&90&100\end{pmatrix}
+\]
+(d) The leading principal minors of \(X_0\) are \(2\), \(4-1=3\), \(2(4-1)+(-1)\cdot2=4\) (along row \(1\),
+Theorem~\ref{r5d-thm-expansion}) and \(\det X_0=1\), all positive, so \(X_0\) is PD (Theorem~\ref{r8-thm-leading-minors}). By
+Theorem~\ref{r13-thm-symmetric}(b),
+\[
+\frac{\partial\log\det X}{\partial X}=2X_0^{-1}-\diag(X_0^{-1})=2M-\diag(1,2,3,4)
+=\begin{pmatrix}1&2&2&2\\2&2&4&4\\2&4&3&6\\2&4&6&4\end{pmatrix}
+\]
+the off-diagonal entries double, since \(x_{ij}=x_{ji}\) is one variable.
+\end{solution}
+
+\begin{exercise}\label{r9-ex-matrix-drill}
+Let
+\[
+X_0=\begin{pmatrix}1&1&0&0\\0&1&1&0\\0&0&1&1\\0&0&0&1\end{pmatrix},\qquad
+v=\begin{pmatrix}1\\-1\\1\\-1\end{pmatrix}
+\]
+\begin{enumerate}
+\item Show that
+\[
+X_0^{-1}=\begin{pmatrix}1&-1&1&-1\\0&1&-1&1\\0&0&1&-1\\0&0&0&1\end{pmatrix}
+\]
+and find \(\det X_0\), \(\partial\det X/\partial X\) and \(\partial\log\det X/\partial X\) at \(X_0\).
+\item Find the differential of \(X^{-1}\) at \(X_0\) for the increment \(\mathrm{d}X=E_{41}\), and show that it equals
+\(vv'\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) Multiplying, \(X_0\) times the given matrix is \(I_4\), so it is \(X_0^{-1}\) (Theorem~\ref{r2-thm-invertible}).
+\(X_0\) is upper triangular with diagonal entries \(1\), so \(\det X_0=1\) (Theorem~\ref{r5d-thm-basic}(c)). By
+Theorem~\ref{r13-thm-trace-det}(b),(d),
+\[
+\frac{\partial\det X}{\partial X}(X_0)=\det X_0\,(X_0^{-1})'=\frac{\partial\log\det X}{\partial X}(X_0)=(X_0^{-1})'
+=\begin{pmatrix}1&0&0&0\\-1&1&0&0\\1&-1&1&0\\-1&1&-1&1\end{pmatrix}
+\]
+(b) By Theorem~\ref{r13-thm-trace-det}(c), \(\mathrm{d}(X^{-1})=-X_0^{-1}e_4e_1'X_0^{-1}\) (\(E_{41}=e_4e_1'\),
+Proposition~\ref{r1-prop-units}). Here \(X_0^{-1}e_4=(-1,1,-1,1)'=-v\) (the fourth column) and \(e_1'X_0^{-1}=v'\) (the first
+row), so
+\[
+\mathrm{d}(X^{-1})=vv'=\begin{pmatrix}1&-1&1&-1\\-1&1&-1&1\\1&-1&1&-1\\-1&1&-1&1\end{pmatrix}
+\]
+\end{solution}
+
+\begin{exercise}\label{r13-dr-extrema}
+Let \(f(x)=x_1^3+x_2^3-3x_1x_2+x_3^2+x_3x_4+x_4^2-3x_3\) for \(x\in\R^4\).
+\begin{enumerate}
+\item Find the gradient, the Hessian and the stationary points of \(f\).
+\item Classify each stationary point by Theorem~\ref{r13-thm-extrema}(c).
+\item Is the local minimum a global minimum?
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) The gradient is \((3x_1^2-3x_2,\ 3x_2^2-3x_1,\ 2x_3+x_4-3,\ x_3+2x_4)'\) and
+\[
+\mathrm Hf(x)=\begin{pmatrix}6x_1&-3&0&0\\-3&6x_2&0&0\\0&0&2&1\\0&0&1&2\end{pmatrix}
+\]
+The gradient is \(0\) when \(x_2=x_1^2\) and \(x_1=x_2^2=x_1^4\), that is, \(x_1(x_1^3-1)=0\): \(x_1=0\) or \(x_1=1\); and
+when \(x_3=-2x_4\) and \(-4x_4+x_4=3\), that is, \(x_4=-1\), \(x_3=2\). The stationary points are \((0,0,2,-1)'\) and
+\((1,1,2,-1)'\).
+
+(b) The lower right block \(\left(\begin{smallmatrix}2&1\\1&2\end{smallmatrix}\right)\) of \(\mathrm Hf\) has the
+eigenvalues \(3\) and \(1\), with the eigenvectors \((0,0,1,1)'\) and \((0,0,1,-1)'\) of \(\mathrm Hf\).
+\begin{itemize}
+\item At \((0,0,2,-1)'\), the upper left block is \(\left(\begin{smallmatrix}0&-3\\-3&0\end{smallmatrix}\right)\), with the
+eigenvalues \(3\) and \(-3\) (eigenvectors \((1,-1,0,0)'\), \((1,1,0,0)'\)). So \(\mathrm Hf(0,0,2,-1)\) has the eigenvalues
+\(3\), \(-3\), \(3\), \(1\): it is indefinite, and \((0,0,2,-1)'\) is neither a local minimum nor a local maximum.
+\item At \((1,1,2,-1)'\), the upper left block is \(\left(\begin{smallmatrix}6&-3\\-3&6\end{smallmatrix}\right)\), with the
+eigenvalues \(9\) and \(3\) (eigenvectors \((1,-1,0,0)'\), \((1,1,0,0)'\)). So \(\mathrm Hf(1,1,2,-1)\) has the eigenvalues
+\(9\), \(3\), \(3\), \(1\): it is PD (Theorem~\ref{r8-thm-eigen-criterion}(a)), and \(f\) has a strict local minimum at
+\((1,1,2,-1)'\), with \(f(1,1,2,-1)=1+1-3+4-2+1-6=-4\).
+\end{itemize}
+(c) No: \(f(x_1,0,2,-1)=x_1^3+4-2+1-6=x_1^3-3\) is less than \(-4\) for \(x_1<-1\). The Hessian is not PSD on all of \(\R^4\)
+(for instance at \((0,0,2,-1)'\)), so Theorem~\ref{r13-thm-extrema}(d) does not apply.
+\end{solution}
+
+\begin{exercise}\label{r9-ex-classify}
+Let \(M=4I_4+3J_4\) and \(f(x)=\frac14(x'x)^2-\frac12x'Mx\) on \(\R^4\).
+\begin{enumerate}
+\item Find the gradient and the Hessian of \(f\), and the eigenvalues and eigenvectors of \(M\).
+\item Find all stationary points of \(f\), and classify them by the eigenvalues of the Hessian. Treat
+\(x=(1,1,-1,-1)'\) explicitly.
+\item Find the global minimum of \(f\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item By Theorems~\ref{r13-thm-forms}(c) and~\ref{r13-thm-diff-rules}, \(\mathrm{d}(x'x)=2x'\mathrm{d}x\) and
+\(\mathrm{d}f=\frac12(x'x)\,2x'\mathrm{d}x-x'M\,\mathrm{d}x=\bigl((x'x)x-Mx\bigr)'\mathrm{d}x\): the gradient is
+\(g(x)=(x'x)x-Mx\).
+\item \(\mathrm{d}g=\bigl(\mathrm{d}(x'x)\bigr)x+(x'x)\,\mathrm{d}x-M\,\mathrm{d}x=\bigl(2xx'+(x'x)I_4-M\bigr)\mathrm{d}x\), so by
+Definition~\ref{r13-def-hessian}, \(\mathrm Hf(x)=\mathrm Dg(x)=(x'x)I_4+2xx'-M\).
+\item \(J_4\one_4=4\one_4\) and \(J_4v=\one_4(\one_4'v)=0\) for \(v\perp\one_4\), so \(M\one_4=16\one_4\) and \(Mv=4v\) for every
+\(v\ne0\) in the \(3\)-dimensional subspace \(\one_4^\perp\): the eigenvalues of \(M\) are \(16\) and \(4\) (three times).
+\end{itemize}
+(b) \(g(x)=0\) means \(Mx=(x'x)x\): \(x=0\), or \(x\) is an eigenvector of \(M\) with \(x'x\) equal to its eigenvalue. The
+stationary points are \(0\), \(\pm2\one_4\) (\(x'x=16\)), and every \(x\perp\one_4\) with \(x'x=4\), infinitely many.
+\begin{itemize}
+\item At \(\pm2\one_4\), \(\mathrm Hf=16I_4+8J_4-4I_4-3J_4=12I_4+5J_4\), with the eigenvalues \(32\) (on \(\one_4\)) and \(12\)
+(three times): a strict local minimum (Theorem~\ref{r13-thm-extrema}(c)), with \(f=64-128=-64\).
+\item At \(x\perp\one_4\) with \(x'x=4\), \(\mathrm Hf=2xx'-3J_4\). Then \(\mathrm Hf\,x=8x\), \(\mathrm Hf\,\one_4=-12\one_4\), and
+\(\mathrm Hf\,v=0\) for \(v\perp x,\one_4\): the eigenvalues are \(8,-12,0,0\). As \(8>0>-12\), \(\mathrm Hf\) is indefinite, and
+\(x\) is neither a local minimum nor a local maximum (Theorem~\ref{r13-thm-extrema}(c)), with \(f=4-8=-4\). For
+\(x=(1,1,-1,-1)'\),
+\[
+\mathrm Hf(x)=\begin{pmatrix}-1&-1&-5&-5\\-1&-1&-5&-5\\-5&-5&-1&-1\\-5&-5&-1&-1\end{pmatrix}
+\]
+and \(\mathrm Hf(x)(1,-1,0,0)'=\mathrm Hf(x)(0,0,1,-1)'=0\), \(\mathrm Hf(x)\,x=8x\), \(\mathrm Hf(x)\one_4=-12\one_4\).
+\item At \(0\), \(\mathrm Hf=-M\) has the eigenvalues \(-16,-4,-4,-4\): it is ND, a strict local maximum, \(f(0)=0\).
+\end{itemize}
+(c) By Theorem~\ref{r9-thm-rayleigh}(a) for \(M\), whose largest eigenvalue is \(16\), \(x'Mx\leqslant16s\) with \(s=x'x\),
+so \(f(x)\geqslant\frac14s^2-8s=\frac14(s-16)^2-64\geqslant-64\). The global minimum is \(-64\), attained at \(\pm2\one_4\).
+\end{solution}
+
+\begin{exercise}\label{r13-dr-lagrange}
+Four unbiased estimators \(t=(t_1,t_2,t_3,t_4)'\) of a number \(\theta\) have the covariance matrix
+\[
+\Sigma=\begin{pmatrix}1&-1&0&0\\-1&4&-1&0\\0&-1&2&-1\\0&0&-1&1\end{pmatrix}
+\]
+A combination \(a't\) is unbiased when \(\one'a=1\); we seek the one of least variance (as in a minimum-variance
+portfolio).
+\begin{enumerate}
+\item Write down the Lagrangian for minimizing \(\var(a't)=a'\Sigma a\) subject to \(\one'a=1\), and the conditions
+\(\mathrm D\psi=0\).
+\item Solve them: find \(w=\Sigma^{-1}\one\) by Gauss elimination, then \(a\) and the multiplier.
+\item Show that this \(a\) gives the smallest variance, and compare with the equal weights \(\frac14\one\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(\psi(a)=a'\Sigma a-2\lambda(\one'a-1)\) (multiplier \(2\lambda\)); by Theorem~\ref{r13-thm-forms},
+\(\mathrm{d}\psi=2(\Sigma a-\lambda\one)'\mathrm{d}a\), so the conditions are \(\Sigma a=\lambda\one\) and \(\one'a=1\).
+
+(b) Solve \(\Sigma w=\one\):
+\[
+\left(\begin{array}{cccc|c}1&-1&0&0&1\\-1&4&-1&0&1\\0&-1&2&-1&1\\0&0&-1&1&1\end{array}\right)
+\xrightarrow{R_2\leftarrow R_2+R_1}
+\left(\begin{array}{cccc|c}1&-1&0&0&1\\0&3&-1&0&2\\0&-1&2&-1&1\\0&0&-1&1&1\end{array}\right)
+\xrightarrow{R_2\leftrightarrow R_3}
+\left(\begin{array}{cccc|c}1&-1&0&0&1\\0&-1&2&-1&1\\0&3&-1&0&2\\0&0&-1&1&1\end{array}\right)
+\]
+\[
+\left(\begin{array}{cccc|c}1&-1&0&0&1\\0&-1&2&-1&1\\0&3&-1&0&2\\0&0&-1&1&1\end{array}\right)
+\xrightarrow{R_3\leftarrow R_3+3R_2}
+\left(\begin{array}{cccc|c}1&-1&0&0&1\\0&-1&2&-1&1\\0&0&5&-3&5\\0&0&-1&1&1\end{array}\right)
+\xrightarrow{R_3\leftrightarrow R_4}
+\left(\begin{array}{cccc|c}1&-1&0&0&1\\0&-1&2&-1&1\\0&0&-1&1&1\\0&0&5&-3&5\end{array}\right)
+\]
+\[
+\left(\begin{array}{cccc|c}1&-1&0&0&1\\0&-1&2&-1&1\\0&0&-1&1&1\\0&0&5&-3&5\end{array}\right)
+\xrightarrow{R_4\leftarrow R_4+5R_3}
+\left(\begin{array}{cccc|c}1&-1&0&0&1\\0&-1&2&-1&1\\0&0&-1&1&1\\0&0&0&2&10\end{array}\right)
+\]
+so \(w_4=5\); \(-w_3+5=1\) gives \(w_3=4\); \(-w_2+8-5=1\) gives \(w_2=2\); and \(w_1-2=1\) gives \(w_1=3\):
+\(w=(3,2,4,5)'\). Then \(a=\lambda w\) with \(1=\one'a=14\lambda\), so \(\lambda=\frac1{14}\) and \(a=\frac1{14}(3,2,4,5)'\).
+Check: \(\Sigma w=(3-2,\ -3+8-4,\ -2+8-5,\ -4+5)'=\one\), so \(\Sigma a=\frac1{14}\one\).
+
+(c) The leading principal minors of \(\Sigma\) are \(1\), \(4-1=3\), \(1\cdot(8-1)+(-1)\cdot2=5\) (along row \(1\),
+Theorem~\ref{r5d-thm-expansion}) and \(\det\Sigma=(-1)^2\cdot1\cdot(-1)\cdot(-1)\cdot2=2\) (Theorem~\ref{r5d-thm-gauss}, two
+interchanges), all positive, so \(\Sigma\) is PD (Theorem~\ref{r8-thm-leading-minors}), and \(\mathrm H\psi=2\Sigma\) is PD
+everywhere: by Theorem~\ref{r13-thm-extrema}(e), \(a\) is the strict minimizer under the constraint. Its variance is
+\(a'\Sigma a=\lambda\,a'\one=\frac1{14}\). The equal weights give \(\frac1{16}\one'\Sigma\one=\frac1{16}(0+2+0+0)=\frac18>\frac1{14}\),
+where \(0,2,0,0\) are the row sums of \(\Sigma\).
+\end{solution}
+
+\begin{exercise}\label{r9-ex-equality-qp}
+Let \(a=(3,1,4,1)'\) and \(L=\{x\in\R^4:x_1+x_2+x_3+x_4=1,\ x_1+x_2-x_3-x_4=3\}\).
+\begin{enumerate}
+\item Find the point \(x^*\) of \(L\) closest to \(a\), and the distance from \(a\) to \(L\), by
+Theorem~\ref{r9-thm-equality-qp} with \(A=I_4\) and \(b=a\).
+\item Check Theorem~\ref{r9-thm-equality-qp}(b) for the point \(x=(2,0,0,-1)'\) of \(L\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) With \(A=I_4\) and \(b=a\), \(q(x)=\frac12x'x-a'x=\frac12\lVert x-a\rVert^2-\frac12\lVert a\rVert^2\), so
+minimizing \(q\) on \(L\) is minimizing the distance to \(a\), and \(\hat x=a\). Here
+\[
+C=\begin{pmatrix}1&1&1&1\\1&1&-1&-1\end{pmatrix},\qquad d=\begin{pmatrix}1\\3\end{pmatrix},\qquad
+V=CC'=4I_2,\qquad Ca-d=\begin{pmatrix}9\\-1\end{pmatrix}-\begin{pmatrix}1\\3\end{pmatrix}=\begin{pmatrix}8\\-4\end{pmatrix}
+\]
+\(\rank C=2\) (the rows are not multiples of each other), and \(\lambda=V^{-1}(Ca-d)=(2,-1)'\). By
+Theorem~\ref{r9-thm-equality-qp}(a),
+\[
+x^*=a-C'\lambda=\begin{pmatrix}3\\1\\4\\1\end{pmatrix}-\begin{pmatrix}1\\1\\3\\3\end{pmatrix}=\begin{pmatrix}2\\0\\1\\-2\end{pmatrix}
+\]
+which satisfies \(2+0+1-2=1\) and \(2+0-1+2=3\). By Theorem~\ref{r9-thm-equality-qp}(c),
+\(\frac12\lVert x^*-a\rVert^2=q(x^*)-q(a)=\frac12(Ca-d)'V^{-1}(Ca-d)=\frac12\cdot\frac{64+16}4=10\); so the distance is
+\(\sqrt{20}=2\sqrt5\), and directly \(\lVert a-x^*\rVert^2=1+1+9+9=20\).
+
+(b) \(x=(2,0,0,-1)'\) lies in \(L\) (\(2+0+0-1=1\), \(2+0-0+1=3\)). Here \(q(x)=\frac12\cdot5-(6-1)=-\frac52\),
+\(q(x^*)=\frac12\cdot9-(6+4-2)=-\frac72\), and \(\frac12\lVert x-x^*\rVert^2=\frac12\lVert(0,0,-1,1)'\rVert^2=1\);
+indeed \(-\frac52=-\frac72+1\).
+\end{solution}
+
+\begin{exercise}\label{r13-dr-least-squares}
+Five units have the values \(x_{i1}=2,2,3,3,5\) and \(x_{i2}=1,5,2,2,0\) of two explanatory variables and the responses
+\(y=(4,8,5,7,6)'\). In the model \(y_i=\beta_0+\beta_1x_{i1}+\beta_2x_{i2}+\varepsilon_i\) (\(k=2\)):
+\begin{enumerate}
+\item Write down \(X\), \(X'X\), \(X'y\) and the gradient of \(S(\beta)\) at \(\beta=0\).
+\item Solve the normal equations by Gauss elimination.
+\item Show that the solution minimizes \(S\), and find the residuals and \(S(\hat\beta)\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\[
+X=\begin{pmatrix}1&2&1\\1&2&5\\1&3&2\\1&3&2\\1&5&0\end{pmatrix},\qquad
+X'X=\begin{pmatrix}5&15&10\\15&51&24\\10&24&34\end{pmatrix},\qquad X'y=\begin{pmatrix}30\\90\\68\end{pmatrix}
+\]
+By Theorem~\ref{r13-thm-ols}(a), the gradient at \(\beta=0\) is \(-2X'y=(-60,-180,-136)'\).
+
+(b)
+\[
+\left(\begin{array}{ccc|c}5&15&10&30\\15&51&24&90\\10&24&34&68\end{array}\right)
+\xrightarrow[R_3\leftarrow R_3-2R_1]{R_2\leftarrow R_2-3R_1}
+\left(\begin{array}{ccc|c}5&15&10&30\\0&6&-6&0\\0&-6&14&8\end{array}\right)
+\xrightarrow{R_3\leftarrow R_3+R_2}
+\left(\begin{array}{ccc|c}5&15&10&30\\0&6&-6&0\\0&0&8&8\end{array}\right)
+\]
+so \(\beta_2=1\), \(6\beta_1-6=0\) gives \(\beta_1=1\), and \(5\beta_0+15+10=30\) gives \(\beta_0=1\): \(\hat\beta=(1,1,1)'\).
+
+(c) The pivots \(5\), \(6\), \(8\) are positive, so the leading principal minors \(5\), \(30\), \(240\) of \(X'X\) are positive and
+\(\mathrm HS=2X'X\) is PD (Theorem~\ref{r8-thm-leading-minors}): \(\hat\beta\) is the strict global minimizer (Theorem~\ref{r13-thm-ols}(c)).
+\(X\hat\beta=(4,8,6,6,6)'\), so \(e=y-X\hat\beta=(0,0,-1,1,0)'\) and \(S(\hat\beta)=e'e=2\); indeed \(X'e=(0,\ 0,\ 0)'\).
+\end{solution}
+
+\begin{exercise}\label{r13-dr-newton}
+Let \(f(x)=\begin{pmatrix}x_1^2-x_1x_2-2x_2+2\\2x_1+x_2^2-3\end{pmatrix}\), which is \(0\) at \(x=(1,1)'\).
+\begin{enumerate}
+\item Find the derivative \(G(x)=\mathrm Df(x)\), and check that \(G(1,1)\) is invertible.
+\item Starting from \(x_0=(-1,-1)'\), compute two Newton--Raphson steps \(x_1\) and \(x_2\) (Example~\ref{r13-exm-newton}).
+\item Compare the squared distances of \(x_0\), \(x_1\), \(x_2\) from the solution \((1,1)'\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(G(x)=\begin{pmatrix}2x_1-x_2&-x_1-2\\2&2x_2\end{pmatrix}\), and \(G(1,1)=\begin{pmatrix}1&-3\\2&2\end{pmatrix}\) has determinant \(8\ne0\).
+
+(b) At \(x_0=(-1,-1)'\): \(f(x_0)=(4,-4)'\) and \(G(x_0)=\begin{pmatrix}-1&-1\\2&-2\end{pmatrix}\), with determinant \(4\) and
+\(G(x_0)^{-1}=\frac14\begin{pmatrix}-2&1\\-2&-1\end{pmatrix}\) (Theorem~\ref{r5d-thm-adjugate}). So
+\(x_1=x_0-G(x_0)^{-1}f(x_0)=(-1,-1)'-\frac14(-12,-4)'=(2,0)'\). At \(x_1\): \(f(x_1)=(6,1)'\) and \(G(x_1)=\begin{pmatrix}4&-4\\2&0\end{pmatrix}\),
+with determinant \(8\) and \(G(x_1)^{-1}=\frac18\begin{pmatrix}0&4\\-2&4\end{pmatrix}\). So \(x_2=(2,0)'-\frac18(4,-8)'=(\frac32,1)'\).
+
+(c) The squared distances from \((1,1)'\) are \(\lVert(-2,-2)'\rVert^2=8\), \(\lVert(1,-1)'\rVert^2=2\) and
+\(\lVert(\frac12,0)'\rVert^2=\frac14\). A third step gives \(x_3=(\frac{23}{22},\frac{21}{22})'\), at squared distance
+\(\lVert(\frac1{22},-\frac1{22})'\rVert^2=\frac2{484}=\frac1{242}\): near the solution each step roughly squares the error.
+\end{solution}
+
+\begin{exercise}\label{r13-dr-jacobian}
+Let \(A=\begin{pmatrix}2&0\\1&1\end{pmatrix}\) and \(B=\begin{pmatrix}1&1\\0&3\end{pmatrix}\), and consider \(Y=AXB\) for \(X\in\R^{2\times2}\).
+\begin{enumerate}
+\item Write down the matrix \(J\) with \(\operatorname{vec}Y=J\operatorname{vec}X\), and find \(\det J\) in two ways. Check \(J\operatorname{vec}X\) for
+\(X=\begin{pmatrix}1&0\\2&1\end{pmatrix}\).
+\item If the four entries of \(X\) have the joint density \(f_X\), what is the density of \(Y\)?
+\item Compute \(\int_{\R^4}e^{-\frac12x'Px}\,\mathrm{d}x\) for the matrix
+\[
+P=\begin{pmatrix}2&0&1&-1\\0&2&1&1\\1&1&3&0\\-1&1&0&3\end{pmatrix}
+\]
+of Example~\ref{r8-exm-leading}.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) By Theorem~\ref{r13-thm-jacobian}(c), \(J=B'\otimes A\) with \(B'=\begin{pmatrix}1&0\\1&3\end{pmatrix}\):
+\[
+J=\begin{pmatrix}A&0\\A&3A\end{pmatrix}=\begin{pmatrix}2&0&0&0\\1&1&0&0\\2&0&6&0\\1&1&3&3\end{pmatrix}
+\]
+\(J\) is lower triangular, so \(\det J=2\cdot1\cdot6\cdot3=36\) (Theorems~\ref{r5d-thm-basic}(c) and~\ref{r5d-thm-transpose}); and
+\(\det J=(\det A)^2(\det B)^2=2^2\cdot3^2=36\) (Theorem~\ref{r13-thm-kron-det}(a)). For the given \(X\),
+\(AXB=\begin{pmatrix}2&0\\3&1\end{pmatrix}B=\begin{pmatrix}2&2\\3&6\end{pmatrix}\), and \(J(1,2,0,1)'=(2,3,2,6)'=\operatorname{vec}Y\).
+
+(b) \(f_Y(Y)=f_X(A^{-1}YB^{-1})/36\) (Theorem~\ref{r13-thm-jacobian}(c)), with \(A^{-1}=\frac12\begin{pmatrix}1&0\\-1&2\end{pmatrix}\) and
+\(B^{-1}=\frac13\begin{pmatrix}3&-1\\0&1\end{pmatrix}\).
+
+(c) By Example~\ref{r8-exm-leading}, \(P\) is PD with \(\det P=\Delta_4=16\), so by Example~\ref{r13-exm-aitken} with
+\(n=4\) the integral is \((2\pi)^{4/2}\cdot16^{-1/2}=\frac{4\pi^2}4=\pi^2\).
+\end{solution}
+
+\begin{exercise}\label{r9-ex-jacobian-det}
+\begin{enumerate}
+\item Find the Jacobian determinant of \(X\mapsto AXB\) on \(\R^{2\times3}\) for
+\[
+A=\begin{pmatrix}3&1\\1&1\end{pmatrix},\qquad B=\begin{pmatrix}2&1&1\\1&2&1\\1&1&2\end{pmatrix}
+\]
+\item Find \(X_0^{-1}\) and the Jacobian determinant of \(X\mapsto X^{-1}\) at
+\[
+X_0=\begin{pmatrix}1&1&0&0\\0&1&1&0\\0&0&1&1\\-1&0&0&1\end{pmatrix}
+\]
+\item Find the Jacobian matrix of \(X\mapsto X'\) on \(\R^{2\times2}\) and its determinant.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(\det A=2\) and, along row \(1\) (Theorem~\ref{r5d-thm-expansion}), \(\det B=2(4-1)-(2-1)+(1-2)=4\). By
+Theorem~\ref{r13-thm-jacobian}(c) with \(m=2\) and \(n=3\), the Jacobian matrix is \(B'\otimes A\in\R^{6\times6}\), with
+determinant \((\det A)^3(\det B)^2=8\cdot16=128\).
+
+(b) Along column \(1\) (Theorem~\ref{r5d-thm-expansion}),
+\[
+\det X_0=1\cdot\det\begin{pmatrix}1&1&0\\0&1&1\\0&0&1\end{pmatrix}+(-1)\cdot(-1)^{4+1}\det\begin{pmatrix}1&0&0\\1&1&0\\0&1&1\end{pmatrix}
+=1+1=2
+\]
+the two minors being triangular with diagonal entries \(1\) (Theorems~\ref{r5d-thm-basic}(c) and~\ref{r5d-thm-transpose}).
+Multiplying checks \(X_0X_0^{-1}=I_4\) for
+\[
+X_0^{-1}=\frac12\begin{pmatrix}1&-1&1&-1\\1&1&-1&1\\-1&1&1&-1\\1&-1&1&1\end{pmatrix}
+\]
+(Theorem~\ref{r2-thm-invertible}). By Theorem~\ref{r13-thm-jacobian}(d) with \(n=4\), the Jacobian determinant is
+\((-1)^4(\det X_0)^{-8}=2^{-8}=\frac1{256}\).
+
+(c) The map is linear, with \(\operatorname{vec}(X')=(x_{11},x_{12},x_{21},x_{22})'\) for
+\(\operatorname{vec}X=(x_{11},x_{21},x_{12},x_{22})'\): \(\operatorname{vec}(X')=K_2\operatorname{vec}X\)
+(Definition~\ref{r13-def-commutation}), and \(\mathrm{d}(X')=(\mathrm{d}X)'\) gives
+\(\operatorname{vec}\mathrm{d}(X')=K_2\operatorname{vec}\mathrm{d}X\). So the Jacobian matrix is
+(Theorem~\ref{r13-thm-identification}(b))
+\[
+K_2=\begin{pmatrix}1&0&0&0\\0&0&1&0\\0&1&0&0\\0&0&0&1\end{pmatrix}
+\]
+obtained from \(I_4\) by interchanging rows \(2\) and \(3\), and \(\det K_2=-1\) (Theorem~\ref{r5d-thm-basic}(d)).
+\end{solution}
+
+\begin{exercise}\label{r9-ex-sphere}
+Let
+\[
+A=\begin{pmatrix}5&1&2&0\\1&5&0&2\\2&0&5&1\\0&2&1&5\end{pmatrix}
+\]
+and \(h_1=(1,1,1,1)'\), \(h_2=(1,-1,1,-1)'\), \(h_3=(1,1,-1,-1)'\), \(h_4=(1,-1,-1,1)'\).
+\begin{enumerate}
+\item Compute \(Ah_1,\dots,Ah_4\), and show that every eigenvector of \(A\) is a multiple of one of \(h_1,\dots,h_4\).
+\item Find all stationary points of \(f(x)=x'Ax\) on the unit sphere of \(\R^4\), and the maximum and the minimum of
+\(f\) on the sphere.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a)
+\begin{itemize}
+\item Row by row, \(Ah_1=(8,8,8,8)'=8h_1\), \(Ah_2=(6,-6,6,-6)'=6h_2\), \(Ah_3=(4,4,-4,-4)'=4h_3\) and
+\(Ah_4=(2,-2,-2,2)'=2h_4\).
+\item The \(h_j\) are nonzero and pairwise orthogonal, hence linearly independent
+(Proposition~\ref{r6-prop-orthogonal-list}(b)), and a basis of \(\R^4\) (Theorem~\ref{thm:r4-counting}(d)). For
+\(x=\sum_jc_jh_j\), \(Ax=8c_1h_1+6c_2h_2+4c_3h_3+2c_4h_4\), so \(Ax=\lambda x\) means
+\((8-\lambda)c_1=(6-\lambda)c_2=(4-\lambda)c_3=(2-\lambda)c_4=0\).
+\item If \(x\ne0\), some \(c_j\ne0\), so \(\lambda\in\{8,6,4,2\}\), and then the other three coefficients vanish: \(x\) is
+a multiple of one \(h_j\).
+\end{itemize}
+(b) Each \(\lVert h_j\rVert=2\). By Proposition~\ref{r13-prop-sphere} and (a), the stationary points are the unit
+eigenvectors \(\pm\frac12h_1\) (\(f=8\)), \(\pm\frac12h_2\) (\(f=6\)), \(\pm\frac12h_3\) (\(f=4\)) and \(\pm\frac12h_4\)
+(\(f=2\)). On the sphere \(f(x)=x'Ax/x'x\), so the maximum of \(f\) on the sphere is \(8\) and the minimum is \(2\)
+(Theorem~\ref{r9-thm-rayleigh}(a)).
+\end{solution}
+
+\begin{exercise}\label{r9-ex-logdet-max}
+Let
+\[
+S=\begin{pmatrix}2&1\\1&2\end{pmatrix}\otimes\begin{pmatrix}3&1\\1&3\end{pmatrix}
+=\begin{pmatrix}6&2&3&1\\2&6&1&3\\3&1&6&2\\1&3&2&6\end{pmatrix}
+\]
+and \(g(X)=\log\det X-\tr(SX)\) for PD \(X\in\R^{4\times4}\).
+\begin{enumerate}
+\item Maximize \(g(cI_4)\) over \(c>0\).
+\item Find the maximizer and the maximum of \(g\) over the PD \(X\in\R^{4\times4}\), and compare with (a).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+Let \(A=\left(\begin{smallmatrix}2&1\\1&2\end{smallmatrix}\right)\) and \(B=\left(\begin{smallmatrix}3&1\\1&3\end{smallmatrix}\right)\).
+Their leading principal minors are \(2,3\) and \(3,8\), so \(A\) and \(B\) are PD (Theorem~\ref{r8-thm-leading-minors}), and so
+is \(S=A\otimes B\) (Theorem~\ref{r13-thm-kron-eigen}(c)).
+
+(a) \(\tr S=24\), so \(h(c)=g(cI_4)=4\log c-24c\) on the open convex set \((0,\infty)\), with derivative \(4/c-24\) and second
+derivative \(-4/c^2<0\). By Theorem~\ref{r13-thm-extrema}(d) applied to \(-h\) (\(n=1\)), the stationary point \(c=\frac16\) is
+the strict global maximizer, and \(g(\frac16I_4)=-4\log6-4=-2\log36-4\).
+
+(b)
+\begin{itemize}
+\item The PD matrices form an open set, and we take the variables \(\operatorname{vech}X\), as in
+Example~\ref{r13-exm-covariance}. By Theorems~\ref{r13-thm-diff-rules} and~\ref{r13-thm-trace-det}(a),(d),
+\(\mathrm{d}g=\tr(X^{-1}\mathrm{d}X)-\tr(S\,\mathrm{d}X)=\tr\bigl((X^{-1}-S)\,\mathrm{d}X\bigr)\). At a stationary point this is \(0\)
+for every symmetric \(\mathrm{d}X\); as \(X^{-1}-S\) is symmetric, \(\mathrm{d}X=X^{-1}-S\) gives
+\(\tr\bigl((X^{-1}-S)'(X^{-1}-S)\bigr)=0\), so \(X^{-1}=S\) (Theorem~\ref{r1-thm-trace}(d)), as in
+Example~\ref{r13-exm-covariance}(a). So the only stationary point is \(X=S^{-1}\), which is PD
+(Proposition~\ref{r8-prop-pd-basic}(c)).
+\item It is the global maximizer. Let \(C=S^{1/2}XS^{1/2}\) (Theorem~\ref{r8-thm-sqrt}), PD (Theorem~\ref{r8-thm-congruence}(c)).
+Then \(\tr C=\tr(SX)\) (Theorem~\ref{r1-thm-trace}(b)) and \(\log\det C=\log\det S+\log\det X\)
+(Theorem~\ref{r5d-thm-product}(b)), so by Lemma~\ref{r14-lem-logdet}
+\[
+g(X)=\log\det C-\tr C-\log\det S\leqslant-4-\log\det S
+\]
+with equality only if \(C=I_4\), that is, \(X=S^{-1}\).
+\item By Corollary~\ref{r13-cor-kron}(b), with \(A^{-1}=\frac13\left(\begin{smallmatrix}2&-1\\-1&2\end{smallmatrix}\right)\) and
+\(B^{-1}=\frac18\left(\begin{smallmatrix}3&-1\\-1&3\end{smallmatrix}\right)\),
+\[
+S^{-1}=A^{-1}\otimes B^{-1}=\frac1{24}\begin{pmatrix}6&-2&-3&1\\-2&6&1&-3\\-3&1&6&-2\\1&-3&-2&6\end{pmatrix}
+\]
+and \(\det S=(\det A)^2(\det B)^2=9\cdot64=576\) (Theorem~\ref{r13-thm-kron-det}(a)). The maximum is
+\(-\log\det S-4=-\log576-4=-2\log24-4\), larger than the value \(-2\log36-4\) in (a).
+\end{itemize}
+\end{solution}
+
+\needspace{14\baselineskip}
+\subsection*{Problems}
+
+\begin{problem}[\citeat{abadir-magnus}{Exercise~10.13}]\label{r13-ex-kron-nonsingular}
+Let \(A\in\R^{m\times p}\) and \(B\in\R^{n\times q}\). If \(A\) and \(B\) are not square, \(A\otimes B\) may still be square. Show that \(A\otimes B\) is
+singular unless both \(A\) and \(B\) are square and invertible.
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item \(A\otimes B\in\R^{mn\times pq}\) is square when \(mn=pq\). By Theorem~\ref{r13-thm-kron-det}(b) and Theorem~\ref{thm:r4-rank-rules}(a),
+\(\rank(A\otimes B)=\rank A\cdot\rank B\leqslant\min\{m,p\}\min\{n,q\}\).
+\item If \(A\otimes B\) is invertible, its rank is \(mn=pq\) (Theorem~\ref{thm:r4-rank-rules}(d)). From \(mn\leqslant\min\{m,p\}\min\{n,q\}\) we get
+\(m\leqslant p\) and \(n\leqslant q\), and from \(pq\leqslant\min\{m,p\}\min\{n,q\}\) we get \(p\leqslant m\) and \(q\leqslant n\). So \(p=m\), \(q=n\): \(A\)
+and \(B\) are square.
+\item Then \(\rank A\cdot\rank B=mn\) with \(\rank A\leqslant m\) and \(\rank B\leqslant n\) forces \(\rank A=m\) and \(\rank B=n\): \(A\) and \(B\) are
+invertible.
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{abadir-magnus}{Exercise~10.14}]\label{r13-ex-kron-loewner}
+Let \(A,B\in\R^{n\times n}\) be PSD. Show that \(A\otimes A-B\otimes B\) is PSD if and only if \(A-B\) is PSD.
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item Let \(A-B\) be PSD. By Theorem~\ref{r13-thm-kron-rules}(b),
+\(A\otimes A-B\otimes B=A\otimes A-A\otimes B+A\otimes B-B\otimes B=A\otimes(A-B)+(A-B)\otimes B\). Both terms are PSD by
+Theorem~\ref{r13-thm-kron-eigen}(c), and a sum of PSD matrices is PSD (Proposition~\ref{r8-prop-pd-basic}(b)).
+\item Conversely, let \(A\otimes A-B\otimes B\) be PSD and \(x\in\R^n\). By the mixed product, \((x\otimes x)'(A\otimes A)(x\otimes x)=(x'Ax)(x'Ax)\), so
+\[
+0\leqslant(x\otimes x)'(A\otimes A-B\otimes B)(x\otimes x)=(x'Ax)^2-(x'Bx)^2=x'(A+B)x\cdot x'(A-B)x
+\]
+\item \(x'(A+B)x\geqslant0\). If it is \(>0\), the display gives \(x'(A-B)x\geqslant0\). If it is \(0\), then \(x'Ax=x'Bx=0\) (both are \(\geqslant0\)),
+and \(x'(A-B)x=0\). So \(x'(A-B)x\geqslant0\) for every \(x\): \(A-B\) is PSD.
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{prasolov}{Problem~27.1}]\label{r13-ex-pr-kron-vectors}
+Let \(a,c\in\R^m\) and \(b,d\in\R^n\) be nonzero vectors. Show that \(a\otimes b=c\otimes d\) if and only if
+\(a=\alpha c\) and \(d=\alpha b\) for some number \(\alpha\).
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item If \(a=\alpha c\) and \(d=\alpha b\), then
+\(a\otimes b=(\alpha c)\otimes b=\alpha(c\otimes b)=c\otimes(\alpha b)=c\otimes d\) (Theorem~\ref{r13-thm-kron-rules}(a)).
+\item Conversely, let \(a\otimes b=c\otimes d\). By Definition~\ref{r13-def-kronecker}, \(a\otimes b=(a_1b',\dots,a_mb')'\) and
+\(c\otimes d=(c_1d',\dots,c_md')'\); comparing the \(i\)th blocks of \(n\) entries, \(a_ib=c_id\) for \(i=1,\dots,m\).
+\item As \(a\ne0\), some \(a_k\ne0\). Then \(c_kd=a_kb\ne0\), as \(b\ne0\); so \(c_k\ne0\), and \(d=\alpha b\) with
+\(\alpha=a_k/c_k\).
+\item For every \(i\), \(a_ib=c_id=\alpha c_ib\), that is, \((a_i-\alpha c_i)b=0\). As \(b\) has a nonzero entry,
+\(a_i=\alpha c_i\). So \(a=\alpha c\).
+\end{itemize}
+As \(a\otimes b=\operatorname{vec}(ba')\) (Theorem~\ref{r13-thm-vec}(a)), this also says: for nonzero vectors, \(ba'=dc'\) if
+and only if \(a=\alpha c\) and \(d=\alpha b\) for some \(\alpha\).
+\end{solution}
+
+\begin{problem}[\citeat{abadir-magnus}{Exercise~10.21}]\label{r13-ex-vec-identity}
+Let \(n\geqslant1\), \(\alpha\in\R\), \(v=\operatorname{vec}I_n\), and let \(A\in\R^{n\times n}\) be PD. Consider the \(n^2\times n^2\) matrices
+\[
+B=I_n\otimes I_n-\alpha vv',\qquad C=A\otimes A-\alpha(\operatorname{vec}A)(\operatorname{vec}A)'
+\]
+Show that:
+\begin{enumerate}
+\item the eigenvalues of \(B\) are \(1-n\alpha\) (once) and \(1\) (\(n^2-1\) times);
+\item \(\det B=1-n\alpha\);
+\item \(B\) is PD if and only if \(\alpha<1/n\), and PSD if and only if \(\alpha\leqslant1/n\);
+\item the same holds for \(C\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a)
+\begin{itemize}
+\item \(v'v=n\), as \(v\) has \(n\) entries \(1\) and the others \(0\). \(vv'v=nv\), and \(vv'x=0\) for \(x\perp v\); an orthonormal basis of \(\R^{n^2}\)
+made of \(v/\sqrt n\) and \(n^2-1\) vectors orthogonal to \(v\) (Theorems~\ref{r6-thm-complement}(c) and~\ref{r6-thm-gram-schmidt}) consists of
+eigenvectors of the symmetric \(vv'\), so its eigenvalues are \(n\) (once) and \(0\) (\(n^2-1\) times) (Theorem~\ref{r8-thm-spectral}(c)).
+\item \(B=I_{n^2}-\alpha vv'\) (Corollary~\ref{r13-cor-kron}(a)), so its eigenvalues are \(1-\alpha n\) and \(1-\alpha\cdot0=1\)
+(Proposition~\ref{r7-prop-eig-poly}(c)).
+\end{itemize}
+(b) \(\det B\) is the product of the eigenvalues (Theorem~\ref{r7-thm-trace-det}): \(1-n\alpha\).
+
+(c) \(B\) is symmetric; it is PD (PSD) if and only if all eigenvalues are \(>0\) (\(\geqslant0\)) (Theorem~\ref{r8-thm-eigen-criterion}(a)), that is,
+\(1-n\alpha>0\) (\(\geqslant0\)).
+
+(d)
+\begin{itemize}
+\item Let \(R=A^{1/2}\otimes A^{1/2}\) (Theorem~\ref{r8-thm-sqrt}), symmetric and invertible (Corollary~\ref{r13-cor-kron}(b),(e)). Then
+\(R(I_n\otimes I_n)R=A^{1/2}A^{1/2}\otimes A^{1/2}A^{1/2}=A\otimes A\) (mixed product), and \(Rv=\operatorname{vec}(A^{1/2}I_nA^{1/2})=\operatorname{vec}A\)
+(Theorem~\ref{r13-thm-vec}(b)), so \(R(vv')R=(\operatorname{vec}A)(\operatorname{vec}A)'\). Hence \(C=RBR=R'BR\).
+\item By Theorem~\ref{r8-thm-congruence}(c), \(C\) is PD (PSD) if and only if \(B\) is; apply (c).
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{harville}{Ch.~16, Exercise~6}, \citeat{harville-solutions}{Ch.~16, Exercise~6}]\label{r13-ex-kron-projection}
+For a matrix \(A\) let \(P_A=A(A'A)^-A'\), the matrix of the orthogonal projection onto \(\mathcal C(A)\) (Theorem~\ref{r10-thm-ata}(b)). Let
+\(X=A\otimes B\), where \(A\in\R^{m\times n}\) and \(B\in\R^{p\times q}\). Show that \(P_X=P_A\otimes P_B\).
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item By Theorem~\ref{r13-thm-kron-rules}(e),(f), \(X'X=(A'\otimes B')(A\otimes B)=(A'A)\otimes(B'B)\), so \((A'A)^-\otimes(B'B)^-\) is a g-inverse of
+\(X'X\) (Corollary~\ref{r13-cor-kron}(d)).
+\item As \(P_X\) does not depend on the g-inverse (Theorem~\ref{r10-thm-ata}(b)), the mixed product gives
+\[
+P_X=(A\otimes B)\bigl((A'A)^-\otimes(B'B)^-\bigr)(A'\otimes B')=\bigl(A(A'A)^-A'\bigr)\otimes\bigl(B(B'B)^-B'\bigr)=P_A\otimes P_B
+\]
+\end{itemize}
+For instance, for the balanced one-way design \(X_1=I_g\otimes\one_m\), \(P_{X_1}=I_g\otimes\bar J_m\), as in Example~\ref{r13-exm-designs}(a).
+\end{solution}
+
+\begin{problem}[\citeat{abadir-magnus}{Exercise~11.14}]\label{r13-ex-schur-inequality}
+\begin{enumerate}
+\item Show that \(\frac12(I_{n^2}-K_n)\) is symmetric and idempotent.
+\item Show that \(\tr(A^2)\leqslant\tr(A'A)\) for every \(A\in\R^{n\times n}\), with equality if and only if \(A\) is symmetric (\textbf{Schur's inequality}).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) \(K_n\) is symmetric and \(K_n^2=K_n'K_n=I_{n^2}\) (Theorem~\ref{r13-thm-commutation}(b)), so \(N=\frac12(I-K_n)\) is symmetric and
+\(N^2=\frac14(I-2K_n+K_n^2)=\frac12(I-K_n)=N\).
+
+(b)
+\begin{itemize}
+\item By Theorem~\ref{r13-thm-vec}(d), \(\tr(A'A)=(\operatorname{vec}A)'\operatorname{vec}A\) and
+\(\tr(A^2)=\tr((A')'A)=(\operatorname{vec}A')'\operatorname{vec}A=(\operatorname{vec}A)'K_n'\operatorname{vec}A=(\operatorname{vec}A)'K_n\operatorname{vec}A\).
+\item So \(\tr(A'A)-\tr(A^2)=(\operatorname{vec}A)'(I-K_n)\operatorname{vec}A=2x'Nx\) with \(x=\operatorname{vec}A\), and \(x'Nx=x'N'Nx=\lVert Nx\rVert^2\geqslant0\).
+\item Equality holds if and only if \(Nx=0\), that is, \(K_n\operatorname{vec}A=\operatorname{vec}A\), that is, \(\operatorname{vec}A'=\operatorname{vec}A\), or \(A'=A\).
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{prasolov}{Problem~32.1}]\label{r13-ex-pr-transpose-map}
+Let \(m,n\geqslant1\) with \(mn>1\). Show that
+\begin{enumerate}
+\item there are no matrices \(A\), \(B\) with \(AXB=X'\) for every \(X\in\R^{m\times n}\);
+\item there are no matrices \(A\), \(B\) with \(AX'B=X\) for every \(X\in\R^{m\times n}\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a)
+\begin{itemize}
+\item Suppose \(AXB=X'\) for every \(X\in\R^{m\times n}\). As \(AXB\) is defined and has the size \(n\times m\) of \(X'\),
+\(A=(a_{ij})\in\R^{n\times m}\) and \(B=(b_{ij})\in\R^{n\times m}\).
+\item Let \(1\leqslant k\leqslant m\) and \(1\leqslant s\leqslant n\), and take \(X=E_{ks}=e_ke_s'\in\R^{m\times n}\)
+(Proposition~\ref{r1-prop-units}). Then \(AXB=(Ae_k)(e_s'B)=\col_k(A)\row_s(B)\) (Theorem~\ref{r1-thm-rules},
+Proposition~\ref{r1-prop-units}(a)), whose \((i,j)\) entry is \(a_{ik}b_{sj}\) (Theorem~\ref{r1-thm-views}(d)); and
+\(X'=e_se_k'=E_{sk}\in\R^{n\times m}\) (Theorem~\ref{r1-thm-transpose}), whose \((s,k)\) entry is \(1\) and whose other
+entries are \(0\) (Proposition~\ref{r1-prop-units}(b)). So, for \(1\leqslant i,s\leqslant n\) and \(1\leqslant j,k\leqslant m\),
+\[
+a_{ik}b_{sj}=1\quad\text{if }(i,j)=(s,k),\qquad a_{ik}b_{sj}=0\quad\text{if }(i,j)\ne(s,k)
+\]
+\item With \(i=s\) and \(j=k\): \(a_{sk}b_{sk}=1\) for all \(s\) and \(k\). So every entry of \(A\) and every entry of \(B\) is
+nonzero.
+\item As \(mn>1\), \(n\geqslant2\) or \(m\geqslant2\). If \(n\geqslant2\), then \(i=j=k=1\) and \(s=2\) give
+\(a_{11}b_{21}=0\) \(\contradiction\)
+If \(m\geqslant2\), then \(i=j=s=1\) and \(k=2\) give \(a_{12}b_{11}=0\) \(\contradiction\)
+\end{itemize}
+(b) If \(AX'B=X\) for every \(X\in\R^{m\times n}\), then transposing gives \(B'XA'=X'\) for every \(X\in\R^{m\times n}\)
+(Theorem~\ref{r1-thm-transpose}), which (a) excludes.
+
+By Theorem~\ref{r13-thm-vec}(b) and Definition~\ref{r13-def-commutation}, \(AXB=X'\) for every \(X\) means
+\((B'\otimes A)\operatorname{vec}X=K_{mn}\operatorname{vec}X\) for every \(X\), that is, \(B'\otimes A=K_{mn}\), as
+\(\operatorname{vec}X\) runs over \(\R^{mn}\) (Proposition~\ref{r1-prop-units}(d)). So (a) says that for \(mn>1\) the
+commutation matrix \(K_{mn}\) is not of the form \(C\otimes A\) with \(C\in\R^{m\times n}\) and \(A\in\R^{n\times m}\).
+\end{solution}
+
+\begin{problem}[\citeat{searle-khuri}{Exercise~9.1}]\label{r13-ex-jacobian-hessian}
+Show that the derivative of \(f(x)=(y_1,y_2)'\), where
+\(y_1=6x_1^2x_2+2x_1x_2+x_2^2\) and \(y_2=2x_1^3+x_1^2+2x_1x_2\), with respect to \(x=(x_1,x_2)'\) is the same as the Hessian matrix of
+\(y=2x_1^3x_2+x_1^2x_2+x_1x_2^2\).
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item Differentiating the entries,
+\[
+\mathrm Df(x)=\begin{pmatrix}12x_1x_2+2x_2&6x_1^2+2x_1+2x_2\\6x_1^2+2x_1+2x_2&2x_1\end{pmatrix}
+\]
+\item For \(y\), \(\partial y/\partial x_1=6x_1^2x_2+2x_1x_2+x_2^2\) and \(\partial y/\partial x_2=2x_1^3+x_1^2+2x_1x_2\), and the second partial derivatives
+are \(\partial^2y/\partial x_1^2=12x_1x_2+2x_2\), \(\partial^2y/\partial x_1\partial x_2=\partial^2y/\partial x_2\partial x_1=6x_1^2+2x_1+2x_2\),
+\(\partial^2y/\partial x_2^2=2x_1\). So \(\mathrm Hy(x)\) is the matrix above.
+\item The reason: \(y_1\) and \(y_2\) are the partial derivatives of \(y\), so \(f=(\mathrm Dy)'\) is the gradient of \(y\), and
+\(\mathrm Hy=\mathrm D((\mathrm Dy)')=\mathrm Df\) (Definition~\ref{r13-def-hessian}).
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{abadir-magnus}{Exercise~13.24(a)}]\label{r13-ex-residual-maker}
+Let \(X\in\R^{n\times k}\) have rank \(k\), and let \(M=I_n-X(X'X)^{-1}X'\) (the residual maker). Find the differential and the derivative of \(M\)
+as a function of \(X\).
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item Let \(F=X(X'X)^{-1}\in\R^{n\times k}\) and \(H=I_n-M=X(X'X)^{-1}X'\). By the product rule and
+\(\mathrm{d}(X'X)^{-1}=-(X'X)^{-1}\mathrm{d}(X'X)(X'X)^{-1}\) with \(\mathrm{d}(X'X)=(\mathrm{d}X)'X+X'\mathrm{d}X\)
+(Theorems~\ref{r13-thm-diff-rules} and~\ref{r13-thm-trace-det}(c)),
+\[
+\mathrm{d}M=-(\mathrm{d}X)F'+F(\mathrm{d}X)'H+H(\mathrm{d}X)F'-F(\mathrm{d}X)'
+\]
+\item The first and third terms give \(-(I_n-H)(\mathrm{d}X)F'=-M(\mathrm{d}X)F'\), the second and fourth \(-F(\mathrm{d}X)'(I_n-H)=-F(\mathrm{d}X)'M\):
+\(\mathrm{d}M=-M(\mathrm{d}X)(X'X)^{-1}X'-X(X'X)^{-1}(\mathrm{d}X)'M\).
+\item By Theorem~\ref{r13-thm-vec}(b), \(\operatorname{vec}\bigl(M(\mathrm{d}X)F'\bigr)=(F\otimes M)\operatorname{vec}\mathrm{d}X\)
+and \(\operatorname{vec}\bigl(F(\mathrm{d}X)'M\bigr)=(M\otimes F)\operatorname{vec}(\mathrm{d}X)'=(M\otimes F)K_{nk}\operatorname{vec}\mathrm{d}X\).
+\item By Theorem~\ref{r13-thm-commutation}(d), \((M\otimes F)K_{nk}=K_n(F\otimes M)\). Hence
+\(\operatorname{vec}\mathrm{d}M=-(I_{n^2}+K_n)(F\otimes M)\operatorname{vec}\mathrm{d}X\), and
+\[
+\mathrm DM(X)=-(I_{n^2}+K_n)\bigl(X(X'X)^{-1}\otimes M\bigr)
+\]
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{tu-mc}{Exercise~16}]\label{r13-ex-lagrangian-saddle}
+Show that optimizing a function subject to a constraint is not the same as optimizing its Lagrangian: maximize \(xy\) subject to
+\(x+y=2\), and examine the Lagrangian \(\psi(x,y)=xy-\lambda(x+y-2)\) at the solution.
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item On the line \(x+y=2\), \(xy=x(2-x)=1-(x-1)^2\leqslant1\), with equality only at \(x=1\): the constrained maximum is attained at
+\(x=y=1\).
+\item \(\mathrm{d}\psi=(y-\lambda)\,\mathrm{d}x+(x-\lambda)\,\mathrm{d}y\), so \(\mathrm D\psi=0\) and \(x+y=2\) give \(x=y=\lambda=1\): Lagrange's method finds
+the point \((1,1)\) with \(\lambda=1\).
+\item But \(\mathrm H\psi=\begin{pmatrix}0&1\\1&0\end{pmatrix}\), with the eigenvalues \(1\) and \(-1\) (eigenvectors \((1,1)'\), \((1,-1)'\)), is
+indefinite; by Theorem~\ref{r13-thm-extrema}(c), \(\psi\) has neither a maximum nor a minimum at \((1,1)\): it is a saddle point
+(\(\psi=1+st\) at \((1+s,1+t)\) for \(\lambda=1\), which is \(>1\) for \(s=t\ne0\) and \(<1\) for \(s=-t\ne0\)). So the solution of the
+constrained problem is not a maximum of the Lagrangian, and Theorem~\ref{r13-thm-extrema}(e) does not apply here, since
+\(\mathrm H\psi\) is not PSD.
+\end{itemize}
+\end{solution}
+
+\begin{problem}[\citeat{abadir-magnus}{Exercise~13.56}]\label{r13-ex-constrained-gls}
+Let \(X\in\R^{n\times k}\) have rank \(k\), \(y\in\R^n\), \(\Omega\in\R^{n\times n}\) PD, \(R\in\R^{k\times r}\) of rank \(r\), and \(c\in\R^r\). Minimize
+\((y-X\beta)'\Omega^{-1}(y-X\beta)\) subject to \(R'\beta=c\).
+\end{problem}
+\begin{solution}
+\begin{itemize}
+\item Take \(\psi(\beta)=\frac12(y-X\beta)'\Omega^{-1}(y-X\beta)-l'(R'\beta-c)\) with \(l\in\R^r\). Then
+\(\mathrm{d}\psi=-\bigl((y-X\beta)'\Omega^{-1}X+l'R'\bigr)\mathrm{d}\beta\), so the conditions are
+\(X'\Omega^{-1}X\beta-Rl=X'\Omega^{-1}y\) and \(R'\beta=c\).
+\item \(\Omega^{-1}\) is PD (Proposition~\ref{r8-prop-pd-basic}(c)), so \(W=X'\Omega^{-1}X\) is PD (Theorem~\ref{r8-thm-congruence}(b)), so is
+\(W^{-1}\) (the same proposition), and \(R'W^{-1}R\) is PD
+(Theorem~\ref{r8-thm-congruence}(b), \(\rank R=r\)), hence invertible. Let \(\hat\beta=W^{-1}X'\Omega^{-1}y\) (the unconstrained solution, the generalized least-squares estimator of Theorem~\ref{r12-thm-gls}).
+\item Multiplying the first condition by \(R'W^{-1}\) and using \(R'\beta=c\): \(c-R'W^{-1}Rl=R'\hat\beta\), so
+\(\tilde l=(R'W^{-1}R)^{-1}(c-R'\hat\beta)\), and then
+\[
+\tilde\beta=\hat\beta+W^{-1}R\tilde l=\hat\beta+W^{-1}R(R'W^{-1}R)^{-1}(c-R'\hat\beta)
+\]
+\item \(\mathrm H\psi=X'\Omega^{-1}X=W\) is PD at every \(\beta\), so \(\tilde\beta\) is the strict minimizer under the constraint
+(Theorem~\ref{r13-thm-extrema}(e)).
+\end{itemize}
+For \(\Omega=I_n\), \(W=X'X\) and \(\tilde\beta\) is the constrained least-squares estimate of Theorem~\ref{r12-thm-cls}, with
+\(K=R'\), \(m=c\) and \(G=(X'X)^{-1}\), found there without derivatives.
+\end{solution}
+
+\begin{problem}[\citeat{abadir-magnus}{Exercises~8.46, 12.34(a)}]\label{r9-pr-fischer}
+\begin{enumerate}
+\item Let
+\[
+M=\begin{pmatrix}A&B\\B'&D\end{pmatrix}
+\]
+be PD, with square blocks \(A\) and \(D\). Show that \(\det M\leqslant\det A\cdot\det D\) (\textbf{Fischer's inequality}),
+with equality if and only if \(B=0\).
+\item Let \(M\) be PD and partitioned into \(k\) row and column groups, with square diagonal blocks
+\(M_{11},\dots,M_{kk}\). Show that \(\det M\leqslant\det M_{11}\cdots\det M_{kk}\). For blocks of size \(1\) this is
+Hadamard's inequality (Theorem~\ref{r8-thm-hadamard}) for PD \(M\).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a)
+\begin{itemize}
+\item \(A\) and \(D\) are principal submatrices of \(M\), hence PD (Theorem~\ref{r8-thm-principal-sub}); in particular
+\(A\) is invertible and \(\det A>0\) (Theorem~\ref{r8-thm-eigen-criterion}(c)).
+\item By Theorem~\ref{r8-thm-schur-pd}, the Schur complement \(S=D-B'A^{-1}B\) is PD and \(\det M=\det A\cdot\det S\).
+\item \(A^{-1}\) is PD (Proposition~\ref{r8-prop-pd-basic}(c)), so \(B'A^{-1}B\) is PSD (Theorem~\ref{r8-thm-congruence}(a)).
+As \(D=S+B'A^{-1}B\) with \(S\) PD, Theorem~\ref{r8-thm-det-monotone} gives \(\det D\geqslant\det S\), with equality if and
+only if \(B'A^{-1}B=0\). Multiplying by \(\det A>0\): \(\det M=\det A\cdot\det S\leqslant\det A\cdot\det D\), with equality if
+and only if \(B'A^{-1}B=0\).
+\item If \(B=0\), then \(B'A^{-1}B=0\). Conversely, if \(B'A^{-1}B=0\), then \((Bx)'A^{-1}(Bx)=0\) for every \(x\), so \(Bx=0\)
+for every \(x\), as \(A^{-1}\) is PD; hence \(B=0\) (Proposition~\ref{r1-prop-units}(a)).
+\end{itemize}
+(b) Induction on \(k\); for \(k=1\) there is nothing to prove. For \(k\geqslant2\), let \(A\) be the leading block
+formed by the first \(k-1\) groups and \(D=M_{kk}\). \(A\) is PD (Theorem~\ref{r8-thm-principal-sub}), with the diagonal
+blocks \(M_{11},\dots,M_{k-1,k-1}\). By (a) and the induction hypothesis,
+\[
+\det M\leqslant\det A\cdot\det M_{kk}\leqslant\det M_{11}\cdots\det M_{k-1,k-1}\cdot\det M_{kk}
+\]
+\end{solution}
+
+\clearpage
 \def\runningtitle{Bibliography}
 \renewcommand{\refname}{Bibliography}
 \begin{thebibliography}{10}
@@ -33326,6 +35759,13 @@ Anthony~W. Knapp.
 \newblock Anthony W. Knapp, East Setauket, NY, digital second edition, 2016.
 \newblock Freely downloadable from the author,
   \url{https://www.math.stonybrook.edu/~aknapp/download.html}.
+
+\bibitem{magnus-neudecker}
+Jan~R. Magnus and Heinz Neudecker.
+\newblock {\em {Matrix Differential Calculus with Applications in Statistics
+  and Econometrics}}.
+\newblock Wiley Series in Probability and Statistics. John Wiley \& Sons,
+  Hoboken, NJ, third edition, 2019.
 
 \end{thebibliography}
 \end{document}
