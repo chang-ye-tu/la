@@ -1,0 +1,663 @@
+\def\handoutsay{false}\def\handoutfill{false}
+\documentclass[12pt]{article}
+\newcommand{\handoutrunning}{Lecture 11: Linear Models I}
+\providecommand{\handoutsay}{true}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[a4paper,margin=15mm,headheight=14pt,headsep=5mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,booktabs,needspace}
+\usepackage{pifont}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{fancyhdr}
+\usepackage{ifthen}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdfauthor={Chang-Ye Tu}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Linear Algebra}
+\fancyhead[R]{\small\handoutrunning}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt plus 1pt minus 1pt}
+\setlength{\emergencystretch}{1.5em}
+\usepackage{etoolbox}
+\newcommand{\handoutdisplayskips}{\setlength{\abovedisplayskip}{7pt plus 2pt minus 2pt}%
+  \setlength{\belowdisplayskip}{7pt plus 2pt minus 2pt}}
+\apptocmd{\normalsize}{\handoutdisplayskips}{}{\PackageWarning{handout}{could not patch normalsize}}
+\handoutdisplayskips
+\setlist[enumerate]{label=(\alph*),leftmargin=*,itemsep=2pt,topsep=3pt}
+\setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\iu}{\mathrm{i}}
+\newcommand{\contradiction}{\mathord{\text{\large\ding{56}}}}
+\newcommand{\one}{\mathbf 1}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\col}{col}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator\prb{\mathsf{P}}
+\DeclareMathOperator\expc{\mathsf{E}}
+\DeclareMathOperator\var{var}
+\DeclareMathOperator\cov{cov}
+\DeclareMathOperator\cor{cor}
+\DeclareMathOperator\argmin{argmin}
+\DeclareMathOperator\argmax{argmax}
+\DeclareMathOperator{\Span}{span}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{fact}{Fact}
+\renewcommand{\thefact}{F\arabic{fact}}
+\AddToHook{cmd/subsection/before}{\par\Needspace{9\baselineskip}}
+\AddToHook{env/theorem/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/proposition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/lemma/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/definition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/example/before}{\par\Needspace{4\baselineskip}}
+\definecolor{saybg}{gray}{0.86}
+\NewDocumentEnvironment{say}{+b}
+  {\ifthenelse{\equal{\handoutsay}{true}}{\par\Needspace{2\baselineskip}\noindent\colorbox{saybg}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}%
+   {\small\sffamily\ding{43}\enspace\textbf{Say.}\enspace#1}}\par}{}}
+  {}
+\providecommand{\handoutfill}{false}
+\newsavebox{\boardbox}
+\newlength{\boardht}
+\definecolor{boardrule}{gray}{0.55}
+\makeatletter
+\newcommand{\boardstart}{\par\if@inlabel\leavevmode\par\fi}
+\makeatother
+\NewDocumentEnvironment{board}{o +b}
+  {\boardstart\IfValueT{#1}{\noindent#1\par\nopagebreak}%
+   \noindent\begin{lrbox}{\boardbox}\begin{minipage}{\linewidth}#2\end{minipage}\end{lrbox}%
+   \setlength{\boardht}{\dimexpr\ht\boardbox+\dp\boardbox\relax}%
+   \ifthenelse{\equal{\handoutfill}{true}}%
+     {\setlength{\boardht}{1.4\boardht}%
+      {\setlength{\fboxsep}{0pt}\setlength{\fboxrule}{0.4pt}\color{boardrule}%
+       \framebox[\dimexpr\linewidth-2\fboxrule\relax]{\rule{0pt}{\boardht}}}}%
+     {\ifthenelse{\equal{\handoutsay}{true}}%
+        {\llap{\color{boardrule}\rule[-\dp\boardbox]{1.5pt}{\boardht}\hspace{4pt}}}{}%
+      \usebox{\boardbox}}%
+   \par}
+  {}
+\newcommand{\blank}[1]{\ifthenelse{\equal{\handoutfill}{true}}{\underline{\phantom{#1}}}{#1}}
+\newcommand{\lec}[1]{Lecture~#1}
+\newcommand{\handouttitle}[2]{%
+  \begin{center}
+  {\LARGE\sffamily\bfseries #2\par}\vspace{3pt}
+  {\sffamily Linear Algebra \textperiodcentered\ \lec{#1}\par}
+  \ifthenelse{\equal{\handoutsay}{true}}{\vspace{3pt}{\small\sffamily\colorbox{saybg}{\ding{43}\enspace\textbf{Say.}}\enspace
+    teacher's copy: the shaded boxes are not in the students' copy.\par}}{}
+  \ifthenelse{\equal{\handoutfill}{true}}{\vspace{3pt}{\small\sffamily Fill-in copy: complete the framed spaces in
+    class.\par}}{}
+  \end{center}}
+
+\hypersetup{pdftitle={Linear Algebra, Lecture 11: Linear Models I}}
+\newcommand{\boardtop}{\vspace*{-\abovedisplayskip}}
+\DeclareMathOperator{\row}{row}
+\begin{document}
+\handouttitle{11}{Linear Models I}
+
+\textbf{Last time} (\lec{10}): \(z\sim N_n(\mu,\Sigma)\Rightarrow Az+b\sim N_m(A\mu+b,A\Sigma A')\) (Theorem~3);
+\(z\sim N_n(\mu,\sigma^2I_n)\), \(A'=A=A^2\), \(\rank A=r\geqslant1\), \(A\mu=0\) \(\Rightarrow\)
+\(z'Az/\sigma^2\sim\chi^2_r\) (Theorem~15). This lecture uses \lec{8} (projections) and \lec{9} (\(\expc\), \(\var\)).
+F1--F9: Chapters 1--6 of the textbook. \(e\) is the vector of residuals; unit vectors are written as columns of \(I\).
+
+\subsection*{Facts}
+
+\begin{enumerate}[label=\textbf{F\arabic*.},ref=F\arabic*,leftmargin=*,itemsep=0pt,parsep=0pt,topsep=2pt]
+\item\label{f-rules} \((AB)C=A(BC)\), \(A(B+C)=AB+AC\), \((A+B)C=AC+BC\), \(c(AB)=(cA)B=A(cB)\), \(I_mA=A=AI_n\)
+(\(A\in\R^{m\times n}\)); \((A+B)'=A'+B'\), \((cA)'=cA'\), \((AB)'=B'A'\), \((A')'=A\); \(x'y=y'x\); \(A\) is
+\textbf{symmetric} if \(A'=A\).
+\item\label{f-views} \((AB)_{ij}=\sum_ra_{ir}b_{rj}\). For \(A=[a_1\ \cdots\ a_p]\): \(Ax=x_1a_1+\dots+x_pa_p\),
+\(A\col_j(I_p)=a_j\), \(\col_j(AB)=A\col_j(B)\), \(\row_i(AB)=\row_i(A)B\), \(AB=a_1b_1'+\dots+a_pb_p'\) (\(b_j'\) =
+row \(j\) of \(B\)); if \(Ax=Bx\) for all \(x\), then \(A=B\);
+\(\diag(\alpha_1,\dots,\alpha_n)\diag(\beta_1,\dots,\beta_n)=\diag(\alpha_1\beta_1,\dots,\alpha_n\beta_n)\); block
+matrices multiply, and are transposed, block by block (when the blocks fit).
+\item\label{f-inverse} \(A\in\R^{n\times n}\) is invertible \(\iff\) \(\rank A=n\); \(BA=I\) \(\Rightarrow\)
+\(B=A^{-1}\); \((A')^{-1}=(A^{-1})'\), so the inverse of an invertible symmetric matrix is symmetric.
+\item\label{f-rank} For \(A\in\R^{m\times n}\): \(\mathcal C(A)=\{Ax:x\in\R^n\}\) and
+\(\mathcal N(A)=\{x:Ax=0\}\) are subspaces; \(\rank A=\dim\mathcal C(A)=\rank A'\leqslant\min\{m,n\}\);
+\(\dim\mathcal N(A)=n-\rank A\). \(A\) has \textbf{full column rank} (\(\rank A=n\)) \(\iff\) its columns are
+independent \(\iff\) \(\mathcal N(A)=\{0\}\); \textbf{full row rank} (\(\rank A=m\)) \(\iff\) \(\mathcal C(A)=\R^m\).
+\(\mathcal C(AB)\subseteq\mathcal C(A)\), \(\rank(AB)\leqslant\rank A\); if \(A\) has full column rank,
+\(\rank(AB)=\rank B\) and \(\mathcal N(AB)=\mathcal N(B)\). For subspaces \(W_1\subseteq W_2\), \(\dim W_1=\dim W_2\)
+\(\Rightarrow\) \(W_1=W_2\); \(d\) independent vectors of a \(d\)-dimensional subspace form a basis of it; the coordinates in
+a basis are unique.
+\item\label{f-solve} \(Ax=b\) has a solution \(\iff\) \(b\in\mathcal C(A)\); if \(x_p\) is a solution, the solutions are
+the vectors \(x_p+z\), \(z\in\mathcal N(A)\).
+\item\label{f-ata} \(\mathcal N(A'A)=\mathcal N(A)\), \(\rank(A'A)=\rank A\), \(\mathcal C(A'A)=\mathcal C(A')\).
+\item\label{f-trace} \(\tr A=\sum_ia_{ii}\); \(\tr(A+B)=\tr A+\tr B\), \(\tr(cA)=c\tr A\), \(\tr(AB)=\tr(BA)\)
+(\(A\in\R^{m\times n}\), \(B\in\R^{n\times m}\)); \(\tr(A'A)=\sum_i\sum_ja_{ij}^2\), so \(\tr(A'A)=0\Rightarrow A=0\).
+\item\label{f-dot} \(\lVert x\rVert^2=x'x=x_1^2+\dots+x_n^2>0\) if \(x\ne0\); if \(x\perp y\) (\(x'y=0\)), then
+\(\lVert x+y\rVert^2=\lVert x\rVert^2+\lVert y\rVert^2\).
+\item\label{f-centering} \(\one=\one_n=(1,\dots,1)'\in\R^n\), \(\bar y=\frac1n\one'y\), \(\bar J_n=\frac1n\one\one'\),
+\(C_n=I_n-\bar J_n\): \(C_n'=C_n=C_n^2\), \(C_n\one=0\), \(C_ny=y-\bar y\one\),
+\(\lVert C_ny\rVert^2=y'C_ny=\sum_i(y_i-\bar y)^2\).
+\end{enumerate}
+
+\textbf{From \lec{8} and \lec{9}} (restated; \(W\) a subspace of \(\R^n\), \(y\in\R^n\)).
+\begin{itemize}[itemsep=0pt,parsep=0pt,topsep=2pt]
+\item \lec{8}, Definition~1: \(y\perp W\) if \(y'w=0\) for all \(w\in W\); \(W^\perp=\{y:y\perp W\}\); \(\hat w\in W\)
+with \(y-\hat w\perp W\) is an \textbf{orthogonal projection} of \(y\) onto \(W\).
+\item \lec{8}, Theorem~2: (a) if \(W=\Span\{w_1,\dots,w_k\}\) and \(A=[w_1\ \cdots\ w_k]\): \(y\perp W\iff A'y=0\).
+(b) \(y\) has at most one orthogonal projection \(\hat w\) onto \(W\). (c) If \(\hat w\) is the orthogonal
+projection: \(\lVert y-w\rVert^2=\lVert y-\hat w\rVert^2+\lVert\hat w-w\rVert^2\) (\(w\in W\)).
+\item \lec{8}, Theorem~3: if \(A\in\R^{n\times p}\), \(\rank A=p\): \(A'A\) is invertible; for
+\(P=A(A'A)^{-1}A'\), \(Py\) is the orthogonal projection of \(y\) onto \(\mathcal C(A)\), \(P'=P=P^2\), \(PA=A\).
+\item \lec{8}, Theorem~11: if \(A\in\R^{n\times n}\) is symmetric and \(A^2=A\), then \(\rank A=\tr A\).
+Definition~13, Theorem~15(b): a symmetric \(A\) is \textbf{positive semidefinite} (PSD) if \(x'Ax\geqslant0\) for all
+\(x\); \(A'A\) is PSD for every \(A\in\R^{n\times p}\).
+\item \lec{9}, Definitions~1, 7: for a random vector \(z\), \(\expc(z)=(\expc(z_i))\),
+\(\var(z)=\expc\bigl((z-\mu)(z-\mu)'\bigr)\) (\(\mu=\expc(z)\)). If observations are
+modeled as a random vector \(y\) whose distribution depends on unknown parameters, an \textbf{estimator} of a parameter
+\(\theta\) is a random variable \(T=g(y)\), \(g\) involving no unknown parameter; \(T\) is \textbf{unbiased} if
+\(\expc(T)=\theta\) for all values of the parameters.
+\item \lec{9}, Theorem~3(b), Theorem~6: for \(\expc(z)=\mu\), \(\var(z)=\Sigma\) and constant \(A\), \(b\):
+\(\expc(Az+b)=A\mu+b\), \(\var(Az+b)=A\Sigma A'\); \(\expc(z'Az)=\tr(A\Sigma)+\mu'A\mu\) (\(A\in\R^{n\times n}\)).
+\end{itemize}
+
+\subsection*{1. The linear model and least squares}
+
+\begin{definition}\label{h-def-model}
+In the \textbf{linear model} \(y=X\beta+\varepsilon\), the \textbf{design matrix} \(X\in\R^{n\times p}\) is a known
+constant matrix, \(\beta\in\R^p\) is an unknown constant vector of \textbf{parameters}, the \textbf{errors}
+\(\varepsilon\in\R^n\) form a random vector, and the \textbf{response} \(y\in\R^n\) is observed; \(x_i'\) is row \(i\) of
+\(X\). In \textbf{multiple regression}, \(p=k+1\), \(\beta=(\beta_0,\dots,\beta_k)'\) and
+\(x_i'=(1,x_{i1},\dots,x_{ik})\), with \(x_{ij}\) the value of the \(j\)th explanatory variable on observation \(i\): the
+first column \(\one_n\) of \(X\) is the column of the \textbf{intercept} \(\beta_0\). The assumptions:
+(A1) \(\expc(y)=X\beta\); (A2) \(\expc(\varepsilon)=0\); (A3) \(\var(\varepsilon)=\sigma^2I_n\) (\(\sigma^2>0\)); (A4)
+\(\rank X=p\). Results hold for \(X\) of any rank unless (A4) is assumed. A \textbf{least-squares estimate} of \(\beta\) is a
+\(\hat\beta\in\R^p\) that minimizes \(S(\beta)=\lVert y-X\beta\rVert^2=\sum_i(y_i-x_i'\beta)^2\); the \(p\) equations
+\(X'X\beta=X'y\) are the \textbf{normal equations}.
+\end{definition}
+By \lec{9}, Theorem~3(b) (\(A=I_n\), \(b=X\beta\)): \(\expc(y)=X\beta+\expc(\varepsilon)\), \(\var(y)=\var(\varepsilon)\). So
+(A1) \(\iff\) (A2), and (A3) gives \(\var(y)=\sigma^2I_n\). (A4) needs \(n\geqslant p\) (\ref{f-rank}). Estimators are as in
+\lec{9}, Definition~7.
+
+\Needspace{14\baselineskip}
+\begin{theorem}\label{h-thm-normal}
+Let \(X\in\R^{n\times p}\) and \(y\in\R^n\).
+\begin{enumerate}
+\item The normal equations \(X'X\beta=X'y\) have a solution.
+\item \(X'X\) is invertible \(\iff\) \(\rank X=p\). Then \(\hat\beta=(X'X)^{-1}X'y\) is the only solution.
+\item If \(\hat\beta\) is a solution, the solutions are the vectors \(\hat\beta+z\), \(z\in\mathcal N(X)\); all give the same
+\(X\hat\beta\). If \(\rank X<p\), there are infinitely many solutions.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a):]
+\[
+X'y\in\mathcal C(X')=\mathcal C(X'X)\implies X'X\beta=X'y\text{ has a solution}\qquad(\text{\ref{f-rank}, \ref{f-ata};
+\ref{f-solve}})
+\]
+\end{board}
+\begin{board}[(b) \(X'X\in\R^{p\times p}\):]
+\boardtop
+\begin{align*}
+X'X\text{ invertible}&\iff\rank(X'X)=p\iff\rank X=p&&\text{(\ref{f-inverse}; \ref{f-ata})}\\
+X'X\beta=X'y&\implies\beta=(X'X)^{-1}X'X\beta=(X'X)^{-1}X'y,\text{ and this }\beta\text{ is a solution}
+\end{align*}
+\end{board}
+\begin{board}[(c):]
+\boardtop
+\begin{align*}
+\text{solutions }\hat\beta+z,\ z&\in\mathcal N(X'X)=\mathcal N(X)&&\text{(\ref{f-solve}; \ref{f-ata})}\\
+X(\hat\beta+z)&=X\hat\beta+Xz=X\hat\beta\\
+\rank X<p&\implies\dim\mathcal N(X)\geqslant1:\ \text{some }z\ne0\text{ in }\mathcal N(X)&&\text{(\ref{f-rank})}\\
+\hat\beta+t_1z&=\hat\beta+t_2z\implies t_1=t_2:\ \text{the solutions }\hat\beta+tz\ (t\in\R)\text{ are distinct}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{16\baselineskip}
+\begin{theorem}\label{h-thm-ls}
+Let \(X\in\R^{n\times p}\) and \(y\in\R^n\).
+\begin{enumerate}
+\item \(\hat\beta\) is a least-squares estimate \(\iff\) \(X'X\hat\beta=X'y\). For every solution \(\hat\beta\) of the normal
+equations: \(S(\beta)=S(\hat\beta)+\lVert X(\hat\beta-\beta)\rVert^2\) (\(\beta\in\R^p\)).
+\item All least-squares estimates give the same vector of \textbf{fitted values} \(\hat y=X\hat\beta\), the orthogonal
+projection of \(y\) onto \(\mathcal C(X)\); the vector of \textbf{residuals} \(e=y-\hat y\) lies in \(\mathcal C(X)^\perp\).
+\item If \(\rank X=p\): \(\hat\beta=(X'X)^{-1}X'y\) is the only least-squares estimate, \(\hat y=Hy\) and \(e=My\), with the
+\textbf{hat matrix} \(H=X(X'X)^{-1}X'\) (\lec{8}, Theorem~3, \(A=X\)) and the \textbf{residual maker} \(M=I_n-H\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) \(\Leftarrow\): \(X'X\hat\beta=X'y\); \(X\beta\in\mathcal C(X)\) for \(\beta\in\R^p\).
+\(\Rightarrow\): \(\beta^*\) a least-squares estimate, \(\hat\beta\) a solution (Theorem~\ref{h-thm-normal}(a)):]
+\boardtop
+\begin{align*}
+X'(y-X\hat\beta)&=0\implies y-X\hat\beta\perp\mathcal C(X)&&\text{(\lec{8}, Theorem~2(a))}\\
+&\implies X\hat\beta\text{ is the projection of }y\text{ onto }\mathcal C(X)&&\text{(\lec{8}, Definition~1)}\\
+\lVert y-X\beta\rVert^2&=\lVert y-X\hat\beta\rVert^2+\lVert X\hat\beta-X\beta\rVert^2\implies S(\beta)\geqslant S(\hat\beta)
+&&\text{(\lec{8}, Theorem~2(c))}\\
+\lVert X(\hat\beta-\beta^*)\rVert^2&=S(\beta^*)-S(\hat\beta)\leqslant0\implies X\beta^*=X\hat\beta&&\text{(\(\Rightarrow\); \(\beta^*\) minimizes \(S\); \ref{f-dot})}\\
+X'X\beta^*&=X'X\hat\beta=X'y
+\end{align*}
+\end{board}
+(b) By the last two lines of (a), every least-squares estimate \(\beta^*\) gives \(X\beta^*=X\hat\beta\), the projection
+of the first two lines; and \(e=y-X\hat\beta\perp\mathcal C(X)\).
+
+(c) By Theorem~\ref{h-thm-normal}(b) and (a), \((X'X)^{-1}X'y\) is the only least-squares estimate; then
+\(\hat y=X(X'X)^{-1}X'y=Hy\) and \(e=y-Hy=My\).
+\end{proof}
+
+\begin{proposition}\label{h-prop-residuals}
+Let \(\hat\beta\) be a least-squares estimate, \(\hat y=X\hat\beta\), \(e=y-\hat y\).
+(a) \(X'e=0\). (b) If \(\one_n\in\mathcal C(X)\): \(\one'e=0\), so \(\hat y\) and \(y\) have the same mean \(\bar y\).
+(c) \(\hat y'e=0\).
+\end{proposition}
+\begin{proof}
+(a) \(X'(y-X\hat\beta)=0\) is the normal equations (Theorem~\ref{h-thm-ls}(a)).
+
+(b) \(\one=Xc\): \(\one'e=c'X'e=0\) by (a), and \(\one'\hat y=\one'y-\one'e=\one'y\).
+
+(c) \(\hat y'e=\hat\beta'X'e=0\) by (a).
+\end{proof}
+
+\Needspace{16\baselineskip}
+\begin{example}\label{h-exm-ls}
+Let \(X=[\one_4\ (2,0,2,0)'\ (3,3,1,1)']\in\R^{4\times3}\) (\(k=2\)) and \(y=(9,3,5,3)'\): the \(A\) and \(y\) of
+\lec{8}, Example~6, where (with \(H=P\))
+\[
+X'X=\begin{pmatrix}4&4&8\\4&8&8\\8&8&20\end{pmatrix},\quad
+(X'X)^{-1}=\frac14\begin{pmatrix}6&-1&-2\\-1&1&0\\-2&0&1\end{pmatrix},\quad
+(X'X)^{-1}X'=\frac14\begin{pmatrix}-2&0&2&4\\1&-1&1&-1\\1&1&-1&-1\end{pmatrix}
+\]
+and \(Hy=(8,4,6,2)'\), \((I-H)y=(1,-1,-1,1)'\). Find \(\hat\beta\), \(\hat y\), \(e\), \(S(\hat\beta)\) and
+\(S((1,2,2)')\).
+\end{example}
+\textit{Solution.}
+\begin{board}[\(X'X\) is invertible, so \(\rank X=3=p\) (Theorem~\ref{h-thm-normal}(b)): (A4) holds; \(X'y\) has the
+entries \(\col_j(X)'y\) (\ref{f-views}):]
+\boardtop
+\begin{align*}
+X'y&=\begin{pmatrix}9+3+5+3\\18+10\\27+9+5+3\end{pmatrix}=\begin{pmatrix}20\\28\\44\end{pmatrix},\qquad
+\hat\beta=(X'X)^{-1}X'y=\frac14\begin{pmatrix}-18+0+10+12\\9-3+5-3\\9+3-5-3\end{pmatrix}=\begin{pmatrix}1\\2\\1\end{pmatrix}\\
+X'X\hat\beta&=(4+8+8,\ 4+16+8,\ 8+16+20)'=(20,28,44)'=X'y
+\end{align*}
+\end{board}
+\begin{board}[Theorem~\ref{h-thm-ls}; Proposition~\ref{h-prop-residuals} for the checks; the identity of
+Theorem~\ref{h-thm-ls}(a) for \(S((1,2,2)')\):]
+\boardtop
+\begin{align*}
+\hat y&=X\hat\beta=(1+4+3,\ 1+0+3,\ 1+4+1,\ 1+0+1)'=(8,4,6,2)'=Hy\\
+e&=y-\hat y=(1,-1,-1,1)'\\
+S(\hat\beta)&=e'e=1+1+1+1=4>0:\ X\beta=y\text{ has no solution}\\
+X'e&=(1-1-1+1,\ 2-2,\ 3-3-1+1)'=0,\qquad\one'e=0,\qquad\hat y'e=8-4-6+2=0\\
+S((1,2,2)')&=4+\lVert X(0,0,-1)'\rVert^2=4+(9+9+1+1)=24
+\end{align*}
+\end{board}
+
+\subsection*{2. Rank-deficient designs and generalized inverses}
+
+\Needspace{18\baselineskip}
+\begin{theorem}\label{h-thm-oneway}
+Let \(n_1,\dots,n_g\geqslant1\), \(n=n_1+\dots+n_g\); \(n\) observations in \(g\) groups (first the \(n_1\) of group
+\(1\), then the \(n_2\) of group \(2\), and so on); the \textbf{indicator} \(d_l\in\R^n\) of group \(l\) has entry \(1\) in
+the rows of group \(l\) and \(0\) elsewhere. The model \(y_i=\mu+\alpha_l+\varepsilon_i\) (observation \(i\) in group
+\(l\)) is \(y=X\beta+\varepsilon\), \(\beta=(\mu,\alpha_1,\dots,\alpha_g)'\), \(X=[\one_n\ d_1\ \cdots\ d_g]\in\R^{n\times(g+1)}\).
+Let \(X_1=[d_1\ \cdots\ d_g]\), \(X_2=[\one_n\ d_2\ \cdots\ d_g]\in\R^{n\times g}\).
+\begin{enumerate}
+\item \(X_1\) has full column rank, and \(X=X_1S\) with \(S=[\one_g\ I_g]\in\R^{g\times(g+1)}\) of full row rank.
+\item \(\rank X=g\) and \(\mathcal N(X)=\Span\{(-1,1,\dots,1)'\}\).
+\item \(X_1=XT_1\), \(X_2=XT_2\), with \(T_1,T_2\in\R^{(g+1)\times g}\) the matrix \(I_{g+1}\) without its first, resp.\
+second, column. \(X_1\), \(X_2\) have full column rank \(g\), and \(\mathcal C(X_1)=\mathcal C(X_2)=\mathcal C(X)\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) No observation lies in two groups, each lies in one:]
+\boardtop
+\begin{align*}
+d_l'd_m&=0\ (l\ne m),\qquad d_l'd_l=n_l\\
+c_1d_1+\dots+c_gd_g&=0\implies c_mn_m=0\ (\text{multiply by }d_m')\implies c_m=0:\ X_1\text{ full column rank}
+&&\text{(\ref{f-rank})}\\
+d_1+\dots+d_g&=\one_n\implies X_1\one_g=\one_n\implies X_1S=[X_1\one_g\ \ X_1I_g]=X&&\text{(\ref{f-views})}\\
+\mathcal C(S)&\supseteq\mathcal C(I_g)=\R^g:\ S\text{ full row rank}&&\text{(\ref{f-rank})}
+\end{align*}
+\end{board}
+\begin{board}[(b) \(X_1\) has full column rank ((a)):]
+\boardtop
+\begin{align*}
+\rank X&=\rank(X_1S)=\rank S=g,\qquad\mathcal N(X)=\mathcal N(X_1S)=\mathcal N(S)&&\text{(\ref{f-rank}; (a))}\\
+S(c_0,c_1,\dots,c_g)'&=c_0\one_g+(c_1,\dots,c_g)'=0\iff c_l=-c_0\ (l=1,\dots,g)\\
+&\iff(c_0,c_1,\dots,c_g)'=-c_0(-1,1,\dots,1)'
+\end{align*}
+\end{board}
+(c)
+\begin{itemize}[itemsep=0pt,topsep=1pt]
+\item \(X\col_j(T_1)\) is a column of \(X\) other than the first (\ref{f-views}), so \(XT_1=X_1\); likewise \(XT_2=X_2\).
+\item \(\one_n=d_1+\dots+d_g\) and \(d_1=\one_n-d_2-\dots-d_g\): each column of \(X_2\) lies in \(\mathcal C(X_1)\) and each
+column of \(X_1\) in \(\mathcal C(X_2)\); so \(\mathcal C(X_2)=\mathcal C(X_1)\), of dimension \(g\) by (a), and the \(g\)
+columns of \(X_2\) are independent (\ref{f-rank}).
+\item \(\mathcal C(X_1)=\mathcal C(XT_1)\subseteq\mathcal C(X)\), both of dimension \(g\) ((b)): equal (\ref{f-rank}).
+\end{itemize}
+\end{proof}
+So the intercept together with all \(g\) indicators (the \textbf{dummy variable trap}) makes \(X'X\) singular
+(Theorem~\ref{h-thm-normal}(b)); dropping the intercept or one indicator (\(d_1\) in Theorem~\ref{h-thm-oneway}(c); any \(d_l\) after renumbering the
+groups) gives a design of full column rank with the
+same column space, hence the same fitted values (Theorem~\ref{h-thm-ls}(b)).
+
+\Needspace{20\baselineskip}
+\begin{example}\label{h-exm-oneway}
+Six plants of three types weigh \(5,7,6\) (type \(1\)), \(3,5\) (type \(2\)) and \(2\) (type \(3\)): \(y=(5,7,6,3,5,2)'\),
+the model of Theorem~\ref{h-thm-oneway} with \(g=3\), \((n_1,n_2,n_3)=(3,2,1)\), and (entries
+\(\col_j(X)'\col_l(X)\), \(\col_j(X)'y\), \ref{f-views})
+\[
+X=\begin{pmatrix}1&1&0&0\\1&1&0&0\\1&1&0&0\\1&0&1&0\\1&0&1&0\\1&0&0&1\end{pmatrix},\qquad
+X'X=\begin{pmatrix}6&3&2&1\\3&3&0&0\\2&0&2&0\\1&0&0&1\end{pmatrix},\qquad
+X'y=\begin{pmatrix}28\\18\\8\\2\end{pmatrix}
+\]
+Find all least-squares estimates and \(\hat y\), and the estimates with \(X_1\) and with \(X_2\).
+\end{example}
+\textit{Solution.}
+\begin{board}[\(\rank X=3\), \(\mathcal N(X)=\Span\{(-1,1,1,1)'\}\) (Theorem~\ref{h-thm-oneway}(b)): \(X'X\) is singular
+(Theorem~\ref{h-thm-normal}(b)); all solutions, that is, all least-squares estimates, by Theorems~\ref{h-thm-normal}(c)
+and~\ref{h-thm-ls}(a):]
+\boardtop
+\begin{align*}
+X'X(0,6,4,2)'&=(18+8+2,\ 18,\ 8,\ 2)'=(28,18,8,2)'=X'y\\
+\hat\beta&=(0,6,4,2)'+t(-1,1,1,1)'=(-t,\ 6+t,\ 4+t,\ 2+t)'\quad(t\in\R)\\
+X\hat\beta&=(6,6,6,4,4,2)'\ \text{for all }t:\ \text{the group means }18/3,\ 8/2,\ 2/1\\
+\hat\alpha_1-\hat\alpha_2&=(6+t)-(4+t)=2\ \text{for all }t;\qquad\hat\alpha_1=6+t\text{ changes with }t
+\end{align*}
+\end{board}
+\begin{board}[\(X_1\), \(X_2\) have full column rank and \(\mathcal C(X_1)=\mathcal C(X_2)=\mathcal C(X)\)
+(Theorem~\ref{h-thm-oneway}(c)): one solution each (Theorem~\ref{h-thm-normal}(b)), the same \(\hat y\)
+(Theorem~\ref{h-thm-ls}(b)):]
+\boardtop
+\begin{align*}
+X_1'X_1&=\diag(3,2,1),\qquad X_1'y=(18,8,2)',\qquad\hat\beta=(X_1'X_1)^{-1}X_1'y=(6,4,2)'\\
+X_2'X_2&=\begin{pmatrix}6&2&1\\2&2&0\\1&0&1\end{pmatrix},\qquad X_2'y=\begin{pmatrix}28\\8\\2\end{pmatrix},\qquad
+X_2'X_2\begin{pmatrix}6\\-2\\-4\end{pmatrix}=\begin{pmatrix}36-4-4\\12-4\\6-4\end{pmatrix}=X_2'y\\
+\hat y&=6d_1+4d_2+2d_3=6\,\one_6-2d_2-4d_3=(6,6,6,4,4,2)'
+\end{align*}
+\end{board}
+\((6,4,2)'\) and \((6,-2,-4)'\) are the coordinates of \(\hat y\) in the bases \(d_1,d_2,d_3\) and \(\one_6,d_2,d_3\) of
+\(\mathcal C(X)\) (\ref{f-rank}). In this \textbf{baseline coding}, the coefficient of \(\one_6\) is the value of group
+\(1\), and those of \(d_2\), \(d_3\) are the differences of groups \(2\), \(3\) from it. \(T_1(6,4,2)'=(0,6,4,2)'\) and
+\(T_2(6,-2,-4)'=(6,0,-2,-4)'\) are the solutions with \(t=0\) and \(t=-6\).
+
+\begin{definition}\label{h-def-ginverse}
+Let \(A\in\R^{m\times n}\). A matrix \(G\in\R^{n\times m}\) with \(AGA=A\) is a \textbf{generalized inverse}
+(\textbf{g-inverse}) of \(A\); \(A^-\) denotes any g-inverse of \(A\). If \(y=Az\in\mathcal C(A)\), then
+\(A(Gy)=AGAz=Az=y\): \(x=Gy\) solves \(Ax=y\). If \(A\in\R^{n\times n}\) is invertible, \(A^{-1}\) is its only
+g-inverse: \(AGA=A\) gives \(G=A^{-1}(AGA)A^{-1}=A^{-1}AA^{-1}=A^{-1}\).
+\end{definition}
+
+\Needspace{16\baselineskip}
+\begin{theorem}\label{h-thm-submatrix}
+Let \(A\in\R^{m\times n}\), \(\rank A=r\geqslant1\). For rows \(i_1<\dots<i_r\) and columns \(j_1<\dots<j_r\), let the
+submatrix \(A_*\in\R^{r\times r}\) (\((s,t)\) entry \(a_{i_sj_t}\)) be invertible, and let \(G\in\R^{n\times m}\) have
+\((j_s,i_t)\) entry equal to the \((s,t)\) entry of \(A_*^{-1}\) (\(s,t=1,\dots,r\)) and all other entries \(0\). Then
+\(G\) is a g-inverse of \(A\). In particular, if
+\(A=\left(\begin{smallmatrix}A_{11}&A_{12}\\A_{21}&A_{22}\end{smallmatrix}\right)\) with \(A_{11}\in\R^{r\times r}\)
+invertible, then \(\left(\begin{smallmatrix}A_{11}^{-1}&0\\0&0\end{smallmatrix}\right)\in\R^{n\times m}\) is a g-inverse
+of \(A\).
+\end{theorem}
+\begin{proof}
+\begin{board}[Selection matrices \(U=[\col_{i_1}(I_m)\ \cdots\ \col_{i_r}(I_m)]\) and
+\(V=[\col_{j_1}(I_n)\ \cdots\ \col_{j_r}(I_n)]\); by \ref{f-views}, the \((s,t)\) entry of \(U'AV\) is
+\(\col_{i_s}(I_m)'A\col_{j_t}(I_n)=a_{i_sj_t}\):]
+\boardtop
+\begin{align*}
+U'AV&=A_*,\qquad B=AV\in\R^{m\times r},\qquad\mathcal C(B)\subseteq\mathcal C(A)&&\text{(\ref{f-rank})}\\
+Bz&=0\implies A_*z=U'Bz=0\implies z=0:\ B\text{ has independent columns}&&\text{(\ref{f-inverse}, \ref{f-rank})}\\
+\dim\mathcal C(A)&=r\implies\text{a basis of }\mathcal C(A)\implies A=BT,\ T\in\R^{r\times n}
+&&\text{(\ref{f-rank}, \ref{f-views})}\\
+U'A&=U'BT=A_*T\implies T=A_*^{-1}U'A\\
+A(VA_*^{-1}U')A&=BA_*^{-1}U'A=BT=A\\
+VA_*^{-1}U'&=\textstyle\sum_{s,t}(A_*^{-1})_{st}\col_{j_s}(I_n)\col_{i_t}(I_m)'=G&&\text{(\ref{f-views})}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+The case \(A_*=A_{11}\) is \(i_s=j_s=s\) (\(s=1,\dots,r\)). So: pick an invertible \(r\times r\) submatrix, invert it, put
+\(A_*^{-1}\) (not transposed) into rows \(j_1,\dots,j_r\) and columns \(i_1,\dots,i_r\) of the \(n\times m\) zero
+matrix.
+
+\Needspace{11\baselineskip}
+\begin{theorem}\label{h-thm-hat}
+Let \(X\in\R^{n\times p}\), \(r=\rank X\), \(G\) a g-inverse of \(X'X\), and \(H=XGX'=X(X'X)^-X'\), \(M=I_n-H\) (the
+\textbf{hat matrix} and the \textbf{residual maker}).
+\begin{enumerate}
+\item \(XGX'X=X\) and \(X'XGX'=X'\); \(\beta^0=GX'y\) is a solution of the normal equations.
+\item For every \(y\in\R^n\), \(Hy\) is the orthogonal projection of \(y\) onto \(\mathcal C(X)\). So \(H\) does not depend
+on the choice of \(G\), and \(H=X(X'X)^{-1}X'\) if \(r=p\).
+\item \(H'=H=H^2\), \(HX=X\), \(X'H=X'\); \(M'=M=M^2\), \(MX=0\), \(HM=MH=0\).
+\item \(\rank H=\tr H=r\) and \(\rank M=\tr M=n-r\).
+\item For every least-squares estimate \(\hat\beta\): \(\hat y=Hy\), \(e=My\), and the \textbf{error sum of squares} is
+\(\mathrm{SSE}=S(\hat\beta)=e'e=y'My=y'y-\hat\beta'X'y\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) \(X'X(GX'X-I_p)=X'XGX'X-X'X=0\) (Definition~\ref{h-def-ginverse}):]
+\boardtop
+\begin{align*}
+\text{the columns of }GX'X-I_p&\in\mathcal N(X'X)=\mathcal N(X)&&\text{(\ref{f-views}; \ref{f-ata})}\\
+&\implies X(GX'X-I_p)=0:\ XGX'X=X\\
+X'XG'X'X&=(X'XGX'X)'=(X'X)'=X'X:\ G'\text{ is a g-inverse of }X'X&&\text{(\ref{f-rules})}\\
+XG'X'X&=X\ (\text{line 2 for }G')\implies X'XGX'=(XG'X'X)'=X'&&\text{(\ref{f-rules})}
+\end{align*}
+\(X'y\in\mathcal C(X'X)\) (Theorem~\ref{h-thm-normal}(a)), so \(X'X(GX'y)=X'y\) (Definition~\ref{h-def-ginverse}).
+\end{board}
+\begin{board}[(b) By (a); the projection by \lec{8}, Theorem~2(a) and Definition~1, its uniqueness by \lec{8},
+Theorem~2(b):]
+\boardtop
+\begin{align*}
+Hy&=X(GX'y)\in\mathcal C(X),\qquad X'(y-Hy)=X'y-X'XGX'y=0\\
+&\implies Hy\text{ is the projection of }y\text{ onto }\mathcal C(X)\\
+G_1,G_2\text{ g-inverses}&\implies XG_1X'y=XG_2X'y\ (\text{all }y)\implies XG_1X'=XG_2X'&&\text{(\ref{f-views})}
+\end{align*}
+If \(r=p\): \(X'X\) is invertible (Theorem~\ref{h-thm-normal}(b)), \((X'X)^{-1}\) is its only g-inverse
+(Definition~\ref{h-def-ginverse}), and \(H=X(X'X)^{-1}X'\).
+\end{board}
+\begin{board}[(c) \(G'\) is a g-inverse of \(X'X\) ((a)), so \(H=XG'X'\) ((b)):]
+\boardtop
+\begin{align*}
+H'&=(XGX')'=XG'X'=H&&\text{(\ref{f-rules})}\\
+HX&=XGX'X=X,\qquad X'H=X'H'=(HX)'=X'&&\text{((a); \ref{f-rules})}\\
+H^2&=(HX)GX'=XGX'=H\\
+M'&=I-H'=M,\qquad M^2=I-2H+H^2=M\\
+MX&=X-HX=0,\qquad HM=H-H^2=0=MH
+\end{align*}
+\end{board}
+\begin{board}[(d) \(H\), \(M\) are symmetric and idempotent ((c)):]
+\boardtop
+\begin{align*}
+\mathcal C(H)&=\mathcal C(X(GX'))\subseteq\mathcal C(X)=\mathcal C(HX)\subseteq\mathcal C(H)\implies\rank H=r
+&&\text{(\ref{f-rank})}\\
+\rank H&=\tr H,\qquad\rank M=\tr M=\tr I_n-\tr H=n-r&&\text{(\lec{8}, Theorem~11; \ref{f-trace})}
+\end{align*}
+\end{board}
+(e) \(\hat y=X\hat\beta\) is the projection of \(y\) onto \(\mathcal C(X)\) (Theorem~\ref{h-thm-ls}(b)), which is \(Hy\) by
+(b); so \(e=y-Hy=My\). By (c), \(S(\hat\beta)=e'e=y'M'My=y'My\); and \(y'Hy=y'X\hat\beta=\hat\beta'X'y\)
+(\ref{f-rules}), so \(y'My=y'y-\hat\beta'X'y\).
+\end{proof}
+
+\Needspace{12\baselineskip}
+\begin{example}\label{h-exm-ginverse}
+In Example~\ref{h-exm-oneway}, find a g-inverse \(G\) of \(X'X\) by Theorem~\ref{h-thm-submatrix}, \(\beta^0=GX'y\) and
+SSE.
+\end{example}
+\textit{Solution.}
+\begin{board}[\(\rank(X'X)=\rank X=3\) (\ref{f-ata}); rows and columns \(2,3,4\) of \(X'X\) give
+\(A_*=\diag(3,2,1)\), \(A_*^{-1}=\diag(\frac13,\frac12,1)\) (\ref{f-views}, \ref{f-inverse}):]
+\boardtop
+\begin{align*}
+G&=\diag(0,\tfrac13,\tfrac12,1)&&\text{(Theorem~\ref{h-thm-submatrix})}\\
+\beta^0&=GX'y=(0,\ 18/3,\ 8/2,\ 2)'=(0,6,4,2)'&&\text{(Theorem~\ref{h-thm-hat}(a))}\\
+\mathrm{SSE}&=y'y-\beta^{0\prime}X'y=148-(0+108+32+4)=4&&\text{(Theorem~\ref{h-thm-hat}(e))}\\
+e&=y-X\beta^0=(-1,1,0,-1,1,0)',\qquad e'e=4
+\end{align*}
+Here \(y'y=25+49+36+9+25+4=148\), and \(\beta^0\) is the solution with \(t=0\) in Example~\ref{h-exm-oneway}.
+\end{board}
+
+\subsection*{3. The Gauss--Markov theorem}
+
+\Needspace{11\baselineskip}
+\begin{theorem}\label{h-thm-unbiased}
+Assume (A4), and let \(\hat\beta=(X'X)^{-1}X'y\).
+\begin{enumerate}
+\item \(\hat\beta=\beta+(X'X)^{-1}X'\varepsilon\); under (A2), \(\expc(\hat\beta)=\beta\).
+\item Under (A3), \(\var(\hat\beta)=\sigma^2(X'X)^{-1}\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) \(y=X\beta+\varepsilon\):]
+\boardtop
+\begin{align*}
+\hat\beta&=(X'X)^{-1}X'(X\beta+\varepsilon)=\beta+(X'X)^{-1}X'\varepsilon&&\text{(\ref{f-rules})}\\
+\expc(\hat\beta)&=\beta+(X'X)^{-1}X'\expc(\varepsilon)=\beta&&\text{(\lec{9}, Theorem~3(b), \(z=\varepsilon\), \(b=\beta\); (A2))}
+\end{align*}
+\end{board}
+\begin{board}[(b) \(((X'X)^{-1})'=(X'X)^{-1}\) (\ref{f-inverse}); by (a):]
+\[
+\var(\hat\beta)=(X'X)^{-1}X'(\sigma^2I_n)X(X'X)^{-1}=\sigma^2(X'X)^{-1}\qquad\text{(\lec{9}, Theorem~3(b); (A3))}
+\]
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{16\baselineskip}
+\begin{theorem}[Gauss--Markov]\label{h-thm-gm}
+Assume (A1)--(A4), and let \(\hat\beta=(X'X)^{-1}X'y\). Let \(L\in\R^{p\times n}\) be constant, and \(\tilde\beta=Ly\) a
+\textbf{linear unbiased estimator} of \(\beta\): \(\expc(Ly)=\beta\) for every \(\beta\in\R^p\). Then
+\(\var(\tilde\beta)-\var(\hat\beta)\) is PSD, and it is \(0\) only if \(\tilde\beta=\hat\beta\). So
+\(\var(a'\tilde\beta)\geqslant\var(a'\hat\beta)\) for every \(a\in\R^p\); in particular
+\(\var(\tilde\beta_j)\geqslant\var(\hat\beta_j)\) for each entry. \(\hat\beta\) is the \textbf{BLUE} (best linear unbiased
+estimator) of \(\beta\).
+\end{theorem}
+\begin{proof}
+\begin{board}[\(LX=I_p\) (\lec{9}, Theorem~3(b), (A1)); the difference \(D\):]
+\boardtop
+\begin{align*}
+\expc(Ly)&=L\expc(y)=LX\beta=\beta\ \text{for all }\beta\\
+\beta&=\col_j(I_p)\ (j=1,\dots,p)\implies LX=I_p&&\text{(\ref{f-views})}\\
+D&=L-(X'X)^{-1}X'\implies DX=LX-I_p=0,\qquad X'D'=(DX)'=0&&\text{(\ref{f-rules})}
+\end{align*}
+\end{board}
+\begin{board}[The variances (\lec{9}, Theorem~3(b), (A3)); \(DX=0\), \(X'D'=0\), \((X'X)^{-1}\) symmetric
+(\ref{f-inverse}); \((D')'D'\) is PSD (\lec{8}, Theorem~15(b)):]
+\boardtop
+\begin{align*}
+\var(\tilde\beta)&=L(\sigma^2I_n)L'=\sigma^2LL'\\
+LL'&=(X'X)^{-1}X'X(X'X)^{-1}+(X'X)^{-1}X'D'\\
+&\qquad+DX(X'X)^{-1}+DD'=(X'X)^{-1}+DD'&&\text{(\ref{f-rules})}\\
+\var(\tilde\beta)-\var(\hat\beta)&=\sigma^2DD'=\sigma^2(D')'D'\text{ is PSD}&&\text{(Theorem~\ref{h-thm-unbiased}(b))}\\
+\sigma^2DD'=0&\implies\tr\bigl((D')'D'\bigr)=0\implies D'=0\implies\tilde\beta=\hat\beta&&\text{(\ref{f-trace})}\\
+\var(a'\tilde\beta)-\var(a'\hat\beta)&=\sigma^2a'DD'a=\sigma^2\lVert D'a\rVert^2\geqslant0&&\text{(\ref{f-dot})}
+\end{align*}
+\(a=\col_j(I_p)\) gives \(a'\tilde\beta=\tilde\beta_j\): \(\var(\tilde\beta_j)\geqslant\var(\hat\beta_j)\).
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{12\baselineskip}
+\begin{example}\label{h-exm-blue}
+In Example~\ref{h-exm-ls}, under (A1)--(A4): show that \(c'y=\frac12(y_1-y_2)\) has \(\expc(c'y)=\beta_1\) for every
+\(\beta\), and compare its variance with that of the entry \(\hat\beta_1\) of the BLUE \(\hat\beta\).
+\end{example}
+\textit{Solution.}
+\begin{board}[\(x_1'=(1,2,3)\), \(x_2'=(1,0,3)\), \(c=\frac12(1,-1,0,0)'\), \(a=(0,1,0)'\); (A1), (A3), \lec{9},
+Theorem~3(b); Theorem~\ref{h-thm-unbiased}(b) for \(\var(\hat\beta_1)\); \(M'=M\), \(MX=0\)
+(Theorem~\ref{h-thm-hat}(c)):]
+\boardtop
+\begin{align*}
+\expc(y_1-y_2)&=(x_1-x_2)'\beta=(0,2,0)\beta=2\beta_1,\qquad\expc(c'y)=\beta_1=a'\beta\\
+\var(c'y)&=\sigma^2c'c=\sigma^2/2;\qquad\hat\beta_1=\tfrac14(y_1-y_2+y_3-y_4),\quad\var(\hat\beta_1)=\sigma^2\cdot\tfrac14\\
+X'c&=a,\qquad Hc=X(X'X)^{-1}X'c=X(X'X)^{-1}a=\tfrac14(1,-1,1,-1)'\\
+u&=c-Hc=Mc=\tfrac14(1,-1,-1,1)'\\
+c'&=a'(X'X)^{-1}X'+u',\qquad u'X=c'MX=0\\
+\var(c'y)-\var(\hat\beta_1)&=\frac{\sigma^2}2-\frac{\sigma^2}4=\sigma^2\lVert u\rVert^2=\sigma^2\cdot\tfrac4{16}
+\end{align*}
+\(\hat\beta_1\) is row \(2\) of \((X'X)^{-1}X'y\). For \(y=(9,3,5,3)'\) the two estimates are \(\frac12(9-3)=3\) and
+\(\hat\beta_1=2\).
+\end{board}
+
+\Needspace{16\baselineskip}
+\subsection*{4. Estimating \(\sigma^2\); sums of squares}
+
+\Needspace{12\baselineskip}
+\begin{theorem}\label{h-thm-sigma}
+Assume (A2), (A3), and \(\rank X=r<n\); let \(G\) be a g-inverse of \(X'X\) and \(M=I_n-XGX'\) (Theorem~\ref{h-thm-hat}).
+Then \(\expc(\mathrm{SSE})=(n-r)\sigma^2\), so
+\(\hat\sigma^2=\mathrm{SSE}/(n-r)\) is an unbiased estimator of \(\sigma^2\). Under (A4), \(r=p\), and \(\hat\sigma^2\) is
+the \textbf{mean squared error} \(s^2=\mathrm{MSE}=\mathrm{SSE}/(n-p)\) (\(=\mathrm{SSE}/(n-k-1)\) in multiple regression).
+\end{theorem}
+\begin{proof}
+\begin{board}[\(y=X\beta+\varepsilon\); \lec{9}, Theorem~6 with \(z=\varepsilon\), \(\mu=0\)
+(A2), \(\Sigma=\sigma^2I_n\) (A3):]
+\boardtop
+\begin{align*}
+e&=My=MX\beta+M\varepsilon=M\varepsilon&&\text{(Theorem~\ref{h-thm-hat}(c),(e))}\\
+\mathrm{SSE}&=e'e=\varepsilon'M'M\varepsilon=\varepsilon'M\varepsilon&&\text{(Theorem~\ref{h-thm-hat}(c))}\\
+\expc(\mathrm{SSE})&=\tr(M\sigma^2I_n)+0'M0=\sigma^2\tr M=\sigma^2(n-r)
+&&\text{(\ref{f-trace}; Theorem~\ref{h-thm-hat}(d))}\\
+\expc(\hat\sigma^2)&=\tfrac1{n-r}\expc(\mathrm{SSE})=\sigma^2&&\text{(\(n-r>0\); \lec{9}, Theorem~3(b))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+Example~\ref{h-exm-ls}: \(\mathrm{SSE}=S(\hat\beta)=4\), \(n-r=4-3=1\), so \(s^2=4\), and
+\(s^2(X'X)^{-1}=\left(\begin{smallmatrix}6&-1&-2\\-1&1&0\\-2&0&1\end{smallmatrix}\right)\) estimates \(\var(\hat\beta)\)
+(Theorem~\ref{h-thm-unbiased}(b)). Example~\ref{h-exm-ginverse}: \(\hat\sigma^2=4/(6-3)=\frac43\).
+
+\begin{definition}\label{h-def-ss}
+For a least-squares fit, with \(\hat y\) and \(e=y-\hat y\): the \textbf{total}, \textbf{regression} and \textbf{error sums
+of squares} are \(\mathrm{SST}=\sum_i(y_i-\bar y)^2\), \(\mathrm{SSR}=\sum_i(\hat y_i-\bar y)^2\),
+\(\mathrm{SSE}=\sum_i(y_i-\hat y_i)^2=e'e\). If \(\one_n\in\mathcal C(X)\) and \(\mathrm{SST}>0\), the
+\textbf{coefficient of determination} is \(R^2=\mathrm{SSR}/\mathrm{SST}\).
+\end{definition}
+
+\Needspace{13\baselineskip}
+\begin{theorem}\label{h-thm-anova}
+If \(\one_n\in\mathcal C(X)\): \(\mathrm{SST}=\mathrm{SSR}+\mathrm{SSE}\), with \(\mathrm{SST}=\lVert C_ny\rVert^2=y'C_ny\)
+and \(\mathrm{SSR}=\lVert C_n\hat y\rVert^2\); if \(\mathrm{SST}>0\), \(R^2=1-\mathrm{SSE}/\mathrm{SST}\in[0,1]\); and
+\(y'y=n\bar y^2+\mathrm{SSR}+\mathrm{SSE}\).
+\end{theorem}
+\begin{proof}
+\begin{board}[\(\hat y\) and \(y\) have the mean \(\bar y\), \(\one'e=0\) (Proposition~\ref{h-prop-residuals}(b)):]
+\boardtop
+\begin{align*}
+\mathrm{SST}&=\lVert C_ny\rVert^2=y'C_ny,\qquad\mathrm{SSR}=\lVert C_n\hat y\rVert^2&&\text{(\ref{f-centering})}\\
+C_ne&=e-\bar e\one=e\implies C_ny=C_n\hat y+C_ne=C_n\hat y+e&&(\bar e=0)\\
+(C_n\hat y)'e&=\hat y'C_ne=\hat y'e=0\implies\mathrm{SST}=\lVert C_n\hat y\rVert^2+\lVert e\rVert^2=\mathrm{SSR}+\mathrm{SSE}
+&&\text{(Proposition~\ref{h-prop-residuals}(c); \ref{f-dot})}\\
+\mathrm{SST}>0&\implies R^2=1-\mathrm{SSE}/\mathrm{SST},\quad0\leqslant\mathrm{SSR}\leqslant\mathrm{SST}&&(\mathrm{SSE}\geqslant0)\\
+y&=\bar y\one+C_ny,\quad(\bar y\one)'C_ny=\bar y(C_n\one)'y=0\implies y'y=n\bar y^2+\lVert C_ny\rVert^2
+&&\text{(\ref{f-centering}; \ref{f-dot})}\\
+y'y&=n\bar y^2+\mathrm{SSR}+\mathrm{SSE}&&(\lVert C_ny\rVert^2=\mathrm{SST})
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{9\baselineskip}
+\begin{example}\label{h-exm-anova}
+In Example~\ref{h-exm-ls} (\(\one_4\) is a column of \(X\)), find SST, SSR, SSE, \(R^2\) and the partition of \(y'y\).
+\end{example}
+\textit{Solution.}
+\begin{board}[\(\bar y=\frac14(9+3+5+3)=5\), \(\hat y=(8,4,6,2)'\) (Example~\ref{h-exm-ls}); Theorem~\ref{h-thm-anova}:]
+\boardtop
+\begin{align*}
+C_4y&=(4,-2,0,-2)',\qquad C_4\hat y=(3,-1,1,-3)',\qquad e=(1,-1,-1,1)',\qquad C_4y=C_4\hat y+e\\
+\mathrm{SST}&=16+4+0+4=24,\quad\mathrm{SSR}=9+1+1+9=20,\quad\mathrm{SSE}=4:\quad24=20+4,\quad R^2=\tfrac{20}{24}=\tfrac56\\
+y'y&=81+9+25+9=124=4\cdot25+20+4=100+20+4
+\end{align*}
+\end{board}
+
+\bigskip
+\textbf{Practice.} The Exercises and Problems of the textbook, Chapters~12 and~13: generalized inverses, least squares
+and the normal equations, the hat matrix, rank-deficient designs, the Gauss--Markov theorem, the estimation of
+\(\sigma^2\), and sums of squares.
+
+\end{document}
