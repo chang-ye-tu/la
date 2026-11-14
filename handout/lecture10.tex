@@ -488,8 +488,8 @@ So \(\prb\bigl((z-\mu)'\Sigma^{-1}(z-\mu)\leqslant\chi^2_{n,1-\alpha}\bigr)=1-\a
 
 \Needspace{17\baselineskip}
 \begin{enumerate}[label=\textbf{F\arabic*.},ref=F\arabic*,leftmargin=*,itemsep=0pt,parsep=0pt,topsep=2pt,start=10]
-\item\label{f-integrals} \(\int_{\R^n}g(x)\,\mathrm dx=\lvert\det B\rvert\int_{\R^n}g(c+Bu)\,\mathrm du\) (\(B\)
-invertible); \(\int_{\R^n}e^{-u'u/2}\,\mathrm du=\bigl(\int_\R e^{-s^2/2}\,\mathrm ds\bigr)^n=(2\pi)^{n/2}\).
+\item\label{f-integrals} \(\int_{\R^n}g(x)\,\mathrm{d}x=\lvert\det B\rvert\int_{\R^n}g(c+Bu)\,\mathrm{d}u\) (\(B\)
+invertible); \(\int_{\R^n}e^{-u'u/2}\,\mathrm{d}u=\bigl(\int_\R e^{-s^2/2}\,\mathrm{d}s\bigr)^n=(2\pi)^{n/2}\).
 \item\label{f-density} \(z\) has \textbf{density} \(f\geqslant0\) if \(\prb(z\in A)=\int_Af\) (all \(A\));
 \(\expc g(z)=\int gf\); any \(f\geqslant0\) with \(\int f=1\) is one.
 \end{enumerate}
@@ -499,7 +499,7 @@ Let \(\mu\in\R^n\), \(\Sigma\in\R^{n\times n}\) PD, and
 f(x)=\frac1{(2\pi)^{n/2}(\det\Sigma)^{1/2}}\exp\Bigl(-\frac12(x-\mu)'\Sigma^{-1}(x-\mu)\Bigr)\qquad(x\in\R^n)
 \]
 \begin{enumerate}
-\item \(f(x)>0\) for every \(x\), and \(\int_{\R^n}f(x)\,\mathrm dx=1\).
+\item \(f(x)>0\) for every \(x\), and \(\int_{\R^n}f(x)\,\mathrm{d}x=1\).
 \item A random vector with the density \(f\) has the distribution \(N_n(\mu,\Sigma)\); so \(N_n(\mu,\Sigma)\) exists.
 \item Every \(z\sim N_n(\mu,\Sigma)\) has the density \(f\).
 \end{enumerate}
@@ -515,19 +515,19 @@ For \(n=1\), \(\sigma^2>0\): \(N(\mu,\sigma^2)\) has the density \((2\pi\sigma^2
 (Proposition~\ref{h-prop-sqrt}; \lec{1}, Theorem~8).
 \begin{board}[\ref{f-integrals} with \(g=f\), \(c=\mu\), \(B=\Sigma^{1/2}\):]
 \[
-\int_{\R^n}f(x)\,\mathrm dx=\frac{(\det\Sigma)^{1/2}}{(2\pi)^{n/2}(\det\Sigma)^{1/2}}\int_{\R^n}e^{-u'u/2}\,\mathrm du
+\int_{\R^n}f(x)\,\mathrm{d}x=\frac{(\det\Sigma)^{1/2}}{(2\pi)^{n/2}(\det\Sigma)^{1/2}}\int_{\R^n}e^{-u'u/2}\,\mathrm{d}u
 =\frac{(2\pi)^{n/2}}{(2\pi)^{n/2}}=1
 \]
 \end{board}
 (b) For \(t,x\in\R^n\), expanding with \(\Sigma'=\Sigma\), \(\Sigma^{-1}\Sigma=I\) (\lec{1}, Theorems~3(a), 8):
 \((x-\mu-\Sigma t)'\Sigma^{-1}(x-\mu-\Sigma t)=(x-\mu)'\Sigma^{-1}(x-\mu)-2t'(x-\mu)+t'\Sigma t\). So
 \(e^{t'x}f(x)=\exp(t'\mu+\frac12t'\Sigma t)f_t(x)\), where \(f_t\) is \(f\) with \(\mu+\Sigma t\) for \(\mu\). If \(y\)
-has the density \(f\): \(M_y(t)=\int_{\R^n}e^{t'x}f(x)\,\mathrm dx=\exp(t'\mu+\frac12t'\Sigma t)\int_{\R^n}f_t(x)\,\mathrm
-dx=\exp(t'\mu+\frac12t'\Sigma t)\) (\ref{f-density}; (a) for \(\mu+\Sigma t\)): \(y\sim N_n(\mu,\Sigma)\). By (a) and
+has the density \(f\): \(M_y(t)=\int_{\R^n}e^{t'x}f(x)\,\mathrm{d}x=\exp(t'\mu+\frac12t'\Sigma t)\int_{\R^n}f_t(x)\,\mathrm{d}
+x=\exp(t'\mu+\frac12t'\Sigma t)\) (\ref{f-density}; (a) for \(\mu+\Sigma t\)): \(y\sim N_n(\mu,\Sigma)\). By (a) and
 \ref{f-density}, such a \(y\) exists.
 
 (c) For \(y\) as in (b), \(M_z=M_y\) (Definition~\ref{h-def-mvn}): \(z\), \(y\) have the same distribution
-(\ref{f-same}), and \(\prb(z\in A)=\prb(y\in A)=\int_Af(x)\,\mathrm dx\) for every \(A\). For \(n=1\):
+(\ref{f-same}), and \(\prb(z\in A)=\prb(y\in A)=\int_Af(x)\,\mathrm{d}x\) for every \(A\). For \(n=1\):
 \(\det(\sigma^2)=\sigma^2\), \((\sigma^2)^{-1}=1/\sigma^2\).
 \end{proof}
 
