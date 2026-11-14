@@ -35623,6 +35623,581 @@ blocks \(M_{11},\dots,M_{k-1,k-1}\). By (a) and the induction hypothesis,
 \end{solution}
 
 \clearpage
+\def\unitnumber{17}
+\setcounter{theorem}{0}\setcounter{problem}{0}
+\section*{Chapter 17. Generalized linear models}
+
+\subsection*{Exponential families and generalized linear models}
+
+We use the following distributions of a real random variable \(y\). For an integer \(m\geqslant1\) and \(0<\pi<1\), \(y\)
+has the \textbf{binomial distribution} \(\mathrm{Bin}(m,\pi)\) if \(\prb(y=k)=\binom mk\pi^k(1-\pi)^{m-k}\) for
+\(k=0,1,\dots,m\), where \(\binom mk=\frac{m!}{k!\,(m-k)!}\); for \(m=1\), \(y\) is \textbf{Bernoulli}, with
+\(\prb(y=1)=\pi=1-\prb(y=0)\). For \(\mu>0\), \(y\) has the \textbf{Poisson distribution} \(\mathrm{Poisson}(\mu)\) if
+\(\prb(y=k)=e^{-\mu}\mu^k/k!\) for every integer \(k\geqslant0\). For \(\sigma^2>0\), \(N(\mu,\sigma^2)\) has the density
+\((2\pi\sigma^2)^{-1/2}\exp\bigl(-(y-\mu)^2/(2\sigma^2)\bigr)\) (Theorem~\ref{r14-thm-mvn-density}), mean \(\mu\) and
+variance \(\sigma^2\) (Definition~\ref{r14-def-mvn}). We use without proof that \(\expc y=m\pi\) and
+\(\var y=m\pi(1-\pi)\) if \(y\sim\mathrm{Bin}(m,\pi)\), and \(\expc y=\var y=\mu\) if \(y\sim\mathrm{Poisson}(\mu)\)~\citeat{casella-berger}{\S3.2}, \citeat{tu-asm}{Propositions~7.2, 8.2}. For
+\(0<\pi<1\) the \textbf{odds} are \(\pi/(1-\pi)\) and \(\operatorname{logit}\pi=\log\bigl(\pi/(1-\pi)\bigr)\); the
+\textbf{logistic function} \(\operatorname{expit}t=e^t/(1+e^t)\) (\(t\in\R\)) takes values in \((0,1)\), and direct computation
+gives \(1-\operatorname{expit}t=1/(1+e^t)\), \(\operatorname{logit}(\operatorname{expit}t)=t\) and
+\(\operatorname{expit}(\operatorname{logit}\pi)=\pi\). To the facts of calculus stated after
+Definition~\ref{r13-def-derivative} we add: \(e^t\) is \(C^2\) on \(\R\), with derivative \(e^t\).
+
+\begin{definition}[\citeat{tu-asm}{Definitions~8.32, 8.36, 8.9, Proposition~8.35}, \citeat{shao}{\S4.4.2, (4.55)--(4.58)}, \citeat{islr}{(4.42)}]\label{r12-def-glm}
+A \textbf{generalized linear model} (GLM) with canonical link consists of a known \(X\in\R^{n\times p}\) of any rank,
+with rows \(x_1',\dots,x_n'\), known numbers \(o_1,\dots,o_n\), the \textbf{offsets} (often \(0\)), an unknown
+\(\beta\in\R^p\), and independent responses \(y_1,\dots,y_n\). Each \(y_i\) has a density, or probabilities, of the
+\textbf{one-parameter exponential family} form
+\[
+f_i(y_i;\theta_i,\phi)=\exp\Bigl\{\frac{y_i\theta_i-b_i(\theta_i)}\phi+c_i(y_i,\phi)\Bigr\},\qquad\theta_i=\eta_i=o_i+x_i'\beta
+\]
+with the \textbf{natural parameter} \(\theta_i\) equal to the \textbf{linear predictor} \(\eta_i\), the
+\textbf{dispersion} \(\phi>0\), and the functions \(b_i\), \(c_i\) of one of the three families below, the same family for
+all \(i\). The number \(\mu_i=b_i'(\theta_i)\) is the mean of \(y_i\) (shown after the definition), and the inverse of
+\(b_i'\), which maps \(\mu_i\) to \(\eta_i\), is the \textbf{canonical link}: \(\mu\mapsto\mu\),
+\(\mu\mapsto\operatorname{logit}(\mu/m_i)\) or \(\mu\mapsto\log\mu\) in the three families below.
+\begin{itemize}
+\item \textbf{Normal linear model}: \(y_i\sim N(\mu_i,\sigma^2)\), \(o_i=0\), \(\theta_i=\mu_i=x_i'\beta\),
+\(\phi=\sigma^2\), \(b_i(\theta)=\theta^2/2\), \(c_i(y,\phi)=-y^2/(2\phi)-\frac12\log(2\pi\phi)\); this is the normal linear
+model of Definition~\ref{r12-def-inference}, with \(p\) columns.
+\item \textbf{Logistic regression}: \(y_i\sim\mathrm{Bin}(m_i,\pi_i)\) with known \(m_i\), \(o_i=0\),
+\(\theta_i=\operatorname{logit}\pi_i=x_i'\beta\), \(\phi=1\), \(b_i(\theta)=m_i\log(1+e^\theta)\),
+\(c_i(k,\phi)=\log\binom{m_i}k\). So \(\pi_i=\operatorname{expit}(x_i'\beta)\) and \(\mu_i=m_i\pi_i\); for \(m_i=1\) the
+responses are binary.
+\item \textbf{Poisson regression with exposure}: \(y_i\sim\mathrm{Poisson}(\mu_i)\) with \(\mu_i=t_ie^{x_i'\beta}\), that is,
+\(\log\mu_i=\log t_i+x_i'\beta\), for known \textbf{exposures} \(t_i>0\) (offsets \(o_i=\log t_i\)), such as policy-years
+in insurance; \(\theta_i=\log\mu_i\), \(\phi=1\), \(b_i(\theta)=e^\theta\), \(c_i(k,\phi)=-\log k!\).
+\end{itemize}
+The likelihood and the maximum likelihood estimates (MLE) are those of Definition~\ref{r12-def-inference}: the likelihood
+is the density \(f(y;\vartheta)\) of \(y=(y_1,\dots,y_n)'\) at the observed \(y\), as a function of the parameters
+\(\vartheta\) (here \(\beta\) and \(\phi\)). For a discrete \(y\),
+\(f(y;\vartheta)\) is instead the probability that \(y\) takes the observed value. By independence (the paragraphs before
+Definition~\ref{r14-def-mvn} and before Theorem~\ref{r14-thm-mvn-density}), it is the product
+\(f_1(y_1;\theta_1,\phi)\cdots f_n(y_n;\theta_n,\phi)\).
+\end{definition}
+
+The three families have this form~\citeat{tu-asm}{Proposition~8.35}, \citeat{casella-berger}{Examples~3.4.1, 3.4.4}. For \(\mathrm{Bin}(m,\pi)\) with \(\theta=\operatorname{logit}\pi\),
+\(\pi=\operatorname{expit}\theta\) and \(1-\pi=1/(1+e^\theta)\), so
+\(\pi^k(1-\pi)^{m-k}=\bigl(\pi/(1-\pi)\bigr)^k(1-\pi)^m=e^{k\theta}(1+e^\theta)^{-m}\) and
+\(\log\prb(y=k)=k\theta-m\log(1+e^\theta)+\log\binom mk\). For \(\mathrm{Poisson}(\mu)\) with \(\theta=\log\mu\),
+\(\log(e^{-\mu}\mu^k/k!)=k\theta-e^\theta-\log k!\). For \(N(\mu,\sigma^2)\),
+\(-(y-\mu)^2/(2\sigma^2)=(y\mu-\mu^2/2)/\sigma^2-y^2/(2\sigma^2)\). The functions \(b\) are \(C^2\) on \(\R\), with
+\[
+\begin{aligned}
+&\text{binomial:}&&b'(\theta)=\frac{me^\theta}{1+e^\theta}=m\pi,&&b''(\theta)=\frac{me^\theta}{(1+e^\theta)^2}=m\pi(1-\pi)\\
+&\text{Poisson:}&&b'(\theta)=e^\theta=\mu,&&b''(\theta)=e^\theta=\mu\\
+&\text{normal:}&&b'(\theta)=\theta=\mu,&&b''(\theta)=1
+\end{aligned}
+\]
+So in each family \(\expc y=b'(\theta)\) and \(\var y=\phi\,b''(\theta)>0\), by the facts in the first paragraph.
+
+\needspace{14\baselineskip}
+\begin{theorem}[\citeat{tu-asm}{Proposition~8.37, Theorem~8.40}, \citeat{shao}{\S4.4.2}]\label{r12-thm-glm}
+In a GLM (Definition~\ref{r12-def-glm}), let \(\theta=o+X\beta\) with \(o=(o_1,\dots,o_n)'\), and let
+\[
+\mu=\begin{pmatrix}b_1'(\theta_1)\\\vdots\\b_n'(\theta_n)\end{pmatrix},\qquad
+W=\diag\bigl(b_1''(\theta_1),\dots,b_n''(\theta_n)\bigr)
+\]
+both evaluated at \(\beta\). The log-likelihood, as a function of \(\beta\in\R^p\) with \(\phi\) fixed, is
+\[
+\ell(\beta)=\frac1\phi\sum_{i=1}^n\bigl(y_i\theta_i-b_i(\theta_i)\bigr)+\sum_{i=1}^nc_i(y_i,\phi)
+\]
+Here an \textbf{MLE} of \(\beta\) (for the given \(\phi\)) is a maximizer of \(\ell\) on \(\R^p\); for the binomial and
+Poisson families \(\phi=1\), and for the normal family the maximizers do not depend on \(\phi\) and, if
+\(\mathrm{SSE}>0\), they are the first components \(\hat\beta\) of the MLEs \((\hat\beta,\mathrm{SSE}/n)\) of
+Theorem~\ref{r12-thm-sampling}(d).
+\begin{enumerate}
+\item \(\ell\) is \(C^2\) on \(\R^p\), \(\mathrm D\ell(\beta)=(y-\mu)'X/\phi\), so that the gradient, the \textbf{score}, is
+\(X'(y-\mu)/\phi\), and \(\mathrm H\ell(\beta)=-X'WX/\phi\). The matrix \(X'WX\) is PSD for every \(\beta\), and PD if
+\(\rank X=p\).
+\item \(\hat\beta\) is an MLE if and only if it solves the \textbf{likelihood equations}
+\[
+X'(y-\hat\mu)=0,\qquad\hat\mu_i=b_i'(o_i+x_i'\hat\beta)
+\]
+which do not involve \(\phi\). If \(\rank X=p\), there is at most one MLE.
+\item Let \(\rank X=p\). The Newton--Raphson step for the stationary points of \(\ell\) from \(\beta\)
+(Example~\ref{r13-exm-newton}) is
+\[
+\beta^{\mathrm{new}}=\beta-\mathrm H\ell(\beta)^{-1}\bigl(\mathrm D\ell(\beta)\bigr)'=(X'WX)^{-1}X'Wz,\qquad
+z=X\beta+W^{-1}(y-\mu)
+\]
+the weighted least-squares estimate (Proposition~\ref{r12-prop-wls}) for the \textbf{working response} \(z\) and the weight
+matrix \(W\); it is the unique maximizer of the second-order Taylor polynomial of \(\ell\) at \(\beta\). Repeating the step
+is \textbf{iteratively reweighted least squares} (IRLS).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+By Definition~\ref{r12-def-glm} the likelihood is \(\prod_if_i(y_i;\theta_i,\phi)\), and its logarithm is \(\ell\).
+
+(a)
+\begin{itemize}
+\item Each \(b_i\) is \(C^2\) on \(\R\) (the paragraph after Definition~\ref{r12-def-glm}), and \(\theta_i=o_i+x_i'\beta\) is a
+polynomial in \(\beta\); so \(\ell\) is \(C^2\) on \(\R^p\) (rules and chain rule of calculus, after
+Definition~\ref{r13-def-derivative}).
+\item By Theorems~\ref{r13-thm-forms}(a) and~\ref{r13-thm-diff-rules}(a),(c), \(\mathrm{d}\theta_i=x_i'\,\mathrm{d}\beta\) and
+\(\mathrm{d}\,b_i(\theta_i)=b_i'(\theta_i)\,x_i'\,\mathrm{d}\beta=\mu_ix_i'\,\mathrm{d}\beta\). By Theorem~\ref{r1-thm-views}(c), the row
+\((y-\mu)'X\) is \(\sum_i(y_i-\mu_i)x_i'\), so
+\[
+\mathrm{d}\ell=\frac1\phi\sum_{i=1}^n(y_i-\mu_i)\,x_i'\,\mathrm{d}\beta=\frac1\phi(y-\mu)'X\,\mathrm{d}\beta
+\]
+and \(\mathrm D\ell(\beta)=(y-\mu)'X/\phi\) (Theorem~\ref{r13-thm-identification}(a)); the gradient is its transpose
+\(X'(y-\mu)/\phi\).
+\item With \(\mathrm{d}\beta\) fixed, \(\mathrm{d}\mu_i=b_i''(\theta_i)\,x_i'\,\mathrm{d}\beta\), a number equal to its transpose
+\(b_i''(\theta_i)(\mathrm{d}\beta)'x_i\). By Theorem~\ref{r1-thm-views}(d), \(X'WX=\sum_ix_i\,b_i''(\theta_i)x_i'\) (the
+columns of \(X'\) are the \(x_i\), the rows of \(WX\) are the \(b_i''(\theta_i)x_i'\)). So
+\[
+\mathrm{d}^2\ell=-\frac1\phi\sum_{i=1}^n(\mathrm{d}\mu_i)\,x_i'\,\mathrm{d}\beta
+=-\frac1\phi(\mathrm{d}\beta)'\Bigl(\sum_{i=1}^nb_i''(\theta_i)x_ix_i'\Bigr)\mathrm{d}\beta=-\frac1\phi(\mathrm{d}\beta)'X'WX\,\mathrm{d}\beta
+\]
+\(X'WX\) is symmetric, so \(\mathrm H\ell(\beta)=-X'WX/\phi\)
+(Theorem~\ref{r13-thm-identification2}(a)).
+\item \(W\) is diagonal with positive diagonal entries (the paragraph after Definition~\ref{r12-def-glm}), hence PD
+(Proposition~\ref{r8-prop-pd-basic}(a)). By Theorem~\ref{r8-thm-congruence}(a),(b) with \(A=W\) and \(P=X\), \(X'WX\) is
+PSD, and PD if \(\rank X=p\).
+\end{itemize}
+(b)
+\begin{itemize}
+\item \(\R^p\) is open and convex. If \(\hat\beta\) is an MLE, \(\ell\) has a global, hence a local, maximum at
+\(\hat\beta\), so \(\mathrm D\ell(\hat\beta)=0\) (Theorem~\ref{r13-thm-extrema}(a)); by (a) and \(\phi>0\), this is
+\(X'(y-\hat\mu)=0\).
+\item Conversely, let \(X'(y-\hat\mu)=0\). The function \(-\ell\) is \(C^2\), \(\mathrm D(-\ell)(\hat\beta)=0\), and its
+Hessian \(X'WX/\phi\) is PSD at every \(\beta\) by (a). By Theorem~\ref{r13-thm-extrema}(d), \(-\ell\) has a global
+minimum at \(\hat\beta\): \(\ell(\beta)\leqslant\ell(\hat\beta)\) for every \(\beta\), and \(\hat\beta\) is an MLE.
+\item If \(\rank X=p\), the Hessian of \(-\ell\) is PD at every \(\beta\), and the global minimum is strict
+(Theorem~\ref{r13-thm-extrema}(d)): \(\ell(\beta)<\ell(\hat\beta)\) for \(\beta\ne\hat\beta\), so no other \(\beta\) is an
+MLE.
+\end{itemize}
+(c)
+\begin{itemize}
+\item By (a), \(X'WX\) is PD, hence invertible (Theorem~\ref{r8-thm-eigen-criterion}(c)), and so is
+\(\mathrm H\ell(\beta)=-X'WX/\phi\). The step of Example~\ref{r13-exm-newton} for the function \(\ell\) is
+\(\beta-(-X'WX/\phi)^{-1}X'(y-\mu)/\phi=\beta+(X'WX)^{-1}X'(y-\mu)\), in which \(\phi\) cancels.
+\item As \(\beta=(X'WX)^{-1}X'WX\beta\), this is \((X'WX)^{-1}X'W\bigl(X\beta+W^{-1}(y-\mu)\bigr)=(X'WX)^{-1}X'Wz\), and by
+Proposition~\ref{r12-prop-wls} (\(W\) PD, \(\rank X=p\)) it is the unique minimizer of \((z-Xb)'W(z-Xb)\).
+\item The Hessian \(X'WX/\phi\) of \(-\ell\) at \(\beta\) is PD, so by the paragraph after Example~\ref{r13-exm-newton},
+applied to \(-\ell\), \(\beta^{\mathrm{new}}\) is the unique minimizer of the second-order Taylor polynomial \(q\) of \(-\ell\)
+at \(\beta\); and \(-q\) is the second-order Taylor polynomial of \(\ell\).\qedhere
+\end{itemize}
+\end{proof}
+
+The theorem does not assert that an MLE exists. For instance, in a logistic regression whose design has the column
+\(\one_n\) and whose responses are all \(0\), the likelihood equation \(\one_n'(y-\hat\mu)=0\) would require
+\(\sum_im_i\operatorname{expit}(x_i'\hat\beta)=0\), which is impossible, as \(\operatorname{expit}>0\). Nor does the theorem
+assert that the IRLS iterates converge. For the normal family, \(b_i''=1\), so \(W=I_n\) and \(\mu=X\beta\): the likelihood
+equations \(X'(y-X\hat\beta)=0\) are the normal equations (Definition~\ref{r11-def-model}), as in
+Theorem~\ref{r12-thm-sampling}(d); and \(z=X\beta+(y-X\beta)=y\), so that for \(\rank X=p\) one IRLS step from any \(\beta\)
+gives the least-squares estimate \((X'X)^{-1}X'y\), as in Example~\ref{r13-exm-newton}~\citeat{shao}{Example~4.36}.
+
+\needspace{18\baselineskip}
+\subsection*{The rank-general case and weighted projections}
+
+\begin{proposition}\label{r12-prop-glm-fitted}
+In a GLM (Definition~\ref{r12-def-glm}), let \(\rank X=r\geqslant1\), and let \(X=X_1C\) be a full-rank factorization
+(Theorem~\ref{thm:r4-full-rank-factorization}): \(X_1\in\R^{n\times r}\) has full column rank and \(C\in\R^{r\times p}\) full
+row rank. Let \(\ell_1(\gamma)\) (\(\gamma\in\R^r\)) be the log-likelihood of the GLM with the same responses, family,
+offsets and \(\phi\) and the design \(X_1\).
+\begin{enumerate}
+\item \(\ell(\beta)=\ell_1(C\beta)\), and \(\beta\) is an MLE if and only if \(C\beta\) is an MLE of the design \(X_1\), of
+which there is at most one. If \(\beta^0\) is an MLE, the MLEs are the vectors \(\beta^0+u\) with \(u\in\mathcal N(X)\), and
+all of them give the same \(X\hat\beta\), the same linear predictors \(\hat\eta=o+X\hat\beta\) and the same fitted means
+\(\hat\mu\).
+\item If \(a\in\mathcal C(X')\), then \(a'\hat\beta\) is the same number for all MLEs \(\hat\beta\).
+\item At any \(\beta\), with \(W\) and \(z\) as in Theorem~\ref{r12-thm-glm}, the system \(X'WXb=X'Wz\) (unknown
+\(b\in\R^p\)) is consistent, and its solutions are the minimizers of \((z-Xb)'W(z-Xb)\); one of them is \(GX'Wz\) for any
+g-inverse \(G\) of \(X'WX\). All of them give the same \(Xb=X_1\gamma^{\mathrm{new}}\), where \(\gamma^{\mathrm{new}}\) is the
+IRLS step of Theorem~\ref{r12-thm-glm}(c) for the design \(X_1\) from \(\gamma=C\beta\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a)
+\begin{itemize}
+\item \(\theta=o+X\beta=o+X_1(C\beta)\), and \(\ell\) depends on \(\beta\) only through \(\theta\)
+(Theorem~\ref{r12-thm-glm}); so \(\ell(\beta)=\ell_1(C\beta)\). As \(C\) has full row rank, \(\mathcal C(C)=\R^r\)
+(Theorem~\ref{thm:r4-rank-rules}(c)): every \(\gamma\in\R^r\) is \(C\beta'\) for some \(\beta'\in\R^p\).
+\item If \(C\beta\) maximizes \(\ell_1\), then \(\ell(\beta')=\ell_1(C\beta')\leqslant\ell_1(C\beta)=\ell(\beta)\) for every
+\(\beta'\): \(\beta\) is an MLE. Conversely, if \(\beta\) is an MLE and \(\gamma=C\beta'\in\R^r\), then
+\(\ell_1(\gamma)=\ell(\beta')\leqslant\ell(\beta)=\ell_1(C\beta)\): \(C\beta\) maximizes \(\ell_1\).
+\item \(X_1\) has full column rank \(r\), so \(\ell_1\) has at most one maximizer \(\hat\gamma\)
+(Theorem~\ref{r12-thm-glm}(b)). If \(\beta^0\) is an MLE, \(\hat\gamma=C\beta^0\), and the MLEs are the solutions of
+\(C\beta=C\beta^0\), that is, the vectors \(\beta^0+u\) with \(u\in\mathcal N(C)=\mathcal N(X)\)
+(Theorem~\ref{thm:r4-full-rank-factorization}(b)). Each of them gives \(X\beta=X_1C\beta=X_1\hat\gamma\), hence the same
+\(\hat\eta=o+X\hat\beta\) and \(\hat\mu_i=b_i'(\hat\eta_i)\).
+\end{itemize}
+(b) \(a=X'c\) for some \(c\in\R^n\), so \(a'\hat\beta=c'X\hat\beta=c'X_1\hat\gamma\) for every MLE \(\hat\beta\), by (a).
+
+(c)
+\begin{itemize}
+\item By Proposition~\ref{r12-prop-wls} (\(W\) PD, \(X\) of any rank), the minimizers of \(Q(b)=(z-Xb)'W(z-Xb)\) are the
+solutions of \(X'WXb=X'Wz\). \(W\), \(\mu\) and \(z\) depend on \(\beta\) only through \(X\beta=X_1\gamma\), so they are also
+those of the design \(X_1\) at \(\gamma=C\beta\); and \(Q(b)=Q_1(Cb)\) with \(Q_1(h)=(z-X_1h)'W(z-X_1h)\) (\(h\in\R^r\)).
+\item By Proposition~\ref{r12-prop-wls} for \(X_1\) (rank \(r\)), \(Q_1\) has exactly one minimizer, which is
+\(\gamma^{\mathrm{new}}=(X_1'WX_1)^{-1}X_1'Wz\), the step of Theorem~\ref{r12-thm-glm}(c) for \(X_1\). As in (a), \(b\) minimizes
+\(Q\) if and only if \(Cb\) minimizes \(Q_1\), that is, \(Cb=\gamma^{\mathrm{new}}\); such \(b\) exist (\(\mathcal C(C)=\R^r\)), so
+the system is consistent, and \(Xb=X_1Cb=X_1\gamma^{\mathrm{new}}\) for all of them.
+\item As the system is consistent, \(X'Wz\in\mathcal C(X'WX)\), and \(GX'Wz\) is a solution
+(Theorem~\ref{r10-thm-ginv-solves}(a)).\qedhere
+\end{itemize}
+\end{proof}
+
+\needspace{14\baselineskip}
+\begin{proposition}[\citeat{harville}{Theorems~14.12.11, 14.12.3, Corollary~14.12.4}]\label{r12-prop-weighted-projection}
+Let \(X\in\R^{n\times p}\), let \(W\in\R^{n\times n}\) be PD, let \(G\) be a g-inverse of \(X'WX\), and put
+\[
+P_{X,W}=XGX'W=X(X'WX)^-X'W
+\]
+\begin{enumerate}
+\item Let \(T=W^{1/2}\) (Theorem~\ref{r8-thm-sqrt}), and let \(P=TXG(TX)'\), the orthogonal projection matrix onto
+\(\mathcal C(TX)\) of Theorem~\ref{r10-thm-ata} for \(A=TX\). Then \(P_{X,W}=T^{-1}PT\), and \(P_{X,W}\) does not depend on the
+choice of \(G\).
+\item \(P_{X,W}X=X\), \(P_{X,W}^2=P_{X,W}\), and \(WP_{X,W}\) is symmetric.
+\item \(\mathcal C(P_{X,W})=\mathcal C(X)\), \(\rank P_{X,W}=\rank X\), and \(\rank(I_n-P_{X,W})=n-\rank X\).
+\item For every \(z\in\R^n\), \(P_{X,W}z=Xb\) for every minimizer \(b\) of \((z-Xb)'W(z-Xb)\). In particular, in a GLM the
+IRLS step of Proposition~\ref{r12-prop-glm-fitted}(c) gives \(Xb=P_{X,W}z\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\begin{itemize}
+\item \(T\) is PD, hence symmetric and invertible, and \(T^2=W\) (Theorem~\ref{r8-thm-sqrt}(a),(c)); so
+\((TX)'(TX)=X'T^2X=X'WX\), and \(G\) is a g-inverse of \((TX)'(TX)\).
+\item By Theorem~\ref{r10-thm-ata} for \(A=TX\): \(P=TXGX'T\) does not depend on \(G\), \(P'=P=P^2\), \(P(TX)=TX\), and
+\(I_n-P\) has rank \(n-\rank(TX)\), where \(\rank(TX)=\rank X\) (Theorem~\ref{thm:r4-rank-product}(d)).
+\end{itemize}
+(a) \(T^{-1}PT=T^{-1}TXGX'TT=XGX'W=P_{X,W}\). As \(P\) does not depend on \(G\), neither does \(P_{X,W}\).
+
+(b) \(P_{X,W}X=T^{-1}P(TX)=T^{-1}TX=X\); \(P_{X,W}^2=T^{-1}P^2T=T^{-1}PT=P_{X,W}\); and \(WP_{X,W}=T^2T^{-1}PT=TPT\), with
+\((TPT)'=T'P'T'=TPT\).
+
+(c) \(\mathcal C(P_{X,W})=\mathcal C\bigl(X(GX'W)\bigr)\subseteq\mathcal C(X)\) and
+\(\mathcal C(X)=\mathcal C(P_{X,W}X)\subseteq\mathcal C(P_{X,W})\) (Theorem~\ref{thm:r4-rank-product}(a)); so the two are equal
+and have the same dimension. \(I_n-P_{X,W}=T^{-1}(I_n-P)T\) has the rank \(n-\rank X\) of \(I_n-P\)
+(Theorem~\ref{thm:r4-rank-product}(d)).
+
+(d) By Proposition~\ref{r12-prop-wls}, the minimizers \(b\) are the solutions of \(X'WXb=X'Wz\), that is, of
+\((TX)'(TX)b=(TX)'(Tz)\), the normal equations of the design \(TX\) and the response \(Tz\). By
+Theorem~\ref{r10-thm-normal-equations}(c), \(G(TX)'Tz=GX'Wz\) is one of them, and all of them give the same \(TXb\), hence
+the same \(Xb\) (\(T\) is invertible), which is \(XGX'Wz=P_{X,W}z\). In a GLM, the solutions of
+Proposition~\ref{r12-prop-glm-fitted}(c) are these minimizers.
+\end{proof}
+For \(W=I_n\), \(P_{X,W}=X(X'X)^-X'\) is the hat matrix \(H\) of Theorem~\ref{r10-thm-PX}. For other \(W\) it is idempotent
+but in general not symmetric. By (d), \(P_{X,W}z\) is the point \(Xb\) of \(\mathcal C(X)\) nearest to \(z\) when the length of
+a vector \(v\) is measured by \(\lVert Tv\rVert=(v'Wv)^{1/2}\); so each IRLS step replaces the working response \(z\) by this
+projection \(P_{X,W}z\) of it.
+
+\subsection*{Grouped data and examples}
+
+In logistic regression the odds are \(\pi_i/(1-\pi_i)=e^{x_i'\beta}\): increasing \(x_{ij}\) by \(1\), the other entries of
+\(x_i\) fixed, multiplies the odds by \(e^{\beta_j}\), the \textbf{odds ratio}. In Poisson regression with exposure, the
+expected count per unit of exposure is \(\mu_i/t_i=e^{x_i'\beta}\); increasing \(x_{ij}\) by \(1\) multiplies it by
+\(e^{\beta_j}\), the \textbf{rate ratio}~\citeat{tu-asm}{Theorem~7.11, Proposition~8.10}, \citeat{islr}{\S4.3, \S4.6.2}. When column \(j\) of \(X\) is the indicator of a group, \(e^{\beta_j}\) compares that
+group with the observations that have \(x_{ij}=0\) and the same other entries: in the baseline coding
+\([\one_n\ d_2\ \cdots\ d_g]\) of Theorem~\ref{r11-thm-oneway}, the observations of group \(1\); in
+\([\one_n\ d_1\ \cdots\ d_g]\) there are no such observations, as every row has exactly one indicator entry \(1\).
+
+\needspace{16\baselineskip}
+\begin{proposition}[\citeat{tu-asm}{Corollaries~8.12, 7.16, 8.14}]\label{r12-prop-glm-groups}
+In a GLM (Definition~\ref{r12-def-glm}), let the \(n\) observations fall into \(g\) nonempty groups, and let
+\(d_l\in\R^n\) be the \textbf{indicator} of group \(l\), with entry \(1\) in the rows of group \(l\) and \(0\) elsewhere (as in
+Theorem~\ref{r11-thm-oneway}); \(\sum_{i\in l}\) is the sum over the observations \(i\) of group \(l\).
+\begin{enumerate}
+\item If \(\one_n\in\mathcal C(X)\), every MLE satisfies \(\sum_{i=1}^n(y_i-\hat\mu_i)=0\).
+\item If \(d_l\in\mathcal C(X)\), every MLE satisfies \(\sum_{i\in l}\hat\mu_i=\sum_{i\in l}y_i\).
+\item Let \(\mathcal C(X)=\mathcal C(D)\) with \(D=[d_1\ \cdots\ d_g]\), for instance \(X=[\one_n\ d_1\ \cdots\ d_g]\),
+\([\one_n\ d_2\ \cdots\ d_g]\) or \(D\) (Theorem~\ref{r11-thm-oneway}).
+\begin{itemize}
+\item In logistic regression, let \(s_l=\sum_{i\in l}y_i\) and \(n_l=\sum_{i\in l}m_i\). An MLE exists if and only if
+\(0<s_l<n_l\) for every \(l\); the MLEs are then the \(\beta\) with \(x_i'\beta=\operatorname{logit}(s_l/n_l)\) for every \(i\)
+of every group \(l\), and \(\hat\pi_i=s_l/n_l\).
+\item In Poisson regression with exposures, let \(Y_l=\sum_{i\in l}y_i\) and \(\tau_l=\sum_{i\in l}t_i\). An MLE exists if and
+only if \(Y_l>0\) for every \(l\); the MLEs are then the \(\beta\) with \(x_i'\beta=\log(Y_l/\tau_l)\) for every \(i\) of every
+group \(l\), and \(\hat\mu_i=t_iY_l/\tau_l\).
+\end{itemize}
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(a) If \(\one_n=Xa\), then by Theorem~\ref{r12-thm-glm}(b),
+\(\sum_i(y_i-\hat\mu_i)=\one_n'(y-\hat\mu)=a'X'(y-\hat\mu)=0\).
+
+(b) In the same way, \(d_l=Xa_l\) gives \(\sum_{i\in l}(y_i-\hat\mu_i)=d_l'(y-\hat\mu)=a_l'X'(y-\hat\mu)=0\).
+
+(c)
+\begin{itemize}
+\item Every column of \(X\) lies in \(\mathcal C(D)\), so \(X=DF\) for some \(F\in\R^{g\times p}\)
+(Theorem~\ref{r1-thm-views}(a),(b)); row \(i\) of \(D\) is \(e_l'\) for \(i\) in group \(l\), so \(x_i'\beta=(F\beta)_l\) is the
+same number \(c_l\) for all \(i\) of group \(l\), and \(X\beta=Dc\) with \(c=F\beta\).
+\item Logistic. \(\mu_i=m_i\operatorname{expit}(c_l)\) for \(i\) in group \(l\). If \(\beta\) is an MLE, (b) gives
+\(n_l\operatorname{expit}(c_l)=s_l\); as \(0<\operatorname{expit}<1\), this has a solution only if \(0<s_l<n_l\), and then
+\(c_l=\operatorname{logit}(s_l/n_l)\). Conversely, let \(0<s_l<n_l\) for every \(l\), let
+\(c_l=\operatorname{logit}(s_l/n_l)\), and let \(\beta\) satisfy \(X\beta=Dc\) (there is such a \(\beta\), as
+\(Dc\in\mathcal C(D)=\mathcal C(X)\)). Then \(\hat\pi_i=s_l/n_l\), the entries of \(D'(y-\hat\mu)\) are
+\(s_l-n_l\,s_l/n_l=0\), and \(X'(y-\hat\mu)=F'D'(y-\hat\mu)=0\): \(\beta\) is an MLE (Theorem~\ref{r12-thm-glm}(b)).
+\item Poisson. \(\mu_i=t_ie^{c_l}\) for \(i\) in group \(l\), and (b) reads \(\tau_le^{c_l}=Y_l\), which has a solution if and
+only if \(Y_l>0\), namely \(c_l=\log(Y_l/\tau_l)\); the converse is as in the logistic case.\qedhere
+\end{itemize}
+\end{proof}
+
+\needspace{20\baselineskip}
+\begin{example}\label{r12-exm-glm-factorial}
+Four batches of \(8\) insects are exposed to an insecticide. Batch \(i\) has the dose \(a_i\in\{0,1\}\) (low, high) and the
+strain \(b_i\in\{0,1\}\), with \((a_i,b_i)=(0,0),(1,0),(0,1),(1,1)\), and \(y=(2,4,4,6)'\) of the insects die. Fit the
+logistic regression \(y_i\sim\mathrm{Bin}(8,\pi_i)\), \(\operatorname{logit}\pi_i=\beta_0+\beta_1a_i+\beta_2b_i\): carry
+out one IRLS step from \(\beta=0\), and find the MLE.
+
+\textit{Solution.} With \(X\) and \(X'X\) below, \(\det(X'X)=4\), and
+\((X'X)^{-1}=\frac14\operatorname{adj}(X'X)\) (Theorem~\ref{r5d-thm-adjugate}):
+\[
+X=\begin{pmatrix}1&0&0\\1&1&0\\1&0&1\\1&1&1\end{pmatrix},\qquad
+X'X=\begin{pmatrix}4&2&2\\2&2&1\\2&1&2\end{pmatrix},\qquad
+(X'X)^{-1}=\frac14\begin{pmatrix}3&-2&-2\\-2&4&0\\-2&0&4\end{pmatrix}
+\]
+so \(\rank X=3\) (Theorem~\ref{r10-thm-normal-equations}(b)). By the paragraph after Definition~\ref{r12-def-glm},
+\(\mu_i=8\pi_i\) and
+\(W=\diag\bigl(8\pi_i(1-\pi_i)\bigr)\), and \(\phi=1\).
+\begin{itemize}
+\item At \(\beta=0\): \(\pi_i=\frac12\), \(\mu=4\one_4\), \(W=2I_4\), \(y-\mu=(-2,0,0,2)'\) and
+\(z=X\beta+W^{-1}(y-\mu)=(-1,0,0,1)'\). The score \(X'(y-\mu)=(0,2,2)'\) is not \(0\), \(X'Wz=X'(y-\mu)\), and
+\[
+X'WX=2X'X=\begin{pmatrix}8&4&4\\4&4&2\\4&2&4\end{pmatrix},\qquad
+\beta^{(1)}=(X'WX)^{-1}X'Wz=\frac18\begin{pmatrix}3&-2&-2\\-2&4&0\\-2&0&4\end{pmatrix}\begin{pmatrix}0\\2\\2\end{pmatrix}
+=\begin{pmatrix}-1\\1\\1\end{pmatrix}
+\]
+by Theorem~\ref{r12-thm-glm}(c).
+\item The likelihood equations \(X'(y-\hat\mu)=0\) (Theorem~\ref{r12-thm-glm}(b)) hold if \(\hat\mu=y\), that is,
+\(\hat\pi=\frac18y=(\frac14,\frac12,\frac12,\frac34)'\), with \(\operatorname{logit}\hat\pi=(-\log3,0,0,\log3)'\). The
+equations \(\beta_0=-\log3\), \(\beta_0+\beta_1=0\), \(\beta_0+\beta_2=0\), \(\beta_0+\beta_1+\beta_2=\log3\) are solved by
+\(\hat\beta=(-\log3,\log3,\log3)'\). As \(\rank X=3\), it is the only MLE. For each strain, the high dose multiplies the
+odds of death by \(e^{\hat\beta_1}=3\), and for each dose, the strain \(b=1\) multiplies them by \(e^{\hat\beta_2}=3\).
+\item At \(\hat\beta\), \(\hat W=\diag\bigl(8\hat\pi_i(1-\hat\pi_i)\bigr)=\diag(\frac32,2,2,\frac32)\), and
+\(\mathrm H\ell(\hat\beta)=-X'\hat WX\) with
+\[
+X'\hat WX=\begin{pmatrix}7&\frac72&\frac72\\\frac72&\frac72&\frac32\\\frac72&\frac32&\frac72\end{pmatrix}
+\]
+which is PD (Theorem~\ref{r12-thm-glm}(a)).
+\end{itemize}
+\end{example}
+
+\needspace{18\baselineskip}
+\begin{example}\label{r12-exm-glm-oneway}
+Three groups of \(36\) patients receive the treatments \(1\), \(2\), \(3\), and \(12\), \(24\), \(18\) of them recover. With
+one row for each group, \(y_l\sim\mathrm{Bin}(36,\pi_l)\) (\(l=1,2,3\)), so \(n=3\) and \(d_l=e_l\). Fit the one-way
+logistic model \(\operatorname{logit}\pi_l=\beta_0+\alpha_l\), that is, \(\beta=(\beta_0,\alpha_1,\alpha_2,\alpha_3)'\) and
+\[
+X=[\one_3\ d_1\ d_2\ d_3]=\begin{pmatrix}1&1&0&0\\1&0&1&0\\1&0&0&1\end{pmatrix}
+\]
+(Theorem~\ref{r11-thm-oneway}): find the MLEs, the fitted probabilities and the odds ratios of the treatments.
+
+\textit{Solution.}
+\begin{itemize}
+\item \(\mathcal C(X)=\mathcal C(D)\) with \(D=[d_1\ d_2\ d_3]=I_3\) (Theorem~\ref{r11-thm-oneway}(c)), and
+\(0<s_l<36\) for each group. By Proposition~\ref{r12-prop-glm-groups}(c), the MLEs exist, \(\hat\pi=(\frac13,\frac23,\frac12)'\),
+and they are the \(\beta\) with
+\[
+X\beta=\begin{pmatrix}\operatorname{logit}\frac13\\\operatorname{logit}\frac23\\\operatorname{logit}\frac12\end{pmatrix}
+=\begin{pmatrix}-\log2\\\log2\\0\end{pmatrix}
+\]
+\item \(\rank X=3<4\) and \(\mathcal N(X)=\Span\{(-1,1,1,1)'\}\) (Theorem~\ref{r11-thm-oneway}(b)). One MLE is
+\(\beta^0=(0,-\log2,\log2,0)'\), so by Proposition~\ref{r12-prop-glm-fitted}(a) the MLEs are
+\(\beta^0+t(-1,1,1,1)'=(-t,\ t-\log2,\ t+\log2,\ t)'\) (\(t\in\R\)), all with the same \(\hat\pi\). Their first entry
+\(-t\) takes every real value: the data do not determine \(\beta_0\).
+\item \(\alpha_2-\alpha_1=a'\beta\) with \(a=(0,-1,1,0)'=X'(-1,1,0)'\in\mathcal C(X')\), and likewise
+\(\alpha_3-\alpha_1\), with \(a=X'(-1,0,1)'\). By Proposition~\ref{r12-prop-glm-fitted}(b) they have the same value for all
+MLEs: \(\hat\alpha_2-\hat\alpha_1=2\log2\) and \(\hat\alpha_3-\hat\alpha_1=\log2\). So the estimated odds ratios of
+treatments \(2\) and \(3\) to treatment \(1\) are \(4\) and \(2\): the estimated odds of recovery are \(\frac{24}{12}=2\),
+\(\frac{12}{24}=\frac12\) and \(1\) for treatments \(2\), \(1\), \(3\).
+\end{itemize}
+\end{example}
+
+We state without proof, as it needs limit theorems that are not in this book: in a GLM with \(\rank X=p\) and \(\phi\) known
+(\(\phi=1\) for the binomial and Poisson families), under conditions on \(X\) (for instance, bounded rows \(x_i\) and
+\(X'WX/n\) converging to a PD matrix), for large \(n\) an MLE exists with probability close to \(1\), and \(\hat\beta\) is
+approximately \(N_p\bigl(\beta,\phi(X'\hat WX)^{-1}\bigr)\)~\citeat{tu-asm}{Theorem~8.41, Corollary~7.21}, \citeat{shao}{Theorem~4.18}, where \(\hat W\) is \(W\) at \(\hat\beta\). Binomial rows are
+covered, with \(\sum_im_i\) in place of \(n\): a row with \(m_i\) trials and response \(y_i\) contributes
+\((y_i-m_i\pi_i)x_i\) to the score and \(m_i\pi_i(1-\pi_i)x_ix_i'\) to \(X'WX\) (the sums in the proof of
+Theorem~\ref{r12-thm-glm}(a)), as do \(m_i\) Bernoulli rows with the same \(x_i\) and responses of sum \(y_i\). Accordingly,
+the \textbf{standard error} of \(c'\hat\beta\) is taken to be \(\operatorname{SE}(c'\hat\beta)=\sqrt{\phi\,c'(X'\hat WX)^{-1}c}\),
+with \(\phi(X'\hat WX)^{-1}\) in place of the \(\sigma^2(X'X)^{-1}\) of Theorem~\ref{r12-thm-sampling}(a); for the normal
+family, where \(W=I_n\) and \(\phi=\sigma^2\) is known, the normal distribution of \(\hat\beta\) is exact. For
+\(H_0\colon K\beta=k_0\) with \(K\in\R^{q\times p}\) of rank \(q\) and \(k_0\in\R^q\), the \textbf{Wald statistic}
+\((K\hat\beta-k_0)'\bigl(\phi K(X'\hat WX)^{-1}K'\bigr)^{-1}(K\hat\beta-k_0)\) and the \textbf{likelihood-ratio statistic}
+\(2\bigl(\ell(\hat\beta)-\ell(\tilde\beta)\bigr)\), where \(\tilde\beta\) maximizes \(\ell\) subject to \(K\beta=k_0\), are both
+approximately \(\chi^2_q\) under \(H_0\), and \(H_0\) is rejected at approximate level \(\alpha\) when the statistic exceeds
+\(\chi^2_{q,1-\alpha}\) (Definition~\ref{r15-def-t-F}(c)).
+
+\needspace{14\baselineskip}
+
+\subsection*{Exercises}
+
+\begin{exercise}\label{r12-ex-logistic-groups}
+Use the data of Example~\ref{r12-exm-glm-oneway} (three groups of \(36\) patients, \(12\), \(24\), \(18\) recoveries, one row
+for each group).
+\begin{enumerate}
+\item In the baseline coding \(X_2=[\one_3\ d_2\ d_3]\) (Example~\ref{r11-exm-oneway}),
+\(\operatorname{logit}\pi_l=\beta_0+\beta_2d_{l2}+\beta_3d_{l3}\)
+(\(d_{l2}\), \(d_{l3}\) the entries of \(d_2\), \(d_3\)), find the MLE \(\hat\beta=(\hat\beta_0,\hat\beta_2,\hat\beta_3)'\) and
+the odds ratios \(e^{\hat\beta_2}\), \(e^{\hat\beta_3}\), and compare them with Example~\ref{r12-exm-glm-oneway}.
+\item At the MLE, find \(\hat W\), \(X_2'\hat WX_2\) and its inverse, and \(\operatorname{SE}(\hat\beta_2)\),
+\(\operatorname{SE}(\hat\beta_3)\).
+\item In the coding \(X_1=[d_1\ d_2\ d_3]=I_3\) without intercept (Theorem~\ref{r11-thm-oneway}), carry out one IRLS step
+from \(\gamma=0\).
+\item In the coding \(X=[\one_3\ d_1\ d_2\ d_3]\) of Example~\ref{r12-exm-glm-oneway}, at \(\beta=0\), find \(X'WX\), check
+that \(G_0=\frac19\diag(0,1,1,1)\) is a g-inverse of it, compute \(b=G_0X'Wz\), and compare \(Xb\) with the step of (c).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) \(\mathcal C(X_2)=\mathcal C(I_3)\) (Theorem~\ref{r11-thm-oneway}(c)), so by
+Proposition~\ref{r12-prop-glm-groups}(c) the MLE satisfies \(X_2\hat\beta=(-\log2,\log2,0)'\), as in
+Example~\ref{r12-exm-glm-oneway}: \(\hat\beta_0=-\log2\), \(\hat\beta_0+\hat\beta_2=\log2\), \(\hat\beta_0+\hat\beta_3=0\). So
+\(\hat\beta=(-\log2,\ 2\log2,\ \log2)'\), the only MLE (\(\rank X_2=3\), Theorem~\ref{r12-thm-glm}(b)), and
+\(e^{\hat\beta_2}=4\), \(e^{\hat\beta_3}=2\). These are the odds ratios of Example~\ref{r12-exm-glm-oneway}:
+\(\hat\beta_2\), \(\hat\beta_3\) equal \(\hat\alpha_2-\hat\alpha_1\), \(\hat\alpha_3-\hat\alpha_1\), as both codings give the same
+fitted probabilities \(\hat\pi=(\frac13,\frac23,\frac12)'\) (Proposition~\ref{r12-prop-glm-groups}(c)).
+
+(b) \(\hat W=\diag\bigl(36\hat\pi_l(1-\hat\pi_l)\bigr)=\diag(36\cdot\frac13\cdot\frac23,\ 36\cdot\frac23\cdot\frac13,\
+36\cdot\frac12\cdot\frac12)=\diag(8,8,9)\), and \(X_2\) is invertible, with the inverse below (\(X_2X_2^{-1}=I_3\) by
+multiplication):
+\[
+X_2=\begin{pmatrix}1&0&0\\1&1&0\\1&0&1\end{pmatrix},\qquad
+X_2'\hat WX_2=\begin{pmatrix}25&8&9\\8&8&0\\9&0&9\end{pmatrix},\qquad
+X_2^{-1}=\begin{pmatrix}1&0&0\\-1&1&0\\-1&0&1\end{pmatrix}
+\]
+By Theorem~\ref{r2-thm-inverse-props}(b),(c), \((X_2'\hat WX_2)^{-1}=X_2^{-1}\hat W^{-1}(X_2^{-1})'\), with
+\[
+X_2^{-1}\hat W^{-1}=\begin{pmatrix}\frac18&0&0\\-\frac18&\frac18&0\\-\frac18&0&\frac19\end{pmatrix},\qquad
+(X_2'\hat WX_2)^{-1}=\begin{pmatrix}\frac18&-\frac18&-\frac18\\-\frac18&\frac14&\frac18\\-\frac18&\frac18&\frac{17}{72}\end{pmatrix}
+\]
+With \(\phi=1\) and the paragraph after Example~\ref{r12-exm-glm-oneway},
+\(\operatorname{SE}(\hat\beta_2)^2=\frac14=\frac18+\frac18\) and \(\operatorname{SE}(\hat\beta_3)^2=\frac{17}{72}=\frac18+\frac19\): so
+\(\operatorname{SE}(\hat\beta_2)=\frac12\) and \(\operatorname{SE}(\hat\beta_3)=\frac{\sqrt{34}}{12}\).
+
+(c) At \(\gamma=0\): \(\pi_l=\frac12\), \(\mu=18\one_3\), \(W=36\cdot\frac12\cdot\frac12I_3=9I_3\), \(y-\mu=(-6,6,0)'\) and
+\(z=\gamma+W^{-1}(y-\mu)=(-\frac23,\frac23,0)'\). By Theorem~\ref{r12-thm-glm}(c),
+\(\gamma^{\mathrm{new}}=(X_1'WX_1)^{-1}X_1'Wz=(9I_3)^{-1}\,9z=z=(-\frac23,\frac23,0)'\) (the MLE is
+\(\hat\gamma=(-\log2,\log2,0)'\)).
+
+(d) At \(\beta=0\), \(X\beta=0\), so \(\pi\), \(\mu\), \(W=9I_3\) and \(z\) are those of (c), and \(X'Wz=X'(y-\mu)=(0,-6,6,0)'\).
+\[
+X'WX=9X'X=\begin{pmatrix}27&9&9&9\\9&9&0&0\\9&0&9&0\\9&0&0&9\end{pmatrix},\qquad
+X'WX\,G_0=\begin{pmatrix}0&1&1&1\\0&1&0&0\\0&0&1&0\\0&0&0&1\end{pmatrix}
+\]
+and \(X'WX\,G_0\,X'WX=X'WX\): the first row of the product is the sum of rows \(2\), \(3\), \(4\) of \(X'WX\), which is
+\((27,9,9,9)\), and the other rows are rows \(2\), \(3\), \(4\) themselves. So \(G_0\) is a g-inverse of \(X'WX\)
+(Definition~\ref{r10-def-ginverse}). Then
+\[
+b=G_0X'Wz=\frac19\begin{pmatrix}0\\-6\\6\\0\end{pmatrix}=\begin{pmatrix}0\\-\frac23\\\frac23\\0\end{pmatrix},\qquad
+Xb=\begin{pmatrix}-\frac23\\\frac23\\0\end{pmatrix}=\gamma^{\mathrm{new}}
+\]
+as Proposition~\ref{r12-prop-glm-fitted}(c) asserts for the full-rank factorization \(X=X_1S\), \(S=[\one_3\ I_3]\)
+(Theorem~\ref{r11-thm-oneway}(a)), although \(b\) itself depends on the g-inverse.
+\end{solution}
+
+\begin{exercise}\label{r12-ex-poisson-classes}
+A motor portfolio has three rating classes A, B, C. Policy \(i\) is observed for \(t_i\) years (its exposure) and has \(y_i\)
+claims. Class A has total exposure \(1000\) policy-years and \(24\) claims, class B \(500\) policy-years and \(48\) claims,
+class C \(750\) policy-years and \(36\) claims. Assume the Poisson regression
+\(\log\mu_i=\log t_i+\beta_0+\beta_1d_{Bi}+\beta_2d_{Ci}\), where \(d_B\), \(d_C\) are the indicators of classes B and C.
+\begin{enumerate}
+\item Show that, apart from a term free of \(\beta\), the log-likelihood depends on the data only through the class
+totals; find the MLE and the rate ratios of classes B and C to class A.
+\item Find \(X'\hat WX\) at the MLE, its inverse, and \(\operatorname{SE}(\hat\beta_1)\), \(\operatorname{SE}(\hat\beta_2)\).
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+(a) Let \(Y_l\), \(\tau_l\) be the total count and exposure of class \(l\), and \(\eta_A=\beta_0\), \(\eta_B=\beta_0+\beta_1\),
+\(\eta_C=\beta_0+\beta_2\), so that \(x_i'\beta=\eta_l\) for \(i\) in class \(l\). By Theorem~\ref{r12-thm-glm} with
+\(b_i(\theta)=e^\theta\), \(c_i(k,\phi)=-\log k!\) and \(\phi=1\),
+\[
+\ell(\beta)=\sum_i\bigl(y_i(\log t_i+x_i'\beta)-t_ie^{x_i'\beta}-\log y_i!\bigr)
+=\sum_{l=A,B,C}\bigl(Y_l\eta_l-\tau_le^{\eta_l}\bigr)+\sum_i(y_i\log t_i-\log y_i!)
+\]
+\(\mathcal C(X)=\mathcal C([d_A\ d_B\ d_C])\) (Theorem~\ref{r11-thm-oneway}(c)) and every \(Y_l>0\), so by
+Proposition~\ref{r12-prop-glm-groups}(c), \(e^{\hat\eta_l}=Y_l/\tau_l\): \(\frac{24}{1000}=\frac3{125}\),
+\(\frac{48}{500}=\frac{12}{125}\), \(\frac{36}{750}=\frac6{125}\). Hence \(\hat\beta_0=\log\frac3{125}\),
+\(\hat\beta_1=\log\bigl(\frac{12}{125}\big/\frac3{125}\bigr)=\log4\) and \(\hat\beta_2=\log\bigl(\frac6{125}\big/\frac3{125}\bigr)=\log2\),
+the only MLE (\(X=[\one_n\ d_B\ d_C]\) has rank \(3\), Theorem~\ref{r11-thm-oneway}(c)). So the rate ratios of classes B and C
+to class A are \(e^{\hat\beta_1}=4\) and \(e^{\hat\beta_2}=2\).
+
+(b) Here \(\hat W=\diag(\hat\mu_1,\dots,\hat\mu_n)\) (\(b_i''(\theta)=e^\theta\)). By Theorem~\ref{r1-thm-views}(d),
+\(X'\hat WX=\sum_i\hat\mu_ix_ix_i'\); \(x_i\) is \(x_A=(1,0,0)'\), \(x_B=(1,1,0)'\) or \(x_C=(1,0,1)'\) according to the class,
+and \(\sum_{i\in l}\hat\mu_i=Y_l\) (Proposition~\ref{r12-prop-glm-groups}(b)). The matrix with rows \(x_A'\), \(x_B'\), \(x_C'\)
+is \(X_2\) of Exercise~\ref{r12-ex-logistic-groups}(b), with the inverse computed there; so, by
+Theorem~\ref{r1-thm-views}(d) again, \(X'\hat WX=\sum_lY_lx_lx_l'=X_2'\diag(24,48,36)X_2\):
+\[
+X_2=\begin{pmatrix}1&0&0\\1&1&0\\1&0&1\end{pmatrix},\qquad
+X'\hat WX=\begin{pmatrix}108&48&36\\48&48&0\\36&0&36\end{pmatrix},\qquad
+X_2^{-1}=\begin{pmatrix}1&0&0\\-1&1&0\\-1&0&1\end{pmatrix}
+\]
+By Theorem~\ref{r2-thm-inverse-props}(b),(c),
+\((X'\hat WX)^{-1}=X_2^{-1}\diag(\frac1{24},\frac1{48},\frac1{36})(X_2^{-1})'\), with
+\[
+X_2^{-1}\diag\bigl(\tfrac1{24},\tfrac1{48},\tfrac1{36}\bigr)=\begin{pmatrix}\frac1{24}&0&0\\-\frac1{24}&\frac1{48}&0\\-\frac1{24}&0&\frac1{36}\end{pmatrix},\qquad
+(X'\hat WX)^{-1}=\begin{pmatrix}\frac1{24}&-\frac1{24}&-\frac1{24}\\-\frac1{24}&\frac1{16}&\frac1{24}\\-\frac1{24}&\frac1{24}&\frac5{72}\end{pmatrix}
+\]
+So \(\operatorname{SE}(\hat\beta_1)^2=\frac1{16}=\frac1{24}+\frac1{48}\) and \(\operatorname{SE}(\hat\beta_2)^2=\frac5{72}=\frac1{24}+\frac1{36}\)
+(\(\phi=1\); the paragraph after Example~\ref{r12-exm-glm-oneway}): \(\operatorname{SE}(\hat\beta_1)=\frac14\) and
+\(\operatorname{SE}(\hat\beta_2)=\frac{\sqrt{10}}{12}\).
+\end{solution}
+
+\begin{exercise}\label{r12-ex-weighted-projection}
+For \(X\) and \(\hat W\) of Example~\ref{r12-exm-glm-factorial}, compute \(P_{X,\hat W}=X(X'\hat WX)^{-1}X'\hat W\).
+Check that \(P_{X,\hat W}^2=P_{X,\hat W}\), that \(\hat WP_{X,\hat W}\) is symmetric while \(P_{X,\hat W}\) is not, that
+\(\tr P_{X,\hat W}=\rank X\), and that \(I_4-P_{X,\hat W}\) has rank \(1\) (Proposition~\ref{r12-prop-weighted-projection}).
+\end{exercise}
+\begin{solution}
+By Example~\ref{r12-exm-glm-factorial}, \(X'\hat WX=\frac12B\) with \(B\) below. Expanding along the first row,
+\(\det B=14(49-9)-7(49-21)+7(21-49)=560-196-196=168\), and by Theorem~\ref{r5d-thm-adjugate}
+\[
+B=\begin{pmatrix}14&7&7\\7&7&3\\7&3&7\end{pmatrix},\qquad
+\operatorname{adj}B=\begin{pmatrix}40&-28&-28\\-28&49&7\\-28&7&49\end{pmatrix}
+\]
+so \((X'\hat WX)^{-1}=2B^{-1}=\frac2{168}\operatorname{adj}B=\frac1{84}\operatorname{adj}B\). Then
+\[
+X(X'\hat WX)^{-1}=\frac1{84}\begin{pmatrix}40&-28&-28\\12&21&-21\\12&-21&21\\-16&28&28\end{pmatrix},\qquad
+X'\hat W=\begin{pmatrix}\frac32&2&2&\frac32\\0&2&0&\frac32\\0&0&2&\frac32\end{pmatrix}
+\]
+and \(P_{X,\hat W}=\frac1{14}M\) with
+\[
+M=\begin{pmatrix}10&4&4&-4\\3&11&-3&3\\3&-3&11&3\\-4&4&4&10\end{pmatrix},\qquad
+M^2=\begin{pmatrix}140&56&56&-56\\42&154&-42&42\\42&-42&154&42\\-56&56&56&140\end{pmatrix}=14M
+\]
+so \(P_{X,\hat W}^2=\frac1{196}M^2=\frac1{14}M=P_{X,\hat W}\). Further,
+\[
+\hat WP_{X,\hat W}=\frac1{28}\begin{pmatrix}30&12&12&-12\\12&44&-12&12\\12&-12&44&12\\-12&12&12&30\end{pmatrix}
+\]
+is symmetric, while \(P_{X,\hat W}\) is not: its \((1,2)\) entry is \(\frac27\) and its \((2,1)\) entry \(\frac3{14}\).
+\(\tr P_{X,\hat W}=\frac{10+11+11+10}{14}=3=\rank X\) (Example~\ref{r12-exm-glm-factorial}), as it must be:
+\(P_{X,\hat W}\) is idempotent of rank \(\rank X\) (Proposition~\ref{r12-prop-weighted-projection}(b),(c)), and an
+idempotent matrix has trace equal to its rank (Theorem~\ref{r6-thm-idempotent}(c)). Finally,
+\[
+I_4-P_{X,\hat W}=\frac1{14}\begin{pmatrix}4&-4&-4&4\\-3&3&3&-3\\-3&3&3&-3\\4&-4&-4&4\end{pmatrix}
+=\frac1{14}\begin{pmatrix}4\\-3\\-3\\4\end{pmatrix}(1,\ -1,\ -1,\ 1)
+\]
+is a nonzero matrix whose columns are multiples of one vector, so its rank is \(1=4-\rank X\).
+\end{solution}
+
+\subsection*{Problems}
+
+\begin{problem}[\citeat{tu-asm}{Exercise~8.3}]\label{r12-pr-poisson-residuals}
+In a Poisson regression (Definition~\ref{r12-def-glm}) whose design \(X\) has the column \(\one_n\) (an intercept), let
+\(\hat\beta\) be an MLE and \(e=y-\hat\mu\) the vector of residuals. Show that
+\begin{enumerate}
+\item \(e_1+\dots+e_n=0\);
+\item the residuals and each column \(u\) of \(X\) have sample covariance \(0\) (Definition~\ref{r12-def-data}), so that their
+sample correlation is \(0\) whenever neither \(e\) nor \(u\) is constant (Definition~\ref{r12-def-correlation}).
+\end{enumerate}
+\end{problem}
+\begin{solution}
+(a) This is Proposition~\ref{r12-prop-glm-groups}(a), as \(\one_n\in\mathcal C(X)\).
+
+(b) By Theorem~\ref{r12-thm-glm}(b), \(X'e=0\), so \(u'e=\sum_iu_ie_i=0\) for each column \(u\) of \(X\). By (a),
+\(\bar e=0\), so
+\[
+\sum_{i=1}^n(u_i-\bar u)(e_i-\bar e)=\sum_{i=1}^nu_ie_i-\bar u\sum_{i=1}^ne_i=0
+\]
+and the sample covariance \(\frac1{n-1}\sum_i(u_i-\bar u)(e_i-\bar e)\) is \(0\). The sample correlation
+\(\cor(u,e)=S_{ue}/\sqrt{S_{uu}S_{ee}}\) has the numerator \(S_{ue}=0\), so it is \(0\) when \(u\) and \(e\) are not constant
+(for the column \(\one_n\) itself it is not defined).
+\end{solution}
+
+\clearpage
 \def\runningtitle{Bibliography}
 \renewcommand{\refname}{Bibliography}
 \begin{thebibliography}{10}
@@ -35766,6 +36341,13 @@ Jan~R. Magnus and Heinz Neudecker.
   and Econometrics}}.
 \newblock Wiley Series in Probability and Statistics. John Wiley \& Sons,
   Hoboken, NJ, third edition, 2019.
+
+\bibitem{shao}
+Jun Shao.
+\newblock {\em {Mathematical Statistics}}.
+\newblock Springer Texts in Statistics. Springer, New York, second edition,
+  2003.
+\newblock \url{https://doi.org/10.1007/b97553}.
 
 \end{thebibliography}
 \end{document}
