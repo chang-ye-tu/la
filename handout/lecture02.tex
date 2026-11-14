@@ -105,21 +105,8 @@
 \begin{document}
 \handouttitle{2}{Gauss Elimination, RREF, and Inverses}
 
-\textbf{Last time} (\lec{1}): products of matrices and their rules; the columns and rows of a product; the transpose
-(restated below). \(e_i\) is column \(i\) of the identity matrix (\(I_m\) or \(I_n\), as the product requires).
-
-\textbf{From \lec{1}} (restated; \(A=(a_{ij})\in\R^{m\times n}\) with columns \(a_1,\dots,a_n\)).
-\begin{itemize}[itemsep=0pt,parsep=0pt,topsep=2pt]
-\item Definition~2: for \(B\in\R^{n\times p}\), \((AB)_{ij}=\sum_{r=1}^na_{ir}b_{rj}\); so
-\((Ax)_i=\sum_ja_{ij}x_j\) for \(x\in\R^n\).
-\item Theorem~3(a): \(A(BG)=(AB)G\), \(A(B+G)=AB+AG\), \((A+B)G=AG+BG\), \(A(cB)=c(AB)=(cA)B\),
-\(I_mA=A=AI_n\), \(0A=0\), \(A0=0\).
-\item Theorem~4(a)--(c): \(\col_j(AB)=A\col_j(B)\); \(Ax=x_1a_1+\dots+x_na_n\); \(\row_i(AB)=\row_i(A)B\).
-\item Definition~7, Theorem~8: \((A')_{ij}=a_{ji}\); \(A\) is \textbf{symmetric} if \(A'=A\);
-\((A')'=A\), \((AB)'=B'A'\), \(I_n'=I_n\).
-\item Proposition~13(b): \(\diag(d_1,\dots,d_n)\diag(f_1,\dots,f_n)=\diag(d_1f_1,\dots,d_nf_n)\).
-\item Proposition~11(a): \(Ae_j=\col_j(A)\), \(e_i'A=\row_i(A)\).
-\end{itemize}
+\textbf{Last time} (\lec{1}): products of matrices and their rules; the columns and rows of a product; the transpose.
+\(e_i\) is column \(i\) of the identity matrix (\(I_m\) or \(I_n\), as the product requires).
 
 \subsection*{1. Linear systems and row operations}
 
@@ -331,7 +318,7 @@ elimination:]
 \end{board}
 Check: \(A(3,0,0,1)'=(4,7,4,7)'\); \(A(-2,1,1,0)'=0\), that is, \(\col_3(A)=2\col_1(A)-\col_2(A)\).
 
-\Needspace{8\baselineskip}
+\Needspace{9\baselineskip}
 \begin{theorem}\label{b2.11}
 \begin{enumerate}
 \item If \(A\in\R^{m\times n}\) with \(m<n\), then \(Ax=0\) has a nontrivial solution.
@@ -348,7 +335,7 @@ Let \(R\) be an RREF of \(A\) (Definition~\ref{b2.5}), with \(r\) nonzero rows; 
 r\leqslant m<n&\implies\text{a free unknown exists; it }=1,\text{ the others }=0\implies\text{a solution }x\ne0
 \end{align*}
 \end{board}
-\begin{board}[(b) Theorem~\ref{b2.3}(b), Proposition~\ref{b2.7}(b):]
+\begin{board}[(b) Theorem~\ref{b2.3}(b), Proposition~\ref{b2.7}(b); \lec{1}, Theorem~3(a):]
 \boardtop
 \begin{align*}
 R=I&\implies Rx=x\implies x=0\text{ is the only solution}\\
@@ -405,7 +392,7 @@ A'(A^{-1})'=(A^{-1}A)'=I'=I,\qquad(A^{-1})'A'=(AA^{-1})'=I
 If \(A\in\R^{n\times n}\) is symmetric and invertible, then \(A^{-1}\) is symmetric.
 \end{corollary}
 \begin{proof}
-\begin{board}[\(A'=A\); Theorem~\ref{b2.13}(c):]
+\begin{board}[\(A'=A\) (\lec{1}, Definition~7); Theorem~\ref{b2.13}(c):]
 \[
 (A^{-1})'=(A')^{-1}=A^{-1}
 \]
@@ -470,7 +457,7 @@ for every \(b\in\R^n\); (v) \(A\) is a product of elementary matrices. Moreover,
 \begin{proof}
 \(R=PA\), \(P=E_k\cdots E_1\) invertible (Theorem~\ref{b2.15}(c)).
 \begin{itemize}
-\item \(R=I\): \(A=P^{-1}(PA)=P^{-1}R=P^{-1}=E_1^{-1}\cdots E_k^{-1}\), a product of elementary matrices, hence invertible
+\item \(R=I\): \(A=P^{-1}(PA)=P^{-1}R=P^{-1}\) (\lec{1}, Theorem~3(a)) is \(E_1^{-1}\cdots E_k^{-1}\), a product of elementary matrices, hence invertible
 (Theorems~\ref{b2.15}(b), \ref{b2.13}(b)); \(Ax=0\) has only the trivial solution (Theorem~\ref{b2.11}(b)); and
 \(x=A^{-1}b\) solves \(Ax=b\).
 \item \(R\ne I\): then \(R\) has a zero row, hence a zero last row (Definition~\ref{b2.4}(c)); otherwise \(r=n\),
@@ -547,8 +534,8 @@ Row-reduce \([A\mid I_2]\) and read the result by Corollary~\ref{b2.17}; \(\Delt
 \]
 \(\Delta=0\): not invertible (Corollary~\ref{b2.17}(b)); \(\Delta\ne0\): the right half is the stated \(A^{-1}\).
 \end{board}
-\begin{board}[\(a=0\), so \(\Delta=-bc\); \(c=0\): \(Ae_1=\col_1(A)=0\), not invertible (Theorem~\ref{b2.16},
-(i)\(\Leftrightarrow\)(iii)); \(c\ne0\):]
+\begin{board}[\(a=0\), so \(\Delta=-bc\); \(c=0\): \(Ae_1=\col_1(A)=0\) (\lec{1}, Proposition~11(a)), not invertible
+(Theorem~\ref{b2.16}, (i)\(\Leftrightarrow\)(iii)); \(c\ne0\):]
 \[
 \begin{gathered}
 \left(\begin{array}{cc|cc}0&b&1&0\\c&d&0&1\end{array}\right)
@@ -692,7 +679,7 @@ so; different choices give different solutions (they differ in a free unknown, a
 \item No free unknowns: exactly one solution; a free unknown: each of its values gives another solution, infinitely
 many.
 \end{itemize}
-\begin{board}[(c)]
+\begin{board}[(c) \lec{1}, Theorem~3(a):]
 \boardtop
 \begin{align*}
 A\text{ invertible}&\implies A(A^{-1}b)=b;\quad Ax=b\implies x=A^{-1}(Ax)=A^{-1}b\\

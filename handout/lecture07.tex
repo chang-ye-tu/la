@@ -104,54 +104,22 @@
 \begin{document}
 \handouttitle{7}{Eigenvalues and diagonalization}
 
-\textbf{Last time} (Chapters 1--6, before the midterm): linear systems, rank, determinants. Facts F1--F8 below are
-proved there; F9--F13 are facts about polynomials, used without proof here (see Chapter 7 of the textbook).
-Throughout, \(I=I_n\) and \(e_j\) is column \(j\) of \(I\).
+\textbf{Last time} (\lec{6}): orthogonality. Results of Lectures~1--5 are cited where they are used; F1--F4:
+facts about polynomials, without proof (Chapter~7 of the textbook). \(I=I_n\), \(e_j=\col_j(I)\).
 
-\subsection*{Facts}
-
-\begin{enumerate}[label=\textbf{F\arabic*.},ref=F\arabic*,leftmargin=*,itemsep=0pt,parsep=0pt,topsep=2pt]
-\item\label{f-rules} \((AB)C=A(BC)\), \(A(B+C)=AB+AC\), \((A+B)C=AC+BC\), \(c(AB)=(cA)B=A(cB)\) (\(c\in\R\)),
-\(I_mA=A=AI_n\) (\(A\in\R^{m\times n}\)); \(A+B\), \(cA\) entry by entry, with the vector rules.
-\item\label{f-views} \(A=[a_1\ \cdots\ a_n]\): \(Ax=x_1a_1+\dots+x_na_n\), \(Ae_j=a_j\), \(\col_j(AB)=A\col_j(B)\)
-(\(\col_j\): column \(j\)); matrices with the same columns are equal.
-\item\label{f-invertible} \(A\in\R^{n\times n}\) invertible \(\Leftrightarrow\) (\(Ax=0\Rightarrow x=0\))
-\(\Leftrightarrow\) \(\rank A=n\) \(\Leftrightarrow\) independent columns \(\Leftrightarrow\) \(\det A\ne0\);
-\(BA=I\) \(\Rightarrow\) \(A\) invertible, \(A^{-1}=B\).
-\item\label{f-basis} \(cx=0\), \(x\ne0\) \(\Rightarrow\) \(c=0\); a list containing \(0\) is dependent;
-\(\dim W=d\) \(\Rightarrow\) more than \(d\) vectors of \(W\) are dependent, \(d\) independent ones are a basis of
-\(W\); \(\dim\R^n=n\); an independent list in \(\R^n\) extends to a basis.
-\item\label{f-rank} \(A\in\R^{m\times n}\): \(\mathcal N(A)=\{x:Ax=0\}\) is a subspace, \(\dim\mathcal N(A)=n-\rank A\),
-\(\mathcal N(A'A)=\mathcal N(A)\); \(\rank A=n\) \(\Leftrightarrow\) independent columns; \(\rank(PAQ)=\rank A\) (\(P\), \(Q\) invertible),
-\(\rank(AB)\leqslant\min\{\rank A,\rank B\}\); row operations keep \(\mathcal N(A)\); \(\rank A\) = number of nonzero
-rows of an echelon form; the special solutions of the reduced echelon form are a basis of \(\mathcal N(A)\).
-\item\label{f-det} \(A,B\in\R^{n\times n}\), \(c\in\R\): \(\det(AB)=\det A\det B\), \(\det(cA)=c^n\det A\), \(\det I=1\),
-\(\det A=a_{11}\cdots a_{nn}\) (\(A\) triangular); adding a multiple of a row (column) to another keeps \(\det A\),
-scaling a row (column) by \(c\) scales \(\det A\) by \(c\).
-\item\label{f-expansion} \(n\geqslant2\), \(A(i|j)\) = \(A\) without row \(i\) and column \(j\):
-\(\det A=\sum_j(-1)^{i+j}a_{ij}\det A(i|j)\) (each \(i\)) \(=\sum_i(-1)^{i+j}a_{ij}\det A(i|j)\) (each \(j\)).
-\item\label{f-block} \(M=\left(\begin{smallmatrix}P&Q\\R&S\end{smallmatrix}\right)\), \(P\in\R^{p\times p}\),
-\(S\in\R^{q\times q}\): \(R=0\Rightarrow\det M=\det P\det S\); \(P\) invertible
-\(\Rightarrow\det M=\det P\det(S-RP^{-1}Q)\); \(S\) invertible \(\Rightarrow\det M=\det S\det(P-QS^{-1}R)\).
-\end{enumerate}
-
-\textbf{Polynomials.} \(\C=\{a+bi:a,b\in\R\}\), \(i^2=-1\); \(zw=0\Rightarrow z=0\) or \(w=0\). A polynomial is
-\(f=c_0+c_1t+\dots+c_mt^m\), \(c_k\in\C\), \(c_k=0\) for \(k>m\) (constant term \(c_0\); real if all \(c_k\in\R\));
-\(f=g\) if \(c_k=d_k\) for all \(k\); \(f+g\), \(fg\) have coefficients \(c_k+d_k\), \(\sum_{i+j=k}c_id_j\)
-(\(g=\sum_kd_kt^k\)). For \(f\ne0\):
-\(\deg f=\max\{k:c_k\ne0\}\), monic if \(c_{\deg f}=1\). Values: \(f(z)=\sum_kc_kz^k\)
+\textbf{Polynomials.} \(\C=\{a+bi:a,b\in\R\}\), \(i^2=-1\); \(zw=0\Rightarrow z=0\) or \(w=0\).
+\(f=\sum_kc_kt^k\), \(g=\sum_kd_kt^k\) (\(c_k,d_k\in\C\), \(c_k=d_k=0\) for \(k>m\); \(f\) real if all \(c_k\in\R\)):
+\(f=g\) if all \(c_k=d_k\); \(f+g\), \(fg\) have the coefficients \(c_k+d_k\), \(\sum_{i+j=k}c_id_j\); constant term
+\(c_0\); \(\deg f=\max\{k:c_k\ne0\}\) (\(f\ne0\)), monic if \(c_{\deg f}=1\). Values \(f(z)=\sum_kc_kz^k\)
 (\(z\in\C\)), \(f(A)=\sum_kc_kA^k\) (\(f\) real, \(A^0=I\), \(A^{k+1}=A^kA\)); \(z\) is a root if \(f(z)=0\).
-\begin{enumerate}[resume*]
-\item\label{f-degree} \(f,g\ne0\Rightarrow fg\ne0\), \(\deg(fg)=\deg f+\deg g\). So \(fg=fh\), \(f\ne0\)
-\(\Rightarrow\) \(g=h\).
-\item\label{f-values} \((f+g)(z)=f(z)+g(z)\), \((fg)(z)=f(z)g(z)\) (\(z\in\C\)).
-\item\label{f-factor} (Factor theorem) For \(c\in\C\): \(f(c)=0\iff f=(t-c)q\) for some polynomial \(q\).
-\item\label{f-roots} \(f\ne0\) of degree \(m\) has at most \(m\) roots. So \(f(z)=g(z)\) for infinitely many \(z\)
+\begin{enumerate}[label=\textbf{F\arabic*.},ref=F\arabic*,leftmargin=*,itemsep=0pt,parsep=0pt,topsep=2pt]
+\item\label{f-degree} \(f,g\ne0\Rightarrow fg\ne0\) and \(\deg(fg)=\deg f+\deg g\).
+\item\label{f-roots} \(f\ne0\) of degree \(m\) has at most \(m\) roots; so \(f(z)=g(z)\) for infinitely many \(z\)
 \(\Rightarrow\) \(f=g\).
-\item\label{f-complex-roots} A monic \(f\) of degree \(n\geqslant1\) is \(f=(t-\lambda_1)\cdots(t-\lambda_n)\),
-\(\lambda_i\in\C\), unique up to order (existence: fundamental theorem of algebra, not proved in this course); its
-roots are \(\lambda_1,\dots,\lambda_n\); its coefficient of \(t^{n-1}\) is \(-(\lambda_1+\dots+\lambda_n)\), its
-constant term \((-1)^n\lambda_1\cdots\lambda_n\).
+\item\label{f-complex-roots} A monic \(f\) of degree \(n\geqslant1\) is \((t-\lambda_1)\cdots(t-\lambda_n)\),
+\(\lambda_i\in\C\) unique up to order (fundamental theorem of algebra): roots \(\lambda_1,\dots,\lambda_n\); coefficient of
+\(t^{n-1}\): \(-(\lambda_1+\dots+\lambda_n)\); constant term \((-1)^n\lambda_1\cdots\lambda_n\).
+\item\label{f-values} \((f+g)(z)=f(z)+g(z)\), \((fg)(z)=f(z)g(z)\) (\(z\in\C\)).
 \end{enumerate}
 
 \subsection*{1. Eigenvalues and eigenvectors}
@@ -159,7 +127,8 @@ constant term \((-1)^n\lambda_1\cdots\lambda_n\).
 \begin{definition}\label{h-def-eigen}
 Let \(A\in\R^{n\times n}\). \(\lambda\in\R\) is an \textbf{eigenvalue} of \(A\) if \(Ax=\lambda x\) for some \(x\in\R^n\),
 \(x\ne0\); such \(x\) is an \textbf{eigenvector} belonging to \(\lambda\). The \textbf{eigenspace} of \(\lambda\) is the
-subspace \(\mathcal N(A-\lambda I)=\{x\in\R^n:Ax=\lambda x\}\) (\ref{f-rank}); its nonzero vectors are the eigenvectors
+subspace \(\mathcal N(A-\lambda I)=\{x\in\R^n:Ax=\lambda x\}\) (\lec{4}, Definition~7: null spaces are subspaces);
+its nonzero vectors are the eigenvectors
 belonging to \(\lambda\).
 \end{definition}
 Eigenvalues need not be real numbers: once the characteristic polynomial of \(A\) is defined below, the eigenvalues of
@@ -172,12 +141,14 @@ Let \(A\in\R^{n\times n}\), \(\lambda\in\R\). Then \(\lambda\) is an eigenvalue 
 \(\det(\lambda I-A)=0\) \(\iff\) \(\rank(A-\lambda I)<n\).
 \end{theorem}
 \begin{proof}
-\begin{board}[The chain of equivalences:]
+\begin{board}[The chain of equivalences; \(\det(-F)=(-1)^n\det F\) (\lec{5}, Theorem~12(c)):]
 \boardtop
 \begin{align*}
-\lambda\text{ is an eigenvalue}&\iff(A-\lambda I)x=0\text{ for some }x\ne0&&\text{(\ref{f-rules})}\\
-&\iff A-\lambda I\text{ is not invertible}\iff\rank(A-\lambda I)<n&&\text{(\ref{f-invertible})}\\
-&\iff\det(\lambda I-A)=(-1)^n\det(A-\lambda I)=0&&\text{(\ref{f-invertible}, \ref{f-det})}
+\lambda\text{ is an eigenvalue}&\iff(A-\lambda I)x=0\text{ for some }x\ne0&&\text{(\lec{1}, Theorem~3(a))}\\
+&\iff A-\lambda I\text{ is not invertible}&&\text{(\lec{2}, Theorem~15)}\\
+&\iff\rank(A-\lambda I)<n&&\text{(\lec{4}, Theorem~12(d))}\\
+&\iff\det(A-\lambda I)=0&&\text{(\lec{5}, Theorem~12(a))}\\
+&\iff\det(\lambda I-A)=0&&\text{(\lec{5}, Theorem~12(c))}
 \end{align*}
 \end{board}
 \nopagebreak
@@ -185,8 +156,8 @@ Let \(A\in\R^{n\times n}\), \(\lambda\in\R\). Then \(\lambda\) is an eigenvalue 
 
 \subsection*{2. The characteristic polynomial}
 
-\textbf{Characteristic polynomial.} For \(A\in\R^{n\times n}\), \(\det(tI-A)\), computed by \ref{f-det} and
-\ref{f-expansion} with \(t\) as a number, is a real polynomial: the \textbf{characteristic polynomial}
+\textbf{Characteristic polynomial.} For \(A\in\R^{n\times n}\), \(\det(tI-A)\), computed by cofactor expansion
+(\lec{5}, Definition~7) with \(t\) as a number, is a real polynomial: the \textbf{characteristic polynomial}
 \(p_A(t)=\det(tI-A)\) of \(A\). So \(p_A(c)=\det(cI-A)\) for \(c\in\R\).
 
 \begin{theorem}\label{h-thm-charpoly}
@@ -203,14 +174,14 @@ has at most \(n\) such eigenvalues.
 \begin{itemize}
 \item Claim: if \(M\in\R^{m\times m}\) has entries \(\alpha_{ij}+\beta_{ij}t\) (\(\alpha_{ij},\beta_{ij}\in\R\)) and
 \(\beta_{ij}\ne0\) occurs in at most \(d\) rows, then \(\det M\) is \(0\) or of degree \(\leqslant d\).
-\item Induction on \(m\). \(m=1\): \(\det M=\alpha_{11}+\beta_{11}t\) (\ref{f-det}).
+\item Induction on \(m\). \(m=1\): \(\det M=\alpha_{11}+\beta_{11}t\) (\lec{5}, Definition~7: \(\det(a)=a\)).
 No \(\beta_{ij}\ne0\) (e.g.\ \(d=0\)): \(\det M\) is a number. Otherwise expand along a row \(i\) with some
-\(\beta_{ij}\ne0\) (\ref{f-expansion}); each \(M(i|j)\) has \(\beta\ne0\) in at most \(d-1\) rows, so
+\(\beta_{ij}\ne0\) (\lec{5}, Theorem~13(a): expansion along any row); each \(M(i|j)\) has \(\beta\ne0\) in at most \(d-1\) rows, so
 \(\det M=\sum_j(-1)^{i+j}(\alpha_{ij}+\beta_{ij}t)\det M(i|j)\) is \(0\) or of degree \(\leqslant d\) (induction,
 \ref{f-degree}).
 \end{itemize}
-Induction on \(n\); \(n=1\): \(p_A=t-a_{11}\) (\ref{f-det}). For \(n\geqslant2\), as \((tI-A)(1|1)=tI_{n-1}-A(1|1)\),
-expanding along row \(1\) (\ref{f-expansion}) gives
+Induction on \(n\); \(n=1\): \(p_A=t-a_{11}\) (\lec{5}, Definition~7). For \(n\geqslant2\), as
+\((tI-A)(1|1)=tI_{n-1}-A(1|1)\), expanding along row \(1\) (\lec{5}, Theorem~13(a)) gives
 \[
 p_A=(t-a_{11})\,p_{A(1|1)}+\sum_{j=2}^n(-1)^{1+j}(-a_{1j})\det\bigl((tI-A)(1|j)\bigr)
 \]
@@ -221,7 +192,7 @@ its determinant is \(0\) or of degree \(\leqslant n-2\) (claim).
 \(r\), \(s\) are \(0\) or of degree \(\leqslant n-3\), \(\leqslant n-2\) (\ref{f-degree}); \(a_{11}+\tr A(1|1)=\tr A\).
 \item So \(p_A=t^n-(\tr A)\,t^{n-1}+(0\text{ or degree}\leqslant n-2)\).
 \end{itemize}
-Constant term (every \(n\)): \(p_A(0)=\det(-A)=(-1)^n\det A\) (\ref{f-det}).
+Constant term (every \(n\)): \(p_A(0)=\det(-A)=(-1)^n\det A\) (\lec{5}, Theorem~12(c)).
 
 (b) \(p_A(\lambda)=\det(\lambda I-A)\) and Theorem~\ref{h-thm-eig-singular}; at most \(n\) roots by (a) and
 \ref{f-roots}.
@@ -235,7 +206,7 @@ A=\begin{pmatrix}1&2&1\\2&0&-2\\-1&2&3\end{pmatrix}
 \]
 \end{example}
 \textit{Solution.}
-\begin{board}[\(p_A\), expanding along row \(1\) (\ref{f-expansion}):]
+\begin{board}[\(p_A\), expanding along row \(1\) (\lec{5}, Theorem~13(a)):]
 \[
 \begin{aligned}
 \det(tI-A)&=\det\begin{pmatrix}t-1&-2&-1\\-2&t&2\\1&-2&t-3\end{pmatrix}
@@ -259,7 +230,7 @@ A\xrightarrow[R_3\leftarrow R_3+R_1]{R_2\leftarrow R_2-2R_1}
 \begin{pmatrix}1&0&-1\\0&1&1\\0&0&0\end{pmatrix}
 \end{gathered}
 \]
-Free unknown \(x_3\); special solution \((1,-1,1)'\), a basis of \(\mathcal N(A)\) (\ref{f-rank}).
+Free unknown \(x_3\); special solution \((1,-1,1)'\), a basis of \(\mathcal N(A)\) (\lec{4}, Theorem~8(c)).
 \end{board}
 \begin{board}[\(\lambda=2\): reduce \(A-2I\); a basis of \(\mathcal N(A-2I)\):]
 \[
@@ -271,7 +242,7 @@ A-2I=\begin{pmatrix}-1&2&1\\2&-2&-2\\-1&2&1\end{pmatrix}
 \xrightarrow{R_1\leftarrow R_1+2R_2}
 \begin{pmatrix}1&0&-1\\0&1&0\\0&0&0\end{pmatrix}
 \]
-Special solution \((1,0,1)'\), a basis of \(\mathcal N(A-2I)\) (\ref{f-rank}).
+Special solution \((1,0,1)'\), a basis of \(\mathcal N(A-2I)\) (\lec{4}, Theorem~8(c)).
 \end{board}
 
 \begin{definition}\label{h-def-eigenvalues}
@@ -292,7 +263,7 @@ A=\begin{pmatrix}2&-1&0\\1&2&0\\1&1&1\end{pmatrix}
 \]
 and the eigenspace of each real eigenvalue.
 \end{example}
-\textit{Solution.} Expanding along column \(3\) (\ref{f-expansion}), and as \((t-2-i)(t-2+i)=(t-2)^2-i^2\),
+\textit{Solution.} Expanding along column \(3\) (\lec{5}, Theorem~10), and as \((t-2-i)(t-2+i)=(t-2)^2-i^2\),
 \[
 \det(tI-A)=\det\begin{pmatrix}t-2&1&0\\-1&t-2&0\\-1&-1&t-1\end{pmatrix}=(t-1)\bigl((t-2)^2+1\bigr)
 =(t-1)\bigl(t-(2+i)\bigr)\bigl(t-(2-i)\bigr)
@@ -306,8 +277,8 @@ A-I=\begin{pmatrix}1&-1&0\\1&1&0\\1&1&0\end{pmatrix}
 \xrightarrow{R_3\leftarrow R_3-R_2}
 \begin{pmatrix}1&-1&0\\0&2&0\\0&0&0\end{pmatrix}
 \]
-So \(x_1=x_2=0\), \(x_3\) free: \(\mathcal N(A-I)=\Span\{e_3\}\) (\ref{f-rank}); \(2\pm i\) have no eigenvectors in
-\(\R^3\) (Definition~\ref{h-def-eigenvalues}).
+So \(x_1=x_2=0\), \(x_3\) free: \(\mathcal N(A-I)=\Span\{e_3\}\) (\lec{2}, Theorem~3(b): row operations keep the
+solutions); \(2\pm i\) have no eigenvectors in \(\R^3\) (Definition~\ref{h-def-eigenvalues}).
 
 \Needspace{16\baselineskip}
 \subsection*{3. Similar matrices}
@@ -318,12 +289,12 @@ Let \(A,P\in\R^{n\times n}\), \(P\) invertible, and \(B=P^{-1}AP\) (\(B\) is \te
 \(\det B=\det A\).
 \end{theorem}
 \begin{proof}
-\begin{board}[\(\det(cI-B)=\det(cI-A)\) for \(c\in\R\):]
+\begin{board}[\(\det(cI-B)=\det(cI-A)\) for \(c\in\R\); \(\det(FG)=\det F\det G\) (\lec{5}, Theorem~12(b)):]
 \boardtop
 \begin{align*}
-\det P^{-1}\det P&=\det(P^{-1}P)=\det I=1&&\text{(\ref{f-det})}\\
-cI-B&=P^{-1}(cI)P-P^{-1}AP=P^{-1}(cI-A)P&&\text{(\ref{f-rules})}\\
-\det(cI-B)&=\det P^{-1}\det(cI-A)\det P=\det(cI-A)&&\text{(\ref{f-det})}
+\det P^{-1}\det P&=\det(P^{-1}P)=\det I=1&&\text{(\lec{5}, Theorems~12(b), 8(d))}\\
+cI-B&=P^{-1}(cI)P-P^{-1}AP=P^{-1}(cI-A)P&&\text{(\lec{1}, Theorem~3(a))}\\
+\det(cI-B)&=\det P^{-1}\det(cI-A)\det P=\det(cI-A)&&\text{(\lec{5}, Theorem~12(b))}
 \end{align*}
 So \(p_B=p_A\) (\ref{f-roots}); eigenvalues, \(\tr\), \(\det\) are read off \(p_A\)
 (Definition~\ref{h-def-eigenvalues}, Theorem~\ref{h-thm-charpoly}(a)).
@@ -346,22 +317,22 @@ real polynomial \(f\), and \((A+cI)x=(\lambda+c)x\).
 \begin{board}[(a) by induction on \(k\), then \(f(A)x\) and \((A+cI)x\):]
 \boardtop
 \begin{align*}
-A^0x&=x,\qquad A^{k+1}x=A^k(Ax)=\lambda A^kx=\lambda^{k+1}x&&\text{(induction, \ref{f-rules})}\\
+A^0x&=x,\qquad A^{k+1}x=A^k(Ax)=\lambda A^kx=\lambda^{k+1}x&&\text{(induction; \lec{1}, Theorem~3(a))}\\
 f(A)x&=\textstyle\sum_kc_kA^kx=\sum_kc_k\lambda^kx=f(\lambda)x&&(f=\textstyle\sum_kc_kt^k)\\
-(A+cI)x&=Ax+cx=(\lambda+c)x&&\text{(\ref{f-rules})}
+(A+cI)x&=Ax+cx=(\lambda+c)x&&\text{(\lec{1}, Theorem~3(a))}
 \end{align*}
 \end{board}
 \begin{board}[(b) \(\lambda\ne0\), then \(A^{-1}x\):]
 \boardtop
 \begin{align*}
-\lambda=0&\implies Ax=0,\ x\ne0\implies A\text{ not invertible }\contradiction&&\text{((b); \ref{f-invertible})}\\
-x&=A^{-1}(Ax)=\lambda A^{-1}x\implies A^{-1}x=\lambda^{-1}x&&\text{(\ref{f-rules})}
+\lambda=0&\implies Ax=0,\ x\ne0\implies A\text{ not invertible }\contradiction&&\text{((b); \lec{2}, Theorem~15)}\\
+x&=A^{-1}(Ax)=\lambda A^{-1}x\implies A^{-1}x=\lambda^{-1}x&&\text{(\lec{1}, Theorem~3(a))}
 \end{align*}
 \end{board}
 \begin{board}[(c) For \(s\in\R\), with \(p_A=(t-\lambda_1)\cdots(t-\lambda_n)\) (Definition~\ref{h-def-eigenvalues}):]
 \boardtop
 \begin{align*}
-\det\bigl(sI-(A+cI)\bigr)&=\det\bigl((s-c)I-A\bigr)=p_A(s-c)&&\text{(\ref{f-rules})}\\
+\det\bigl(sI-(A+cI)\bigr)&=\det\bigl((s-c)I-A\bigr)=p_A(s-c)&&\text{(\lec{1}, Definition~1)}\\
 &=\bigl(s-(\lambda_1+c)\bigr)\cdots\bigl(s-(\lambda_n+c)\bigr)&&\text{(\ref{f-values})}
 \end{align*}
 So \(p_{A+cI}=\bigl(t-(\lambda_1+c)\bigr)\cdots\bigl(t-(\lambda_n+c)\bigr)\) (\ref{f-roots}): the
@@ -383,10 +354,10 @@ and \(\det A=\lambda_1\cdots\lambda_n\). So \(A\) is invertible \(\iff\) \(0\) i
 t^{n-1}&:\quad-\tr A=-(\lambda_1+\dots+\lambda_n)
 &&\text{(Theorem~\ref{h-thm-charpoly}(a), \ref{f-complex-roots})}\\
 t^0&:\quad(-1)^n\det A=(-1)^n\lambda_1\cdots\lambda_n
-&&\text{(Theorem~\ref{h-thm-charpoly}(a), \ref{f-complex-roots})}\\
-&\quad A\text{ invertible}\iff\det A\ne0\iff\lambda_i\ne0\text{ for all }i
-&&\text{(\ref{f-invertible}; \(zw=0\Rightarrow z=0\) or \(w=0\))}
+&&\text{(Theorem~\ref{h-thm-charpoly}(a), \ref{f-complex-roots})}
 \end{align*}
+So \(A\) is invertible \(\iff\det A\ne0\) (\lec{5}, Theorem~12(a)) \(\iff\lambda_i\ne0\) for all \(i\)
+(\(zw=0\Rightarrow z=0\) or \(w=0\)).
 \end{board}
 \nopagebreak
 \end{proof}
@@ -401,20 +372,22 @@ Let \(v_1,\dots,v_m\) be eigenvectors of \(A\in\R^{n\times n}\) for real eigenva
 eigenvalues, eigenvectors for them form a basis of \(\R^n\).
 \end{theorem}
 \begin{proof}
-Induction on \(m\); \(m=1\): \(c_1v_1=0\), \(v_1\ne0\) \(\Rightarrow\) \(c_1=0\) (\ref{f-basis}). Let \(m\geqslant2\) and
+Induction on \(m\); \(m=1\): \(c_1v_1=0\), \(v_1\ne0\) \(\Rightarrow\) \(c_1=0\) (\lec{3}, Proposition~2:
+\(cv=0\Rightarrow c=0\) or \(v=0\)). Let \(m\geqslant2\) and
 \(c_1v_1+\dots+c_mv_m=0\).
 \begin{itemize}
-\item \(A\) times it minus \(\lambda_m\) times it (\(Av_i=\lambda_iv_i\), \ref{f-rules}):
+\item \(A\) times it minus \(\lambda_m\) times it (\(Av_i=\lambda_iv_i\); \lec{1}, Theorem~3(a)):
 \(c_1(\lambda_1-\lambda_m)v_1+\dots+c_{m-1}(\lambda_{m-1}-\lambda_m)v_{m-1}=0\).
 \item Induction hypothesis: \(c_i(\lambda_i-\lambda_m)=0\), so \(c_i=0\) for \(i<m\) (\(\lambda_i\ne\lambda_m\)).
-\item Then \(c_mv_m=0\) and \(v_m\ne0\), so \(c_m=0\) (\ref{f-basis}).
+\item Then \(c_mv_m=0\) and \(v_m\ne0\), so \(c_m=0\) (\lec{3}, Proposition~2).
 \end{itemize}
-Last sentence: \(n\) independent vectors in \(\R^n\) form a basis (\ref{f-basis}).
+Last sentence: \(n\) independent vectors in \(\R^n\) form a basis (\lec{4}, Theorem~5(d), as \(\dim\R^n=n\) by
+Theorem~4).
 \end{proof}
 
 \begin{definition}\label{h-def-multiplicity}
 For \(A\in\R^{n\times n}\) and \(c\in\R\), the \textbf{geometric multiplicity} of \(c\) is
-\(g_A(c)=\dim\mathcal N(A-cI)=n-\rank(A-cI)\) (\ref{f-rank}). So \(g_A(c)\geqslant1\) \(\iff\) \(c\) is an eigenvalue
+\(g_A(c)=\dim\mathcal N(A-cI)=n-\rank(A-cI)\) (\lec{4}, Theorem~11: \(\rank(A-cI)+\dim\mathcal N(A-cI)=n\)). So \(g_A(c)\geqslant1\) \(\iff\) \(c\) is an eigenvalue
 (Theorem~\ref{h-thm-eig-singular}).
 \end{definition}
 
@@ -425,18 +398,21 @@ simple, \(g_A(c)=1\).
 \begin{proof}
 \begin{itemize}
 \item \(g=g_A(c)\geqslant1\) (Definition~\ref{h-def-multiplicity}). Extend a basis \(x_1,\dots,x_g\) of
-\(\mathcal N(A-cI)\) to a basis \(x_1,\dots,x_n\) of \(\R^n\) (\ref{f-basis}); \(P=[x_1\ \cdots\ x_n]\) is invertible
-(\ref{f-invertible}).
+\(\mathcal N(A-cI)\) to a basis \(x_1,\dots,x_n\) of \(\R^n\) (\lec{4}, Theorem~5(b): an independent list extends to a
+basis; \(\dim\R^n=n\), Theorem~4); \(P=[x_1\ \cdots\ x_n]\) is invertible (\lec{4}, Theorem~12(b),(d): independent
+columns \(\iff\) rank \(n\) \(\iff\) invertible).
 \item \(Ax_j=cx_j=P(ce_j)\) for \(j\leqslant g\); \(Ax_j=Pm_j\) for some \(m_j\in\R^n\) for \(j>g\), as
-\(x_1,\dots,x_n\) span \(\R^n\) (\ref{f-views}). So \(AP=PM\) for \(M=[ce_1\ \cdots\ ce_g\ m_{g+1}\ \cdots\ m_n]\)
-(\ref{f-views}), and \(M=P^{-1}AP\). If \(g=n\): \(M=cI\), \(p_A=p_M=(t-c)^n\) (Theorem~\ref{h-thm-similar};
-\ref{f-det}, \ref{f-values}, \ref{f-roots}), and \(a_A(c)=n\).
+\(x_1,\dots,x_n\) span \(\R^n\) (\lec{1}, Theorem~4(b)). So \(AP=PM\) for
+\(M=[ce_1\ \cdots\ ce_g\ m_{g+1}\ \cdots\ m_n]\) (\lec{1}, Theorem~4(a)), and \(M=P^{-1}AP\). If \(g=n\): \(M=cI\),
+\(p_A=p_M=(t-c)^n\) (Theorem~\ref{h-thm-similar}; \lec{5}, Theorem~9(b): \(\det\) of a diagonal matrix is the product
+of its diagonal; \ref{f-values}, \ref{f-roots}), and \(a_A(c)=n\).
 \item If \(g<n\), \(M=\left(\begin{smallmatrix}cI_g&K\\0&D\end{smallmatrix}\right)\) with
-\(D\in\R^{(n-g)\times(n-g)}\), and for \(s\in\R\)
+\(D\in\R^{(n-g)\times(n-g)}\), and for \(s\in\R\), with
+\(\det\left(\begin{smallmatrix}F&G\\0&H\end{smallmatrix}\right)=\det F\det H\) (\lec{5}, Theorem~18):
 \begin{align*}
-sI-M&=\begin{pmatrix}(s-c)I_g&-K\\0&sI_{n-g}-D\end{pmatrix}&&\text{(\ref{f-rules})}\\
+sI-M&=\begin{pmatrix}(s-c)I_g&-K\\0&sI_{n-g}-D\end{pmatrix}&&\text{(\lec{5}, Theorem~2(a))}\\
 \det(sI-M)&=\det\bigl((s-c)I_g\bigr)\det(sI_{n-g}-D)=(s-c)^gp_D(s)
-&&\text{(\ref{f-block}, \ref{f-det})}
+&&\text{(\lec{5}, Theorems~18, 9(b))}
 \end{align*}
 So \(p_A=p_M=(t-c)^gp_D\) (Theorem~\ref{h-thm-similar}; \ref{f-values}, \ref{f-roots}).
 \item With \(p_D=(t-\delta_1)\cdots(t-\delta_{n-g})\) (Theorem~\ref{h-thm-charpoly}(a), \ref{f-complex-roots}), the
@@ -469,22 +445,25 @@ Let \(A\in\R^{n\times n}\) have the distinct real eigenvalues \(c_1,\dots,c_k\),
 \begin{proof}
 (a)
 \begin{align*}
-P^{-1}AP=\Lambda&\iff AP=P\Lambda&&\text{(\ref{f-rules})}\\
-&\iff Ap_j=\col_j(AP)=\col_j(P\Lambda)=\lambda_jp_j\text{ for all }j&&\text{(\ref{f-views})}\\
+P^{-1}AP=\Lambda&\iff AP=P\Lambda&&\text{(\lec{1}, Theorem~3(a))}\\
+&\iff\col_j(AP)=\col_j(P\Lambda)\text{ for all }j&&\text{(\lec{1}, Definition~1)}\\
+&\iff Ap_j=\lambda_jp_j\text{ for all }j&&\text{(\lec{1}, Theorem~4(a), Proposition~13(a))}\\
 P^{-1}AP=\Lambda&\implies p_A=p_\Lambda=(t-\lambda_1)\cdots(t-\lambda_n)
-&&\text{(Theorem~\ref{h-thm-similar}; \ref{f-det}, \ref{f-values}, \ref{f-roots})}
+&&\text{(Theorem~\ref{h-thm-similar}; \lec{5}, Theorem~9(b); \ref{f-values}, \ref{f-roots})}
 \end{align*}
 So \(\lambda_1,\dots,\lambda_n\) are the eigenvalues of \(A\) (Definition~\ref{h-def-eigenvalues}).
 
 (b)
 \begin{itemize}
-\item (i)\(\Leftrightarrow\)(ii): by (a), as the columns of an invertible \(P\) form a basis of \(\R^n\) and are
-nonzero, and a basis \(p_1,\dots,p_n\) gives an invertible \(P\) (\ref{f-invertible}, \ref{f-basis}).
+\item (i)\(\Leftrightarrow\)(ii): by (a); \(P\) is invertible \(\iff\) its columns are independent (\lec{4},
+Theorem~12(b),(d)) \(\iff\) they form a basis of \(\R^n\) (\lec{4}, Theorem~5(d)), and then they are nonzero
+(\lec{3}, Proposition~12(a): a list containing \(0\) is dependent).
 \item (i)\(\Rightarrow\)(iii): by (a), the eigenvalues are the real \(\lambda_j\), and
 \(a_A(c_i)=d_i=\#\{j:\lambda_j=c_i\}\). The \(j\)th entry of \((\Lambda-c_iI)x\) is \((\lambda_j-c_i)x_j\), so
-\(\mathcal N(\Lambda-c_iI)\) has the basis \(\{e_j:\lambda_j=c_i\}\), and
+\(\mathcal N(\Lambda-c_iI)\) has the basis \(\{e_j:\lambda_j=c_i\}\). With \(\rank(P^{-1}FP)=\rank F\) (\lec{4},
+Theorem~15(d)) and \(\rank F+\dim\mathcal N(F)=n\) (\lec{4}, Theorem~11), for \(F\in\R^{n\times n}\):
 \[
-g_A(c_i)=n-\rank(A-c_iI)=n-\rank\bigl(P^{-1}(A-c_iI)P\bigr)=n-\rank(\Lambda-c_iI)=d_i\qquad(\text{\ref{f-rank}})
+g_A(c_i)=n-\rank(A-c_iI)=n-\rank\bigl(P^{-1}(A-c_iI)P\bigr)=n-\rank(\Lambda-c_iI)=d_i
 \]
 \item (iii)\(\Rightarrow\)(iv): each eigenvalue is one of \(c_1,\dots,c_k\), so
 \(\sum_ig_A(c_i)=\sum_ia_A(c_i)=n\).
@@ -494,7 +473,7 @@ g_A(c_i)=n-\rank(A-c_iI)=n-\rank\bigl(P^{-1}(A-c_iI)P\bigr)=n-\rank(\Lambda-c_iI
 \(0=f_i(A)(w_1+\dots+w_k)=f_i(c_1)w_1+\dots+f_i(c_k)w_k=w_i\).
 \item So bases \(v_{l1},\dots,v_{lg_l}\) of the \(W_l\) (\(g_l=g_A(c_l)\)) are together independent:
 \(\sum_{l,r}\gamma_{lr}v_{lr}=0\) is \(w_1+\dots+w_k=0\) with \(w_l=\sum_r\gamma_{lr}v_{lr}\in W_l\); so all \(w_l=0\),
-all \(\gamma_{lr}=0\). These \(n\) eigenvectors form a basis of \(\R^n\) (\ref{f-basis}).
+all \(\gamma_{lr}=0\). These \(n\) eigenvectors form a basis of \(\R^n\) (\lec{4}, Theorem~5(d)).
 \end{itemize}
 (c) \(n\) eigenvectors for the \(n\) eigenvalues form a basis (Theorem~\ref{h-thm-indep}): (ii) holds.
 \end{proof}
@@ -509,13 +488,14 @@ A=\begin{pmatrix}5&-6&-6\\-1&4&2\\3&-6&-4\end{pmatrix}
 \]
 \end{example}
 \textit{Solution.}
-\begin{board}[\(p_A\): \(\col_2\leftarrow\col_2-\col_3\), then take \(t-2\) out of column \(2\) (\ref{f-det}):]
+\begin{board}[\(p_A\): \(\col_2\leftarrow\col_2-\col_3\), then take \(t-2\) out of column \(2\) (\lec{5},
+Theorem~8(a),(b), for columns by Theorem~13(b)):]
 \[
 \det(tI-A)=\det\begin{pmatrix}t-5&6&6\\1&t-4&-2\\-3&6&t+4\end{pmatrix}
 =\det\begin{pmatrix}t-5&0&6\\1&t-2&-2\\-3&2-t&t+4\end{pmatrix}
 =(t-2)\det\begin{pmatrix}t-5&0&6\\1&1&-2\\-3&-1&t+4\end{pmatrix}
 \]
-\(R_3\leftarrow R_3+R_2\) (\ref{f-det}), expand along column \(2\) (\ref{f-expansion}):
+\(R_3\leftarrow R_3+R_2\) (\lec{5}, Theorem~8(b)), expand along column \(2\) (\lec{5}, Theorem~10):
 \[
 \begin{aligned}
 \det(tI-A)&=(t-2)\det\begin{pmatrix}t-5&0&6\\1&1&-2\\-2&0&t+2\end{pmatrix}
@@ -540,8 +520,9 @@ A-I=\begin{pmatrix}4&-6&-6\\-1&3&2\\3&-6&-5\end{pmatrix}
 \begin{pmatrix}-1&3&2\\0&3&1\\0&0&0\end{pmatrix}
 \end{gathered}
 \]
-\(\rank(A-I)=2\), \(g_A(1)=1\) (\ref{f-rank}). \(-x_1+3x_2+2x_3=0\), \(3x_2+x_3=0\); \(x_3=3\):
-\(\alpha_1=(3,-1,3)'\), a basis of \(\mathcal N(A-I)\) (\ref{f-rank}, \ref{f-basis}).
+\(\rank(A-I)=2\) (\lec{4}, Definition~10, Remark~3: the number of nonzero rows of an echelon form, first nonzero
+entries not yet scaled to~\(1\)), \(g_A(1)=1\). \(-x_1+3x_2+2x_3=0\), \(3x_2+x_3=0\) (\lec{2},
+Theorem~3(b)); \(x_3=3\): \(\alpha_1=(3,-1,3)'\), a basis of \(\mathcal N(A-I)\) (\lec{4}, Theorem~5(d)).
 \end{board}
 \begin{board}[\(\lambda=2\): reduce \(A-2I\); special solutions:]
 \[
@@ -553,12 +534,12 @@ A-2I=\begin{pmatrix}3&-6&-6\\-1&2&2\\3&-6&-6\end{pmatrix}
 \xrightarrow{R_1\leftarrow-R_1}
 \begin{pmatrix}1&-2&-2\\0&0&0\\0&0&0\end{pmatrix}
 \]
-\(g_A(2)=3-1=2\); special solutions \(\alpha_2=(2,1,0)'\), \(\alpha_3=(2,0,1)'\), a basis of \(\mathcal N(A-2I)\)
-(\ref{f-rank}).
+\(g_A(2)=3-1=2\); \(\alpha_2=(2,1,0)'\), \(\alpha_3=(2,0,1)'\), a basis of \(\mathcal N(A-2I)\) (\lec{4},
+Theorem~8(c)).
 \end{board}
 \begin{board}[\(P\) and \(\Lambda\):]
 \(g_A(1)+g_A(2)=3\): \(\alpha_1,\alpha_2,\alpha_3\) form a basis of \(\R^3\) (Theorem~\ref{h-thm-diag-criterion}(b)), so
-\(P=[\alpha_1\ \alpha_2\ \alpha_3]\) is invertible (\ref{f-invertible}), and \(AP=P\Lambda\) gives \(P^{-1}AP=\Lambda\)
+\(P=[\alpha_1\ \alpha_2\ \alpha_3]\) is invertible (\lec{4}, Theorem~12(b),(d)), and \(AP=P\Lambda\) gives \(P^{-1}AP=\Lambda\)
 (Theorem~\ref{h-thm-diag-criterion}(a)):
 \[
 P=\begin{pmatrix}3&2&2\\-1&1&0\\3&0&1\end{pmatrix},\qquad\Lambda=\diag(1,2,2),\qquad
@@ -576,13 +557,9 @@ If \(A=P\Lambda P^{-1}\) with \(P\in\R^{n\times n}\) invertible and \(\Lambda=\d
 \boardtop
 \begin{align*}
 A^0&=I=P\Lambda^0P^{-1}\\
-A^{k+1}&=A^kA=P\Lambda^kP^{-1}P\Lambda P^{-1}=P\Lambda^{k+1}P^{-1}&&\text{(\ref{f-rules})}
+A^{k+1}&=A^kA=P\Lambda^kP^{-1}P\Lambda P^{-1}=P\Lambda^{k+1}P^{-1}&&\text{(\lec{1}, Theorem~3(a))}\\
+\Lambda^k&=\diag(\lambda_1^k,\dots,\lambda_n^k)&&\text{(\lec{1}, Proposition~13(d))}
 \end{align*}
-Diagonal matrices (column \(j\) of the product is \(a_jb_je_j\); \ref{f-views}):
-\[
-\diag(a_1,\dots,a_n)\diag(b_1,\dots,b_n)=\diag(a_1b_1,\dots,a_nb_n)
-\]
-So \(\Lambda^k=\diag(\lambda_1^k,\dots,\lambda_n^k)\).
 \end{board}
 \nopagebreak
 \end{proof}
@@ -590,21 +567,20 @@ So \(\Lambda^k=\diag(\lambda_1^k,\dots,\lambda_n^k)\).
 \Needspace{19\baselineskip}
 \begin{example}\label{h-exm-diag-powers}
 Find \(B^k\) (\(k=0,1,2,\dots\)) for the matrix \(B\) below. Multiplying out, \(P^{-1}P=I\) (so \(P\) is invertible,
-\ref{f-invertible}) and \(BP=P\Lambda\) with \(\Lambda=\diag(3,3,1,1)\):
+\lec{2}, Theorem~15) and \(BP=P\Lambda\) with \(\Lambda=\diag(3,3,1,1)\):
 \[
 B=\begin{pmatrix}1&2&-2&2\\-2&3&-2&0\\0&-2&3&-2\\2&-2&2&1\end{pmatrix},\qquad
 P=\begin{pmatrix}-1&0&0&-1\\0&-1&1&-1\\1&0&1&0\\0&1&0&1\end{pmatrix},\qquad
 P^{-1}=\begin{pmatrix}0&-1&1&-1\\1&-1&1&0\\0&1&0&1\\-1&1&-1&1\end{pmatrix}
 \]
 \end{example}
-\textit{Solution.} \(B=BPP^{-1}=P\Lambda P^{-1}\) (\ref{f-rules}).
-\begin{board}[\(B^k\) by Theorem~\ref{h-thm-powers}, with \(D=\diag(1,1,0,0)\) and \(E=PDP^{-1}\):]
+\textit{Solution.} \(B=BPP^{-1}=P\Lambda P^{-1}\) (\lec{1}, Theorem~3(a)).
+\begin{board}[\(B^k\) (Theorem~\ref{h-thm-powers}; \lec{1}, Theorem~3(a)), \(D=\diag(1,1,0,0)\), \(E=PDP^{-1}\):]
 \boardtop
 \begin{align*}
-B^k&=P\diag(3^k,3^k,1,1)P^{-1}=P(3^kD+I-D)P^{-1}=3^kE+I-E
-&&\text{(Theorem~\ref{h-thm-powers}; \ref{f-rules}, \(PP^{-1}=I\))}\\
+B^k&=P\diag(3^k,3^k,1,1)P^{-1}=P(3^kD+I-D)P^{-1}=3^kE+I-E&&(PP^{-1}=I)\\
 B&=3E+I-E=I+2E,\quad\text{so }E=\tfrac12(B-I)&&(k=1)\\
-B^k&=3^k\cdot\tfrac12(B-I)+I-\tfrac12(B-I)=I+\tfrac12(3^k-1)(B-I)&&\text{(\ref{f-rules})}\\
+B^k&=3^k\cdot\tfrac12(B-I)+I-\tfrac12(B-I)=I+\tfrac12(3^k-1)(B-I)&&\text{(\lec{1}, Definition~1)}\\
 B^2&=I+4(B-I)=\begin{pmatrix}1&8&-8&8\\-8&9&-8&0\\0&-8&9&-8\\8&-8&8&1\end{pmatrix}
 \end{align*}
 \end{board}
@@ -623,11 +599,13 @@ So \(g_{AB}(c)=g_{BA}(c)\).
 \end{enumerate}
 \end{theorem}
 \begin{proof}
-(a) For \(t\in\R\), \(t\ne0\), and \(M=\left(\begin{smallmatrix}I_n&t^{-1}B\\A&I_m\end{smallmatrix}\right)\):
+(a) For \(t\in\R\), \(t\ne0\), and \(M=\left(\begin{smallmatrix}I_n&t^{-1}B\\A&I_m\end{smallmatrix}\right)\), with
+\(\det I=1\) (\lec{5}, Theorem~8(d)):
 \begin{align*}
-\det M&=\det I_n\det(I_m-AI_n^{-1}t^{-1}B)=\det(I_m-t^{-1}AB)&&\text{(\ref{f-block}, \ref{f-det})}\\
-\det M&=\det I_m\det(I_n-t^{-1}BI_m^{-1}A)=\det(I_n-t^{-1}BA)&&\text{(\ref{f-block}, \ref{f-det})}\\
-\det(tI_n-BA)&=t^n\det(I_n-t^{-1}BA)=t^n\det(I_m-t^{-1}AB)=t^{n-m}\det(tI_m-AB)&&\text{(\ref{f-det})}
+\det M&=\det I_n\det(I_m-AI_n^{-1}t^{-1}B)=\det(I_m-t^{-1}AB)&&\text{(\lec{5}, Theorem~19(a))}\\
+\det M&=\det I_m\det(I_n-t^{-1}BI_m^{-1}A)=\det(I_n-t^{-1}BA)&&\text{(\lec{5}, Theorem~19(b))}\\
+\det(tI_n-BA)&=t^n\det(I_n-t^{-1}BA)=t^n\det(I_m-t^{-1}AB)&&\text{(\lec{5}, Theorem~12(c))}\\
+&=t^{n-m}\det(tI_m-AB)&&\text{(\lec{5}, Theorem~12(c))}
 \end{align*}
 So \(p_{BA}\) and \(t^{n-m}p_{AB}\) have the same value at every real \(t\ne0\) (\ref{f-values}), and \(p_{BA}=t^{n-m}p_{AB}\) (\ref{f-roots}). With \(p_{AB}=(t-\mu_1)\cdots(t-\mu_m)\)
 (Definition~\ref{h-def-eigenvalues}), \(p_{BA}=(t-0)^{n-m}(t-\mu_1)\cdots(t-\mu_m)\): the eigenvalues of \(BA\) are
@@ -636,14 +614,15 @@ So \(p_{BA}\) and \(t^{n-m}p_{AB}\) have the same value at every real \(t\ne0\) 
 
 (b) Let \(g=g_{AB}(c)\).
 \begin{align*}
-\rank X&=g,\qquad ABX=cX&&\text{(\ref{f-rank}; \ref{f-views})}\\
-g=\rank X&\geqslant\rank(BX)\geqslant\rank(ABX)=\rank\bigl(X(cI_g)\bigr)=\rank X=g
-&&\text{(\ref{f-rank}; \(cI_g\) invertible)}\\
-BA(BX)&=B(ABX)=c\,BX&&\text{(\ref{f-rules})}
+\rank X&=g,\qquad ABX=cX&&\text{(\lec{4}, Theorem~12(b); \lec{1}, Theorem~4(a))}\\
+g=\rank X&\geqslant\rank(BX)\geqslant\rank(ABX)&&\text{(\lec{4}, Theorem~15(a))}\\
+\rank(ABX)&=\rank\bigl(X(cI_g)\bigr)=\rank X=g&&\text{(\lec{4}, Theorem~15(d); \(cI_g\) invertible)}\\
+BA(BX)&=B(ABX)=c\,BX&&\text{(\lec{1}, Theorem~3(a))}
 \end{align*}
 \begin{itemize}
-\item So the \(g\) columns of \(BX\) are independent (\ref{f-rank}), lie in \(\mathcal N(BA-cI_n)\) (\ref{f-views}) and
-are nonzero (\ref{f-basis}): eigenvectors of \(BA\) belonging to \(c\); \(g_{BA}(c)\geqslant g\) (\ref{f-basis}).
+\item So the \(g\) columns of \(BX\) are independent (\lec{4}, Theorem~12(b)), lie in \(\mathcal N(BA-cI_n)\)
+(\lec{1}, Theorem~4(a)) and are nonzero (\lec{3}, Proposition~12(a)): eigenvectors of \(BA\) belonging to \(c\);
+\(g_{BA}(c)\geqslant g\) (\lec{4}, Theorem~5(c): more than \(\dim W\) vectors of \(W\) are dependent).
 \item The argument does not use \(m\leqslant n\); with \(A\), \(B\) exchanged it gives
 \(g_{AB}(c)\geqslant g_{BA}(c)\).\qedhere
 \end{itemize}
@@ -659,7 +638,7 @@ AA'=\begin{pmatrix}2&1&1&-1\\1&2&1&0\\1&1&2&1\\-1&0&1&2\end{pmatrix}
 \]
 \end{example}
 \textit{Solution.}
-\begin{board}[\(p_{A'A}\), expanding along row \(1\) (\ref{f-expansion}), and \(p_{AA'}\):]
+\begin{board}[\(p_{A'A}\), expanding along row \(1\) (\lec{5}, Theorem~13(a)), and \(p_{AA'}\):]
 \[
 \begin{aligned}
 \det(tI_3-A'A)&=\det\begin{pmatrix}t-3&-1&0\\-1&t-2&-1\\0&-1&t-3\end{pmatrix}
@@ -681,10 +660,10 @@ A'A(-1,0,1)'&=(-3,0,3)'=3(-1,0,1)',&A(-1,0,1)'&=(-1,0,1,2)'\\
 A'A(1,-2,1)'&=(1,-2,1)'=1(1,-2,1)',&A(1,-2,1)'&=(-1,2,-1,0)'
 \end{align*}
 \(4\), \(3\), \(1\) are simple, so each of the three vectors \(v\) is a basis of \(\mathcal N(A'A-\lambda I_3)\)
-(Theorem~\ref{h-thm-geo-alg}, \ref{f-basis}); with \(X=v\): \((2,2,2,0)'\), \((-1,0,1,2)'\), \((-1,2,-1,0)'\) are
+(Theorem~\ref{h-thm-geo-alg}; \lec{4}, Theorem~5(d)); with \(X=v\): \((2,2,2,0)'\), \((-1,0,1,2)'\), \((-1,2,-1,0)'\) are
 eigenvectors of \(AA'\) for \(4\), \(3\), \(1\).
 \end{board}
-\begin{board}[\(\lambda=0\): \(\mathcal N(AA')=\mathcal N(A')\) (\ref{f-rank} with \(A'\)); reduce \(A'\):]
+\begin{board}[\(\lambda=0\): \(\mathcal N(AA')=\mathcal N(A')\) (\lec{4}, Theorem~16(a) with \(A'\)); reduce \(A'\):]
 \[
 A'=\begin{pmatrix}1&1&0&-1\\1&0&1&0\\0&1&1&1\end{pmatrix}
 \xrightarrow{R_2\leftarrow R_2-R_1}
@@ -692,8 +671,9 @@ A'=\begin{pmatrix}1&1&0&-1\\1&0&1&0\\0&1&1&1\end{pmatrix}
 \xrightarrow{R_3\leftarrow R_3+R_2}
 \begin{pmatrix}1&1&0&-1\\0&-1&1&1\\0&0&2&2\end{pmatrix}
 \]
-\(\rank A'=3\), \(\dim\mathcal N(A')=4-3=1\) (\ref{f-rank}). \(x_4=1\): \(x_3=-1\), \(x_2=0\), \(x_1=1\);
-\((1,0,-1,1)'\) is a basis of \(\mathcal N(AA')\) (\ref{f-basis}).
+\(\rank A'=3\), \(\dim\mathcal N(A')=4-3=1\) (\lec{4}, Definition~10, Remark~3, Theorem~11). Back substitution (\lec{2},
+Theorem~3(b)), \(x_4=1\): \(x_3=-1\), \(x_2=0\), \(x_1=1\); \((1,0,-1,1)'\) is a basis of \(\mathcal N(AA')\) (\lec{4},
+Theorem~5(d)).
 \end{board}
 
 \bigskip

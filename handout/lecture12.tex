@@ -101,185 +101,93 @@
 
 \hypersetup{pdftitle={Linear Algebra, Lecture 12: Linear Models II}}
 \newcommand{\boardtop}{\vspace*{-\abovedisplayskip}}
-\DeclareMathOperator{\row}{row}
 \DeclareMathOperator{\SE}{SE}
 \begin{document}
 \handouttitle{12}{Linear Models II}
 
-\textbf{Last time} (\lec{11}): if \(G\) is a g-inverse of \(X'X\), then \(\beta^0=GX'y\) solves the normal equations,
-\(H=XGX'\) gives the projection of \(y\) onto \(\mathcal C(X)\) and does not depend on \(G\), \(\mathrm{SSE}=y'My\), and
-\(\hat\sigma^2=\mathrm{SSE}/(n-r)\) is unbiased (Theorems~10, 15). F1--F8: Chapters 1--6 of the textbook; F9, F10:
-probability, no proof. \(e\) is the vector of residuals; unit vectors are written as columns of \(I\).
-
-\subsection*{Facts}
+\textbf{Last time} (\lec{11}): \(\beta^0=GX'y\) (\(G\) a g-inverse of \(X'X\)) solves the normal equations;
+\(H=XGX'\) does not depend on \(G\); \(\hat\sigma^2=y'My/(n-r)\) (\(M=I_n-H\)) is unbiased. Earlier results are cited where they are
+used; F1--F3: probability, no proof. \(e\) is the vector of residuals; unit vectors are columns of \(I\).
 
 \begin{enumerate}[label=\textbf{F\arabic*.},ref=F\arabic*,leftmargin=*,itemsep=0pt,parsep=0pt,topsep=2pt]
-\item\label{f-rules} \((AB)C=A(BC)\), \(A(B+C)=AB+AC\), \((A+B)C=AC+BC\), \(c(AB)=(cA)B=A(cB)\), \(I_mA=A=AI_n\)
-(\(A\in\R^{m\times n}\)); \((A+B)'=A'+B'\), \((cA)'=cA'\), \((AB)'=B'A'\), \((A')'=A\); \(x'y=y'x\); \(A\) is
-\textbf{symmetric} if \(A'=A\).
-\item\label{f-views} \((AB)_{ij}=\sum_ra_{ir}b_{rj}\). For \(A=[a_1\ \cdots\ a_p]\): \(Ax=x_1a_1+\dots+x_pa_p\),
-\(A\col_j(I_p)=a_j\), \(\col_j(AB)=A\col_j(B)\), \(\row_i(AB)=\row_i(A)B\); if \(Ax=Bx\) for all \(x\), then \(A=B\);
-\(\diag(\alpha_1,\dots,\alpha_n)\diag(\beta_1,\dots,\beta_n)=\diag(\alpha_1\beta_1,\dots,\alpha_n\beta_n)\); block
-matrices multiply, and are transposed, block by block (when the blocks fit).
-\item\label{f-inverse} \(A\in\R^{n\times n}\) is invertible \(\iff\) \(\rank A=n\); \(BA=I\) \(\Rightarrow\)
-\(B=A^{-1}\); \((A')^{-1}=(A^{-1})'\), so the inverse of an invertible symmetric matrix is symmetric.
-\(\left(\begin{smallmatrix}a&b\\c&d\end{smallmatrix}\right)\) is invertible \(\iff\) \(ad-bc\ne0\), and then its inverse
-is \(\frac1{ad-bc}\left(\begin{smallmatrix}d&-b\\-c&a\end{smallmatrix}\right)\).
-\item\label{f-rank} \(\Span\{v_1,\dots,v_k\}=\{c_1v_1+\dots+c_kv_k:c_1,\dots,c_k\in\R\}\). For \(A\in\R^{m\times n}\):
-\(\mathcal C(A)=\{Ax:x\in\R^n\}\) and
-\(\mathcal N(A)=\{x:Ax=0\}\) are subspaces; \(\rank A=\dim\mathcal C(A)=\rank A'\leqslant\min\{m,n\}\);
-\(\dim\mathcal N(A)=n-\rank A\). \(A\) has \textbf{full column rank} (\(\rank A=n\)) \(\iff\) its columns are
-independent \(\iff\) \(\mathcal N(A)=\{0\}\); \textbf{full row rank} (\(\rank A=m\)) \(\iff\) \(\mathcal C(A)=\R^m\).
-\(\rank(AB)\leqslant\rank A\). For subspaces \(W_1\subseteq W_2\), \(\dim W_1=\dim W_2\) \(\Rightarrow\) \(W_1=W_2\).
-\item\label{f-trace} \(\tr A=\sum_ia_{ii}\); \(\tr(A+B)=\tr A+\tr B\), \(\tr(cA)=c\tr A\), \(\tr(AB)=\tr(BA)\)
-(\(A\in\R^{m\times n}\), \(B\in\R^{n\times m}\)).
-\item\label{f-dot} \(\lVert x\rVert^2=x'x=x_1^2+\dots+x_n^2>0\) if \(x\ne0\); if \(x\perp y\) (\(x'y=0\)), then
-\(\lVert x+y\rVert^2=\lVert x\rVert^2+\lVert y\rVert^2\).
-\item\label{f-centering} \(\one=\one_n=(1,\dots,1)'\in\R^n\), \(\one'\one=n\), \(\bar y=\frac1n\one'y\),
-\(\bar J_n=\frac1n\one\one'\): \(\bar J_n'=\bar J_n=\bar J_n^2\), \(\bar J_ny=\bar y\one\).
-\item\label{f-perp} For a subspace \(W\subseteq\R^n\): \(y\perp W\) if \(y'w=0\) for all \(w\in W\);
-\(W^\perp=\{y:y\perp W\}\) is a subspace, and \(\dim W+\dim W^\perp=n\). For \(A\in\R^{m\times n}\):
-\(\mathcal N(A)=\mathcal C(A')^\perp\).
-\item\label{f-prob} (Probability.) \(\prb(z\notin\mathcal A)=1-\prb(z\in\mathcal A)\). \(u_1,\dots,u_m\) are
-\textbf{independent} if \(\prb(u_1\in\mathcal A_1,\dots,u_m\in\mathcal A_m)=\prb(u_1\in\mathcal A_1)\cdots\prb(u_m\in\mathcal A_m)\)
-for all \(\mathcal A_1,\dots,\mathcal A_m\); then \(g_1(u_1),\dots,g_m(u_m)\) are independent, for any functions
-\(g_1,\dots,g_m\).
-\item\label{f-chisq} Let \(r,\nu,a,b\geqslant1\) (the \textbf{degrees of freedom}). \(\chi^2_r\) is the distribution of
-\(w_1^2+\dots+w_r^2\) for independent \(w_1,\dots,w_r\sim N(0,1)\); \(t_\nu\) is that of \(Z/\sqrt{Y/\nu}\) for
-independent \(Z\sim N(0,1)\), \(Y\sim\chi^2_\nu\); \(F_{a,b}\) is that of \((Y_1/a)/(Y_2/b)\) for independent
-\(Y_1\sim\chi^2_a\), \(Y_2\sim\chi^2_b\). For \(u\) with one of these
-distributions, \(\prb(u=c)=0\) for every \(c\); for \(\tau\in(0,1)\), the \(\tau\) \textbf{quantile} \(t_{\nu,\tau}\),
-\(F_{a,b,\tau}\) is the unique \(c\) with \(\prb(u\leqslant c)=\tau\); so \(\prb(u>c)=\alpha\) for the \((1-\alpha)\)
-quantile \(c\).
+\item\label{f-prob} \(\prb(u\notin\mathcal A)=1-\prb(u\in\mathcal A)\); \(u_1,\dots,u_m\) are \textbf{independent} if
+\(\prb(u_k\in\mathcal A_k\ \forall k)=\prod_k\prb(u_k\in\mathcal A_k)\); then so are \(g_1(u_1),\dots,g_m(u_m)\).
+\item\label{f-chisq} \(\chi^2_r\), \(t_\nu\), \(F_{a,b}\) (\textbf{degrees of freedom} \(r,\nu,a,b\geqslant1\)): the
+distributions of \(\sum_{i\leqslant r}w_i^2\), \(Z/\sqrt{Y/\nu}\), \((Y_1/a)/(Y_2/b)\) for independent \(w_i,Z\sim N(0,1)\),
+\(Y\sim\chi^2_\nu\), \(Y_1\sim\chi^2_a\), \(Y_2\sim\chi^2_b\).
+\item\label{f-quantile} For \(u\) as in \ref{f-chisq}: \(\prb(u=c)=0\); the \textbf{quantile} \(t_{\nu,\tau}\),
+\(F_{a,b,\tau}\) (\(0<\tau<1\)) is the unique \(c\) with \(\prb(u\leqslant c)=\tau\).
 \end{enumerate}
-
-\textbf{From \lec{8}, \lec{9} and \lec{10}} (restated).
-\begin{itemize}[itemsep=0pt,parsep=0pt,topsep=2pt]
-\item \lec{8}, Theorem~11: if \(A\in\R^{n\times n}\) is symmetric and \(A^2=A\), then \(\rank A=\tr A\).
-\item \lec{8}, Definition~13, Theorems~14(c), 15(b): a symmetric \(A\) is \textbf{positive definite} (PD) if \(x'Ax>0\) for all
-\(x\ne0\); a PD matrix is invertible; for \(A\in\R^{n\times p}\), \(A'A\) is PD \(\iff\) \(\rank A=p\).
-\item \lec{9}, Definitions~1, 7, Theorem~3(b): for a random vector \(z\), \(\expc(z)=(\expc(z_i))\),
-\(\var(z)=\expc\bigl((z-\mu)(z-\mu)'\bigr)\) (\(\mu=\expc(z)\)). An \textbf{estimator} of a parameter \(\theta\) is a
-random variable \(T=g(y)\), \(g\) involving no unknown parameter; it is \textbf{unbiased} if \(\expc(T)=\theta\) for all
-values of the parameters. For \(\expc(z)=\mu\), \(\var(z)=\Sigma\) and constant \(A\), \(b\): \(\expc(Az+b)=A\mu+b\),
-\(\var(Az+b)=A\Sigma A'\).
-\item \lec{10}, Definition~1, Proposition~2, Theorem~3: \(N_n(\mu,\Sigma)\) (\(\mu\in\R^n\), \(\Sigma\) symmetric with
-\(x'\Sigma x\geqslant0\) for all \(x\)) is the \textbf{multivariate normal} distribution, \(N(0,1)\) the standard normal. If
-\(z\sim N_n(\mu,\Sigma)\): \(\expc(z)=\mu\), \(\var(z)=\Sigma\), and \(Az+b\sim N_m(A\mu+b,\ A\Sigma A')\) for constant
-\(A\in\R^{m\times n}\), \(b\in\R^m\).
-\item \lec{10}, Theorem~12: if \(T\sim t_\nu\) and \(\alpha\in(0,1)\), then
-\(\prb\bigl(-t_{\nu,1-\alpha/2}\leqslant T\leqslant t_{\nu,1-\alpha/2}\bigr)=1-\alpha\) and \(t_{\nu,1-\alpha/2}>0\).
-\item \lec{10}, Theorems~15, 16(a),(b): let \(z\sim N_n(\mu,\sigma^2I_n)\) (\(\sigma>0\)), and \(A,B\in\R^{n\times n}\)
-symmetric with \(A^2=A\), \(B^2=B\). If \(\rank A=r\geqslant1\) and \(A\mu=0\), then \(z'Az/\sigma^2\sim\chi^2_r\). If
-\(AB=0\), then \(z'Az\) and \(z'Bz\) are independent. If \(K\in\R^{m\times n}\) and \(KA=0\), then \(Kz\) and \(z'Az\) are
-independent.
-\item \lec{10}, Definition~18: if the distribution of the observations depends on parameters and \(\alpha\in(0,1)\), an
-interval \([L,U]\) whose endpoints \(L\leqslant U\) are computed from the observations is a \textbf{confidence interval}
-with level \(1-\alpha\) for a parameter \(\theta\in\R\) if \(\prb(L\leqslant\theta\leqslant U)=1-\alpha\) for all values of
-the parameters.
-\end{itemize}
-
-\textbf{From \lec{11}} (restated; \(X\in\R^{n\times p}\), \(y\in\R^n\)).
-\begin{itemize}[itemsep=0pt,parsep=0pt,topsep=2pt]
-\item Definition~1 and the lines after it: in the \textbf{linear model} \(y=X\beta+\varepsilon\), the design matrix
-\(X\) is a known constant matrix, \(\beta\in\R^p\) an unknown constant vector of parameters, the errors
-\(\varepsilon\in\R^n\) a random vector, and the response \(y\) is observed. (A1) \(\expc(y)=X\beta\); (A2)
-\(\expc(\varepsilon)=0\); (A3) \(\var(\varepsilon)=\sigma^2I_n\) (\(\sigma^2>0\)); (A4) \(\rank X=p\). (A1) \(\iff\) (A2), and
-(A3) gives \(\var(y)=\sigma^2I_n\). A \textbf{least-squares estimate} is a \(\hat\beta\in\R^p\) that minimizes
-\(S(\beta)=\lVert y-X\beta\rVert^2\); \(X'X\beta=X'y\) are the \textbf{normal equations}.
-\item Theorem~2: (a) the normal equations have a solution; (b) \(X'X\) is invertible \(\iff\) \(\rank X=p\).
-Theorem~3: (a) \(\hat\beta\) is a least-squares estimate \(\iff\) \(X'X\hat\beta=X'y\). (b) All least-squares estimates give the same
-\(\hat y=X\hat\beta\) (the \textbf{fitted values}), the orthogonal projection of \(y\) onto \(\mathcal C(X)\) (the
-\(\hat w\in\mathcal C(X)\) with \(y-\hat w\perp\mathcal C(X)\)); \(e=y-\hat y\). (c) If \(\rank X=p\),
-\(\hat\beta=(X'X)^{-1}X'y\) is the only least-squares estimate.
-\item Theorem~6: \(n\) observations in \(g\) groups of sizes \(n_1,\dots,n_g\geqslant1\) (first the \(n_1\) of group \(1\),
-and so on); the \textbf{indicator} \(d_l\in\R^n\) of group \(l\) has entry \(1\) in the rows of group \(l\), \(0\)
-elsewhere. The model \(y_i=\mu+\alpha_l+\varepsilon_i\) (observation \(i\) in group \(l\)) is \(y=X\beta+\varepsilon\),
-\(\beta=(\mu,\alpha_1,\dots,\alpha_g)'\), \(X=[\one_n\ d_1\ \cdots\ d_g]\). For \(X_1=[d_1\ \cdots\ d_g]\): (a) \(X_1\) has
-full column rank; (b) \(\rank X=g\), \(\mathcal N(X)=\Span\{(-1,1,\dots,1)'\}\); (c) \(\mathcal C(X_1)=\mathcal C(X)\).
-\item Example~7: \(y=(5,7,6,3,5,2)'\), \(g=3\), \((n_1,n_2,n_3)=(3,2,1)\);
-\(X=\left(\begin{smallmatrix}1&1&0&0\\1&1&0&0\\1&1&0&0\\1&0&1&0\\1&0&1&0\\1&0&0&1\end{smallmatrix}\right)\),
-\(X'X=\left(\begin{smallmatrix}6&3&2&1\\3&3&0&0\\2&0&2&0\\1&0&0&1\end{smallmatrix}\right)\), \(X'y=(28,18,8,2)'\); the
-least-squares estimates are \((-t,6+t,4+t,2+t)'\) (\(t\in\R\)), and \(\hat y=(6,6,6,4,4,2)'\).
-\item Definition~8: \(G\) with \(AGA=A\) is a \textbf{g-inverse} of \(A\); if \(A\) is invertible, \(A^{-1}\) is its only
-g-inverse.
-\item Theorem~10: let \(r=\rank X\), \(G\) a g-inverse of \(X'X\), \(H=XGX'\) (the \textbf{hat matrix}) and
-\(M=I_n-H\). (a) \(XGX'X=X\), \(X'XGX'=X'\); \(\beta^0=GX'y\) solves the normal equations. (b) \(Hy\) is the orthogonal
-projection of \(y\) onto \(\mathcal C(X)\), so \(H\) does not depend on the choice of \(G\); \(H=X(X'X)^{-1}X'\) if \(r=p\).
-(c) \(H'=H=H^2\), \(HX=X\), \(X'H=X'\); \(M'=M=M^2\), \(MX=0\), \(HM=MH=0\). (d) \(\rank H=\tr H=r\),
-\(\rank M=\tr M=n-r\). (e) For every least-squares estimate \(\hat\beta\): \(\hat y=Hy\), \(e=My\), and
-\(\mathrm{SSE}=S(\hat\beta)=e'e=y'My=y'y-\hat\beta'X'y\).
-\item Example~11: in Example~7, \(G=\diag(0,\frac13,\frac12,1)\) is a g-inverse of \(X'X\), \(\beta^0=(0,6,4,2)'\),
-\(e=(-1,1,0,-1,1,0)'\), \(\mathrm{SSE}=4\).
-\item Theorem~13 (Gauss--Markov): under (A1)--(A4), for \(\hat\beta=(X'X)^{-1}X'y\) and every \(\tilde\beta=Ly\) with
-\(\expc(Ly)=\beta\) for all \(\beta\): \(\var(a'\tilde\beta)\geqslant\var(a'\hat\beta)\) for every \(a\in\R^p\).
-\item Theorem~15 and the line after it: under (A2), (A3) and \(r=\rank X<n\), \(\expc(\mathrm{SSE})=(n-r)\sigma^2\), so
-\(\hat\sigma^2=\mathrm{SSE}/(n-r)\) is unbiased for \(\sigma^2\); in Example~11, \(\hat\sigma^2=4/(6-3)=\frac43\).
-\item Definition~16, Theorem~17: \(\mathrm{SST}=\sum_i(y_i-\bar y)^2\), \(\mathrm{SSR}=\sum_i(\hat y_i-\bar y)^2\),
-\(\mathrm{SSE}=\sum_i(y_i-\hat y_i)^2\). If \(\one_n\in\mathcal C(X)\): \(\mathrm{SST}=\mathrm{SSR}+\mathrm{SSE}\) and
-\(y'y=n\bar y^2+\mathrm{SSR}+\mathrm{SSE}\).
-\end{itemize}
 
 \subsection*{1. Estimable functions and their best linear unbiased estimators}
 
 \begin{definition}\label{h-def-estimable}
-Assume (A1), with \(X\in\R^{n\times p}\) of any rank, and let \(a\in\R^p\). A \textbf{linear estimator} is a random
-variable \(c'y\) with a constant \(c\in\R^n\); it is a \textbf{linear unbiased estimator} of \(a'\beta\) if
-\(\expc(c'y)=a'\beta\) for every \(\beta\in\R^p\). \(a'\beta\) is \textbf{estimable} if it has a linear unbiased
-estimator. A linear unbiased estimator of \(a'\beta\) with the smallest variance among all of them is a \textbf{best
-linear unbiased estimator} (\textbf{BLUE}) of \(a'\beta\).
+In the linear model \(y=X\beta+\varepsilon\) (\lec{11}, Definition~1: \(X\in\R^{n\times p}\) known, \(\beta\in\R^p\)
+unknown, \(\varepsilon\in\R^n\) random), with \(X\) of any rank, assume (A1) \(\expc(y)=X\beta\), and let \(a\in\R^p\).
+A \textbf{linear estimator} is a random variable \(c'y\) with a constant \(c\in\R^n\); it is a \textbf{linear unbiased
+estimator} of \(a'\beta\) if \(\expc(c'y)=a'\beta\) for every \(\beta\in\R^p\). \(a'\beta\) is \textbf{estimable} if it
+has a linear unbiased estimator. A linear unbiased estimator of \(a'\beta\) with the smallest variance among all of them
+is a \textbf{best linear unbiased estimator} (\textbf{BLUE}) of \(a'\beta\).
 \end{definition}
 
-\Needspace{20\baselineskip}
+\Needspace{26\baselineskip}
 \begin{theorem}\label{h-thm-estimable}
 Assume (A1), and let \(a\in\R^p\).
 \begin{enumerate}
 \item A linear estimator \(c'y\) is unbiased for \(a'\beta\) \(\iff\) \(X'c=a\). Hence \(a'\beta\) is estimable \(\iff\)
 \(a\in\mathcal C(X')\) \(\iff\) \(a\perp\mathcal N(X)\). If \(\rank X=p\), every \(a'\beta\) is estimable.
-\item Let \(G\) be a g-inverse of \(X'X\) and \(H=XGX'\). If \(a=X'c\), then \(a'\hat\beta=c'\hat y=c'Hy\) for every
-least-squares estimate \(\hat\beta\) (the same linear estimator for all of them), and \(\expc(a'\hat\beta)=a'\beta\).
+\item Let \(G\) be a g-inverse of \(X'X\) (\lec{11}, Definition~8: \(AGA=A\) for \(A=X'X\)) and \(H=XGX'\). If
+\(a=X'c\), then \(a'\hat\beta=c'\hat y=c'Hy\) (\(\hat y=X\hat\beta\)) for every least-squares estimate \(\hat\beta\), a
+minimizer of \(\lVert y-X\beta\rVert^2\) (\lec{11}, Definition~1): the same linear estimator for all of them; and
+\(\expc(a'\hat\beta)=a'\beta\).
 \item If \(a'\beta\) is not estimable, then \(a'\hat\beta\) takes every real value as \(\hat\beta\) runs through the
 least-squares estimates.
 \end{enumerate}
 \end{theorem}
 \begin{proof}
-\begin{board}[(a) \lec{9}, Theorem~3(b), and (A1); Definition~\ref{h-def-estimable}:]
+\begin{board}[(a) \(\expc(c'y)=c'\expc(y)=c'X\beta\) (\lec{9}, Theorem~3(b): \(\expc(Az+b)=A\expc(z)+b\); (A1));
+\(z\perp W\) means \(z'w=0\) for all \(w\in W\) (\lec{6}, Definition~4); \(\rank A=\dim\mathcal C(A)\) (\lec{4},
+Definition~10); subspaces \(U\subseteq W\) with \(\dim U=\dim W\) are equal (\lec{4}, Theorem~5(a)):]
 \boardtop
 \begin{align*}
-\expc(c'y)&=c'X\beta;\qquad c'X\beta=a'\beta\ \text{for all }\beta\implies c'X\col_j(I_p)=a'\col_j(I_p)\ (j=1,\dots,p)\\
-&\implies c'X=a',\ X'c=a;\qquad\text{conversely }X'c=a\implies\expc(c'y)=c'X\beta=a'\beta&&\text{(\ref{f-views}, \ref{f-rules})}\\
-&\implies\bigl(a'\beta\text{ estimable}\iff a\in\mathcal C(X')\bigr)&&\text{(\ref{f-rank})}\\
-\mathcal N(X)&=\mathcal C(X')^\perp\implies\mathcal C(X')\subseteq\mathcal N(X)^\perp&&\text{(\ref{f-perp})}\\
-\dim\mathcal C(X')&=\rank X'=\rank X=p-\dim\mathcal N(X)=\dim\mathcal N(X)^\perp\implies\mathcal C(X')=\mathcal N(X)^\perp
-&&\text{(\ref{f-rank}, \ref{f-perp})}\\
-\rank X&=p\implies\rank X'=p\implies\mathcal C(X')=\R^p&&\text{(\ref{f-rank})}
+c'X\beta&=a'\beta\ (\text{all }\beta)\implies c'X\col_j(I_p)=a'\col_j(I_p)\ (\text{all }j)&&\text{(\lec{1}, Proposition~11(a))}\\
+&\implies c'X=a'\iff X'c=a&&\text{(\lec{1}, Theorem~8)}\\
+X'c&=a\implies\expc(c'y)=c'X\beta=a'\beta\\
+&\implies\bigl(a'\beta\text{ estimable}\iff a\in\{X'c\}=\mathcal C(X')\bigr)&&\text{(\lec{4}, Definition~7)}\\
+\mathcal N(X)&=\mathcal C(X')^\perp\implies\mathcal C(X')\subseteq\mathcal N(X)^\perp&&\text{(\lec{6}, Corollary~6)}\\
+\dim\mathcal C(X')&=\rank X'=\rank X=p-\dim\mathcal N(X)&&\text{(\lec{4}, Theorems~12(a), 11)}\\
+&=\dim\mathcal N(X)^\perp\implies\mathcal C(X')=\mathcal N(X)^\perp&&\text{(\lec{6}, Theorem~5(c))}\\
+\rank X&=p\implies\rank X'=p\implies\mathcal C(X')=\R^p&&\text{(\lec{4}, Theorem~12(a),(c))}
 \end{align*}
 \end{board}
-\begin{board}[(b) \(a=X'c\); \lec{9}, Theorem~3(b), and (A1) for the mean:]
+\begin{board}[(b) \(a=X'c\); \(\expc(c'Hy)=c'H\expc(y)\) (\lec{9}, Theorem~3(b)) and (A1); all least-squares estimates
+give the same \(\hat y=X\hat\beta\) (\lec{11}, Theorem~3(b)):]
 \boardtop
 \begin{align*}
-X\hat\beta&=\hat y=Hy\implies a'\hat\beta=c'X\hat\beta=c'\hat y=c'Hy&&\text{(\lec{11}, Theorems~3(b), 10(e))}\\
+X\hat\beta&=\hat y=Hy\implies a'\hat\beta=c'X\hat\beta=c'\hat y=c'Hy&&\text{(\lec{11}, Theorem~10(e))}\\
 \expc(c'Hy)&=c'HX\beta=c'X\beta=a'\beta&&\text{(\lec{11}, Theorem~10(c))}
 \end{align*}
 \end{board}
-\begin{board}[(c) By (a), \(a\notin\mathcal N(X)^\perp\); a least-squares estimate \(\hat\beta\) exists (\lec{11},
-Theorems~2(a), 3(a)):]
+\begin{board}[(c) By (a), \(a\notin\mathcal N(X)^\perp\); \(X'X\beta=X'y\) has a solution \(\hat\beta\) (\lec{11},
+Theorem~2(a)); the least-squares estimates are the solutions of \(X'X\beta=X'y\) (\lec{11}, Theorem~3(a)):]
 \boardtop
 \begin{align*}
 a'z&\ne0\ \text{for some }z\in\mathcal N(X)\\
-Xz&=0\implies X'X(\hat\beta+tz)=X'X\hat\beta=X'y\quad(t\in\R)\\
-&\implies\hat\beta+tz\text{ is a least-squares estimate}&&\text{(\lec{11}, Theorem~3(a))}\\
+Xz&=0\implies X'X(\hat\beta+tz)=X'X\hat\beta=X'y\quad(t\in\R)\implies\hat\beta+tz\text{ is a least-squares estimate}\\
 a'(\hat\beta+tz)&=a'\hat\beta+t\,a'z\ \text{takes every real value}
 \end{align*}
 \end{board}
 \nopagebreak
 \end{proof}
 
-\Needspace{11\baselineskip}
+\Needspace{14\baselineskip}
 \begin{example}\label{h-exm-estimable}
-In \lec{11}, Example~7, which of \(\mu+\alpha_1\), \(\alpha_1-\alpha_2\), \(\mu\), \(\alpha_1\) are estimable? With the
-group means \(\bar y_1=\frac13(y_1+y_2+y_3)\), \(\bar y_2=\frac12(y_4+y_5)\), \(\bar y_3=y_6\), find the estimator of
-\(\alpha_1-\alpha_2\) of Theorem~\ref{h-thm-estimable}(b).
+In \lec{11}, Example~7, the one-way model \(y_i=\mu+\alpha_l+\varepsilon_i\) of \lec{11}, Theorem~6 has
+\(\beta=(\mu,\alpha_1,\alpha_2,\alpha_3)'\), \(y=(5,7,6,3,5,2)'\) in groups of sizes \((n_1,n_2,n_3)=(3,2,1)\),
+\(X'X=\left(\begin{smallmatrix}6&3&2&1\\3&3&0&0\\2&0&2&0\\1&0&0&1\end{smallmatrix}\right)\), \(X'y=(28,18,8,2)'\) and the
+least-squares estimates \((-t,6+t,4+t,2+t)'\) (\(t\in\R\)). Which of \(\mu+\alpha_1\), \(\alpha_1-\alpha_2\), \(\mu\),
+\(\alpha_1\) are estimable? With the group means \(\bar y_1=\frac13(y_1+y_2+y_3)\), \(\bar y_2=\frac12(y_4+y_5)\),
+\(\bar y_3=y_6\), find the estimator of \(\alpha_1-\alpha_2\) of Theorem~\ref{h-thm-estimable}(b).
 \end{example}
 \textit{Solution.}
 \begin{board}[\(\mathcal N(X)=\Span\{(-1,1,1,1)'\}\) (\lec{11}, Theorem~6(b)); Theorem~\ref{h-thm-estimable}(a),(c):]
@@ -290,7 +198,8 @@ group means \(\bar y_1=\frac13(y_1+y_2+y_3)\), \(\bar y_2=\frac12(y_4+y_5)\), \(
 &\mu:\ -1\ne0,\quad\alpha_1:\ 1\ne0\implies\text{not estimable; values }{-t},\ 6+t\text{ change with }t
 \end{align*}
 \end{board}
-\begin{board}[\(X'y\) holds the total and the group totals (\ref{f-views}); \lec{11}, Theorem~3(a):]
+\begin{board}[\(X'y\) holds the total and the group totals \(\col_j(X)'y\) (\lec{1}, Theorem~4(d), Definition~7);
+\lec{11}, Theorem~3(a):]
 \boardtop
 \begin{align*}
 X'X(0,\bar y_1,\bar y_2,\bar y_3)'&=(3\bar y_1+2\bar y_2+\bar y_3,\ 3\bar y_1,\ 2\bar y_2,\ \bar y_3)'=X'y\\
@@ -302,63 +211,73 @@ X'c&=(1-1,\ 1,\ -1,\ 0)'=(0,1,-1,0)'
 
 \Needspace{17\baselineskip}
 \begin{theorem}\label{h-thm-blue}
-Assume (A1)--(A3), with \(X\) of any rank; let \(G\) be a g-inverse of \(X'X\), \(H=XGX'\), \(M=I_n-H\), and let
+Assume (A1)--(A3) (\lec{11}, Definition~1: (A2) \(\expc(\varepsilon)=0\), (A3) \(\var(\varepsilon)=\sigma^2I_n\),
+\(\sigma^2>0\)), with \(X\) of any rank; let \(G\) be a g-inverse of \(X'X\), \(H=XGX'\), \(M=I_n-H\), and let
 \(a'\beta\) be estimable. Then \(a'\hat\beta\), the same for every least-squares estimate \(\hat\beta\), is the BLUE of
 \(a'\beta\): it is a linear unbiased estimator of \(a'\beta\), and every linear unbiased estimator \(c'y\) of \(a'\beta\)
 has \(\var(c'y)\geqslant\var(a'\hat\beta)\), with equality only if \(c'y=a'\hat\beta\) for every \(y\). Moreover
 \(\var(a'\hat\beta)=\sigma^2a'Ga\) (for every such \(G\)).
 \end{theorem}
 \begin{proof}
-\begin{board}[\(c'y\) a linear unbiased estimator of \(a'\beta\); \(\var(y)=\sigma^2I_n\) ((A3)) and \lec{9},
-Theorem~3(b) for the variances; \(H'=H=H^2\), \(M'=M=M^2\) (\lec{11}, Theorem~10(c)); \(u=Mc\):]
+\begin{board}[\(c'y\) a linear unbiased estimator of \(a'\beta\); (A3) gives \(\var(y)=\sigma^2I_n\) (\lec{11},
+Definition~1); \(\var(Az+b)=A\var(z)A'\) (\lec{9}, Theorem~3(b)); \(H'=H=H^2\), \(M'=M=M^2\) (\lec{11},
+Theorem~10(c)); \(\lVert u\rVert^2=u'u\) is \(0\) only for \(u=0\) (\lec{6}, Definition~1); \(u=Mc\):]
 \boardtop
 \begin{align*}
 X'c&=a,\quad a'\hat\beta=c'Hy\ \text{is linear unbiased}&&\text{(Theorem~\ref{h-thm-estimable}(a),(b))}\\
-\var(c'y)&=\sigma^2c'c,\quad\var(c'Hy)=\sigma^2c'HH'c=\sigma^2c'Hc\\
-\var(c'y)-\var(a'\hat\beta)&=\sigma^2c'(I_n-H)c=\sigma^2c'M'Mc=\sigma^2\lVert u\rVert^2\geqslant0&&\text{(\ref{f-dot})}\\
-\sigma^2\lVert u\rVert^2&=0\implies u=0\implies c=Hc\implies c'y=c'Hy=a'\hat\beta\ (\text{all }y)&&\text{(\ref{f-dot})}\\
-c'Hc&=c'XGX'c=a'Ga
+\var(c'y)&=\sigma^2c'c,\quad\var(c'Hy)=\sigma^2c'HH'c=\sigma^2c'Hc=\sigma^2a'Ga\\
+\var(c'y)-\var(a'\hat\beta)&=\sigma^2c'(I_n-H)c=\sigma^2c'M'Mc=\sigma^2\lVert u\rVert^2\geqslant0\\
+\sigma^2\lVert u\rVert^2&=0\implies u=0\implies c=Hc\implies c'y=c'Hy=a'\hat\beta\ (\text{all }y)
 \end{align*}
 \end{board}
 \nopagebreak
 \end{proof}
-So \(\var(c'y)=\var(a'\hat\beta)+\sigma^2\lVert Mc\rVert^2\). Under (A4), every \(a'\beta\) is estimable
-(Theorem~\ref{h-thm-estimable}(a)), and Theorem~\ref{h-thm-blue} is \lec{11}, Theorem~13 for one \(a'\beta\) at a time.
+So \(\var(c'y)=\var(a'\hat\beta)+\sigma^2\lVert Mc\rVert^2\). Under (A4) \(\rank X=p\), every \(a'\beta\) is
+estimable (Theorem~\ref{h-thm-estimable}(a)): Theorem~\ref{h-thm-blue} gives \(\var(a'\tilde\beta)\geqslant\var(a'\hat\beta)\)
+for linear unbiased \(\tilde\beta\) of \(\beta\) (\lec{11}, Theorem~13).
 
 \Needspace{15\baselineskip}
 \begin{example}\label{h-exm-solution}
-In \lec{11}, Examples~7 and 11 (\(G=\diag(0,\frac13,\frac12,1)\)), under (A1), (A3): find \(\beta^0=GX'y\),
-\(\expc(\beta^0)\), \(\var(\beta^0)\) and \(\var(\bar y_1-\bar y_2)\).
+In Example~\ref{h-exm-estimable}, with the g-inverse \(G=\diag(0,\frac13,\frac12,1)\) of \(X'X\) (\lec{11},
+Example~11), under (A1), (A3): find \(\beta^0=GX'y\), \(\expc(\beta^0)\), \(\var(\beta^0)\) and
+\(\var(\bar y_1-\bar y_2)\).
 \end{example}
 \textit{Solution.}
-\begin{board}[\(GX'X\): the rows of \(X'X\) times \(0,\frac13,\frac12,1\); \(X'y\) as in Example~\ref{h-exm-estimable};
-\lec{9}, Theorem~3(b):]
+\begin{board}[\(GX'X\): the rows of \(X'X\) times \(0,\frac13,\frac12,1\) (\lec{1}, Proposition~13(a)); \lec{9},
+Theorem~3(b):]
 \boardtop
 \begin{align*}
 GX'X&=\begin{pmatrix}0&0&0&0\\1&1&0&0\\1&0&1&0\\1&0&0&1\end{pmatrix},\qquad
 \beta^0=GX'y=(0,\bar y_1,\bar y_2,\bar y_3)'\\
 \expc(\beta^0)&=GX'X\beta=(0,\ \mu+\alpha_1,\ \mu+\alpha_2,\ \mu+\alpha_3)'&&\text{((A1))}\\
-\var(\beta^0)&=GX'(\sigma^2I_n)XG'=\sigma^2GX'XG=\sigma^2\diag(0,\tfrac13,\tfrac12,1)&&\text{((A3); \(G'=G\); \ref{f-views})}\\
+\var(\beta^0)&=GX'(\sigma^2I_n)XG'=\sigma^2GX'XG=\sigma^2\diag(0,\tfrac13,\tfrac12,1)&&\text{((A3); \(G'=G\))}\\
 \var(\bar y_1-\bar y_2)&=a'\var(\beta^0)a=\sigma^2\bigl(\tfrac13+\tfrac12\bigr)=\tfrac56\sigma^2=\sigma^2a'Ga&&(a=(0,1,-1,0)')
 \end{align*}
 \end{board}
 So \(\beta^0\) is the \(\hat\beta\) of Example~\ref{h-exm-estimable}, and \(\bar y_l\) estimates \(\mu+\alpha_l\), not
-\(\alpha_l\); \(GX'XG\) has the columns of \(GX'X\) times \(0,\frac13,\frac12,1\); and \(\frac56\sigma^2\) is the variance
-of Theorem~\ref{h-thm-blue}.
+\(\alpha_l\); \(GX'XG\) has the columns of \(GX'X\) times \(0,\frac13,\frac12,1\) (\lec{1}, Proposition~13(a)); and
+\(\frac56\sigma^2\) is the variance of Theorem~\ref{h-thm-blue}.
 
 \subsection*{2. The normal linear model; \(t\) intervals and tests}
 
 \begin{definition}\label{h-def-normal}
 The \textbf{normal linear model} is the linear model of \lec{11}, Definition~1, with \(X\in\R^{n\times p}\) of any rank,
-under (A5) \(\varepsilon\sim N_n(0,\sigma^2I_n)\) for a number \(\sigma^2>0\). Then (A2), (A3) hold (\lec{10},
-Proposition~2), and \(y=X\beta+I_n\varepsilon\sim N_n(X\beta,\sigma^2I_n)\) (\lec{10}, Theorem~3), so (A1) holds. Let
-\(\alpha\in(0,1)\). A \textbf{hypothesis} \(H_0\) is a condition on the parameters, such as \(K\beta=m\). A \textbf{test} of
-\(H_0\) is given by a \textbf{rejection region} \(\mathcal R\), a set of possible values of \(y\): \(H_0\) is rejected if the
-observed \(y\) lies in \(\mathcal R\). The test has \textbf{level} \(\alpha\) if \(\prb(y\in\mathcal R)=\alpha\) for all
-parameter values that satisfy \(H_0\). Usually \(\mathcal R\) is described by a \textbf{test statistic} \(T\) computed from
-\(y\), as \(\{T>c\}\) or \(\{\lvert T\rvert>c\}\). When \(H_0\) is rejected at level \(\alpha\), the departure from \(H_0\)
-is \textbf{significant} at level \(\alpha\). Confidence intervals are those of \lec{10}, Definition~18; the quantiles
-\(t_{\nu,\tau}\), \(F_{a,b,\tau}\) those of \ref{f-chisq}.
+under (A5) \(\varepsilon\sim N_n(0,\sigma^2I_n)\) for a number \(\sigma^2>0\) (\lec{10}, Definition~1: multivariate
+normal). Then (A2), (A3) hold (\lec{10}, Proposition~2:
+\(z\sim N_n(\mu,\Sigma)\Rightarrow\expc(z)=\mu\), \(\var(z)=\Sigma\)), and \(y=X\beta+I_n\varepsilon\sim
+N_n(X\beta,\sigma^2I_n)\) (\lec{10}, Theorem~3: \(Az+b\sim N_m(A\mu+b,A\Sigma A')\)), so (A1) holds; and
+\(y_1,\dots,y_n\) are independent (\ref{f-prob}), \(y_i\sim N(x_i'\beta,\sigma^2)\), \(x_i'\) the row \(i\) of \(X\)
+(\lec{10}, Theorem~6(b): \(z\sim N_n(\mu,\diag(\sigma_1^2,\dots,\sigma_n^2))\iff\) the \(z_i\) are independent
+\(N(\mu_i,\sigma_i^2)\)). Let \(\alpha\in(0,1)\). A \textbf{hypothesis} \(H_0\) is a condition on the parameters, such as
+\(K\beta=m\). A \textbf{test} of \(H_0\) is given by a \textbf{rejection region} \(\mathcal R\), a set of possible values
+of \(y\): \(H_0\) is rejected if the observed \(y\) lies in \(\mathcal R\). The test has \textbf{level} \(\alpha\) if
+\(\prb(y\in\mathcal R)=\alpha\) for all parameter values that satisfy \(H_0\). Usually \(\mathcal R\) is described by a
+\textbf{test statistic} \(T\) computed from \(y\), as \(\{T>c\}\) or \(\{\lvert T\rvert>c\}\). When \(H_0\) is rejected at
+level \(\alpha\), the departure from \(H_0\) is \textbf{significant} at level \(\alpha\). A \textbf{confidence interval}
+of level \(1-\alpha\) for \(\theta\in\R\) is an interval \([L,U]\) computed from \(y\) with
+\(\prb(L\leqslant\theta\leqslant U)=1-\alpha\) for all parameter values (\lec{10}, Definition~18). The distributions
+\(\chi^2_r\), \(t_\nu\), \(F_{a,b}\) and their quantiles \(t_{\nu,\tau}\), \(F_{a,b,\tau}\) are those of \ref{f-chisq},
+\ref{f-quantile}.
 \end{definition}
 
 \Needspace{16\baselineskip}
@@ -374,7 +293,8 @@ In the normal linear model let \(\rank X=r<n\), \(G\) a g-inverse of \(X'X\), \(
 \end{theorem}
 \begin{proof}
 \begin{board}[(a) Row \(i\) of \(K\) is \(t_i'X\), \(t_i\in\R^n\) (Theorem~\ref{h-thm-estimable}(a)); \(T\in\R^{q\times n}\)
-has the rows \(t_i'\), so \(K=TX\) (\ref{f-views}); \(y\sim N_n(X\beta,\sigma^2I_n)\) (Definition~\ref{h-def-normal}):]
+has the rows \(t_i'\), so \(K=TX\) (\lec{1}, Theorem~4(c)); \(y\sim N_n(X\beta,\sigma^2I_n)\)
+(Definition~\ref{h-def-normal}):]
 \boardtop
 \begin{align*}
 K\beta^0&=TXGX'y=THy\sim N_q(THX\beta,\ \sigma^2THH'T')&&\text{(\lec{10}, Theorem~3)}\\
@@ -384,24 +304,26 @@ THX\beta&=TX\beta=K\beta,\qquad THH'T'=THT'=TXGX'T'=KGK'&&\text{(\lec{11}, Theor
 \(H\) does not depend on \(G\) (\lec{11}, Theorem~10(b)), so neither do \(K\beta^0=THy\) and \(KGK'=THT'\). Under (A4),
 \(X'X\) is invertible and \((X'X)^{-1}\) is its only g-inverse (\lec{11}, Theorem~2(b), Definition~8), every \(a'\beta\)
 is estimable (Theorem~\ref{h-thm-estimable}(a)), and \(K=I_p\) gives \(\hat\beta\).
-\begin{board}[(b) \(y\sim N_n(X\beta,\sigma^2I_n)\); \lec{11}, Theorem~10(c)--(e):]
+\begin{board}[(b) \(y\sim N_n(X\beta,\sigma^2I_n)\); \lec{11}, Theorem~10(c)--(e); \(z\sim N_n(\mu,\sigma^2I_n)\),
+\(A'=A=A^2\), \(\rank A=d\geqslant1\), \(A\mu=0\) \(\Rightarrow\) \(z'Az/\sigma^2\sim\chi^2_d\) (\lec{10}, Theorem~15):]
 \boardtop
 \begin{align*}
 \mathrm{SSE}&=y'My,\quad M'=M=M^2\\
 \rank M&=n-r\geqslant1,\quad MX\beta=0\\
 \mathrm{SSE}/\sigma^2&\sim\chi^2_{n-r}&&\text{(\lec{10}, Theorem~15, \(z=y\), \(A=M\))}\\
-\prb(\mathrm{SSE}=0)&=\prb(\mathrm{SSE}/\sigma^2=0)=0&&\text{(\ref{f-chisq})}
+\prb(\mathrm{SSE}=0)&=\prb(\mathrm{SSE}/\sigma^2=0)=0&&\text{(\ref{f-quantile})}
 \end{align*}
 \end{board}
-\begin{board}[(c) \(K\beta^0=(TH)y\) ((a)); \lec{10}, Theorem~16(b), with \(TH\), \(M\) for its \(K\), \(A\):]
+\begin{board}[(c) \(K\beta^0=(TH)y\) ((a)); for \(z\sim N_n(\mu,\sigma^2I_n)\), \(A'=A=A^2\) and \(KA=0\), \(Kz\) and
+\(z'Az\) are independent (\lec{10}, Theorem~16(b)); here \(z=y\), and \(TH\), \(M\) for \(K\), \(A\):]
 \[
 (TH)M=T(HM)=0\implies K\beta^0\text{ and }\mathrm{SSE}=y'My\text{ independent}\qquad\text{(\lec{11}, Theorem~10(c))}
 \]
 \end{board}
 \nopagebreak
 \end{proof}
-We write \(s^2=\hat\sigma^2=\mathrm{SSE}/(n-r)\) (unbiased by \lec{11}, Theorem~15) and \(s=\sqrt{s^2}\); by (b),
-\(s>0\) with probability \(1\).
+We write \(s^2=\hat\sigma^2=\mathrm{SSE}/(n-r)\), unbiased for \(\sigma^2\) (\lec{11}, Theorem~16:
+\(\expc(\mathrm{SSE})=(n-r)\sigma^2\)), and \(s=\sqrt{s^2}\); by (b), \(s>0\) with probability \(1\).
 
 \Needspace{18\baselineskip}
 \begin{theorem}\label{h-thm-t}
@@ -423,7 +345,7 @@ nonzero with \(a'\beta\) estimable. Then \(a'Ga>0\); let \(\SE(a'\beta^0)=s\sqrt
 \boardtop
 \begin{align*}
 a'Ga&=c'XGX'c=c'Hc=c'H'Hc=\lVert Hc\rVert^2&&\text{(\lec{11}, Theorem~10(c))}\\
-X'Hc&=X'c=a\ne0\implies Hc\ne0\implies a'Ga>0&&\text{(\ref{f-dot})}
+X'Hc&=X'c=a\ne0\implies Hc\ne0\implies a'Ga>0&&\text{(\lec{6}, Definition~1)}
 \end{align*}
 \end{board}
 \begin{board}[(a) \lec{10}, Theorem~3 for \(z\); \(s>0\) with probability \(1\):]
@@ -434,11 +356,13 @@ v&=\mathrm{SSE}/\sigma^2\sim\chi^2_{n-r};\quad z,\ v\text{ independent}&&\text{(
 T&=\frac z{s/\sigma}=\frac z{\sqrt{v/(n-r)}}\sim t_{n-r}&&\text{(\ref{f-chisq})}
 \end{align*}
 \end{board}
-\begin{board}[(b) \(t^*>0\); \(\SE=\SE(a'\beta^0)>0\) with probability \(1\):]
+\begin{board}[(b) For \(T\sim t_\nu\): \(\prb(-t_{\nu,1-\alpha/2}\leqslant T\leqslant t_{\nu,1-\alpha/2})=1-\alpha\)
+(\lec{10}, Theorem~11(a)) and \(t_{\nu,1-\alpha/2}>0\) (\lec{10}, Theorem~11(b)); \(\SE=\SE(a'\beta^0)>0\) with
+probability \(1\):]
 \boardtop
 \begin{align*}
-\prb(\lvert T\rvert\leqslant t^*)&=1-\alpha&&\text{((a); \lec{10}, Theorem~12)}\\
-\lvert T\rvert\leqslant t^*&\iff a'\beta^0-t^*\SE\leqslant a'\beta\leqslant a'\beta^0+t^*\SE&&\text{(\lec{10}, Definition~18)}\\
+\prb(\lvert T\rvert\leqslant t^*)&=1-\alpha\quad(T\sim t_{n-r}\text{ by (a)})&&\text{(\lec{10}, Theorem~11(a))}\\
+\lvert T\rvert\leqslant t^*&\iff a'\beta^0-t^*\SE\leqslant a'\beta\leqslant a'\beta^0+t^*\SE&&\text{(Definition~\ref{h-def-normal})}\\
 H_0&\colon a'\beta=m_0\implies T_0=T\\
 \prb(\lvert T_0\rvert>t^*)&=1-(1-\alpha)=\alpha\ \text{under }H_0&&\text{(\ref{f-prob})}\\
 \lvert T_0\rvert>t^*&\iff\lvert a'\beta^0-m_0\rvert>t^*\SE\iff m_0\text{ outside the interval}
@@ -447,14 +371,15 @@ H_0&\colon a'\beta=m_0\implies T_0=T\\
 \nopagebreak
 \end{proof}
 
-\Needspace{11\baselineskip}
+\Needspace{12\baselineskip}
 \begin{example}\label{h-exm-t}
-In \lec{11}, Example~7, assume the normal linear model. Find the confidence interval of level \(1-\alpha\) for
+In Example~\ref{h-exm-estimable}, assume the normal linear model. Find the confidence interval of level \(1-\alpha\) for
 \(\alpha_1-\alpha_2\), and the test of \(H_0\colon\alpha_1=\alpha_2\) at level \(\alpha\).
 \end{example}
 \textit{Solution.}
-\begin{board}[\(\alpha_1-\alpha_2\) is estimable (Example~\ref{h-exm-estimable}); Example~\ref{h-exm-solution},
-\lec{11}, Example~11 and Theorem~15; Theorem~\ref{h-thm-t}(b):]
+\begin{board}[\(\alpha_1-\alpha_2\) is estimable (Example~\ref{h-exm-estimable}); \(\beta^0\), \(a'Ga\) as in
+Example~\ref{h-exm-solution}; \(\mathrm{SSE}=4\) (\lec{11}, Example~11), \(r=\rank X=3\) (\lec{11}, Theorem~6(b));
+Theorem~\ref{h-thm-t}(b):]
 \boardtop
 \begin{align*}
 a&=(0,1,-1,0)':\quad a'\beta^0=6-4=2,\quad a'Ga=\tfrac13+\tfrac12=\tfrac56;\quad\mathrm{SSE}=4,\ n-r=6-3=3,\ s^2=\tfrac43\\
@@ -470,12 +395,14 @@ Equivalently, the interval contains \(0\) exactly when \(t_{3,1-\alpha/2}\geqsla
 Let \(\rank X=r\), \(K\in\R^{q\times p}\) and \(m\in\R^q\). The hypothesis \(H_0\colon K\beta=m\) is \textbf{testable} if
 every entry of \(K\beta\) is estimable and \(\rank K=q\) (the rows of \(K\) are linearly independent).
 \end{definition}
-\begin{board}[Let \(H_0\colon K\beta=m\) be testable, \(G\) a g-inverse of \(X'X\), \(H=XGX'\);
-\(K=T_1X\), \(T_1\in\R^{q\times n}\) (Theorem~\ref{h-thm-estimable}(a), \ref{f-views}):]
+\begin{board}[Let \(H_0\colon K\beta=m\) be testable, \(G\) a g-inverse of \(X'X\), \(H=XGX'\); \(K=T_1X\),
+\(T_1\in\R^{q\times n}\) (Theorem~\ref{h-thm-estimable}(a); \lec{1}, Theorem~4(c)); for \(A\in\R^{n\times p}\), \(A'A\)
+is PD (\lec{8}, Definition~13: symmetric, \(x'Ax>0\) for \(x\ne0\)) \(\iff\) \(\rank A=p\) (\lec{8}, Theorem~15(b)), and
+a PD matrix is invertible (\lec{8}, Theorem~14(c)):]
 \boardtop
 \begin{align*}
 T&=T_1H:\quad TX=T_1HX=T_1X=K,\quad TH=T_1H^2=T&&\text{(\lec{11}, Theorem~10(c))}\\
-q&=\rank(TX)\leqslant\rank T\leqslant q\implies\rank T'=\rank T=q&&\text{(\ref{f-rank})}\\
+q&=\rank(TX)\leqslant\rank T\leqslant q\implies\rank T'=\rank T=q&&\text{(\lec{4}, Theorems~15(a), 12(a))}\\
 V&=KGK'=TXGX'T'=THT'=THH'T'=TT'&&\text{(\lec{11}, Theorem~10(c))}\\
 &\implies V\text{ is PD (\(A=T'\)), hence invertible}&&\text{(\lec{8}, Theorems~15(b), 14(c))}
 \end{align*}
@@ -489,53 +416,106 @@ In the normal linear model let \(\rank X=r<n\), \(G\) a g-inverse of \(X'X\), \(
 testable, with \(K\in\R^{q\times p}\) and \(V=KGK'\).
 \begin{enumerate}
 \item Let \(F=\bigl[(K\beta^0-m)'V^{-1}(K\beta^0-m)/q\bigr]/s^2\), defined with probability \(1\) (\(V\) invertible by
-the lines after Definition~\ref{h-def-testable}, \(s^2>0\) by Theorem~\ref{h-thm-sampling}(b)) and the same for every g-inverse \(G\) of \(X'X\). If \(H_0\) holds, then
-\(F\sim F_{q,n-r}\); so the test that rejects \(H_0\) when \(F>F_{q,n-r,1-\alpha}\) has level \(\alpha\).
-\item If \(q=1\) and \(K=a'\), then \(F=T_0^2\), with \(T_0\) of Theorem~\ref{h-thm-t}(b) for \(m_0=m\).
+the lines after Definition~\ref{h-def-testable}, \(s^2>0\) by Theorem~\ref{h-thm-sampling}(b)) and the same for every
+g-inverse \(G\) of \(X'X\). If \(H_0\) holds, then \(F\sim F_{q,n-r}\); so the test that rejects \(H_0\) when
+\(F>F_{q,n-r,1-\alpha}\) has level \(\alpha\).
+\item If \(q=1\) and \(K=a'\), then \(F=T_0^2\), with \(T_0\) of Theorem~\ref{h-thm-t}(b) for \(m_0=m\); the test of (a)
+rejects exactly when that of Theorem~\ref{h-thm-t}(b) does.
 \end{enumerate}
 \end{theorem}
 \begin{proof}
 (a) \(K\beta^0\) and \(V\) do not depend on \(G\) (Theorem~\ref{h-thm-sampling}(a), the lines after
 Definition~\ref{h-def-testable}), nor does \(s^2=y'My/(n-r)\) (\lec{11}, Theorem~10(b),(e)).
 \begin{board}[Algebra: \(T\) as after Definition~\ref{h-def-testable} (\(TH=T\), \(V=TT'\)); \(H_0\) holds;
-\(\varepsilon=y-X\beta\); \(MX=0\), \(X'M=0\) (\lec{11}, Theorem~10(c)):]
+\(\varepsilon=y-X\beta\); \(MX=0\), \(X'M=0\) (\lec{11}, Theorem~10(c)); \(A'=A=A^2\Rightarrow\rank A=\tr A\) (\lec{8},
+Theorem~11):]
 \boardtop
 \begin{align*}
 K\beta^0&=TXGX'y=THy=Ty\\
 K\beta^0-m&=Ty-TX\beta=T\varepsilon&&(m=K\beta=TX\beta)\\
-U&=T'V^{-1}T:\ U'=U,\quad U^2=T'V^{-1}(TT')V^{-1}T=U&&\text{(\(V^{-1}\) symmetric, \ref{f-inverse})}\\
-\rank U&=\tr U=\tr(V^{-1}TT')=\tr I_q=q&&\text{(\lec{8}, Theorem~11; \ref{f-trace})}\\
+U&=T'V^{-1}T=U',\quad U^2=T'V^{-1}(TT')V^{-1}T=U&&\text{(\lec{2}, Corollary~12)}\\
+\rank U&=\tr U=\tr(V^{-1}TT')=\tr I_q=q&&\text{(\lec{1}, Theorem~10(b))}\\
 TM&=T-TH=0\implies UM=0\\
-Q&=(K\beta^0-m)'V^{-1}(K\beta^0-m)=\varepsilon'U\varepsilon\\
-\mathrm{SSE}&=y'My=\varepsilon'M\varepsilon
+Q&=(K\beta^0-m)'V^{-1}(K\beta^0-m)=\varepsilon'U\varepsilon;\ \mathrm{SSE}=y'My=\varepsilon'M\varepsilon
 \end{align*}
 \end{board}
 \begin{board}[Distribution: \(\varepsilon\sim N_n(0,\sigma^2I_n)\) (A5); \(M'=M=M^2\), \(\rank M=n-r\) (\lec{11},
-Theorem~10(c),(d)):]
+Theorem~10(c),(d)); for \(z\sim N_n(\mu,\sigma^2I_n)\) and symmetric \(A\), \(B\) with \(A^2=A\), \(B^2=B\), \(AB=0\),
+\(z'Az\) and \(z'Bz\) are independent (\lec{10}, Theorem~16(a)):]
 \boardtop
 \begin{align*}
 Q/\sigma^2&=\varepsilon'U\varepsilon/\sigma^2\sim\chi^2_q&&\text{(\lec{10}, Theorem~15, \(\mu=0\))}\\
 \mathrm{SSE}/\sigma^2&=\varepsilon'M\varepsilon/\sigma^2\sim\chi^2_{n-r}&&\text{(\lec{10}, Theorem~15, \(\mu=0\))}\\
 Q&\text{ and }\mathrm{SSE}\text{ independent}&&\text{(\lec{10}, Theorem~16(a), \(UM=0\))}\\
 F&=\frac{(Q/\sigma^2)/q}{(\mathrm{SSE}/\sigma^2)/(n-r)}\sim F_{q,n-r}&&\text{(\ref{f-prob}; \ref{f-chisq})}\\
-\prb(F&>F_{q,n-r,1-\alpha})=\alpha&&\text{(\ref{f-chisq})}
+\prb(F&>F_{q,n-r,1-\alpha})=1-(1-\alpha)=\alpha&&\text{(\ref{f-quantile}, \ref{f-prob})}
 \end{align*}
 \end{board}
 (b) \(K=a'\), \(V=a'Ga\), \(\SE(a'\beta^0)^2=s^2a'Ga\) (Theorem~\ref{h-thm-t}):
 \[
 F=\frac{(a'\beta^0-m)^2}{s^2a'Ga}=\Bigl(\frac{a'\beta^0-m}{\SE(a'\beta^0)}\Bigr)^2=T_0^2
 \]
+and \(F>F_{1,n-r,1-\alpha}\iff T_0^2>(t^*)^2\iff\lvert T_0\rvert>t^*\) (\lec{10}, Theorem~11(b):
+\(t_{\nu,1-\alpha/2}^2=F_{1,\nu,1-\alpha}\), \(t_{\nu,1-\alpha/2}>0\)).
 \end{proof}
+
+\Needspace{19\baselineskip}
+\begin{example}\label{b14.15}
+Eight plots receive a fertilizer at two levels, coded \(x_{i1}=-1,1\), and irrigation at two levels, coded
+\(x_{i2}=-1,1\), two plots for each combination; the yields are
+\[
+\begin{array}{c|rrrrrrrr}
+x_{i1}&-1&-1&-1&-1&1&1&1&1\\
+x_{i2}&-1&-1&1&1&-1&-1&1&1\\\hline
+y_i&9&3&9&7&11&13&11&17
+\end{array}
+\]
+In the normal linear model \(y_i=\beta_0+\beta_1x_{i1}+\beta_2x_{i2}+\varepsilon_i\) (multiple regression with \(n=8\),
+\(k=2\), \lec{11}, Definition~1), find the confidence interval of level \(1-\alpha\) for \(\beta_1\), and the tests of
+\(\beta_2=0\) and of \(\beta_1=\beta_2=0\) at level \(\alpha\). Put \(t^*=t_{5,1-\alpha/2}\).
+\end{example}
+\textit{Solution.}
+\begin{board}[The three columns of \(X\) are orthogonal with squared length \(8\) (\lec{1}, Theorem~4(d));
+\(X'X\) invertible \(\iff\) \(\rank X=3\) (\lec{11}, Theorem~2(b)); under (A4), \(G=(X'X)^{-1}\), \(\beta^0=\hat\beta\),
+\(r=3\) (Theorem~\ref{h-thm-t}); every \(a'\beta\) is estimable (Theorem~\ref{h-thm-estimable}(a)):]
+\boardtop
+\begin{align*}
+X'X&=8I_3,\quad\rank X=3,\quad G=(X'X)^{-1}=\tfrac18I_3,\quad X'y=(80,24,8)',\quad\hat\beta=\tfrac18X'y=(10,3,1)'\\
+\hat y_i&=10+3x_{i1}+x_{i2}=6,\ 8,\ 12,\ 14\ \text{for the four combinations}\\
+e&=y-\hat y=(3,-3,1,-1,-1,1,-3,3)',\quad\mathrm{SSE}=e'e=40,\quad s^2=40/(8-3)=8
+\end{align*}
+\end{board}
+\begin{board}[\(\SE(\hat\beta_j)=s\sqrt{1/8}=1\) (\(a'Ga=\frac18\) for \(a=\col_{j+1}(I_3)\)); Theorems~\ref{h-thm-t}(b),
+\ref{h-thm-f}(b):]
+\boardtop
+\begin{align*}
+\beta_1&:\ \text{interval }[3-t^*,\ 3+t^*]\\
+\beta_2&=0:\ T_0=(1-0)/1=1;\ \text{the test rejects}\iff t^*<1;\quad F=T_0^2=1
+\end{align*}
+\end{board}
+\begin{board}[\(\beta_1=\beta_2=0\) is \(K\beta=0\), \(K=\left(\begin{smallmatrix}0&1&0\\0&0&1\end{smallmatrix}\right)\),
+\(\rank K=2\): testable under (A4) (the lines after Definition~\ref{h-def-testable}); Theorem~\ref{h-thm-f}(a),
+\(q=2\):]
+\boardtop
+\begin{align*}
+K\hat\beta&=(3,1)',\quad V=KGK'=\tfrac18I_2,\quad V^{-1}=8I_2,\quad(K\hat\beta)'V^{-1}K\hat\beta=8(9+1)=80\\
+F&=\frac{80/2}8=5:\ \text{the test rejects }H_0\iff F_{2,5,1-\alpha}<5
+\end{align*}
+\end{board}
+With \(\bar y=10\): \(\mathrm{SSR}=2(16+4+4+16)=80\), \(\mathrm{SST}=120\) and \(R^2=\frac23\) (\lec{11}, Definition~17:
+\(\mathrm{SSR}=\sum_i(\hat y_i-\bar y)^2\), \(\mathrm{SST}=\sum_i(y_i-\bar y)^2\), \(R^2=\mathrm{SSR}/\mathrm{SST}\)); so
+here \((K\hat\beta)'V^{-1}K\hat\beta=80=\mathrm{SSR}\).
 
 \Needspace{20\baselineskip}
 \subsection*{4. One-way analysis of variance}
 
-\Needspace{17\baselineskip}
+\Needspace{20\baselineskip}
 \begin{theorem}\label{h-thm-oneway-anova}
-In the one-way design of \lec{11}, Theorem~6, let \(\mathcal I_l\) be the set of the observations (row indices) of group
-\(l\), \(\bar y_l=n_l^{-1}\sum_{i\in\mathcal I_l}y_i\) the \textbf{group mean} and \(\bar y\) the \textbf{grand mean} of
-all \(n\) observations. Then \(\hat y=\bar y_1d_1+\dots+\bar y_gd_g\) (the fitted value of each observation is the mean
-of its group), and
+In the one-way design (\lec{11}, Theorem~6: \(n\) observations in \(g\) groups of sizes \(n_l\geqslant1\), the
+indicator \(d_l\in\R^n\) of group \(l\), \(X=[\one_n\ d_1\ \cdots\ d_g]\), \(X_1=[d_1\ \cdots\ d_g]\)), let
+\(\mathcal I_l\) be the set of the observations (row indices) of group \(l\), \(\bar y_l=n_l^{-1}\sum_{i\in\mathcal
+I_l}y_i\) the \textbf{group mean} and \(\bar y\) the \textbf{grand mean} of all \(n\) observations. Then
+\(\hat y=\bar y_1d_1+\dots+\bar y_gd_g\) (the fitted value of each observation is the mean of its group), and
 \[
 \sum_{i=1}^n(y_i-\bar y)^2=\sum_{l=1}^gn_l(\bar y_l-\bar y)^2+\sum_{l=1}^g\sum_{i\in\mathcal I_l}(y_i-\bar y_l)^2
 \]
@@ -544,11 +524,12 @@ that is, \(\mathrm{SST}=\mathrm{SSR}+\mathrm{SSE}\), with the \textbf{between-gr
 \end{theorem}
 \begin{proof}
 \begin{board}[Fitted values: \(X_1\) has full column rank (\lec{11}, Theorem~6(a)); \(X_1'y\) holds the group totals
-\(d_l'y\) (\ref{f-views}); no observation lies in two groups:]
+\(d_l'y\) (\lec{1}, Theorem~4(d)); no observation lies in two groups; \(\diag(n_l)^{-1}=\diag(1/n_l)\) (\lec{1},
+Proposition~13(b); \lec{2}, Theorem~15):]
 \boardtop
 \begin{align*}
-d_l'd_m&=0\ (l\ne m),\quad d_l'd_l=n_l\implies X_1'X_1=\diag(n_1,\dots,n_g)&&\text{(\ref{f-views})}\\
-\hat\beta_1&=(X_1'X_1)^{-1}X_1'y=(\bar y_1,\dots,\bar y_g)'&&\text{(\ref{f-inverse}; \lec{11}, Theorem~3(c))}\\
+d_l'd_m&=0\ (l\ne m),\quad d_l'd_l=n_l\implies X_1'X_1=\diag(n_1,\dots,n_g)&&\text{(\lec{1}, Theorem~4(d))}\\
+\hat\beta_1&=(X_1'X_1)^{-1}X_1'y=(\bar y_1,\dots,\bar y_g)'&&\text{(\lec{11}, Theorem~3(c))}\\
 X_1\hat\beta_1&=\bar y_1d_1+\dots+\bar y_gd_g=\hat y\quad(\mathcal C(X_1)=\mathcal C(X))&&\text{(\lec{11}, Theorems~6(c), 3(b))}
 \end{align*}
 \end{board}
@@ -556,43 +537,46 @@ X_1\hat\beta_1&=\bar y_1d_1+\dots+\bar y_gd_g=\hat y\quad(\mathcal C(X_1)=\mathc
 \boardtop
 \begin{align*}
 \mathrm{SSR}&=\textstyle\sum_i(\hat y_i-\bar y)^2=\sum_ln_l(\bar y_l-\bar y)^2\\
-\mathrm{SSE}&=\textstyle\sum_i(y_i-\hat y_i)^2=\sum_l\sum_{i\in\mathcal I_l}(y_i-\bar y_l)^2&&\text{(\lec{11}, Definition~16)}\\
-\mathrm{SST}&=\mathrm{SSR}+\mathrm{SSE}\quad(\one_n=\textstyle\sum_ld_l\in\mathcal C(X))&&\text{(\lec{11}, Theorem~17)}
+\mathrm{SSE}&=\textstyle\sum_i(y_i-\hat y_i)^2=\sum_l\sum_{i\in\mathcal I_l}(y_i-\bar y_l)^2&&\text{(\lec{11}, Definition~17)}\\
+\mathrm{SST}&=\mathrm{SSR}+\mathrm{SSE}\quad(\one_n=\textstyle\sum_ld_l\in\mathcal C(X))&&\text{(\lec{11}, Theorem~18)}
 \end{align*}
 \end{board}
 \nopagebreak
 \end{proof}
 
-\Needspace{20\baselineskip}
+\Needspace{22\baselineskip}
 \begin{corollary}\label{h-cor-oneway-f}
 In the one-way design of \lec{11}, Theorem~6, use the design \(X_1=[d_1\ \cdots\ d_g]\) with \(\beta=(\mu_1,\dots,\mu_g)'\)
-(the group means), and assume the normal linear model with \(n>g\geqslant2\). With \(\mathrm{SSR}\), \(\mathrm{SSE}\) of Theorem~\ref{h-thm-oneway-anova}, let
-\(F=\bigl[\mathrm{SSR}/(g-1)\bigr]/\bigl[\mathrm{SSE}/(n-g)\bigr]\), defined with probability \(1\)
-(Theorem~\ref{h-thm-sampling}(b)). If \(H_0\colon\mu_1=\dots=\mu_g\) holds, then \(F\sim F_{g-1,n-g}\); so the test that
-rejects \(H_0\) when \(F>F_{g-1,n-g,1-\alpha}\) has level \(\alpha\).
+(the group means), and assume the normal linear model with \(n>g\geqslant2\). With \(\mathrm{SSR}\), \(\mathrm{SSE}\) of
+Theorem~\ref{h-thm-oneway-anova}, let \(F=\bigl[\mathrm{SSR}/(g-1)\bigr]/\bigl[\mathrm{SSE}/(n-g)\bigr]\), defined with
+probability \(1\) (Theorem~\ref{h-thm-sampling}(b)). If \(H_0\colon\mu_1=\dots=\mu_g\) holds, then
+\(F\sim F_{g-1,n-g}\); so the test that rejects \(H_0\) when \(F>F_{g-1,n-g,1-\alpha}\) has level \(\alpha\).
 \end{corollary}
 \begin{proof}
+\(\bar J_n=\frac1n\one\one'\) (\lec{1}, Definition~14), \(\bar J_n'=\bar J_n=\bar J_n^2\), \(\tr\bar J_n=1\) (\lec{1},
+Proposition~15), \(\bar J_ny=\bar y\one_n\) (\(\bar y=\frac1n\one'y\), \lec{1}, Example~16); \(\one_n=X_1\one_g\).
 \begin{board}[\(\rank X_1=g\) (\lec{11}, Theorem~6(a)), so \(H=X_1(X_1'X_1)^{-1}X_1'\) and \(M=I_n-H\) have \(H'=H=H^2\),
-\(HX_1=X_1\), \(HM=0\), \(\tr H=g\), \(Hy=\hat y\) (\lec{11}, Theorems~2(b), 10, design \(X_1\)); \(\one_n=X_1\one_g\);
-\(A=H-\bar J_n\):]
+\(HX_1=X_1\), \(HM=0\), \(\tr H=g\), \(Hy=\hat y\) (\lec{11}, Theorems~2(b), 10, design \(X_1\)); \(A=H-\bar J_n\):]
 \boardtop
 \begin{align*}
-H\bar J_n&=\tfrac1n(HX_1\one_g)\one'=\tfrac1n\one\one'=\bar J_n,\quad\bar J_nH=(H\bar J_n)'=\bar J_n&&\text{(\ref{f-rules}, \ref{f-centering})}\\
-A'&=A,\quad A^2=H-2\bar J_n+\bar J_n^2=A&&\text{(\ref{f-centering})}\\
-\rank A&=\tr A=g-\tfrac1n\tr(\one\one')=g-\tfrac1n\one'\one=g-1&&\text{(\lec{8}, Theorem~11; \ref{f-trace})}\\
+H\bar J_n&=\tfrac1n(HX_1\one_g)\one'=\tfrac1n\one\one'=\bar J_n&&\text{(\lec{1}, Theorem~3(a))}\\
+\bar J_nH&=(H\bar J_n)'=\bar J_n&&\text{(\lec{1}, Theorem~8)}\\
+A'&=A,\quad A^2=H-2\bar J_n+\bar J_n^2=A\\
+\rank A&=\tr A=\tr H-\tr\bar J_n=g-1&&\text{(\lec{8}, Theorem~11; \lec{1}, Theorem~10(a))}\\
 AM&=HM-\bar J_n(I_n-H)=-\bar J_n+\bar J_n=0\\
-y'Ay&=y'A'Ay=\lVert Hy-\bar J_ny\rVert^2=\lVert\hat y-\bar y\one_n\rVert^2=\mathrm{SSR}&&\text{(\ref{f-centering}; Theorem~\ref{h-thm-oneway-anova})}\\
+y'Ay&=y'A'Ay=\lVert\hat y-\bar y\one_n\rVert^2=\mathrm{SSR}&&\text{(Theorem~\ref{h-thm-oneway-anova})}\\
 y'My&=e'e=\mathrm{SSE}&&\text{(\lec{11}, Theorem~10(e))}
 \end{align*}
 \end{board}
-\begin{board}[Distribution: \(y\sim N_n(X_1\beta,\sigma^2I_n)\) (Definition~\ref{h-def-normal}); \(g-1\geqslant1\):]
+\begin{board}[Distribution: \(y\sim N_n(X_1\beta,\sigma^2I_n)\) (Definition~\ref{h-def-normal}); \(g-1\geqslant1\);
+\(\bar J_n\one_n=\frac1n\one(\one'\one)=\one_n\) (\lec{1}, Proposition~15):]
 \boardtop
 \begin{align*}
-AX_1\beta&=\mu_1A(d_1+\dots+d_g)=\mu_1(H\one_n-\bar J_n\one_n)=\mu_1(\one_n-\one_n)=0&&\text{(\(H_0\); \ref{f-centering})}\\
+AX_1\beta&=\mu_1A(d_1+\dots+d_g)=\mu_1(H\one_n-\bar J_n\one_n)=\mu_1(\one_n-\one_n)=0&&\text{(\(H_0\))}\\
 \mathrm{SSR}/\sigma^2&=y'Ay/\sigma^2\sim\chi^2_{g-1}&&\text{(\lec{10}, Theorem~15)}\\
 \mathrm{SSE}/\sigma^2&=y'My/\sigma^2\sim\chi^2_{n-g}&&\text{(Theorem~\ref{h-thm-sampling}(b), \(r=g\))}\\
 \mathrm{SSR}&\text{ and }\mathrm{SSE}\text{ are independent }(AM=0)&&\text{(\lec{10}, Theorem~16(a))}\\
-F&=\frac{(\mathrm{SSR}/\sigma^2)/(g-1)}{(\mathrm{SSE}/\sigma^2)/(n-g)}\sim F_{g-1,n-g},\ \prb(F>F_{g-1,n-g,1-\alpha})=\alpha&&\text{(\ref{f-prob}; \ref{f-chisq})}
+F&=\frac{(\mathrm{SSR}/\sigma^2)/(g-1)}{(\mathrm{SSE}/\sigma^2)/(n-g)}\sim F_{g-1,n-g},\ \prb(F>F_{g-1,n-g,1-\alpha})=\alpha&&\text{(\ref{f-prob}--\ref{f-quantile})}
 \end{align*}
 \end{board}
 \nopagebreak
@@ -613,14 +597,15 @@ freedom are those of the \(\chi^2\) distributions in the proof, and \(n-1=(g-1)+
 
 \Needspace{10\baselineskip}
 \begin{example}\label{h-exm-oneway-f}
-In \lec{11}, Example~7, assume the normal linear model. Test \(H_0\colon\alpha_1=\alpha_2=\alpha_3\) at level \(\alpha\).
+In Example~\ref{h-exm-estimable}, assume the normal linear model. Test \(H_0\colon\alpha_1=\alpha_2=\alpha_3\) at level
+\(\alpha\).
 \end{example}
 \textit{Solution.}
-\begin{board}[Group means \(6,4,2\) (\lec{11}, Example~7); \lec{11}, Example~11 and Theorem~15;
-Theorem~\ref{h-thm-oneway-anova}:]
+\begin{board}[Group means \(6,4,2\) (\lec{11}, Example~7); \(e=(-1,1,0,-1,1,0)'\), \(\mathrm{SSE}=4\) (\lec{11},
+Example~11); Theorem~\ref{h-thm-oneway-anova}:]
 \boardtop
 \begin{align*}
-\bar y&=28/6=14/3;\quad e=(-1,1,0,-1,1,0)',\ \mathrm{SSE}=4,\ r=\rank X=3,\ s^2=4/3\\
+\bar y&=28/6=14/3;\quad\mathrm{SSE}=4,\ r=\rank X=3,\ s^2=4/3\\
 \mathrm{SSR}&=3\Bigl(6-\frac{14}3\Bigr)^2+2\Bigl(4-\frac{14}3\Bigr)^2+\Bigl(2-\frac{14}3\Bigr)^2=\frac{48+8+64}9=\frac{40}3,
 \qquad\mathrm{SST}=\frac{40}3+4=\frac{52}3
 \end{align*}
@@ -641,19 +626,21 @@ F&=\frac{(40/3)/2}{4/3}=5,\ \text{with }2\text{ and }3\text{ degrees of freedom:
 \end{array}
 \]
 \begin{board}[The same \(F\) by Theorem~\ref{h-thm-f}(a) in the design \(X\) (\(r=3\)): \(H_0\) is \(K\beta=0\), testable
-(the criterion of Example~\ref{h-exm-estimable} for the rows); \(G\), \(\beta^0=(0,6,4,2)'\) as in Example~\ref{h-exm-solution}:]
+(the criterion of Example~\ref{h-exm-estimable} for the rows); \(G\), \(\beta^0=(0,6,4,2)'\) as in
+Example~\ref{h-exm-solution}; the rows of \(K\) are independent \(\iff\) \(\rank K=2\) (\lec{4}, Theorem~12(c));
+\(V^{-1}\) by \lec{2}, Proposition~17:]
 \boardtop
 \begin{align*}
 &K=\begin{pmatrix}0&1&-1&0\\0&0&1&-1\end{pmatrix}:\ -0+1-1+0=0,\ -0+0+1-1=0:\ \text{rows estimable}\\
-&c_1(0,1,-1,0)+c_2(0,0,1,-1)=(0,\ c_1,\ c_2-c_1,\ -c_2)=0\implies c_1=c_2=0:\ \rank K=2&&\text{(\ref{f-rank})}\\
+&c_1(0,1,-1,0)+c_2(0,0,1,-1)=(0,\ c_1,\ c_2-c_1,\ -c_2)=0\implies c_1=c_2=0:\ \rank K=2\\
 &K\beta^0=(2,2)',\quad V=KGK'=\begin{pmatrix}\frac56&-\frac12\\-\frac12&\frac32\end{pmatrix}\\
-&ad-bc=\tfrac54-\tfrac14=1,\quad V^{-1}=\begin{pmatrix}\frac32&\frac12\\\frac12&\frac56\end{pmatrix}&&\text{(\ref{f-inverse})}\\
+&ad-bc=\tfrac54-\tfrac14=1,\quad V^{-1}=\begin{pmatrix}\frac32&\frac12\\\frac12&\frac56\end{pmatrix}\\
 &(K\beta^0)'V^{-1}K\beta^0=4\bigl(\tfrac32+\tfrac12+\tfrac12+\tfrac56\bigr)=\tfrac{40}3=\mathrm{SSR},\qquad
 F=\frac{40/3}{2\cdot4/3}=5
 \end{align*}
 \end{board}
-Uncentered (\lec{11}, Theorem~17): \(n\bar y^2=6\cdot\frac{196}9=\frac{392}3\), and
-\(y'y=148=\frac{392}3+\frac{40}3+4\).
+Uncentered, \(y'y=n\bar y^2+\mathrm{SSR}+\mathrm{SSE}\) (\lec{11}, Theorem~18): \(n\bar y^2=6\cdot\frac{196}9=\frac{392}3\),
+and \(y'y=148=\frac{392}3+\frac{40}3+4\).
 
 \bigskip
 \textbf{Practice.} The Exercises and Problems of the textbook, Chapter~14: estimable functions and their best linear

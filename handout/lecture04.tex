@@ -108,56 +108,19 @@
 \textbf{Last time} (\lec{3}): subspaces, spans, linear independence and bases. Here \(A=[a_1\ \cdots\ a_n]\in\R^{m\times
 n}\) has the columns \(a_j\); \(e_j\) is column \(j\) of \(I\); \(\row_i\), \(\col_j\) are row \(i\) and column \(j\).
 
-\textbf{From \lec{1}, \lec{2} and \lec{3}} (restated).
-\begin{itemize}[itemsep=0pt,parsep=0pt,topsep=2pt]
-\item \lec{1}, Theorems~3(a), 8, 4(a)--(c), Definition~7:
-\((AB)C=A(BC)\), \(A(B+C)=AB+AC\), \(c(AB)=(cA)B=A(cB)\), \(I_mA=A=AI_n\), \(A0=0\); \((A')_{ij}=a_{ji}\), \((A')'=A\),
-\((A+B)'=A'+B'\), \((cA)'=cA'\), \((AB)'=B'A'\); \(x'y=y'x=\sum_ix_iy_i\), \(x'x=x_1^2+\dots+x_n^2\);
-\(\col_j(AB)=A\col_j(B)\); \(Ax=x_1a_1+\dots+x_na_n\), \(Ae_j=a_j\);
-\(\row_i(AB)=\row_i(A)B=a_{i1}\row_1(B)+\dots+a_{in}\row_n(B)\).
-\item \lec{2}, Definitions~2, 4, 5: row operations \(R_r\leftarrow cR_r\)
-(\(c\ne0\)), \(R_r\leftarrow R_r+cR_s\), \(R_r\leftrightarrow R_s\) (\(r\ne s\)). \(R\) is in \textbf{RREF} if (a) the
-first nonzero entry of each nonzero row is \(1\), its \textbf{pivot}; (b) a column with a pivot has all other entries
-\(0\); (c) zero rows lie below nonzero rows; (d) the pivots of the nonzero rows \(1,\dots,r\) lie in columns
-\(k_1<\dots<k_r\), the \textbf{pivot columns}; so \(\col_{k_i}(R)=e_i\). \textbf{Echelon form}: (a), (c), (d).
-Gauss--Jordan: forward elimination gives an echelon form; then backward elimination, for each pivot from the last to
-the first, adds multiples of its row to the rows above it to make the entries above the pivot \(0\). An \textbf{RREF}
-(\textbf{echelon form}) \textbf{of} \(A\): a matrix in RREF (echelon form) reached from \(A\) by row operations.
-\item \lec{2}, Theorem~3(b), Proposition~7: if row operations take \([A\mid b]\) to
-\([R\mid z]\), then \(Ax=b\) and \(Rx=z\) have the same solutions. Let \(R\) be in RREF, with nonzero rows
-\(1,\dots,r\), pivot columns \(k_1<\dots<k_r\), \textbf{pivot unknowns} \(x_{k_i}\), the others \textbf{free unknowns}.
-(a) \(Ax=b\) is consistent \(\iff\) \(z_i=0\) for all \(i>r\). (b) If so, the solutions: free unknowns arbitrary,
-\(x_{k_i}=z_i-\sum_{j\text{ free}}R_{ij}x_j\) (\(i\leqslant r\)).
-\item \lec{2}, Definition~10, Theorems~14(c), 15, 22(a): \(P\in\R^{m\times m}\)
-is invertible if \(PQ=QP=I_m\) for some \(Q=P^{-1}\). If row operations take \(A\) to \(B\), then \(B=PA\), \(P\)
-invertible. \(A\in\R^{n\times n}\) is invertible \(\iff\) \(Ax=0\) only for \(x=0\). If \(Ax_p=b\), the solutions of
-\(Ax=b\) are the \(x_p+z\) with \(Az=0\).
-\item \lec{3}, Definition~3, Theorem~4, Example~5(b): a \textbf{subspace} \(W\subseteq\R^n\)
-(or \(\R^{1\times n}\)) is a vector space with the same operations: \(0,u+v,cu\in W\) (\(u,v\in W\), \(c\in\R\));
-\(\{x:Ax=0\}\) is one.
-\item \lec{3}, Definition~6, Theorems~7, 9(c):
-\(\Span\{v_1,\dots,v_k\}=\{\sum_ic_iv_i:c_i\in\R\}\) (\(\Span\varnothing=\{0\}\)) is the smallest subspace containing
-\(v_1,\dots,v_k\); adjoining vectors of \(\Span\{a_1,\dots,a_n\}\) keeps the span.
-\item \lec{3}, Definitions~10, 14, Propositions~11, 12(a),(b):
-\(v_1,\dots,v_k\) are \textbf{linearly independent} if \(c_1v_1+\dots+c_kv_k=0\) only for \(c_1=\dots=c_k=0\) (the empty
-list is independent), otherwise \textbf{dependent}. For \(v_i\in\R^m\), \(V=[v_1\ \cdots\ v_k]\): independent \(\iff\)
-\(Vc=0\) only for \(c=0\) \(\iff\) every column of an RREF of \(V\) is a pivot column; more than \(m\) vectors of \(\R^m\)
-are dependent. A list containing \(0\) is dependent; sublists of independent lists are independent. A \textbf{basis} of
-\(W\): independent vectors of \(W\) that span \(W\); \(e_1,\dots,e_n\) of \(\R^n\) (standard basis); \(\varnothing\) of
-\(\{0\}\).
-\end{itemize}
-
 \Needspace{15\baselineskip}
 \subsection*{1. Bases and dimension of subspaces of \(\R^n\)}
 
-\Needspace{12\baselineskip}
+\Needspace{14\baselineskip}
 \begin{theorem}\label{b4.1}
 Let \(R\) be an RREF of \(A\in\R^{m\times n}\), with \(r\) nonzero rows. The following are equivalent: (i) the columns
 \(a_1,\dots,a_n\) of \(A\) are linearly independent; (ii) \(Ax=0\) only for \(x=0\); (iii) \(r=n\), that is, every column
 of \(R\) is a pivot column. In particular, if \(n>m\), then any \(n\) vectors of \(\R^m\) are linearly dependent.
 \end{theorem}
 \begin{proof}
-\begin{board}[\lec{3}, Proposition~11, with \(V=A\); \lec{2}, Definition~4(a),(d):]
+\begin{board}[\lec{3}, Proposition~11 (for \(V=[v_1\ \cdots\ v_k]\): \(v_1,\dots,v_k\) independent \(\iff\) \(Vc=0\)
+only for \(c=0\) \(\iff\) every column of an RREF of \(V\) is a pivot column; more than \(m\) vectors of \(\R^m\) are
+dependent), with \(V=A\); \lec{2}, Definition~4(a),(d):]
 \boardtop
 \begin{align*}
 &\text{(i)}\iff\text{(ii)}\iff\text{every column of \(R\) is a pivot column};\quad n>m\implies\text{dependent}\\
@@ -168,7 +131,7 @@ of \(R\) is a pivot column. In particular, if \(n>m\), then any \(n\) vectors of
 \nopagebreak
 \end{proof}
 
-\Needspace{15\baselineskip}
+\Needspace{16\baselineskip}
 \begin{theorem}\label{b4.3}
 Let \(R\) be an RREF of \(A\in\R^{m\times n}\), with \(r\) nonzero rows, pivot columns \(k_1<\dots<k_r\) and entries
 \(R_{ij}\).
@@ -184,7 +147,8 @@ If \(r=0\), then \(A=0\) and \(\Span\{a_1,\dots,a_n\}=\{0\}\).
 In particular, every finite list that spans a subspace \(W\) contains a basis of \(W\).
 \end{theorem}
 \begin{proof}
-\begin{board}[(a) \lec{1}, Theorem~4(b); \lec{2}, Theorem~3(b) for \([A\mid0]\to[R\mid0]\):]
+\begin{board}[(a) \lec{1}, Theorem~4(b); \lec{2}, Theorem~3(b) for \([A\mid0]\to[R\mid0]\) (row operations keep the
+solutions):]
 \[
 x_1a_1+\dots+x_na_n=Ax,\quad x_1\col_1(R)+\dots+x_n\col_n(R)=Rx;\qquad Ax=0\iff Rx=0
 \]
@@ -200,7 +164,8 @@ x_1a_1+\dots+x_na_n=Ax,\quad x_1\col_1(R)+\dots+x_n\col_n(R)=Rx;\qquad Ax=0\iff 
 &j=k_l:\ R_{ik_l}=1\ (i=l),\ 0\ (i\ne l)\implies\text{the formula reads }a_{k_l}=a_{k_l}
 \end{align*}
 \end{board}
-\begin{board}[Basis: \(U=\Span\{a_{k_1},\dots,a_{k_r}\}\):]
+\begin{board}[Basis (\lec{3}, Definition~14: independent vectors of \(W\) that span \(W\)):
+\(U=\Span\{a_{k_1},\dots,a_{k_r}\}\); a span is the smallest subspace containing its vectors (\lec{3}, Theorem~7):]
 \boardtop
 \begin{align*}
 &a_1,\dots,a_n\in U\implies\Span\{a_1,\dots,a_n\}\subseteq U\subseteq\Span\{a_1,\dots,a_n\}
@@ -226,10 +191,11 @@ number \(r\), do not depend on the row operations used.
 \end{itemize}
 
 \begin{remark}\label{b4.2}
-Let \(H\) be an echelon form of \(A\), with pivots in columns \(k_1<\dots<k_r\). Then the pivot columns of \(A\) are
+Let \(H\) be an echelon form of \(A\) (\lec{2}, Definition~4: each nonzero row begins with a pivot \(1\), zero rows are
+last, the pivot columns increase), with pivots in columns \(k_1<\dots<k_r\). Then the pivot columns of \(A\) are
 \(a_{k_1},\dots,a_{k_r}\), and \(r\) is the number of nonzero rows of \(H\). So for Theorem~\ref{b4.1} one may stop at
 an echelon form: (iii) says that every column of \(H\) contains a pivot. The same holds for a matrix reached from \(A\)
-that satisfies (c), (d) of the definition of RREF with its first nonzero entries not yet scaled to \(1\).
+whose zero rows are last and whose first nonzero entries, not yet scaled to \(1\), lie in increasing columns.
 \end{remark}
 \begin{proof}
 \begin{itemize}
@@ -252,7 +218,8 @@ only for \(W=\{0\}\). If \(W\) is spanned by \(m\) vectors, then any \(k>m\) vec
 \end{theorem}
 \begin{proof}
 \begin{board}[\(W=\Span\{w_1,\dots,w_m\}\), \(v_1,\dots,v_k\in W\), \(k>m\) (if \(m=0\): \(W=\{0\}\), and \(k\geqslant1\)
-vectors of \(\{0\}\) are dependent, \lec{3}, Proposition~12(a)); \(m\geqslant1\):]
+vectors of \(\{0\}\) are dependent, \lec{3}, Proposition~12(a): a list containing \(0\) is dependent);
+\(m\geqslant1\):]
 \boardtop
 \begin{align*}
 &v_j=a_{1j}w_1+\dots+a_{mj}w_m\ (j=1,\dots,k),\quad A=(a_{ij})\in\R^{m\times k}\\
@@ -267,7 +234,7 @@ vectors of \(\{0\}\) are dependent, \lec{3}, Proposition~12(a)); \(m\geqslant1\)
 \(v_1,\dots,v_k\); so \(c=0\), and then every \(c_i=0\): the list stays independent.
 \item More than \(n\) vectors of \(\R^n\) are dependent (Theorem~\ref{b4.1}), so this stops after at most \(n\) steps, at a
 basis of \(W\).
-\item A basis with no vectors is the empty list, which spans \(\{0\}\) (\lec{3}, Definition~6).\qedhere
+\item A basis with no vectors is the empty list, which spans \(\{0\}\) (\lec{3}, Definition~6: \(\Span\varnothing=\{0\}\)).\qedhere
 \end{itemize}
 \end{proof}
 
@@ -287,7 +254,7 @@ Let \(W\) be a subspace of \(\R^n\) with \(\dim W=d\).
 \begin{itemize}
 \item Every subspace \(U\) of \(W\) is \(\{0\}=W\); a nonempty list of vectors of \(W\) contains \(0\), so it is
 dependent (\lec{3}, Proposition~12(a)); the empty list, the only independent one, is a basis of \(W\)
-(\lec{3}, Definition~14). So (a)--(c) hold.
+(\lec{3}, Definition~14: the empty list is a basis of \(\{0\}\)). So (a)--(c) hold.
 \item (d): the only list of \(0\) vectors is the empty list; it is independent, spans \(\{0\}=W\) and is a basis of \(W\).
 \end{itemize}
 Let \(d\geqslant1\), and let \(w_1,\dots,w_d\) be a basis of \(W\) (Theorem~\ref{b4.4}). We prove (c) first.
@@ -378,12 +345,14 @@ space} of \(A\) are
 \end{aligned}
 \]
 The columns of \(A\) span \(\mathcal C(A)\), the rows of \(A\) span \(\mathcal R(A)\), and \(y\in\mathcal N(A')\iff
-y'A=0\) (transpose). All four are subspaces (\lec{3}, Theorem~7, Example~5(b)).
+y'A=0\) (transpose). All four are subspaces (\lec{3}, Theorem~7: a span is a subspace; \lec{3}, Example~5(b):
+\(\{x:Ax=0\}\) is a subspace).
 \end{definition}
 Let \(R\) be an RREF of \(A\), with \(r\) nonzero rows, pivot columns \(k_1<\dots<k_r\) and \textbf{free columns}
 \(f_1<\dots<f_{n-r}\) (the free unknowns of \(Ax=0\) are \(x_{f_1},\dots,x_{f_{n-r}}\)). For \(j=1,\dots,n-r\), the
 \textbf{special solution} \(s_j\in\R^n\) is the solution of \(Ax=0\) with \(x_{f_j}=1\) and \(x_{f_l}=0\) (\(l\ne j\)).
-By \lec{2}, Proposition~7(b), its entries are
+By \lec{2}, Proposition~7(b) (all solutions of \(Ax=0\): free unknowns arbitrary,
+\(x_{k_i}=-\sum_{j\text{ free}}R_{ij}x_j\)), its entries are
 \[
 (s_j)_{f_l}=\delta_{jl}\ (1\leqslant l\leqslant n-r),\qquad(s_j)_{k_i}=-R_{if_j}\ (1\leqslant i\leqslant r)
 \]
@@ -414,7 +383,8 @@ E[A\mid I_m]=[EA\mid E]=[R\mid P]\implies P=E\text{ is invertible},\ PA=R
 \]
 \end{board}
 (a) \(\mathcal C(A)=\Span\{a_1,\dots,a_n\}\); Theorem~\ref{b4.3}(b).
-\begin{board}[(b) \(P=(p_{ij})\); \lec{1}, Theorem~4(c); \lec{3}, Theorem~7:]
+\begin{board}[(b) \(P=(p_{ij})\); \lec{1}, Theorem~4(c); \lec{3}, Theorem~7: a span is the smallest subspace containing
+its vectors:]
 \boardtop
 \begin{align*}
 &\row_i(R)=\row_i(P)A=p_{i1}\row_1(A)+\dots+p_{im}\row_m(A)\in\mathcal R(A)\implies\mathcal R(R)\subseteq\mathcal R(A)\\
@@ -424,7 +394,8 @@ E[A\mid I_m]=[EA\mid E]=[R\mid P]\implies P=E\text{ is invertible},\ PA=R
 \end{align*}
 \end{board}
 \begin{board}[(c) \(Ax=0\iff Rx=0\) (\lec{2}, Theorem~3(b)); pivot unknowns from free ones (\lec{2},
-Proposition~7(b)); \(t\in\mathcal N(A)\), \(\tilde t=t_{f_1}s_1+\dots+t_{f_{n-r}}s_{n-r}\):]
+Proposition~7(b)); \(\mathcal N(A)\) is closed under linear combinations (\lec{3}, Theorem~4); \(t\in\mathcal N(A)\),
+\(\tilde t=t_{f_1}s_1+\dots+t_{f_{n-r}}s_{n-r}\):]
 \boardtop
 \begin{align*}
 &\text{entry }f_l\text{ of }c_1s_1+\dots+c_{n-r}s_{n-r}\text{ is }\textstyle\sum_jc_j\delta_{jl}=c_l\implies\text{independent}\\
@@ -433,7 +404,7 @@ Proposition~7(b)); \(t\in\mathcal N(A)\), \(\tilde t=t_{f_1}s_1+\dots+t_{f_{n-r}
 &r=n:\ \text{no free unknowns, so }x=0\text{ is the only solution}
 \end{align*}
 \end{board}
-\begin{board}[(d) \lec{1}, Theorems~4(c), 8; \lec{3}, Proposition~12(b):]
+\begin{board}[(d) \lec{1}, Theorems~3(a), 4(c), 8; \lec{3}, Proposition~12(b): sublists of independent lists are independent:]
 \boardtop
 \begin{align*}
 &i>r:\ \row_i(P)A=\row_i(PA)=\row_i(R)=0\implies A'\row_i(P)'=(\row_i(P)A)'=0\\
@@ -589,7 +560,8 @@ Let \(A\in\R^{m\times n}\), \(b\in\R^m\), and \([A\mid b]\in\R^{m\times(n+1)}\).
 \textbf{Equations of \(\mathcal C(A)\).} Let row operations take \([A\mid I_m]\) to \([R\mid P]\) as in
 Theorem~\ref{b4.8}, \(r=\rank A\), and \(b\in\R^m\).
 \begin{board}[The same operations multiply on the left by \(E\) (\lec{2}, Theorem~14(c)); \lec{1},
-Theorem~4(a); Corollary~\ref{b4.14}(a); \lec{2}, Proposition~7(a) with \(z=Pb\):]
+Theorem~4(a); Corollary~\ref{b4.14}(a); \lec{2}, Proposition~7(a) (consistent \(\iff\) \(z_i=0\) for \(i>r\)) with
+\(z=Pb\):]
 \boardtop
 \begin{align*}
 &E[A\mid I_m]=[EA\mid E]=[R\mid P]\implies E=P,\quad E[A\mid b]=[R\mid Pb]\\
@@ -610,8 +582,8 @@ For \(A\) of Example~\ref{b4.9}, when is \(Ax=(1,t,4)'\) consistent? Find all it
 &b=(1,t,4)':\ -1-t+4=0\iff t=3
 \end{align*}
 \end{board}
-\begin{board}[\(t=3\), \(b=(1,3,4)'\); \(Ax=b\iff Rx=Pb\) (\lec{2}, Theorem~3(b)); all solutions by
-\lec{2}, Theorem~22(a), and Theorem~\ref{b4.8}(c):]
+\begin{board}[\(t=3\), \(b=(1,3,4)'\); \(Ax=b\iff Rx=Pb\) (\lec{2}, Theorem~3(b)); all solutions \(x_p+z\),
+\(z\in\mathcal N(A)\) (\lec{2}, Theorem~22(a)), and Theorem~\ref{b4.8}(c):]
 \boardtop
 \begin{align*}
 &Pb=(3-6,\ -1+3,\ -1-3+4)'=(-3,2,0)'\\
@@ -661,7 +633,7 @@ Let \(A\in\R^{m\times n}\) and \(B\in\R^{n\times p}\).
 \begin{board}[(d) Theorem~\ref{b4.13}(b),(d):]
 \boardtop
 \begin{align*}
-&Px=0\implies x=P^{-1}Px=0:\ P\text{ has full column rank}\\
+&Px=0\implies x=P^{-1}Px=0:\ P\text{ has full column rank}&&\text{(\lec{1}, Theorem~3(a))}\\
 &\rank Q=n:\ Q\text{ has full row rank}\\
 &\rank(P(AQ))=\rank(AQ)=\rank A&&\text{((b), (c))}
 \end{align*}

@@ -106,58 +106,15 @@
 \handouttitle{9}{Covariance matrices and principal components}
 
 \textbf{Last time} (\lec{8}): symmetric \(A=Q\Lambda Q'\) (\(Q\) orthogonal, \(\Lambda\) diagonal); PSD \(\iff\)
-eigenvalues \(\geqslant0\). F1--F6: Chapters 1--6 of the textbook; F7: probability, no proof. \(I=I_n\),
-\(e_j=\col_j(I)\).
+eigenvalues \(\geqslant0\). Earlier results are cited where they are used; F1, F2: probability, without proof.
+\(I=I_n\), \(e_j=\col_j(I)\).
 
-\subsection*{Facts}
-
+\textbf{Facts} on random variables (numbers whose values depend on chance; here with finite variances).
 \begin{enumerate}[label=\textbf{F\arabic*.},ref=F\arabic*,leftmargin=*,itemsep=0pt,parsep=0pt,topsep=2pt]
-\item\label{f-rules} \((AB)C=A(BC)\), \(A(B+C)=AB+AC\), \((A+B)C=AC+BC\), \(c(AB)=(cA)B=A(cB)\), \(I_mA=A=AI_n\)
-(\(A\in\R^{m\times n}\)); \((A+B)'=A'+B'\), \((cA)'=cA'\), \((AB)'=B'A'\), \((A')'=A\); \(x'y=y'x=\sum_ix_iy_i\);
-\(I'=I\); \(A\) is \textbf{symmetric} if \(A'=A\); \(B'B\) is symmetric.
-\item\label{f-views} \((AB)_{ij}=\sum_ra_{ir}b_{rj}\). For \(A=[a_1\ \cdots\ a_p]\): \(Ax=x_1a_1+\dots+x_pa_p\),
-\(Ae_j=a_j\), \(\col_j(AB)=A\col_j(B)\), \(\row_i(AB)=\row_i(A)B\); \((A'G)_{ij}=a_i'\col_j(G)\);
-\(AB=a_1b_1'+\dots+a_pb_p'\) (\(b_j'\) = row \(j\) of \(B\)); \(\col_j(A\diag(d_1,\dots,d_p))=d_ja_j\); block matrices
-multiply block by block (when the blocks fit).
-\item\label{f-trace} \(\tr A=\sum_ia_{ii}\); \(\tr(A+B)=\tr A+\tr B\), \(\tr(cA)=c\tr A\), \(\tr(AB)=\tr(BA)\)
-(\(A\in\R^{m\times n}\), \(B\in\R^{n\times m}\)); \(\tr(A'A)=\sum_i\sum_ja_{ij}^2\).
-\item\label{f-centering} \(\one=\one_n=(1,\dots,1)'\in\R^n\), \(\bar y=\frac1n\one'y\),
-\(J_n=\one\one'\), \(\bar J_n=\frac1nJ_n\), \(C_n=I_n-\bar J_n\): \(C_n'=C_n=C_n^2\), \(C_n\one=0\),
-\(\bar J_ny=\bar y\one\), \(C_ny=y-\bar y\one\), \(y'C_ny=\sum_i(y_i-\bar y)^2\). For \(X\in\R^{n\times p}\) and \(\bar x=\frac1nX'\one\):
-\(C_nX=X-\one\bar x'\).
-\item\label{f-rank} \(\rank(AB)\leqslant\rank A\leqslant\min\{m,n\}\) (\(A\in\R^{m\times n}\));
-\(\rank(PAQ)=\rank(A'A)=\rank A\) (\(P\), \(Q\) invertible).
-\item\label{f-orthonormal} \(\lVert x\rVert^2=x'x>0\) if \(x\ne0\); \(x/\lVert x\rVert\) is a \textbf{unit vector}
-(length \(1\)); \(x\perp y\) means \(x'y=0\). \(Q=[q_1\ \cdots\ q_p]\in\R^{n\times p}\)
-has \textbf{orthonormal} columns (\(q_i'q_j=0\) for \(i\ne j\), \(\lVert q_j\rVert=1\)) \(\iff\) \(Q'Q=I_p\); then
-\(\lVert Qx\rVert=\lVert x\rVert\). If \(p=n\) (\(Q\) \textbf{orthogonal}): \(Q^{-1}=Q'\), \(QQ'=I_n\). If \(p<n\):
-\([Q\ T]\) is orthogonal for some \(T\in\R^{n\times(n-p)}\).
-\item\label{f-prob} (Probability.) A random variable is a number whose value depends on chance; each one here has
-a finite variance. For random variables \(u\), \(v\)
-and numbers \(a\), \(b\), \(c\): \(\expc(au+bv+c)=a\expc(u)+b\expc(v)+c\) (also for
-finite sums);
-\(\var(u)=\expc\bigl((u-\expc(u))^2\bigr)\geqslant0\);
-\(\cov(u,v)=\expc\bigl((u-\expc(u))(v-\expc(v))\bigr)=\cov(v,u)\);
-\(\var(u)=\cov(u,u)\).
+\item\label{f-prob} \(\var(u)=\expc\bigl((u-\expc(u))^2\bigr)\geqslant0\),
+\(\cov(u,v)=\expc\bigl((u-\expc(u))(v-\expc(v))\bigr)=\cov(v,u)\), \(\var(u)=\cov(u,u)\).
+\item\label{f-lin} \(\expc(au+bv+c)=a\expc(u)+b\expc(v)+c\) for numbers \(a\), \(b\), \(c\) (also for finite sums).
 \end{enumerate}
-
-\textbf{From \lec{7} and \lec{8}} (restated; \(A\in\R^{n\times n}\)).
-\begin{itemize}[itemsep=0pt,parsep=0pt,topsep=2pt]
-\item \lec{7}, Definitions~1 and~5: an \textbf{eigenvector} of \(A\) is \(x\in\R^n\), \(x\ne0\), with \(Ax=\lambda x\)
-(\(\lambda\in\R\)); \(p_A=(t-\lambda_1)\cdots(t-\lambda_n)\) (characteristic polynomial), \(\lambda_i\in\C\): the
-\textbf{eigenvalues}, with multiplicity.
-\item \lec{8}, Theorem~9(a),(b) (\(A\) symmetric): \(\R^n\) has an orthonormal basis \(q_1,\dots,q_n\) of eigenvectors
-of \(A\). If \(q_1,\dots,q_n\in\R^n\) are orthonormal, \(Aq_i=\lambda_iq_i\), \(Q=[q_1\ \cdots\ q_n]\) and
-\(\Lambda=\diag(\lambda_1,\dots,\lambda_n)\): \(Q\) is orthogonal and \(Q'AQ=\Lambda\), \(A=Q\Lambda Q'\);
-\(\lambda_1,\dots,\lambda_n\) are the eigenvalues of \(A\); \(\rank A=\#\{i:\lambda_i\ne0\}\).
-\item \lec{8}, Definitions~12 and~13: \(x'Ax=\sum_i\sum_ja_{ij}x_ix_j\) is the \textbf{quadratic form} of \(A\); a
-symmetric \(A\) is \textbf{positive semidefinite} (PSD) if \(x'Ax\geqslant0\) for all \(x\in\R^n\).
-\item \lec{8}, Theorem~14: for \(Q\), \(\Lambda\) as in its Theorem~9(b) and \(y=Q'x\):
-\(x'Ax=\lambda_1y_1^2+\dots+\lambda_ny_n^2\), and \(y=0\iff x=0\). (a) \(A\) is PSD \(\iff\) every
-\(\lambda_i\geqslant0\).
-\item \lec{8}, Theorem~11: if \(A\) is symmetric and \(A^2=A\), then \(\rank A=\tr A\). Theorem~15(b): for
-\(A\in\R^{n\times p}\), \(A'A\) is PSD. Example~5: \(\rank C_n=\tr C_n=n-1\).
-\end{itemize}
 
 \subsection*{1. Random vectors and covariance matrices}
 
@@ -168,7 +125,7 @@ entries; \(\expc(Z)=(\expc(z_{ij}))\). The \textbf{mean vector} of \(z\) is
 \[
 \Sigma=\var(z)=\expc\bigl((z-\mu)(z-\mu)'\bigr)\in\R^{n\times n}
 \]
-By \ref{f-views} and \ref{f-prob}, \(\sigma_{ij}=\expc\bigl((z_i-\mu_i)(z_j-\mu_j)\bigr)=\cov(z_i,z_j)\),
+By \lec{1}, Theorem~4(d) and \ref{f-prob}, \(\sigma_{ij}=\expc\bigl((z_i-\mu_i)(z_j-\mu_j)\bigr)=\cov(z_i,z_j)\),
 \(\sigma_{ii}=\var(z_i)\), and \(\Sigma\) is symmetric.
 \end{definition}
 
@@ -179,7 +136,7 @@ For random vectors \(u\in\R^p\), \(v\in\R^q\) with \(\mu_u=\expc(u)\), \(\mu_v=\
 \cov(u,v)=\expc\bigl((u-\mu_u)(v-\mu_v)'\bigr)\in\R^{p\times q}
 \]
 Its \((i,j)\) entry is \(\cov(u_i,v_j)\). So \(\cov(u,u)=\var(u)\) and
-\(\cov(v,u)=\cov(u,v)'\) (\ref{f-rules}). \(u\) and \(v\) are \textbf{uncorrelated} if
+\(\cov(v,u)=\cov(u,v)'\) (\lec{1}, Theorem~8). \(u\) and \(v\) are \textbf{uncorrelated} if
 \(\cov(u,v)=0\).
 \end{definition}
 
@@ -195,13 +152,13 @@ Let \(z\in\R^n\) be a random vector, \(\expc(z)=\mu\), \(\var(z)=\Sigma\).
 \end{enumerate}
 \end{theorem}
 \begin{proof}
-(a) Entry \((i,j)\) of \(AZB+D\) is \(\sum_r\sum_sa_{ir}z_{rs}b_{sj}+d_{ij}\) (\ref{f-views}); its expectation is
-\(\sum_r\sum_sa_{ir}\expc(z_{rs})b_{sj}+d_{ij}\) (\ref{f-prob}), entry \((i,j)\) of \(A\expc(Z)B+D\).
+(a) Entry \((i,j)\) of \(AZB+D\) is \(\sum_r\sum_sa_{ir}z_{rs}b_{sj}+d_{ij}\) (\lec{1}, Theorem~4(d)); its expectation is
+\(\sum_r\sum_sa_{ir}\expc(z_{rs})b_{sj}+d_{ij}\) (\ref{f-lin}), entry \((i,j)\) of \(A\expc(Z)B+D\).
 \begin{board}[(b):]
 \boardtop
 \begin{align*}
 \expc(Az+b)&=A\mu+b,\qquad Az+b-\expc(Az+b)=A(z-\mu)&&\text{((a): \(Z=z\), \(B=1\), \(D=b\))}\\
-\var(Az+b)&=\expc\bigl(A(z-\mu)(z-\mu)'A'\bigr)=A\Sigma A'&&\text{(\ref{f-rules}; (a))}
+\var(Az+b)&=\expc\bigl(A(z-\mu)(z-\mu)'A'\bigr)=A\Sigma A'&&\text{(\lec{1}, Theorem~8; (a))}
 \end{align*}
 \end{board}
 \begin{board}[(c):]
@@ -209,7 +166,8 @@ Let \(z\in\R^n\) be a random vector, \(\expc(z)=\mu\), \(\var(z)=\Sigma\).
 \begin{align*}
 \var(a'z)&=a'\Sigma a\geqslant0&&\text{((b) with \(a'\), \(b=0\); \ref{f-prob})}
 \end{align*}
-\(\Sigma\) is symmetric (Definition~\ref{h-def-random}): PSD (\lec{8}, Definition~13).
+\(\Sigma\) is symmetric (Definition~\ref{h-def-random}): PSD (\lec{8}, Definition~13: \(x'\Sigma x\geqslant0\) for
+all \(x\)).
 \end{board}
 \nopagebreak
 \end{proof}
@@ -228,24 +186,25 @@ Let \(u\in\R^p\), \(v\in\R^q\) be random vectors, \(\mu_u=\expc(u)\), \(\mu_v=\e
 \end{enumerate}
 \end{theorem}
 \begin{proof}
-\begin{board}[(a) By Theorem~\ref{h-thm-linear}(b): \(Au+b-\expc(Au+b)=A(u-\mu_u)\), \(Bv+d-\expc(Bv+d)=B(v-\mu_v)\):]
+\begin{board}[(a) By Theorem~\ref{h-thm-linear}(b): \(Au+b-\expc(Au+b)=A(u-\mu_u)\), \(Bv+d-\expc(Bv+d)=B(v-\mu_v)\);
+transposes (\lec{1}, Theorem~8):]
 \boardtop
 \begin{align*}
 \cov(Au+b,Bv+d)&=\expc\bigl(A(u-\mu_u)(v-\mu_v)'B'\bigr)=A\cov(u,v)B'
-&&\text{(\ref{f-rules}; Theorem~\ref{h-thm-linear}(a))}
+&&\text{(Theorem~\ref{h-thm-linear}(a))}
 \end{align*}
 \(u=v=z\): \(\cov(Az,Bz)=A\var(z)B'\).
 \end{board}
 (b) \(\expc(u_1+u_2)=\expc(u_1)+\expc(u_2)\), so
 \((u_1+u_2-\expc(u_1+u_2))(v-\mu_v)'=(u_1-\expc(u_1))(v-\mu_v)'+(u_2-\expc(u_2))(v-\mu_v)'\)
-(\ref{f-rules}); take expectations entry by entry (\ref{f-prob}). Transpose for the second identity
+(\lec{1}, Theorem~3(a)); take expectations entry by entry (\ref{f-lin}). Transpose for the second identity
 (Definition~\ref{h-def-cov}).
 
 (c) By (b) in both arguments,
 \(\var(\sum_ix_i)=\cov(\sum_ix_i,\sum_jx_j)=\sum_i\sum_j\cov(x_i,x_j)\); only the
 \(m\) terms with \(i=j\) remain.
 
-(d) \((u-\mu_u)(u-\mu_u)'=uu'-u\mu_u'-\mu_uu'+\mu_u\mu_u'\) (\ref{f-rules}); take expectations entry by entry, with
+(d) \((u-\mu_u)(u-\mu_u)'=uu'-u\mu_u'-\mu_uu'+\mu_u\mu_u'\) (\lec{1}, Theorems~3(a), 8); take expectations entry by entry, with
 \(\expc(u\mu_u')=\mu_u\mu_u'=\expc(\mu_uu')\) (Theorem~\ref{h-thm-linear}(a)):
 \(\var(u)=\expc(uu')-\mu_u\mu_u'\).
 \end{proof}
@@ -289,14 +248,14 @@ Let \(z\in\R^n\) be a random vector, \(\expc(z)=\mu\), \(\var(z)=\Sigma\), and
 \end{theorem}
 \begin{proof}
 \begin{board}[\(x'Ax=\sum_i\sum_ja_{ij}x_ix_j\) for \(x=z\) and \(x=\mu\) (\lec{8}, Definition~12); \(\Sigma\) is symmetric
-(Definition~\ref{h-def-random}):]
+(Definition~\ref{h-def-random}); \(\tr(A\Sigma)=\sum_i\sum_ja_{ij}\sigma_{ji}\) (\lec{1}, Definition~9, Theorem~4(d)):]
 \boardtop
 \begin{align*}
-\expc(z'Az)&=\textstyle\sum_i\sum_ja_{ij}\expc(z_iz_j)&&\text{(\ref{f-prob})}\\
+\expc(z'Az)&=\textstyle\sum_i\sum_ja_{ij}\expc(z_iz_j)&&\text{(\ref{f-lin})}\\
 \sigma_{ij}&=\expc\bigl((z_i-\mu_i)(z_j-\mu_j)\bigr)=\expc(z_iz_j)-\mu_i\mu_j-\mu_j\mu_i+\mu_i\mu_j
-&&\text{(\ref{f-prob})}\\
+&&\text{(\ref{f-prob}, \ref{f-lin})}\\
 \expc(z'Az)&=\textstyle\sum_i\sum_ja_{ij}\sigma_{ij}+\sum_i\sum_ja_{ij}\mu_i\mu_j=\tr(A\Sigma)+\mu'A\mu
-&&\text{(\ref{f-views}, \ref{f-trace}; \(\sigma_{ji}=\sigma_{ij}\))}
+&&(\sigma_{ji}=\sigma_{ij})
 \end{align*}
 \end{board}
 \nopagebreak
@@ -313,11 +272,13 @@ unknown parameters; \(T\) is \textbf{unbiased} if \(\expc(T)=\theta\) for all va
 Let \(y\in\R^n\), \(\expc(y)=\mu\), \(\var(y)=\sigma^2I_n\), and \(P\in\R^{n\times n}\) with
 \(P'=P=P^2\) and \(\rank P=r\). Find \(\expc(y'Py)\), and the expectation of \(s^2=\frac1{n-1}\sum_i(y_i-\bar y)^2\).
 \end{example}
-\textit{Solution.} \(\tr P=\rank P=r\) (\lec{8}, Theorem~11), and by Theorem~\ref{h-thm-quadratic} and \ref{f-trace},
+\textit{Solution.} \(\tr P=\rank P=r\) (\lec{8}, Theorem~11: symmetric \(A^2=A\Rightarrow\rank A=\tr A\)), and by
+Theorem~\ref{h-thm-quadratic} and \lec{1}, Theorem~10(a),
 \(\expc(y'Py)=\tr(P\sigma^2I_n)+\mu'P\mu=\sigma^2r+\mu'P\mu\).
 \begin{itemize}
-\item \(P=C_n\) (\(n\geqslant2\)): \(C_n'=C_n=C_n^2\) (\ref{f-centering}), \(\rank C_n=n-1\) (\lec{8}, Example~5);
-\(y'C_ny=\sum_i(y_i-\bar y)^2\) and \(\mu'C_n\mu=\sum_i(\mu_i-\bar\mu)^2\) (\ref{f-centering}). So
+\item \(P=C_n=I_n-\frac1n\one\one'\) (\(n\geqslant2\); \lec{1}, Definition~14): \(C_n'=C_n=C_n^2\), \(C_n\one=0\)
+(\lec{1}, Proposition~15), \(\rank C_n=n-1\) (\lec{8}, Example~5); \(y'C_ny=\sum_i(y_i-\bar y)^2\) and
+\(\mu'C_n\mu=\sum_i(\mu_i-\bar\mu)^2\) (\(\bar y=\frac1n\one'y\); \lec{1}, Example~16). So
 \(\expc\bigl(\sum_i(y_i-\bar y)^2\bigr)=(n-1)\sigma^2+\sum_i(\mu_i-\bar\mu)^2\).
 \item Common mean, \(\mu=\mu_0\one\): \(C_n\mu=0\), and \(\expc(s^2)=\sigma^2\) for all \(\mu_0\), \(\sigma^2\):
 \(s^2\) is an unbiased estimator of \(\sigma^2\) (Definition~\ref{h-def-estimator}). The estimator
@@ -330,9 +291,9 @@ Let \(y\in\R^n\), \(\expc(y)=\mu\), \(\var(y)=\sigma^2I_n\), and \(P\in\R^{n\tim
 
 \begin{definition}\label{h-def-data}
 A \textbf{data matrix} is \(X=(x_{ij})\in\R^{n\times p}\) (\(n\geqslant2\)): \(x_{ij}\) is the value of variable \(j\) on
-unit \(i\); row \(i\) of \(X\) is \(x_i'=(x_{i1},\dots,x_{ip})\). With \(\one=\one_n\) and \(C_n\) (\ref{f-centering}):
+unit \(i\); row \(i\) of \(X\) is \(x_i'=(x_{i1},\dots,x_{ip})\). With \(\one=\one_n\) and \(C_n=I_n-\frac1n\one\one'\) (\lec{1}, Definition~14):
 the \textbf{mean vector} \(\bar x=\frac1nX'\one=(\bar x_1,\dots,\bar x_p)'\), \(\bar x_j=\frac1n\sum_ix_{ij}\); the
-\textbf{centered data matrix} \(C_nX=X-\one\bar x'\), with entries \(x_{ij}-\bar x_j\); the \textbf{sample covariance
+\textbf{centered data matrix} \(C_nX=X-\one\bar x'\) (\lec{1}, Example~17), with entries \(x_{ij}-\bar x_j\); the \textbf{sample covariance
 matrix} \(S=(s_{jl})=\frac1{n-1}X'C_nX\in\R^{p\times p}\). For \(y,w\in\R^n\),
 \(\frac1{n-1}\sum_i(y_i-\bar y)(w_i-\bar w)\) is their \textbf{sample covariance} (\(y\), \(w\) are
 \textbf{uncorrelated} if it is \(0\)), and \(\frac1{n-1}\sum_i(y_i-\bar y)^2\) is the \textbf{sample variance} of \(y\).
@@ -351,21 +312,22 @@ of \(Xa\) and \(Xb\) is \(a'Sb\), and the sample variance of \(Xa\) is \(a'Sa\).
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-\begin{board}[(a) \(C_n'=C_n=C_n^2\), \(X'\one=n\bar x\) (\ref{f-centering}); column \(j\) of \(C_nX\) holds
+\begin{board}[(a) \(C_n'=C_n=C_n^2\) (\lec{1}, Proposition~15), \(X'\one=n\bar x\); column \(j\) of \(C_nX\) holds
 \(x_{ij}-\bar x_j\):]
 \boardtop
 \begin{align*}
-X'C_nX&=X'C_n'C_nX=(C_nX)'(C_nX)&&\text{(\ref{f-rules})}\\
-X'C_nX&=X'X-\tfrac1n(X'\one)(\one'X)=X'X-n\bar x\bar x'&&\text{(\ref{f-rules})}\\
-\bigl((C_nX)'(C_nX)\bigr)_{jl}&=\textstyle\sum_i(x_{ij}-\bar x_j)(x_{il}-\bar x_l)&&\text{(\ref{f-views})}
+X'C_nX&=X'C_n'C_nX=(C_nX)'(C_nX)&&\text{(\lec{1}, Theorem~8)}\\
+X'C_nX&=X'X-\tfrac1n(X'\one)(\one'X)=X'X-n\bar x\bar x'&&\text{(\lec{1}, Theorems~3(a), 8)}\\
+\bigl((C_nX)'(C_nX)\bigr)_{jl}&=\textstyle\sum_i(x_{ij}-\bar x_j)(x_{il}-\bar x_l)&&\text{(\lec{1}, Theorem~4(d))}
 \end{align*}
-Divide by \(n-1\): \(s_{jl}\), \(s_{jj}\). \(S\) is symmetric (\ref{f-rules}) and PSD (\lec{8}, Theorem~15(b)).
+Divide by \(n-1\): \(s_{jl}\), \(s_{jj}\). \(S\) is symmetric (\lec{1}, Theorem~8) and PSD (\lec{8}, Theorem~15(b):
+\(A'A\) is PSD).
 \end{board}
 \begin{board}[(b) \(\frac1n\one'(Xa)=\bar x'a=a'\bar x\), \(C_n(Xa)=(C_nX)a\): the deviations of \(Xa\) from its mean
-(\ref{f-rules}, \ref{f-centering}):]
+(\lec{1}, Theorem~8, Example~16):]
 \boardtop
 \begin{align*}
-\tfrac1{n-1}(C_nXa)'(C_nXb)&=a'\bigl(\tfrac1{n-1}(C_nX)'(C_nX)\bigr)b=a'Sb&&\text{(\ref{f-rules}; (a))}
+\tfrac1{n-1}(C_nXa)'(C_nXb)&=a'\bigl(\tfrac1{n-1}(C_nX)'(C_nX)\bigr)b=a'Sb&&\text{(\lec{1}, Theorem~8; (a))}
 \end{align*}
 \(b=a\): the sample variance of \(Xa\) is \(a'Sa\).
 \end{board}
@@ -381,13 +343,13 @@ X=\begin{pmatrix}7&3&7&3\\9&9&5&7\\5&7&9&9\\3&5&1&1\\1&1&3&5\end{pmatrix}
 Find \(\bar x\), \(C_5X\) and \(S\).
 \end{example}
 \textit{Solution.}
-\begin{board}[\(\one'X\), \(\bar x\); subtract \(\bar x'\) from every row (\ref{f-centering}):]
+\begin{board}[\(\one'X\), \(\bar x\); subtract \(\bar x'\) from every row (Definition~\ref{h-def-data}):]
 \[
 \one'X=(25,\ 25,\ 25,\ 25),\qquad\bar x=\tfrac15X'\one=\begin{pmatrix}5\\5\\5\\5\end{pmatrix},\qquad
 C_5X=\begin{pmatrix}2&-2&2&-2\\4&4&0&2\\0&2&4&4\\-2&0&-4&-4\\-4&-4&-2&0\end{pmatrix}
 \]
 \end{board}
-\begin{board}[\((C_5X)'(C_5X)\): inner products of the columns (\ref{f-views}); \(S\) (Proposition~\ref{h-prop-data}(a)):]
+\begin{board}[\((C_5X)'(C_5X)\): inner products of the columns (\lec{1}, Theorem~4(d)); \(S\) (Proposition~\ref{h-prop-data}(a)):]
 \[
 (C_5X)'(C_5X)=\begin{pmatrix}40&28&20&12\\28&40&12&20\\20&12&40&28\\12&20&28&40\end{pmatrix},\qquad
 S=\frac14(C_5X)'(C_5X)=\begin{pmatrix}10&7&5&3\\7&10&3&5\\5&3&10&7\\3&5&7&10\end{pmatrix}
@@ -408,23 +370,50 @@ rows \(x_1',\dots,x_n'\), \(\bar x=\frac1nX'\one\) and \(S=\frac1{n-1}X'C_nX\).
 \end{enumerate}
 \end{theorem}
 \begin{proof}
-(a) \(X'\one=x_1+\dots+x_n\) (\ref{f-views}), so \(\expc(\bar x)=\frac1n(\mu+\dots+\mu)=\mu\)
+(a) \(X'\one=x_1+\dots+x_n\) (\lec{1}, Theorem~4(b)), so \(\expc(\bar x)=\frac1n(\mu+\dots+\mu)=\mu\)
 (Theorem~\ref{h-thm-linear}(a)), and \(\var(\bar x)=\frac1{n^2}\var(x_1+\dots+x_n)
 =\frac1{n^2}n\Sigma=\frac1n\Sigma\) (Theorem~\ref{h-thm-linear}(b) with \(A=\frac1nI_p\), Theorem~\ref{h-thm-cov}(c)).
 
 (b) \(\expc(x_ix_i')=\Sigma+\mu\mu'\) and \(\expc(\bar x\bar x')=\frac1n\Sigma+\mu\mu'\)
-(Theorem~\ref{h-thm-cov}(d); (a)). By Proposition~\ref{h-prop-data}(a) and \ref{f-views},
+(Theorem~\ref{h-thm-cov}(d); (a)). By Proposition~\ref{h-prop-data}(a) and \lec{1}, Theorem~4(d),
 \(X'C_nX=X'X-n\bar x\bar x'\) with \(X'X=x_1x_1'+\dots+x_nx_n'\); so
 \(\expc(X'C_nX)=n(\Sigma+\mu\mu')-n(\frac1n\Sigma+\mu\mu')=(n-1)\Sigma\), and \(\expc(S)=\Sigma\).
 \end{proof}
 With the divisor \(n\) in place of \(n-1\), the expectation would be \(\frac{n-1}n\Sigma\), not \(\Sigma\) (if
 \(\Sigma\ne0\)); this is why \(S\) has the divisor \(n-1\).
 
-\Needspace{20\baselineskip}
+\Needspace{6\baselineskip}
+\begin{definition}\label{b9.17}
+Let \(X\in\R^{n\times p}\) be a data matrix with every \(s_{jj}>0\); \(\sqrt{s_{jj}}\) is the \textbf{sample standard
+deviation} of variable \(j\). With \(D_s=\diag(s_{11},\dots,s_{pp})\) and
+\(D_s^{-1/2}=\diag\bigl(1/\sqrt{s_{11}},\dots,1/\sqrt{s_{pp}}\bigr)\), \(r_{jl}=s_{jl}/\sqrt{s_{jj}s_{ll}}\) is the
+\textbf{sample correlation} of variables \(j\) and \(l\), and \(R=(r_{jl})=D_s^{-1/2}SD_s^{-1/2}\) (\lec{1},
+Proposition~13(a)) is the \textbf{sample correlation matrix}.
+\end{definition}
+
+\Needspace{8\baselineskip}
+\begin{proposition}\label{b9.18}
+In Definition~\ref{b9.17}, \(r_{jj}=1\) and \(\lvert r_{jl}\rvert\leqslant1\).
+\end{proposition}
+\begin{proof}
+\begin{board}[\(u_j=\col_j(C_nX)\): \((n-1)s_{jl}=u_j'u_l\) (Proposition~\ref{h-prop-data}(a)), \(\lVert u_j\rVert^2=u_j'u_j\):]
+\[
+r_{jj}=\frac{s_{jj}}{s_{jj}}=1,\qquad r_{jl}=\frac{u_j'u_l}{\lVert u_j\rVert\,\lVert u_l\rVert},\qquad\lvert
+r_{jl}\rvert\leqslant1\qquad\text{(\lec{6}, Theorem~3: \(\lvert x'y\rvert\leqslant\lVert x\rVert\,\lVert y\rVert\))}
+\]
+\end{board}
+\nopagebreak
+\end{proof}
+\begin{board}[Example~\ref{h-exm-data}: every \(s_{jj}=10\), so \(D_s^{-1/2}=\frac1{\sqrt{10}}I_4\) and \(R=\frac1{10}S\):]
+\(r_{12}=s_{12}/\sqrt{s_{11}s_{22}}=7/\sqrt{10\cdot10}=\frac7{10}\), \(r_{13}=\frac5{10}=\frac12\),
+\(r_{14}=\frac3{10}\).
+\end{board}
+
+\Needspace{19\baselineskip}
 \subsection*{3. The Rayleigh quotient}
 
 \begin{theorem}\label{h-thm-rayleigh}
-Let \(A\in\R^{n\times n}\) be symmetric, and let \(q_1,\dots,q_n\) be orthonormal eigenvectors of \(A\),
+Let \(A\in\R^{n\times n}\) be symmetric, and let \(q_1,\dots,q_n\) be orthonormal (\lec{6}, Definition~8) eigenvectors of \(A\),
 \(Aq_i=\lambda_iq_i\), numbered so that \(\lambda_1\geqslant\dots\geqslant\lambda_n\) (\lec{8}, Theorem~9(a)); then
 \(Q=[q_1\ \cdots\ q_n]\) is orthogonal, \(Q'AQ=\diag(\lambda_1,\dots,\lambda_n)\), and the \(\lambda_i\) are the
 eigenvalues of \(A\) (\lec{8}, Theorem~9(b)). For \(x\ne0\), \(x'Ax/x'x\) is the \textbf{Rayleigh quotient} of \(x\).
@@ -435,17 +424,17 @@ eigenvalues of \(A\) (\lec{8}, Theorem~9(b)). For \(x\ne0\), \(x'Ax/x'x\) is the
 \end{enumerate}
 \end{theorem}
 \begin{proof}
-\begin{board}[(a) \(y=Q'x\): \(x=QQ'x=Qy\) (\ref{f-orthonormal}); \lec{8}, Theorem~14:]
+\begin{board}[(a) \(y=Q'x\): \(x=QQ'x=Qy\) (\(QQ'=I\), \lec{6}, Theorem~9(b)):]
 \boardtop
 \begin{align*}
-x'x&=y'Q'Qy=y'y,\qquad x'Ax=\lambda_1y_1^2+\dots+\lambda_ny_n^2&&\text{(\ref{f-orthonormal})}\\
+x'x&=y'Q'Qy=y'y,\qquad x'Ax=\lambda_1y_1^2+\dots+\lambda_ny_n^2&&\text{(\lec{8}, Theorem~14)}\\
 \lambda_nx'x&=\textstyle\sum_i\lambda_ny_i^2\leqslant\sum_i\lambda_iy_i^2\leqslant\sum_i\lambda_1y_i^2=\lambda_1x'x
 &&(\lambda_n\leqslant\lambda_i\leqslant\lambda_1)\\
 q_1'Aq_1&=\lambda_1q_1'q_1=\lambda_1,\qquad q_n'Aq_n=\lambda_nq_n'q_n=\lambda_n
 \end{align*}
 Divide by \(x'x>0\).
 \end{board}
-\begin{board}[(b) \(x\ne0\), \(y=Q'x\), \(x=Qy=\sum_iy_iq_i\) (\ref{f-views}):]
+\begin{board}[(b) \(x\ne0\), \(y=Q'x\), \(x=Qy=\sum_iy_iq_i\) (\lec{1}, Theorem~4(b)):]
 \boardtop
 \begin{align*}
 \lambda_1x'x-x'Ax&=\textstyle\sum_i(\lambda_1-\lambda_i)y_i^2\geqslant0\\
@@ -466,17 +455,17 @@ and \(1\leqslant k\leqslant n\). Then
 \[
 \lambda_k=\max\Bigl\{\frac{x'Ax}{x'x}:x\ne0,\ x\perp q_1,\dots,q_{k-1}\Bigr\}
 \]
-attained at \(x=q_k\) (for \(k=1\) there is no condition).
+attained at \(x=q_k\) (for \(k=1\) there is no condition); \(x\perp q\) means \(q'x=0\) (\lec{6}, Definition~1).
 \end{theorem}
 \begin{proof}
-\begin{board}[\(Q=[R\ T]\), \(R=[q_1\ \cdots\ q_{k-1}]\), \(T=[q_k\ \cdots\ q_n]\); \(R'x\) has the entries
-\(q_1'x,\dots,q_{k-1}'x\) (\ref{f-views}):]
+\begin{board}[\(Q=[R\ T]\), \(R=[q_1\ \cdots\ q_{k-1}]\), \(T=[q_k\ \cdots\ q_n]\); \(QQ'=I\) (\lec{6}, Theorem~9(b));
+\(AT=[\lambda_kq_k\ \cdots\ \lambda_nq_n]=T\diag(\lambda_k,\dots,\lambda_n)\) (\lec{1}, Theorem~4(a), Proposition~13(a)):]
 \boardtop
 \begin{align*}
-&R'T=0,\qquad T'T=I_{n-k+1},\qquad I=QQ'=RR'+TT'&&\text{(\ref{f-orthonormal}, \ref{f-views})}\\
-x\perp q_1,\dots,q_{k-1}&\iff R'x=0\iff x=TT'x=Tz,\ z=T'x&&(R'Tz=0)\\
+&R'T=0,\ T'T=I_{n-k+1},\ I=QQ'=RR'+TT'&&\text{(\lec{1}, Theorem~4(d))}\\
+x\perp q_1,\dots,q_{k-1}&\iff R'x=0\iff x=Tz,\ z=T'x&&\text{(\lec{1}, Theorem~4(c); line 1)}\\
 x'x&=z'T'Tz=z'z,\qquad x'Ax=z'(T'AT)z\\
-T'AT&=T'[\lambda_kq_k\ \cdots\ \lambda_nq_n]=T'T\diag(\lambda_k,\dots,\lambda_n)=\diag(\lambda_k,\dots,\lambda_n)&&\text{(\ref{f-views})}
+T'AT&=T'T\diag(\lambda_k,\dots,\lambda_n)=\diag(\lambda_k,\dots,\lambda_n)
 \end{align*}
 By Theorem~\ref{h-thm-rayleigh}(a) for \(\diag(\lambda_k,\dots,\lambda_n)\) (with \(Q=I\)), the max of
 \(z'(T'AT)z/z'z\) over \(z\ne0\) is \(\lambda_k\), at \(z=e_1\): \(x=Te_1=q_k\).
@@ -488,7 +477,7 @@ By Theorem~\ref{h-thm-rayleigh}(a) for \(\diag(\lambda_k,\dots,\lambda_n)\) (wit
 
 \begin{definition}\label{h-def-pc}
 Let \(X\in\R^{n\times p}\) be a data matrix with \(S\ne0\). A \textbf{first loading vector} is a unit vector
-\(v_1\in\R^p\) that maximizes \(a'Sa\) over all unit vectors \(a\in\R^p\). For \(m\geqslant2\), once \(v_1,\dots,v_{m-1}\)
+\(v_1\in\R^p\) that maximizes \(a'Sa\) over all unit vectors \(a\in\R^p\) (\(\lVert a\rVert=1\), \lec{6}, Definition~1). For \(m\geqslant2\), once \(v_1,\dots,v_{m-1}\)
 are chosen, an \textbf{\(m\)th loading vector} is a unit vector \(v_m\) that maximizes \(a'Sa\) over the unit vectors
 \(a\) with \(a'Sv_l=0\) (\(l=1,\dots,m-1\)) (the \textbf{\(m\)th problem}). The linear combination with coefficient
 vector \(v_m\) is the \textbf{\(m\)th principal component}, and \(z_m=C_nXv_m\in\R^n\), with the entries
@@ -498,7 +487,7 @@ By Proposition~\ref{h-prop-data}(b), \(a'Sa\) is the sample variance of \(Xa\), 
 \(Xv_l\) are uncorrelated: the \(m\)th principal component has the largest sample variance among the combinations with
 a unit coefficient vector that are uncorrelated with the first \(m-1\) principal components.
 
-\Needspace{14\baselineskip}
+\Needspace{11\baselineskip}
 \begin{theorem}\label{h-thm-pca}
 Let \(X\in\R^{n\times p}\) be a data matrix with \(S\ne0\), and \(S=V\Lambda V'\) with \(V=[v_1\ \cdots\ v_p]\)
 orthogonal, \(\Lambda=\diag(\lambda_1,\dots,\lambda_p)\), \(\lambda_1\geqslant\dots\geqslant\lambda_p\) (as in
@@ -516,15 +505,16 @@ uncorrelated, and \(z_m\) has the sample variance \(\lambda_m\).
 (a)
 \begin{itemize}
 \item \(S\) is PSD (Proposition~\ref{h-prop-data}(a)), so \(\lambda_p\geqslant0\) (\lec{8}, Theorem~14(a)).
-\item \(r=\rank(C_nX)\leqslant\rank C_n=n-1\) (\ref{f-rank}; \lec{8}, Example~5), and \(r\leqslant p\) (\ref{f-rank}).
-\item \(\rank S=\rank\bigl((C_nX)'(C_nX)\bigr)=r\) (\ref{f-rank}) and \(\rank S=\#\{m:\lambda_m\ne0\}\) (\lec{8},
-Theorem~9(b)). As \(\lambda_1\geqslant\dots\geqslant\lambda_p\geqslant0\), exactly \(\lambda_1,\dots,\lambda_r\) are
+\item \(r=\rank(C_nX)\leqslant\rank C_n=n-1\) (\lec{4}, Theorem~15(a); \lec{8}, Example~5), \(r\leqslant p\) (\lec{4},
+Theorem~12(a)).
+\item \(\rank S=\rank\bigl((C_nX)'(C_nX)\bigr)=r\) (\lec{4}, Theorems~15(d), 16(b)) and \(\rank S=\#\{m:\lambda_m\ne0\}\)
+(\lec{8}, Theorem~9(b)). As \(\lambda_1\geqslant\dots\geqslant\lambda_p\geqslant0\), exactly \(\lambda_1,\dots,\lambda_r\) are
 positive.
 \end{itemize}
 (b) By Proposition~\ref{h-prop-data}(b) and \(Sv_l=\lambda_lv_l\), the sample covariance of \(Xa\) and \(Xv_l\) is
 \(a'Sv_l=\lambda_la'v_l\), which is \(0\iff a'v_l=0\), as \(\lambda_l>0\).
 \begin{board}[(c) Unit \(a\), \(c=V'a\): \(a=Vc\), \(c_j=v_j'a\), \(\sum_jc_j^2=\lVert c\rVert^2=\lVert a\rVert^2=1\)
-(\ref{f-orthonormal}); by (b), (a), the \(m\)th problem asks \(c_1=\dots=c_{m-1}=0\):]
+(\lec{6}, Theorem~9(a),(b)); by (b), (a), the \(m\)th problem asks \(c_1=\dots=c_{m-1}=0\):]
 \boardtop
 \begin{align*}
 a'Sa&=c'V'SVc=c'\Lambda c=\textstyle\sum_j\lambda_jc_j^2\\
@@ -534,7 +524,7 @@ v_m'Sv_l&=\lambda_lv_m'v_l=0\ (l<m),\qquad v_m'Sv_m=\lambda_m
 \end{align*}
 So \(v_m\) solves the \(m\)th problem, with the maximum \(\lambda_m\).
 \end{board}
-\begin{board}[(d) Proposition~\ref{h-prop-data}(a); \(\frac1n\one'z_m=\frac1n\one'C_nXv_m=0\) (\ref{f-centering}):]
+\begin{board}[(d) Proposition~\ref{h-prop-data}(a); \(\frac1n\one'z_m=\frac1n\one'C_nXv_m=0\) (\lec{1}, Proposition~15):]
 \boardtop
 \begin{align*}
 z_m'z_l&=v_m'(C_nX)'(C_nX)v_l=(n-1)v_m'Sv_l=(n-1)\lambda_lv_m'v_l
@@ -554,15 +544,15 @@ and the \textbf{proportion of variance explained} by the \(m\)th principal compo
 (m=1,\dots,p)
 \]
 where \(\lVert C_nX\rVert_F^2=\tr\bigl((C_nX)'(C_nX)\bigr)\) is the sum of the squared entries of \(C_nX\)
-(\ref{f-trace}). \(\mathrm{PVE}_m>0\) for \(m\leqslant r\), \(\mathrm{PVE}_m=0\) for \(m>r\),
+(\lec{1}, Theorem~10(c)). \(\mathrm{PVE}_m>0\) for \(m\leqslant r\), \(\mathrm{PVE}_m=0\) for \(m>r\),
 \(\mathrm{PVE}_1\geqslant\mathrm{PVE}_2\geqslant\cdots\), and \(\mathrm{PVE}_1+\dots+\mathrm{PVE}_M\) increases with
 \(M\leqslant r\) and equals \(1\) for \(M\geqslant r\).
 \end{proposition}
 \begin{proof}
-\begin{board}[\(V'V=I\) (\ref{f-orthonormal}); Proposition~\ref{h-prop-data}(a), Theorem~\ref{h-thm-pca}(d):]
+\begin{board}[\(V'V=I\) (\lec{6}, Definition~8); Proposition~\ref{h-prop-data}(a), Theorem~\ref{h-thm-pca}(d):]
 \boardtop
 \begin{align*}
-\tr S&=\tr(V\Lambda V')=\tr(\Lambda V'V)=\tr\Lambda=\lambda_1+\dots+\lambda_p&&\text{(\ref{f-trace})}\\
+\tr S&=\tr(V\Lambda V')=\tr(\Lambda V'V)=\tr\Lambda=\lambda_1+\dots+\lambda_p&&\text{(\lec{1}, Theorem~10(b))}\\
 \lVert C_nX\rVert_F^2&=\tr\bigl((C_nX)'(C_nX)\bigr)=(n-1)\tr S,\qquad\lVert z_m\rVert^2=(n-1)\lambda_m
 \end{align*}
 \(\tr S\geqslant\lambda_1>0\) (Theorem~\ref{h-thm-pca}(a); \(\Lambda\ne0\) as \(S=V\Lambda V'\ne0\)); \(\lambda_m>0\) exactly for
@@ -571,11 +561,12 @@ where \(\lVert C_nX\rVert_F^2=\tr\bigl((C_nX)'(C_nX)\bigr)\) is the sum of the s
 \nopagebreak
 \end{proof}
 
-\Needspace{14\baselineskip}
+\Needspace{5\baselineskip}
 \begin{example}\label{h-exm-pca}
 Find the principal components, the score vectors and the proportions of variance explained for the data of
 Example~\ref{h-exm-data}.
 \end{example}
+\par\Needspace{12\baselineskip}
 \textit{Solution.} \(h_1=\one_4\), \(h_2=(1,1,-1,-1)'\), \(h_3=(1,-1,1,-1)'\), \(h_4=(1,-1,-1,1)'\).
 \begin{board}[\(Sh_m\) row by row (\(S\) of Example~\ref{h-exm-data}); the \(h_m\) are orthogonal, \(\lVert h_m\rVert=2\):]
 \[
@@ -650,9 +641,9 @@ component, with variance \(\lambda_m\).
 \end{enumerate}
 \end{theorem}
 \begin{proof}
-(a) Let \(T\in\R^{2\times p}\) have the rows \(a'\), \(b'\), so \(Tx=(a'x,b'x)'\) (\ref{f-views}).
+(a) Let \(T\in\R^{2\times p}\) have the rows \(a'\), \(b'\), so \(Tx=(a'x,b'x)'\) and
 \(\var(Tx)=T\Sigma T'\) (Theorem~\ref{h-thm-linear}(b)) has the entries \(a'\Sigma a\), \(a'\Sigma b\);
-\(b'\Sigma a\), \(b'\Sigma b\) (\ref{f-views}); by Definition~\ref{h-def-random}, its diagonal entries are
+\(b'\Sigma a\), \(b'\Sigma b\) (\lec{1}, Theorem~4(c),(d)); by Definition~\ref{h-def-random}, its diagonal entries are
 \(\var(a'x)\), \(\var(b'x)\) and its \((1,2)\) entry is \(\cov(a'x,b'x)\).
 \(\Sigma\) is PSD (Theorem~\ref{h-thm-linear}(c)), so \(\lambda_p\geqslant0\) (\lec{8}, Theorem~14(a)).
 
@@ -670,7 +661,7 @@ So the \(m\)th problem maximizes \(a'\Sigma a\) over the unit \(a\perp v_1,\dots
 \end{itemize}
 (c) By (a), \(\cov(v_m'x,v_l'x)=v_m'\Sigma v_l=\lambda_lv_m'v_l=0\) for \(l\ne m\).
 \(\var(x_j)=\sigma_{jj}\) (Definition~\ref{h-def-random}), so the total variance is
-\(\tr\Sigma=\tr(V\Lambda V')=\tr(\Lambda V'V)=\tr\Lambda\) (\ref{f-trace}), which is positive: every \(\lambda_m\geqslant0\)
+\(\tr\Sigma=\tr(V\Lambda V')=\tr(\Lambda V'V)=\tr\Lambda\) (\lec{1}, Theorem~10(b)), which is positive: every \(\lambda_m\geqslant0\)
 by (a), and \(\Lambda\ne0\), as \(\Sigma=V\Lambda V'\ne0\).
 \end{proof}
 Parts (b) and (c) are Theorem~\ref{h-thm-pca}(c),(d) and Proposition~\ref{h-prop-pve} with \(\Sigma\) in place of \(S\).
@@ -681,20 +672,20 @@ components of the data (Definition~\ref{h-def-pc}), computed from \(S\), take th
 \begin{example}\label{h-exm-equicorrelation}
 Let \(x=(x_1,\dots,x_p)'\) (\(p\geqslant2\)) have \(\var(x_i)=\sigma^2>0\) and
 \(\cov(x_i,x_j)=\rho\sigma^2\) for \(i\ne j\), where \(0<\rho<1\):
-\(\Sigma=\sigma^2\bigl((1-\rho)I_p+\rho J_p\bigr)\). Find the principal components of \(x\).
+\(\Sigma=\sigma^2\bigl((1-\rho)I_p+\rho J_p\bigr)\) (\(J_p=\one_p\one_p'\)). Find the principal components of \(x\).
 \end{example}
 \textit{Solution.}
 \begin{board}[\(I_p=\bar J_p+C_p\), \(J_p=p\bar J_p\); for \(a\in\R^p\), \(\bar J_pa=\bar a\one\), \(C_pa=a-\bar a\one\)
-(\ref{f-centering}):]
+(\lec{1}, Definition~14, Example~16):]
 \boardtop
 \begin{align*}
 \Sigma&=\lambda_1\bar J_p+\lambda_2C_p,\qquad\lambda_1=\sigma^2\bigl(1+(p-1)\rho\bigr),\qquad\lambda_2=\sigma^2(1-\rho),\qquad\lambda_1-\lambda_2=p\rho\sigma^2>0\\
 \Sigma\one&=\lambda_1\one,\qquad\Sigma a=\lambda_2a\ \text{ if }\one'a=0\\
 \Sigma-\lambda_1I_p&=(\lambda_2-\lambda_1)C_p,\qquad\text{so }\Sigma a=\lambda_1a\iff C_pa=0\iff a=\bar a\one
 \end{align*}
-\(v_1=\frac1{\sqrt p}\one\); by \ref{f-orthonormal}, \([v_1\ v_2\ \cdots\ v_p]\) is orthogonal for some
-\(v_2,\dots,v_p\), and then \(\one'v_j=\sqrt p\,v_1'v_j=0\), \(\Sigma v_j=\lambda_2v_j\) (\(j\geqslant2\)). So the
-eigenvalues are \(\lambda_1\) and \(\lambda_2\) (\(p-1\) times) (\lec{8}, Theorem~9(b)), and \(\lambda_1>\lambda_2>0\).
+\(v_1=\frac1{\sqrt p}\one\); \([v_1\ \cdots\ v_p]\) is orthogonal for some \(v_2,\dots,v_p\) (\lec{6},
+Corollary~11(c)); then \(\one'v_j=\sqrt p\,v_1'v_j=0\), \(\Sigma v_j=\lambda_2v_j\) (\(j\geqslant2\)): the eigenvalues
+are \(\lambda_1\) and \(\lambda_2\) (\(p-1\) times) (\lec{8}, Theorem~9(b)); \(\lambda_1>\lambda_2>0\).
 \end{board}
 \begin{board}[The principal components (Theorem~\ref{h-thm-pop-pca}):]
 \begin{itemize}
@@ -710,7 +701,6 @@ is a second principal component: for \(p\geqslant3\) not unique, even up to sign
 \end{board}
 
 \bigskip
-\textbf{Practice.} The Exercises and Problems of the textbook, Chapter~9: random vectors and covariance matrices, data
-matrices and sample covariance matrices, the Rayleigh quotient, and principal components.
+\textbf{Practice.} The Exercises and Problems of the textbook, Chapter~9.
 
 \end{document}

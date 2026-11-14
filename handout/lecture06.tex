@@ -108,47 +108,10 @@
 \textbf{Last time} (\lec{5}): block matrices and determinants; \(\det(AB)=\det A\det B\), \(\det A'=\det A\), and
 \(A\in\R^{n\times n}\) is invertible \(\iff\) \(\det A\ne0\). Throughout, \(I=I_n\) and \(e_j\) is column \(j\) of \(I\).
 
-\textbf{From \lec{1}, \lec{2}, \lec{3}, \lec{4} and \lec{5}} (restated).
-\begin{itemize}[itemsep=0pt,parsep=0pt,topsep=2pt]
-\item \lec{1}, Definition~7, Theorems~3, 8: \((A')_{ij}=a_{ji}\);
-\((AB)C=A(BC)\), \(A(B+C)=AB+AC\), \((A+B)C=AC+BC\), \(c(AB)=(cA)B=A(cB)\), \(I_mA=A=AI_n\)
-(\(A\in\R^{m\times n}\)); \((A+B)'=A'+B'\), \((AB)'=B'A'\), \((A')'=A\), \(I'=I\); \(x'y=y'x=x_1y_1+\dots+x_ny_n\) (\(x,y\in\R^n\)).
-\item \lec{1}, Definition~1, Theorem~4: for \(A=[a_1\ \cdots\ a_n]\in\R^{m\times n}\) and
-\(B\in\R^{n\times p}\), \(\col_j(AB)=A\col_j(B)\); \(Ax=x_1a_1+\dots+x_na_n\), \(Ae_j=a_j\);
-\((AB)_{ij}=\row_i(A)\col_j(B)\), so \((A'G)_{ij}=a_i'\col_j(G)\) (\(G\in\R^{m\times p}\));
-\(AB=a_1\row_1(B)+\dots+a_n\row_n(B)\). Matrices with the same columns are equal.
-\item \lec{1}, Definition~14, Example~16: \(\one=\one_n=(1,\dots,1)'\in\R^n\),
-\(\bar y=\frac1n\one'y\), \(\bar J_n=\frac1n\one\one'\), \(C_n=I_n-\bar J_n\);
-\(\sum_i(y_i-\bar y)^2=\sum_iy_i^2-n\bar y^2\).
-\item \lec{2}, Theorems~11(b), 15: for invertible \(A,B\in\R^{n\times n}\), \(AB\) is
-invertible and \((AB)^{-1}=B^{-1}A^{-1}\); for \(A,B\in\R^{n\times n}\), \(BA=I\) or \(AB=I\) \(\Rightarrow\) \(A\) is
-invertible and \(A^{-1}=B\).
-\item \lec{3}, Definition~6, Theorem~7, Proposition~12(a),(c):
-\(\Span\{v_1,\dots,v_k\}=\{c_1v_1+\dots+c_kv_k:c_i\in\R\}\) is a subspace that contains \(v_1,\dots,v_k\) and lies in
-every subspace containing them. A list containing \(0\) is dependent; for \(k\geqslant2\), \(v_1,\dots,v_k\) are
-dependent \(\iff\) some \(v_j\) is a combination of the others.
-\item \lec{3}, Definition~18, Theorems~19(a), 20, 21: for subspaces
-\(U\), \(W\) of \(\R^n\), \(U+W=\{u+w:u\in U,\ w\in W\}\) is a subspace. If \(U\cap W=\{0\}\), the sum is
-\textbf{direct}, written \(U\oplus W\); each of its vectors is \(u+w\) (\(u\in U\), \(w\in W\)) in exactly one way, and
-a basis of \(U\) together with a basis of \(W\) is a basis of \(U\oplus W\).
-\item \lec{4}, Theorem~4: every subspace \(W\) of \(\R^n\) has a basis, and any two bases of \(W\) have the
-same number of elements, \(\dim W\); \(\dim\R^n=n\), \(\dim\{0\}=0\) (empty list), and \(\dim W=0\) only for
-\(W=\{0\}\). If \(W\) is spanned by \(m\) vectors, then any \(k>m\) vectors of \(W\) are linearly dependent.
-\item \lec{4}, Theorem~5(a),(b),(d): let \(U\subseteq W\) be subspaces of \(\R^n\), \(\dim W=d\). Then
-\(\dim U=d\) \(\Rightarrow\) \(U=W\); an independent list in \(W\) extends to a basis of \(W\); \(d\) independent
-vectors of \(W\) form a basis of \(W\).
-\item \lec{4}, Definitions~7, 10, Theorems~11, 12(b): for
-\(A\in\R^{m\times n}\), \(\mathcal C(A)=\{Ax:x\in\R^n\}\) (the span of the columns of \(A\)) and
-\(\mathcal N(A)=\{x\in\R^n:Ax=0\}\) are subspaces; \(\rank A=\dim\mathcal C(A)\); \(\rank A+\dim\mathcal N(A')=m\);
-\(\rank A=n\) \(\iff\) the columns of \(A\) are independent.
-\item \lec{5}, Theorems~8(d), 12(b), 13(b): for \(A,B\in\R^{n\times n}\),
-\(\det I=1\), \(\det(AB)=\det A\det B\), \(\det A'=\det A\).
-\end{itemize}
-
 \subsection*{1. Inner products, lengths, and orthogonal complements}
 
 \begin{definition}\label{b6.1}
-For \(x,y\in\R^n\): the \textbf{inner product} \(x'y=x_1y_1+\dots+x_ny_n=y'x\); the \textbf{length}
+For \(x,y\in\R^n\): the \textbf{inner product} \(x'y=x_1y_1+\dots+x_ny_n=y'x\) (\lec{1}, Theorem~8); the \textbf{length}
 \(\lVert x\rVert=\sqrt{x'x}\); the \textbf{distance} \(\lVert x-y\rVert\); \(x\perp y\) (\textbf{orthogonal}) if
 \(x'y=0\). As \(x'x\) is a sum of squares, \(\lVert x\rVert\geqslant0\), and \(\lVert x\rVert=0\) only for \(x=0\): \(0\)
 is the only vector orthogonal to itself. \(\lVert cx\rVert=\lvert c\rvert\,\lVert x\rVert\) (\(c\in\R\); \((cx)'(cx)=c^2x'x\)). A
@@ -229,25 +192,26 @@ So \(W^\perp=\mathcal N(A')\), a subspace (\lec{4}, Definition~7).
 y\in W,\ y\perp W&\implies y'y=0\implies y=0&&\text{(Definition~\ref{b6.1})}
 \end{align*}
 \end{board}
-(c) Let \(d=\dim W\). If \(d=0\): \(W=\{0\}\), \(W^\perp=\R^n\). Let \(d\geqslant1\), and let \(A\in\R^{n\times d}\) have a
-basis of \(W\) as its columns (\lec{4}, Theorem~4).
-\begin{board}[(c) \(\dim W^\perp\) (\lec{4}, Definitions~7, 10, Theorem~11, with
-\(m=n\)):]
+(c) Let \(d=\dim W\). If \(d=0\): \(W=\{0\}\) (\lec{4}, Theorem~4: \(\dim W=0\) only for \(W=\{0\}\)),
+\(W^\perp=\R^n\). Let \(d\geqslant1\), and let \(A\in\R^{n\times d}\) have a basis of \(W\) as its columns (\lec{4},
+Theorem~4: \(W\) has a basis).
+\begin{board}[(c) \(\dim W^\perp\):]
 \boardtop
 \begin{align*}
-\mathcal C(A)&=W,\quad\rank A=\dim W=d\\
-\dim W^\perp&=\dim\mathcal N(A')=n-\rank A=n-d&&\text{((a))}
+\mathcal C(A)&=\Span\{\text{columns of }A\}=W&&\text{(\lec{4}, Definition~7)}\\
+\rank A&=\dim\mathcal C(A)=d&&\text{(\lec{4}, Definition~10)}\\
+\dim W^\perp&=\dim\mathcal N(A')=n-\rank A=n-d&&\text{((a); \lec{4}, Theorem~11, \(m=n\))}
 \end{align*}
 \end{board}
-\begin{board}[(c) \(\R^n=W\oplus W^\perp\) (\lec{3}, Definition~18,
-Theorems~19(a), 20, 21; \lec{4}, Theorems~4, 5(a)):]
+\begin{board}[(c) \(\R^n=W\oplus W^\perp\):]
 \boardtop
 \begin{align*}
-&W\cap W^\perp=\{0\}\implies W+W^\perp=W\oplus W^\perp\text{, a subspace of }\R^n&&\text{((b))}\\
-&\text{bases of }W\text{, }W^\perp\text{ together: }d+(n-d)=n\text{ vectors, a basis of }W\oplus W^\perp\\
-&\dim(W\oplus W^\perp)=n=\dim\R^n\implies W\oplus W^\perp=\R^n
+&W+W^\perp\text{ is a subspace of }\R^n&&\text{(\lec{3}, Theorem~19(a))}\\
+&W\cap W^\perp=\{0\}\implies W+W^\perp=W\oplus W^\perp&&\text{((b); \lec{3}, Definition~18)}\\
+&\text{bases of }W\text{, }W^\perp\text{ together: a basis of }W\oplus W^\perp&&\text{(\lec{3}, Theorem~21)}\\
+&\dim(W\oplus W^\perp)=d+(n-d)=n=\dim\R^n\implies W\oplus W^\perp=\R^n&&\text{(\lec{4}, Theorems~4, 5(a))}
 \end{align*}
-Each \(y\in\R^n\) is \(w+v\) (\(w\in W\), \(v\in W^\perp\)) in exactly one way.
+Each \(y\in\R^n\) is \(w+v\) (\(w\in W\), \(v\in W^\perp\)) in exactly one way (\lec{3}, Theorem~20).
 \end{board}
 \nopagebreak
 \end{proof}
@@ -340,7 +304,7 @@ Then \(b_1,\dots,b_p\) are nonzero and pairwise orthogonal, and
 form an orthonormal basis of \(\Span\{a_1,\dots,a_p\}\).
 \end{theorem}
 \begin{proof}
-Induction on \(j\). \(b_1=a_1\ne0\) (\lec{3}, Proposition~12(a)). Let \(j\geqslant2\), and let
+Induction on \(j\). \(b_1=a_1\ne0\) (\lec{3}, Proposition~12(a): a list containing \(0\) is dependent). Let \(j\geqslant2\), and let
 \(b_1,\dots,b_{j-1}\) be nonzero, pairwise orthogonal, with span \(W_{j-1}=\Span\{a_1,\dots,a_{j-1}\}\); so \(b_j\) is
 defined.
 \begin{board}[Orthogonal: for \(l<j\), with \(b_l'b_i=0\) (\(i\ne l\)):]
@@ -354,6 +318,7 @@ b_l'b_j&=b_l'a_j-\textstyle\sum_{i<j}t_{ij}b_l'b_i=b_l'a_j-t_{lj}\lVert b_l\rVer
 \boardtop
 \begin{align*}
 b_j=0&\implies a_j=\textstyle\sum_{i<j}t_{ij}b_i\in W_{j-1}=\Span\{a_1,\dots,a_{j-1}\}\\
+&\implies a_j\text{ is a combination of }a_1,\dots,a_{j-1}&&\text{(\lec{3}, Definition~6)}\\
 &\implies a_1,\dots,a_p\text{ dependent }\contradiction&&\text{(\lec{3}, Proposition~12(c))}
 \end{align*}
 \end{board}
@@ -402,14 +367,15 @@ Theorem~5(b)), then Gram--Schmidt (Theorem~\ref{b6.14}):]
 &T=[q_{p+1}\ \cdots\ q_n]\implies[Q\ T]\text{ has orthonormal columns: orthogonal}&&\text{(Definition~\ref{b6.12})}
 \end{align*}
 \end{board}
-\begin{board}[(c) Let \(T=[v_1\ \cdots\ v_{n-p}]\) be any such matrix: \([Q\ T]'[Q\ T]=I_n\), so
-\(q_1,\dots,q_p,v_1,\dots,v_{n-p}\) are orthonormal (Definition~\ref{b6.12}), hence independent
-(Theorem~\ref{b6.11}(b)); \(\mathcal C(Q)=\Span\{q_1,\dots,q_p\}\) (\lec{4}, Definition~7):]
+\begin{board}[(c) Let \(T=[v_1\ \cdots\ v_{n-p}]\) be any such matrix: \([Q\ T]'[Q\ T]=I_n\);
+\(\mathcal C(Q)=\Span\{q_1,\dots,q_p\}\), \(\dim\mathcal C(Q)=\rank Q\) (\lec{4}, Definitions~7, 10):]
 \boardtop
 \begin{align*}
+&q_1,\dots,q_p,v_1,\dots,v_{n-p}\text{ orthonormal}\implies\text{independent}&&\text{(Definition~\ref{b6.12}; Theorem~\ref{b6.11}(b))}\\
+&\implies Q\text{ has full column rank: }\rank Q=p&&\text{(\lec{4}, Theorem~12(b))}\\
 v_k'q_i&=0\ (\text{all }k,\ i)\implies v_k\in\mathcal C(Q)^\perp&&\text{(Theorem~\ref{b6.6}(a))}\\
-\rank Q&=p\implies\dim\mathcal C(Q)^\perp=n-p&&\text{(\lec{4}, Theorem~12(b); Theorem~\ref{b6.6}(c))}\\
-&\implies v_1,\dots,v_{n-p}\text{ form a basis of }\mathcal C(Q)^\perp&&\text{(\lec{4}, Theorem~5(d))}\\
+\dim\mathcal C(Q)^\perp&=n-\rank Q=n-p&&\text{(Theorem~\ref{b6.6}(c))}\\
+&\implies\text{the }n-p\text{ independent }v_k\text{ form a basis of }\mathcal C(Q)^\perp&&\text{(\lec{4}, Theorem~5(d))}\\
 I_n&=[Q\ T][Q\ T]'&&\text{(Theorem~\ref{b6.13}(b))}\\
 &=\textstyle\sum_iq_iq_i'+\sum_kv_kv_k'=QQ'+TT'&&\text{(\lec{1}, Theorem~4)}
 \end{align*}
@@ -423,7 +389,7 @@ Let \(A=[a_1\ \cdots\ a_p]\in\R^{n\times p}\), \(\rank A=p\). Then \(A=QR\) with
 \(R=(r_{ij})\in\R^{p\times p}\) upper triangular (\(r_{ij}=0\) for \(i>j\)) with \(r_{jj}>0\); moreover \(R=Q'A\).
 \end{theorem}
 \begin{proof}
-\begin{board}[\(a_1,\dots,a_p\) are independent (\lec{4}, Theorem~12(b)); Theorem~\ref{b6.14} gives
+\begin{board}[\(\rank A=p\): \(a_1,\dots,a_p\) are independent (\lec{4}, Theorem~12(b)); Theorem~\ref{b6.14} gives
 \(b_j\), \(t_{ij}\), \(q_j\); \(Q=[q_1\ \cdots\ q_p]\), \(Q'Q=I_p\) (Definition~\ref{b6.12}):]
 \boardtop
 \begin{align*}
@@ -431,7 +397,7 @@ r_{jj}&=\lVert b_j\rVert>0,\quad r_{ij}=t_{ij}\lVert b_i\rVert\ (i<j),\quad r_{i
 &&\text{(\(b_j\ne0\), Theorem~\ref{b6.14}; Definition~\ref{b6.1})}\\
 a_j&=b_j+\textstyle\sum_{i<j}t_{ij}b_i=\sum_{i\leqslant j}r_{ij}q_i&&(b_i=\lVert b_i\rVert q_i)\\
 \col_j(QR)&=Q\col_j(R)=\textstyle\sum_{i\leqslant j}r_{ij}q_i=a_j\ (\text{all }j)\implies QR=A
-&&\text{(\lec{1}, Theorem~4)}\\
+&&\text{(\lec{1}, Definition~1, Theorem~4)}\\
 Q'A&=Q'QR=I_pR=R&&\text{(\lec{1}, Theorem~3)}
 \end{align*}
 \end{board}
@@ -520,7 +486,7 @@ Theorem~8:]
 &(Q')'Q'=QQ'=I_n\implies Q'\text{ orthogonal};\quad Q^{-1}=Q'&&\text{((a)(ii))}
 \end{align*}
 \end{board}
-\begin{board}[(c) \lec{5}, Theorems~8(d), 12(b), 13(b):]
+\begin{board}[(c) \(\det I_n=1\), \(\det(AB)=\det A\det B\), \(\det A'=\det A\) (\lec{5}, Theorems~8(d), 12(b), 13(b)):]
 \boardtop
 \begin{align*}
 1&=\det I_n=\det(Q'Q)=\det Q'\det Q=(\det Q)^2\implies\det Q=\pm1
@@ -531,9 +497,9 @@ Theorem~8:]
 So, for orthogonal \(Q\): \(\lVert Qx-Qy\rVert=\lVert Q(x-y)\rVert=\lVert x-y\rVert\) (Theorem~\ref{b6.13}(a)); \(Q\) keeps
 inner products, lengths and distances.
 
-\Needspace{22\baselineskip}
+\Needspace{24\baselineskip}
 \begin{example}\label{b6.20}
-Let \(n\geqslant2\). For \(k=2,\dots,n\) let \(u_k=(1,\dots,1,-(k-1),0,\dots,0)'\in\R^n\): \(k-1\) entries \(1\), then
+Let \(n\geqslant2\) and \(\one_n=(1,\dots,1)'\in\R^n\) (\lec{1}, Definition~14). For \(k=2,\dots,n\) let \(u_k=(1,\dots,1,-(k-1),0,\dots,0)'\in\R^n\): \(k-1\) entries \(1\), then
 \(-(k-1)\) in position \(k\), then zeros. The \textbf{Helmert matrix} \(K_n\in\R^{n\times n}\) has the rows
 \[
 p_1'=\frac1{\sqrt n}\,\one_n',\quad p_k'=\frac1{\sqrt{k(k-1)}}\,u_k'\ (k=2,\dots,n);\quad
@@ -542,7 +508,7 @@ K_4=\begin{pmatrix}1/2&1/2&1/2&1/2\\1/\sqrt2&-1/\sqrt2&0&0\\1/\sqrt6&1/\sqrt6&-2
 \]
 \begin{enumerate}
 \item Show that \(K_n\) is orthogonal.
-\item For \(y\in\R^n\), \(p_1'y=\sqrt n\,\bar y\), and for \(k\geqslant2\),
+\item For \(y\in\R^n\) and its mean \(\bar y=\frac1n\one'y\) (\lec{1}, Example~16), \(p_1'y=\sqrt n\,\bar y\), and for \(k\geqslant2\),
 \(p_k'y=\bigl(y_1+\dots+y_{k-1}-(k-1)y_k\bigr)/\sqrt{k(k-1)}\) is a \textbf{contrast} (its coefficients add up to
 \(0\)). Show that \(\sum_{i=1}^n(y_i-\bar y)^2=\sum_{k=2}^n(p_k'y)^2\).
 \item Check (b) for \(n=4\), \(y=(5,3,1,7)'\).
@@ -558,8 +524,7 @@ K_4=\begin{pmatrix}1/2&1/2&1/2&1/2\\1/\sqrt2&-1/\sqrt2&0&0\\1/\sqrt6&1/\sqrt6&-2
 &\one'\one=n,\quad u_k'u_k=(k-1)\cdot1+(k-1)^2=k(k-1)\implies\lVert p_1\rVert=\lVert p_k\rVert=1
 \end{align*}
 \end{board}
-\begin{board}[(b) The entries of \(K_ny\) are \(p_k'y\) (\lec{1}, Theorem~4); (a) and
-Theorem~\ref{b6.13}(a):]
+\begin{board}[(b) The entries of \(K_ny\) are \(p_k'y\) (\lec{1}, Theorem~4); (a) and Theorem~\ref{b6.13}(a):]
 \boardtop
 \begin{align*}
 p_1'y&=\tfrac1{\sqrt n}\one'y=\tfrac1{\sqrt n}\,n\bar y=\sqrt n\,\bar y\\
@@ -569,7 +534,7 @@ p_1'y&=\tfrac1{\sqrt n}\one'y=\tfrac1{\sqrt n}\,n\bar y=\sqrt n\,\bar y\\
 \end{align*}
 \end{board}
 In matrix form: \(K_n'K_n=I_n\) reads \(p_1p_1'+\dots+p_np_n'=I_n\) (\lec{1}, Theorem~4), and
-\(p_1p_1'=\frac1n\one\one'=\bar J_n\); so \(p_2p_2'+\dots+p_np_n'=I_n-\bar J_n=C_n\).
+\(p_1p_1'=\frac1n\one\one'=\bar J_n\); so \(p_2p_2'+\dots+p_np_n'=I_n-\bar J_n=C_n\) (\lec{1}, Definition~14).
 \begin{board}[(c) \(n=4\), \(y=(5,3,1,7)'\):]
 \boardtop
 \begin{align*}
