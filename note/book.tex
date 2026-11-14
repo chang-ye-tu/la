@@ -29812,7 +29812,7 @@ In particular, under (A4), for the \textbf{overall \(F\) test} of \(H_0\colon\be
 F=\frac{\mathrm{SSR}/k}{\mathrm{SSE}/(n-k-1)}=\frac{R^2/k}{(1-R^2)/(n-k-1)}
 \]
 \item If \(q=1\) and \(K=a'\), then \(F=T_0^2\), where \(T_0\) is the statistic of Theorem~\ref{r12-thm-t}(b) for
-\(m_0=m\).
+\(m_0=m\); the test of (b) rejects exactly when that of Theorem~\ref{r12-thm-t}(b) does.
 \end{enumerate}
 Part (a) and the identities in (c) and (d) are algebraic: they hold for every \(y\) with \(\mathrm{SSE}>0\). Under (A4),
 \(G=(X'X)^{-1}\), \(\beta^0=\hat\beta\) and \(r=k+1\).
@@ -29857,7 +29857,8 @@ So \(\mathrm{SSE}_K=\mathrm{SST}\), \(R^2_2=0\) and \(\mathrm{SSE}_K-\mathrm{SSE
 under (A4), \(r=k+1\) and the hypothesis is testable (Definition~\ref{r11-def-testable}).
 \end{itemize}
 (d) For \(K=a'\), \(V=a'Ga\), and the numerator of \(F\) is \((a'\beta^0-m)^2/(a'Ga)\), so
-\(F=(a'\beta^0-m)^2/(s^2a'Ga)=T_0^2\).
+\(F=(a'\beta^0-m)^2/(s^2a'Ga)=T_0^2\). Hence \(F>F_{1,n-r,1-\alpha}\iff T_0^2>(t^*)^2\iff\lvert T_0\rvert>t^*\), as
+\((t^*)^2=F_{1,n-r,1-\alpha}\) and \(t^*>0\) (Theorem~\ref{r15-thm-t-symmetric}(b) and its proof).
 \end{proof}
 
 \begin{definition}[\citeat{searle-khuri}{\S11.9, \S12.9, \S12.13}]\label{r11-def-reduction}
@@ -33970,6 +33971,8 @@ Theorem~\ref{r13-thm-identification}(b).
 \needspace{3\baselineskip}
 (d)
 \begin{itemize}
+\item As \(\det\) is continuous, \(\det C>0\) (\(\det C<0\)) gives \(\det X>0\) (\(\det X<0\)) on a ball around \(C\), as in (c):
+the sets \(\{\det X>0\}\) and \(\{\det X<0\}\) are open, so the chain rule applies on them.
 \item On \(\{\det X>0\}\), \(\log\det X=h(\det X)\) with \(h(t)=\log t\); by the chain rule (Theorem~\ref{r13-thm-diff-rules}(c)) and (b),
 \(\mathrm{d}\log\det X=\frac1{\det X}\,\mathrm{d}\det X=\tr(X^{-1}\mathrm{d}X)\).
 \item On \(\{\det X<0\}\), \(\log\lvert\det X\rvert=h(-\det X)\), and \(\mathrm{d}\log\lvert\det X\rvert=\frac1{-\det X}(-\mathrm{d}\det X)=\tr(X^{-1}\mathrm{d}X)\).
@@ -34243,13 +34246,13 @@ minimum at \(c\); if \(\mathrm Hf(x)\) is PD for every \(x\in S\), the global mi
 \begin{proof}
 Throughout, for a given \(u\in\R^n\), \(I\) and \(h(t)=f(c+tu)\) are as in Lemma~\ref{r13-lem-line}.
 
-(a) Let \(f(x)\geqslant f(c)\) for \(x\in B(c,\delta)\subseteq S\) (a local minimum). For \(u=e_j\), \(h\) has a local minimum at \(t=0\), as
+(a) Let \(f(x)\geqslant f(c)\) for \(x\in B(c,\delta)\subseteq S\) (a local minimum; \(\delta\) small, as \(S\) is open). For \(u=e_j\), \(h\) has a local minimum at \(t=0\), as
 \(c+te_j\in B(c,\delta)\) for \(\lvert t\rvert<\delta\). By Fermat's rule and Lemma~\ref{r13-lem-line}(a),
 \(0=h'(0)=\mathrm Df(c)e_j=\partial f/\partial x_j(c)\), for every \(j\): \(\mathrm Df(c)=0\). For a maximum apply this to \(-f\).
 
 (b)
 \begin{itemize}
-\item Let \(f\) have a local minimum at \(c\), say \(f(x)\geqslant f(c)\) for \(x\in B(c,\delta)\subseteq S\), and suppose
+\item Let \(f\) have a local minimum at \(c\), say \(f(x)\geqslant f(c)\) for \(x\in B(c,\delta)\subseteq S\) (\(\delta\) small, as in (a)), and suppose
 \(u'\mathrm Hf(c)u<0\) for some \(u\). By Lemma~\ref{r13-lem-line}(a), \(h''(0)=u'\mathrm Hf(c)u<0\). As \(h''\) is continuous and \(I\) is
 open, \(h''(t)<0\) for \(\lvert t\rvert\leqslant\varepsilon\), for some \(\varepsilon>0\) with \([-\varepsilon,\varepsilon]\subseteq I\).
 \item Choose \(0<s_0\leqslant\varepsilon\) with \(s_0\lVert u\rVert<\delta\). By Lemma~\ref{r13-lem-line}(b) for the vector \(s_0u\) (first
