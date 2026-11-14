@@ -17,9 +17,6 @@
 !/note/Makefile
 !/note/book.tex
 !/note/book.pdf
-# The 10/21 version (Chapters 1-12) and the table of its numbers in the new version.
-!/note/lecture-1021.pdf
-!/note/concordance-1021.pdf
 
 # Per-session lectures: each PDF and its single-file source.
 /handout/*
