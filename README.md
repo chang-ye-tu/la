@@ -39,6 +39,7 @@
 | 12/16 | <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture12.pdf">Lecture 12: Linear Models II</a> |
 | 12/23 | **期末考** |
 | — | <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture13.pdf">Lecture 13: The Singular Value Decomposition</a> |
+| — | <a href="https://github.com/chang-ye-tu/la/blob/master/handout/lecture14.pdf">Lecture 14: Kronecker Products, vec, and Matrix Derivatives</a> |
 
 ## 授課教師
 

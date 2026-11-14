@@ -1,0 +1,784 @@
+\def\handoutsay{false}\def\handoutfill{false}
+\documentclass[12pt]{article}
+\newcommand{\handoutrunning}{Lecture 14: Kronecker Products, vec, and Matrix Derivatives}
+\providecommand{\handoutsay}{true}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[a4paper,margin=15mm,headheight=14pt,headsep=5mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,booktabs,needspace}
+\usepackage{pifont}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{fancyhdr}
+\usepackage{ifthen}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdfauthor={Chang-Ye Tu}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Linear Algebra}
+\fancyhead[R]{\small\handoutrunning}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt plus 1pt minus 1pt}
+\setlength{\emergencystretch}{1.5em}
+\usepackage{etoolbox}
+\newcommand{\handoutdisplayskips}{\setlength{\abovedisplayskip}{7pt plus 2pt minus 2pt}%
+  \setlength{\belowdisplayskip}{7pt plus 2pt minus 2pt}}
+\apptocmd{\normalsize}{\handoutdisplayskips}{}{\PackageWarning{handout}{could not patch normalsize}}
+\handoutdisplayskips
+\setlist[enumerate]{label=(\alph*),leftmargin=*,itemsep=2pt,topsep=3pt}
+\setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\iu}{\mathrm{i}}
+\newcommand{\contradiction}{\mathord{\text{\large\ding{56}}}}
+\newcommand{\one}{\mathbf 1}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\col}{col}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator\prb{\mathsf{P}}
+\DeclareMathOperator\expc{\mathsf{E}}
+\DeclareMathOperator\var{var}
+\DeclareMathOperator\cov{cov}
+\DeclareMathOperator\cor{cor}
+\DeclareMathOperator\argmin{argmin}
+\DeclareMathOperator\argmax{argmax}
+\DeclareMathOperator{\Span}{span}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{fact}{Fact}
+\renewcommand{\thefact}{F\arabic{fact}}
+\AddToHook{cmd/subsection/before}{\par\Needspace{9\baselineskip}}
+\AddToHook{env/theorem/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/proposition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/lemma/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/definition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/example/before}{\par\Needspace{4\baselineskip}}
+\definecolor{saybg}{gray}{0.86}
+\NewDocumentEnvironment{say}{+b}
+  {\ifthenelse{\equal{\handoutsay}{true}}{\par\Needspace{2\baselineskip}\noindent\colorbox{saybg}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}%
+   {\small\sffamily\ding{43}\enspace\textbf{Say.}\enspace#1}}\par}{}}
+  {}
+\providecommand{\handoutfill}{false}
+\newsavebox{\boardbox}
+\newlength{\boardht}
+\definecolor{boardrule}{gray}{0.55}
+\makeatletter
+\newcommand{\boardstart}{\par\if@inlabel\leavevmode\par\fi}
+\makeatother
+\NewDocumentEnvironment{board}{o +b}
+  {\boardstart\IfValueT{#1}{\noindent#1\par\nopagebreak}%
+   \noindent\begin{lrbox}{\boardbox}\begin{minipage}{\linewidth}#2\end{minipage}\end{lrbox}%
+   \setlength{\boardht}{\dimexpr\ht\boardbox+\dp\boardbox\relax}%
+   \ifthenelse{\equal{\handoutfill}{true}}%
+     {\setlength{\boardht}{1.4\boardht}%
+      {\setlength{\fboxsep}{0pt}\setlength{\fboxrule}{0.4pt}\color{boardrule}%
+       \framebox[\dimexpr\linewidth-2\fboxrule\relax]{\rule{0pt}{\boardht}}}}%
+     {\ifthenelse{\equal{\handoutsay}{true}}%
+        {\llap{\color{boardrule}\rule[-\dp\boardbox]{1.5pt}{\boardht}\hspace{4pt}}}{}%
+      \usebox{\boardbox}}%
+   \par}
+  {}
+\newcommand{\blank}[1]{\ifthenelse{\equal{\handoutfill}{true}}{\underline{\phantom{#1}}}{#1}}
+\newcommand{\lec}[1]{Lecture~#1}
+\newcommand{\handouttitle}[2]{%
+  \begin{center}
+  {\LARGE\sffamily\bfseries #2\par}\vspace{3pt}
+  {\sffamily Linear Algebra \textperiodcentered\ \lec{#1}\par}
+  \ifthenelse{\equal{\handoutsay}{true}}{\vspace{3pt}{\small\sffamily\colorbox{saybg}{\ding{43}\enspace\textbf{Say.}}\enspace
+    teacher's copy: the shaded boxes are not in the students' copy.\par}}{}
+  \ifthenelse{\equal{\handoutfill}{true}}{\vspace{3pt}{\small\sffamily Fill-in copy: complete the framed spaces in
+    class.\par}}{}
+  \end{center}}
+
+\hypersetup{pdftitle={Linear Algebra, Lecture 14: Kronecker Products, vec, and Matrix Derivatives}}
+\newcommand{\boardtop}{\vspace*{-\abovedisplayskip}}
+\DeclareMathOperator{\row}{row}
+\DeclareMathOperator{\vecop}{vec}
+\DeclareMathOperator{\adj}{adj}
+\begin{document}
+\handouttitle{14}{Kronecker Products, vec, and Matrix Derivatives}
+
+\textbf{Last time} (\lec{13}): the singular value decomposition \(A=P\diag(D,0)Q'\), the best approximation of
+rank \(k\) (Eckart--Young), principal components through the SVD, the spectral norm and the condition number.
+Throughout, \(I\) and \(e_j=\col_j(I)\) are of the size required.
+
+\subsection*{Facts}
+
+From calculus, used without proof (balls, open sets and partial derivatives: Definition~\ref{b16.17}).
+\begin{enumerate}[label=\textbf{F\arabic*.},ref=F\arabic*,leftmargin=*,itemsep=0pt,parsep=0pt,topsep=2pt]
+\item\label{f-calc} A function on an open set is \(C^1\) (\textbf{continuously differentiable}) if its partial
+derivatives exist and are continuous there, \(C^2\) if moreover the partial derivatives of these exist and are
+continuous; vector and matrix functions are \(C^1\) (\(C^2\)) if all their entries are. Sums, products and quotients
+(nonzero denominator) of \(C^1\) (\(C^2\)) functions are \(C^1\) (\(C^2\)), with
+\(\partial(f+g)/\partial x_j=\partial f/\partial x_j+\partial g/\partial x_j\),
+\(\partial(fg)/\partial x_j=(\partial f/\partial x_j)g+f\,\partial g/\partial x_j\),
+\(\partial(cf)/\partial x_j=c\,\partial f/\partial x_j\) (\(c\) constant); constants and the variables are \(C^2\), so
+polynomials in the variables are \(C^2\). A \(C^1\) function is continuous, and a continuous function that is \(\ne0\)
+(\(>0\)) at \(c\) is \(\ne0\) (\(>0\)) on some ball around \(c\). \textbf{Chain rule}: if \(g\) is \(C^1\) on an open
+\(S\subseteq\R^n\) with values in an open \(T\subseteq\R^m\), and \(f\) is \(C^1\) (\(C^2\)) on \(T\), then \(f\circ g\)
+is \(C^1\) on \(S\) (\(C^2\) if \(g\) is too) and \(\mathrm D(f\circ g)(x)=\mathrm Df(g(x))\,\mathrm Dg(x)\). \(\log t\)
+(\(t>0\)) is \(C^2\), with derivative \(1/t\).
+\item\label{f-sym} If \(f\) is \(C^2\) on an open set, then
+\(\partial^2f/\partial x_i\partial x_j=\partial^2f/\partial x_j\partial x_i\), where \(\partial^2f/\partial x_i\partial x_j\)
+is the partial derivative with respect to \(x_i\) of \(\partial f/\partial x_j\).
+\item\label{f-onevar} (One variable.) \textbf{Fermat's rule}: if \(h\) is differentiable on an open interval and has a
+local minimum or maximum at a point \(t_0\) of it, then \(h'(t_0)=0\). \textbf{Taylor's formula}: if \(h\) is \(C^2\)
+on an open interval that contains \([0,1]\), then \(h(1)=h(0)+h'(0)+\frac12h''(\tau)\) for some \(0<\tau<1\).
+\end{enumerate}
+
+\textbf{From earlier lectures} (restated).
+\begin{itemize}[itemsep=0pt,parsep=0pt,topsep=2pt]
+\item \lec{1}, Theorem~3(a), Definitions~7, 9, Theorems~8, 10(a),(b): matrix products are associative and
+distributive, \(c(AB)=(cA)B=A(cB)\); \((A')'=A\), \((A+B)'=A'+B'\), \((cA)'=cA'\), \((AB)'=B'A'\), \(x'y=y'x\), and a
+\(1\times1\) matrix (a number) is its own transpose; \(A\) is \textbf{symmetric} if \(A'=A\); \(\tr A=\sum_ia_{ii}\),
+\(\tr(A+B)=\tr A+\tr B\), \(\tr(cA)=c\tr A\), \(\tr(AB)=\tr(BA)\) (\(A\in\R^{m\times n}\),
+\(B\in\R^{n\times m}\)). \lec{1}, Definitions~12, 14: \(\diag(d_1,\dots,d_n)\) has the diagonal entries
+\(d_1,\dots,d_n\) and all other entries \(0\); the \textbf{summing vector} \(\one_n\in\R^n\) has all entries \(1\).
+\item \lec{1}, Theorem~4(a),(b),(d): for \(A=[a_1\ \cdots\ a_n]\in\R^{m\times n}\), \(B=[b_1\ \cdots\ b_p]\in\R^{n\times p}\)
+and \(x\in\R^n\): \(\col_j(AB)=Ab_j\); \(Ax=x_1a_1+\dots+x_na_n\), \(Ae_j=a_j\); \((AB)_{ij}=\row_i(A)\,b_j\) and
+\(AB=a_1\row_1(B)+\dots+a_n\row_n(B)\) (the \textbf{outer product expansion}). \lec{1}, Proposition~11(a),(b): \(e_i'Ae_j=a_{ij}\); for \(A,B\in\R^{m\times n}\), \(A=B\iff Ax=Bx\) for every
+\(x\in\R^n\).
+\item \lec{2}, Definition~10, Theorem~15, Corollary~12: \(A\in\R^{n\times n}\) is \textbf{invertible} if
+\(AB=BA=I_n\) for some \(B\), the \textbf{inverse} \(A^{-1}\). If \(BA=I\) or \(AB=I\), then \(A\) is invertible and
+\(B=A^{-1}\). If \(A\) is symmetric and invertible, \(A^{-1}\) is symmetric.
+\item \lec{5}, Definition~1, Theorem~2(b),(c): for a matrix \(A\) partitioned into blocks \(A_{ij}\), \(A'\) has the
+\((j,i)\) block \(A_{ij}'\); for a partition of \(B\) conformal for multiplication,
+\((AB)_{ik}=A_{i1}B_{1k}+\dots+A_{is}B_{sk}\).
+\item \lec{5}, Definition~7, Theorems~12(a), 13(a), 14: \(\det(a)=a\) for \(n=1\); for \(A\in\R^{n\times n}\), \(n\geqslant2\), \(A(i|j)\) is
+\(A\) without row \(i\) and column \(j\), \(\det A(i|j)\) a \textbf{minor}, \(c_{ij}=(-1)^{i+j}\det A(i|j)\) a
+\textbf{cofactor}, and \(\det A=a_{11}c_{11}+\dots+a_{n1}c_{n1}\). \(A\) is invertible \(\iff\)
+\(\det A\ne0\) \(\iff\) \(\rank A=n\); \(\det A=a_{i1}c_{i1}+\dots+a_{in}c_{in}\) for every
+\(i\) (expansion along row \(i\)); the \textbf{adjugate} \(\adj A=(c_{ij})'\) has \(A\adj A=(\det A)I_n\), and
+\(A^{-1}=\frac1{\det A}\adj A\) if \(\det A\ne0\).
+\item \lec{6}, Definition~1: the \textbf{length} \(\lVert x\rVert=\sqrt{x'x}\), the \textbf{distance}
+\(\lVert x-y\rVert\); \(\lVert cx\rVert=\lvert c\rvert\,\lVert x\rVert\) (\(c\in\R\)). \lec{13}, Definition~2: the
+\textbf{Frobenius norm} \(\lVert A\rVert_F=\bigl(\tr(A'A)\bigr)^{1/2}=\bigl(\sum_i\sum_ja_{ij}^2\bigr)^{1/2}\).
+\item \lec{8}, Definition~13, Theorems~14(c), 15(a),(b): a symmetric \(A\) is \textbf{positive definite} (PD) if \(x'Ax>0\) for all \(x\ne0\),
+\textbf{positive semidefinite} (PSD) if \(x'Ax\geqslant0\) for all \(x\); a PD matrix is PSD and invertible. If
+\(B\in\R^{n\times n}\) is PD and \(K\in\R^{n\times k}\) has \(\rank K=k\), then \(K'BK\) is PD. For
+\(A\in\R^{n\times p}\), \(A'A\) is PSD, and PD \(\iff\) \(\rank A=p\).
+\item \lec{11}, Definition~1, Theorems~2(b), 3(a): in the linear model \(y=X\beta+\varepsilon\)
+(\(X\in\R^{n\times p}\), \(y\in\R^n\)), a \textbf{least-squares estimate} \(\hat\beta\) minimizes
+\(S(\beta)=\lVert y-X\beta\rVert^2\); \(X'X\beta=X'y\) are the \textbf{normal equations}. \(X'X\) is invertible \(\iff\)
+\(\rank X=p\), and then \(\hat\beta=(X'X)^{-1}X'y\) is their only solution. \(\hat\beta\) is a least-squares estimate
+\(\iff\) \(X'X\hat\beta=X'y\). \lec{11}, Example~5: \(X=[\one_4\ (2,0,2,0)'\ (3,3,1,1)']\in\R^{4\times3}\), \(y=(9,3,5,3)'\);
+\(X'X=\left(\begin{smallmatrix}4&4&8\\4&8&8\\8&8&20\end{smallmatrix}\right)\) is invertible, so \(\rank X=3\);
+\((X'X)^{-1}=\frac14\left(\begin{smallmatrix}6&-1&-2\\-1&1&0\\-2&0&1\end{smallmatrix}\right)\), \(X'y=(20,28,44)'\),
+\(\hat\beta=(1,2,1)'\), \(S(\hat\beta)=4\).
+\end{itemize}
+
+\subsection*{1. Kronecker products and vec}
+
+\begin{definition}\label{b16.1}
+Let \(A=(a_{ij})\in\R^{m\times n}\) and \(B\in\R^{p\times q}\). The \textbf{Kronecker product} of \(A\) and \(B\) is
+\[
+A\otimes B=\begin{pmatrix}a_{11}B&\cdots&a_{1n}B\\\vdots&&\vdots\\a_{m1}B&\cdots&a_{mn}B\end{pmatrix}\in\R^{mp\times nq}
+\]
+with \(m\times n\) blocks of size \(p\times q\), the \((i,j)\) block \(a_{ij}B\): the entry in row \((i-1)p+r\) and column
+\((j-1)q+s\) is \(a_{ij}b_{rs}\). For \(a\in\R^m\), \(b\in\R^p\): \(a\otimes b=(a_1b',\dots,a_mb')'\in\R^{mp}\). For a
+number \(c\), \(c\otimes B=B\otimes c=cB\). Unlike \(AB\), \(A\otimes B\) is defined for any sizes.
+\end{definition}
+
+\Needspace{17\baselineskip}
+\begin{example}\label{b16.2}
+For \(A=(1,\ 2,\ 3)\) and \(B=\begin{pmatrix}6&7\\8&9\end{pmatrix}\), compute \(A\otimes B\), \(B\otimes A\),
+\(I_2\otimes\one_3\) and \(\one_3\otimes I_2\).
+\end{example}
+\textit{Solution.}
+\begin{board}[Definition~\ref{b16.1}, block by block: \(A\otimes B=[1B\ \ 2B\ \ 3B]\),
+\(B\otimes A=\left(\begin{smallmatrix}6A&7A\\8A&9A\end{smallmatrix}\right)\),
+\(I_2\otimes\one_3=\left(\begin{smallmatrix}1\one_3&0\one_3\\0\one_3&1\one_3\end{smallmatrix}\right)\),
+\(\one_3\otimes I_2=\left(\begin{smallmatrix}1I_2\\1I_2\\1I_2\end{smallmatrix}\right)\):]
+\[
+\begin{aligned}
+A\otimes B&=\begin{pmatrix}6&7&12&14&18&21\\8&9&16&18&24&27\end{pmatrix}\\[4pt]
+B\otimes A&=\begin{pmatrix}6&12&18&7&14&21\\8&16&24&9&18&27\end{pmatrix}
+\end{aligned}\qquad
+I_2\otimes\one_3=\begin{pmatrix}1&0\\1&0\\1&0\\0&1\\0&1\\0&1\end{pmatrix},\quad
+\one_3\otimes I_2=\begin{pmatrix}1&0\\0&1\\1&0\\0&1\\1&0\\0&1\end{pmatrix}
+\]
+Both \(A\otimes B\) and \(B\otimes A\) contain the twelve numbers \(a_jb_{rs}\), in different orders:
+\(A\otimes B\ne B\otimes A\).
+\end{board}
+
+\Needspace{10\baselineskip}
+\begin{theorem}\label{b16.3}
+Let \(A=(a_{ij})\in\R^{m\times n}\) and \(B\in\R^{p\times q}\).
+\begin{enumerate}
+\item \((A\otimes B)'=A'\otimes B'\).
+\item (\textbf{Mixed product}) For \(C=(c_{jk})\in\R^{n\times s}\) and \(D\in\R^{q\times t}\),
+\((A\otimes B)(C\otimes D)=(AC)\otimes(BD)\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) \(A\otimes B\) has \(m\) block rows and \(n\) block columns; \lec{5}, Theorem~2(b):]
+\[
+\text{block }(j,i)\text{ of }(A\otimes B)'=(a_{ij}B)'=a_{ij}B'=(A')_{ji}B'=\text{block }(j,i)\text{ of }A'\otimes B'
+\]
+\end{board}
+\begin{board}[(b) \(A\otimes B\) has \(n\) block columns of width \(q\), \(C\otimes D\) has \(n\) block rows of height
+\(q\): conformal for multiplication; \lec{5}, Theorem~2(c), and \lec{1}, Theorem~3(a):]
+\[
+\text{block }(i,k)\text{ of }(A\otimes B)(C\otimes D)=\sum_{j=1}^n(a_{ij}B)(c_{jk}D)=\Bigl(\sum_{j=1}^na_{ij}c_{jk}\Bigr)BD
+=(AC)_{ik}BD
+\]
+This is block \((i,k)\) of \((AC)\otimes(BD)\), for \(i=1,\dots,m\), \(k=1,\dots,s\).
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{13\baselineskip}
+\begin{corollary}\label{b16.4}
+\begin{enumerate}
+\item \(I_m\otimes I_p=I_{mp}\). For \(B\in\R^{p\times q}\) and \(D=\diag(d_1,\dots,d_m)\), \(D\otimes B\) is block
+diagonal with the diagonal blocks \(d_1B,\dots,d_mB\); in particular \(I_m\otimes B\) has \(m\) diagonal blocks \(B\).
+\item If \(A\in\R^{m\times m}\) and \(B\in\R^{p\times p}\) are invertible, then \(A\otimes B\) is invertible and
+\((A\otimes B)^{-1}=A^{-1}\otimes B^{-1}\).
+\item For \(A\in\R^{m\times m}\) and \(B\in\R^{p\times p}\), \(\tr(A\otimes B)=\tr A\cdot\tr B\).
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(a) The \((i,j)\) block of \(D\otimes B\) is \(d_iB\) for \(i=j\) and \(0\) for \(i\ne j\) (Definition~\ref{b16.1};
+\lec{1}, Definition~12); \(D=I_m\) gives \(I_m\otimes B\), and then \(B=I_p\) gives \(I_m\otimes I_p=I_{mp}\).
+\begin{board}[(b) Theorem~\ref{b16.3}(b); part (a) above:]
+\boardtop
+\begin{align*}
+&(A\otimes B)(A^{-1}\otimes B^{-1})=(AA^{-1})\otimes(BB^{-1})=I_m\otimes I_p=I_{mp}\\
+&\implies A\otimes B\text{ is invertible},\ (A\otimes B)^{-1}=A^{-1}\otimes B^{-1}&&\text{(\lec{2}, Theorem~15)}
+\end{align*}
+\end{board}
+\begin{board}[(c) The diagonal blocks of \(A\otimes B\) are \(a_{11}B,\dots,a_{mm}B\); \lec{1}, Theorem~10(a):]
+\[
+\tr(A\otimes B)=\textstyle\sum_{i=1}^m\tr(a_{ii}B)=\bigl(\sum_{i=1}^ma_{ii}\bigr)\tr B=\tr A\cdot\tr B
+\]
+\end{board}
+\nopagebreak
+\end{proof}
+
+\begin{definition}\label{b16.6}
+For \(A\in\R^{m\times n}\) with columns \(a_1,\dots,a_n\), \(\vecop A=(a_1',\dots,a_n')'\in\R^{mn}\) stacks the
+columns: \(a_{ij}\) is entry \((j-1)m+i\). For instance
+\(\vecop\left(\begin{smallmatrix}1&2&3\\4&5&6\end{smallmatrix}\right)=(1,4,2,5,3,6)'\). For \(A,B\in\R^{m\times n}\) and
+\(c,d\in\R\): \(\vecop(cA+dB)=c\vecop A+d\vecop B\); \(\vecop A=\vecop B\iff A=B\);
+\(\lVert\vecop A\rVert=\lVert A\rVert_F\) (\lec{13}, Definition~2).
+\end{definition}
+
+\Needspace{10\baselineskip}
+\begin{theorem}\label{b16.7}
+\begin{enumerate}
+\item For \(a\in\R^m\) and \(b\in\R^n\), \(\vecop(ab')=b\otimes a\).
+\item For \(A\in\R^{m\times n}\), \(B\in\R^{n\times p}\) and \(C\in\R^{p\times q}\),
+\(\vecop(ABC)=(C'\otimes A)\vecop B\).
+\item For \(A,B\in\R^{m\times n}\), \((\vecop A)'\vecop B=\tr(A'B)\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) \lec{1}, Theorem~4(a); Definition~\ref{b16.1}:]
+\[
+\col_j(ab')=b_ja\implies\vecop(ab')=(b_1a',\dots,b_na')'=b\otimes a
+\]
+\end{board}
+\begin{board}[(b) \(b_j=\col_j(B)\), \(u_j=\col_j(I_p)\); \lec{1}, Theorems~4(d), 3(a), 8; then (a) and
+Theorem~\ref{b16.3}(b); then the sum over \(j\) (Definition~\ref{b16.6}):]
+\boardtop
+\begin{align*}
+B&=BI_p=\textstyle\sum_{j=1}^pb_ju_j',\qquad ABC=\sum_j(Ab_j)(u_j'C)=\sum_j(Ab_j)(C'u_j)'\\
+\vecop\bigl((Ab_j)(C'u_j)'\bigr)&=(C'u_j)\otimes(Ab_j)=(C'\otimes A)(u_j\otimes b_j)=(C'\otimes A)\vecop(b_ju_j')\\
+\vecop(ABC)&=(C'\otimes A)\vecop\bigl(\textstyle\sum_jb_ju_j'\bigr)=(C'\otimes A)\vecop B
+\end{align*}
+\end{board}
+\begin{board}[(c) \lec{1}, Theorem~4(d); both vectors list the entries in the same order:]
+\[
+(A'B)_{jj}=\col_j(A)'\col_j(B)=\textstyle\sum_ia_{ij}b_{ij}\implies\tr(A'B)=\sum_{i,j}a_{ij}b_{ij}=(\vecop A)'\vecop B
+\]
+\end{board}
+\nopagebreak
+\end{proof}
+
+\subsection*{2. Derivatives and differentials}
+
+\begin{definition}\label{b16.17}
+The \textbf{ball} \(B(c,\delta)\) (\(c\in\R^n\), \(\delta>0\)) is the set of \(x\in\R^n\) with
+\(\lVert x-c\rVert<\delta\); \(S\subseteq\R^n\) is \textbf{open} if every \(c\in S\) has a ball \(B(c,\delta)\subseteq
+S\). For matrices \(X,C\in\R^{n\times q}\) the distance is \(\lVert X-C\rVert_F=\lVert\vecop X-\vecop C\rVert\)
+(Definition~\ref{b16.6}): a set of matrices is open if the set of the vectors \(\vecop X\) is. For a function \(f\) on an
+open \(S\) and \(x\in S\), the \textbf{partial derivative} \(\partial f(x)/\partial x_j\) is the derivative at \(t=0\) of
+\(t\mapsto f(x+te_j)\), when it exists. For \(f=(f_1,\dots,f_m)':S\to\R^m\) with all these partial derivatives at \(x\),
+the \textbf{derivative} (or \textbf{Jacobian matrix}) of \(f\) at \(x\) is
+\[
+\mathrm Df(x)=\frac{\partial f(x)}{\partial x'}\in\R^{m\times n}\quad\text{with }(i,j)\text{ entry }
+\frac{\partial f_i(x)}{\partial x_j}
+\]
+For \(m=1\), \(\partial f(x)/\partial x=(\mathrm Df(x))'\) is the \textbf{gradient}. A matrix function \(F\), with
+\(F(X)\in\R^{m\times p}\), of \(X\) in an open set of \(\R^{n\times q}\) is the vector function
+\(\vecop X\mapsto\vecop F(X)\): \(\mathrm DF(X)=\partial\vecop F(X)/\partial(\vecop X)'\in\R^{mp\times nq}\). For a
+scalar function \(\varphi(X)\), \(\partial\varphi/\partial X\in\R^{n\times q}\) has the \((i,j)\) entry
+\(\partial\varphi/\partial x_{ij}\); so \(\mathrm D\varphi(X)=\bigl(\vecop(\partial\varphi/\partial X)\bigr)'\).
+\end{definition}
+
+\begin{definition}\label{b16.20}
+Let \(f\) be \(C^1\) (\ref{f-calc}) on an open \(S\subseteq\R^n\), with values in \(\R^m\), and \(x\in S\). The
+\textbf{differential} of \(f\) at \(x\) is the linear function \(\mathrm{d}f(x)=\mathrm Df(x)\,\mathrm{d}x\) of an
+arbitrary \(\mathrm{d}x=(\mathrm{d}x_1,\dots,\mathrm{d}x_n)'\in\R^n\). For a \(C^1\) matrix function \(F\) of
+\(X\in\R^{n\times q}\), \(\mathrm{d}F(X)\) is the matrix of the size of \(F(X)\) with
+\(\vecop\mathrm{d}F(X)=\mathrm DF(X)\vecop\mathrm{d}X\) (\(\mathrm{d}X\in\R^{n\times q}\) arbitrary); its \((k,l)\)
+entry is \(\sum_{i,j}(\partial f_{kl}/\partial x_{ij})\,\mathrm{d}x_{ij}\). So \(\mathrm{d}f\) has the size of \(f\);
+for \(f(x)=x\), \(\mathrm Df=I_n\) and \(\mathrm{d}f=\mathrm{d}x\).
+\end{definition}
+
+\Needspace{14\baselineskip}
+\begin{theorem}[First identification theorem]\label{b16.21}
+\begin{enumerate}
+\item Let \(f\) be \(C^1\) on an open \(S\subseteq\R^n\) with values in \(\R^m\), \(x\in S\) and \(A\in\R^{m\times n}\).
+Then \(\mathrm{d}f(x)=A\,\mathrm{d}x\) for every \(\mathrm{d}x\) \(\iff\) \(\mathrm Df(x)=A\).
+\item Let \(F\) be a \(C^1\) matrix function of \(X\in\R^{n\times q}\) with values in \(\R^{m\times p}\), and
+\(A\in\R^{mp\times nq}\). Then \(\vecop\mathrm{d}F(X)=A\vecop\mathrm{d}X\) for every \(\mathrm{d}X\) \(\iff\)
+\(\mathrm DF(X)=A\).
+\item Let \(\varphi\) be a \(C^1\) scalar function of \(X\in\R^{n\times q}\), and \(C\in\R^{n\times q}\). Then
+\(\mathrm{d}\varphi(X)=\tr(C'\mathrm{d}X)\) for every \(\mathrm{d}X\) \(\iff\) \(\partial\varphi/\partial X=C\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) Definition~\ref{b16.20}:]
+\boardtop
+\begin{align*}
+&\Leftarrow\colon\ \mathrm{d}f(x)=\mathrm Df(x)\,\mathrm{d}x=A\,\mathrm{d}x\\
+&\Rightarrow\colon\ \mathrm Df(x)\,\mathrm{d}x=A\,\mathrm{d}x\text{ for every }\mathrm{d}x\implies\mathrm Df(x)=A
+&&\text{(\lec{1}, Proposition~11(b))}
+\end{align*}
+\end{board}
+(b) This is (a) for the vector function \(\vecop X\mapsto\vecop F(X)\) (Definitions~\ref{b16.17}, \ref{b16.20}).
+\begin{board}[(c) \(\tr(C'\mathrm{d}X)=(\vecop C)'\vecop\mathrm{d}X\) (Theorem~\ref{b16.7}(c)); (b) with \(m=p=1\),
+\(A=(\vecop C)'\); Definition~\ref{b16.17}:]
+\[
+\mathrm{d}\varphi(X)=(\vecop C)'\vecop\mathrm{d}X\text{ for every }\mathrm{d}X\iff\mathrm D\varphi(X)=(\vecop C)'
+\iff\partial\varphi/\partial x_{ij}=c_{ij}\text{ for all }i,j
+\]
+\end{board}
+\nopagebreak
+\end{proof}
+So, to find a derivative, compute the differential and bring it to one of these forms.
+
+\Needspace{11\baselineskip}
+\begin{theorem}\label{b16.22}
+Let \(F\), \(G\) be \(C^1\) matrix functions (vector and scalar functions included) of the same variable on an open set,
+\(A\) a constant matrix and \(\alpha\) a number.
+\begin{enumerate}
+\item \(\mathrm{d}A=0\), \(\mathrm{d}(\alpha F)=\alpha\,\mathrm{d}F\), \(\mathrm{d}(F+G)=\mathrm{d}F+\mathrm{d}G\),
+\(\mathrm{d}(F')=(\mathrm{d}F)'\), \(\mathrm{d}\vecop F=\vecop\mathrm{d}F\), and \(\mathrm{d}\tr F=\tr\mathrm{d}F\) for
+square \(F\).
+\item \(\mathrm{d}(FG)=(\mathrm{d}F)G+F\,\mathrm{d}G\) whenever \(FG\) is defined.
+\item (\textbf{Chain rule}) Let \(y=g(x)\) be \(C^1\) on an open \(S\subseteq\R^n\) with values in an open
+\(T\subseteq\R^m\), and \(z=f(y)\) \(C^1\) on \(T\), with \(\mathrm{d}z=A(y)\,\mathrm{d}y\) and
+\(\mathrm{d}y=B(x)\,\mathrm{d}x\). Then the differential of \(x\mapsto f(g(x))\) is
+\(\mathrm{d}z=A(g(x))B(x)\,\mathrm{d}x\). The same holds for matrix functions, through \(\vecop\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) The \((k,l)\) entry of \(\mathrm{d}F\) is \(\sum_{i,j}(\partial f_{kl}/\partial x_{ij})\,\mathrm{d}x_{ij}\)
+(Definition~\ref{b16.20}); the partial derivatives of a constant are \(0\), those of \(\alpha f_{kl}\) and
+\(f_{kl}+g_{kl}\) are \(\alpha\,\partial f_{kl}/\partial x_{ij}\) and \(\partial f_{kl}/\partial x_{ij}+\partial
+g_{kl}/\partial x_{ij}\) (\ref{f-calc}). \(F'\), \(\vecop F\) and \(\tr F\) rearrange or add up entries of \(F\), so their
+differentials rearrange or add up the differentials of these entries.
+\begin{board}[(b) The product rule of \ref{f-calc}; \((FG)_{kl}=\sum_rf_{kr}g_{rl}\) and (a):]
+\boardtop
+\begin{align*}
+\mathrm{d}(uv)&=\textstyle\sum_{i,j}\bigl((\partial u/\partial x_{ij})v+u\,\partial v/\partial x_{ij}\bigr)\mathrm{d}x_{ij}
+=(\mathrm{d}u)v+u\,\mathrm{d}v&&(u,v\text{ scalar})\\
+\mathrm{d}(FG)_{kl}&=\textstyle\sum_r\bigl((\mathrm{d}f_{kr})g_{rl}+f_{kr}\,\mathrm{d}g_{rl}\bigr)
+=\bigl((\mathrm{d}F)G+F\,\mathrm{d}G\bigr)_{kl}
+\end{align*}
+\end{board}
+(c) By the chain rule (\ref{f-calc}), \(\mathrm D(f\circ g)(x)=\mathrm Df(g(x))\,\mathrm Dg(x)\), and
+\(\mathrm Df(y)=A(y)\), \(\mathrm Dg(x)=B(x)\) (Theorem~\ref{b16.21}(a)); so the differential of \(f\circ g\) at \(x\) is
+\(A(g(x))B(x)\,\mathrm{d}x\) (Definition~\ref{b16.20}).
+\end{proof}
+
+\Needspace{15\baselineskip}
+\begin{theorem}\label{b16.24}
+Let \(a\in\R^n\) and \(A\in\R^{m\times n}\) be constant.
+\begin{enumerate}
+\item \(\mathrm{d}(a'x)=a'\,\mathrm{d}x\): \(\mathrm D(a'x)=a'\), and the gradient of \(a'x\) is \(a\).
+\item \(\mathrm{d}(Ax)=A\,\mathrm{d}x\): \(\mathrm D(Ax)=A\).
+\item For \(A\in\R^{n\times n}\), \(\mathrm{d}(x'Ax)=x'(A+A')\,\mathrm{d}x\): \(\mathrm D(x'Ax)=x'(A+A')\), and the
+gradient is \((A+A')x\), which is \(2Ax\) if \(A\) is symmetric.
+\item For \(X\in\R^{n\times q}\), \(a\in\R^n\) and \(b\in\R^q\), \(\mathrm{d}(a'Xb)=a'(\mathrm{d}X)b\):
+\(\partial(a'Xb)/\partial X=ab'\), and \(\mathrm D(a'Xb)=(b\otimes a)'\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a), (b) Theorem~\ref{b16.22}(a),(b), then Theorem~\ref{b16.21}(a):]
+\boardtop
+\begin{align*}
+&\text{(b)}\colon\ \mathrm{d}(Ax)=(\mathrm{d}A)x+A\,\mathrm{d}x=A\,\mathrm{d}x\\
+&\text{(a)}\colon\ A=a'\text{ in (b)}
+\end{align*}
+\end{board}
+\begin{board}[(c) Theorem~\ref{b16.22}(a),(b); the number \((\mathrm{d}x)'Ax\) is its own transpose (\lec{1},
+Theorem~8):]
+\boardtop
+\begin{align*}
+\mathrm{d}(x'Ax)&=(\mathrm{d}x)'Ax+x'A\,\mathrm{d}x=x'A'\,\mathrm{d}x+x'A\,\mathrm{d}x=x'(A+A')\,\mathrm{d}x\\
+\mathrm D(x'Ax)&=x'(A+A'),\quad\text{gradient }\bigl(x'(A+A')\bigr)'=(A+A')x&&\text{(Theorem~\ref{b16.21}(a))}
+\end{align*}
+\end{board}
+\begin{board}[(d) Theorem~\ref{b16.22}(a),(b); \lec{1}, Theorem~10(b):]
+\boardtop
+\begin{align*}
+\mathrm{d}(a'Xb)&=a'(\mathrm{d}X)b=\tr\bigl(a'(\mathrm{d}X)b\bigr)=\tr\bigl(ba'\,\mathrm{d}X\bigr)
+=\tr\bigl((ab')'\,\mathrm{d}X\bigr)\\
+\partial(a'Xb)/\partial X&=ab',\qquad\mathrm D(a'Xb)=\bigl(\vecop(ab')\bigr)'=(b\otimes a)'
+&&\text{(Theorems~\ref{b16.21}(c), \ref{b16.7}(a))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{18\baselineskip}
+\begin{theorem}\label{b16.26}
+Let \(X\in\R^{n\times n}\) (\(n\geqslant2\)) be a variable and \(A\in\R^{n\times n}\) constant; \(c_{ij}\) are the
+cofactors of \(X\) (\lec{5}, Definition~7).
+\begin{enumerate}
+\item \(\mathrm{d}\tr(AX)=\tr(A\,\mathrm{d}X)\), so \(\partial\tr(AX)/\partial X=A'\).
+\item \(\det X\) is a polynomial in the entries of \(X\), \(\partial\det X/\partial x_{ij}=c_{ij}\), and
+\(\mathrm{d}\det X=\tr(\adj X\,\mathrm{d}X)\). If \(X\) is invertible, then
+\(\mathrm{d}\det X=\det X\,\tr(X^{-1}\mathrm{d}X)\) (\textbf{Jacobi's formula}) and
+\(\partial\det X/\partial X=\det X\,(X^{-1})'\).
+\item The invertible matrices form an open set, on which \(X\mapsto X^{-1}\) is \(C^2\), and
+\(\mathrm{d}X^{-1}=-X^{-1}(\mathrm{d}X)X^{-1}\), \(\mathrm D(X^{-1})=-(X^{-1})'\otimes X^{-1}\).
+\item On the open set \(\{X:\det X\ne0\}\), \(\mathrm{d}\log\lvert\det X\rvert=\tr(X^{-1}\mathrm{d}X)\); so
+\(\partial\log\det X/\partial X=(X^{-1})'\) where \(\det X>0\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) Theorem~\ref{b16.22}(a),(b); \((A')'=A\):]
+\[
+\mathrm{d}\tr(AX)=\tr\mathrm{d}(AX)=\tr(A\,\mathrm{d}X)=\tr\bigl((A')'\mathrm{d}X\bigr)\implies
+\partial\tr(AX)/\partial X=A'\qquad\text{(Theorem~\ref{b16.21}(c))}
+\]
+\end{board}
+\begin{board}[(b) \(\det X\) and its partial derivatives (\lec{5}, Definition~7, Theorem~13(a)):]
+\boardtop
+\begin{align*}
+&\det(x_{11})=x_{11};\quad\det X=\textstyle\sum_kx_{1k}(-1)^{1+k}\det X(1|k)&&\text{(row \(1\))}\\
+&\implies\det X\text{ is a polynomial in the entries, so it is \(C^2\)}&&\text{(induction on the size; \ref{f-calc})}\\
+&\det X=\textstyle\sum_kx_{ik}c_{ik},\quad c_{ik}=(-1)^{i+k}\det X(i|k)\text{ does not involve row }i&&\text{(row \(i\))}\\
+&\implies\det X=c_{ij}x_{ij}+(\text{terms without }x_{ij})\implies\partial\det X/\partial x_{ij}=c_{ij}
+\end{align*}
+\end{board}
+\begin{board}[(b) Definition~\ref{b16.20} (\(1\times1\) case); \((\adj X)_{ji}=c_{ij}\); if \(X\) is invertible,
+\(\det X\ne0\) and \(\adj X=\det X\cdot X^{-1}\) (\lec{5}, Theorems~12(a), 14):]
+\boardtop
+\begin{align*}
+\mathrm{d}\det X&=\textstyle\sum_{i,j}c_{ij}\,\mathrm{d}x_{ij}=\sum_j\sum_i(\adj X)_{ji}\,\mathrm{d}x_{ij}
+=\sum_j(\adj X\,\mathrm{d}X)_{jj}=\tr(\adj X\,\mathrm{d}X)\\
+&=\det X\,\tr(X^{-1}\mathrm{d}X)\quad(X\text{ invertible})\\
+\partial\det X/\partial X&=(c_{ij})=(\adj X)'=\det X\,(X^{-1})'\quad(X\text{ invertible})
+\end{align*}
+\end{board}
+\begin{board}[(c) \lec{5}, Theorems~12(a), 14; \ref{f-calc}; Theorem~\ref{b16.22}(a),(b); Theorems~\ref{b16.7}(b),
+\ref{b16.21}(b):]
+\boardtop
+\begin{align*}
+&\det C\ne0\implies\det X\ne0\text{ on a ball around }C&&(\det\text{ continuous, (b)})\\
+&X^{-1}=\tfrac1{\det X}\adj X\colon\text{ polynomials over a nonzero polynomial}\implies C^2\\
+&X^{-1}X=I_n\implies(\mathrm{d}X^{-1})X+X^{-1}\mathrm{d}X=0\implies\mathrm{d}X^{-1}=-X^{-1}(\mathrm{d}X)X^{-1}\\
+&\vecop\mathrm{d}X^{-1}=-\bigl((X^{-1})'\otimes X^{-1}\bigr)\vecop\mathrm{d}X\implies\mathrm D(X^{-1})=-(X^{-1})'\otimes X^{-1}
+\end{align*}
+\end{board}
+\begin{board}[(d) \(h(t)=\log t\), \(h'(t)=1/t\) (\ref{f-calc}); Theorem~\ref{b16.22}(c); part (b) above:]
+\boardtop
+\begin{align*}
+\det X>0&\colon\ \mathrm{d}\log\det X=\tfrac1{\det X}\,\mathrm{d}\det X=\tr(X^{-1}\mathrm{d}X)&&\text{(\(\{\det X>0\}\) open: (b), \ref{f-calc})}\\
+\det X<0&\colon\ \mathrm{d}\log(-\det X)=\tfrac1{-\det X}(-\mathrm{d}\det X)=\tr(X^{-1}\mathrm{d}X)&&\text{(\(\{\det X<0\}\) open)}\\
+\det X>0&\colon\ \partial\log\det X/\partial X=(X^{-1})'&&\text{(Theorem~\ref{b16.21}(c), \(C=(X^{-1})'\))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\subsection*{3. The Hessian matrix and extrema}
+
+\Needspace{9\baselineskip}
+\begin{definition}\label{b16.31}
+Let \(f\) be a \(C^2\) scalar function on an open \(S\subseteq\R^n\). The \textbf{Hessian matrix} of \(f\) at \(x\in S\)
+is \(\mathrm Hf(x)=\partial^2f(x)/\partial x\,\partial x'\in\R^{n\times n}\), with \((i,j)\) entry
+\(\partial^2f(x)/\partial x_i\partial x_j\); it is symmetric (\ref{f-sym}), and it is the derivative of the gradient,
+\(\mathrm Hf=\mathrm D\bigl((\mathrm Df)'\bigr)\). The \textbf{second differential} \(\mathrm{d}^2f(x)\) is the
+differential of \(x\mapsto\mathrm{d}f(x)=\mathrm Df(x)\,\mathrm{d}x\) with \(\mathrm{d}x\) held fixed.
+\end{definition}
+\begin{board}[With \(a_j=\partial f/\partial x_j\); Theorem~\ref{b16.22}(a),(b), \(\mathrm{d}x\) fixed:]
+\[
+\mathrm{d}f=\textstyle\sum_ja_j\,\mathrm{d}x_j,\qquad
+\mathrm{d}^2f=\sum_j(\mathrm{d}a_j)\,\mathrm{d}x_j=\sum_j\sum_i\frac{\partial a_j}{\partial x_i}\,\mathrm{d}x_i\,\mathrm{d}x_j
+=(\mathrm{d}x)'\,\mathrm Hf(x)\,\mathrm{d}x
+\]
+\end{board}
+To compute \(\mathrm{d}^2f\), apply Theorem~\ref{b16.22} to \(\mathrm{d}f\), with \(\mathrm{d}(\mathrm{d}x)=0\).
+
+\Needspace{11\baselineskip}
+\begin{lemma}\label{b16.19}
+\begin{enumerate}
+\item For \(A\in\R^{n\times n}\): \(x'Ax=0\) for every \(x\in\R^n\) \(\iff\) \(A'=-A\).
+\item For \(A,B\in\R^{n\times n}\): \(x'Ax=x'Bx\) for every \(x\) \(\iff\) \(A+A'=B+B'\). For symmetric \(A\), \(B\),
+\(x'Ax=x'Bx\) for every \(x\) only if \(A=B\).
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+\begin{board}[(a) A number is its own transpose; \(e_i'Ae_j=a_{ij}\) (\lec{1}, Proposition~11(a)):]
+\boardtop
+\begin{align*}
+&\Leftarrow\colon\ x'Ax=(x'Ax)'=x'A'x=-x'Ax\implies x'Ax=0\\
+&\Rightarrow\colon\ x=e_i\colon\ a_{ii}=0;\quad x=e_i+e_j\ (i\ne j)\colon\ 0=a_{ii}+a_{ij}+a_{ji}+a_{jj}=a_{ij}+a_{ji}
+\implies A'=-A
+\end{align*}
+\end{board}
+\begin{board}[(b) (a) for \(A-B\):]
+\[
+x'Ax=x'Bx\ \forall x\iff x'(A-B)x=0\ \forall x\iff(A-B)'=-(A-B)\iff A+A'=B+B'
+\]
+For symmetric \(A\), \(B\) this reads \(2A=2B\).
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{9\baselineskip}
+\begin{theorem}[Second identification theorem]\label{b16.32}
+Let \(f\) be a \(C^2\) scalar function on an open \(S\subseteq\R^n\), \(x\in S\) and \(B\in\R^{n\times n}\). Then
+\(\mathrm{d}^2f(x)=(\mathrm{d}x)'B\,\mathrm{d}x\) for every \(\mathrm{d}x\) \(\iff\) \(\mathrm Hf(x)=\frac12(B+B')\).
+\end{theorem}
+\begin{proof}
+\begin{board}[\(\mathrm Hf(x)\) and \(\frac12(B+B')\) are symmetric; \(\mathrm{d}^2f=(\mathrm{d}x)'\mathrm Hf\,\mathrm{d}x\)
+(Definition~\ref{b16.31}):]
+\boardtop
+\begin{align*}
+&\Rightarrow\colon\ (\mathrm{d}x)'\mathrm Hf(x)\,\mathrm{d}x=(\mathrm{d}x)'B\,\mathrm{d}x\text{ for every }\mathrm{d}x
+\implies2\mathrm Hf(x)=B+B'&&\text{(Lemma~\ref{b16.19}(b))}\\
+&\Leftarrow\colon\ (\mathrm{d}x)'\tfrac12(B+B')\,\mathrm{d}x=(\mathrm{d}x)'B\,\mathrm{d}x
+&&((\mathrm{d}x)'B'\,\mathrm{d}x=(\mathrm{d}x)'B\,\mathrm{d}x)
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+For \(f(x)=x'Ax\) (\(A\in\R^{n\times n}\)): \(\mathrm{d}f=(\mathrm{d}x)'Ax+x'A\,\mathrm{d}x\),
+\(\mathrm{d}^2f=2(\mathrm{d}x)'A\,\mathrm{d}x\), so \(\mathrm Hf=A+A'\), which is \(2A\) for symmetric \(A\).
+
+\begin{definition}\label{b16.34}
+Let \(f\) be a scalar function on \(S\subseteq\R^n\) and \(c\in S\). \(f\) has a \textbf{local minimum} at \(c\) if
+\(f(x)\geqslant f(c)\) for all \(x\in S\) in some ball \(B(c,\delta)\), a \textbf{strict local minimum} if \(f(x)>f(c)\)
+there for \(x\ne c\), and a \textbf{global minimum} (\textbf{strict global minimum}) if \(f(x)\geqslant f(c)\) for all
+\(x\in S\) (\(f(x)>f(c)\) for \(x\ne c\)); maxima likewise, with the inequalities reversed. If \(S\) is open and \(f\) is
+\(C^1\), \(c\) is a \textbf{stationary point} of \(f\) if \(\mathrm Df(c)=0\). \(S\) is \textbf{convex} if
+\(tx+(1-t)y\in S\) for all \(x,y\in S\) and \(0\leqslant t\leqslant1\).
+\end{definition}
+
+\Needspace{15\baselineskip}
+\begin{lemma}\label{b16.35}
+Let \(S\subseteq\R^n\) be open, \(f\) a \(C^2\) scalar function on \(S\), \(c\in S\) and \(u\in\R^n\). Let
+\(J=\{t\in\R:c+tu\in S\}\) and \(h(t)=f(c+tu)\) for \(t\in J\).
+\begin{enumerate}
+\item \(J\) is open and contains \(0\); \(h\) is \(C^2\) on \(J\), with \(h'(t)=\mathrm Df(c+tu)u\) and
+\(h''(t)=u'\mathrm Hf(c+tu)u\).
+\item If \(S\) is convex and \(c+u\in S\), then, for some \(0<\tau<1\),
+\(f(c+u)=f(c)+\mathrm Df(c)u+\frac12u'\mathrm Hf(c+\tau u)u\).
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+\begin{board}[(a) \(0\in J\) (\(c\in S\)); \lec{6}, Definition~1; the chain rule of \ref{f-calc} (\(t\mapsto c+tu\) has the derivative \(u\)):]
+\boardtop
+\begin{align*}
+&c+t_0u\in S\implies B(c+t_0u,\varepsilon)\subseteq S\ni c+tu\text{ for }\lvert t-t_0\rvert\,\lVert u\rVert<\varepsilon\implies J\text{ open}\\
+&h'(t)=\mathrm Df(c+tu)u=\textstyle\sum_ju_j\,\frac{\partial f}{\partial x_j}(c+tu)\\
+&h''(t)=\textstyle\sum_j\sum_iu_ju_i\,\frac{\partial^2f}{\partial x_i\partial x_j}(c+tu)=u'\mathrm Hf(c+tu)u,
+\text{ continuous in }t&&\text{(Definition~\ref{b16.31})}
+\end{align*}
+\end{board}
+\begin{board}[(b) For \(t\) between \(t_1,t_2\in J\), \(c+tu\) is a convex combination of \(c+t_1u\), \(c+t_2u\):]
+\boardtop
+\begin{align*}
+&J\text{ is an open interval containing \(0\) and \(1\)}&&\text{(\(S\) convex; (a))}\\
+&f(c+u)=h(1)=h(0)+h'(0)+\tfrac12h''(\tau)=f(c)+\mathrm Df(c)u+\tfrac12u'\mathrm Hf(c+\tau u)u
+&&\text{(\ref{f-onevar}; (a))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{12\baselineskip}
+\begin{theorem}\label{b16.36}
+Let \(S\subseteq\R^n\) be open, \(f\) a \(C^2\) scalar function on \(S\), and \(c\in S\).
+\begin{enumerate}
+\item (\textbf{First-order condition}) If \(f\) has a local minimum or maximum at \(c\), then \(\mathrm Df(c)=0\).
+\item (\textbf{Global minimum}) Let \(S\) be convex. If \(\mathrm Df(c)=0\) and \(\mathrm Hf(x)\) is PSD for every
+\(x\in S\), then \(f\) has a global minimum at \(c\); if \(\mathrm Hf(x)\) is PD for every \(x\in S\), it is strict.
+\item (\textbf{Constraints}) Let \(S\) be convex, \(g\) a \(C^2\) function on \(S\) with values in \(\R^m\),
+\(l\in\R^m\), and \(\psi(x)=f(x)-l'g(x)\). If \(\mathrm D\psi(c)=0\), \(g(c)=0\) and \(\mathrm H\psi(x)\) is PSD (PD)
+for every \(x\in S\), then \(f(x)\geqslant f(c)\) (\(f(x)>f(c)\) for \(x\ne c\)) for every \(x\in S\) with \(g(x)=0\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) Local minimum (for a maximum apply this to \(-f\)): \(f(x)\geqslant f(c)\) on a ball
+\(B(c,\delta)\subseteq S\) (\(\delta\) small; \(S\) open); \(h(t)=f(c+te_j)\) (Lemma~\ref{b16.35}, \(u=e_j\)); \(\mathrm Df(c)e_j\) is column \(j\) of \(\mathrm Df(c)\) (\lec{1}, Theorem~4(b)):]
+\boardtop
+\begin{align*}
+&c+te_j\in B(c,\delta)\text{ for }\lvert t\rvert<\delta\implies h\text{ has a local minimum at }t=0\\
+&0=h'(0)=\mathrm Df(c)e_j=\partial f(c)/\partial x_j\text{ for every }j\implies\mathrm Df(c)=0
+&&\text{(\ref{f-onevar}; Lemma~\ref{b16.35}(a))}
+\end{align*}
+\end{board}
+\begin{board}[(b) \(x\in S\), \(u=x-c\); Lemma~\ref{b16.35}(b) (\(S\) convex, \(c+u=x\in S\)) and \(\mathrm Df(c)=0\):]
+\boardtop
+\begin{align*}
+&f(x)=f(c)+\tfrac12u'\mathrm Hf(c+\tau u)u,\qquad c+\tau u=(1-\tau)c+\tau x\in S\\
+&\mathrm Hf(c+\tau u)\text{ PSD}\implies f(x)\geqslant f(c);\qquad\text{PD and }x\ne c\ (u\ne0)\implies f(x)>f(c)
+\end{align*}
+\end{board}
+\begin{board}[(c) \(\psi\) is \(C^2\) on \(S\) (\ref{f-calc}); (b) for \(\psi\):]
+\boardtop
+\begin{align*}
+&\psi(x)\geqslant\psi(c)\text{ for every }x\in S\ (>\text{ for }x\ne c\text{ in the PD case})\\
+&g(x)=0\implies f(x)=\psi(x);\qquad g(c)=0\implies\psi(c)=f(c)
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+To use (c), solve \(\mathrm D\psi(x)=0\), \(g(x)=0\) for \(x\) and the \textbf{Lagrange multipliers} \(l\)
+(\textbf{Lagrange's method}), then check the Hessian of the \textbf{Lagrangian} \(\psi\). For linear constraints
+\(g(x)=Rx-r\): \(\mathrm{d}^2(l'Rx-l'r)=\mathrm{d}(l'R\,\mathrm{d}x)=0\), so \(\mathrm H\psi=\mathrm Hf\)
+(Theorem~\ref{b16.32}).
+
+\Needspace{13\baselineskip}
+\begin{example}\label{b16.37}
+Let \(A\in\R^{n\times n}\) be PD, \(b\in\R^n\), and \(f(x)=\frac12x'Ax-b'x\) on \(\R^n\). (a) Minimize \(f\).
+(b) Minimize \(f\) subject to \(c'x=0\) (\(c\in\R^n\), \(c\ne0\)).
+\end{example}
+\textit{Solution.} \(\R^n\) is open and convex; \(f\) is a polynomial, so \(C^2\) (\ref{f-calc}).
+\begin{board}[(a) Theorem~\ref{b16.24}(a),(c) with \(A'=A\); Theorem~\ref{b16.32}; \(A\) is invertible (\lec{8},
+Theorem~14(c)), \(A^{-1}\) symmetric (\lec{2}, Corollary~12):]
+\boardtop
+\begin{align*}
+&\mathrm{d}f=x'A\,\mathrm{d}x-b'\,\mathrm{d}x=(Ax-b)'\mathrm{d}x,\quad\mathrm{d}^2f=(\mathrm{d}x)'A\,\mathrm{d}x,\quad
+\mathrm Hf=A\text{ PD at every }x\\
+&\mathrm Df(x)=0\iff Ax=b\iff x=\hat x=A^{-1}b\implies\text{the strict global minimizer}
+&&\text{(Theorem~\ref{b16.36}(b))}\\
+&(x-\hat x)'A(x-\hat x)=x'Ax-2b'x+b'A^{-1}b=2f(x)+b'A^{-1}b\geqslant0,\ =0\text{ at }x=\hat x\\
+&\text{minimum: }f(\hat x)=-\tfrac12b'A^{-1}b
+\end{align*}
+\end{board}
+\begin{board}[(b) \(\psi(x)=f(x)-\lambda c'x\); \lec{5}, Theorem~2(c); \(A^{-1}=(A^{-1})'AA^{-1}\) is PD (\lec{8},
+Theorem~15(a), \(K=A^{-1}\), \(\rank A^{-1}=n\) by \lec{5}, Theorem~12(a)):]
+\boardtop
+\begin{align*}
+&\mathrm{d}\psi=(Ax-b-\lambda c)'\mathrm{d}x\colon\ Ax=b+\lambda c,\ c'x=0\iff
+\begin{pmatrix}A&c\\c'&0\end{pmatrix}\begin{pmatrix}x\\-\lambda\end{pmatrix}=\begin{pmatrix}b\\0\end{pmatrix}\\
+&x=A^{-1}(b+\lambda c),\quad0=c'x=c'A^{-1}b+\lambda c'A^{-1}c,\quad c'A^{-1}c>0\\
+&\tilde\lambda=-\frac{c'A^{-1}b}{c'A^{-1}c},\qquad\tilde x=A^{-1}b-\frac{c'A^{-1}b}{c'A^{-1}c}\,A^{-1}c\\
+&\mathrm H\psi=\mathrm Hf=A\text{ PD}\implies\tilde x\text{ is the strict minimizer under }c'x=0
+&&\text{(Theorem~\ref{b16.36}(c))}
+\end{align*}
+\end{board}
+
+\Needspace{17\baselineskip}
+\subsection*{4. Least squares and the Newton--Raphson method}
+
+\Needspace{14\baselineskip}
+\begin{theorem}\label{b16.41}
+Let \(X\in\R^{n\times p}\), \(y\in\R^n\), and \(S(\beta)=(y-X\beta)'(y-X\beta)\) for \(\beta\in\R^p\).
+\begin{enumerate}
+\item \(\mathrm{d}S=-2(y-X\beta)'X\,\mathrm{d}\beta\), so \(\mathrm DS(\beta)=-2(y-X\beta)'X\) and the gradient is
+\(2X'X\beta-2X'y\); \(\mathrm HS(\beta)=2X'X\), which is PSD.
+\item \(\hat\beta\) minimizes \(S\) \(\iff\) \(X'X\hat\beta=X'y\) (the normal equations).
+\item If \(\rank X=p\), then \(\mathrm HS\) is PD, and \(\hat\beta=(X'X)^{-1}X'y\) is the strict global minimizer.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\begin{board}[(a) \(e=y-X\beta\); Theorems~\ref{b16.22}(a),(b), \ref{b16.24}(b); \((\mathrm{d}e)'e=e'\mathrm{d}e\) (a
+number); \(\mathrm{d}\beta\) fixed in \(\mathrm{d}^2S\); \(X'X\) is PSD (\lec{8}, Theorem~15(b)):]
+\boardtop
+\begin{align*}
+&\mathrm{d}e=-X\,\mathrm{d}\beta,\quad\mathrm{d}S=(\mathrm{d}e)'e+e'\,\mathrm{d}e=2e'\,\mathrm{d}e=-2(y-X\beta)'X\,\mathrm{d}\beta\\
+&\mathrm DS(\beta)=-2(y-X\beta)'X,\ \text{gradient }-2X'(y-X\beta)=2X'X\beta-2X'y&&\text{(Theorem~\ref{b16.21}(a))}\\
+&\mathrm{d}^2S=-2(\mathrm{d}e)'X\,\mathrm{d}\beta=2(\mathrm{d}\beta)'X'X\,\mathrm{d}\beta\implies\mathrm HS=2X'X\text{, PSD}
+&&\text{(Theorem~\ref{b16.32})}
+\end{align*}
+\end{board}
+\begin{board}[(b) \(S\) is a polynomial, so \(C^2\) (\ref{f-calc}); \(\R^p\) is open and convex:]
+\boardtop
+\begin{align*}
+&\Rightarrow\colon\ \mathrm DS(\hat\beta)=0\iff X'(y-X\hat\beta)=0&&\text{(Theorem~\ref{b16.36}(a))}\\
+&\Leftarrow\colon\ \hat\beta\text{ is a stationary point, }\mathrm HS\text{ PSD everywhere}\implies\text{global minimizer}
+&&\text{(Theorem~\ref{b16.36}(b))}
+\end{align*}
+\end{board}
+\begin{board}[(c) \lec{8}, Theorem~15(b); \lec{11}, Theorem~2(b):]
+\boardtop
+\begin{align*}
+&\rank X=p\implies X'X\text{ PD},\ x'(2X'X)x>0\ (x\ne0)\implies\mathrm HS\text{ PD}\\
+&X'X\text{ invertible},\ \text{the only solution of the normal equations is }(X'X)^{-1}X'y\\
+&\implies\hat\beta=(X'X)^{-1}X'y\text{ is the strict global minimizer}&&\text{(Theorem~\ref{b16.36}(b))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+Part (b) is \lec{11}, Theorem~3(a), proved there by projection, without calculus.
+
+\Needspace{13\baselineskip}
+\begin{example}\label{b16.42}
+For \(X\) and \(y\) of \lec{11}, Example~5, find the gradient of \(S\) at \(\beta=0\) and at \(\hat\beta=(1,2,1)'\),
+and show that \(\hat\beta\) is the strict global minimizer of \(S\).
+\end{example}
+\textit{Solution.}
+\begin{board}[Theorem~\ref{b16.41}(a),(c): the gradient is \(2X'X\beta-2X'y\); \(X'X\), \(X'y\), \(\rank X=3\) and
+\(S(\hat\beta)=4\) from \lec{11}, Example~5:]
+\boardtop
+\begin{align*}
+&X'X=\begin{pmatrix}4&4&8\\4&8&8\\8&8&20\end{pmatrix},\quad X'y=\begin{pmatrix}20\\28\\44\end{pmatrix}\colon\quad
+\text{gradient at }\beta=0\text{ is }-2X'y=-2(20,28,44)'\ne0\\
+&X'X\hat\beta=(4+8+8,\ 4+16+8,\ 8+16+20)'=(20,28,44)'=X'y\implies\text{gradient at }\hat\beta\text{ is }0\\
+&\rank X=3=p\implies\mathrm HS=2X'X\text{ PD}\implies\hat\beta\text{ is the strict global minimizer},\ S(\hat\beta)=4
+\end{align*}
+\end{board}
+
+\Needspace{21\baselineskip}
+\begin{example}[Newton--Raphson]\label{b16.44}
+To solve \(n\) equations \(f(x)=0\) in \(n\) unknowns (\(f\) \(C^1\), \(G(x)=\mathrm Df(x)\)), set the first-order
+approximation \(f(x_r+\Delta)\approx f(x_r)+G(x_r)\Delta\) (the differential at the current \(x_r\)) to \(0\): the
+\textbf{Newton--Raphson} step is
+\[
+x_{r+1}=x_r-G(x_r)^{-1}f(x_r)\qquad(r=0,1,2,\dots)
+\]
+provided \(G(x_r)\) is invertible; one stops when the step is negligible. For a stationary point of a \(C^2\) scalar
+\(\varphi\): \(f=(\mathrm D\varphi)'\), \(G=\mathrm H\varphi\). Show that one step from any \(x_0\) reaches the
+stationary point for \(\varphi(x)=\frac12x'Ax-b'x\) (\(A\) symmetric and invertible) and for the \(S\) of
+Theorem~\ref{b16.41} with \(\rank X=p\); take the step from \(\beta_0=0\) in Example~\ref{b16.42}.
+\end{example}
+\textit{Solution.}
+\begin{board}[As in Example~\ref{b16.37}(a), and Theorem~\ref{b16.41}(a),(c); \((X'X)^{-1}\) from \lec{11},
+Example~5:]
+\boardtop
+\begin{align*}
+&(\mathrm D\varphi(x))'=Ax-b,\ \mathrm H\varphi=A\implies x_1=x_0-A^{-1}(Ax_0-b)=A^{-1}b\text{, the stationary point}\\
+&(\mathrm DS(\beta))'=2X'X\beta-2X'y,\ \mathrm HS=2X'X\text{ invertible}\\
+&\implies\beta_1=\beta_0-(2X'X)^{-1}(2X'X\beta_0-2X'y)=(X'X)^{-1}X'y\\
+&\beta_0=0\colon\ \beta_1=(X'X)^{-1}X'y
+=\frac14\begin{pmatrix}6&-1&-2\\-1&1&0\\-2&0&1\end{pmatrix}\begin{pmatrix}20\\28\\44\end{pmatrix}
+=\frac14\begin{pmatrix}120-28-88\\-20+28\\-40+44\end{pmatrix}=\begin{pmatrix}1\\2\\1\end{pmatrix}=\hat\beta
+\end{align*}
+\end{board}
+For other functions several steps are needed.
+
+\bigskip
+\textbf{Practice.} The Exercises and Problems of the textbook, Chapter~16: Kronecker products and vec, differentials
+and derivatives of traces, determinants and inverses, Hessian matrices and extrema, least squares by differentiation,
+the Newton--Raphson method.
+
+\end{document}
