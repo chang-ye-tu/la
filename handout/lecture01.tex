@@ -1,0 +1,554 @@
+\def\handoutsay{false}\def\handoutfill{false}
+\documentclass[12pt]{article}
+\newcommand{\handoutrunning}{Lecture 1: Matrices}
+\providecommand{\handoutsay}{true}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype}
+\usepackage[a4paper,margin=15mm,headheight=14pt,headsep=5mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,booktabs,needspace}
+\usepackage{pifont}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{fancyhdr}
+\usepackage{ifthen}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdfauthor={Chang-Ye Tu}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Linear Algebra}
+\fancyhead[R]{\small\handoutrunning}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt plus 1pt minus 1pt}
+\setlength{\emergencystretch}{1.5em}
+\usepackage{etoolbox}
+\newcommand{\handoutdisplayskips}{\setlength{\abovedisplayskip}{7pt plus 2pt minus 2pt}%
+  \setlength{\belowdisplayskip}{7pt plus 2pt minus 2pt}}
+\apptocmd{\normalsize}{\handoutdisplayskips}{}{\PackageWarning{handout}{could not patch normalsize}}
+\handoutdisplayskips
+\setlist[enumerate]{label=(\alph*),leftmargin=*,itemsep=2pt,topsep=3pt}
+\setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\iu}{\mathrm{i}}
+\newcommand{\contradiction}{\mathord{\text{\large\ding{56}}}}
+\newcommand{\one}{\mathbf 1}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\col}{col}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator\prb{\mathsf{P}}
+\DeclareMathOperator\expc{\mathsf{E}}
+\DeclareMathOperator\var{var}
+\DeclareMathOperator\cov{cov}
+\DeclareMathOperator\cor{cor}
+\DeclareMathOperator\argmin{argmin}
+\DeclareMathOperator\argmax{argmax}
+\DeclareMathOperator{\Span}{span}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{fact}{Fact}
+\renewcommand{\thefact}{F\arabic{fact}}
+\AddToHook{cmd/subsection/before}{\par\Needspace{9\baselineskip}}
+\AddToHook{env/theorem/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/proposition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/lemma/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/definition/before}{\par\Needspace{4\baselineskip}}
+\AddToHook{env/example/before}{\par\Needspace{4\baselineskip}}
+\definecolor{saybg}{gray}{0.86}
+\NewDocumentEnvironment{say}{+b}
+  {\ifthenelse{\equal{\handoutsay}{true}}{\par\Needspace{2\baselineskip}\noindent\colorbox{saybg}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}%
+   {\small\sffamily\ding{43}\enspace\textbf{Say.}\enspace#1}}\par}{}}
+  {}
+\providecommand{\handoutfill}{false}
+\newsavebox{\boardbox}
+\newlength{\boardht}
+\definecolor{boardrule}{gray}{0.55}
+\makeatletter
+\newcommand{\boardstart}{\par\if@inlabel\leavevmode\par\fi}
+\makeatother
+\NewDocumentEnvironment{board}{o +b}
+  {\boardstart\IfValueT{#1}{\noindent#1\par\nopagebreak}%
+   \noindent\begin{lrbox}{\boardbox}\begin{minipage}{\linewidth}#2\end{minipage}\end{lrbox}%
+   \setlength{\boardht}{\dimexpr\ht\boardbox+\dp\boardbox\relax}%
+   \ifthenelse{\equal{\handoutfill}{true}}%
+     {\setlength{\boardht}{1.4\boardht}%
+      {\setlength{\fboxsep}{0pt}\setlength{\fboxrule}{0.4pt}\color{boardrule}%
+       \framebox[\dimexpr\linewidth-2\fboxrule\relax]{\rule{0pt}{\boardht}}}}%
+     {\ifthenelse{\equal{\handoutsay}{true}}%
+        {\llap{\color{boardrule}\rule[-\dp\boardbox]{1.5pt}{\boardht}\hspace{4pt}}}{}%
+      \usebox{\boardbox}}%
+   \par}
+  {}
+\newcommand{\blank}[1]{\ifthenelse{\equal{\handoutfill}{true}}{\underline{\phantom{#1}}}{#1}}
+\newcommand{\lec}[1]{Lecture~#1}
+\newcommand{\handouttitle}[2]{%
+  \begin{center}
+  {\LARGE\sffamily\bfseries #2\par}\vspace{3pt}
+  {\sffamily Linear Algebra \textperiodcentered\ \lec{#1}\par}
+  \ifthenelse{\equal{\handoutsay}{true}}{\vspace{3pt}{\small\sffamily\colorbox{saybg}{\ding{43}\enspace\textbf{Say.}}\enspace
+    teacher's copy: the shaded boxes are not in the students' copy.\par}}{}
+  \ifthenelse{\equal{\handoutfill}{true}}{\vspace{3pt}{\small\sffamily Fill-in copy: complete the framed spaces in
+    class.\par}}{}
+  \end{center}}
+
+\hypersetup{pdftitle={Linear Algebra, Lecture 1: Matrices}}
+\newcommand{\boardtop}{\vspace*{-\abovedisplayskip}}
+\DeclareMathOperator{\row}{row}
+\begin{document}
+\handouttitle{1}{Matrices}
+
+\subsection*{1. Matrices and products}
+
+\begin{definition}\label{b1.1}
+Let \(m,n\geqslant1\) be integers. An \(m\times n\) \textbf{matrix} \(A=(a_{ij})\) is a rectangular array of real
+numbers, its \textbf{entries}; \(a_{ij}\) stands in row \(i\) and column \(j\) (\(1\leqslant i\leqslant m\),
+\(1\leqslant j\leqslant n\)). \(\R^{m\times n}\) is the set of all \(m\times n\) matrices.
+\begin{itemize}
+\item \(A=B\): same size and \(a_{ij}=b_{ij}\) for all \(i,j\).
+\item \(\R^n=\R^{n\times1}\): \textbf{column vectors} \(x=(x_i)\); \(\R^{1\times n}\): \textbf{row vectors}. A \(1\times1\)
+matrix is identified with its entry.
+\item \(\col_j(A)\in\R^m\): column \(j\); \(\row_i(A)=(a_{i1},\dots,a_{in})\in\R^{1\times n}\): row \(i\).
+\(a_j=\col_j(A)\), \(A=[a_1\ \cdots\ a_n]\).
+\item \((A+B)_{ij}=a_{ij}+b_{ij}\), \((cA)_{ij}=ca_{ij}\) (\(c\in\R\)); \(-A=(-1)A\), \(A-B=A+(-B)\). The laws of
+numbers hold, e.g.\ \(A+B=B+A\), \(c(A+B)=cA+cB\) (entry by entry).
+\item \(0\): all entries \(0\). \(I_n=(\delta_{ij})\in\R^{n\times n}\), \(\delta_{ij}=1\) (\(i=j\)), \(\delta_{ij}=0\)
+(\(i\ne j\)): the \textbf{identity matrix}; its columns \(e_1,\dots,e_n\) are the \textbf{unit vectors} of \(\R^n\).
+\item \(k\) variables measured on \(n\) units: the \(n\times k\) \textbf{data matrix} \((x_{ij})\); row \(i\) = unit
+\(i\), column \(j\) = variable \(j\), \(x_{ij}\) = value of variable \(j\) on unit \(i\).
+\end{itemize}
+\end{definition}
+
+\begin{definition}\label{b1.2}
+For \(A\in\R^{m\times n}\) and \(B\in\R^{n\times p}\), the \textbf{product} \(AB\in\R^{m\times p}\) is
+\[
+(AB)_{ij}=\sum_{r=1}^na_{ir}b_{rj}=a_{i1}b_{1j}+\dots+a_{in}b_{nj}\qquad(1\leqslant i\leqslant m,\ 1\leqslant j\leqslant p)
+\]
+\(AB\) is defined only when the number of columns of \(A\) equals the number of rows of \(B\).
+\end{definition}
+
+\Needspace{17\baselineskip}
+\begin{theorem}\label{b1.3}
+Let \(A\in\R^{m\times n}\).
+\begin{enumerate}
+\item Whenever the sizes allow the operations:
+\(A(BG)=(AB)G\), \(A(B+G)=AB+AG\), \((A+B)G=AG+BG\), \(A(cB)=c(AB)=(cA)B\) (\(c\in\R\)); \(I_mA=A=AI_n\), \(0A=0\),
+\(A0=0\).
+\item For \(M\in\R^{m\times1}\), \(N\in\R^{1\times p}\) and a \(1\times1\) matrix \(c\): the products \(Mc\), \(cN\) are
+the multiples \(cM\), \(cN\), and \(McN=c(MN)\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) Both sides of each rule have the same size: compare the \((i,j)\) entries (Definitions~\ref{b1.1}, \ref{b1.2}).
+\begin{board}[\(A(BG)=(AB)G\) for \(B\in\R^{n\times p}\), \(G\in\R^{p\times q}\):]
+\boardtop
+\begin{align*}
+[A(BG)]_{ij}&=\sum_{r=1}^na_{ir}(BG)_{rj}=\sum_{r=1}^na_{ir}\Bigl(\sum_{s=1}^pb_{rs}g_{sj}\Bigr)
+=\sum_{r=1}^n\sum_{s=1}^pa_{ir}b_{rs}g_{sj}\\
+[(AB)G]_{ij}&=\sum_{s=1}^p(AB)_{is}g_{sj}=\sum_{s=1}^p\Bigl(\sum_{r=1}^na_{ir}b_{rs}\Bigr)g_{sj}
+=\sum_{s=1}^p\sum_{r=1}^na_{ir}b_{rs}g_{sj}
+\end{align*}
+The same \(np\) terms \(a_{ir}b_{rs}g_{sj}\) in another order: the two entries are equal.
+\end{board}
+The other rules:
+\begin{align*}
+[A(B+G)]_{ij}&=\textstyle\sum_ra_{ir}(b_{rj}+g_{rj})=\sum_ra_{ir}b_{rj}+\sum_ra_{ir}g_{rj}=(AB+AG)_{ij}\\
+[(A+B)G]_{ij}&=\textstyle\sum_r(a_{ir}+b_{ir})g_{rj}=\sum_ra_{ir}g_{rj}+\sum_rb_{ir}g_{rj}=(AG+BG)_{ij}\\
+[A(cB)]_{ij}&=\textstyle\sum_ra_{ir}(cb_{rj})=c\sum_ra_{ir}b_{rj}=[c(AB)]_{ij}=\sum_r(ca_{ir})b_{rj}=[(cA)B]_{ij}\\
+(I_mA)_{ij}&=\textstyle\sum_r\delta_{ir}a_{rj}=a_{ij},\qquad(AI_n)_{ij}=\sum_ra_{ir}\delta_{rj}=a_{ij}
+&&(\delta_{ir}=0\text{ for }r\ne i)\\
+(0A)_{ij}&=\textstyle\sum_r0\cdot a_{rj}=0,\qquad(A0)_{ij}=\sum_ra_{ir}\cdot0=0
+\end{align*}
+(b) One term in each sum of Definition~\ref{b1.2}: \((Mc)_{i1}=m_{i1}c=(cM)_{i1}\), \((cN)_{1j}=cn_{1j}\); so
+\(McN=M(cN)=c(MN)\) by (a).
+\end{proof}
+By (a), a product of several matrices needs no parentheses. \textbf{Powers}: for \(A\in\R^{n\times n}\), \(A^0=I_n\) and
+\(A^{k+1}=A^kA\) (\(k=0,1,2,\dots\)).
+
+\Needspace{14\baselineskip}
+\begin{theorem}\label{b1.4}
+Let \(A=[a_1\ \cdots\ a_n]\in\R^{m\times n}\) and \(B=[b_1\ \cdots\ b_p]\in\R^{n\times p}\).
+\begin{enumerate}
+\item \(\col_j(AB)=Ab_j\), that is, \(AB=[Ab_1\ \cdots\ Ab_p]\).
+\item For \(x\in\R^n\): \(Ax=x_1a_1+\dots+x_na_n\). In particular \(Ae_j=a_j\).
+\item \(\row_i(AB)=\row_i(A)B=a_{i1}\row_1(B)+\dots+a_{in}\row_n(B)\).
+\item \((AB)_{ij}=\row_i(A)\,b_j\), and \(AB=a_1\row_1(B)+\dots+a_n\row_n(B)\) (the \textbf{outer product
+expansion}).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Each part compares entries (Definition~\ref{b1.1}) with \((AB)_{ij}=\sum_{r=1}^na_{ir}b_{rj}\) (Definition~\ref{b1.2}).
+\begin{board}[(a) Fix \(j\); \(b_j\) has the entries \(b_{1j},\dots,b_{nj}\):]
+\boardtop
+\begin{align*}
+(Ab_j)_i&=\textstyle\sum_ra_{ir}(b_j)_r=\sum_ra_{ir}b_{rj}=(AB)_{ij}\quad(i=1,\dots,m)&&\text{(Definition~\ref{b1.2})}\\
+&\implies Ab_j=\col_j(AB)&&\text{(Definition~\ref{b1.1})}
+\end{align*}
+\end{board}
+\begin{board}[(b) \(a_r\) has the entries \(a_{1r},\dots,a_{mr}\):]
+\boardtop
+\begin{align*}
+(Ax)_i&=\textstyle\sum_ra_{ir}x_r=x_1a_{i1}+\dots+x_na_{in}=(x_1a_1+\dots+x_na_n)_i&&\text{(Definitions~\ref{b1.1}, \ref{b1.2})}\\
+Ae_j&=1\cdot a_j=a_j\qquad(x=e_j:\ x_j=1,\ x_r=0\text{ for }r\ne j)
+\end{align*}
+\end{board}
+\begin{board}[(c) Fix \(i\); \(\row_r(B)=(b_{r1},\dots,b_{rp})\):]
+\boardtop
+\begin{align*}
+\bigl(\row_i(A)B\bigr)_{1j}&=\textstyle\sum_ra_{ir}b_{rj}=(AB)_{ij}=\bigl(\row_i(AB)\bigr)_{1j}&&\text{(Definition~\ref{b1.2})}\\
+\bigl(a_{i1}\row_1(B)+\dots+a_{in}\row_n(B)\bigr)_{1j}&=a_{i1}b_{1j}+\dots+a_{in}b_{nj}=(AB)_{ij}&&\text{(Definition~\ref{b1.1})}
+\end{align*}
+\end{board}
+\begin{board}[(d) \(\row_i(A)\in\R^{1\times n}\), \(b_j\in\R^{n\times1}\); \(a_r\in\R^{m\times1}\),
+\(\row_r(B)\in\R^{1\times p}\):]
+\boardtop
+\begin{align*}
+\row_i(A)\,b_j&=\textstyle\sum_ra_{ir}b_{rj}=(AB)_{ij}\quad(1\times1)&&\text{(Definition~\ref{b1.2})}\\
+\bigl(a_r\row_r(B)\bigr)_{ij}&=a_{ir}b_{rj}\ \text{(one term)}\implies
+\bigl(\textstyle\sum_ra_r\row_r(B)\bigr)_{ij}=\sum_ra_{ir}b_{rj}=(AB)_{ij}&&\text{(Definitions~\ref{b1.1}, \ref{b1.2})}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{17\baselineskip}
+\begin{example}\label{b1.5}
+Find \(AB\) by entries, by columns, by rows and by outer products, where
+\[
+A=\begin{pmatrix}1&2&0&1\\0&1&3&1\\2&0&1&1\end{pmatrix}\in\R^{3\times4},\qquad
+B=\begin{pmatrix}1&0\\0&1\\1&1\\2&-1\end{pmatrix}\in\R^{4\times2}
+\]
+\end{example}
+\textit{Solution.}
+\begin{board}[Entries: each is a sum of four products (Definition~\ref{b1.2}):]
+\[
+\begin{aligned}
+(AB)_{11}&=1\cdot1+2\cdot0+0\cdot1+1\cdot2=3, &\quad (AB)_{12}&=1\cdot0+2\cdot1+0\cdot1+1\cdot(-1)=1\\
+(AB)_{21}&=0\cdot1+1\cdot0+3\cdot1+1\cdot2=5, &\quad (AB)_{22}&=0\cdot0+1\cdot1+3\cdot1+1\cdot(-1)=3\\
+(AB)_{31}&=2\cdot1+0\cdot0+1\cdot1+1\cdot2=5, &\quad (AB)_{32}&=2\cdot0+0\cdot1+1\cdot1+1\cdot(-1)=0
+\end{aligned}
+\]
+\[
+AB=\begin{pmatrix}3&1\\5&3\\5&0\end{pmatrix}
+\]
+\end{board}
+\begin{board}[Columns: combinations of the columns of \(A\) (Theorem~\ref{b1.4}(a),(b)); rows: combinations of the
+rows of \(B\) (Theorem~\ref{b1.4}(c)):]
+\[
+\begin{aligned}
+Ab_1&=1\begin{pmatrix}1\\0\\2\end{pmatrix}+0\begin{pmatrix}2\\1\\0\end{pmatrix}
++1\begin{pmatrix}0\\3\\1\end{pmatrix}+2\begin{pmatrix}1\\1\\1\end{pmatrix}=\begin{pmatrix}3\\5\\5\end{pmatrix}\\
+Ab_2&=0\begin{pmatrix}1\\0\\2\end{pmatrix}+1\begin{pmatrix}2\\1\\0\end{pmatrix}
++1\begin{pmatrix}0\\3\\1\end{pmatrix}-1\begin{pmatrix}1\\1\\1\end{pmatrix}=\begin{pmatrix}1\\3\\0\end{pmatrix}\\
+\row_1(AB)&=1\,(1,0)+2\,(0,1)+0\,(1,1)+1\,(2,-1)=(3,\ 1)\\
+\row_2(AB)&=0\,(1,0)+1\,(0,1)+3\,(1,1)+1\,(2,-1)=(5,\ 3)\\
+\row_3(AB)&=2\,(1,0)+0\,(0,1)+1\,(1,1)+1\,(2,-1)=(5,\ 0)
+\end{aligned}
+\]
+\end{board}
+\begin{board}[Outer products: the sum of the four \(3\times2\) matrices \(a_r\row_r(B)\) (Theorem~\ref{b1.4}(d)):]
+\[
+\begin{aligned}
+AB&=\begin{pmatrix}1\\0\\2\end{pmatrix}(1,\ 0)+\begin{pmatrix}2\\1\\0\end{pmatrix}(0,\ 1)
++\begin{pmatrix}0\\3\\1\end{pmatrix}(1,\ 1)+\begin{pmatrix}1\\1\\1\end{pmatrix}(2,\ -1)\\
+&=\begin{pmatrix}1&0\\0&0\\2&0\end{pmatrix}+\begin{pmatrix}0&2\\0&1\\0&0\end{pmatrix}
++\begin{pmatrix}0&0\\3&3\\1&1\end{pmatrix}+\begin{pmatrix}2&-1\\2&-1\\2&-1\end{pmatrix}
+=\begin{pmatrix}3&1\\5&3\\5&0\end{pmatrix}
+\end{aligned}
+\]
+\end{board}
+
+\Needspace{15\baselineskip}
+\begin{example}\label{b1.6}\label{b1.7}
+Find \(NM\), \(MN\) and \(X^2\), where
+\[
+N=\begin{pmatrix}0&1&0\\0&0&0\\0&0&0\end{pmatrix},\qquad
+M=\begin{pmatrix}1&-5&2\\2&3&4\\9&-1&3\end{pmatrix},\qquad
+X=\begin{pmatrix}1&1&3\\2&2&6\\-1&-1&-3\end{pmatrix}
+\]
+\end{example}
+\textit{Solution.}
+\begin{board}[\(NM\) by rows (Theorem~\ref{b1.4}(c)), \(MN\) by columns (Theorem~\ref{b1.4}(a),(b); Theorem~\ref{b1.3}(a)):]
+\boardtop
+\begin{align*}
+\row_1(NM)&=0\row_1(M)+1\row_2(M)+0\row_3(M)=\row_2(M),\quad\row_2(NM)=\row_3(NM)=0\\
+\col_2(MN)&=M\col_2(N)=Me_1=\col_1(M),\quad\col_1(MN)=\col_3(MN)=M0=0\\
+NM&=\begin{pmatrix}2&3&4\\0&0&0\\0&0&0\end{pmatrix}\ne
+MN=\begin{pmatrix}0&1&0\\0&2&0\\0&9&0\end{pmatrix}
+\end{align*}
+\end{board}
+\begin{board}[\(X^2\): \(u=\col_1(X)\) has the entries \(u_1=1\), \(u_2=2\), \(u_3=-1\); \(w_1=1\), \(w_2=1\), \(w_3=3\) are
+the entries of \(\row_1(X)\):]
+\boardtop
+\begin{align*}
+\row_i(X)&=u_i\row_1(X),\qquad\col_j(X)=w_ju&&\text{(read off }X\text{)}\\
+(X^2)_{ij}&=\row_i(X)\col_j(X)=\bigl(u_i\row_1(X)\bigr)(w_ju)=u_iw_j\bigl(\row_1(X)\,u\bigr)
+&&\text{(Theorems~\ref{b1.4}(d), \ref{b1.3}(a))}\\
+\row_1(X)\,u&=1\cdot1+1\cdot2+3\cdot(-1)=0\implies X^2=0
+\end{align*}
+\end{board}
+\(N\), \(M\) are \(3\times3\) and \(NM\ne MN\): in general \(AB\ne BA\); square matrices with \(AB=BA\)
+\textbf{commute}. \(X\ne0\) and \(X^2=0\): \(AB=0\) does not force \(A=0\) or \(B=0\) (\(A=B=X\)), and \(AB=AG\) does not
+force \(B=G\) (\(A=B=X\), \(G=0\)).
+
+\subsection*{2. Transpose, trace and unit vectors}
+
+\begin{definition}\label{b1.8}
+The \textbf{transpose} of \(A\in\R^{m\times n}\) is \(A'\in\R^{n\times m}\), \((A')_{ij}=a_{ji}\): the rows of \(A'\)
+are the transposed columns of \(A\). Column vectors are written \(x=(x_1,\dots,x_n)'\). A square \(A\) is
+\textbf{symmetric} if \(A'=A\).
+\end{definition}
+
+\Needspace{13\baselineskip}
+\begin{theorem}\label{b1.9}
+For \(c\in\R\) and matrices of sizes for which the operations are defined:
+\[
+(A')'=A,\quad(A+B)'=A'+B',\quad(cA)'=cA',\quad(AB)'=B'A',\quad(ABG)'=G'B'A'
+\]
+For \(x,y\in\R^n\): \(x'y=y'x=\sum_{i=1}^nx_iy_i\), \(x'x=\sum_{i=1}^nx_i^2\). \(I_n'=I_n\). For \(B\in\R^{m\times n}\),
+\(B'B\) and \(BB'\) are symmetric.
+\end{theorem}
+\begin{proof}
+Compare entries, with \((A')_{ij}=a_{ji}\) (Definitions~\ref{b1.8}, \ref{b1.1}):
+\(((A')')_{ij}=(A')_{ji}=a_{ij}\), \(((A+B)')_{ij}=a_{ji}+b_{ji}=(A'+B')_{ij}\), \(((cA)')_{ij}=ca_{ji}=(cA')_{ij}\).
+\begin{board}[\(A\in\R^{m\times n}\), \(B\in\R^{n\times p}\): \((AB)'\), \(B'A'\in\R^{p\times m}\); \(1\leqslant k\leqslant
+p\), \(1\leqslant i\leqslant m\):]
+\boardtop
+\begin{align*}
+(B'A')_{ki}&=\textstyle\sum_j(B')_{kj}(A')_{ji}=\sum_jb_{jk}a_{ij}=\sum_ja_{ij}b_{jk}=(AB)_{ik}=((AB)')_{ki}
+&&\text{(Definition~\ref{b1.2})}\\
+(ABG)'&=((AB)G)'=G'(AB)'=G'B'A'&&\text{(the line above, twice)}
+\end{align*}
+\end{board}
+\begin{board}[\(x'\in\R^{1\times n}\) has the entries \((x')_{1i}=x_i\):]
+\boardtop
+\begin{align*}
+x'y&=\textstyle\sum_ix_iy_i=\sum_iy_ix_i=y'x\quad(1\times1),\qquad x'x=\sum_ix_i^2&&\text{(Definition~\ref{b1.2})}\\
+(I_n')_{ij}&=\delta_{ji}=\delta_{ij}\implies I_n'=I_n\\
+(B'B)'&=B'(B')'=B'B,\qquad(BB')'=(B')'B'=BB'&&\text{(the rules above)}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\begin{definition}\label{b1.10}
+The \textbf{trace} of \(A\in\R^{n\times n}\) is \(\tr A=a_{11}+a_{22}+\dots+a_{nn}\).
+\end{definition}
+
+\Needspace{13\baselineskip}
+\begin{theorem}\label{b1.11}
+\begin{enumerate}
+\item \(\tr(A+B)=\tr A+\tr B\), \(\tr(cA)=c\tr A\), \(\tr(A')=\tr A\) (\(A,B\in\R^{n\times n}\), \(c\in\R\)).
+\item \(\tr(AB)=\tr(BA)\) (\(A\in\R^{m\times n}\), \(B\in\R^{n\times m}\)).
+\item \(\tr(A'A)=\sum_{i=1}^m\sum_{j=1}^na_{ij}^2\) (\(A\in\R^{m\times n}\)); so \(\tr(A'A)=0\) \(\Rightarrow\) \(A=0\).
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(a) The \(i\)th diagonal entries of \(A+B\), \(cA\), \(A'\) are \(a_{ii}+b_{ii}\), \(ca_{ii}\), \(a_{ii}\)
+(Definitions~\ref{b1.1}, \ref{b1.8}); sum over \(i\) (Definition~\ref{b1.10}).
+\begin{board}[(b) \(AB\in\R^{m\times m}\), \(BA\in\R^{n\times n}\); Definitions~\ref{b1.10}, \ref{b1.2}:]
+\boardtop
+\begin{align*}
+\tr(AB)&=\sum_{i=1}^m(AB)_{ii}=\sum_{i=1}^m\sum_{j=1}^na_{ij}b_{ji},\qquad
+\tr(BA)=\sum_{j=1}^n(BA)_{jj}=\sum_{j=1}^n\sum_{i=1}^mb_{ji}a_{ij}
+\end{align*}
+The same \(mn\) terms \(a_{ij}b_{ji}\): \(\tr(AB)=\tr(BA)\).
+\end{board}
+\begin{board}[(c) \(A'A\in\R^{n\times n}\); Definitions~\ref{b1.2}, \ref{b1.8}:]
+\boardtop
+\begin{align*}
+(A'A)_{jj}&=\textstyle\sum_{i=1}^m(A')_{ji}a_{ij}=\sum_{i=1}^ma_{ij}^2\implies\tr(A'A)=\sum_{i=1}^m\sum_{j=1}^na_{ij}^2
+&&\text{(Definition~\ref{b1.10})}\\
+a_{kl}&\ne0\text{ for some }k,l\implies\tr(A'A)\geqslant a_{kl}^2>0&&(a_{ij}^2\geqslant0)
+\end{align*}
+So \(\tr(A'A)=0\) forces every \(a_{ij}=0\), that is, \(A=0\).
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{14\baselineskip}
+\begin{proposition}\label{b1.18}
+Let \(A,B\in\R^{m\times n}\); \(e_i\) is a unit vector of \(\R^m\) or of \(\R^n\), as the product requires.
+\begin{enumerate}
+\item \(e_i'e_k=\delta_{ik}\), \(Ae_j=\col_j(A)\), \(e_i'A=\row_i(A)\), \(e_i'Ae_j=a_{ij}\).
+\item \(A=B\) \(\iff\) \(Ax=Bx\) for every \(x\in\R^n\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\begin{board}[(a) The term \((e_i)_r(e_k)_r\) is \(1\) if \(r=i=k\), \(0\) otherwise:]
+\boardtop
+\begin{align*}
+e_i'e_k&=\textstyle\sum_r(e_i)_r(e_k)_r=\delta_{ik}&&\text{(Theorem~\ref{b1.9})}\\
+Ae_j&=\col_j(A)&&\text{(Theorem~\ref{b1.4}(b))}\\
+e_i'A&=(e_i)_1\row_1(A)+\dots+(e_i)_m\row_m(A)=\row_i(A)&&\text{(Theorem~\ref{b1.4}(c))}\\
+e_i'Ae_j&=e_i'\col_j(A)=a_{ij}&&\text{(the line above, for }\col_j(A)\in\R^{m\times1})
+\end{align*}
+\end{board}
+\begin{board}[(b) \(A=B\Rightarrow Ax=Bx\). Conversely, take \(x=e_j\) (\(j=1,\dots,n\)):]
+\boardtop
+\begin{align*}
+\col_j(A)&=Ae_j=Be_j=\col_j(B)\quad(j=1,\dots,n)\implies A=B&&\text{((a); Definition~\ref{b1.1})}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\subsection*{3. Diagonal and triangular matrices; the centering matrix}
+
+\begin{definition}\label{b1.12}
+For \(d_1,\dots,d_n\in\R\), \(\diag(d_1,\dots,d_n)\in\R^{n\times n}\) has the diagonal entries \(d_1,\dots,d_n\) and all
+other entries \(0\): a \textbf{diagonal} matrix. A square \(A\) is \textbf{upper triangular} if \(a_{ij}=0\) for
+\(i>j\), \textbf{lower triangular} if \(a_{ij}=0\) for \(i<j\).
+\end{definition}
+
+\Needspace{16\baselineskip}
+\begin{proposition}\label{b1.13}\label{b1.19}
+Let \(D=\diag(d_1,\dots,d_n)\) and \(F=\diag(f_1,\dots,f_n)\).
+\begin{enumerate}
+\item For \(A\) with \(n\) rows: \((DA)_{ij}=d_ia_{ij}\), \(\row_i(DA)=d_i\row_i(A)\). For \(A\) with \(n\) columns:
+\((AD)_{ij}=a_{ij}d_j\), \(\col_j(AD)=d_j\col_j(A)\).
+\item \(DF=\diag(d_1f_1,\dots,d_nf_n)\).
+\item If \(A,B\in\R^{n\times n}\) are upper (lower) triangular, then \(AB\) is upper (lower) triangular, and
+\((AB)_{ii}=a_{ii}b_{ii}\).
+\item \(D^r=\diag(d_1^r,\dots,d_n^r)\) (\(r=0,1,2,\dots\); \(t^0=1\) for every \(t\in\R\), also \(t=0\)).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\begin{board}[(a) The \((i,r)\) entry of \(D\) is \(d_i\) if \(r=i\), \(0\) if \(r\ne i\): one term of each sum
+survives (Definition~\ref{b1.2}):]
+\boardtop
+\begin{align*}
+(DA)_{ij}&=\textstyle\sum_rD_{ir}a_{rj}=d_ia_{ij}\implies\row_i(DA)=d_i\row_i(A)\\
+(AD)_{ij}&=\textstyle\sum_ra_{ir}D_{rj}=a_{ij}d_j\implies\col_j(AD)=d_j\col_j(A)
+\end{align*}
+\end{board}
+\begin{board}[(b) By (a):]
+\[
+(DF)_{ij}=d_iF_{ij}=\begin{cases}d_if_i&(i=j)\\0&(i\ne j)\end{cases}\implies DF=\diag(d_1f_1,\dots,d_nf_n)
+\]
+\end{board}
+(c)
+\begin{itemize}
+\item Upper triangular: \(a_{ik}=0\) for \(k<i\), \(b_{kj}=0\) for \(k>j\); so
+\((AB)_{ij}=\sum_{k=1}^na_{ik}b_{kj}=\sum_{k=i}^ja_{ik}b_{kj}\) (Definition~\ref{b1.2}).
+\item \(i>j\): no \(k\) with \(i\leqslant k\leqslant j\), so \((AB)_{ij}=0\). \(i=j\): only \(k=i\), so
+\((AB)_{ii}=a_{ii}b_{ii}\).
+\item Lower triangular: only the terms with \(j\leqslant k\leqslant i\) remain; \((AB)_{ij}=0\) for \(i<j\),
+\((AB)_{ii}=a_{ii}b_{ii}\).
+\end{itemize}
+\begin{board}[(d) Induction on \(r\), with the powers after Theorem~\ref{b1.3}:]
+\boardtop
+\begin{align*}
+D^0&=I_n=\diag(1,\dots,1)=\diag(d_1^0,\dots,d_n^0)\\
+D^{r+1}&=D^rD=\diag(d_1^r,\dots,d_n^r)\diag(d_1,\dots,d_n)=\diag(d_1^{r+1},\dots,d_n^{r+1})&&\text{(induction hypothesis; (b))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\begin{definition}\label{b1.14}
+The \textbf{summing vector} \(\one_n\in\R^n\) has all entries \(1\);
+\(J_n=\one_n\one_n'\in\R^{n\times n}\) (all entries \(1\)), \(\bar J_n=\frac1nJ_n\), and \(C_n=I_n-\bar J_n\), the
+\textbf{centering matrix}. Subscripts are dropped when the size is clear. A square \(A\) with \(A^2=A\) is
+\textbf{idempotent}.
+\end{definition}
+
+\Needspace{11\baselineskip}
+\begin{proposition}\label{b1.15}\label{b1.30}
+Let \(\one=\one_n\), \(J=J_n\), \(\bar J=\bar J_n\), \(C=C_n\), \(I=I_n\). Then \(\one'\one=n\), \(J^2=nJ\);
+\(\bar J\) and \(C\) are symmetric and idempotent: \(\bar J'=\bar J=\bar J^2\), \(C'=C=C^2\); \(C\one=0\), \(\tr\bar J=1\)
+and \(\tr C=n-1\).
+\end{proposition}
+\begin{proof}
+\begin{board}[\(\one\), \(J\), \(\bar J\):]
+\boardtop
+\begin{align*}
+\one'\one&=\textstyle\sum_{i=1}^n1\cdot1=n&&\text{(Theorem~\ref{b1.9})}\\
+J^2&=(\one\one')(\one\one')=\one(\one'\one)\one'=n\,\one\one'=nJ,\qquad\bar J^2=\tfrac1{n^2}J^2=\tfrac1nJ=\bar J
+&&\text{(Theorem~\ref{b1.3}(a),(b))}\\
+J'&=(\one\one')'=(\one')'\one'=\one\one'=J,\qquad\bar J'=\tfrac1nJ'=\bar J&&\text{(Theorem~\ref{b1.9})}
+\end{align*}
+\end{board}
+\begin{board}[\(C=I-\bar J\):]
+\boardtop
+\begin{align*}
+C'&=I'-\bar J'=I-\bar J=C&&\text{(Theorem~\ref{b1.9})}\\
+C^2&=I\cdot I-I\bar J-\bar JI+\bar J^2=I-2\bar J+\bar J=C&&\text{(Theorem~\ref{b1.3}(a); \(\bar J^2=\bar J\))}\\
+C\one&=\one-\tfrac1n\one(\one'\one)=\one-\tfrac1n\,n\,\one=0&&\text{(Theorem~\ref{b1.3}(a),(b))}\\
+\tr I&=\tr J=n\implies\tr\bar J=\tfrac1nn=1,\quad\tr C=n-1&&\text{(Definition~\ref{b1.10}, Theorem~\ref{b1.11}(a))}
+\end{align*}
+\end{board}
+\nopagebreak
+\end{proof}
+
+\Needspace{9\baselineskip}
+\begin{example}\label{b1.16}
+Let \(x=(x_1,\dots,x_n)'\in\R^n\), \(\bar x=\frac1n\one'x\) (the \textbf{mean}) and \(C=C_n\). Show that
+\(Cx=x-\bar x\one=(x_1-\bar x,\dots,x_n-\bar x)'\) (the \textbf{deviations} from the mean) and
+\(\sum_{i=1}^n(x_i-\bar x)^2=x'x-n\bar x^2=x'Cx\).
+\end{example}
+\textit{Solution.}
+\begin{board}[Deviations:]
+\boardtop
+\begin{align*}
+\one'x&=x_1+\dots+x_n=n\bar x&&\text{(Theorem~\ref{b1.9})}\\
+Cx&=(I-\tfrac1n\one\one')x=x-\tfrac1n\one(\one'x)=x-\bar x\one=(x_1-\bar x,\dots,x_n-\bar x)'&&\text{(Theorem~\ref{b1.3}(a),(b))}
+\end{align*}
+\end{board}
+\begin{board}[Sum of squares; \(x'\one=\one'x=n\bar x\) (Theorem~\ref{b1.9}):]
+\boardtop
+\begin{align*}
+x'Cx&=x'x-\tfrac1n(x'\one)(\one'x)=\textstyle\sum_ix_i^2-\tfrac1n(n\bar x)(n\bar x)=\sum_ix_i^2-n\bar x^2
+&&\text{(Theorem~\ref{b1.3})}\\
+\textstyle\sum_i(x_i-\bar x)^2&=\textstyle\sum_ix_i^2-2\bar x\sum_ix_i+n\bar x^2=\sum_ix_i^2-2n\bar x^2+n\bar x^2
+=\sum_ix_i^2-n\bar x^2\\
+\textstyle\sum_i(x_i-\bar x)^2&=x'x-n\bar x^2=x'Cx\qquad(x'x=\textstyle\sum_ix_i^2\text{; the two lines above})
+\end{align*}
+\end{board}
+
+\Needspace{21\baselineskip}
+\begin{example}\label{b1.17}
+Four units (\(n=4\)) are measured on two variables (\(k=2\)):
+\[
+X_0=(x_{ij})=\begin{pmatrix}2&3\\0&3\\2&1\\0&1\end{pmatrix}\in\R^{4\times2}
+\]
+With \(C=C_4\), find the \textbf{mean vector} \(\bar x=(\bar x_1,\bar x_2)'\) of the column means
+\(\bar x_j=\frac1n\sum_ix_{ij}\), the \textbf{centered data matrix} \(CX_0\) and the matrix \(X_0'CX_0\) of
+\textbf{corrected sums of squares and products}.
+\end{example}
+\textit{Solution.}
+\begin{board}[Mean vector and \(CX_0\): Theorem~\ref{b1.4}(a) and Example~\ref{b1.16} for the columns:]
+\boardtop
+\begin{align*}
+\one'X_0&=\bigl(\textstyle\sum_ix_{i1},\ \sum_ix_{i2}\bigr)=(4,\ 8)=4\bar x',\qquad\bar x=\tfrac14X_0'\one=(1,\ 2)'
+&&\text{(Definition~\ref{b1.2}, Theorem~\ref{b1.9})}\\
+\col_j(CX_0)&=C\col_j(X_0)=\text{the deviations of variable }j\text{ from }\bar x_j\\
+\one'X_0&=(X_0'\one)'=n\bar x'\implies CX_0=X_0-\tfrac1n\one(\one'X_0)=X_0-\one\bar x'&&\text{(Theorems~\ref{b1.9}, \ref{b1.3})}\\
+CX_0&=\begin{pmatrix}2-1&3-2\\0-1&3-2\\2-1&1-2\\0-1&1-2\end{pmatrix}=\begin{pmatrix}1&1\\-1&1\\1&-1\\-1&-1\end{pmatrix}
+\end{align*}
+\end{board}
+\begin{board}[\(X_0'CX_0\): \(C=C^2=C'C\) (Proposition~\ref{b1.15}):]
+\boardtop
+\begin{align*}
+X_0'CX_0&=X_0'C'CX_0=(CX_0)'(CX_0)&&\text{(Theorem~\ref{b1.9})}\\
+\bigl((CX_0)'(CX_0)\bigr)_{jl}&=\col_j(CX_0)'\col_l(CX_0)&&\text{(Theorem~\ref{b1.4}(d))}\\
+&=1+1+1+1=4\ (j=l),\qquad1-1-1+1=0\ (j\ne l)\\
+X_0'CX_0&=X_0'X_0-\tfrac1n(X_0'\one)(\one'X_0)=X_0'X_0-\tfrac1n(n\bar x)(n\bar x')=X_0'X_0-n\bar x\bar x'
+&&\text{(Theorem~\ref{b1.3})}\\
+&=\begin{pmatrix}8&8\\8&20\end{pmatrix}-\begin{pmatrix}4&8\\8&16\end{pmatrix}=\begin{pmatrix}4&0\\0&4\end{pmatrix}=4I_2
+\end{align*}
+\end{board}
+\(X_0'CX_0=(CX_0)'(CX_0)\) is symmetric (Theorem~\ref{b1.9}).
+
+\bigskip
+\textbf{Practice.} The Exercises and Problems of the textbook, Chapter~1: products by entries, columns, rows and outer
+products; transposes and traces; diagonal and triangular matrices; the centering matrix and data matrices.
+
+\end{document}
